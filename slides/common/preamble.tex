@@ -1,0 +1,84 @@
+% ==========================================================================
+% Shared preamble for INFO 4617 Web Data Science weekly lecture decks
+% Based on the Gotham beamer theme (vendored in this directory).
+% Each week's slides.tex does:  \input{preamble}  (with common/ on TEXINPUTS)
+% then sets \title/\subtitle/\author/\date and \begin{document}.
+% ==========================================================================
+
+\usetheme{gotham}
+
+\usepackage{fbb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{listings}
+\usetikzlibrary{positioning, arrows.meta, shapes}
+
+% Bibliography
+\usepackage[style=authoryear,
+            backend=biber,
+            maxcitenames=1,
+            uniquename=false,
+            uniquelist=false]{biblatex}
+\addbibresource{bibliography.bib}
+
+\gothamset{sectiontocframe default=off}
+
+% ------------------------------------------------------------------ colors
+\definecolor{cugold}{HTML}{CFB87C}
+\definecolor{tab-red}{HTML}{E15759}
+\definecolor{tab-orange}{HTML}{F28E2B}
+\definecolor{tab-blue}{HTML}{4E79A7}
+\definecolor{tab-cyan}{HTML}{76B7B2}
+\definecolor{tab-green}{HTML}{59A14F}
+\definecolor{tab-yellow}{HTML}{EDC948}
+\definecolor{tab-purple}{HTML}{B07AA1}
+\definecolor{tab-pink}{HTML}{FF9DA7}
+\definecolor{tab-brown}{HTML}{9C755F}
+\definecolor{tab-gray}{HTML}{BAB0AC}
+
+\setbeamercolor{frametitle}{fg=black, bg=cugold}
+\setbeamercolor{progress bar}{fg=cugold, bg=cugold!20}
+
+\setbeamercolor{block title alerted}{fg=black, bg=cugold}
+\setbeamercolor{block body alerted}{fg=black, bg=cugold!10}
+
+% ------------------------------------------------------------------ footline
+\setbeamertemplate{footline}{
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.5ex,dp=1ex,right]{footline}
+    {\footnotesize \insertframenumber{} of \inserttotalframenumber}
+    \hspace*{2ex}
+  \end{beamercolorbox}
+}
+
+% ------------------------------------------------------------------ helpers
+\newcommand{\bottomcite}[1]{
+    \vspace*{\fill}
+    \vspace{-\baselineskip}
+    {\tiny
+    \rule{\textwidth}{0.3pt}\\
+    #1
+    }
+    \vspace{0.5ex}
+}
+
+% Consistent code styling for the Wednesday "applied notebook" frames.
+\lstdefinestyle{wds}{
+    basicstyle=\ttfamily\scriptsize,
+    keywordstyle=\color{tab-blue}\bfseries,
+    commentstyle=\color{tab-green},
+    stringstyle=\color{tab-orange},
+    showstringspaces=false,
+    breaklines=true,
+    columns=fullflexible,
+    language=Python,
+    aboveskip=0.4em,
+    belowskip=0.4em,
+}
+\lstset{style=wds}
+
+% \dayband{Day}{Topic} -- a lightweight section divider label used to mark
+% Monday / Wednesday / Friday within a week's deck.
+\newcommand{\dayband}[2]{{\large\textbf{#1}}\;\textcolor{tab-gray}{\textbar}\;#2}

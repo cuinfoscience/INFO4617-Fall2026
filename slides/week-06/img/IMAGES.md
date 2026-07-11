@@ -1,0 +1,11 @@
+# Image placeholders for `week-06`
+
+These are auto-generated gray **placeholders** so the deck compiles. Replace each with the real asset described below (keep the same filename), then rebuild.
+
+| File | Size | Should show |
+|---|---|---|
+| `dev_tools_inspect.png` | 1200x820 | Screenshot: browser dev-tools Inspector highlighting a <table> element and its <tr>/<td> children on a live page |
+| `the_numbers_table.png` | 1200x780 | Screenshot: The Numbers weekly box-office chart table (2018-12-28) as rendered in the browser |
+| `oscars_page.png` | 1100x820 | Screenshot: an Oscars ceremony page showing nominees grouped in nested <div> containers (not a table) |
+| `dom_tree.png` | 1200x760 | Diagram: HTML DOM tree for a table (table -> tr -> td/th) annotated with find_all / select paths |
+| `pr_review.png` | 1300x760 | Screenshot: a GitHub pull-request "Files changed" view with an inline review comment on ch-06-static-pages.qmd |
