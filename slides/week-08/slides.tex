@@ -1,0 +1,386 @@
+% ==========================================================================
+% INFO 4617 Web Data Science -- Week 8: Dynamic Web Pages with Selenium (Chapter 8)
+% Build:  TEXINPUTS=../common: BIBINPUTS=../common: latexmk -pdf slides.tex
+% (or run `make` from the slides/ directory)
+% ==========================================================================
+\documentclass[9pt,aspectratio=169]{beamer}
+\input{preamble}
+
+\title[Week 8 · Dynamic Pages]{{\Huge Dynamic Web Pages with Selenium}}
+\subtitle{Week 8 · Documents module · Textbook Chapter 8}
+\author[Keegan]{\textbf{Brian C. Keegan, Ph.D.} \\ Associate Professor, Department of Information Science \\ University of Colorado Boulder}
+\date{October 5, 7 \& 9, 2026}
+
+\begin{document}
+
+\maketitle
+
+% -------------------------------------------------------------------------
+\begin{frame}{This week at a glance}
+    \begin{columns}[T]
+        \begin{column}{0.62\textwidth}
+            Most of the modern web renders its data with JavaScript \textit{after} the HTML arrives. This week we drive a real browser to reach it.
+
+            \vspace{1em}
+
+            \dayband{Monday}{Concepts \& notebook intro}
+            \begin{itemize}\small
+                \item Why JavaScript content is invisible to \texttt{requests}; Selenium as a browser you script
+            \end{itemize}
+
+            \vspace{0.5em}
+
+            \dayband{Wednesday}{Notebook lab}
+            \begin{itemize}\small
+                \item Work the Chapter 8 notebook: xkcd, a Wikipedia search, and an infinite-scroll page
+            \end{itemize}
+
+            \vspace{0.5em}
+
+            \dayband{Friday}{Textbook revisions}
+            \begin{itemize}\small
+                \item Propose \& peer-review pull requests improving Chapter 8
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.34\textwidth}
+            \begin{block}{Companion notebook}
+                \footnotesize \texttt{ch-08-dynamic-pages.ipynb}
+            \end{block}
+            \begin{alertblock}{Bring a laptop}
+                \footnotesize Wednesday is hands-on --- a browser will open and click by itself.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% =========================================================================
+\section{Monday · Concepts}
+% =========================================================================
+
+\begin{frame}{When static scraping fails}
+    \begin{columns}[T]
+        \begin{column}{0.58\textwidth}
+            Last week's tools --- \texttt{requests} + BeautifulSoup --- work on \textbf{static} pages, whose content is fully present in the initial HTML.
+
+            \vspace{1em}
+
+            But most modern sites are \textbf{dynamic}: their content is loaded or rendered by JavaScript \textit{after} the HTML arrives. \texttt{requests.get()} hands you the skeleton \textit{before} that code has run.
+
+            \vspace{1em}
+
+            The data you see in your browser may simply not exist in the response. Diagnose it: compare \texttt{requests.get(url).text} to the page in your browser --- if the content you want is missing, the page is dynamic.
+
+            \vspace{1em}
+
+            The fix: a tool that \textit{executes} JavaScript --- a real browser, driven by code. That tool is \textbf{Selenium}.
+        \end{column}
+        \begin{column}{0.38\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/requests_vs_browser.png}\\
+            {\scriptsize Same URL, two very different payloads.}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~8, ``When Static Scraping Fails.''}
+\end{frame}
+
+\begin{frame}{Selenium: a browser you drive with code}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            Selenium needs two things: the \texttt{selenium} library and a \textbf{browser driver} --- a small program that lets Python control a specific browser.
+
+            \vspace{1em}
+
+            Since v4.6 (late 2022), \textbf{Selenium Manager} finds or downloads the right driver automatically, so in practice you only \texttt{pip install selenium}. Creating a driver is a one-liner:
+            \begin{itemize}\small
+                \item \texttt{driver = webdriver.Chrome()} opens a real window
+                \item every command you issue through \texttt{driver} happens \textit{in that window}
+            \end{itemize}
+
+            \vspace{1em}
+
+            You are not faking HTTP requests any more --- you are \textbf{automating a browser}, the same one a person would use.
+        \end{column}
+        \begin{column}{0.38\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/selenium_browser.png}\\
+            {\scriptsize ``Controlled by automated test software.''}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~8, ``Setting Up Selenium.''}
+\end{frame}
+
+\begin{frame}{A powerful last resort --- and not a loophole}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            Selenium is slow, resource-intensive, and brittle. Use it only when the simpler tools cannot. The decision tree:
+            \begin{enumerate}\small
+                \item \textbf{API?} Use it --- fastest, most structured.
+                \item \textbf{In the static HTML?} \texttt{requests} + BeautifulSoup.
+                \item \textbf{Rendered by JavaScript?} \textit{Now} reach for a browser.
+            \end{enumerate}
+
+            \vspace{0.5em}
+
+            \textbf{Playwright} (Microsoft) is the modern alternative --- auto-waiting, faster, async --- but Selenium is more widespread and fine for coursework.
+
+            \vspace{0.5em}
+
+            Researchers increasingly \textit{need} automation as platforms enclose once-open data \parencite{freelon2018computational} --- which raises the stakes, not lowers them.
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \centering
+            \includegraphics[width=0.82\textwidth]{img/decision_tree.png}\\[0.4em]
+            \begin{alertblock}{Automation is not a loophole}
+                \footnotesize A \texttt{robots.txt} rule and a site's ToS still apply when a real browser does the clicking. (Ch.~2)
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~8, ``When to Use Selenium vs.\ APIs'' \& ``The Fragility Problem.''}
+\end{frame}
+
+\begin{frame}{What the notebook covers}
+    This week's companion notebook builds the workflow one interaction at a time:
+    \begin{itemize}
+        \item \textbf{Launch \& locate} --- start a driver, find elements by ID, name, CSS selector, and XPath (on xkcd)
+        \item \textbf{Extract} --- read hidden attributes like an image's \texttt{alt} and \texttt{title} (the xkcd hover-text joke)
+        \item \textbf{Interact} --- click a button, type a Wikipedia search, and submit it like a user
+        \item \textbf{Wait \& scroll} --- replace blind \texttt{time.sleep()} with \texttt{WebDriverWait}; harvest an infinite-scroll page
+        \item \textbf{Hand off} --- pass the rendered \texttt{page\_source} to BeautifulSoup, then \texttt{driver.quit()}
+    \end{itemize}
+
+    \vspace{0.75em}
+
+    \begin{alertblock}{Connecting to Ch.~2 (Ethics)}
+        Everything from the ethics chapter applies with full force here. Before you automate \textit{any} site, check its \texttt{robots.txt} and Terms of Service --- especially anything logged-in or ToS-restricted, where the temptation is greatest.
+    \end{alertblock}
+\end{frame}
+
+% =========================================================================
+\section{Wednesday · Notebook Lab}
+% =========================================================================
+
+\begin{frame}[fragile]{Launch a driver, then locate elements}
+    Four strategies find elements; \texttt{find\_element} returns the first match, \texttt{find\_elements} returns a list:
+\begin{lstlisting}
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()          # Selenium Manager fetches the driver
+driver.get("https://xkcd.com")
+
+comic = driver.find_element(By.ID, "comic")                        # by id
+nav   = driver.find_elements(By.CSS_SELECTOR, "ul.comicNav li a")  # -> a list
+title = driver.find_element(By.XPATH, "//div[@id='ctitle']")       # by XPath
+print(title.text)                    # the title of the current comic
+\end{lstlisting}
+    Prefer a stable anchor --- an \texttt{id} or a semantic \texttt{class} --- over a brittle, position-based path.
+    \bottomcite{Textbook Ch.~8, ``Navigating and Finding Elements.''}
+\end{frame}
+
+\begin{frame}[fragile]{Read attributes, then act like a user}
+\begin{lstlisting}
+# xkcd hides a joke in the image's title (hover) attribute
+img = driver.find_element(By.XPATH, "//div[@id='comic']//img")
+print(img.get_attribute("alt"))      # the accessible description
+print(img.get_attribute("title"))    # the mouseover punchline
+
+# Anything a user can do, Selenium can do -- e.g. click "Random":
+btn = driver.find_element(
+    By.XPATH, "//ul[@class='comicNav']//a[contains(text(),'Random')]")
+btn.click()
+\end{lstlisting}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \texttt{get\_attribute()} reads \textit{any} HTML attribute (even ones you never see); \texttt{.text} reads the visible text.
+        \end{column}
+        \begin{column}{0.36\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/xkcd_inspect.png}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~8, ``Extracting Data'' \& ``Simulating Interactions.''}
+\end{frame}
+
+\begin{frame}[fragile]{Type, submit --- then wait \textit{well}}
+    Fill a search box, submit, and wait for the exact condition instead of guessing a duration:
+\begin{lstlisting}
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+driver.get("https://www.wikipedia.org")
+box = driver.find_element(By.NAME, "search")
+box.send_keys("Colorado Buffaloes")      # type like a user
+box.send_keys(Keys.RETURN)               # submit the form
+
+WebDriverWait(driver, 10).until(         # not a blind time.sleep(2)!
+    EC.presence_of_element_located((By.ID, "firstHeading")))
+print(driver.title)                      # -> Colorado Buffaloes - Wikipedia
+\end{lstlisting}
+    \texttt{WebDriverWait} polls every 0.5\,s, returns \textit{the instant} the condition holds, and raises \texttt{TimeoutException} if it never does --- faster, and it fails loudly. Common conditions: \texttt{presence\_of\_element\_located}, \texttt{visibility\_of\_element\_located}, \texttt{element\_to\_be\_clickable}.
+    \bottomcite{Textbook Ch.~8, ``Typing and Searching'' \& ``Waiting for Dynamic Content.''}
+\end{frame}
+
+\begin{frame}[fragile]{Scraping an infinite-scroll page}
+    Scroll to the bottom, wait, and stop when the page stops growing:
+\begin{lstlisting}
+def scrape_infinite_scroll(driver, max_scrolls=20, pause=2):
+    last = driver.execute_script("return document.body.scrollHeight")
+    for i in range(max_scrolls):
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(pause)                # let new content load
+        new = driver.execute_script("return document.body.scrollHeight")
+        if new == last:                  # height stopped growing -> the end
+            break
+        last = new
+    return driver.page_source            # the fully-loaded HTML
+\end{lstlisting}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Set a sane \texttt{max\_scrolls}. \textbf{Proportionality} (Ch.~2): collect only what your question needs --- not an entire 10,000-post feed.
+        \end{column}
+        \begin{column}{0.36\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/infinite_scroll.png}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~8, ``Scraping Infinite Scroll Pages.''}
+\end{frame}
+
+\begin{frame}[fragile]{Selenium renders; BeautifulSoup reads}
+    Get the page into the state you need, hand the rendered HTML to BeautifulSoup, and \textbf{always} clean up:
+\begin{lstlisting}
+from bs4 import BeautifulSoup
+
+try:
+    driver.get("https://example-search-site.com")
+    # ...scroll / click / search until the page is ready...
+    soup = BeautifulSoup(driver.page_source, "html.parser")  # rendered HTML
+    for item in soup.find_all("div", class_="result-item"):
+        title = item.find("h3")
+        if title is None:            # same defensive habit as static scraping
+            continue                 # skip a malformed item instead of crashing
+        print(title.get_text(strip=True))
+finally:
+    driver.quit()                    # each driver is a whole browser process
+\end{lstlisting}
+    Selenium is the \textbf{hands} that navigate; BeautifulSoup is the \textbf{eyes} that read. \texttt{try/finally} guarantees the browser closes even when parsing throws.
+    \bottomcite{Textbook Ch.~8, ``Passing to BeautifulSoup'' \& ``A Practical Selenium Workflow.''}
+\end{frame}
+
+\begin{frame}{Lab: work these, then show-and-tell}
+    \begin{columns}[T]
+        \begin{column}{0.62\textwidth}
+            Work through the chapter's exercises in pairs:
+            \begin{enumerate}\small
+                \item Extract JavaScript-loaded data; compare it to what \texttt{requests.get()} returns
+                \item Automate a multi-step search: navigate, query, submit, extract
+                \item Categorize three sites as static, partially, or fully dynamic
+                \item ``Load More'' button: click in a loop until it disappears --- how many items were hidden?
+                \item Time \texttt{requests} vs.\ headed vs.\ headless Selenium; when is the tradeoff worth it?
+                \item[6.] \textcolor{tab-purple}{\textbf{5617}}: instrument a JS-heavy research site with both approaches; a $\sim$500-word memo engaging \textcite{mitchell2018web}
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.34\textwidth}
+            \begin{block}{Show-and-Tell}
+                \footnotesize Come ready to share:
+                \begin{itemize}\footnotesize
+                    \item a challenging bug
+                    \item interesting data you pulled
+                    \item a provocation for a research design
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[standout]
+    The Twitter scraper that worked in 2019\\
+    was dead by 2024.\\[1em]
+    Browser automation is borrowed time ---\\
+    {\large write it defensively, and expect it to break.}
+\end{frame}
+
+% =========================================================================
+\section{Friday · Textbook Revisions}
+% =========================================================================
+
+\begin{frame}{Improving Chapter 8 together}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-08-dynamic-pages.qmd} and reviews a classmate's.
+
+            \vspace{1em}
+
+            The workflow (from Week 1):
+            \begin{enumerate}\small
+                \item Branch / fork the book repo
+                \item Edit the chapter; commit with a clear message
+                \item Open a PR describing \textit{what} and \textit{why}
+                \item Review two peers' PRs: kind, specific, actionable
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.36\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/pr_review.png}
+        \end{column}
+    \end{columns}
+    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (30\%).}
+\end{frame}
+
+\begin{frame}{A revision menu for Chapter 8}
+    High-value targets --- pick one and scope it to a single PR:
+    \begin{itemize}
+        \item \textbf{Test the code against live sites.} The xkcd and Wikipedia examples drift. Run the notebook headless, report what broke (a renamed class, a new consent banner), and fix the selector --- the chapter's own ``Fragility Problem.''
+        \item \textbf{Close a gap in ``Common Issues to Debug.''} Add a worked \texttt{StaleElementReferenceException} reproduction, or a headed-vs-headless content difference caused by \texttt{navigator.webdriver} detection.
+        \item \textbf{Write the Playwright counterpart.} The chapter \textit{names} Playwright as the modern alternative but shows no code --- add a short side-by-side of the search example.
+        \item \textbf{Add a figure.} A clean API~$\rightarrow$~static~$\rightarrow$~Selenium decision-tree diagram, or an annotated shot of a driver-controlled browser.
+        \item \textbf{Strengthen an exercise.} Add expected output, a rubric, or a starter cell (e.g.\ a public infinite-scroll demo page) so Exercise 1 or 4 is self-checking.
+        \item \textbf{Extend ``Further Reading.''} A public-interest case study that turned to browser automation after an API closed --- tying the ``Public Interest'' callout to the post-API enclosure.
+    \end{itemize}
+    \bottomcite{Targets drawn from the chapter's callouts, ``Common Issues,'' and ``Further Reading.''}
+\end{frame}
+
+\begin{frame}{What makes a good revision \& a good review}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{block}{A strong PR}
+                \begin{itemize}\small
+                    \item One focused change, clearly titled
+                    \item Explains the problem it fixes
+                    \item Builds (\texttt{quarto render}) without errors
+                    \item Matches the book's voice and notation
+                    \item Discloses any AI assistance
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{A strong review}
+                \begin{itemize}\small
+                    \item Runs / reads the change, not just skims
+                    \item Names specifics (line, claim, code)
+                    \item Separates ``must fix'' from ``nice to have''
+                    \item Is generous --- assume good faith
+                    \item Ends with a clear verdict
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+    \vspace{0.5em}
+    \centering\small Next week: \textbf{Extracting data from PDFs} --- when the data isn't on a web page at all.
+\end{frame}
+
+% =========================================================================
+\begin{frame}{Key takeaways}
+    \begin{enumerate}
+        \item Static tools see the HTML \textbf{skeleton}; dynamic pages render their data with JavaScript \textit{after} it arrives.
+        \item Selenium drives a \textbf{real browser} --- locate elements (ID / name / CSS / XPath), then click, type, and scroll like a user.
+        \item Wait on \textbf{conditions} with \texttt{WebDriverWait}, not a blind \texttt{time.sleep()} --- it's faster and fails loudly.
+        \item Render with Selenium, extract with BeautifulSoup --- hands and eyes --- and \texttt{driver.quit()} every time.
+        \item Selenium is a slow, fragile \textbf{last resort}: API~$\rightarrow$~static~$\rightarrow$~browser. Automation never suspends \texttt{robots.txt} or a site's ToS.
+    \end{enumerate}
+    \vspace{1em}
+    \bottomcite{Reading: Textbook Ch.~8. Related: \textcite{mitchell2018web}; \textcite{garcia_SurveySeleniumEcosystem_2020}; \textcite{perriam2020digital}.}
+\end{frame}
+
+\end{document}

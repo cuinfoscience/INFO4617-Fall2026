@@ -1,0 +1,382 @@
+% ==========================================================================
+% INFO 4617 Web Data Science -- Week 2: Ethics, Law & Responsible Data
+% Collection (Chapter 2)
+% Build:  TEXINPUTS=../common: BIBINPUTS=../common: latexmk -pdf slides.tex
+% (or run `make` from the slides/ directory)
+% ==========================================================================
+\documentclass[9pt,aspectratio=169]{beamer}
+\input{preamble}
+
+\title[Week 2 · Ethics \& Law]{{\Huge Ethics, Law \& Responsible Data Collection}}
+\subtitle{Week 2 · Foundations module · Textbook Chapter 2}
+\author[Keegan]{\textbf{Brian C. Keegan, Ph.D.} \\ Associate Professor, Department of Information Science \\ University of Colorado Boulder}
+\date{August 24, 26 \& 28, 2026}
+
+\begin{document}
+
+\maketitle
+
+% -------------------------------------------------------------------------
+\begin{frame}{This week at a glance}
+    \begin{columns}[T]
+        \begin{column}{0.62\textwidth}
+            Before we collect a single row, we settle the harder question --- not \textit{can} we, but \textbf{should} we, and if so, how responsibly?
+
+            \vspace{1em}
+
+            \dayband{Monday}{Concepts \& notebook intro}
+            \begin{itemize}\small
+                \item The legal landscape, \texttt{robots.txt}, and a five-question ethical framework
+            \end{itemize}
+
+            \vspace{0.5em}
+
+            \dayband{Wednesday}{Notebook lab}
+            \begin{itemize}\small
+                \item \texttt{robots.txt}, User-Agent headers, rate limiting --- and building \texttt{responsible\_get()}
+            \end{itemize}
+
+            \vspace{0.5em}
+
+            \dayband{Friday}{Textbook revisions}
+            \begin{itemize}\small
+                \item Propose \& peer-review pull requests improving Chapter 2 --- our first real PR
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.34\textwidth}
+            \begin{block}{Companion notebook}
+                \footnotesize \texttt{ch-02-ethics.ipynb}
+            \end{block}
+            \begin{alertblock}{Bring a laptop}
+                \footnotesize Wednesday is hands-on --- we send live requests and watch what the server sees.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% =========================================================================
+\section{Monday · Concepts}
+% =========================================================================
+
+\begin{frame}{The ethics of retrieval}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            ``Web scraping'' is a popular phrase --- and a faintly pejorative one. Data is \textbf{valuable}: other people invested time, money, and effort to create and host what you are about to retrieve programmatically.
+
+            \vspace{0.9em}
+
+            So the question is never simply \textbf{``can I scrape this?''} but \textbf{``should I --- and if so, how do I do it responsibly?''}
+
+            \vspace{0.9em}
+
+            This chapter builds a \textbf{decision framework} to revisit before every collection project in this course and beyond. Three layers of guidance, none sufficient alone: \textbf{law}, \textbf{technical norms} (\texttt{robots.txt}), and \textbf{ethics}.
+        \end{column}
+        \begin{column}{0.36\textwidth}
+            \begin{alertblock}{One idea to carry all semester}
+                \footnotesize ``It's technically possible'' is not the same as ``it's legal,'' and ``it's legal'' is not the same as ``it's ethical.''
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~2, ``The Ethics of Retrieval.''}
+\end{frame}
+
+\begin{frame}{The legal landscape is unsettled}
+    \begin{columns}[T]
+        \begin{column}{0.58\textwidth}
+            The \textbf{Computer Fraud and Abuse Act} (CFAA, 1986) bans ``unauthorized access'' --- but what that means for scraping is still litigated. Three cases draw today's boundaries:
+            \begin{itemize}\small
+                \item \textbf{Van Buren v.\ United States (2021)} --- the Supreme Court's ``gates-up-or-down'' reading: the CFAA targets entering areas you may not enter, \textit{not} misusing data you were allowed to see.
+                \item \textbf{hiQ Labs v.\ LinkedIn (2019, 2022)} --- scraping \textit{public} profiles likely isn't a CFAA violation (no login gate bypassed), yet hiQ still \textbf{lost on breach of contract} for scraping after agreeing to the ToS.
+                \item \textbf{Sandvig v.\ Barr (2020)} --- violating a site's Terms of Service is not, by itself, a federal crime --- modest cover for audit-study research.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.38\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/legal_timeline.png}\\
+            {\scriptsize The CFAA has also been used to \textit{threaten} researchers and journalists --- the Aaron Swartz case is the sobering example.}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~2, ``Legal Frameworks.'' Legal-ethical analysis of ToS-based restrictions: \textcite{fiesler2020no}.}
+\end{frame}
+
+\begin{frame}{A moving target: scraping, AI \& privacy law}
+    As of mid-2026, three developments matter most for your work:
+    \begin{itemize}
+        \item \textbf{Public data, contract risk.} Meta's claims against the broker \textbf{Bright Data} (2024) failed --- the scraping collected only public, logged-out data --- and a parallel \textbf{X Corp.} suit was dismissed. Legal risk concentrates at \textit{authentication barriers and contracts}, not public visibility.
+        \item \textbf{The AI front.} \textit{New York Times v.\ OpenAI} and a wave of similar suits ask whether scraping to \textbf{train models} is fair use. Publishers have already hardened sites and added AI directives to \texttt{robots.txt}.
+        \item \textbf{State privacy law.} California's CCPA/CPRA and 12+ states --- including the \textbf{Colorado Privacy Act} --- now bring GDPR-like rights. If your dataset names residents, these laws can apply to \textit{you}, even as a student.
+    \end{itemize}
+    \vspace{0.3em}
+    \begin{alertblock}{Practical implication}
+        \footnotesize Treat personal data as a \textbf{liability, not an asset} --- collect the minimum you need.
+    \end{alertblock}
+    \bottomcite{Textbook Ch.~2, ``The Current Landscape.'' Data revolts against AI scraping: \parencite{frenkel_not_2023}.}
+\end{frame}
+
+\begin{frame}{An ethical decision framework}
+    \begin{columns}[T]
+        \begin{column}{0.62\textwidth}
+            Before any project, work through five questions:
+            \begin{enumerate}\small
+                \item \textcolor{tab-blue}{\textbf{Legality}} --- CFAA, GDPR, local law, the site's ToS?
+                \item \textcolor{tab-green}{\textbf{Consent}} --- did people consent? Is it truly public, or shared with a reasonable expectation of limited visibility \parencite{zimmer_DataAlreadyPublic_2010}?
+                \item \textcolor{tab-orange}{\textbf{Proportionality}} --- only the data you need? Could a smaller or less sensitive set answer the question?
+                \item \textcolor{tab-purple}{\textbf{Privacy}} --- any PII? Could individuals be re-identified? What if it leaks?
+                \item \textcolor{tab-red}{\textbf{Server impact}} --- a meaningful load? Rate-limited? Scraping off-peak?
+            \end{enumerate}
+            \vspace{0.2em}
+            {\footnotesize No framework substitutes for judgment --- but working these questions surfaces the risks.}
+        \end{column}
+        \begin{column}{0.36\textwidth}
+            \begin{block}{IRBs \& web data}
+                \footnotesize Scraping becomes \textit{human-subjects research} when you collect data about \textbf{identifiable people} to produce \textbf{generalizable knowledge}. Public officials' votes: usually not. Social-media profiles for health or politics: almost certainly. When in doubt, ask your IRB.
+            \end{block}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~2, ``An Ethical Decision Framework'' \& ``IRBs and Web Data.'' The Belmont Report maps consent~$\to$~respect, proportionality/privacy~$\to$~beneficence, risk~$\to$~justice.}
+\end{frame}
+
+% =========================================================================
+\section{Wednesday · Notebook Lab}
+% =========================================================================
+
+\begin{frame}[fragile]{\texttt{robots.txt}: read it before you scrape}
+    A \texttt{robots.txt} at a site's root declares what automated agents may fetch. Read it raw, or parse it and ask permission per URL:
+\begin{lstlisting}
+import requests
+from urllib.robotparser import RobotFileParser
+
+print(requests.get("https://en.wikipedia.org/robots.txt").text[:400])
+# User-agent: *  /  Disallow: /w/  /  Allow: ...  /  Crawl-delay: ...
+
+rp = RobotFileParser()
+rp.set_url("https://en.wikipedia.org/robots.txt")
+rp.read()
+
+rp.can_fetch("*", "https://en.wikipedia.org/wiki/Python_(programming_language)")  # True
+rp.can_fetch("*", "https://en.wikipedia.org/w/api.php")                           # False
+rp.crawl_delay("*")   # seconds between requests, or None -> pick a polite default
+\end{lstlisting}
+    The nuance: \texttt{/wiki/} articles are open, but \texttt{/w/} (dynamic pages + API) is disallowed \textit{for crawlers}. Deliberate API clients follow different norms (Ch.~10) --- \texttt{robots.txt} is one input, not the whole rulebook.
+    \bottomcite{Textbook Ch.~2, ``Technical Norms: \texttt{robots.txt}.''}
+\end{frame}
+
+\begin{frame}[fragile]{What \texttt{robots.txt} reveals across platforms}
+\begin{lstlisting}
+sites = {"Wikipedia": "https://en.wikipedia.org/robots.txt",
+         "Reddit":    "https://www.reddit.com/robots.txt",
+         "NY Times":  "https://www.nytimes.com/robots.txt"}
+
+for name, url in sites.items():
+    lines = requests.get(url).text.strip().split("\n")
+    disallow = sum(l.startswith("Disallow") for l in lines)
+    allow    = sum(l.startswith("Allow")    for l in lines)
+    print(f"{name}: {len(lines)} lines, {disallow} Disallow, {allow} Allow")
+\end{lstlisting}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \footnotesize
+            \textbf{Wikipedia} --- permissive where it matters (openness is the mission; data flows through its API + dumps). \textbf{Reddit} --- tolerates access within limits. \textbf{NY Times} --- restrictive; the content is a commercial product. Reading it tells you \textit{what kind of organization} you're dealing with.
+
+            \vspace{0.4em}
+            Two caveats: it's a \textbf{norm, not a law} (violating it isn't illegal, but it's rude and gets you IP-blocked); and a \textbf{404} means \textit{no rules}, not ``crawl aggressively.''
+        \end{column}
+        \begin{column}{0.36\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/robots_txt_browser.png}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~2, ``Comparing \texttt{robots.txt} Across Platforms.''}
+\end{frame}
+
+\begin{frame}[fragile]{Identify yourself, then slow down}
+    Two habits make you a good citizen of the web --- a truthful \texttt{User-Agent} and rate limiting:
+\begin{lstlisting}
+import time, requests
+
+headers = {
+    "User-Agent": "WebDataScience/1.0 (INFO 4617; brian.keegan@colorado.edu)"
+}
+
+for url in urls:
+    response = requests.get(url, headers=headers)
+    # ... process the response ...
+    time.sleep(1)          # a good default: about one request per second
+\end{lstlisting}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \footnotesize The default \texttt{requests} User-Agent marks you as an anonymous bot. A good one \textbf{identifies you and gives contact info}, so operators can reach you instead of simply blocking you --- and some APIs \textit{require} it. Hundreds of requests per second is an accidental \textbf{denial-of-service}: respect any \texttt{Crawl-delay} and stay well inside documented API limits.
+        \end{column}
+        \begin{column}{0.36\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/user_agent_devtools.png}\\
+            {\scriptsize Your header is visible to every server you touch.}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~2, ``Responsible Request Headers'' \& ``Rate Limiting.'' HTTP mechanics: \textit{Missing Manual} Ch.~24.}
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{responsible\_get()}: build it once}
+    Custom User-Agent, rate limiting, and error handling appear in \textit{every} scraping project. Wrap them into one reusable function instead of re-implementing them ad hoc:
+\begin{lstlisting}
+import requests, time
+
+def responsible_get(url, headers=None, delay=1.0):
+    """GET with responsible defaults: identify, rate-limit, fail loudly."""
+    default_headers = {
+        "User-Agent": "WebDataScience/1.0 (INFO 4617; you@colorado.edu)"}
+    if headers:
+        default_headers.update(headers)
+    try:
+        response = requests.get(url, headers=default_headers, timeout=30)
+        response.raise_for_status()      # treat 4xx/5xx as failures, not data
+        time.sleep(delay)                # rate-limit by default
+        return response
+    except requests.exceptions.RequestException as e:
+        print(f"Request failed ({type(e).__name__}): {url}")
+        return None
+\end{lstlisting}
+    \bottomcite{Textbook Ch.~2, ``Building a Responsible Scraper Function.''}
+\end{frame}
+
+\begin{frame}{Why it's built that way --- and reused everywhere}
+    \begin{columns}[T]
+        \begin{column}{0.58\textwidth}
+            \begin{block}{Every default encodes a principle}
+                \begin{itemize}\small
+                    \item \textbf{Custom User-Agent} --- identify \& give contact
+                    \item \textbf{\texttt{delay} defaults ON} --- aggressive scraping must be a \textit{conscious} override, not an oversight
+                    \item \texttt{raise\_for\_status()} --- a 403/404 fails loudly instead of feeding your parser garbage
+                    \item broad \texttt{except} --- \texttt{ConnectionError}, \texttt{Timeout}, \texttt{SSLError} log rather than crash the run
+                    \item \texttt{timeout=30} --- never hang forever on a dead server
+                    \item pass a site's \texttt{Crawl-delay} as \texttt{delay} to honor its stated preference
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.38\textwidth}
+            \begin{alertblock}{You'll import this again}
+                \footnotesize \texttt{responsible\_get()} returns in \textbf{Ch.~6} (scraping HTML tables), \textbf{Ch.~7} (Wayback snapshots), and throughout the \textbf{API chapters}.
+
+                \vspace{0.5em}
+
+                Building responsible defaults into your \textit{tools} is more reliable than remembering to add them each time.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~2. Reused in later chapters on static pages, archives, and APIs.}
+\end{frame}
+
+\begin{frame}{Lab: work these, then show-and-tell}
+    \begin{columns}[T]
+        \begin{column}{0.62\textwidth}
+            Work through the notebook exercises in pairs:
+            \begin{enumerate}\small
+                \item Compare \texttt{robots.txt} for five sites in one category --- what patterns emerge?
+                \item ToS audit --- find three clauses restricting automated collection; do research exceptions apply?
+                \item Run the five-question framework on a scenario: scraping a dating app's profiles to study self-presentation
+                \item Rate-limit experiment --- time five requests with \texttt{time.time()} at 1s then 2s; does timing match intent?
+                \item Audit a site you use daily: reconcile \texttt{robots.txt}, ToS, and the framework in 300 words --- where do they conflict?
+                \item[6.] \textcolor{tab-purple}{\textbf{5617}}: read \textcite{fiesler2020no} + EFF's CFAA explainer + \textit{Van Buren}; write a two-page platform-collection memo
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.34\textwidth}
+            \begin{block}{Show-and-Tell}
+                \footnotesize Come ready to share:
+                \begin{itemize}\footnotesize
+                    \item a challenging bug
+                    \item interesting data you pulled
+                    \item a provocation for a research design
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[standout]
+    ``Can I scrape this?'' is the wrong question.\\[0.4em]
+    Ask instead: \textit{should} I --- and if so, how do I do it responsibly?\\[1em]
+    {\large Legality · Consent · Proportionality · Privacy · Server impact.}
+\end{frame}
+
+% =========================================================================
+\section{Friday · Textbook Revisions}
+% =========================================================================
+
+\begin{frame}{Improving Chapter 2 together}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Last week you set up Git and GitHub. Today we open our \textbf{first real pull request} --- against \texttt{ch-02-ethics.qmd} --- and review a classmate's.
+
+            \vspace{1em}
+
+            The workflow (from Week 1):
+            \begin{enumerate}\small
+                \item Branch / fork the book repo
+                \item Edit the chapter; commit with a clear message
+                \item Open a PR describing \textit{what} and \textit{why}
+                \item Review two peers' PRs: kind, specific, actionable
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.36\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/pr_review.png}
+        \end{column}
+    \end{columns}
+    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (30\%).}
+\end{frame}
+
+\begin{frame}{A revision menu for Chapter 2}
+    High-value targets --- pick one and scope it to a single PR:
+    \begin{itemize}
+        \item \textbf{Re-run the live code.} \texttt{robots.txt} files drift --- verify the described Wikipedia \texttt{/w/} rules and Reddit patterns still hold, then update the prose and expected output.
+        \item \textbf{Close a gap in ``Common Issues to Debug.''} Add a worked \textbf{403-with-a-good-User-Agent} case, a \texttt{robots.txt} 404 example, or a note on CAPTCHA / bot-detection beyond \texttt{robots.txt}.
+        \item \textbf{Add a figure.} A clean five-question framework diagram, an annotated \texttt{robots.txt} anatomy, or a CFAA case timeline.
+        \item \textbf{Strengthen an exercise.} Add a rubric or expected output to the framework exercise, or a starter cell so it self-checks.
+        \item \textbf{Update the legal landscape.} The ``Current Landscape (mid-2026)'' section dates quickly --- verify a recent ruling or add a Colorado Privacy Act explainer tied to the ``Public Interest Connection'' callout.
+    \end{itemize}
+    \bottomcite{Targets drawn from the chapter's callouts, ``Common Issues,'' and ``Further Reading.''}
+\end{frame}
+
+\begin{frame}{What makes a good revision \& a good review}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{block}{A strong PR}
+                \begin{itemize}\small
+                    \item One focused change, clearly titled
+                    \item Explains the problem it fixes
+                    \item Builds (\texttt{quarto render}) without errors
+                    \item Matches the book's voice and notation
+                    \item Discloses any AI assistance
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{A strong review}
+                \begin{itemize}\small
+                    \item Runs / reads the change, not just skims
+                    \item Names specifics (line, claim, code)
+                    \item Separates ``must fix'' from ``nice to have''
+                    \item Is generous --- assume good faith
+                    \item Ends with a clear verdict
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+    \vspace{0.5em}
+    \centering\small Next week: \textbf{The Post-API Age} --- why the open web is closing, and how researchers adapt.
+\end{frame}
+
+% =========================================================================
+\begin{frame}{Key takeaways}
+    \begin{enumerate}
+        \item \textbf{``Can I?'' is not ``should I?''} --- the real question is how to collect data \textit{responsibly}.
+        \item The law is unsettled: the CFAA targets \textbf{bypassing gates} (Van Buren), but \textbf{contracts and ToS} still bite (hiQ); state privacy laws and GDPR reach personal data.
+        \item \texttt{robots.txt} is a \textbf{norm, not a law} --- read it, respect \texttt{Disallow} and \texttt{Crawl-delay}; a 404 means no rules, not open season.
+        \item \textbf{Identify yourself} (custom \texttt{User-Agent}) and \textbf{rate-limit} (\texttt{time.sleep}) --- then wrap both into \texttt{responsible\_get()} and reuse it.
+        \item Run the \textbf{five-question framework} before every project; when in doubt, use an API, collect less, and err toward caution.
+    \end{enumerate}
+    \vspace{0.75em}
+    \bottomcite{Reading: Textbook Ch.~2. Related: \textcite{fiesler2020no}; \textcite{freelon2018computational}.}
+\end{frame}
+
+\end{document}

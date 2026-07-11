@@ -1,0 +1,6 @@
+# filename	WIDTHxHEIGHT	description of the real asset to drop in
+xml_tree.png	1200x760	Diagram: the House MemberData XML as a tree (MemberData -> members -> member -> member-info -> firstname/lastname/party/state), annotated with .find_all / .find / .text paths and the postal-code attribute on <state>
+json_onion.png	1200x760	Diagram: nested JSON drawn as an onion (outer dict -> "daily" dict -> lists of values), showing the type()/.keys() "peel the onion" traversal one layer at a time
+house_xml_raw.png	1200x820	Screenshot: clerk.house.gov MemberData.xml raw XML rendered in a browser, with the publish-date attribute and one <member> block highlighted
+weather_forecast_plot.png	1200x560	Figure: Open-Meteo 7-day high/low temperature forecast for Boulder, CO (matplotlib line plot with a shaded band between the series) produced by the companion notebook
+pr_review.png	1300x760	Screenshot: a GitHub pull-request "Files changed" view with an inline review comment on ch-04-data-formats.qmd
