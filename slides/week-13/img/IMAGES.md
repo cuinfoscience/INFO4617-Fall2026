@@ -1,0 +1,11 @@
+# Image placeholders for `.`
+
+These are auto-generated gray **placeholders** so the deck compiles. Replace each with the real asset described below (keep the same filename), then rebuild.
+
+| File | Size | Should show |
+|---|---|---|
+| `chat_api_request.png` | 1200x760 | Diagram: chat-completions request/response flow -- a messages array (system + user roles) sent to the API, returning one completion at response.choices[0].message.content; OpenAI chat.completions vs Anthropic messages shapes side by side |
+| `model_comparison.png` | 1150x740 | Figure: the same Colorado bill classified by gpt-4o-mini and claude-sonnet-4, agreeing on clear cases and diverging on a boundary case (EV incentives -> environment vs transportation), with an agreement rate callout |
+| `embeddings_heatmap.png` | 1000x860 | Figure: seaborn cosine-similarity heatmap of Colorado bill-summary embeddings (text-embedding-3-small), annotated cells, YlOrRd colormap -- the chapter's Step 3 output |
+| `token_pricing.png` | 1150x780 | Screenshot: provider token-pricing table showing per-1M-token input/output prices for gpt-4o-mini vs gpt-4o (and an embedding model), highlighting the >10x flagship-vs-mini gap |
+| `pr_review.png` | 1300x780 | Screenshot: a GitHub pull-request "Files changed" view with an inline review comment on ch-13-ai-apis.qmd, including an AI-use disclosure note in the PR description |

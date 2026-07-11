@@ -8,3 +8,9 @@
 *.out
 *.toc
 *.synctex.gz
+# biblatex/biber + beamer artifacts
+*.bcf
+*.run.xml
+*.nav
+*.snm
+*.vrb

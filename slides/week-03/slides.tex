@@ -1,0 +1,374 @@
+% ==========================================================================
+% INFO 4617 Web Data Science -- Week 3: The Post-API Age (Chapter 3)
+% Build:  TEXINPUTS=../common: BIBINPUTS=../common: latexmk -pdf slides.tex
+% (or run `make` from the slides/ directory)
+% ==========================================================================
+\documentclass[9pt,aspectratio=169]{beamer}
+\input{preamble}
+
+\title[Week 3 · Post-API Age]{{\Huge The Post-API Age}}
+\subtitle{Week 3 · Foundations module · Textbook Chapter 3}
+\author[Keegan]{\textbf{Brian C. Keegan, Ph.D.} \\ Associate Professor, Department of Information Science \\ University of Colorado Boulder}
+\date{August 31, September 2 \& 4, 2026}
+
+\begin{document}
+
+\maketitle
+
+% -------------------------------------------------------------------------
+\begin{frame}{This week at a glance}
+    \begin{columns}[T]
+        \begin{column}{0.62\textwidth}
+            The web used to invite us in. This week we ask \textit{why} that changed --- and how to keep doing public-interest research anyway.
+
+            \vspace{1em}
+
+            \dayband{Monday}{Concepts \& notebook intro}
+            \begin{itemize}\small
+                \item The golden age, then enclosure, exemption \& erosion
+            \end{itemize}
+
+            \vspace{0.5em}
+
+            \dayband{Wednesday}{Notebook lab}
+            \begin{itemize}\small
+                \item A discussion notebook: build a timeline, apply the framework, plan for closure
+            \end{itemize}
+
+            \vspace{0.5em}
+
+            \dayband{Friday}{Textbook revisions}
+            \begin{itemize}\small
+                \item Propose \& peer-review pull requests improving Chapter 3
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.34\textwidth}
+            \begin{block}{Companion notebook}
+                \footnotesize \texttt{ch-03-post-api.ipynb}
+            \end{block}
+            \begin{alertblock}{A conceptual week}
+                \footnotesize No code today --- the notebook is a space for notes, arguments, and evidence. Bring a laptop and an example that matters to you.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% =========================================================================
+\section{Monday · Concepts}
+% =========================================================================
+
+\begin{frame}{The golden age of web data access}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            For roughly a decade --- about \textbf{2008 to 2018} --- the web behaved as if it wanted to be studied.
+            \begin{itemize}\small
+                \item Twitter opened its API in 2006; Facebook launched the Graph API in 2010; Reddit's API was free and essentially unrestricted; Google exposed trends, maps, and books.
+                \item This was not charity: platforms traded \textbf{data access} for \textbf{ecosystems}, credibility, and lock-in.
+                \item The bargain built a field --- computational social science \parencite{lazer2009computational} --- and a generation of data journalism and civic tech.
+            \end{itemize}
+
+            \vspace{0.5em}
+
+            When researchers today say the \textbf{``post-API age''} \parencite{freelon2018computational}, this is the era they measure against.
+        \end{column}
+        \begin{column}{0.36\textwidth}
+            \begin{block}{Built on the bargain}
+                \footnotesize The Wikipedia and Reddit studies that trained a generation --- including the instructor's --- ran on open APIs, public dumps, and volunteer archives like Pushshift \parencite{baumgartner2020pushshift}. No permission, partnership, or payment required.
+            \end{block}
+            {\scriptsize You will use those same open interfaces in Ch.~10 (Wikipedia).}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~3, ``The Golden Age of Web Data Access.''}
+\end{frame}
+
+\begin{frame}{Pressure 1 --- Enclosure}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            Three pressures explain the shift since $\sim$2018: \textbf{\textcolor{tab-blue}{enclosure}}, \textbf{\textcolor{tab-orange}{exemption}}, \textbf{\textcolor{tab-red}{erosion}}.
+
+            \vspace{0.5em}
+
+            \textbf{Enclosure} privatizes a shared resource --- the name echoes the fencing of English common land. The posts still exist; the \textit{terms of access} are fenced.
+            \begin{itemize}\small
+                \item \textbf{Twitter/X}: a free academic archive (2021) $\rightarrow$ discontinued; enterprise access from \$42{,}000/month. Hundreds of tools went dark.
+                \item \textbf{Reddit}: free since 2008 $\rightarrow$ \$0.24 per 1{,}000 calls (2023); Apollo shut down; 7{,}000+ subreddits went dark; Pushshift was cut off.
+            \end{itemize}
+            \textbf{The driver: generative AI.} Once text became training data, an open API stopped looking like ecosystem-building and started looking like giving away inventory (Reddit--Google: $\sim$\$60M/year).
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/three_pressures.png}\\
+            {\scriptsize Three forces fencing the open web.}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~3, ``Enclosure.'' Facebook's CrowdTangle shutdown (2024) was the template.}
+\end{frame}
+
+\begin{frame}{Pressure 2 --- Exemption}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            \textbf{Exemption}: platforms operate beyond outside scrutiny while running the same studies internally at will.
+
+            \vspace{0.5em}
+
+            \textbf{The asymmetry is the tell.} Every A/B test is a behavioral study, and internal teams have total access --- but outside researchers meet:
+            \begin{itemize}\small
+                \item cease-and-desist letters citing the Computer Fraud and Abuse Act;
+                \item Terms of Service that prohibit the very collection research needs \parencite{fiesler2020no};
+                \item account bans --- e.g., Meta disabling NYU's Ad Observatory (2021), justified as \textit{protecting privacy}.
+            \end{itemize}
+            When ``privacy'' restricts only accountability research --- never ad targeting on the same users --- it is functioning as exemption, not protection.
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/ad_observatory.png}\\
+            {\scriptsize Consenting users' data, still shut down.}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~3, ``Exemption.'' Courts push back at the margins (\emph{Sandvig}, \emph{Van Buren}, \emph{hiQ}; see Ch.~2). EU DSA Article~40 may mandate vetted-researcher access.}
+\end{frame}
+
+\begin{frame}{Pressure 3 --- Erosion}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            \textbf{Erosion} is the quietest pressure: enclosure and exemption are things platforms \textit{do}; erosion is what happens to the web \textit{itself}.
+            \begin{itemize}\small
+                \item \textbf{Links rot.} About half the links in U.S. Supreme Court opinions are dead; a 2024 Pew study found about a third of 2013 web pages gone a decade later.
+                \item \textbf{Platforms churn.} GeoCities vanished; Parler went offline overnight; Twitter became X and broke a decade of embedded links.
+                \item \textbf{Sites redesign} and silently break every scraper --- fragility you will feel in Ch.~6 \& 8.
+            \end{itemize}
+
+            \vspace{0.3em}
+
+            For research this is a \textbf{reproducibility crisis}: a study on the Twitter Academic API cannot be rerun at any price \parencite{davidson2023platform}.
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/link_rot.png}\\
+            {\scriptsize The record decays unless someone saves it.}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~3, ``Erosion.'' Two later chapters are counter-erosion: archives (Ch.~7) and automation (Ch.~14).}
+\end{frame}
+
+\begin{frame}{This is an old problem --- public-interest lineages}
+    Data science is not the first profession to face powerful actors gatekeeping information the public needs. Each precedent offers a hard-won lesson:
+    \begin{itemize}\small
+        \item \textbf{Journalism} --- freedom-of-information laws and the muckraking tradition established that records, public \emph{and} private, are legitimate targets of scrutiny. (You work in this lineage when you file a records request.)
+        \item \textbf{Law} --- discovery rules compel disclosure; due process demands decisions be explainable and reviewable --- inherited almost verbatim by algorithmic accountability.
+        \item \textbf{Accounting} --- after 1929, mandatory audits turned private finances into public record. Lesson: trustworthy disclosure at scale needs \textbf{standards and independent examiners}, not goodwill.
+        \item \textbf{Urban planning} --- impact statements and public comment periods make community input a precondition for decisions about shared resources.
+        \item \textbf{Engineering} --- licensure and safety codes established duties to the public that override duties to an employer. Data science is still writing its equivalent.
+    \end{itemize}
+    \bottomcite{Textbook Ch.~3, ``Public Interest Lineages.'' Missing Manual Ch.~8: ``Artifacts Have Politics.''}
+\end{frame}
+
+% =========================================================================
+\section{Wednesday · Notebook Lab}
+% =========================================================================
+
+\begin{frame}{Working inside it --- openness, oversight, ownership}
+    The counter-values are not a fix for the post-API age; they are a \textbf{stance} for working inside it. They frame everything we do today.
+    \begin{columns}[T]
+        \begin{column}{0.32\textwidth}
+            \begin{block}{Openness}
+                \footnotesize Make your \textit{own} work resist enclosure: transparent pipelines, documented collection, and redundant deposits (Zenodo, Internet Archive, open licenses). Wikipedia is the standing counter-example.
+            \end{block}
+        \end{column}
+        \begin{column}{0.32\textwidth}
+            \begin{block}{Oversight}
+                \footnotesize Insist consequential systems be inspectable by parties who do \textit{not} own them: audits, documentation standards, DSA Article~40. \textbf{The skills this course teaches are oversight skills.}
+            \end{block}
+        \end{column}
+        \begin{column}{0.32\textwidth}
+            \begin{block}{Ownership}
+                \footnotesize Prefer community-governed infrastructure: federated protocols (ActivityPub, AT~Protocol), data cooperatives, ArchiveTeam. The long-horizon answer to enclosure.
+            \end{block}
+        \end{column}
+    \end{columns}
+    \vspace{0.4em}
+    \bottomcite{Textbook Ch.~3, ``Three Counter-Values.'' Federated platforms return in Ch.~12 (Social).}
+\end{frame}
+
+\begin{frame}{Lab 1 --- build the timeline}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \textbf{Exercise 1.} In the notebook, build a timeline of major API-access changes from \textbf{2008 to today}.
+            \begin{itemize}\small
+                \item At least \textbf{five events} across at least \textbf{three platforms}.
+                \item For each, tag which pressure best fits: \textcolor{tab-blue}{enclosure}, \textcolor{tab-orange}{exemption}, or \textcolor{tab-red}{erosion}.
+            \end{itemize}
+
+            \vspace{0.5em}
+
+            The point is not memorizing dates --- it is seeing the \textbf{trend}: free-and-open access for outside observers is what is disappearing, replaced by paid tiers, gated programs, and licensing deals.
+        \end{column}
+        \begin{column}{0.46\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/api_timeline.png}\\
+            {\scriptsize Start here; add the events you already know.}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~3, Exercise~1.}
+\end{frame}
+
+\begin{frame}{Lab 2 --- apply the framework, then plan for closure}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \textbf{Exercise 2 --- name the pressure.} Pick a platform change \textit{not} in the chapter and write 500 words applying the framework. Ask:
+            \begin{itemize}\small
+                \item Was a shared resource fenced? (\textcolor{tab-blue}{enclosure})
+                \item Was scrutiny blocked while internal study continued? (\textcolor{tab-orange}{exemption})
+                \item Did the record simply decay? (\textcolor{tab-red}{erosion})
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.46\textwidth}
+            \textbf{Exercise 3 --- a contingency plan.} Design a project on one web source, then plan for it vanishing mid-study. Redundancy is the strategy; keep $\geq 3$ fallbacks in your repertoire:
+            \begin{itemize}\small
+                \item \textbf{Official research programs} (Meta Content Library, TikTok, Reddit) --- real but rationed.
+                \item \textbf{Data donation} --- users' export rights, with consent built in.
+                \item \textbf{FOIA / records requests} --- see Ch.~11 (Government).
+                \item \textbf{Crowdsourcing} --- when no one holds the data, communities create it.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~3, Exercises~2--3 \& ``What This Means for Practice.''}
+\end{frame}
+
+\begin{frame}[fragile]{Openness in practice --- document the collection}
+    The chapter has no scraping code --- but openness \textit{does} have a concrete artifact. Record not just \textbf{what} you collected but \textbf{how}: endpoints, parameters, dates, and the platform's constraints \parencite{gebru2021datasheets}. A future reader (or you, in a year) can then reconstruct exactly what was allowed:
+\begin{lstlisting}
+collection = {
+    "source":      "reddit.com  (PRAW, r/ClimateChange)",
+    "endpoint":    "GET /r/{sub}/top   params: t=year, limit=1000",
+    "collected":   "2026-02-14",
+    "access_tier": "researcher program (application-gated)",
+    "constraints": "no redistribution of raw comments; 100 req/min",
+    "known_gaps":  "pre-2023 history unavailable -- Pushshift offline",
+}
+import json, pathlib
+pathlib.Path("datasheet.json").write_text(json.dumps(collection, indent=2))
+# The datasheet travels next to the data; the source may change, the record does not.
+\end{lstlisting}
+    \bottomcite{Textbook Ch.~3, ``Openness'' --- documentation as the practice that survives enclosure.}
+\end{frame}
+
+\begin{frame}{Lab: work these, then show-and-tell}
+    \begin{columns}[T]
+        \begin{column}{0.62\textwidth}
+            Work through the notebook prompts in pairs:
+            \begin{enumerate}\small
+                \item Timeline: five events, three platforms, tag each pressure
+                \item Framework application --- 500 words on a fresh case
+                \item Contingency plan --- three concrete fallbacks
+                \item Public-interest audit: take an API-enabled project (paper, investigation, or civic tool) and assess how today's restrictions would hit it. Which value does it embody?
+                \item[5.] \textcolor{tab-purple}{\textbf{5617}}: read \textcite{davidson2023platform} \& \textcite{perriam2020digital}; write a 2--3 page ``state of research access'' brief for one platform, ending with a recommendation.
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.34\textwidth}
+            \begin{block}{Show-and-Tell}
+                \footnotesize Come ready to share:
+                \begin{itemize}\footnotesize
+                    \item an access change that surprised you
+                    \item a dataset you fear losing
+                    \item a provocation for a research design
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[standout]
+    ``If the API closes, I'll just scrape.''\\[0.6em]
+    {\large Visibility, permission, and ethics are three different questions.}\\[1em]
+    Scraping is one tool in a portfolio ---\\
+    not an escape hatch that makes enclosure irrelevant.
+\end{frame}
+
+% =========================================================================
+\section{Friday · Textbook Revisions}
+% =========================================================================
+
+\begin{frame}{Improving Chapter 3 together}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-03-post-api.qmd} and reviews a classmate's.
+
+            \vspace{1em}
+
+            The workflow (from Week 1):
+            \begin{enumerate}\small
+                \item Branch / fork the book repo
+                \item Edit the chapter; commit with a clear message
+                \item Open a PR describing \textit{what} and \textit{why}
+                \item Review two peers' PRs: kind, specific, actionable
+            \end{enumerate}
+
+            \vspace{0.5em}
+
+            This is a \textbf{fast-moving} chapter --- prices, lawsuits, and regulations change monthly --- so it always needs hands.
+        \end{column}
+        \begin{column}{0.36\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/pr_review.png}
+        \end{column}
+    \end{columns}
+    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (30\%).}
+\end{frame}
+
+\begin{frame}{A revision menu for Chapter 3}
+    High-value targets --- pick one and scope it to a single PR:
+    \begin{itemize}\small
+        \item \textbf{Add the missing figures.} This chapter is \textit{all prose}. Contribute a three-pressures diagram, an API-access timeline (2008--2026), or a link-rot chart --- the deck's placeholders show the need.
+        \item \textbf{Update the moving numbers.} Verify and re-cite the Twitter/X pricing, the Reddit--Google deal, and DSA Article~40's implementation status ``as of mid-2026.'' Flag what has gone stale.
+        \item \textbf{Resolve the editorial TODOs.} The source carries author-voice and ``add citation when published'' notes (the openness/oversight/ownership framing). Track down a source or draft the text.
+        \item \textbf{Strengthen the open-ended exercises.} Add a rubric, a deliverable format, or a starter table for the timeline so Exercise~1 is self-checking.
+        \item \textbf{Extend a Misconception or Further Reading.} Add a post-2023 source on AI-training licensing, tied to ``enclosure logic is spreading.''
+        \item \textbf{Verify the cross-references.} Ch.~3 leans on many \texttt{@sec-} links (ethics, wikipedia, archives, automation, social, government). Confirm each resolves and is described accurately.
+    \end{itemize}
+    \bottomcite{Targets drawn from the chapter's callouts, thin exercises, ``Common Misconceptions,'' and ``Further Reading.''}
+\end{frame}
+
+\begin{frame}{What makes a good revision \& a good review}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{block}{A strong PR}
+                \begin{itemize}\small
+                    \item One focused change, clearly titled
+                    \item Explains the problem it fixes
+                    \item Builds (\texttt{quarto render}) without errors
+                    \item Matches the book's voice and notation
+                    \item Discloses any AI assistance
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{A strong review}
+                \begin{itemize}\small
+                    \item Runs / reads the change, not just skims
+                    \item Names specifics (line, claim, source)
+                    \item Separates ``must fix'' from ``nice to have''
+                    \item Is generous --- assume good faith
+                    \item Ends with a clear verdict
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+    \vspace{0.5em}
+    \centering\small Next week: \textbf{Data formats} --- XML \& JSON, the shapes web data actually arrives in.
+\end{frame}
+
+% =========================================================================
+\begin{frame}{Key takeaways}
+    \begin{enumerate}
+        \item The open-API era ($\sim$2008--2018) was a \textbf{strategic bargain}, not a natural state --- and computational social science was built on the trade.
+        \item \textbf{Enclosure} converts collective data into private assets: shutdowns, repricing, and AI-training licensing deals.
+        \item \textbf{Exemption} is the asymmetry of scrutiny --- platforms study users freely while blocking those who study platforms.
+        \item \textbf{Erosion} is infrastructural decay, so reproducibility is a problem you must solve \textit{at collection time}.
+        \item The response is \textbf{redundancy}: openness, oversight, ownership --- and mastery of many access techniques so no single closure ends your research.
+    \end{enumerate}
+    \vspace{0.5em}
+    \bottomcite{Reading: Textbook Ch.~3. See \textcite{freelon2018computational}; \textcite{bruns2019after}; \textcite{lazer2020computational}.}
+\end{frame}
+
+\end{document}
