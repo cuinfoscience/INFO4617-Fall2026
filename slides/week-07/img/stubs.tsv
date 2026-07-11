@@ -1,0 +1,6 @@
+# filename	WIDTHxHEIGHT	description of the real asset to drop in
+wayback_calendar.png	1200x820	Screenshot: the Wayback Machine calendar view for a URL (web.archive.org) with the year timeline and month grid of capture dots highlighted
+change_timeline.png	1200x560	Figure: matplotlib line plot of document change score (1 - bag-of-words similarity) across consecutive Facebook ToS versions, with spikes marking major revisions
+wrapped_vs_raw.png	1200x780	Diagram: side-by-side of a Wayback snapshot with the injected toolbar/banner and rewritten links (wrapped) vs the same page fetched with the id_ suffix (raw, unmodified capture), annotated
+cdx_response.png	1200x720	Screenshot: a CDX Server API JSON response, showing the header row then rows of timestamp / original / statuscode / length for successive captures
+pr_review.png	1300x760	Screenshot: a GitHub pull-request "Files changed" view with an inline review comment on ch-07-archives.qmd
