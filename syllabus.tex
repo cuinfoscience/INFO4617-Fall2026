@@ -1,0 +1,420 @@
+ \documentclass[11pt]{memoir}
+
+% based on kieran healy's memoir modifications
+\usepackage{mako-mem}
+\chapterstyle{article-2}
+\pagestyle{mako-mem}
+
+% \usepackage{ucs}
+% \usepackage[utf8x]{inputenc}
+
+%\usepackage{kpfonts}
+%\usepackage[bitstream-charter]{mathdesign}
+\usepackage{fbb}
+\usepackage[T1]{fontenc}
+%\usepackage{textcomp}
+
+%\renewcommand{\rmdefault}{ugm}
+%\renewcommand{\sfdefault}{phv}
+
+% Packages for making a landscape table (?)
+\usepackage[table,dvipsnames]{xcolor}
+\usepackage{multirow, makecell}
+\usepackage{pdflscape}
+\usepackage{afterpage}
+
+\usepackage[letterpaper,left=1.125in,right=1.125in,top=1.25in,bottom=1.25in]{geometry}
+
+% packages i use in essentially every document
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage{stringstrings}
+
+
+% date auto-incrementation
+\usepackage{datenumber}
+\setdate{2026}{8}{21}
+\def\datedate{\datedayname,\space\datemonthname~\thedateday}
+\def\datedateshort{\substring{\datemonthname}{1}{3}~\thedateday}
+
+\newcommand{\adddays}[1]{%
+    \addtocounter{datenumber}{#1}%
+    \setdatebynumber{\thedatenumber}%
+}
+
+% Setup list environments
+\usepackage{enumitem}
+\setlist[description]{
+  topsep=0pt,
+  before=\vspace{0pt},
+  after=\vspace{0pt},
+  itemsep=2pt,
+  labelsep=0pt
+}
+
+\setlist[itemize]{
+    noitemsep,
+    leftmargin=1em,
+    topsep=0pt}
+
+% packages i use in many documents but leave off by default
+% \usepackage{amsmath, amsthm, amssymb}
+% \usepackage{dcolumn}
+% \usepackage{endfloat}
+
+% Set paragraph indents and spacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{.5\baselineskip}
+%\usepackage[document]{ragged2e}
+
+% adjust section title formatting
+\usepackage{titlesec}
+\titlespacing\section{0pt}{8pt plus 2pt minus 2pt}{-6pt}
+\titlespacing\subsection{0pt}{8pt plus 2pt minus 2pt}{-6pt}
+\titlespacing\subsubsection{0pt}{8pt plus 2pt minus 2pt}{10pt}
+
+% allows full, in-line citations
+\usepackage{bibentry}
+
+% add bibliographic stuff
+\usepackage[round, numbers]{natbib} \def\citepos#1{\citeauthor{#1}'s (\citeyear{#1})} \def\citespos#1{\citeauthor{#1}' (\citeyear{#1})}
+\renewcommand{\bibnumfmt}[1]{}
+
+% define colors from http://www.colorado.edu/brand/visual-identity/typography-color
+%\usepackage[usenames,dvipsnames]{color}
+\definecolor{CUGold}{RGB}{207,184,124}
+\definecolor{CUDarkGray}{RGB}{86,90,92}
+\definecolor{CULightGray}{RGB}{162,164,163}
+
+% customize URLs
+\usepackage[hyphens]{url}
+%\usepackage{breakurl}
+\usepackage[breaklinks, bookmarks, bookmarksopen]{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=Blue,
+    citecolor=Black,
+    filecolor=Blue,
+    urlcolor=Blue,
+    unicode=true,
+    breaklinks=true}
+
+% create a "reading list" environment to format the items
+\newenvironment{readinglist}{
+\begin{list}{}{\leftmargin=0pt \itemindent=0em}
+  \setlength{\itemsep}{8pt}
+  \setlength{\parskip}{0em}
+  \setlength{\parindent}{8em}}
+{\end{list}}
+
+% Course/Instructor metadata -- alter as needed
+\def\coursename{Web Data Science}
+\def\courselisting{INFO 4617}
+\def\classroom{CASE W262}
+% \def\zoomurl{https://cuboulder.zoom.us/j/91984080043}
+% PLACEHOLDER: update Canvas course URL before publishing
+\def\canvasurl{https://canvas.colorado.edu/courses/XXXXXX}
+\def\githuburl{https://github.com/cuinfoscience/INFO4617-Fall2026}
+\def\bookurl{https://github.com/cuinfoscience/Web-Data-Science-Book}
+\def\meetingdays{Mondays, Wednesdays, and Fridays}
+\def\starttime{12:20 pm}
+\def\endtime{1:10 pm}
+\def\meetingtimes{\starttime~-- \endtime}
+\def\semester{Fall 2026}
+
+\def\instructorfirstname{Brian}
+\def\instructorlastname{Keegan}
+\def\instructorfullname{\instructorfirstname~\instructorlastname, Ph.D.}
+\def\instructortitle{Associate Professor, Information Science}
+\def\instructoroffice{\href{https://www.colorado.edu/map/?id=336\#!m/193981}{INFO 129}}
+\def\instructoremail{brian.keegan@colorado.edu}
+\def\instructorwebsite{http://www.brianckeegan.com}
+% PLACEHOLDER: confirm office hours before publishing
+\def\instructorofficehours{\textit{[TBD --- posted on Canvas]}}
+
+\begin{document}
+
+\nobibliography*
+
+%\baselineskip 14.2pt
+
+\title{
+    \textbf{\huge{\coursename}}\\
+    \vspace{5pt} \normalsize{\courselisting}; \semester
+}
+
+\author{
+    \meetingdays; \meetingtimes\\
+    % Zoom room: \href{\myzoomurl}{\myzoomurl}\\
+    Classroom: \classroom
+}
+
+\date{
+    \normalsize{
+        \href{\instructorwebsite}{\textbf{\instructorfullname}}\\
+        \instructortitle\\
+        E-mail: \href{mailto:\instructoremail}{\instructoremail}\\
+        Office: \instructoroffice\\
+        Office hours: \instructorofficehours
+    }
+}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%
+%% Acknowledgements %%
+%%%%%%%%%%%%%%%%%%%%%%
+% This syllabus template was made in LaTeX by Brian Keegan and is distributed as Free Software under the GNU GPL v3. It was built using style templates created by Aaron Shaw, Benjamin Mako Hill, and Kieran Healy.
+
+% Original description: https://docs.google.com/document/d/1l7Qaop6Lmy7wkP_Jdb5JkeXNkrWVAMdZgQgj5uyvN8Q/edit#
+
+\section{Course Description}
+
+The internet makes many kinds of information easy to access. The ability to retrieve, parse, and analyze this information is a valuable skill for data scientists. This course provides an overview of computational tools and practices for transforming web documents and APIs into data for common research designs.
+
+The course is organized around an open-source textbook, the \href{\bookurl}{\textit{Web Data Science}} book, which we will read chapter-by-chapter and---crucially---improve together. Each week you will implement the concepts in companion Jupyter notebooks and then propose and evaluate revisions to the textbook itself through GitHub. By the end of the semester you will have built a portfolio of web-data skills, contributed to a living technical resource, and completed an original data-collection project.
+
+\subsection{Learning objectives}
+
+\begin{itemize}[itemsep=0em]
+    \item Understand the legal and ethical contours of web data access
+    \item Navigate and parse common web data formats like XML and JSON
+    \item Retrieve and automate data extraction from HTML and PDF documents
+    \item Access popular APIs to collect data for common research designs
+    \item Use version control and collaborative open-source workflows (Git and GitHub pull requests) to contribute to a shared codebase
+    \item Document, communicate, and critically evaluate data-collection code and technical writing
+\end{itemize}
+
+\subsection{Course Design}
+Class will meet three times per week on \meetingdays~from \starttime~to \endtime~in \classroom. The week follows a consistent rhythm:
+\begin{description}[itemsep=2pt,labelsep=0.5em,leftmargin=1.5em]
+    \item[Monday] introduces a new concept and its companion notebook through lecture and live coding.
+    \item[Wednesday] is a hands-on \textit{Notebook Lab}: you work through and share your implementation of the notebook exercises.
+    \item[Friday] is a \textit{Textbook Revision} workshop: you propose revisions to the \textit{Web Data Science} book as GitHub pull requests and review your classmates' proposals.
+\end{description}
+Student performance is evaluated through participation in the Wednesday labs, the Friday textbook revisions, and a Final Project (see \textit{Evaluation} below). There is no midterm or final exam.
+
+The class is organized into four modules that track the textbook: (1) \textit{Foundations} introduces the ethical and legal considerations of web data access, the ``post-API'' landscape, common file formats, and web protocols; (2) \textit{Documents} covers methods and tools for retrieving data from web pages and PDFs; (3) \textit{APIs} provides an overview of tools for accessing popular web APIs; and (4) \textit{Practice} covers automation, research design, and the Final Project. See Table~\ref{tab:course_outline} for the full outline.
+
+\subsection{Prerequisites}
+There are no formal pre-requisites for the class, but prior programming experience in Python is strongly recommended. If you have questions about these prerequisites, please \href{mailto:\instructoremail}{email the instructor}.
+
+\subsection{Course Website and Materials}
+There is no textbook to purchase. The required text is the open-source \textit{Web Data Science} book, which we read and revise together:
+\vspace{-8pt}
+    \begin{center}
+    \Large{\href{\bookurl}{\bookurl}}
+    \end{center}
+\vspace{-8pt}
+Readings, notebooks, assignments, and grades are coordinated through Canvas:
+\vspace{-8pt}
+    \begin{center}
+    \large{\href{\canvasurl}{\canvasurl}}
+    \end{center}
+\vspace{-8pt}
+This PDF version of the syllabus is a work-in-progress and will be revised as we proceed through the semester. Any revised requirements will be posted as announcements and an updated course schedule to Canvas. The instructor reserves the right to make changes to the course's schedule, evaluation criteria, policies, \textit{etc.} through announcements in class and on Canvas. Students should \href{mailto:\instructoremail}{email the instructor} if there are any discrepancies or questions.
+
+\subsection{Computing}
+Students will use programming languages for data retrieval, analysis, and visualization. \href{http://jupyter.org/}{Jupyter notebooks} written in Python 3 will be used for all in-class examples and assignments. The \href{https://www.anaconda.com/}{Anaconda distribution} of Python 3.12 (or above) is \textit{strongly} recommended to provide these programs and libraries. Over the semester we will use libraries including \href{https://requests.readthedocs.io/}{\texttt{requests}}, \href{https://www.crummy.com/software/BeautifulSoup/bs4/doc/}{\texttt{BeautifulSoup}}, \href{https://selenium-python.readthedocs.io/}{\texttt{selenium}}, \href{https://pypdf.readthedocs.io/}{\texttt{pypdf}}, and \href{https://pandas.pydata.org/}{\texttt{pandas}}. Because we contribute to the textbook through GitHub, you will also need \href{https://git-scm.com/}{Git} and a free \href{https://github.com/}{GitHub} account; we will set these up together in the first week. Lectures include exercises and presentations with the expectation that students participate with their own laptop computers. If you cannot bring a laptop to class, please email the instructor to work out an alternative arrangement.
+
+\subsection{Evaluation}
+Students are evaluated through three mechanisms. The class has no midterm or final exam.
+
+    \begin{description}[itemsep=0pt,labelsep=0pt,leftmargin=1em]
+
+        \item[Notebook Labs]~(30\%). The Wednesday labs are where you build fluency with retrieving, reshaping, and analyzing web data. Each week you work through and share your implementation of the companion notebook. Labs are graded on participation and completion rather than perfection, and are meant to be collaborative. Your lowest two lab scores are dropped to accommodate illness, travel, and the occasional bad week.
+
+        \item[Textbook Revisions]~(30\%). The Friday workshops are dedicated to improving the open-source \textit{Web Data Science} book. Each week you propose revisions---clarifications, corrections, new examples, additional exercises, or better explanations---as pull requests to the book's GitHub repository, and you review your classmates' pull requests. Credit reflects both the substance of the revisions you propose and the quality of the peer reviews you provide. A running target for contributions and reviews across the semester will be posted to Canvas. In the absence of an approved excuse, late submissions will be docked 1\% of their maximum value for every day elapsed since the deadline.
+
+        \item[Final Project]~(40\%). The Final Project is a portfolio piece that matches a web data source with a research design. It is completed individually (or in pairs with the instructor's permission) and has three graded components: a \textbf{proposal} (due Friday, October 23), an in-class \textbf{presentation} during the final week, and a \textbf{project repository and write-up} (due Friday, December 11). Further details will be collaboratively developed and detailed later in the course. In the absence of an approved excuse, late submissions will be docked 1\% of their maximum value for every day elapsed since the deadline.
+
+    \end{description}
+
+Because the Wednesday labs and Friday revision workshops are collaborative and graded on in-class participation, regular attendance is essential; there is no separate attendance grade, but missing these sessions directly affects those components. If personal, professional, medical, or other circumstances will prevent your attendance, please notify the instructor via e-mail so we can develop an accommodation plan together.
+
+\section{Course Policies}
+
+\subsection{In-Class Confidentiality}
+The success of this class depends on students feeling comfortable sharing questions, ideas, concerns, and confusions about assignments, work-in-progress, and their personal experiences. Students may read, comment, and run classmates' writing, code, and other class-related content for use within this class. However, students may not use, run, copy, perform, display, distribute, modify, translate, or create derivative works of another student's work outside of this class without that student's expressed written consent or formal license. Students may not create any audio, video, or other records of lectures without the instructor's permission nor may students share comments made in class attributable to another person's identity without permission.
+
+Note that our textbook contributions are different: pull requests to the \textit{Web Data Science} book are made to a \textit{public} open-source repository under an open license, and your accepted contributions will be visible to anyone. If you prefer to contribute under a pseudonym or have concerns about public attribution, email the instructor and we will work out an alternative.
+
+\subsection{Generative AI and Coauthorship}
+Generative AI tools (e.g., ChatGPT, Claude, GitHub Copilot) are part of contemporary data-science practice, and you are welcome to use them in this course as collaborators---much as the course textbook itself was drafted with AI assistance and documents that process in its \textit{AI Coauthorship and Responsible Disclosure} appendix. Three expectations apply. First, \textbf{disclosure}: when AI tools materially shape a notebook, a pull request, or your Final Project, note where and how you used them (a brief comment or commit message is sufficient). Second, \textbf{understanding}: you are responsible for every line you submit and must be able to explain how your code works and why it is correct; the instructor may ask you to do so. Third, \textbf{integrity}: presenting AI-generated work as another person's, or using it to misrepresent data, sources, or effort, violates the Honor Code. When in doubt, disclose and ask.
+
+\subsection{Classroom Behavior}
+Both students and faculty are responsible for maintaining an appropriate learning environment in all instructional settings, whether in person, remote or online. Those who fail to adhere to such behavioral standards may be subject to discipline. Professional courtesy and sensitivity are especially important with respect to individuals and topics dealing with race, color, national origin, sex, pregnancy, age, disability, creed, religion, sexual orientation, gender identity, gender expression, veteran status, political affiliation or political philosophy. For more information, see the policies on \href{http://www.colorado.edu/policies/student-classroom-and-course-related-behavior}{class behavior}, the \href{http://www.colorado.edu/osc/#student_code}{Student Code of Conduct}, and the \href{https://www.colorado.edu/oiec/}{Office of Institutional Equity and Compliance}.
+
+\subsection{Accommodations for Disabilities}
+If you qualify for accommodations because of a disability, please submit your accommodation letter from Disability Services to your faculty member in a timely manner so that your needs can be addressed.  Disability Services determines accommodations based on documented disabilities in the academic environment.  Information on requesting accommodations is located on the \href{www.colorado.edu/disabilityservices/students}{Disability Services website}. Contact Disability Services at 303-492-8671 or \href{mailto:dsinfo@colorado.edu}{dsinfo@colorado.edu} for further assistance. If you have a temporary medical condition, see \href{http://www.colorado.edu/disabilityservices/students/temporary-medical-conditions}{Temporary Medical Conditions} on the Disability Services website.
+
+\subsection{Preferred Student Names and Pronouns}
+CU Boulder recognizes that students' legal information does not always align with how they identify. Students may update their preferred names and pronouns via the student portal; those preferred names and pronouns are listed on the instructor's class rosters. In the absence of such updates, the name that appears on the class roster is the student's legal name.
+
+\subsection{Honor Code}
+All students enrolled in a University of Colorado Boulder course are responsible for knowing and adhering to the \href{http://www.colorado.edu/policies/academic-integrity-policy}{Honor Code}. Violations of the Honor Code may include, but are not limited to: plagiarism, cheating, fabrication, lying, bribery, threat, unauthorized access to academic materials, clicker fraud, submitting the same or similar work in more than one course without permission from all course instructors involved, and aiding academic dishonesty. All incidents of academic misconduct will be reported to the Honor Code (\href{mailto:honor@colorado.edu}{honor@colorado.edu}; 303-492-5550). Students found responsible for violating the academic integrity policy will be subject to nonacademic sanctions from the Honor Code as well as academic sanctions from the faculty member. Additional information regarding the Honor Code academic integrity policy can be found on the \href{http://honorcode.colorado.edu}{Honor Code website}.
+
+\subsection{Harassment and Discrimination}
+CU Boulder is committed to fostering an inclusive and welcoming learning, working, and living environment. CU's \href{http://www.colorado.edu/policies/discrimination-and-harassment-policy-and-procedures}{discrimination and harassment policies} prohibit acts of sexual misconduct (harassment, exploitation, and assault), intimate partner violence (dating or domestic violence), stalking, or protected-class discrimination or harassment by or against members of our community. Individuals who believe they have been subject to misconduct or retaliatory actions for reporting a concern should contact the Office of Institutional Equity and Compliance (OIEC) at 303-492-2127 or email \href{mailto:cureport@colorado.edu}{cureport@colorado.edu}. Information about university policies, \href{https://www.colorado.edu/oiec/reporting-resolutions/making-report}{reporting options}, and the support resources can be found on the \href{http://www.colorado.edu/institutionalequity/}{OIEC website}.
+
+Please know that faculty and graduate instructors have a responsibility to inform OIEC when they are made aware of incidents of sexual misconduct, dating and domestic violence, stalking, discrimination, harassment and/or related retaliation, to ensure that individuals impacted receive information about their rights, support resources, and reporting options. To learn more about reporting and support options for a variety of concerns, visit \href{https://www.colorado.edu/dontignoreit/}{Don't Ignore It}.
+
+\subsection{Religious Observance}
+Campus policy regarding \href{http://www.colorado.edu/policies/observance-religious-holidays-and-absences-classes-andor-exams}{religious observances} requires that faculty make every effort to deal reasonably and fairly with all students who, because of religious obligations, have conflicts with scheduled exams, assignments or required assignments/attendance. If this applies to you, please \href{mailto:brian.keegan@colorado.edu}{email the instructor} as soon as possible to make the appropriate accommodations.
+
+\subsection{CMCI Diversity, Equity, and Inclusion}
+CMCI strives to be a community whose excellence depends on diversity, equity, and inclusion. We aim to understand and challenge systems of privilege and disadvantage in higher education, such as those based on class, race, ethnicity, gender, sexuality, and dis/ability. We seek to reach across social and political divides and to make space for voices historically underrepresented in higher education and marginalized in society. In other words, diversity is not just a future reality for which we try to prepare students. It is a priority we want to put into practice here, now, and together, in order to foster places of learning where all members can thrive. Please contact the CMCI diversity team (\href{mailto:lisa.flores@colorado.edu}{email Lisa Flores} or visit the \href{https://www.colorado.edu/cmci/about-college/diversity-equity-and-inclusion/our-team}{CMCI Diversity, Inclusion, and Equity Staff} page) if:
+\begin{itemize}
+    \item you need support or other resources but don't know where to turn
+    \item any aspect of your educational experience with CMCI does not reflect the commitment expressed here, or if you want to share a positive instance of this commitment in action
+    \item you have any questions, concerns, or ideas related to diversity
+    % \item We want to hear from you so that we can do better, and to support you however we can
+\end{itemize}
+
+\section{Acknowledgements}
+% The design and format of this course borrows from other courses.
+This syllabus was typeset in \LaTeX~using \href{http://www.overleaf.com}{Overleaf} with the \href{http://www.tug.dk/FontCatalogue/fbb/}{fbb/Bembo} font and is derived from the \texttt{memoir} styles adapted by \href{https://github.com/kjhealy/latex-custom-kjh}{Kieran Healy} and \href{http://projects.mako.cc/source/?p=latex_mako;a=summary}{Benjamin `Mako' Hill}.
+
+\section{Other resources}
+\begin{itemize}
+    \item \bibentry{broucke_PracticalWebScraping_2018}
+    \item \bibentry{bradshaw_ScrapingJournalists_2012}
+    \item \bibentry{chapagain_web_2019}
+    \item \bibentry{heydt_python_2018}
+    \item \bibentry{lawson_WebScrapingPython_2015}
+    \item \bibentry{mitchell_WebScrapingPython_2018}
+    \item \bibentry{munzert_AutomatedDataCollection_2014}
+    \item \bibentry{rogers_DoingDigitalMethods_2019}
+    \item \bibentry{russell_mining_2019}
+    \item \bibentry{salganik_BitBitSocial_2019}
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%
+%%% COURSE OUTLINE %%%
+%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\section{Course Outline}
+
+This is an outline of modules and topics, mapped to the chapters of the \href{\bookurl}{\textit{Web Data Science}} book. The schedule will evolve; consult Canvas for the most up-to-date information.
+
+\begin{table}[ht]
+%\Large
+\centering
+    \begin{tabular}{cccc}
+        \toprule[.15em]
+        \textbf{Module} & \textbf{Week} & \textbf{Dates} & \textbf{Topics} \\
+        \cmidrule[.1em](lr){1-4}
+
+        \multirow{5}{*}[0pt]{\textit{Foundations}}
+            & 1 & Aug.~21 & Introduction \& setup \\
+            & 2 & Aug.~24--28 & Ethics, law \& responsible collection \\
+            & 3 & Aug.~31--Sep.~4 & The post-API age \\
+            & 4 & Sep.~9--11 & Data formats: XML \& JSON \\
+            & 5 & Sep.~14--18 & Web architecture \& protocols \\ \cmidrule[.1em](lr){1-4}
+
+        \multirow{4}{*}[0pt]{\textit{Documents}}
+            & 6 & Sep.~21--25 & Parsing static web pages \\
+            & 7 & Sep.~28--Oct.~2 & Archived web pages \& the Wayback Machine \\
+            & 8 & Oct.~5--9 & Dynamic web pages with Selenium \\
+            & 9 & Oct.~12--16 & Extracting data from PDFs \\ \cmidrule[.1em](lr){1-4}
+
+        \multirow{4}{*}[0pt]{\textit{APIs}}
+            & 10 & Oct.~19--23 & Wikipedia APIs \quad \small(\textit{proposal due Oct.~23}) \\
+            & 11 & Oct.~26--30 & Government data APIs \\
+            & 12 & Nov.~2--6 & Social \& media platform APIs \\
+            & 13 & Nov.~9--13 & AI \& language-model APIs \\ \cmidrule[.1em](lr){1-4}
+
+        \multirow{3}{*}[0pt]{\textit{Practice}}
+            & 14 & Nov.~16--20 & Automating data collection \\
+            & 15 & Nov.~23--27 & \textbf{No class: Fall Break} \\
+            & 16 & Nov.~30--Dec.~4 & Research design \& final presentations \\
+            \cmidrule[.1em](lr){1-4}
+            & \multicolumn{3}{c}{\textbf{Final Project due Friday, December 11}} \\
+
+        \bottomrule[.15em]
+    \end{tabular}
+    \caption{Course outline by week. Labor Day (Sep.~7) and Fall Break (Nov.~23--27) have no class; the last day of class (Dec.~4) follows a Monday schedule.}
+    \label{tab:course_outline}
+\end{table}
+
+\clearpage
+
+\section{\textbf{Course Schedule}}
+
+The schedule will evolve throughout the semester, so please consult the schedule online at Canvas for the most up-to-date information. Unless noted otherwise, each week follows the same rhythm: \textbf{Monday} introduces the concept and notebook, \textbf{Wednesday} is a hands-on notebook lab, and \textbf{Friday} is a textbook-revision workshop.
+
+\section{Week 1 -- Foundations: Introduction \& setup}
+\textcolor{CUGold}{\textbf{Friday, August 21}}\\
+Course overview and motivation; setting up the Python computing environment, Git, and GitHub; how our textbook-revision workflow will work. \textit{Because the semester begins on a Thursday, our first meeting is this Friday only.} Textbook: \href{\bookurl/blob/main/ch-01-introduction.qmd}{Chapter 1 (Introduction)}.
+
+\section{Week 2 -- Foundations: Ethics, law \& responsible collection}
+\textcolor{CUGold}{\textbf{August 24, 26 \& 28}}\\
+The legal and ethical contours of web data retrieval: terms of service, copyright, privacy, and research ethics. Textbook: \href{\bookurl/blob/main/ch-02-ethics.qmd}{Chapter 2 (Ethics, Law, and Responsible Data Collection)}.
+
+\section{Week 3 -- Foundations: The post-API age}
+\textcolor{CUGold}{\textbf{August 31, September 2 \& 4}}\\
+Changing contexts of data access, platform transparency, and the ``post-API'' turn. Textbook: \href{\bookurl/blob/main/ch-03-post-api.qmd}{Chapter 3 (The Post-API Age)}.
+
+\section{Week 4 -- Foundations: Data formats (XML \& JSON)}
+\textcolor{CUGold}{\textbf{September 9 \& 11}}\\
+JSON and XML data formats and supporting libraries. \textit{No class Monday, September 7 (Labor Day); this week the concept and notebook are introduced on Wednesday and we hold the revision workshop on Friday.} Textbook: \href{\bookurl/blob/main/ch-04-data-formats.qmd}{Chapter 4 (Data Formats: XML and JSON)}.
+
+\section{Week 5 -- Foundations: Web architecture \& protocols}
+\textcolor{CUGold}{\textbf{September 14, 16 \& 18}}\\
+Web protocols like IP and HTTP using libraries like \href{https://docs.python.org/3/library/urllib.html}{\texttt{urllib}} and \href{https://requests.readthedocs.io/}{\texttt{requests}}. Textbook: \href{\bookurl/blob/main/ch-05-protocols.qmd}{Chapter 5 (Web Architecture and Protocols)}.
+
+\section{Week 6 -- Documents: Parsing static web pages}
+\textcolor{CUGold}{\textbf{September 21, 23 \& 25}}\\
+HTML elements and document parsing on static web pages with \href{https://www.crummy.com/software/BeautifulSoup/bs4/doc/}{\texttt{BeautifulSoup}}. Textbook: \href{\bookurl/blob/main/ch-06-static-pages.qmd}{Chapter 6 (Parsing Static Web Pages)}.
+
+\section{Week 7 -- Documents: Archived web pages}
+\textcolor{CUGold}{\textbf{September 28, 30 \& October 2}}\\
+Using the Internet Archive's Wayback Machine to analyze archived web pages. Textbook: \href{\bookurl/blob/main/ch-07-archives.qmd}{Chapter 7 (Archived Web Pages and the Wayback Machine)}.
+
+\section{Week 8 -- Documents: Dynamic web pages}
+\textcolor{CUGold}{\textbf{October 5, 7 \& 9}}\\
+Rendering and scraping dynamic web pages with \href{https://selenium-python.readthedocs.io/}{\texttt{selenium}}. Textbook: \href{\bookurl/blob/main/ch-08-dynamic-pages.qmd}{Chapter 8 (Dynamic Web Pages with Selenium)}.
+
+\section{Week 9 -- Documents: Extracting data from PDFs}
+\textcolor{CUGold}{\textbf{October 12, 14 \& 16}}\\
+Accessing and parsing PDFs with \href{https://pypdf.readthedocs.io/}{\texttt{pypdf}}. Textbook: \href{\bookurl/blob/main/ch-09-pdfs.qmd}{Chapter 9 (Extracting Data from PDFs)}.
+
+\section{Week 10 -- APIs: Wikipedia}
+\textcolor{CUGold}{\textbf{October 19, 21 \& 23}}\\
+Retrieving data from Wikipedia's APIs. \textbf{Final Project proposal due Friday, October 23.} Textbook: \href{\bookurl/blob/main/ch-10-wikipedia.qmd}{Chapter 10 (Introduction to APIs: Wikipedia)}.
+
+\section{Week 11 -- APIs: Government data}
+\textcolor{CUGold}{\textbf{October 26, 28 \& 30}}\\
+Retrieving and filtering data from government APIs like the Census and Federal Reserve. Textbook: \href{\bookurl/blob/main/ch-11-government.qmd}{Chapter 11 (Government Data APIs)}.
+
+\section{Week 12 -- APIs: Social \& media platforms}
+\textcolor{CUGold}{\textbf{November 2, 4 \& 6}}\\
+Retrieving content, social graphs, and activity streams from social and media platform APIs. Textbook: \href{\bookurl/blob/main/ch-12-social.qmd}{Chapter 12 (Social and Media Platform APIs)}.
+
+\section{Week 13 -- APIs: AI \& language models}
+\textcolor{CUGold}{\textbf{November 9, 11 \& 13}}\\
+Accessing and using AI and large language models through their APIs. Textbook: \href{\bookurl/blob/main/ch-13-ai-apis.qmd}{Chapter 13 (AI and Language Model APIs)}.
+
+\section{Week 14 -- Practice: Automating data collection}
+\textcolor{CUGold}{\textbf{November 16, 18 \& 20}}\\
+Automating and scheduling web data retrieval with tools like \href{https://docs.github.com/en/actions}{GitHub Actions}. Textbook: \href{\bookurl/blob/main/ch-14-automation.qmd}{Chapter 14 (Automating Data Collection)}.
+
+\section{Week 15 -- Fall Break}
+\textcolor{CUGold}{\textbf{November 23--27}}\\
+No class (Fall Break; university closed November 26 \& 27). Use this week to make progress on your Final Project.
+
+\section{Week 16 -- Practice: Research design \& final presentations}
+\textcolor{CUGold}{\textbf{November 30, December 2 \& 4}}\\
+Matching web data sources with research designs; workshopping and presenting Final Projects. \textit{December 4 is the last day of class and follows a Monday schedule.} Textbook: \href{\bookurl/blob/main/ch-15-research-design.qmd}{Chapter 15 (Research Design with Web Data)}. \textbf{Final Project repository and write-up due Friday, December 11.}
+
+% \newpage
+
+
+\renewcommand{\bibsection}{\section{\huge \bibname}\prebibhook}
+\baselineskip 14.2pt
+\nobibliography{refs}
+\bibliographystyle{apalike}
+
+\end{document}
