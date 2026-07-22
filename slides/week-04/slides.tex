@@ -8,6 +8,9 @@
 % (revisions). The three Mon/Wed/Fri sections are kept for a consistent spine.
 % ==========================================================================
 \documentclass[9pt,aspectratio=169]{beamer}
+% Resolve the shared theme/preamble in ../common/ when compiling this
+% file directly from its own folder (no TEXINPUTS needed).
+\makeatletter\def\input@path{{../common/}}\makeatother
 \input{preamble}
 
 \title[Week 4 · Data Formats]{{\Huge Data Formats: XML \& JSON}}

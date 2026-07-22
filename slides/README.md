@@ -46,15 +46,27 @@ Requires a TeX Live install with `beamer`, `fbb`, `expl3`, `biber`, and
 `latexmk` (the Gotham theme is vendored in `common/`, so no separate theme
 install is needed).
 
+**Each deck compiles standalone.** Open `week-NN/slides.tex` in your editor and
+build it, or from inside the folder run:
+
+```bash
+cd week-06 && latexmk -pdf slides.tex
+```
+
+No `TEXINPUTS` or other environment setup is needed: each `slides.tex` adds
+`../common/` to LaTeX's input path itself (the line right after
+`\documentclass`), so the shared theme, preamble, and bibliography resolve
+automatically. This assumes you compile from within the week's own folder,
+which is what editors do by default.
+
+The `Makefile` is a convenience for building everything at once:
+
 ```bash
 make            # build every deck
 make week-06    # build one week
 make stubs      # regenerate placeholder images
 make clean      # remove build artifacts (keeps slides.pdf)
 ```
-
-Each deck compiles from inside its own folder with `common/` on `TEXINPUTS`;
-the `Makefile` handles that for you.
 
 ## Images
 
