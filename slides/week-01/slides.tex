@@ -7,6 +7,9 @@
 % This is a single-session intro deck, not the usual Mon/Wed/Fri shape.
 % ==========================================================================
 \documentclass[9pt,aspectratio=169]{beamer}
+% Resolve the shared theme/preamble in ../common/ when compiling this
+% file directly from its own folder (no TEXINPUTS needed).
+\makeatletter\def\input@path{{../common/}}\makeatother
 \input{preamble}
 
 \title[Week 1 · Introduction]{{\Huge Introduction \& Setup}}

@@ -1,9 +1,12 @@
 % ==========================================================================
 % INFO 4617 Web Data Science -- Week 6: Parsing Static Web Pages (Chapter 6)
-% Build:  TEXINPUTS=../common: BIBINPUTS=../common: latexmk -pdf slides.tex
-% (or run `make` from the slides/ directory)
+% Build:  latexmk -pdf slides.tex   (from this folder; no env vars needed)
+% (or run `make` from the slides/ directory to build every deck)
 % ==========================================================================
 \documentclass[9pt,aspectratio=169]{beamer}
+% Resolve the shared theme/preamble in ../common/ when compiling this
+% file directly from its own folder (no TEXINPUTS needed).
+\makeatletter\def\input@path{{../common/}}\makeatother
 \input{preamble}
 
 \title[Week 6 · Static Pages]{{\Huge Parsing Static Web Pages}}

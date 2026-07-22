@@ -4,6 +4,9 @@
 % (or run `make` from the slides/ directory)
 % ==========================================================================
 \documentclass[9pt,aspectratio=169]{beamer}
+% Resolve the shared theme/preamble in ../common/ when compiling this
+% file directly from its own folder (no TEXINPUTS needed).
+\makeatletter\def\input@path{{../common/}}\makeatother
 \input{preamble}
 
 \title[Week 11 · Government APIs]{{\Huge Government Data APIs}}
