@@ -36,8 +36,8 @@ python migrate.py build                # preview groups/assignments/modules/syll
 python migrate.py build --apply        # build the new structure
 ```
 
-Recommended order: `plan` to review the design, `inspect` to see what is actually in both courses , then
-`copy --apply`, then `build --apply`.
+Recommended order: `plan` to review the design, `inspect` to see what is actually
+in both courses, then `copy --apply`, then `build --apply`.
 
 ### Options
 
