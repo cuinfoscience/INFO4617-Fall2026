@@ -1,10 +1,13 @@
 % ==========================================================================
 % INFO 4617 Web Data Science -- Week 1: Introduction & Setup (Chapter 1)
-% Build:  TEXINPUTS=../common: BIBINPUTS=../common: latexmk -pdf slides.tex
-% (or run `make` from the slides/ directory)
+% Build:  latexmk -pdf slides.tex   (from this folder; no env vars needed)
+% (or run `make` from the slides/ directory to build every deck)
 %
 % NOTE: The semester starts Thursday, Aug 20, so this week meets FRIDAY ONLY.
 % This is a single-session intro deck, not the usual Mon/Wed/Fri shape.
+%
+% Environment setup (Anaconda, first request) is NOT in this deck -- it moved
+% to handouts/setup.md so class time protects the textbook-revision activity.
 % ==========================================================================
 \documentclass[9pt,aspectratio=169]{beamer}
 % Resolve the shared theme/preamble in ../common/ when compiling this
@@ -25,27 +28,28 @@
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
         \begin{column}{0.62\textwidth}
-            Welcome to Web Data Science. The semester starts Thursday, so this week we meet \textbf{Friday only} --- today is orientation, setup, and the plan for the semester.
+            Welcome to Web Data Science. The semester starts Thursday, so this week we meet \textbf{Friday only} --- today is orientation and your first contribution to the course textbook.
 
             \vspace{1em}
 
-            \dayband{Friday}{Welcome, setup \& how the class works}
+            \dayband{Friday}{Welcome, the book \& your first revision}
             \begin{itemize}\small
                 \item What web data science is --- and why it matters
-                \item Get Python, Git, and a GitHub account working
-                \item How the weekly rhythm and grading work
+                \item How the class works and how you're graded
+                \item The textbook: what it is, how it was made, how it's built
+                \item Git \& GitHub --- and \textbf{you file a real issue today}
             \end{itemize}
 
             \vspace{0.75em}
 
-            The \textbf{Monday / Wednesday / Friday} rhythm begins next week --- see ``The weekly rhythm.''
+            The \textbf{Monday / Wednesday / Friday} rhythm begins next week.
         \end{column}
         \begin{column}{0.34\textwidth}
             \begin{block}{Companion notebook}
                 \footnotesize \texttt{ch-01-introduction.ipynb}
             \end{block}
             \begin{alertblock}{Before Monday}
-                \footnotesize Install Anaconda and create a \textbf{free} GitHub account. Bring a laptop --- we work hands-on.
+                \footnotesize Work through \texttt{handouts/setup.md}: Anaconda, Git, and a \textbf{free} GitHub account. Bring a laptop --- today included.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -162,7 +166,7 @@
             {\scriptsize A first pipeline: CU Boulder's daily Wikipedia pageviews.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~1, ``Your First Request.''}
+    \bottomcite{You'll run this yourself in \texttt{handouts/setup.md} before Monday. Textbook Ch.~1, ``Your First Request.''}
 \end{frame}
 
 \begin{frame}{The data science mindset}
@@ -261,85 +265,108 @@
 \end{frame}
 
 % =========================================================================
-\section{Getting set up}
+\section{The textbook}
 % =========================================================================
 
-\begin{frame}{Three things you'll need}
-    Before Monday, get all three working on your own laptop:
-    \begin{enumerate}
-        \item \textcolor{tab-blue}{\textbf{Python, via Anaconda}} --- the language plus a curated scientific stack and the \texttt{conda} package manager.
-        \item \textcolor{tab-green}{\textbf{Git}} --- version control that tracks every change and lets many people edit the same project safely.
-        \item \textcolor{tab-orange}{\textbf{A free GitHub account}} --- where our textbook lives and where you'll submit revisions as pull requests.
-    \end{enumerate}
-    \vspace{1em}
-    \begin{alertblock}{Can't access a laptop or install software?}
-        \footnotesize Contact me \textbf{immediately} so we can arrange an accommodation --- do not wait until an assignment is due.
-    \end{alertblock}
+\begin{frame}{A book built for this course}
+    \begin{columns}[T]
+        \begin{column}{0.57\textwidth}
+            There is no book to buy. Our text is open source, and it is shaped to the course rather than the other way around:
+
+            \vspace{0.6em}
+
+            \begin{itemize}\small
+                \item \textbf{15 chapters, 15 teaching weeks} --- roughly one chapter per week
+                \item \textbf{Four modules} matching ours: Foundations, Documents, APIs, Practice
+                \item Every chapter ships a \textbf{companion notebook}, plus exercises and a ``Common Issues to Debug'' list
+                \item Code is \textbf{not pre-executed} (\texttt{eval: false}) --- you run it, so you meet the errors yourself
+            \end{itemize}
+
+            \vspace{0.6em}
+
+            {\footnotesize Read it at \texttt{cuinfoscience.github.io/Web-Data-Science-Book}}
+        \end{column}
+        \begin{column}{0.39\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/book_website.png}\\
+            {\scriptsize The published book --- free, open, and ours to improve.}
+        \end{column}
+    \end{columns}
+    \bottomcite{The syllabus schedule and this book's table of contents are the same document, seen twice.}
 \end{frame}
 
-\begin{frame}[fragile]{Anaconda, environments \& core libraries}
+\begin{frame}{How this book was written}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            I'll be direct about it: \textbf{portions of this book were drafted with large language models}, then reviewed, edited, and verified by me. The repository documents the process, and an appendix discloses it.
+
+            \vspace{0.6em}
+
+            That process is fast and fluent --- and it produces three predictable weaknesses:
+            \begin{itemize}\small
+                \item \textcolor{tab-red}{\textbf{Confident text that is subtly wrong}} --- a selector that never matched, a parameter that doesn't exist
+                \item \textcolor{tab-orange}{\textbf{Explanations from the far side of understanding}} --- correct, but skipping where you actually get stuck
+                \item \textcolor{tab-blue}{\textbf{Examples that decay}} --- the web changes underneath the book
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.36\textwidth}
+            \begin{alertblock}{Why this matters to you}
+                \footnotesize You are meeting this material \textbf{for the first time}. That makes you the best possible reviewer for exactly the failures a fluent draft hides.
+                \vspace{0.3em}
+
+                Your revisions aren't busywork. They're the verification step.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+    \bottomcite{Same standard as the syllabus asks of you: use the tools, verify the output, and disclose the assistance.}
+\end{frame}
+
+\begin{frame}{How it's built and published}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
-            Install Anaconda from \texttt{anaconda.com}, then give this course its own isolated environment:
-\begin{lstlisting}
-conda create -n webdata python=3.11
-conda activate webdata
-pip install requests beautifulsoup4 \
-    pandas matplotlib seaborn
-\end{lstlisting}
-            One environment per project records \textbf{exactly} which versions your analysis ran against --- reproducibility, not just tidiness.
+            The book is a \textbf{Quarto} project living in a \textbf{GitHub} repository. Nothing about it is a mystery box:
 
             \vspace{0.5em}
 
-            Launch your workspace with \texttt{jupyter notebook}: code, notes, and results in one file.
+            \begin{enumerate}\small
+                \item Each chapter is a plain-text \texttt{.qmd} file --- Markdown with executable code blocks
+                \item \texttt{quarto render} turns the \texttt{.qmd} files into the website
+                \item GitHub publishes the result at \texttt{cuinfoscience.github.io}
+                \item \texttt{references.bib} holds the citations; \texttt{claude.md} documents editorial voice and chapter structure
+            \end{enumerate}
+
+            \vspace{0.5em}
+
+            {\footnotesize So ``propose a revision'' concretely means: \textbf{edit a \texttt{.qmd} file} and ask for it to be merged.}
         \end{column}
         \begin{column}{0.4\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{img/anaconda_jupyter.png}\\
-            {\scriptsize Anaconda launches Jupyter in your browser.}
+            \includegraphics[width=\textwidth]{img/book_pipeline.png}\\
+            {\scriptsize Source $\rightarrow$ render $\rightarrow$ published site.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~1, ``Setting Up Your Environment.'' No spreadsheets or BI tools (Excel, Tableau) for coursework.}
+    \bottomcite{The repository is the source of truth. The website is a build artifact of it.}
 \end{frame}
 
-\begin{frame}[fragile]{Your first request}
-    Retrieving a web page programmatically is as simple as one call. Confirm your setup works:
-\begin{lstlisting}
-import requests
+% =========================================================================
+\section{Git \& GitHub}
+% =========================================================================
 
-url = "https://en.wikipedia.org/wiki/University_of_Colorado_Boulder"
-response = requests.get(url)
-
-print(response.status_code)   # 200 means success
-print(len(response.text))     # characters of raw HTML
-\end{lstlisting}
-    Raw HTML isn't data yet. An API hands back JSON that drops straight into a DataFrame:
-\begin{lstlisting}
-import pandas as pd
-api = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article"
-url = f"{api}/en.wikipedia/all-access/all-agents/{article}/daily/20240101/20240131"
-headers = {"User-Agent": "WebDataScience/1.0 (you@colorado.edu)"}
-
-data = requests.get(url, headers=headers).json()  # JSON -> dict
-df = pd.DataFrame(data["items"])                   # list of dicts -> DataFrame
-\end{lstlisting}
-    \bottomcite{Textbook Ch.~1, ``Your First Request.'' The \texttt{User-Agent} header identifies you --- a politeness norm we revisit next week.}
-\end{frame}
-
-\begin{frame}{Git \& a free GitHub account}
+\begin{frame}{Git \& GitHub}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
             \textbf{Git} records the history of a project --- who changed what, when, and why --- and lets many people work on it without overwriting each other.
 
-            \vspace{0.75em}
+            \vspace{0.6em}
 
-            \textbf{GitHub} hosts Git projects online. Create a free account at \texttt{github.com}. Our textbook lives there as an open repository:
+            \textbf{GitHub} hosts Git projects online and adds the social layer: proposing, discussing, and reviewing changes.
 
-            \vspace{0.4em}
+            \vspace{0.6em}
+
+            Create a free account at \texttt{github.com} with your \textbf{\texttt{colorado.edu}} email to unlock student features. Our textbook lives at:
+
+            \vspace{0.3em}
             {\footnotesize \texttt{github.com/cuinfoscience/Web-Data-Science-Book}}
-            \vspace{0.4em}
-
-            You'll \textbf{fork} it (make your own copy), edit a chapter, and propose your change back --- exactly how open-source software is built.
         \end{column}
         \begin{column}{0.4\textwidth}
             \centering
@@ -347,13 +374,38 @@ df = pd.DataFrame(data["items"])                   # list of dicts -> DataFrame
             {\scriptsize The book is a living, open repository.}
         \end{column}
     \end{columns}
-    \bottomcite{Sign up with your \texttt{colorado.edu} email to unlock free student features.}
+    \bottomcite{Setup instructions are in \texttt{handouts/setup.md} --- have this working before Monday.}
 \end{frame}
 
-\begin{frame}{Textbook revisions as pull requests}
+\begin{frame}{Four objects you'll use all semester}
+    \begin{columns}[T]
+        \begin{column}{0.49\textwidth}
+            \begin{itemize}
+                \item \textcolor{tab-blue}{\textbf{Repository}} --- the project: every file and its full history.
+                \vspace{0.3em}
+                \item \textcolor{tab-green}{\textbf{Issue}} --- a written report: ``here is a problem.'' Costs nothing but a browser.
+                \vspace{0.3em}
+                \item \textcolor{tab-orange}{\textbf{Pull request}} --- a proposed change: ``here is the fix, side by side with the original.''
+                \vspace{0.3em}
+                \item \textcolor{tab-purple}{\textbf{Review}} --- a response to a PR: comment line-by-line, then approve or request changes.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.47\textwidth}
+            \begin{block}{Issue vs.\ pull request}
+                \footnotesize An \textbf{issue} says \textit{something is wrong}. A \textbf{pull request} says \textit{here is the correction} --- and shows the exact diff.
+                \vspace{0.3em}
+
+                Issues are cheap and fast; PRs are the real contribution. \textbf{Today you'll file an issue.} From Week 2 on, you'll open pull requests.
+            \end{block}
+        \end{column}
+    \end{columns}
+    \bottomcite{This is how essentially all open-source software gets built --- including every library in this course.}
+\end{frame}
+
+\begin{frame}{Your Friday workflow}
     \begin{columns}[T]
         \begin{column}{0.58\textwidth}
-            Every Friday you improve the book itself. The workflow you'll repeat all semester:
+            From Week 2 onward, every Friday repeats these four steps:
             \begin{enumerate}\small
                 \item \textbf{Fork / branch} the book repository
                 \item \textbf{Edit} a chapter's \texttt{.qmd} source; commit with a clear message
@@ -363,14 +415,249 @@ df = pd.DataFrame(data["items"])                   # list of dicts -> DataFrame
 
             \vspace{0.5em}
 
-            A pull request is a proposal: your change sits side-by-side with the original so peers and I can comment line-by-line before it merges.
+            A pull request is a \textbf{proposal}, not an edit. Your change sits next to the original so peers and I can comment line-by-line before anything merges.
         \end{column}
         \begin{column}{0.38\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
     \end{columns}
-    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (30\%). We walk through a real PR in Week~2.}
+    \bottomcite{Contributions \& reviews are the Textbook Revisions grade (30\%). Full workflow walkthrough in Week~2.}
+\end{frame}
+
+% =========================================================================
+\section{Activity · Propose a revision}
+% =========================================================================
+
+\begin{frame}{Today's activity: file your first issue}
+    \begin{columns}[T]
+        \begin{column}{0.58\textwidth}
+            \textbf{Goal:} by the end of class, every one of you has filed one real GitHub issue proposing a change to Chapter~1.
+
+            \vspace{0.75em}
+
+            \begin{itemize}\small
+                \item You need only a \textbf{browser} and a \textbf{GitHub account} --- no Git, no fork, no local copy
+                \item Work in pairs; file individually
+                \item Read \textbf{Chapter 1} on the published site --- you've just heard the lecture version, so you know what it should have told you
+            \end{itemize}
+
+            \vspace{0.5em}
+
+            This is a genuine contribution to a public resource, not a practice exercise.
+        \end{column}
+        \begin{column}{0.38\textwidth}
+            \begin{alertblock}{No account yet?}
+                \footnotesize Make one now (2 minutes, \texttt{colorado.edu} email), or pair with someone who has one and draft together.
+            \end{alertblock}
+            \begin{block}{Timebox}
+                \footnotesize \textbf{5} read · \textbf{5} pick \& diagnose · \textbf{8} write \& file · \textbf{5} share out
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Where did the chapter fail you?}
+    That question --- not ``what could be added in principle'' --- starts every revision. Sort what you noticed into one of three families:
+
+    \vspace{0.75em}
+
+    \begin{columns}[T]
+        \begin{column}{0.315\textwidth}
+            \begin{block}{\textcolor{tab-red}{Broken}}
+                \footnotesize It is \textbf{wrong}, or no longer works.
+                \vspace{0.3em}
+
+                \textit{Show:} what you ran, and what happened instead.
+            \end{block}
+        \end{column}
+        \begin{column}{0.315\textwidth}
+            \begin{block}{\textcolor{tab-orange}{Unclear}}
+                \footnotesize It is right, but you \textbf{couldn't follow it}.
+                \vspace{0.3em}
+
+                \textit{Show:} where you got stuck, and why.
+            \end{block}
+        \end{column}
+        \begin{column}{0.315\textwidth}
+            \begin{block}{\textcolor{tab-blue}{Missing}}
+                \footnotesize You \textbf{needed something} that wasn't there.
+                \vspace{0.3em}
+
+                \textit{Show:} the gap is real, not merely possible.
+            \end{block}
+        \end{column}
+    \end{columns}
+
+    \vspace{1em}
+
+    \begin{alertblock}{Your inexperience is the qualification}
+        \footnotesize Nobody who already knows this material can tell me where a first-time reader falls off. You can --- but only while you're still a first-time reader. That window closes in about a week.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Seven kinds of revision}
+    \begin{table}
+    \centering
+    \scriptsize
+    \begin{tabular}{clll c}
+        \toprule
+        \textbf{\#} & \textbf{Type} & \textbf{You noticed\ldots} & \textbf{Your contribution includes} & \textbf{Size} \\ \midrule
+        1 & \textcolor{tab-red}{\textbf{Code drift}} & An example errors or returns nothing & The error, the fix, what changed upstream & M \\
+        2 & \textcolor{tab-red}{\textbf{Stale figure}} & A screenshot doesn't match today's UI & A fresh screenshot, same filename \& crop & S \\
+        3 & \textcolor{tab-blue}{\textbf{Common issue}} & An error not in ``Common Issues to Debug'' & Symptom $\rightarrow$ cause $\rightarrow$ fix, in the list's format & S \\
+        4 & \textcolor{tab-blue}{\textbf{Missing figure}} & You sketched it yourself to understand it & The figure, a caption, and alt text & M \\
+        5 & \textcolor{tab-blue}{\textbf{Reading}} & A claim with no source behind it & The citation in \texttt{references.bib} + why it belongs & S \\
+        6 & \textcolor{tab-orange}{\textbf{Exercise}} & An exercise is ambiguous or unverifiable & Expected output, a rubric, or a starter cell & M \\
+        7 & \textcolor{tab-orange}{\textbf{Explanation}} & You reread a passage three times & The rewrite + what confused you the first time & M \\
+        \bottomrule
+    \end{tabular}
+    \end{table}
+
+    \vspace{0.3em}
+
+    \begin{columns}[T]
+        \begin{column}{0.62\textwidth}
+            {\footnotesize \textbf{Type 3 is the easiest high-value contribution in the book} --- it converts your lost debugging time into somebody else's saved time.}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            {\footnotesize \textbf{Size} = review effort. \textbf{S}: a few lines. \textbf{M}: a paragraph or code block. Bigger than M? File an issue first.}
+        \end{column}
+    \end{columns}
+    \bottomcite{The full framework, with worked examples of each type: \texttt{handouts/revision-framework.md}}
+\end{frame}
+
+\begin{frame}{How issues \& pull requests are graded}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            Weekly, out of \textbf{10 points} --- the Textbook Revisions grade (30\%).
+            \vspace{0.4em}
+            \begin{table}
+            \centering
+            \footnotesize
+            \begin{tabular}{llc}
+                \toprule
+                \textbf{Criterion} & \textbf{Full marks} & \textbf{Pts} \\ \midrule
+                \textbf{Located} & Chapter, section \& file named & 2 \\
+                \textbf{Evidenced} & I can reproduce what you hit & 3 \\
+                \textbf{Actionable} & A concrete change, scoped to one thing & 3 \\
+                \textbf{Reviews} & Two peer reviews, specific, with a verdict & 2 \\ \midrule
+                & \textbf{Total} & \textbf{10} \\
+                \bottomrule
+            \end{tabular}
+            \end{table}
+            \vspace{0.4em}
+            {\footnotesize Most weeks, most people land at \textbf{7--9}. A 10 means someone could act on your proposal without asking a single follow-up question.}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{alertblock}{Merged is not the bar}
+                \footnotesize You're graded on the \textbf{proposal and the review}, not on whether I merge it. A well-evidenced PR I decline for editorial reasons earns full credit. A merged one-character typo fix does not.
+            \end{alertblock}
+            \begin{block}{Little or no credit}
+                \footnotesize
+                \begin{itemize}\footnotesize
+                    \item Bulk typo PRs
+                    \item ``This is confusing'' with no location or proposal
+                    \item Duplicates --- check open issues first, then \textit{review} theirs
+                    \item Undisclosed AI text you didn't verify
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Writing it: the skeleton}
+    \begin{columns}[T]
+        \begin{column}{0.55\textwidth}
+            Every issue and every PR description uses the same five fields:
+
+            \vspace{0.5em}
+
+            \begin{itemize}\small
+                \item \textbf{Title} --- \texttt{<type>: <specific thing> in Ch. N}
+                \item \textbf{Location} --- chapter, section, and the \texttt{.qmd} file
+                \item \textbf{Problem} --- what you did, expected, and got. Paste the code and output.
+                \item \textbf{Why} --- who this affects, in one sentence
+                \item \textbf{Proposal} --- the concrete change you'd make
+            \end{itemize}
+
+            \vspace{0.5em}
+
+            {\footnotesize Can't fill in \textbf{Location} and \textbf{Problem} with specifics? You don't have a revision yet --- you have a hunch. Go back and reproduce it.}
+        \end{column}
+        \begin{column}{0.42\textwidth}
+            \begin{block}{Worked example}
+                \footnotesize
+                \textbf{Title:} Common issue: kernel/environment mismatch in Ch.~1
+                \vspace{0.2em}
+
+                \textbf{Location:} \texttt{ch-01-introduction.qmd}, ``Setting Up Your Environment''
+                \vspace{0.2em}
+
+                \textbf{Problem:} Installed \texttt{requests} in \texttt{webdata}, but the notebook raised \texttt{ModuleNotFoundError}. The kernel was pointing at base.
+                \vspace{0.2em}
+
+                \textbf{Why:} Likely to hit anyone using conda environments --- cost me 20 minutes.
+                \vspace{0.2em}
+
+                \textbf{Proposal:} Add to ``Common Issues'': check \texttt{sys.executable} in the notebook.
+            \end{block}
+        \end{column}
+    \end{columns}
+    \bottomcite{One change per issue or PR. Three fixes in one PR is three reviews wearing one coat.}
+\end{frame}
+
+\begin{frame}{Your turn}
+    \begin{columns}[T]
+        \begin{column}{0.55\textwidth}
+            \begin{enumerate}
+                \item \textbf{Read} Chapter 1 on the published site --- skim for the parts you'd have needed today \hfill {\scriptsize(5 min)}
+                \item \textbf{Pick one} problem. Name its family and its type from the table \hfill {\scriptsize(5 min)}
+                \item \textbf{Check} the repo's open issues --- if yours exists, comment on it instead \hfill {\scriptsize(1 min)}
+                \item \textbf{Write and file} it using the five-field skeleton \hfill {\scriptsize(8 min)}
+                \item \textbf{Share out} --- a few of you read yours aloud \hfill {\scriptsize(5 min)}
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.42\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/issue_form.png}\\
+            {\scriptsize \texttt{Issues} $\rightarrow$ \texttt{New issue} --- that's the whole mechanism.}
+            \vspace{0.4em}
+
+            \begin{alertblock}{Next week}
+                \footnotesize Your issue becomes your \textbf{first pull request} --- you'll fix the thing you found.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+    \bottomcite{Stuck choosing? ``The chapter never told me X, and I needed X'' is always a legitimate issue.}
+\end{frame}
+
+% =========================================================================
+\section{Before you go}
+% =========================================================================
+
+\begin{frame}{Before Monday}
+    \begin{columns}[T]
+        \begin{column}{0.58\textwidth}
+            Work through \texttt{handouts/setup.md} --- about 45 minutes:
+            \begin{enumerate}
+                \item \textcolor{tab-blue}{\textbf{Python, via Anaconda}} --- plus a \texttt{webdata} environment and the core libraries
+                \item \textcolor{tab-green}{\textbf{Git}} --- installed and configured with your name and email
+                \item \textcolor{tab-orange}{\textbf{A free GitHub account}} --- with your \texttt{colorado.edu} address
+            \end{enumerate}
+            \vspace{0.5em}
+            The handout ends with a two-cell check: retrieve a page, then pull Wikipedia pageviews into a DataFrame. \textbf{If it runs, you're ready.}
+        \end{column}
+        \begin{column}{0.38\textwidth}
+            \begin{alertblock}{Don't suffer in silence}
+                \footnotesize Email me \textbf{before Monday} if setup fails --- arriving with a broken environment costs you the lab.
+                \vspace{0.3em}
+
+                Can't access a laptop or install software? Contact me \textbf{immediately} so we can arrange an accommodation.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+    \bottomcite{Also read Textbook Ch.~2 (Ethics, law \& responsible collection) before Monday.}
 \end{frame}
 
 \begin{frame}[standout]
@@ -384,13 +671,13 @@ df = pd.DataFrame(data["items"])                   # list of dicts -> DataFrame
     \begin{enumerate}
         \item Web data science is \textbf{retrieve $\rightarrow$ parse $\rightarrow$ analyze} --- and the hard part is getting the data at all.
         \item Every week has a rhythm: \textbf{Monday} concept, \textbf{Wednesday} notebook lab, \textbf{Friday} textbook-revision pull requests.
+        \item The textbook is \textbf{open, Quarto-built, and AI-drafted under human review} --- which is exactly why your first-time-reader perspective is valuable.
+        \item Revisions sort into \textbf{Broken / Unclear / Missing} and seven concrete types. Graded on \textbf{location, evidence, actionability, and reviews} --- not on whether I merge them.
         \item Your grade is what you build: Labs 30\%, Revisions 30\%, Final Project 40\% --- \textbf{no exams}.
-        \item Before Monday: install \textbf{Anaconda}, set up \textbf{Git}, and create a free \textbf{GitHub} account.
-        \item Documentation is a professional skill, not a shortcut --- it's how you'll learn every new library.
     \end{enumerate}
-    \vspace{0.75em}
+    \vspace{0.5em}
     \centering\small Next week: \textbf{Ethics, law \& responsible collection} --- \texttt{robots.txt}, Terms of Service, and how to collect data without doing harm.
-    \bottomcite{Reading: Textbook Ch.~1. Related: \textcite{salganik2018bit}; \textcite{wilson2017good}.}
+    \bottomcite{Reading: Textbook Ch.~1--2. Related: \textcite{salganik2018bit}; \textcite{wilson2017good}.}
 \end{frame}
 
 \end{document}

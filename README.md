@@ -5,6 +5,7 @@ Course materials for **INFO 4617: Web Data Science**, University of Colorado Bou
 - **Meets:** Mondays, Wednesdays & Fridays, 12:20–1:10 pm, CASE W262 (Aug 20 – Dec 4, 2026)
 - **Instructor:** Brian Keegan, Ph.D. — <brian.keegan@colorado.edu>
 - **Textbook:** the open-source [Web Data Science book](https://github.com/cuinfoscience/Web-Data-Science-Book), which we read and revise together
+- **Canvas:** [course 143304](https://canvas.colorado.edu/courses/143304)
 
 ## Weekly rhythm
 
@@ -16,28 +17,39 @@ Course materials for **INFO 4617: Web Data Science**, University of Colorado Bou
 
 Evaluation: Notebook Labs (30%) · Textbook Revisions (30%) · Final Project (40%). No exams.
 
-## Building the syllabus
+## Layout
 
-The syllabus is written in LaTeX (`syllabus.tex`) using the `memoir` class and the
-bundled `mako-mem.sty` style. A rendered `syllabus.pdf` is committed for convenience.
-To rebuild:
+| Directory | Contents |
+| --- | --- |
+| [`syllabus/`](syllabus/) | LaTeX syllabus source and rendered `syllabus.pdf` |
+| [`slides/`](slides/) | Weekly lecture decks (one folder per teaching week) — see [`slides/README.md`](slides/README.md) |
+| [`handouts/`](handouts/) | Student-facing reference pages (see below) |
+| [`canvas/`](canvas/) | Canvas migration tooling — see [`canvas/README.md`](canvas/README.md) |
+
+### Handouts
+
+| File | Purpose |
+| --- | --- |
+| [`handouts/setup.md`](handouts/setup.md) | Self-paced environment setup — Anaconda, Git, GitHub — done before the first notebook lab |
+| [`handouts/revision-framework.md`](handouts/revision-framework.md) | The framework for proposing textbook revisions: three families, seven types, the issue/PR skeleton, and how revisions are graded. Used every Friday. |
+
+## Building
+
+**Syllabus** (`memoir`, `fbb`, `datenumber`; runs `bibtex` against `refs.bib`):
 
 ```bash
-latexmk -pdf syllabus.tex
+cd syllabus && latexmk -pdf syllabus.tex
 ```
 
-This requires a TeX distribution with the `memoir`, `fbb`, and `datenumber` packages
-(e.g., a full TeX Live install, or [Overleaf](https://www.overleaf.com)). The build
-runs `bibtex` against `refs.bib` to populate the in-line "Other resources" list.
+**Slides** (Gotham beamer theme vendored in `slides/common/`; needs `biblatex` + `biber`):
 
-## Files
+```bash
+cd slides && make            # every deck
+cd slides/week-01 && latexmk -pdf slides.tex   # just one
+```
 
-| File | Description |
-| --- | --- |
-| `syllabus.tex` | Syllabus source |
-| `syllabus.pdf` | Rendered syllabus |
-| `mako-mem.sty` | Memoir style (adapted from Kieran Healy / Benjamin Mako Hill) |
-| `refs.bib` | Bibliography for the resources list |
+Each deck also compiles standalone from its own folder — no `TEXINPUTS` setup needed.
 
-> **Note:** the Canvas course URL and office hours in `syllabus.tex` are placeholders
-> (marked `PLACEHOLDER`/`TBD`) to be filled in before publishing.
+> **Note:** office hours in `syllabus/syllabus.tex` are still a `TBD` placeholder,
+> and the images in `slides/week-*/img/` are labeled placeholders to be replaced
+> with real screenshots (each folder's `IMAGES.md` says what belongs where).

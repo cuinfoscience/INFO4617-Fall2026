@@ -4,3 +4,6 @@ anaconda_jupyter.png	1200x820	Screenshot: Anaconda Navigator (or a terminal runn
 pageviews_plot.png	1200x680	Screenshot: matplotlib line plot of daily Wikipedia pageviews for "University of Colorado Boulder" over January 2024, the output of the chapter's first-request pipeline
 github_repo.png	1200x780	Screenshot: the Web Data Science Book GitHub repository page (cuinfoscience/Web-Data-Science-Book) showing the chapter .qmd files and the Fork button
 pr_review.png	1300x760	Screenshot: a GitHub pull-request "Files changed" view with an inline peer-review comment on ch-01-introduction.qmd
+book_website.png	1200x800	Screenshot: the published Quarto book at cuinfoscience.github.io/Web-Data-Science-Book showing the sidebar table of contents (four modules, 15 chapters) and a chapter open
+book_pipeline.png	1250x700	Diagram: ch-NN-topic.qmd (plain text + code) -> `quarto render` -> published website on GitHub Pages; annotate that the repo is the source of truth and the site is a build artifact
+issue_form.png	1200x780	Screenshot: the GitHub "New issue" form on the Web-Data-Science-Book repo, with a title following the "<type>: <specific thing> in Ch. N" pattern and the five-field body filled in
