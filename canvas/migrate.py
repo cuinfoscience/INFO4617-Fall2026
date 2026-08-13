@@ -440,10 +440,60 @@ def cmd_build(api: Canvas, args):
 
 # ---------------------------------------------------------------- entry
 
+def cmd_plan(args):
+    """Print the full target design. Makes no API calls and needs no token."""
+    print(f"\n{'='*72}\nPLAN — what `build --apply` will create in course {spec.NEW_COURSE_ID}"
+          f"\n{'='*72}")
+
+    print(f"\nCourse settings")
+    print(f"  name            {spec.COURSE_NAME} ({spec.COURSE_CODE}, {spec.TERM})")
+    print(f"  meets           {spec.MEETING} · {spec.ROOM}")
+    print(f"  term dates      {spec.FIRST_DAY} → {spec.LAST_DAY}")
+    print(f"  weighted grades on · home page = Modules")
+
+    print(f"\nAssignment groups")
+    total = 0
+    for g in spec.GROUPS:
+        total += g["group_weight"]
+        rule = f"   [{g['rules'].strip()}]" if g["rules"] else ""
+        print(f"  {g['name']:<20} {g['group_weight']:>3}%{rule}")
+    print(f"  {'TOTAL':<20} {total:>3}%")
+
+    labs, revs, fin = (spec.lab_assignments(), spec.revision_assignments(),
+                       spec.final_assignments())
+    print(f"\nAssignments ({len(labs)+len(revs)+len(fin)} total)")
+    for group, items in (("Notebook Labs", labs), ("Textbook Revisions", revs),
+                         ("Final Project", fin)):
+        print(f"  {group}:")
+        for a in items:
+            when = a["due_at"][:16].replace("T", " ")
+            print(f"    {when}  {a['points_possible']:>3}pt  {a['name']}")
+
+    print(f"\nModules ({len(spec.modules())})")
+    for m in spec.modules():
+        print(f"  {m['name']}")
+        for i, item in enumerate(m["items"], 1):
+            kind = item["type"]
+            marker = {"SubHeader": "  ·", "Assignment": "  →"}.get(kind, "  -")
+            print(f"  {marker} [{kind}] {item['title']}")
+
+    html = spec.syllabus_html()
+    print(f"\nSyllabus page: {len(html)} chars of HTML "
+          f"({html.count('<tr')} table rows: weekly rhythm, 30/30/40 grading, "
+          f"{len(spec.WEEKS)}-week schedule)")
+    if args.write_html:
+        Path(args.write_html).write_text(html)
+        print(f"  wrote preview -> {args.write_html}")
+
+    print(f"\nContent migration: course {spec.OLD_COURSE_ID} → {spec.NEW_COURSE_ID}, "
+          f"{'ENTIRE course' if args.everything else 'files + pages only'}")
+    print("\nNothing above has happened yet. Run `build --apply` (with a token) to execute.")
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("command", choices=["inspect", "copy", "build", "all"])
+    p.add_argument("command", choices=["plan", "inspect", "copy", "build", "all"])
     p.add_argument("--apply", action="store_true",
                    help="actually write to Canvas (default is a dry run)")
     p.add_argument("--host", default="canvas.colorado.edu")
@@ -457,7 +507,14 @@ def main():
                    help="copy: bring over the ENTIRE old course, not just files/pages")
     p.add_argument("--snapshot", default="canvas_snapshot.json",
                    help="where inspect writes its JSON dump")
+    p.add_argument("--write-html", default=None,
+                   help="plan: also write the generated syllabus HTML to this path")
     args = p.parse_args()
+
+    # `plan` is pure computation — no token, no network.
+    if args.command == "plan":
+        cmd_plan(args)
+        return
 
     token = None
     if args.token_file:

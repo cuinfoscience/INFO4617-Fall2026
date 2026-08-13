@@ -28,6 +28,7 @@ prints the writes it would perform. Add `--apply` to actually write.
 ```bash
 cd canvas
 
+python migrate.py plan                 # print the whole target design (no token, no network)
 python migrate.py inspect              # read-only survey of both courses
 python migrate.py copy                 # preview the content migration
 python migrate.py copy --apply         # copy files + pages from the old course
@@ -35,7 +36,7 @@ python migrate.py build                # preview groups/assignments/modules/syll
 python migrate.py build --apply        # build the new structure
 ```
 
-Recommended order: `inspect` first (see what's actually in both courses), then
+Recommended order: `plan` to review the design, `inspect` to see what is actually in both courses , then
 `copy --apply`, then `build --apply`.
 
 ### Options
