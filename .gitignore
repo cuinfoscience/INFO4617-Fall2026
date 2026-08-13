@@ -15,3 +15,10 @@
 *.snm
 *.vrb
 .DS_Store
+
+# Canvas migration: never commit tokens or course data dumps
+canvas/.token
+canvas/*_token*
+canvas/canvas_key.json
+canvas/canvas_snapshot.json
+canvas/__pycache__/
