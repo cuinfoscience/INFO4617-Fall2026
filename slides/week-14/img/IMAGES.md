@@ -1,4 +1,4 @@
-# Image placeholders for `.`
+# Image placeholders for `week-14`
 
 These are auto-generated gray **placeholders** so the deck compiles. Replace each with the real asset described below (keep the same filename), then rebuild.
 

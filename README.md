@@ -45,7 +45,7 @@ cd syllabus && latexmk -pdf syllabus.tex
 
 ```bash
 cd slides && make            # every deck
-cd slides/week-01 && latexmk -pdf slides.tex   # just one
+cd slides/week-01 && latexmk -pdf week-01.tex  # just one
 ```
 
 Each deck also compiles standalone from its own folder — no `TEXINPUTS` setup needed.

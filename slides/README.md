@@ -36,7 +36,7 @@ Friday-only intro, and Week 16 covers research design plus final presentations.
 slides/
   common/     shared Gotham theme (vendored), preamble.tex, bibliography.bib,
               make_stubs.py, AUTHORING.md
-  week-NN/    slides.tex, slides.pdf, img/ (stub PNGs + IMAGES.md)
+  week-NN/    week-NN.tex, week-NN.pdf, img/ (stub PNGs + IMAGES.md)
   Makefile
 ```
 
@@ -46,14 +46,14 @@ Requires a TeX Live install with `beamer`, `fbb`, `expl3`, `biber`, and
 `latexmk` (the Gotham theme is vendored in `common/`, so no separate theme
 install is needed).
 
-**Each deck compiles standalone.** Open `week-NN/slides.tex` in your editor and
+**Each deck compiles standalone.** Open `week-NN/week-NN.tex` in your editor and
 build it, or from inside the folder run:
 
 ```bash
-cd week-06 && latexmk -pdf slides.tex
+cd week-06 && latexmk -pdf week-06.tex
 ```
 
-No `TEXINPUTS` or other environment setup is needed: each `slides.tex` adds
+No `TEXINPUTS` or other environment setup is needed: each deck source adds
 `../common/` to LaTeX's input path itself (the line right after
 `\documentclass`), so the shared theme, preamble, and bibliography resolve
 automatically. This assumes you compile from within the week's own folder,
@@ -65,7 +65,7 @@ The `Makefile` is a convenience for building everything at once:
 make            # build every deck
 make week-06    # build one week
 make stubs      # regenerate placeholder images
-make clean      # remove build artifacts (keeps slides.pdf)
+make clean      # remove build artifacts (keeps the deck PDFs)
 ```
 
 ## Images

@@ -198,7 +198,7 @@ def notebook_url(slug: str) -> str:
 
 
 def slides_url(week_number: int) -> str:
-    return f"{REPO_URL}/blob/main/slides/week-{week_number:02d}/slides.pdf"
+    return f"{REPO_URL}/blob/main/slides/week-{week_number:02d}/week-{week_number:02d}.pdf"
 
 
 # --------------------------------------------------------------------------
