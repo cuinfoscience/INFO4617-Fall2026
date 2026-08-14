@@ -23,7 +23,7 @@ Usage
 Useful flags
 ------------
     --only groups,assignments,modules,syllabus,settings   limit what `build` touches
-    --include-slides       upload slides/week-NN/slides.pdf and link it in each module
+    --include-slides       upload slides/week-NN/week-NN.pdf and link it in each module
     --host HOST            default canvas.colorado.edu
 """
 
@@ -368,7 +368,7 @@ def build_modules(api, args, assignment_ids):
 
         slides_file_id = None
         if args.include_slides:
-            local = REPO_ROOT / "slides" / f"week-{wk:02d}" / "slides.pdf"
+            local = REPO_ROOT / "slides" / f"week-{wk:02d}" / f"week-{wk:02d}.pdf"
             if local.exists():
                 slides_file_id = _upload_file(api, spec.NEW_COURSE_ID, local)
 
@@ -502,7 +502,7 @@ def main():
     p.add_argument("--only", default=None,
                    help="build steps to run: settings,groups,assignments,modules,syllabus")
     p.add_argument("--include-slides", action="store_true",
-                   help="upload each week's slides.pdf and link it in the module")
+                   help="upload each week's deck PDF and link it in the module")
     p.add_argument("--everything", action="store_true",
                    help="copy: bring over the ENTIRE old course, not just files/pages")
     p.add_argument("--snapshot", default="canvas_snapshot.json",

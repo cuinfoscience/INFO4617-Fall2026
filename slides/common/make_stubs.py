@@ -65,6 +65,10 @@ def make_stub(path, w, h, caption):
 
 
 def process(week_dir):
+    # Resolve before naming: the Makefile invokes this as `make_stubs.py .`
+    # from inside the week folder, so basename() on the raw argument would
+    # label everything "." instead of "week-NN".
+    week_name = os.path.basename(os.path.abspath(week_dir))
     img_dir = os.path.join(week_dir, "img")
     manifest = os.path.join(img_dir, "stubs.tsv")
     if not os.path.exists(manifest):
@@ -91,14 +95,14 @@ def process(week_dir):
             rows.append((fname, f"{w}x{h}", caption))
     # write IMAGES.md
     with open(os.path.join(img_dir, "IMAGES.md"), "w") as md:
-        md.write(f"# Image placeholders for `{os.path.basename(week_dir)}`\n\n")
+        md.write(f"# Image placeholders for `{week_name}`\n\n")
         md.write("These are auto-generated gray **placeholders** so the deck "
                  "compiles. Replace each with the real asset described below "
                  "(keep the same filename), then rebuild.\n\n")
         md.write("| File | Size | Should show |\n|---|---|---|\n")
         for fname, size, caption in rows:
             md.write(f"| `{fname}` | {size} | {caption} |\n")
-    print(f"  {os.path.basename(week_dir)}: generated {len(rows)} stub(s)")
+    print(f"  {week_name}: generated {len(rows)} stub(s)")
 
 
 if __name__ == "__main__":

@@ -45,7 +45,7 @@ in both courses, then `copy --apply`, then `build --apply`.
 |---|---|
 | `--apply` | Actually write to Canvas (default: dry run) |
 | `--only groups,assignments,modules,syllabus,settings` | Limit what `build` touches |
-| `--include-slides` | Upload each `slides/week-NN/slides.pdf` and link it in that week's module |
+| `--include-slides` | Upload each `slides/week-NN/week-NN.pdf` and link it in that week's module |
 | `--everything` | `copy`: bring over the **entire** old course, not just files/pages |
 | `--host` | Canvas host (default `canvas.colorado.edu`) |
 | `--snapshot PATH` | Where `inspect` writes its JSON dump |
