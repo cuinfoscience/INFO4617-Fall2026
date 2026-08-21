@@ -27,26 +27,32 @@
 % -------------------------------------------------------------------------
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
-            Welcome to Web Data Science. The semester starts Thursday, so this week we meet \textbf{Friday only} --- today is orientation and your first contribution to the course textbook.
+        \begin{column}{0.67\textwidth}
+            Welcome to Web Data Science. The semester starts Thursday, so this week we meet \textbf{Friday only} 
 
-            \vspace{1em}
+            \bigskip
+            Today is orientation and introduction to GitHub.
 
-            \dayband{Friday}{Welcome, the book \& your first revision}
+            \bigskip
+
+            \dayband{Friday}{Orientation, the book \& setting up GitHub}
             \begin{itemize}\small
-                \item What web data science is --- and why it matters
+                \item What web data science is and why it matters
                 \item How the class works and how you're graded
-                \item The textbook: what it is, how it was made, how it's built
-                \item Git \& GitHub --- and \textbf{you file a real issue today}
+                \item Our unusual textbook
+                \item Git \& GitHub
             \end{itemize}
 
-            \vspace{0.75em}
+            \bigskip
 
-            The \textbf{Monday / Wednesday / Friday} rhythm begins next week.
+            The \textbf{Monday $\rightarrow$ Wednesday $\rightarrow$ Friday} rhythm begins next week.
         \end{column}
-        \begin{column}{0.34\textwidth}
-            \begin{block}{Companion notebook}
-                \footnotesize \texttt{ch-01-introduction.ipynb}
+        \begin{column}{0.32\textwidth}
+            \begin{block}{Our textbook}
+                \footnotesize \url{https://cuinfoscience.github.io/Web-Data-Science-Book/}
+            \end{block}
+            \begin{block}{Its source code}
+                \footnotesize \url{https://github.com/cuinfoscience/Web-Data-Science-Book}
             \end{block}
             \begin{alertblock}{Before Monday}
                 \footnotesize Work through \texttt{handouts/setup.md}: Anaconda, Git, and a \textbf{free} GitHub account. Bring a laptop --- today included.
@@ -62,29 +68,30 @@
 \begin{frame}{Meet your instructor}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \textbf{Brian C. Keegan} --- Associate Professor of Information Science.
+            \textbf{Brian C. Keegan} --- Associate Professor
             \begin{itemize}\small
+                \item Born in Medford, Oregon
                 \item Grew up outside Las Vegas, Nevada
-                \item MIT: Mechanical Engineering and Science, Technology \& Society
-                \item A year as a bartender and oral historian
-                \item Ph.D.\ at Northwestern (Media, Technology \& Society); postdoc in computational social science at Northeastern
-                \item Data scientist at Harvard Business School
+                \item Mechanical Engineering and Science, Technology \& Society, MIT, 2002--06
+                \item Bartender and \href{https://infinite.mit.edu/collection/mit-150-interviews/}{oral historian}
+                \item Ph.D.\ in Media, Technology \& Society, Northwestern, 2007--2012
+                \item Postdoc in computational social science, Northeastern, 2012--14
+                \item Data scientist, Harvard Business School, 2014--16
                 \item CU Boulder Information Science, 2016--present
+                \item Visiting scientist, Harvard Population Center, 2025--26
             \end{itemize}
             \vspace{0.5em}
-            {\footnotesize \texttt{brianckeegan.com}}
+            \url{brianckeegan.com}
         \end{column}
         \begin{column}{0.36\textwidth}
             \begin{block}{What I study}
                 \footnotesize
                 \begin{itemize}\footnotesize
-                    \item How Wikipedia covers breaking news
-                    \item Public-interest data science
-                    \item Migration across platforms (Threads, Mastodon, Bluesky)
-                    \item Online extremism and moderation
+                    \item High-tempo online collaborations
+                    \item Public interest data science
+                    \item Platform governance and migration
                 \end{itemize}
             \end{block}
-            {\footnotesize My students and I rely on web data every day --- but researchers' access to it is rapidly disappearing.}
         \end{column}
     \end{columns}
 \end{frame}
@@ -92,96 +99,95 @@
 \begin{frame}{What is web data science?}
     \begin{columns}[T]
         \begin{column}{0.58\textwidth}
-            \textbf{Web data science} is the practice of \textit{retrieving} data from the web, \textit{parsing} it into structured formats, and \textit{analyzing} it to produce knowledge.
+            The World Wide Web is the largest, most dynamic, and most contested data source ever created
 
-            \vspace{1em}
+            \bigskip
+            The web is a data source and web data science is how you get, clean, and use it
 
-            It differs from general data science in one crucial way: your first challenge is not modeling or visualization --- it is \textbf{getting the data in the first place}.
-
-            \vspace{1em}
-
-            The web is the largest, most dynamic, and most contested data source ever created. It can tell us how misinformation spreads, how housing costs shift, and how online communities govern themselves.
+            \bigskip
+            \textbf{Web data science} is the practice of retrieving data from the web, parsing it into structured formats, and analyzing it to produce knowledge.
+            
         \end{column}
         \begin{column}{0.38\textwidth}
             \begin{block}{Not your usual dataset}
                 \footnotesize The web is \textbf{not a database}. Data arrives as:
                 \begin{itemize}\footnotesize
-                    \item HTML tables buried in tracking scripts
+                    \item HTML tables buried slopified websites
                     \item JSON from rate-limited APIs
-                    \item scanned PDFs of council minutes
-                    \item posts that might vanish tomorrow
+                    \item scanned PDFs from a FOIA request
+                    \item pages that might vanish tomorrow
                 \end{itemize}
             \end{block}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~1, ``Why Web Data Science?''}
 \end{frame}
 
 \begin{frame}{Data in the public interest}
     \begin{columns}[T]
         \begin{column}{0.58\textwidth}
-            Web data science grew out of \textbf{computational social science}, \textbf{data journalism}, and \textbf{civic technology} --- traditions that share one idea: data fluency is a form of power that should serve the public.
+            Many disciplines and professions have developed their own local dialects of web data science: computational social science, data journalism, and civic technology 
 
-            \vspace{0.75em}
+            \bigskip
+            Data is power and that power that should serve the public.
 
-            \begin{itemize}\small
-                \item \textbf{ProPublica, ``Machine Bias'' (2016)} --- scraped court records exposed racial bias in criminal risk-assessment algorithms.
-                \item \textbf{The Markup, ``Citizen Browser''} --- a recruited panel revealed how Facebook's feed distributed political content.
-            \end{itemize}
+            \bigskip
+            Who gets to access and benefit from web data is an extremely live issue right now: surveillance, AI, copyright
+            
         \end{column}
         \begin{column}{0.38\textwidth}
-            \begin{alertblock}{The tools are not neutral}
-                \footnotesize The same skills that make public information \textbf{accessible} can also enable surveillance. Who benefits? Who is harmed? These questions run through every chapter.
+            \begin{alertblock}{Classic readings}
+                
+            \begin{center}
+                \includegraphics[width=.5\textwidth]{slides/common/cupids-logo.png}
+            \end{center}
+            \begin{block}{Ask me about CUPIDS Lab}
+                \url{https://www.cupids-lab.org/}
+            \end{block}
             \end{alertblock}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~1, ``Social History \& Public Interest.'' The field's founding vision: \textcite{lazer2009computational}.}
 \end{frame}
 
-\begin{frame}{The loop that structures everything}
+\begin{frame}{Common sequence across topics}
     \begin{columns}[T]
         \begin{column}{0.54\textwidth}
-            Every chapter in this course follows the same arc:
+            Every week in this course follows a common sequence:
 
-            \vspace{0.75em}
+            \bigskip
 
-            {\large \textbf{retrieve $\rightarrow$ parse $\rightarrow$ analyze}}
+            \begin{center}
+                {\large \textbf{retrieve $\rightarrow$ parse $\rightarrow$ analyze}}
+            \end{center}
+            
 
-            \vspace{0.75em}
+            \bigskip
 
-            \begin{itemize}\small
-                \item \textbf{Retrieve} a page or API response with \texttt{requests}
-                \item \textbf{Parse} it into records --- HTML, JSON, XML, or PDF
+            \begin{itemize}
+                \item \textbf{Retrieve} an HTML, JSON, or PDF file with \texttt{requests}
+                \item \textbf{Parse} it into data: JSON, CSV, \textit{etc}.
                 \item Load into a \textbf{pandas} DataFrame
                 \item \textbf{Analyze} or visualize the result
             \end{itemize}
 
-            \vspace{0.75em}
-
-            The specifics change; the arc does not. Recognizing it early gives you a mental model for every new chapter.
+            \bigskip
+            You can collect the data and make this visualization after reading the Ch.~01 of the textbook, ``Your First Request.''
+            
         \end{column}
         \begin{column}{0.42\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{img/pageviews_plot.png}\\
-            {\scriptsize A first pipeline: CU Boulder's daily Wikipedia pageviews.}
+            \includegraphics[width=\textwidth]{slides/week-01/img/pageviews.pdf}
         \end{column}
     \end{columns}
-    \bottomcite{You'll run this yourself in \texttt{handouts/setup.md} before Monday. Textbook Ch.~1, ``Your First Request.''}
 \end{frame}
 
 \begin{frame}{The data science mindset}
     Technical fluency is not enough. Four dispositions will serve you all semester:
     \begin{itemize}
         \item \textcolor{tab-green}{\textbf{Growth mindset}} --- ability develops through effort. Treat each error as a learning signal, not evidence of inadequacy.
-        \item \textcolor{tab-blue}{\textbf{Computational thinking}} --- decompose, recognize patterns, abstract, and specify unambiguous steps \parencite{wing2006computational}.
-        \item \textcolor{tab-orange}{\textbf{The hacker ethic}} --- sharing, openness, curiosity, and a bias toward action. The libraries you'll use exist because people shared their work.
-        \item \textcolor{tab-purple}{\textbf{Scientific norms}} --- communalism, skepticism, and reproducibility. Document your methods; question your data; report limitations.
+        \item \textcolor{tab-blue}{\textbf{Computational thinking}} --- decompose, recognize patterns, abstract, and specify unambiguous steps.
+        \item \textcolor{tab-orange}{\textbf{The hacker ethic}} --- sharing, openness, curiosity, and a bias toward action. The libraries we will use exist because people shared their work.
+        \item \textcolor{tab-purple}{\textbf{Scientific norms}} --- communalism, skepticism, and reproducibility. Document your methods; question yours and others' data; report limitations.
     \end{itemize}
-    \vspace{0.5em}
-    \begin{alertblock}{This is normal}
-        \footnotesize You will meet libraries you've never used and pages that resist your parsing. Frustration is the job, not a detour from it.
-    \end{alertblock}
-    \bottomcite{Textbook Ch.~1, ``The Data Science Mindset.''}
 \end{frame}
 
 % =========================================================================
@@ -193,11 +199,11 @@
         \begin{column}{0.56\textwidth}
             Starting next week, every week runs on the same three-beat rhythm:
 
-            \vspace{0.75em}
+            \bigskip
 
             \dayband{Monday}{Concept + notebook intro}
             \begin{itemize}\small
-                \item Read the chapter; I introduce the week's ideas and the companion notebook
+                \item Lecture --- Introduce the week's ideas and the companion notebook, you read the week's textbook chapter
             \end{itemize}
             \vspace{0.4em}
             \dayband{Wednesday}{Notebook lab}
@@ -207,7 +213,7 @@
             \vspace{0.4em}
             \dayband{Friday}{Textbook revisions}
             \begin{itemize}\small
-                \item Propose and peer-review pull requests that improve the book
+                \item Fix --- submit issues and propose pull requests that improve the textbook and notebooks
             \end{itemize}
         \end{column}
         \begin{column}{0.4\textwidth}
@@ -226,42 +232,86 @@
             \vspace{0.5em}
             \begin{itemize}
                 \item \textcolor{tab-blue}{\textbf{Notebook Labs --- 30\%}}\\ {\small weekly, hands-on data-collection work}
-                \item \textcolor{tab-green}{\textbf{Textbook Revisions --- 30\%}}\\ {\small pull requests + peer reviews that improve the book}
-                \item \textcolor{tab-orange}{\textbf{Final Project --- 40\%}}\\ {\small a research design + real data collection + analysis}
+                \item \textcolor{tab-green}{\textbf{Textbook Revisions --- 15\%}}\\ {\small pull requests + peer reviews that improve the book}
+                \item \textcolor{tab-orange}{\textbf{Attendance --- 15\%}}\\ {\small showing up, participating, daily notes}
+                \item \textcolor{tab-purple}{\textbf{Final Project --- 40\%}}\\ {\small a research design + real data collection + analysis}
             \end{itemize}
         \end{column}
         \begin{column}{0.4\textwidth}
             \begin{block}{No exams}
-                \footnotesize No midterm, no final. You demonstrate learning by \textbf{doing the work of a web data scientist} --- collecting data, contributing to a shared resource, and building a project.
+                \footnotesize No midterm and no final. You demonstrate learning by \textbf{doing the work of a web data scientist} by collecting data, contributing to a shared resource, and building your own project.
             \end{block}
         \end{column}
     \end{columns}
-    \bottomcite{Percentages are the course total; weekly labs are not individually high-stakes.}
 \end{frame}
 
-\begin{frame}{Documentation is the job}
+\begin{frame}{Course outline}
+\begin{table}[ht]
+\footnotesize
+\centering
+    \begin{tabular}{cccc}
+        \toprule[.15em]
+        \textbf{Module} & \textbf{Week} & \textbf{Dates} & \textbf{Topics} \\
+        \cmidrule[.1em](lr){1-4}
+
+        \multirow{5}{*}[0pt]{\textit{Foundations}}
+            & 1 & Aug.~21 & Introduction \& setup \\
+            & 2 & Aug.~24--28 & Ethics, law \& responsible collection \\
+            & 3 & Aug.~31--Sep.~4 & The post-API age \\
+            & 4 & Sep.~9--11 & Data formats: XML \& JSON \\
+            & 5 & Sep.~14--18 & Web architecture \& protocols \\ \cmidrule[.1em](lr){1-4}
+
+        \multirow{4}{*}[0pt]{\textit{Documents}}
+            & 6 & Sep.~21--25 & Parsing static web pages \\
+            & 7 & Sep.~28--Oct.~2 & Archived web pages \\
+            & 8 & Oct.~5--9 & Dynamic web pages with Selenium \\
+            & 9 & Oct.~12--16 & Extracting data from PDFs \\ \cmidrule[.1em](lr){1-4}
+
+        \multirow{4}{*}[0pt]{\textit{APIs}}
+            & 10 & Oct.~19--23 & Wikipedia APIs \\
+            & 11 & Oct.~26--30 & Government data APIs \\
+            & 12 & Nov.~2--6 & Social \& media platform APIs \\
+            & 13 & Nov.~9--13 & AI \& language-model APIs \\ \cmidrule[.1em](lr){1-4}
+
+        \multirow{3}{*}[0pt]{\textit{Practice}}
+            & 14 & Nov.~16--20 & Automating data collection \\
+            & 15 & Nov.~23--27 & \textbf{No class: Fall Break} \\
+            & 16 & Nov.~30--Dec.~4 & Research design \& final presentations \\
+            \cmidrule[.1em](lr){1-4}
+            & \multicolumn{3}{c}{\textbf{Final Project due Friday, December 11}} \\
+
+        \bottomrule[.15em]
+    \end{tabular}
+\end{table}
+    
+\end{frame}
+
+\begin{frame}{Documentation and testing}
     \begin{columns}[T]
         \begin{column}{0.58\textwidth}
-            Your previous classes may have discouraged online resources. \textbf{The training wheels are off.} Finding, reading, and applying documentation is \textit{the} core professional skill --- not a shortcut, not cheating.
+            Your previous classes may have discouraged online resources. 
 
-            \vspace{0.75em}
+            \bigskip
+            \textbf{The training wheels are off.} 
+            
+            \bigskip
+            Finding, reading, and applying documentation is a core professional skill.
 
-            Bookmark the docs you'll live in: \texttt{requests}, \texttt{BeautifulSoup}, \texttt{pandas}, \texttt{matplotlib}.
+            \bigskip
+            Bookmark the docs for the common packages: \href{https://requests.readthedocs.io/en/latest/}{\texttt{requests}}, \href{https://beautiful-soup-4.readthedocs.io/en/latest/}{\texttt{BeautifulSoup}}, \href{https://pandas.pydata.org/}{\texttt{pandas}}, \href{https://matplotlib.org/}{\texttt{matplotlib}}, \textit{etc}.
 
-            \vspace{0.75em}
-
-            ``It's not working'' is not a question. Say what you \textbf{tried}, what you \textbf{expected}, what \textbf{happened}, and what the \textbf{error message} says.
+            \bigskip
+            ``It's not working'' $\rightarrow$ say what you \textbf{tried}, what you \textbf{expected}, what \textbf{happened}, where you \textbf{looked} for help.
         \end{column}
         \begin{column}{0.38\textwidth}
-            \begin{block}{Credit your sources}
+            \begin{block}{Always credit your sources}
                 \footnotesize Used a blog post, a Q\&A answer, docs, or an AI tool to solve something beyond class?
-                \vspace{0.3em}
+                \smallskip
 
                 \textbf{Just include a link in your code.} Undocumented advanced tricks are a reliable signal of uncredited help.
             \end{block}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~1, ``Documentation as Professional Practice.''}
 \end{frame}
 
 % =========================================================================
@@ -271,13 +321,13 @@
 \begin{frame}{A book built for this course}
     \begin{columns}[T]
         \begin{column}{0.57\textwidth}
-            There is no book to buy. Our text is open source, and it is shaped to the course rather than the other way around:
+            There is no textbook to buy --- we are writing our own:
 
-            \vspace{0.6em}
+            \medskip
 
-            \begin{itemize}\small
-                \item \textbf{15 chapters, 15 teaching weeks} --- roughly one chapter per week
-                \item \textbf{Four modules} matching ours: Foundations, Documents, APIs, Practice
+            \begin{itemize}
+                \item 1 chapter per week
+               
                 \item Every chapter ships a \textbf{companion notebook}, plus exercises and a ``Common Issues to Debug'' list
                 \item Code is \textbf{not pre-executed} (\texttt{eval: false}) --- you run it, so you meet the errors yourself
             \end{itemize}
@@ -292,13 +342,18 @@
             {\scriptsize The published book --- free, open, and ours to improve.}
         \end{column}
     \end{columns}
-    \bottomcite{The syllabus schedule and this book's table of contents are the same document, seen twice.}
 \end{frame}
 
 \begin{frame}{How this book was written}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            I'll be direct about it: \textbf{portions of this book were drafted with large language models}, then reviewed, edited, and verified by me. The repository documents the process, and an appendix discloses it.
+            This book was drafted using large language models $\rightarrow$ there is probably some important stuff that is wrong or confusing
+            
+            \medskip
+            You are going to help me debug, review, edit, verify it
+            
+            \medskip
+            This may not be your first time working with ``AI slop''
 
             \vspace{0.6em}
 
@@ -434,7 +489,7 @@
         \begin{column}{0.58\textwidth}
             \textbf{Goal:} by the end of class, every one of you has filed one real GitHub issue proposing a change to Chapter~1.
 
-            \vspace{0.75em}
+            \bigskip
 
             \begin{itemize}\small
                 \item You need only a \textbf{browser} and a \textbf{GitHub account} --- no Git, no fork, no local copy
@@ -460,7 +515,7 @@
 \begin{frame}{Where did the chapter fail you?}
     That question --- not ``what could be added in principle'' --- starts every revision. Sort what you noticed into one of three families:
 
-    \vspace{0.75em}
+    \bigskip
 
     \begin{columns}[T]
         \begin{column}{0.315\textwidth}
@@ -489,7 +544,7 @@
         \end{column}
     \end{columns}
 
-    \vspace{1em}
+    \bigskip
 
     \begin{alertblock}{Your inexperience is the qualification}
         \footnotesize Nobody who already knows this material can tell me where a first-time reader falls off. You can --- but only while you're still a first-time reader. That window closes in about a week.

@@ -29,7 +29,8 @@
 \usepackage{graphicx}
 \usepackage{enumerate}
 \usepackage{stringstrings}
-
+\usepackage{hwemoji}
+\DeclareUnicodeCharacter{FE0F}{}
 
 % date auto-incrementation
 \usepackage{datenumber}
@@ -115,7 +116,8 @@
 % Canvas course URL (Fall 2026)
 \def\canvasurl{https://canvas.colorado.edu/courses/143304}
 \def\githuburl{https://github.com/cuinfoscience/INFO4617-Fall2026}
-\def\bookurl{https://github.com/cuinfoscience/Web-Data-Science-Book}
+\def\bookurl{https://cuinfoscience.github.io/Web-Data-Science-Book/}
+\def\bookgithuburl{https://github.com/cuinfoscience/Web-Data-Science-Book}
 \def\meetingdays{Mondays, Wednesdays, and Fridays}
 \def\starttime{12:20 pm}
 \def\endtime{1:10 pm}
@@ -177,20 +179,20 @@ The course is organized around an open-source textbook, the \href{\bookurl}{\tex
 \subsection{Learning objectives}
 
 \begin{itemize}[itemsep=0em]
-    \item Understand the legal and ethical contours of web data access
+    \item Understand the history, infrastructure, legal and ethical contours of web data access
     \item Navigate and parse common web data formats like XML and JSON
     \item Retrieve and automate data extraction from HTML and PDF documents
     \item Access popular APIs to collect data for common research designs
-    \item Use version control and collaborative open-source workflows (Git and GitHub pull requests) to contribute to a shared codebase
-    \item Document, communicate, and critically evaluate data-collection code and technical writing
+    \item Use version control and open-source workflows to collaborate on a shared codebase
+    \item Document, communicate, and critically evaluate data collection code and technical writing
 \end{itemize}
 
 \subsection{Course Design}
 Class will meet three times per week on \meetingdays~from \starttime~to \endtime~in \classroom. The week follows a consistent rhythm:
 \begin{description}[itemsep=2pt,labelsep=0.5em,leftmargin=1.5em]
     \item[Monday] introduces a new concept and its companion notebook through lecture and live coding.
-    \item[Wednesday] is a hands-on \textit{Notebook Lab}: you work through and share your implementation of the notebook exercises.
-    \item[Friday] is a \textit{Textbook Revision} workshop: you propose revisions to the \textit{Web Data Science} book as GitHub pull requests and review your classmates' proposals.
+    \item[Wednesday] is a hands-on Notebook Lab: you work through and share your implementation of the notebook exercises.
+    \item[Friday] is a Textbook Revision workshop: you propose revisions to the Web Data Science book as GitHub pull requests and review your classmates' proposals.
 \end{description}
 Student performance is evaluated through participation in the Wednesday labs, the Friday textbook revisions, and a Final Project (see \textit{Evaluation} below). There is no midterm or final exam.
 
@@ -200,22 +202,31 @@ The class is organized into four modules that track the textbook: (1) \textit{Fo
 There are no formal pre-requisites for the class, but prior programming experience in Python is strongly recommended. If you have questions about these prerequisites, please \href{mailto:\instructoremail}{email the instructor}.
 
 \subsection{Course Website and Materials}
-There is no textbook to purchase. The required text is the open-source \textit{Web Data Science} book, which we read and revise together:
-\vspace{-8pt}
-    \begin{center}
-    \Large{\href{\bookurl}{\bookurl}}
-    \end{center}
-\vspace{-8pt}
 Readings, notebooks, assignments, and grades are coordinated through Canvas:
 \vspace{-8pt}
     \begin{center}
-    \large{\href{\canvasurl}{\canvasurl}}
+    \href{\canvasurl}{\canvasurl}
     \end{center}
 \vspace{-8pt}
-This PDF version of the syllabus is a work-in-progress and will be revised as we proceed through the semester. Any revised requirements will be posted as announcements and an updated course schedule to Canvas. The instructor reserves the right to make changes to the course's schedule, evaluation criteria, policies, \textit{etc.} through announcements in class and on Canvas. Students should \href{mailto:\instructoremail}{email the instructor} if there are any discrepancies or questions.
+
+There is no textbook to purchase. The required text is the open-source \textit{Web Data Science} book, which we read and revise together. You can access the rendered version of the book here:
+\vspace{-8pt}
+    \begin{center}
+    \href{\bookurl}{\bookurl}
+    \end{center}
+\vspace{-8pt}
+
+The source code you will be editing, can be accessed here:
+\vspace{-8pt}
+    \begin{center}
+    \href{\bookurl}{\bookgithuburl}
+    \end{center}
+\vspace{-8pt}
+
+This PDF version of the syllabus is a work-in-progress and will be revised as we proceed through the semester. Any revised requirements will be posted as announcements and an updated course schedule to Canvas. The instructor reserves the right to make changes to the course's schedule, evaluation criteria, policies, \textit{etc.} through announcements in class and on Canvas. If there are any discrepancies between the syllabus and Canvas, defer to the latest instructions on Canvas. Students should \href{mailto:\instructoremail}{email the instructor} if there are any questions.
 
 \subsection{Computing}
-Students will use programming languages for data retrieval, analysis, and visualization. \href{http://jupyter.org/}{Jupyter notebooks} written in Python 3 will be used for all in-class examples and assignments. The \href{https://www.anaconda.com/}{Anaconda distribution} of Python 3.12 (or above) is \textit{strongly} recommended to provide these programs and libraries. Over the semester we will use libraries including \href{https://requests.readthedocs.io/}{\texttt{requests}}, \href{https://www.crummy.com/software/BeautifulSoup/bs4/doc/}{\texttt{BeautifulSoup}}, \href{https://selenium-python.readthedocs.io/}{\texttt{selenium}}, \href{https://pypdf.readthedocs.io/}{\texttt{pypdf}}, and \href{https://pandas.pydata.org/}{\texttt{pandas}}. Because we contribute to the textbook through GitHub, you will also need \href{https://git-scm.com/}{Git} and a free \href{https://github.com/}{GitHub} account; we will set these up together in the first week. Lectures include exercises and presentations with the expectation that students participate with their own laptop computers. If you cannot bring a laptop to class, please email the instructor to work out an alternative arrangement.
+Students will use programming languages for data retrieval, analysis, and visualization. \href{http://jupyter.org/}{Jupyter notebooks} written in Python 3 will be used for all in-class examples and assignments. The \href{https://www.anaconda.com/}{Anaconda distribution} of Python 3.12 (or above) is \textit{strongly} recommended to provide these programs and libraries. Over the semester we will use libraries including \href{https://requests.readthedocs.io/}{\texttt{requests}}, \href{https://www.crummy.com/software/BeautifulSoup/bs4/doc/}{\texttt{BeautifulSoup}}, \href{https://selenium-python.readthedocs.io/}{\texttt{selenium}}, \href{https://pypdf.readthedocs.io/}{\texttt{pypdf}}, and \href{https://pandas.pydata.org/}{\texttt{pandas}}. You will also need \href{https://git-scm.com/}{Git} and a free \href{https://github.com/}{GitHub} account; we will set these up together in the first week. Lectures include exercises and presentations with the expectation that students participate with their own laptop computers. If you cannot bring a laptop to class, please email the instructor to work out an alternative arrangement.
 
 \subsection{Evaluation}
 Students are evaluated through three mechanisms. The class has no midterm or final exam.
@@ -224,7 +235,9 @@ Students are evaluated through three mechanisms. The class has no midterm or fin
 
         \item[Notebook Labs]~(30\%). The Wednesday labs are where you build fluency with retrieving, reshaping, and analyzing web data. Each week you work through and share your implementation of the companion notebook. Labs are graded on participation and completion rather than perfection, and are meant to be collaborative. Your lowest two lab scores are dropped to accommodate illness, travel, and the occasional bad week.
 
-        \item[Textbook Revisions]~(30\%). The Friday workshops are dedicated to improving the open-source \textit{Web Data Science} book. Each week you propose revisions---clarifications, corrections, new examples, additional exercises, or better explanations---as pull requests to the book's GitHub repository, and you review your classmates' pull requests. Credit reflects both the substance of the revisions you propose and the quality of the peer reviews you provide. A running target for contributions and reviews across the semester will be posted to Canvas. In the absence of an approved excuse, late submissions will be docked 1\% of their maximum value for every day elapsed since the deadline.
+        \item[Textbook Revisions]~(15\%). The Friday workshops are dedicated to improving the open-source \textit{Web Data Science} book. Each week you propose revisions---clarifications, corrections, new examples, additional exercises, or better explanations---as pull requests to the book's GitHub repository, and you review your classmates' pull requests. Credit reflects both the substance of the revisions you propose and the quality of the peer reviews you provide. A running target for contributions and reviews across the semester will be posted to Canvas. In the absence of an approved excuse, late submissions will be docked 1\% of their maximum value for every day elapsed since the deadline.
+
+        \item[Attendance]~(15\%). Attendance in class is required. We will be covering technical methods that are cumulative and require sustained effort. If there are personal, professional, medical, or other circumstances that will prevent your attendance, please notify me via e-mail and we can develop an accommodation plan together. There will be no opportunities to make up missed attendance. If you need to miss multiple classes, please make an effort to come to office hours so we can check in about course material and progress.
 
         \item[Final Project]~(40\%). The Final Project is a portfolio piece that matches a web data source with a research design. It is completed individually (or in pairs with the instructor's permission) and has three graded components: a \textbf{proposal} (due Friday, October 23), an in-class \textbf{presentation} during the final week, and a \textbf{project repository and write-up} (due Friday, December 11). Further details will be collaboratively developed and detailed later in the course. In the absence of an approved excuse, late submissions will be docked 1\% of their maximum value for every day elapsed since the deadline.
 
