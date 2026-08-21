@@ -206,18 +206,29 @@ def cmd_inspect(api: Canvas, args):
 # ---------------------------------------------------------------- copy
 
 def cmd_copy(api: Canvas, args):
-    """Copy reusable content (files, pages) from the old course."""
+    """Copy reusable content (files, pages) from the old course.
+
+    Canvas's selective-import course copy is a two-phase API flow, not a
+    single POST: creating the migration with selective_import=true only
+    gets it to workflow_state "waiting_for_select" -- passing a `select`
+    payload in that same initial POST is silently ignored. The actual
+    selection has to be submitted as a separate PUT to the migration
+    resource, using property names Canvas hands back from its own
+    /selective_data tree (e.g. "copy[all_attachments]" for files -- not
+    "files"), which also tells us what content types the source course
+    actually has, so we don't hardcode types a given course might lack.
+    """
     print(f"\n=== content migration: {spec.OLD_COURSE_ID} -> {spec.NEW_COURSE_ID} ===")
     payload = {
         "migration_type": "course_copy_importer",
         "settings": {"source_course_id": spec.OLD_COURSE_ID},
     }
-    if not args.everything:
+    selective = not args.everything
+    if selective:
         # Only bring across durable assets. The old course's assignments and
         # modules follow the 2024 design (Attendance/Module Assignments/Final)
         # and would fight the new 30/30/40 structure, so they stay behind.
         payload["selective_import"] = True
-        payload["select"] = {"files": ["all"], "pages": ["all"]}
         print("  scope: files + pages only (old assignments/modules intentionally skipped)")
         print("         pass --everything to copy the entire old course instead")
     else:
@@ -228,7 +239,36 @@ def cmd_copy(api: Canvas, args):
     if api.dry_run:
         return
     mig_id = res.get("id")
-    print(f"  migration id {mig_id}; waiting for completion...")
+    print(f"  migration id {mig_id}")
+
+    if selective:
+        # Wait for Canvas to finish indexing the source course before the
+        # selective_data tree is queryable.
+        for _ in range(60):
+            st = api.get(f"/courses/{spec.NEW_COURSE_ID}/content_migrations/{mig_id}")
+            if st.get("workflow_state") == "waiting_for_select":
+                break
+            if st.get("workflow_state") == "failed":
+                raise CanvasError(f"migration failed before selection: {json.dumps(st)[:500]}")
+            time.sleep(3)
+        else:
+            raise CanvasError("migration never reached waiting_for_select; "
+                              "check Canvas manually before re-running")
+
+        tree = api.get(f"/courses/{spec.NEW_COURSE_ID}/content_migrations/{mig_id}/selective_data")
+        wanted_types = {"attachments", "pages"}
+        selection = {}
+        for node in tree:
+            if node.get("type") in wanted_types:
+                selection[node["property"]] = "1"
+                print(f"    selecting: {node['title']} ({node.get('count', 0)} items)")
+        if not selection:
+            print("    nothing to select (source has no files or pages) -- skipping copy")
+            return
+        api.write("PUT", f"/courses/{spec.NEW_COURSE_ID}/content_migrations/{mig_id}",
+                  selection, label="submit selective-import choices")
+
+    print("  waiting for completion...")
     for _ in range(120):
         time.sleep(5)
         st = api.get(f"/courses/{spec.NEW_COURSE_ID}/content_migrations/{mig_id}")
@@ -268,10 +308,13 @@ def build_groups(api, args):
     existing = _index_by_name(api.get_all(f"/courses/{spec.NEW_COURSE_ID}/assignment_groups"))
     ids = {}
     for g in spec.GROUPS:
+        # Drop rules (e.g. drop_lowest:2) are deliberately NOT sent here.
+        # Canvas rejects a drop rule that exceeds the group's current
+        # assignment count, and on a fresh course that count is 0 at this
+        # point in the build -- see apply_group_rules(), which sets them
+        # after build_assignments() has populated each group.
         payload = {"name": g["name"], "group_weight": g["group_weight"],
                    "position": g["position"]}
-        if g["rules"]:
-            payload["rules"] = g["rules"]
         if g["name"] in existing:
             gid = existing[g["name"]]["id"]
             api.write("PUT", f"/courses/{spec.NEW_COURSE_ID}/assignment_groups/{gid}",
@@ -291,6 +334,22 @@ def build_groups(api, args):
             print(f"    NOTE leftover group '{name}' ({weight}%, {count} assignments) "
                   f"— left in place; delete it in Canvas if unwanted")
     return ids
+
+
+def apply_group_rules(api, args, group_ids):
+    """Set drop rules (e.g. drop_lowest:2) now that build_assignments() has
+    populated each group -- Canvas rejects a drop rule against a group with
+    fewer assignments than the rule drops."""
+    for g in spec.GROUPS:
+        if not g["rules"]:
+            continue
+        gid = group_ids.get(g["name"])
+        if gid is None or str(gid).startswith("<dry-run"):
+            if not api.dry_run:
+                continue
+        api.write("PUT", f"/courses/{spec.NEW_COURSE_ID}/assignment_groups/{gid}",
+                  {"rules": g["rules"]},
+                  label=f"apply rule to {g['name']}: {g['rules'].strip()}")
 
 
 def build_assignments(api, args, group_ids):
@@ -429,6 +488,8 @@ def cmd_build(api: Canvas, args):
     if want("assignments") or want("modules"):
         if want("assignments"):
             assignment_ids = build_assignments(api, args, group_ids)
+            if want("groups"):
+                apply_group_rules(api, args, group_ids)
         else:
             assignment_ids = {k: v["id"] for k, v in _index_by_name(
                 api.get_all(f"/courses/{spec.NEW_COURSE_ID}/assignments")).items()}
