@@ -21,31 +21,31 @@
 % -------------------------------------------------------------------------
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             We move scraping off your laptop and into the cloud --- code that collects data on a schedule, unattended.
 
-            \vspace{1em}
+            \bigskip
 
             \dayband{Monday}{Concepts \& notebook intro}
             \begin{itemize}\small
                 \item From exploration to production; why a time series beats a snapshot
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Wednesday}{Notebook lab}
             \begin{itemize}\small
                 \item Notebook $\rightarrow$ script $\rightarrow$ GitHub Actions: schedule it, monitor it, harden it
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Friday}{Textbook revisions}
             \begin{itemize}\small
                 \item Propose \& peer-review pull requests improving Chapter 14
             \end{itemize}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Companion notebook}
                 \footnotesize \texttt{ch-14-automation.ipynb}
             \end{block}
@@ -62,10 +62,10 @@
 
 \begin{frame}{From exploration to production}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
             Interactive notebooks are for \textbf{exploration}. Production data collection requires \textbf{automation}.
 
-            \vspace{1em}
+            \bigskip
 
             The progression is a real development workflow:
             \begin{enumerate}
@@ -74,11 +74,11 @@
                 \item \textbf{Scheduled pipeline} --- a script that runs itself, on the cloud, on a cadence
             \end{enumerate}
 
-            \vspace{1em}
+            \bigskip
 
             The logic is the \textit{same code you already wrote}; only the environment changes. This is not a new paradigm --- it is your existing skills, moved into production.
         \end{column}
-        \begin{column}{0.38\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pipeline_diagram.png}\\
             {\scriptsize Same code, three environments.}
@@ -89,7 +89,7 @@
 
 \begin{frame}{Why automate? A snapshot vs.\ a time series}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             Many of the best research questions are \textbf{temporal}:
             \begin{itemize}\small
                 \item How do Rotten Tomatoes scores evolve during a film's release?
@@ -97,15 +97,15 @@
                 \item Which Wikipedia articles surge on a news event --- and how fast does attention decay?
             \end{itemize}
 
-            \vspace{0.75em}
+            \bigskip
 
             A scraper that runs \textbf{once} gives a cross-sectional \textit{snapshot}. A scraper that runs \textbf{every six hours for three months} gives a \textbf{panel dataset} --- trends, cycles, and responses to events.
 
-            \vspace{0.5em}
+            \medskip
 
             The infrastructure is nearly free; the analytical payoff is large.
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/score_timeseries.png}\\
             {\scriptsize The payoff of collecting the same thing, repeatedly.}
@@ -119,15 +119,15 @@
         \begin{column}{0.6\textwidth}
             A manual scrape you run once makes a handful of requests. A scraper running \textbf{every hour, indefinitely}, accumulates a far larger footprint --- so the ethics of Chapter~2 scale up with it.
 
-            \vspace{0.9em}
+            \bigskip
 
             Automation is also how you build the \textbf{ownership} the post-API chapter describes: infrastructure that runs on \textit{your} terms and schedule, not on platform goodwill.
 
-            \vspace{0.9em}
+            \bigskip
 
             But ownership is \textbf{stewardship}: monitoring, maintaining, and updating scrapers is ongoing labor. Building your own data infrastructure means accepting responsibility for its upkeep.
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Threads we pull forward}
                 \footnotesize
                 \begin{itemize}\footnotesize
@@ -150,7 +150,7 @@
         \item \textbf{Step 3} --- read the accumulated CSV back into pandas and plot the time series
     \end{itemize}
 
-    \vspace{1em}
+    \bigskip
 
     \begin{alertblock}{Test locally first}
         A \texttt{print()} you can run instantly beats debugging inside YAML, where every attempt is a commit, a push, and a wait for the runner. If it runs on your machine, it will very likely run in Actions.
@@ -163,7 +163,7 @@
 
 \begin{frame}[fragile]{Step 1 --- notebook to script}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # scraper.py -- a standalone script; no notebook
 import csv, os
@@ -181,7 +181,7 @@ if __name__ == "__main__":   # the entry point
     main()
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.42\textwidth}
+        \begin{column}{0.35\textwidth}
             Three moves turn a notebook into production code:
             \begin{itemize}\small
                 \item Wrap the work in a \texttt{main()} and guard it with \texttt{if \_\_name\_\_ == "\_\_main\_\_"} so it runs \textit{only} when executed directly.
@@ -195,7 +195,7 @@ if __name__ == "__main__":   # the entry point
 
 \begin{frame}[fragile]{Headless Selenium on a server}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 opts = Options()
 opts.add_argument("--headless")   # no window
@@ -212,14 +212,14 @@ soup = BeautifulSoup(
     driver.page_source, "html.parser")
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \texttt{--headless} runs Chrome with no window; \texttt{--no-sandbox} and \texttt{--disable-dev-shm-usage} are required on a GitHub Actions runner.
 
-            \vspace{0.6em}
+            \medskip
 
             Read \texttt{page\_source} \textit{after} \texttt{WebDriverWait} --- reading a JS-heavy page too early yields empty scores.
 
-            \vspace{0.6em}
+            \medskip
 
             The \texttt{-deprecated} element names are the site's own web components; the suffix warns they change often. When they do, fix it in dev tools, not here.
         \end{column}
@@ -257,9 +257,9 @@ jobs:
 
 \begin{frame}[fragile]{Scheduling with cron --- and a Python-free option}
     \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
+        \begin{column}{0.6\textwidth}
             Five fields: \texttt{minute hour day month weekday}. All times \textbf{UTC}.
-            \vspace{0.4em}
+            \medskip
 
             \begin{center}\small
             \begin{tabular}{ll}
@@ -274,7 +274,7 @@ jobs:
                 \bottomrule
             \end{tabular}
             \end{center}
-            \vspace{0.3em}
+            \smallskip
             {\footnotesize Not every scraper needs Python --- \texttt{curl} a JSON API straight from YAML:}
 \begin{lstlisting}
 - run: |
@@ -283,7 +283,7 @@ jobs:
       -o data/top.json   # no Python
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.46\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/crontab_guru.png}\\
             {\scriptsize \texttt{crontab.guru} translates an expression into plain English. Bookmark it.}
@@ -294,7 +294,7 @@ jobs:
 
 \begin{frame}[fragile]{Fail loudly: monitor \& harden}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             The insidious failure is the \textbf{silent success}: the run is green, but the CSV row is all empty --- the site changed and no exception fired. Catch it with a validation step and a graceful exit:
 \begin{lstlisting}
 def main():
@@ -310,12 +310,12 @@ def main():
     && { echo "empty!"; exit 1; } || true
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/actions_run_log.png}\\
             {\scriptsize The Actions tab: green is not enough --- read the log.}
 
-            \vspace{0.5em}
+            \medskip
             {\footnotesize Harden further: \texttt{timeout-minutes} kills a hung job, a \texttt{concurrency} group stops overlaps, pip caching speeds runs, and retry-with-backoff (Ch.~Protocols) rides out transient 503s.}
         \end{column}
     \end{columns}
@@ -324,7 +324,7 @@ def main():
 
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Work through the notebook exercises in pairs:
             \begin{enumerate}\small
                 \item Build \& deploy a Actions scraper; run it $\geq$3 days, then analyze
@@ -335,7 +335,7 @@ def main():
                 \item[6.] \textcolor{tab-purple}{\textbf{5617}}: run a collector $\geq$2 weeks, then write an infrastructure post-mortem in the spirit of \textcite{wilson2017good}
             \end{enumerate}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
                 \footnotesize Come ready to share:
                 \begin{itemize}\footnotesize
@@ -364,7 +364,7 @@ def main():
         \begin{column}{0.6\textwidth}
             Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-14-automation.qmd} and reviews a classmate's.
 
-            \vspace{1em}
+            \bigskip
 
             The workflow (from Week 1):
             \begin{enumerate}\small
@@ -374,7 +374,7 @@ def main():
                 \item Review two peers' PRs: kind, specific, actionable
             \end{enumerate}
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
@@ -396,7 +396,7 @@ def main():
 
 \begin{frame}{What makes a good revision \& a good review}
     \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{block}{A strong PR}
                 \begin{itemize}\small
                     \item One focused change, clearly titled
@@ -407,7 +407,7 @@ def main():
                 \end{itemize}
             \end{block}
         \end{column}
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{A strong review}
                 \begin{itemize}\small
                     \item Runs / reads the change, not just skims
@@ -419,8 +419,8 @@ def main():
             \end{block}
         \end{column}
     \end{columns}
-    \vspace{0.5em}
-    \centering\small Next week: \textbf{research design} --- turning your automated collection into an end-to-end project.
+    \medskip
+    \centering\small Last deck of the semester --- Weeks 15--16 turn everything you've built into \textbf{research design} and your Final Project presentation (see the syllabus).
 \end{frame}
 
 % =========================================================================
@@ -432,7 +432,7 @@ def main():
         \item \textbf{Fail loudly}: validate output to catch silent successes, wrap scrapes in try/except, and harden with timeouts, concurrency, and backoff.
         \item Automation is not ``set and forget'' --- owning your data infrastructure means committing to its \textbf{stewardship}.
     \end{enumerate}
-    \vspace{1em}
+    \bigskip
     \bottomcite{Reading: Textbook Ch.~14. Related: \textcite{munzert2014automated}; \textcite{mitchell2018web}. Archival precedents: \textcite{baumgartner2020pushshift}.}
 \end{frame}
 

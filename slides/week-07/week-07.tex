@@ -22,31 +22,31 @@
 % -------------------------------------------------------------------------
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             The web is not permanent. This week we scrape the \textit{past} --- and measure how pages change over time.
 
-            \vspace{1em}
+            \bigskip
 
             \dayband{Monday}{Concepts \& notebook intro}
             \begin{itemize}\small
                 \item Link rot, the Internet Archive, and two APIs into the past
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Wednesday}{Notebook lab}
             \begin{itemize}\small
                 \item Work the Chapter 7 notebook: Availability API, CDX, tracking a Terms-of-Service document
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Friday}{Textbook revisions}
             \begin{itemize}\small
                 \item Propose \& peer-review pull requests improving Chapter 7
             \end{itemize}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Companion notebook}
                 \footnotesize \texttt{ch-07-archives.ipynb}
             \end{block}
@@ -63,22 +63,22 @@
 
 \begin{frame}{The web is not permanent}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
             Pages change, disappear, and get redesigned constantly. A large fraction of URLs break within a few years --- \textbf{link rot}.
 
-            \vspace{1em}
+            \bigskip
 
             This is a research problem: how do you study something that might not be there tomorrow, or measure how it \textit{changed} when only today's version is visible?
 
-            \vspace{1em}
+            \bigskip
 
             The \textbf{Internet Archive} (Brewster Kahle, 1996) answers by archiving the web. Its \textbf{Wayback Machine} has captured over 800 billion pages, free to anyone.
 
-            \vspace{1em}
+            \bigskip
 
             It is both a data source and \textit{counter-erosion infrastructure} --- a community-governed public resource (the book's ``post-API'' ownership theme).
         \end{column}
-        \begin{column}{0.38\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/wayback_calendar.png}\\
             {\scriptsize The Wayback calendar: every dot is a capture you can retrieve.}
@@ -89,10 +89,10 @@
 
 \begin{frame}{From snapshots to a longitudinal source}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             One old snapshot is a curiosity. \textbf{Comparing snapshots across time} is where the research value lives.
 
-            \vspace{1em}
+            \bigskip
 
             The Wayback Machine turns the web from a snapshot medium into a \textbf{longitudinal data source} --- you can \textit{measure} change, not merely observe it:
             \begin{itemize}\small
@@ -101,11 +101,11 @@
                 \item Contrast two rivals' homepages as they evolve
             \end{itemize}
 
-            \vspace{0.75em}
+            \bigskip
 
             You are not just reading old pages --- you are measuring \textbf{institutional behavior over time}.
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/change_timeline.png}\\
             {\scriptsize A ``change timeline'' we build Wednesday: spikes mark major revisions.}
@@ -116,21 +116,21 @@
 
 \begin{frame}{Raw or wrapped? The \texttt{id\_} rule}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             A snapshot URL looks like:\\
             {\scriptsize\texttt{web.archive.org/web/\textbf{20000815052826}/http://cnn.com/}}
 
-            \vspace{1em}
+            \bigskip
 
             By default the Archive \textbf{injects} its own toolbar, banner, and JavaScript, and \textbf{rewrites} every link, script, and image to point back into the archive. Convenient for browsing --- \textbf{poison for measurement}: your link, script, and image counts include the scaffolding.
 
-            \vspace{1em}
+            \bigskip
 
             Append \texttt{id\_} to the timestamp\\
             {\scriptsize\texttt{.../20000815052826\textbf{id\_}/http://cnn.com/}}\\
             to get the \textbf{original, unmodified capture}. Raw doesn't render prettily --- but for measurement, raw is exactly what you want.
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/wrapped_vs_raw.png}\\
             {\scriptsize Wrapped (toolbar + rewritten links) vs.\ the \texttt{id\_} raw capture.}
@@ -148,7 +148,7 @@
         \item \textbf{Bag-of-words} --- tokenize, drop stopwords, and measure how much consecutive versions changed
     \end{itemize}
 
-    \vspace{0.75em}
+    \bigskip
 
     \begin{alertblock}{Connecting to Ch.~6 \& what's next}
         \footnotesize Archived pages parse with \texttt{BeautifulSoup} exactly like live ones (Ch.~6), and the same \texttt{time.sleep()} politeness applies --- the Archive is a nonprofit. The JavaScript growth we measure is \textit{why} dynamic-page techniques (next week) exist.
@@ -202,7 +202,7 @@ stats = {"year": ts[:4], "num_links": len(soup.find_all("a")),
 \begin{frame}[fragile]{The whole history --- the CDX Server API}
     Availability finds \textit{one} snapshot; CDX enumerates \textit{all} of them. Two params filter server-side --- less data, less cleanup:
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 cdx = "https://web.archive.org/cdx/search/cdx"
 params = {"url": "facebook.com/terms",
@@ -217,7 +217,7 @@ df["timestamp"] = pd.to_datetime(
     df["timestamp"], format="%Y%m%d%H%M%S")
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/cdx_response.png}\\
             {\scriptsize Row 0 is the header; each later row is one distinct capture.}
@@ -269,7 +269,7 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
 
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Work through the notebook exercises in pairs:
             \begin{enumerate}\small
                 \item Track a policy document (privacy, academic-integrity, agency FAQ) across $\geq 5$ time points; plot length
@@ -280,7 +280,7 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
                 \item[6.] \textcolor{tab-purple}{\textbf{5617}}: assess Wayback's limits (toolbar, capture bias, gaps) vs.\ \textcite{rogers2019doing}
             \end{enumerate}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
                 \footnotesize Come ready to share:
                 \begin{itemize}\footnotesize
@@ -309,7 +309,7 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
         \begin{column}{0.6\textwidth}
             Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-07-archives.qmd} and reviews a classmate's.
 
-            \vspace{1em}
+            \bigskip
 
             The workflow (from Week 1):
             \begin{enumerate}\small
@@ -319,7 +319,7 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
                 \item Review two peers' PRs: kind, specific, actionable
             \end{enumerate}
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
@@ -341,7 +341,7 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
 
 \begin{frame}{What makes a good revision \& a good review}
     \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{block}{A strong PR}
                 \begin{itemize}\small
                     \item One focused change, clearly titled
@@ -352,7 +352,7 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
                 \end{itemize}
             \end{block}
         \end{column}
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{A strong review}
                 \begin{itemize}\small
                     \item Runs / reads the change, not just skims
@@ -364,7 +364,7 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
             \end{block}
         \end{column}
     \end{columns}
-    \vspace{0.5em}
+    \medskip
     \centering\small Next week: \textbf{Dynamic pages} --- when the data appears only after JavaScript runs (Selenium).
 \end{frame}
 
@@ -377,7 +377,7 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
         \item Wayback $+$ text analysis turns the archive into \textbf{longitudinal data} --- measure change, don't just observe it.
         \item Be a good citizen: \texttt{sleep} between requests, cache raw captures, and \textbf{serialize} --- you may not be able to re-scrape.
     \end{enumerate}
-    \vspace{1em}
+    \bigskip
     \bottomcite{Reading: Textbook Ch.~7. Related: \textcite{brugger_SAGEHandbookWeb_2018}; \textcite{rogers2019doing}.}
 \end{frame}
 

@@ -21,31 +21,31 @@
 % -------------------------------------------------------------------------
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Most of the modern web renders its data with JavaScript \textit{after} the HTML arrives. This week we drive a real browser to reach it.
 
-            \vspace{1em}
+            \bigskip
 
             \dayband{Monday}{Concepts \& notebook intro}
             \begin{itemize}\small
                 \item Why JavaScript content is invisible to \texttt{requests}; Selenium as a browser you script
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Wednesday}{Notebook lab}
             \begin{itemize}\small
                 \item Work the Chapter 8 notebook: xkcd, a Wikipedia search, and an infinite-scroll page
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Friday}{Textbook revisions}
             \begin{itemize}\small
                 \item Propose \& peer-review pull requests improving Chapter 8
             \end{itemize}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Companion notebook}
                 \footnotesize \texttt{ch-08-dynamic-pages.ipynb}
             \end{block}
@@ -62,22 +62,22 @@
 
 \begin{frame}{When static scraping fails}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
             Last week's tools --- \texttt{requests} + BeautifulSoup --- work on \textbf{static} pages, whose content is fully present in the initial HTML.
 
-            \vspace{1em}
+            \bigskip
 
             But most modern sites are \textbf{dynamic}: their content is loaded or rendered by JavaScript \textit{after} the HTML arrives. \texttt{requests.get()} hands you the skeleton \textit{before} that code has run.
 
-            \vspace{1em}
+            \bigskip
 
             The data you see in your browser may simply not exist in the response. Diagnose it: compare \texttt{requests.get(url).text} to the page in your browser --- if the content you want is missing, the page is dynamic.
 
-            \vspace{1em}
+            \bigskip
 
             The fix: a tool that \textit{executes} JavaScript --- a real browser, driven by code. That tool is \textbf{Selenium}.
         \end{column}
-        \begin{column}{0.38\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/requests_vs_browser.png}\\
             {\scriptsize Same URL, two very different payloads.}
@@ -88,10 +88,10 @@
 
 \begin{frame}{Selenium: a browser you drive with code}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             Selenium needs two things: the \texttt{selenium} library and a \textbf{browser driver} --- a small program that lets Python control a specific browser.
 
-            \vspace{1em}
+            \bigskip
 
             Since v4.6 (late 2022), \textbf{Selenium Manager} finds or downloads the right driver automatically, so in practice you only \texttt{pip install selenium}. Creating a driver is a one-liner:
             \begin{itemize}\small
@@ -99,11 +99,11 @@
                 \item every command you issue through \texttt{driver} happens \textit{in that window}
             \end{itemize}
 
-            \vspace{1em}
+            \bigskip
 
             You are not faking HTTP requests any more --- you are \textbf{automating a browser}, the same one a person would use.
         \end{column}
-        \begin{column}{0.38\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/selenium_browser.png}\\
             {\scriptsize ``Controlled by automated test software.''}
@@ -114,7 +114,7 @@
 
 \begin{frame}{A powerful last resort --- and not a loophole}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             Selenium is slow, resource-intensive, and brittle. Use it only when the simpler tools cannot. The decision tree:
             \begin{enumerate}\small
                 \item \textbf{API?} Use it --- fastest, most structured.
@@ -122,15 +122,15 @@
                 \item \textbf{Rendered by JavaScript?} \textit{Now} reach for a browser.
             \end{enumerate}
 
-            \vspace{0.5em}
+            \medskip
 
             \textbf{Playwright} (Microsoft) is the modern alternative --- auto-waiting, faster, async --- but Selenium is more widespread and fine for coursework.
 
-            \vspace{0.5em}
+            \medskip
 
             Researchers increasingly \textit{need} automation as platforms enclose once-open data \parencite{freelon2018computational} --- which raises the stakes, not lowers them.
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=0.82\textwidth]{img/decision_tree.png}\\[0.4em]
             \begin{alertblock}{Automation is not a loophole}
@@ -151,7 +151,7 @@
         \item \textbf{Hand off} --- pass the rendered \texttt{page\_source} to BeautifulSoup, then \texttt{driver.quit()}
     \end{itemize}
 
-    \vspace{0.75em}
+    \bigskip
 
     \begin{alertblock}{Connecting to Ch.~2 (Ethics)}
         Everything from the ethics chapter applies with full force here. Before you automate \textit{any} site, check its \texttt{robots.txt} and Terms of Service --- especially anything logged-in or ToS-restricted, where the temptation is greatest.
@@ -196,7 +196,7 @@ btn.click()
         \begin{column}{0.6\textwidth}
             \texttt{get\_attribute()} reads \textit{any} HTML attribute (even ones you never see); \texttt{.text} reads the visible text.
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/xkcd_inspect.png}
         \end{column}
@@ -242,7 +242,7 @@ def scrape_infinite_scroll(driver, max_scrolls=20, pause=2):
         \begin{column}{0.6\textwidth}
             Set a sane \texttt{max\_scrolls}. \textbf{Proportionality} (Ch.~2): collect only what your question needs --- not an entire 10,000-post feed.
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/infinite_scroll.png}
         \end{column}
@@ -273,7 +273,7 @@ finally:
 
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Work through the chapter's exercises in pairs:
             \begin{enumerate}\small
                 \item Extract JavaScript-loaded data; compare it to what \texttt{requests.get()} returns
@@ -284,7 +284,7 @@ finally:
                 \item[6.] \textcolor{tab-purple}{\textbf{5617}}: instrument a JS-heavy research site with both approaches; a $\sim$500-word memo engaging \textcite{mitchell2018web}
             \end{enumerate}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
                 \footnotesize Come ready to share:
                 \begin{itemize}\footnotesize
@@ -313,7 +313,7 @@ finally:
         \begin{column}{0.6\textwidth}
             Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-08-dynamic-pages.qmd} and reviews a classmate's.
 
-            \vspace{1em}
+            \bigskip
 
             The workflow (from Week 1):
             \begin{enumerate}\small
@@ -323,7 +323,7 @@ finally:
                 \item Review two peers' PRs: kind, specific, actionable
             \end{enumerate}
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
@@ -346,7 +346,7 @@ finally:
 
 \begin{frame}{What makes a good revision \& a good review}
     \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{block}{A strong PR}
                 \begin{itemize}\small
                     \item One focused change, clearly titled
@@ -357,7 +357,7 @@ finally:
                 \end{itemize}
             \end{block}
         \end{column}
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{A strong review}
                 \begin{itemize}\small
                     \item Runs / reads the change, not just skims
@@ -369,7 +369,7 @@ finally:
             \end{block}
         \end{column}
     \end{columns}
-    \vspace{0.5em}
+    \medskip
     \centering\small Next week: \textbf{Extracting data from PDFs} --- when the data isn't on a web page at all.
 \end{frame}
 
@@ -382,7 +382,7 @@ finally:
         \item Render with Selenium, extract with BeautifulSoup --- hands and eyes --- and \texttt{driver.quit()} every time.
         \item Selenium is a slow, fragile \textbf{last resort}: API~$\rightarrow$~static~$\rightarrow$~browser. Automation never suspends \texttt{robots.txt} or a site's ToS.
     \end{enumerate}
-    \vspace{1em}
+    \bigskip
     \bottomcite{Reading: Textbook Ch.~8. Related: \textcite{mitchell2018web}; \textcite{garcia_SurveySeleniumEcosystem_2020}; \textcite{perriam2020digital}.}
 \end{frame}
 

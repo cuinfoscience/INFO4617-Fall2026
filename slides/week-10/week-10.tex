@@ -22,31 +22,31 @@
 % -------------------------------------------------------------------------
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             We leave scraping behind and start asking servers for data \textit{on purpose} --- through a documented API.
 
-            \vspace{0.8em}
+            \bigskip
 
             \dayband{Monday}{Concepts \& notebook intro}
             \begin{itemize}\small
                 \item What an API is, why it beats scraping, and why we learn on Wikipedia
             \end{itemize}
 
-            \vspace{0.4em}
+            \medskip
 
             \dayband{Wednesday}{Notebook lab}
             \begin{itemize}\small
                 \item Query the MediaWiki API: revisions, pageviews, links, raw requests
             \end{itemize}
 
-            \vspace{0.4em}
+            \medskip
 
             \dayband{Friday}{Textbook revisions \textcolor{tab-gray}{\textbar} Proposal due}
             \begin{itemize}\small
                 \item Pull requests improving Chapter 10 --- \textbf{and} your Final Project proposal
             \end{itemize}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Companion notebook}
                 \footnotesize \texttt{ch-10-wikipedia.ipynb}
             \end{block}
@@ -66,19 +66,19 @@
         \begin{column}{0.6\textwidth}
             For six weeks we \textbf{reverse-engineered} pages built for human eyes --- inspecting HTML, guessing selectors, and cleaning up the mess.
 
-            \vspace{1em}
+            \bigskip
 
             This week begins Part III: \textbf{API-based data access}. Instead of taking data a site never meant to hand us, we ask for it the way the operator intends.
 
-            \vspace{1em}
+            \bigskip
 
             The skills you build here --- reading documentation, constructing parameterized URLs, handling pagination, parsing nested JSON --- transfer to \textit{every} API in the rest of the course.
 
-            \vspace{1em}
+            \bigskip
 
             When an API exists, it is almost always the better tool.
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/api_vs_scraping.png}\\
             {\scriptsize Ask, don't reverse-engineer.}
@@ -89,10 +89,10 @@
 
 \begin{frame}{What is an API?}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             An \textbf{API} (Application Programming Interface) is a \textbf{contract}: it specifies what you may request, what parameters you may pass, and what format the response will take.
 
-            \vspace{0.8em}
+            \bigskip
 
             \begin{itemize}\small
                 \item Clean \textbf{JSON}, not cluttered HTML
@@ -100,11 +100,11 @@
                 \item \textbf{Documentation} tells you exactly what exists
             \end{itemize}
 
-            \vspace{0.8em}
+            \bigskip
 
             The tradeoff: an API only exposes what its operator \textit{chooses} to. You cannot query a missing field, exceed the rate limits, or count on it forever --- the ``post-API age'' (later this module) is a graveyard of APIs that were restricted, repriced, or shut down.
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/api_call_anatomy.png}\\
             {\scriptsize A request is a URL you assemble on purpose.}
@@ -115,7 +115,7 @@
 
 \begin{frame}{Why Wikipedia?}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
             The \textbf{MediaWiki API} is a near-perfect place to learn:
             \begin{itemize}\small
                 \item Free, with no authentication beyond a \textbf{User-Agent} header
@@ -123,7 +123,7 @@
                 \item Data rich enough for real research --- content, networks, events
             \end{itemize}
 
-            \vspace{0.8em}
+            \bigskip
 
             Our case study: the \texttt{Elizabeth\_II} article. Its editing history has dramatic spikes around major events --- ideal for seeing temporal patterns in API data.
 
@@ -131,7 +131,7 @@
                 \footnotesize Wikipedia is the counter-example to enclosure: an \textbf{open API}, an \textbf{open license}, and public database \textbf{dumps}. Nothing you learn here sits at the mercy of a pricing change.
             \end{block}
         \end{column}
-        \begin{column}{0.38\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/elizabeth_edits_spike.png}\\
             {\scriptsize Every edit, ever, is queryable.}
@@ -142,7 +142,7 @@
 
 \begin{frame}{The anatomy of a request --- and what the notebook covers}
     \begin{columns}[T]
-        \begin{column}{0.54\textwidth}
+        \begin{column}{0.6\textwidth}
             Every MediaWiki call is four parts:
             \begin{enumerate}\small
                 \item a \textbf{base URL} --- \texttt{.../w/api.php}
@@ -151,11 +151,11 @@
                 \item a \texttt{\textbf{format}} --- \texttt{json}
             \end{enumerate}
 
-            \vspace{0.6em}
+            \medskip
 
             The response is nested JSON you navigate \textbf{one level at a time}: \texttt{data["query"]["pages"][page\_id]}. Internalize that shape once and every endpoint feels familiar.
         \end{column}
-        \begin{column}{0.42\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{This week's notebook}
                 \footnotesize
                 \begin{itemize}\footnotesize
@@ -201,7 +201,7 @@ print(pages[page_id]["title"], pages[page_id]["pageid"])
 
 \begin{frame}[fragile]{Revisions --- and the pagination loop}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 def get_revisions(title, headers=HEADERS):
     params = {"action": "query", "titles": title,
@@ -220,14 +220,14 @@ def get_revisions(title, headers=HEADERS):
     return pd.DataFrame(revs)
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             The single most common API bug: \textbf{forgetting to paginate}. The server returns results in batches (here, capped at 500) and hands back a \texttt{continue} token when more remain.
 
-            \vspace{0.6em}
+            \medskip
 
             Skip the loop and you silently keep a \textit{fraction} of the data.
 
-            \vspace{0.6em}
+            \medskip
 
             Two habits: \texttt{raise\_for\_status()} to fail loudly, and \texttt{maxlag=5} so bulk jobs yield to human readers.
         \end{column}
@@ -251,12 +251,12 @@ def get_pageviews(title, start, end, headers=HEADERS):
 \end{lstlisting}
         Links, categories, and languages reuse the \textit{same} Action-API loop --- just swap \texttt{prop} and the matching \texttt{*limit} key (\texttt{links}, \texttt{categories}, \texttt{langlinks}).
         \end{column}
-        \begin{column}{0.38\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/edits_vs_views.png}\\
             {\scriptsize Edits vs.\ views, 2022 --- both spike in September.}
 
-            \vspace{0.5em}
+            \medskip
             {\footnotesize How many of Wikipedia's 300+ languages carry an article is a rough proxy for \textbf{global significance} --- one that skews toward the Global North.}
         \end{column}
     \end{columns}
@@ -280,7 +280,7 @@ for r in data["query"]["search"]:
         \begin{column}{0.6\textwidth}
             \footnotesize Libraries like \texttt{mwclient} and \texttt{pywikibot} automate continuation and throttling --- but we write raw requests first so you know exactly what they do for you.
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/mediawiki_api_sandbox.png}
         \end{column}
@@ -290,7 +290,7 @@ for r in data["query"]["search"]:
 
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Work through the chapter's exercises in pairs:
             \begin{enumerate}\small
                 \item Compare revision histories of two related articles (unique editors, edits-per-editor, monthly activity)
@@ -301,7 +301,7 @@ for r in data["query"]["search"]:
                 \item[6.] \textcolor{tab-purple}{\textbf{5617}}: reproduce a measure from \textcite{mesgari2015sum} --- e.g.\ a Gini coefficient of edits per editor
             \end{enumerate}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
                 \footnotesize Come ready to share:
                 \begin{itemize}\footnotesize
@@ -329,7 +329,7 @@ for r in data["query"]["search"]:
         \begin{column}{0.6\textwidth}
             Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-10-wikipedia.qmd} and reviews a classmate's.
 
-            \vspace{0.6em}
+            \medskip
 
             The workflow (from Week 1):
             \begin{enumerate}\small
@@ -343,7 +343,7 @@ for r in data["query"]["search"]:
                 \footnotesize Submit your \textbf{Final Project proposal}: a research question, your data source(s), and whether you will use an API, scraping, or both.
             \end{alertblock}
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
@@ -365,7 +365,7 @@ for r in data["query"]["search"]:
 
 \begin{frame}{What makes a good revision \& a good review}
     \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{block}{A strong PR}
                 \begin{itemize}\small
                     \item One focused change, clearly titled
@@ -376,7 +376,7 @@ for r in data["query"]["search"]:
                 \end{itemize}
             \end{block}
         \end{column}
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{A strong review}
                 \begin{itemize}\small
                     \item Runs / reads the change, not just skims
@@ -388,7 +388,7 @@ for r in data["query"]["search"]:
             \end{block}
         \end{column}
     \end{columns}
-    \vspace{0.5em}
+    \medskip
     \centering\small Next week: \textbf{Government APIs} --- the Census, the Federal Reserve (FRED), and other public data services.
 \end{frame}
 
@@ -401,7 +401,7 @@ for r in data["query"]["search"]:
         \item Be a good client: a descriptive \textbf{User-Agent}, serial requests, and \texttt{maxlag} for bulk jobs (the ethics of Ch.~2, applied).
         \item Openness is a \textit{choice}, not a guarantee of completeness --- Wikipedia's data still inherits its volunteer community's biases.
     \end{enumerate}
-    \vspace{1em}
+    \bigskip
     \bottomcite{Reading: Textbook Ch.~10. Further: \textcite{ford2022writing}; \textcite{mesgari2015sum}; \textcite{salganik2018bit}.}
 \end{frame}
 

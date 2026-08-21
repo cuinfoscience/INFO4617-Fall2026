@@ -22,31 +22,31 @@
 % -------------------------------------------------------------------------
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Before we collect a single row, we settle the harder question --- not \textit{can} we, but \textbf{should} we, and if so, how responsibly?
 
-            \vspace{1em}
+            \bigskip
 
             \dayband{Monday}{Concepts \& notebook intro}
             \begin{itemize}\small
                 \item The legal landscape, \texttt{robots.txt}, and a five-question ethical framework
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Wednesday}{Notebook lab}
             \begin{itemize}\small
                 \item \texttt{robots.txt}, User-Agent headers, rate limiting --- and building \texttt{responsible\_get()}
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Friday}{Textbook revisions}
             \begin{itemize}\small
                 \item Propose \& peer-review pull requests improving Chapter 2 --- our first real PR
             \end{itemize}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Companion notebook}
                 \footnotesize \texttt{ch-02-ethics.ipynb}
             \end{block}
@@ -66,15 +66,15 @@
         \begin{column}{0.6\textwidth}
             ``Web scraping'' is a popular phrase --- and a faintly pejorative one. Data is \textbf{valuable}: other people invested time, money, and effort to create and host what you are about to retrieve programmatically.
 
-            \vspace{0.9em}
+            \bigskip
 
             So the question is never simply \textbf{``can I scrape this?''} but \textbf{``should I --- and if so, how do I do it responsibly?''}
 
-            \vspace{0.9em}
+            \bigskip
 
             This chapter builds a \textbf{decision framework} to revisit before every collection project in this course and beyond. Three layers of guidance, none sufficient alone: \textbf{law}, \textbf{technical norms} (\texttt{robots.txt}), and \textbf{ethics}.
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{alertblock}{One idea to carry all semester}
                 \footnotesize ``It's technically possible'' is not the same as ``it's legal,'' and ``it's legal'' is not the same as ``it's ethical.''
             \end{alertblock}
@@ -85,7 +85,7 @@
 
 \begin{frame}{The legal landscape is unsettled}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
             The \textbf{Computer Fraud and Abuse Act} (CFAA, 1986) bans ``unauthorized access'' --- but what that means for scraping is still litigated. Three cases draw today's boundaries:
             \begin{itemize}\small
                 \item \textbf{Van Buren v.\ United States (2021)} --- the Supreme Court's ``gates-up-or-down'' reading: the CFAA targets entering areas you may not enter, \textit{not} misusing data you were allowed to see.
@@ -93,7 +93,7 @@
                 \item \textbf{Sandvig v.\ Barr (2020)} --- violating a site's Terms of Service is not, by itself, a federal crime --- modest cover for audit-study research.
             \end{itemize}
         \end{column}
-        \begin{column}{0.38\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/legal_timeline.png}\\
             {\scriptsize The CFAA has also been used to \textit{threaten} researchers and journalists --- the Aaron Swartz case is the sobering example.}
@@ -109,7 +109,7 @@
         \item \textbf{The AI front.} \textit{New York Times v.\ OpenAI} and a wave of similar suits ask whether scraping to \textbf{train models} is fair use. Publishers have already hardened sites and added AI directives to \texttt{robots.txt}.
         \item \textbf{State privacy law.} California's CCPA/CPRA and 12+ states --- including the \textbf{Colorado Privacy Act} --- now bring GDPR-like rights. If your dataset names residents, these laws can apply to \textit{you}, even as a student.
     \end{itemize}
-    \vspace{0.3em}
+    \smallskip
     \begin{alertblock}{Practical implication}
         \footnotesize Treat personal data as a \textbf{liability, not an asset} --- collect the minimum you need.
     \end{alertblock}
@@ -118,7 +118,7 @@
 
 \begin{frame}{An ethical decision framework}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Before any project, work through five questions:
             \begin{enumerate}\small
                 \item \textcolor{tab-blue}{\textbf{Legality}} --- CFAA, GDPR, local law, the site's ToS?
@@ -127,10 +127,10 @@
                 \item \textcolor{tab-purple}{\textbf{Privacy}} --- any PII? Could individuals be re-identified? What if it leaks?
                 \item \textcolor{tab-red}{\textbf{Server impact}} --- a meaningful load? Rate-limited? Scraping off-peak?
             \end{enumerate}
-            \vspace{0.2em}
+            \smallskip
             {\footnotesize No framework substitutes for judgment --- but working these questions surfaces the risks.}
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{IRBs \& web data}
                 \footnotesize Scraping becomes \textit{human-subjects research} when you collect data about \textbf{identifiable people} to produce \textbf{generalizable knowledge}. Public officials' votes: usually not. Social-media profiles for health or politics: almost certainly. When in doubt, ask your IRB.
             \end{block}
@@ -181,10 +181,10 @@ for name, url in sites.items():
             \footnotesize
             \textbf{Wikipedia} --- permissive where it matters (openness is the mission; data flows through its API + dumps). \textbf{Reddit} --- tolerates access within limits. \textbf{NY Times} --- restrictive; the content is a commercial product. Reading it tells you \textit{what kind of organization} you're dealing with.
 
-            \vspace{0.4em}
+            \medskip
             Two caveats: it's a \textbf{norm, not a law} (violating it isn't illegal, but it's rude and gets you IP-blocked); and a \textbf{404} means \textit{no rules}, not ``crawl aggressively.''
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/robots_txt_browser.png}
         \end{column}
@@ -210,7 +210,7 @@ for url in urls:
         \begin{column}{0.6\textwidth}
             \footnotesize The default \texttt{requests} User-Agent marks you as an anonymous bot. A good one \textbf{identifies you and gives contact info}, so operators can reach you instead of simply blocking you --- and some APIs \textit{require} it. Hundreds of requests per second is an accidental \textbf{denial-of-service}: respect any \texttt{Crawl-delay} and stay well inside documented API limits.
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/user_agent_devtools.png}\\
             {\scriptsize Your header is visible to every server you touch.}
@@ -244,7 +244,7 @@ def responsible_get(url, headers=None, delay=1.0):
 
 \begin{frame}{Why it's built that way --- and reused everywhere}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{block}{Every default encodes a principle}
                 \begin{itemize}\small
                     \item \textbf{Custom User-Agent} --- identify \& give contact
@@ -256,11 +256,11 @@ def responsible_get(url, headers=None, delay=1.0):
                 \end{itemize}
             \end{block}
         \end{column}
-        \begin{column}{0.38\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{alertblock}{You'll import this again}
                 \footnotesize \texttt{responsible\_get()} returns in \textbf{Ch.~6} (scraping HTML tables), \textbf{Ch.~7} (Wayback snapshots), and throughout the \textbf{API chapters}.
 
-                \vspace{0.5em}
+                \medskip
 
                 Building responsible defaults into your \textit{tools} is more reliable than remembering to add them each time.
             \end{alertblock}
@@ -271,7 +271,7 @@ def responsible_get(url, headers=None, delay=1.0):
 
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Work through the notebook exercises in pairs:
             \begin{enumerate}\small
                 \item Compare \texttt{robots.txt} for five sites in one category --- what patterns emerge?
@@ -282,7 +282,7 @@ def responsible_get(url, headers=None, delay=1.0):
                 \item[6.] \textcolor{tab-purple}{\textbf{5617}}: read \textcite{fiesler2020no} + EFF's CFAA explainer + \textit{Van Buren}; write a two-page platform-collection memo
             \end{enumerate}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
                 \footnotesize Come ready to share:
                 \begin{itemize}\footnotesize
@@ -310,7 +310,7 @@ def responsible_get(url, headers=None, delay=1.0):
         \begin{column}{0.6\textwidth}
             Last week you set up Git and GitHub. Today we open our \textbf{first real pull request} --- against \texttt{ch-02-ethics.qmd} --- and review a classmate's.
 
-            \vspace{1em}
+            \bigskip
 
             The workflow (from Week 1):
             \begin{enumerate}\small
@@ -320,7 +320,7 @@ def responsible_get(url, headers=None, delay=1.0):
                 \item Review two peers' PRs: kind, specific, actionable
             \end{enumerate}
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
@@ -342,7 +342,7 @@ def responsible_get(url, headers=None, delay=1.0):
 
 \begin{frame}{What makes a good revision \& a good review}
     \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{block}{A strong PR}
                 \begin{itemize}\small
                     \item One focused change, clearly titled
@@ -353,7 +353,7 @@ def responsible_get(url, headers=None, delay=1.0):
                 \end{itemize}
             \end{block}
         \end{column}
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{A strong review}
                 \begin{itemize}\small
                     \item Runs / reads the change, not just skims
@@ -365,7 +365,7 @@ def responsible_get(url, headers=None, delay=1.0):
             \end{block}
         \end{column}
     \end{columns}
-    \vspace{0.5em}
+    \medskip
     \centering\small Next week: \textbf{The Post-API Age} --- why the open web is closing, and how researchers adapt.
 \end{frame}
 
@@ -378,7 +378,7 @@ def responsible_get(url, headers=None, delay=1.0):
         \item \textbf{Identify yourself} (custom \texttt{User-Agent}) and \textbf{rate-limit} (\texttt{time.sleep}) --- then wrap both into \texttt{responsible\_get()} and reuse it.
         \item Run the \textbf{five-question framework} before every project; when in doubt, use an API, collect less, and err toward caution.
     \end{enumerate}
-    \vspace{0.75em}
+    \bigskip
     \bottomcite{Reading: Textbook Ch.~2. Related: \textcite{fiesler2020no}; \textcite{freelon2018computational}.}
 \end{frame}
 

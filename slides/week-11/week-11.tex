@@ -21,31 +21,31 @@
 % -------------------------------------------------------------------------
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             We query the data the government is \textit{required} to publish --- and combine it into stories no single dataset can tell.
 
-            \vspace{1em}
+            \bigskip
 
             \dayband{Monday}{Concepts \& API keys}
             \begin{itemize}\small
                 \item Why government data is open; managing keys like a professional
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Wednesday}{Notebook lab}
             \begin{itemize}\small
                 \item Query the Census, FRED, and FEC --- then join two of them
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Friday}{Textbook revisions}
             \begin{itemize}\small
                 \item Propose \& peer-review pull requests improving Chapter 11
             \end{itemize}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Companion notebook}
                 \footnotesize \texttt{ch-11-government.ipynb}
             \end{block}
@@ -70,11 +70,11 @@
                 \item The \textbf{FEC} must disclose campaign-finance records.
             \end{itemize}
 
-            \vspace{0.75em}
+            \bigskip
 
             They embody the \textbf{openness} value from Ch.~3, \textit{The Post-API Age}: public data, freely accessible by mandate rather than platform goodwill.
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Stable, but less polished}
                 \footnotesize Agencies don't pivot business models or get acquired --- so these APIs are unusually \textbf{stable}. The tradeoff: dense docs, cryptic variable names, unhelpful errors. Navigating that \textit{is} the skill.
             \end{block}
@@ -85,7 +85,7 @@
 
 \begin{frame}{The challenge is navigation, not access}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             The Census API is free and well-maintained. The hard part is \textbf{finding the right variable} among thousands.
             \begin{itemize}\small
                 \item Start at the \textbf{groups index}; search broad categories (housing, income, ``commut'').
@@ -94,7 +94,7 @@
                 \item Always \textbf{sanity-check}: Boulder median income near \$70,000, not 7 or 70,000,000.
             \end{itemize}
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/census_variable_anatomy.png}\\
             {\scriptsize Read the code: group, index, \texttt{E}=estimate / \texttt{M}=margin of error.}
@@ -105,10 +105,10 @@
 
 \begin{frame}{Manage your keys like a professional}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             A \textbf{key} identifies your app, tracks usage, and enforces rate limits. \textbf{Never hardcode one} --- share the notebook and the key goes with it.
 
-            \vspace{0.75em}
+            \bigskip
 
             Two safe patterns, both ending at the same variables:
             \begin{itemize}\small
@@ -116,11 +116,11 @@
                 \item \textbf{A JSON config} --- \texttt{api\_keys.json}, added to \texttt{.gitignore} \textit{before your first commit}.
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             Because both yield \texttt{census\_key} / \texttt{fred\_key} / \texttt{fec\_key}, downstream code is identical.
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/api_key_flow.png}
         \end{column}
@@ -137,7 +137,7 @@
         \item \textbf{Integrate} --- join Census housing vintage with FRED mortgage rates in one figure.
     \end{itemize}
 
-    \vspace{0.75em}
+    \bigskip
 
     \begin{alertblock}{Public interest (Ch.~3)}
         \footnotesize Open data is a mandate, not a guarantee. Datasets get withdrawn and APIs deprecated; political pressure can shape what is collected and how. The \textbf{fragility} of public data infrastructure is itself a public-interest concern.
@@ -187,7 +187,7 @@ df = pd.DataFrame(data[1:], columns=data[0])   # row 0 is the header
 
 \begin{frame}[fragile]{FRED --- let the server do the math}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
         Ask FRED for a \textbf{transformation} and it returns the result --- here, year-over-year percent change:
 \begin{lstlisting}
 fred_url = ("https://api.stlouisfed.org"
@@ -205,7 +205,7 @@ obs = requests.get(fred_url,
 df = pd.DataFrame(obs)
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/fred_series_page.png}\\
             {\scriptsize Find series IDs on the FRED website, then copy them \textit{exactly}.}
@@ -233,7 +233,7 @@ tot = requests.get(url, params={"api_key": fec_key,
                     "election_year": 2024}).json()
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/fec_candidate_search.png}\\
             {\scriptsize IDs encode the office: \texttt{P}/\texttt{S}/\texttt{H} = candidate, \texttt{C} = committee.}
@@ -244,7 +244,7 @@ tot = requests.get(url, params={"api_key": fec_key,
 
 \begin{frame}[fragile]{Combine two agencies --- and mind the sentinels}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
         The payoff is integration. But guard Census \textbf{sentinel values} --- suppressed cells return as \texttt{-666666666}, not null:
 \begin{lstlisting}
 def census_int(v):    # NEVER trust a bare int()
@@ -263,7 +263,7 @@ rate = requests.get(fred_url,
 df_rate = pd.DataFrame(rate["observations"])
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/census_fred_panels.png}\\
             {\scriptsize Census says \textit{what} the housing stock is; FRED says \textit{why}.}
@@ -274,7 +274,7 @@ df_rate = pd.DataFrame(rate["observations"])
 
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Work the chapter exercises in pairs:
             \begin{enumerate}\small
                 \item Census: one variable group across $\geq$5 geographies + a comparative viz.
@@ -285,7 +285,7 @@ df_rate = pd.DataFrame(rate["observations"])
                 \item[6.] \textcolor{tab-purple}{\textbf{5617}}: read \textcite{lazer2020computational}; link two APIs and write a formal limitations section (measurement \& coverage).
             \end{enumerate}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
                 \footnotesize Come ready to share:
                 \begin{itemize}\footnotesize
@@ -313,7 +313,7 @@ df_rate = pd.DataFrame(rate["observations"])
         \begin{column}{0.6\textwidth}
             Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-11-government.qmd} and reviews a classmate's.
 
-            \vspace{1em}
+            \bigskip
 
             The workflow (from Week 1):
             \begin{enumerate}\small
@@ -323,7 +323,7 @@ df_rate = pd.DataFrame(rate["observations"])
                 \item Review two peers' PRs: kind, specific, actionable
             \end{enumerate}
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pr_review_ch11.png}
         \end{column}
@@ -345,7 +345,7 @@ df_rate = pd.DataFrame(rate["observations"])
 
 \begin{frame}{What makes a good revision \& a good review}
     \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{block}{A strong PR}
                 \begin{itemize}\small
                     \item One focused change, clearly titled
@@ -356,7 +356,7 @@ df_rate = pd.DataFrame(rate["observations"])
                 \end{itemize}
             \end{block}
         \end{column}
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{A strong review}
                 \begin{itemize}\small
                     \item Runs / reads the change, not just skims
@@ -368,7 +368,7 @@ df_rate = pd.DataFrame(rate["observations"])
             \end{block}
         \end{column}
     \end{columns}
-    \vspace{0.5em}
+    \medskip
     \centering\small Next week: \textbf{Social \& media platform APIs} --- OAuth, Mastodon, and Bluesky in the post-API age.
 \end{frame}
 
@@ -381,7 +381,7 @@ df_rate = pd.DataFrame(rate["observations"])
         \item \textbf{Combine sources} for stories no single dataset tells: Census says \textit{what}, FRED says \textit{why}.
         \item Mind the \textbf{institutional context} --- using open data well is a form of civic engagement.
     \end{enumerate}
-    \vspace{1em}
+    \bigskip
     \bottomcite{Reading: Textbook Ch.~11. Related: \textcite{salganik2018bit}; \textcite{munzert2014automated}.}
 \end{frame}
 

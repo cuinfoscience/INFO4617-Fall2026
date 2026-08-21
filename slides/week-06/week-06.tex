@@ -21,31 +21,31 @@
 % -------------------------------------------------------------------------
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             We turn HTML --- the language of web pages --- into data you can analyze.
 
-            \vspace{1em}
+            \bigskip
 
             \dayband{Monday}{Concepts \& notebook intro}
             \begin{itemize}\small
                 \item From HTML to a DataFrame; three scraping strategies
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Wednesday}{Notebook lab}
             \begin{itemize}\small
                 \item Work through and share the Chapter 6 notebook: box office, Wikipedia, and the Oscars
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Friday}{Textbook revisions}
             \begin{itemize}\small
                 \item Propose \& peer-review pull requests improving Chapter 6
             \end{itemize}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Companion notebook}
                 \footnotesize \texttt{ch-06-static-pages.ipynb}
             \end{block}
@@ -65,19 +65,19 @@
         \begin{column}{0.6\textwidth}
             The goal of scraping: convert one structured format --- HTML --- into another suited to analysis (a pandas DataFrame, CSV, or JSON).
 
-            \vspace{1em}
+            \bigskip
 
             HTML and XML are \textbf{siblings} (both descend from SGML), so your \texttt{BeautifulSoup} skills transfer directly.
 
-            \vspace{1em}
+            \bigskip
 
             But browsers \textit{tolerate} malformed markup --- unclosed tags, missing quotes, bad nesting --- so real HTML is far messier than clean XML.
 
-            \vspace{1em}
+            \bigskip
 
             The core skill this week: \textbf{cutting through the noise} of navigation bars, ads, tracking scripts, and nested \texttt{<div>}s to reach the data.
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/dev_tools_inspect.png}\\
             {\scriptsize Inspect first, code second.}
@@ -88,20 +88,20 @@
 
 \begin{frame}{Three strategies, increasingly general}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
         \begin{enumerate}
             \item \textbf{Manual table parsing} --- walk \texttt{<table>} $\rightarrow$ \texttt{<tr>} $\rightarrow$ \texttt{<td>} by hand. Most control, most code.
-            \vspace{0.5em}
+            \medskip
             \item \texttt{\textbf{pandas.read\_html()}} --- one call grabs every table on a page. Least code, least control.
-            \vspace{0.5em}
+            \medskip
             \item \textbf{Custom parser} --- navigate the DOM tree for data that isn't in a table (\texttt{<div>}s + CSS classes).
         \end{enumerate}
 
-        \vspace{1em}
+        \bigskip
 
         Choose the \textit{simplest} strategy that fits the page --- and be ready to fall back to a more general one.
         \end{column}
-        \begin{column}{0.38\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/dom_tree.png}
         \end{column}
@@ -111,10 +111,10 @@
 
 \begin{frame}{Inspect before you parse}
     \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
+        \begin{column}{0.6\textwidth}
             Every scrape starts in the browser's developer tools, not in Python.
 
-            \vspace{1em}
+            \bigskip
 
             \begin{itemize}
                 \item Right-click the data $\rightarrow$ \textbf{Inspect}
@@ -123,11 +123,11 @@
                 \item ``Copy selector'' gives you a CSS path to paste into \texttt{select()}
             \end{itemize}
 
-            \vspace{1em}
+            \bigskip
 
             The page is a \textbf{hypothesis}: inspect, guess an anchor, verify the count, refine.
         \end{column}
-        \begin{column}{0.46\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/the_numbers_table.png}\\
             {\scriptsize The Numbers weekly box-office chart --- our first target.}
@@ -145,7 +145,7 @@
         \item \textbf{Reuse} --- abstract a working parser into a function; rate-limit; handle errors
     \end{itemize}
 
-    \vspace{1em}
+    \bigskip
 
     \begin{alertblock}{Connecting to Ch.~2 (Ethics)}
         Before pointing a loop at any site, check its \texttt{robots.txt} and Terms of Service, and reuse \texttt{responsible\_get()} from the ethics chapter. Politeness is not optional.
@@ -175,7 +175,7 @@ for i, table in enumerate(tables):          # inspect each candidate
 
 \begin{frame}[fragile]{The one-line bug that shifts every column}
     \begin{columns}[T]
-        \begin{column}{0.52\textwidth}
+        \begin{column}{0.6\textwidth}
         Tempting shortcut:
 \begin{lstlisting}
 # DON'T: silently drops empty cells
@@ -188,14 +188,14 @@ values = [c.get_text(strip=True)
           for c in cells]
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.44\textwidth}
+        \begin{column}{0.35\textwidth}
             A blank header cell (the ``previous rank'' column) is easy to lose.
 
-            \vspace{0.75em}
+            \bigskip
 
             Split-on-newline drops it --- and every value after shifts one column left, so \textbf{Movie} quietly fills with distributor names.
 
-            \vspace{0.75em}
+            \bigskip
 
             The extra line of code buys correctness.
         \end{column}
@@ -236,7 +236,7 @@ soup.select("div.field--name-field-award-categories div.view-grouping")
         \begin{column}{0.6\textwidth}
             \texttt{select()} returns a list like \texttt{find\_all()}; \texttt{select\_one()} returns one like \texttt{find()}.
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/oscars_page.png}
         \end{column}
@@ -266,7 +266,7 @@ except requests.RequestException as e:
 
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Work through the notebook exercises in pairs:
             \begin{enumerate}\small
                 \item Wikipedia table via \texttt{read\_html} + a visualization
@@ -277,7 +277,7 @@ except requests.RequestException as e:
                 \item[6.] \textcolor{tab-purple}{\textbf{5617}}: audit two sites' ToS \& \texttt{robots.txt} vs.\ \textcite{fiesler2020no}
             \end{enumerate}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
                 \footnotesize Come ready to share:
                 \begin{itemize}\footnotesize
@@ -306,7 +306,7 @@ except requests.RequestException as e:
         \begin{column}{0.6\textwidth}
             Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-06-static-pages.qmd} and reviews a classmate's.
 
-            \vspace{1em}
+            \bigskip
 
             The workflow (from Week 1):
             \begin{enumerate}\small
@@ -316,7 +316,7 @@ except requests.RequestException as e:
                 \item Review two peers' PRs: kind, specific, actionable
             \end{enumerate}
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
@@ -338,7 +338,7 @@ except requests.RequestException as e:
 
 \begin{frame}{What makes a good revision \& a good review}
     \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{block}{A strong PR}
                 \begin{itemize}\small
                     \item One focused change, clearly titled
@@ -349,7 +349,7 @@ except requests.RequestException as e:
                 \end{itemize}
             \end{block}
         \end{column}
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{A strong review}
                 \begin{itemize}\small
                     \item Runs / reads the change, not just skims
@@ -361,7 +361,7 @@ except requests.RequestException as e:
             \end{block}
         \end{column}
     \end{columns}
-    \vspace{0.5em}
+    \medskip
     \centering\small Next week: \textbf{Archived web pages} --- scraping the past with the Wayback Machine.
 \end{frame}
 
@@ -374,7 +374,7 @@ except requests.RequestException as e:
         \item Abstract into functions, rate-limit in the loop, and code defensively.
         \item Pages change: the durable skill is \textbf{inspect, hypothesize, verify} --- not memorized class names.
     \end{enumerate}
-    \vspace{1em}
+    \bigskip
     \bottomcite{Reading: Textbook Ch.~6. Related: \textcite{mitchell2018web}; \textcite{vandenbroucke2018practical}.}
 \end{frame}
 

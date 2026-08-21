@@ -9,8 +9,9 @@ rhythm:
 - **Friday** — propose and peer-review revisions to the [Web Data Science textbook](https://github.com/cuinfoscience/Web-Data-Science-Book)
 
 Decks are grounded chapter-by-chapter in the textbook (and draw on the prior
-offering's slides). Week 15 has no deck (Fall Break); Week 1 is a shorter
-Friday-only intro, and Week 16 covers research design plus final presentations.
+offering's slides). Week 1 is a shorter Friday-only intro. Weeks 15–16 have no
+deck (Fall Break, then research design & final presentations) — see the
+syllabus for that schedule.
 
 | Week | Topic | Chapter |
 |---|---|---|
@@ -28,7 +29,6 @@ Friday-only intro, and Week 16 covers research design plus final presentations.
 | 12 | Social & media platform APIs | 12 |
 | 13 | AI & language-model APIs | 13 |
 | 14 | Automating data collection | 14 |
-| 16 | Research design & final presentations | 15 |
 
 ## Layout
 
@@ -39,6 +39,12 @@ slides/
   week-NN/    week-NN.tex, week-NN.pdf, img/ (stub PNGs + IMAGES.md)
   Makefile
 ```
+
+Full authoring rules — including code style — live in
+[`common/AUTHORING.md`](common/AUTHORING.md). One to know up front: any
+matplotlib code shown in a deck uses the **object-oriented interface**
+(`fig, ax = plt.subplots()`, then `ax.plot(...)`, `ax.set_xlabel(...)`, …),
+never the implicit `plt.plot()` / `plt.xlabel()` pyplot state machine.
 
 ## Building
 
