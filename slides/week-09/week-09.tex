@@ -21,7 +21,7 @@
 % -------------------------------------------------------------------------
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             PDFs are the web's filing cabinets. This week we pry official records out of them and turn locked documents into data.
 
             \bigskip
@@ -45,7 +45,7 @@
                 \item Propose \& peer-review pull requests improving Chapter 9
             \end{itemize}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Companion notebook}
                 \footnotesize \texttt{ch-09-pdfs.ipynb}
             \end{block}
@@ -62,7 +62,7 @@
 
 \begin{frame}{The web's filing cabinets}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
             PDFs are everywhere in institutional record-keeping: council minutes, bill texts, financial reports, court filings, academic papers, environmental impact assessments.
 
             \bigskip
@@ -73,7 +73,7 @@
 
             The records locked inside are \textit{readymade} data (\textcite{salganik2018bit}): created for administration, not research, yet repurposable --- with effort --- to answer questions their creators never anticipated.
         \end{column}
-        \begin{column}{0.38\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/council_minutes_pdf.png}\\
             {\scriptsize Boulder City Council minutes --- our target this week.}
@@ -84,7 +84,7 @@
 
 \begin{frame}{A computer never reads a PDF}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             When \textbf{you} read a PDF you see paragraphs, tables, headers, and page numbers.
 
             \bigskip
@@ -95,7 +95,7 @@
 
             So text extraction is \textbf{reconstruction, not reading} --- the computer must infer logical structure from spatial layout. The results will not be perfect, but they can be good enough to turn inaccessible records into analyzable datasets.
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pdf_drawing_instructions.png}\\
             {\scriptsize Glyphs at coordinates, not sentences --- structure is inferred.}
@@ -106,7 +106,7 @@
 
 \begin{frame}{Soft enclosure \& the infrastructure of transparency}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
             When governments publish minutes, budgets, and filings \textit{only} as PDFs, they create what the book's post-API chapter calls \textbf{soft enclosure}: records that are nominally public but practically inaccessible for analysis.
 
             \bigskip
@@ -117,7 +117,7 @@
 
             Adobe created the PDF in 1993 for visual fidelity across devices --- at the cost of semantic accessibility. \textbf{DocumentCloud} (ProPublica \& IRE), \textbf{MuckRock} (automating FOIA), and the \textbf{Sunlight Foundation} built the infrastructure that bridges public documents and accessible data.
         \end{column}
-        \begin{column}{0.38\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/documentcloud.png}\\
             {\scriptsize DocumentCloud: shared infrastructure for analyzing document dumps.}
@@ -165,7 +165,7 @@ print(text[:500])   # expect mess: headers/footers mixed in, tables garbled,
 
 \begin{frame}[fragile]{The one line that flattens the page}
     \begin{columns}[T]
-        \begin{column}{0.54\textwidth}
+        \begin{column}{0.6\textwidth}
         Tempting one-liner:
 \begin{lstlisting}
 # DON'T: \s matches newlines too,
@@ -179,7 +179,7 @@ lines = [ln.strip() for ln in text.split('\n')]
 clean = '\n'.join(ln for ln in lines if ln)
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.44\textwidth}
+        \begin{column}{0.35\textwidth}
             The most important choice is what \textit{not} to collapse.
 
             \bigskip
@@ -212,7 +212,7 @@ headings = re.findall(r'^[A-Z][A-Z0-9 .:&-]{5,}$', text, re.MULTILINE)
 
 \begin{frame}[fragile]{Case study --- council attendance}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 def extract_attendance(pdf_path):
     text = PdfReader(pdf_path).pages[0].extract_text()
@@ -225,7 +225,7 @@ def extract_attendance(pdf_path):
             "absent":  split_names(absent)}
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/attendance_chart.png}\\
             {\scriptsize Counts across meetings become a trend --- scale reveals what one PDF can't.}
@@ -258,7 +258,7 @@ class PDFCorpusAnalyzer:
         return pd.DataFrame(rows)
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.38\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/extraction_pipeline.png}\\
             {\scriptsize Discover $\rightarrow$ extract $\rightarrow$ clean $\rightarrow$ regex fields $\rightarrow$ DataFrame.}
@@ -289,7 +289,7 @@ with pdfplumber.open("report.pdf") as pdf:
 
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Work through the notebook exercises in pairs:
             \begin{enumerate}\small
                 \item Find \& extract one consistent element across $\geq 10$ government PDFs $\rightarrow$ a DataFrame
@@ -300,7 +300,7 @@ with pdfplumber.open("report.pdf") as pdf:
                 \item[6.] \textcolor{tab-purple}{\textbf{5617}}: quantify extraction quality across two cities' PDFs; write a data-quality memo using \textcite{gebru2021datasheets} categories
             \end{enumerate}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
                 \footnotesize Come ready to share:
                 \begin{itemize}\footnotesize
@@ -339,7 +339,7 @@ with pdfplumber.open("report.pdf") as pdf:
                 \item Review two peers' PRs: kind, specific, actionable
             \end{enumerate}
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
@@ -361,7 +361,7 @@ with pdfplumber.open("report.pdf") as pdf:
 
 \begin{frame}{What makes a good revision \& a good review}
     \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{block}{A strong PR}
                 \begin{itemize}\small
                     \item One focused change, clearly titled
@@ -372,7 +372,7 @@ with pdfplumber.open("report.pdf") as pdf:
                 \end{itemize}
             \end{block}
         \end{column}
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{A strong review}
                 \begin{itemize}\small
                     \item Runs / reads the change, not just skims

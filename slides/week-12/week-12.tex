@@ -21,7 +21,7 @@
 % -------------------------------------------------------------------------
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Last week the data came from governments obligated to be open. This week it comes from private platforms that share it \textit{at their discretion} --- and can stop.
 
             \bigskip
@@ -45,7 +45,7 @@
                 \item Propose \& peer-review pull requests improving Chapter 12
             \end{itemize}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Companion notebook}
                 \footnotesize \texttt{ch-12-social.ipynb}
             \end{block}
@@ -62,7 +62,7 @@
 
 \begin{frame}{Platforms, data, and power}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
             Social platforms mediate an enormous share of public discourse. Their APIs are a \textbf{different animal} from last week's government APIs (Ch.~11): those exist because of transparency mandates; these exist at the discretion of a private company.
 
             \bigskip
@@ -73,7 +73,7 @@
 
             We study four platforms spanning the spectrum from \textbf{proprietary} (Reddit, Spotify) to \textbf{open} (Bluesky, Mastodon) --- the enclosure-vs-openness tension from the post-API age (Ch.~2).
         \end{column}
-        \begin{column}{0.38\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/platform_spectrum.png}\\
             {\scriptsize Proprietary to open: who controls access.}
@@ -84,7 +84,7 @@
 
 \begin{frame}{OAuth2: credentials for a scoped, revocable token}
     \begin{columns}[T]
-        \begin{column}{0.54\textwidth}
+        \begin{column}{0.6\textwidth}
             Almost every platform API authenticates with \textbf{OAuth2}. The idea: don't send your password with each request --- exchange your app's credentials for a \textit{scoped}, \textit{revocable} token.
 
             \bigskip
@@ -99,7 +99,7 @@
 
             Store client IDs and secrets in environment variables, \textbf{never} in the notebook.
         \end{column}
-        \begin{column}{0.42\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/oauth_flow.png}\\
             {\scriptsize Bluesky app passwords and Mastodon tokens are the same delegated-credential idea, implemented more simply.}
@@ -173,7 +173,7 @@ for rule in subreddit.rules:          # PRAW returns Rule objects
 
 \begin{frame}[fragile]{Reddit --- comment trees \& the depth-decay pattern}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 sub = next(subreddit.hot(limit=1))
 sub.comments.replace_more(limit=0)  # flatten tree
@@ -188,7 +188,7 @@ df.groupby("depth")["score"].mean()
 # decays sharply as nesting deepens
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.42\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/reddit_depth_decay.png}\\
             {\scriptsize Depth 0 comments score highest.}
@@ -220,7 +220,7 @@ print(artist["name"], f'{artist["followers"]["total"]:,}',
 
 \begin{frame}{The audio features story --- enclosure in miniature}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             For a decade the API's signature research offering was \textbf{audio features} --- danceability, energy, valence, tempo for every track. Hundreds of studies mapped genres and modeled hits with them.
 
             \bigskip
@@ -231,7 +231,7 @@ print(artist["name"], f'{artist["followers"]["total"]:,}',
 
             The lasting lesson: those scores were never ground truth. They were Spotify's \textit{proprietary model} of what music \textit{is}. You always analyze the platform's model of the world as much as the world itself.
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/spotify_enclosure.png}
             \begin{alertblock}{A shrinking API}
@@ -244,7 +244,7 @@ print(artist["name"], f'{artist["followers"]["total"]:,}',
 
 \begin{frame}[fragile]{Bluesky via the AT Protocol --- open by design}
     \begin{columns}[T]
-        \begin{column}{0.57\textwidth}
+        \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 from atproto import Client
 
@@ -262,7 +262,7 @@ posts = [{"text": i.post.record.text,
 df = pd.DataFrame(posts)
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=0.92\textwidth]{img/bluesky_network.png}\\
             {\scriptsize Social graph via \texttt{get\_followers} / \texttt{get\_follows}.}
@@ -295,7 +295,7 @@ tagged = mastodon.timeline_hashtag("datascience", limit=20)
 
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Register your own apps, then work in pairs:
             \begin{enumerate}\small
                 \item Reddit: compare two subreddits on one topic (r/science vs.\ r/askscience) --- submissions, engagement, moderation
@@ -306,7 +306,7 @@ tagged = mastodon.timeline_hashtag("datascience", limit=20)
                 \item[6.] \textcolor{tab-purple}{\textbf{5617}}: design a cross-platform measurement plan (proprietary vs.\ federated) --- \textcite{bruns2019after}, \textcite{davidson2023platform}
             \end{enumerate}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
                 \footnotesize Come ready to share:
                 \begin{itemize}\footnotesize
@@ -349,7 +349,7 @@ tagged = mastodon.timeline_hashtag("datascience", limit=20)
 
             \footnotesize This chapter drifts \textit{fast} --- endpoints and rate limits change --- so ``test it against the live API'' is unusually valuable here.
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
@@ -371,7 +371,7 @@ tagged = mastodon.timeline_hashtag("datascience", limit=20)
 
 \begin{frame}{What makes a good revision \& a good review}
     \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{block}{A strong PR}
                 \begin{itemize}\small
                     \item One focused change, clearly titled
@@ -382,7 +382,7 @@ tagged = mastodon.timeline_hashtag("datascience", limit=20)
                 \end{itemize}
             \end{block}
         \end{column}
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{A strong review}
                 \begin{itemize}\small
                     \item Runs / reads the change, not just skims

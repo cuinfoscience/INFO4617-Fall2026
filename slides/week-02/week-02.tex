@@ -22,7 +22,7 @@
 % -------------------------------------------------------------------------
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Before we collect a single row, we settle the harder question --- not \textit{can} we, but \textbf{should} we, and if so, how responsibly?
 
             \bigskip
@@ -46,7 +46,7 @@
                 \item Propose \& peer-review pull requests improving Chapter 2 --- our first real PR
             \end{itemize}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Companion notebook}
                 \footnotesize \texttt{ch-02-ethics.ipynb}
             \end{block}
@@ -74,7 +74,7 @@
 
             This chapter builds a \textbf{decision framework} to revisit before every collection project in this course and beyond. Three layers of guidance, none sufficient alone: \textbf{law}, \textbf{technical norms} (\texttt{robots.txt}), and \textbf{ethics}.
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{alertblock}{One idea to carry all semester}
                 \footnotesize ``It's technically possible'' is not the same as ``it's legal,'' and ``it's legal'' is not the same as ``it's ethical.''
             \end{alertblock}
@@ -85,7 +85,7 @@
 
 \begin{frame}{The legal landscape is unsettled}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
             The \textbf{Computer Fraud and Abuse Act} (CFAA, 1986) bans ``unauthorized access'' --- but what that means for scraping is still litigated. Three cases draw today's boundaries:
             \begin{itemize}\small
                 \item \textbf{Van Buren v.\ United States (2021)} --- the Supreme Court's ``gates-up-or-down'' reading: the CFAA targets entering areas you may not enter, \textit{not} misusing data you were allowed to see.
@@ -93,7 +93,7 @@
                 \item \textbf{Sandvig v.\ Barr (2020)} --- violating a site's Terms of Service is not, by itself, a federal crime --- modest cover for audit-study research.
             \end{itemize}
         \end{column}
-        \begin{column}{0.38\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/legal_timeline.png}\\
             {\scriptsize The CFAA has also been used to \textit{threaten} researchers and journalists --- the Aaron Swartz case is the sobering example.}
@@ -118,7 +118,7 @@
 
 \begin{frame}{An ethical decision framework}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Before any project, work through five questions:
             \begin{enumerate}\small
                 \item \textcolor{tab-blue}{\textbf{Legality}} --- CFAA, GDPR, local law, the site's ToS?
@@ -130,7 +130,7 @@
             \smallskip
             {\footnotesize No framework substitutes for judgment --- but working these questions surfaces the risks.}
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{IRBs \& web data}
                 \footnotesize Scraping becomes \textit{human-subjects research} when you collect data about \textbf{identifiable people} to produce \textbf{generalizable knowledge}. Public officials' votes: usually not. Social-media profiles for health or politics: almost certainly. When in doubt, ask your IRB.
             \end{block}
@@ -184,7 +184,7 @@ for name, url in sites.items():
             \medskip
             Two caveats: it's a \textbf{norm, not a law} (violating it isn't illegal, but it's rude and gets you IP-blocked); and a \textbf{404} means \textit{no rules}, not ``crawl aggressively.''
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/robots_txt_browser.png}
         \end{column}
@@ -210,7 +210,7 @@ for url in urls:
         \begin{column}{0.6\textwidth}
             \footnotesize The default \texttt{requests} User-Agent marks you as an anonymous bot. A good one \textbf{identifies you and gives contact info}, so operators can reach you instead of simply blocking you --- and some APIs \textit{require} it. Hundreds of requests per second is an accidental \textbf{denial-of-service}: respect any \texttt{Crawl-delay} and stay well inside documented API limits.
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/user_agent_devtools.png}\\
             {\scriptsize Your header is visible to every server you touch.}
@@ -244,7 +244,7 @@ def responsible_get(url, headers=None, delay=1.0):
 
 \begin{frame}{Why it's built that way --- and reused everywhere}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{block}{Every default encodes a principle}
                 \begin{itemize}\small
                     \item \textbf{Custom User-Agent} --- identify \& give contact
@@ -256,7 +256,7 @@ def responsible_get(url, headers=None, delay=1.0):
                 \end{itemize}
             \end{block}
         \end{column}
-        \begin{column}{0.38\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{alertblock}{You'll import this again}
                 \footnotesize \texttt{responsible\_get()} returns in \textbf{Ch.~6} (scraping HTML tables), \textbf{Ch.~7} (Wayback snapshots), and throughout the \textbf{API chapters}.
 
@@ -271,7 +271,7 @@ def responsible_get(url, headers=None, delay=1.0):
 
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Work through the notebook exercises in pairs:
             \begin{enumerate}\small
                 \item Compare \texttt{robots.txt} for five sites in one category --- what patterns emerge?
@@ -282,7 +282,7 @@ def responsible_get(url, headers=None, delay=1.0):
                 \item[6.] \textcolor{tab-purple}{\textbf{5617}}: read \textcite{fiesler2020no} + EFF's CFAA explainer + \textit{Van Buren}; write a two-page platform-collection memo
             \end{enumerate}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
                 \footnotesize Come ready to share:
                 \begin{itemize}\footnotesize
@@ -320,7 +320,7 @@ def responsible_get(url, headers=None, delay=1.0):
                 \item Review two peers' PRs: kind, specific, actionable
             \end{enumerate}
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
@@ -342,7 +342,7 @@ def responsible_get(url, headers=None, delay=1.0):
 
 \begin{frame}{What makes a good revision \& a good review}
     \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{block}{A strong PR}
                 \begin{itemize}\small
                     \item One focused change, clearly titled
@@ -353,7 +353,7 @@ def responsible_get(url, headers=None, delay=1.0):
                 \end{itemize}
             \end{block}
         \end{column}
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{A strong review}
                 \begin{itemize}\small
                     \item Runs / reads the change, not just skims

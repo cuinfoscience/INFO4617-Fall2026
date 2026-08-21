@@ -72,5 +72,8 @@ clean. Never leave a broken deck.
 ## Code style notes
 - Frames containing `lstlisting` **must** use `\begin{frame}[fragile]`.
 - Keep two-column `\begin{columns}[T]` layouts like week-06 for text+image or text+code.
+  Default the split to `\begin{column}{0.6\textwidth}` / `\begin{column}{0.35\textwidth}`
+  (left/right) unless a frame genuinely needs a different ratio — e.g. a three-column
+  comparison, or two columns that must stay visually symmetric.
 - Use `\texttt{}` for inline code, package, and file names.
 - Escape `_`, `#`, `%`, `&`, `$` in prose; inside `lstlisting` they are literal.

@@ -21,7 +21,7 @@
 % -------------------------------------------------------------------------
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             We move scraping off your laptop and into the cloud --- code that collects data on a schedule, unattended.
 
             \bigskip
@@ -45,7 +45,7 @@
                 \item Propose \& peer-review pull requests improving Chapter 14
             \end{itemize}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Companion notebook}
                 \footnotesize \texttt{ch-14-automation.ipynb}
             \end{block}
@@ -62,7 +62,7 @@
 
 \begin{frame}{From exploration to production}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
             Interactive notebooks are for \textbf{exploration}. Production data collection requires \textbf{automation}.
 
             \bigskip
@@ -78,7 +78,7 @@
 
             The logic is the \textit{same code you already wrote}; only the environment changes. This is not a new paradigm --- it is your existing skills, moved into production.
         \end{column}
-        \begin{column}{0.38\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pipeline_diagram.png}\\
             {\scriptsize Same code, three environments.}
@@ -89,7 +89,7 @@
 
 \begin{frame}{Why automate? A snapshot vs.\ a time series}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             Many of the best research questions are \textbf{temporal}:
             \begin{itemize}\small
                 \item How do Rotten Tomatoes scores evolve during a film's release?
@@ -105,7 +105,7 @@
 
             The infrastructure is nearly free; the analytical payoff is large.
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/score_timeseries.png}\\
             {\scriptsize The payoff of collecting the same thing, repeatedly.}
@@ -127,7 +127,7 @@
 
             But ownership is \textbf{stewardship}: monitoring, maintaining, and updating scrapers is ongoing labor. Building your own data infrastructure means accepting responsibility for its upkeep.
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Threads we pull forward}
                 \footnotesize
                 \begin{itemize}\footnotesize
@@ -163,7 +163,7 @@
 
 \begin{frame}[fragile]{Step 1 --- notebook to script}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # scraper.py -- a standalone script; no notebook
 import csv, os
@@ -181,7 +181,7 @@ if __name__ == "__main__":   # the entry point
     main()
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.42\textwidth}
+        \begin{column}{0.35\textwidth}
             Three moves turn a notebook into production code:
             \begin{itemize}\small
                 \item Wrap the work in a \texttt{main()} and guard it with \texttt{if \_\_name\_\_ == "\_\_main\_\_"} so it runs \textit{only} when executed directly.
@@ -195,7 +195,7 @@ if __name__ == "__main__":   # the entry point
 
 \begin{frame}[fragile]{Headless Selenium on a server}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 opts = Options()
 opts.add_argument("--headless")   # no window
@@ -212,7 +212,7 @@ soup = BeautifulSoup(
     driver.page_source, "html.parser")
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \texttt{--headless} runs Chrome with no window; \texttt{--no-sandbox} and \texttt{--disable-dev-shm-usage} are required on a GitHub Actions runner.
 
             \medskip
@@ -257,7 +257,7 @@ jobs:
 
 \begin{frame}[fragile]{Scheduling with cron --- and a Python-free option}
     \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
+        \begin{column}{0.6\textwidth}
             Five fields: \texttt{minute hour day month weekday}. All times \textbf{UTC}.
             \medskip
 
@@ -283,7 +283,7 @@ jobs:
       -o data/top.json   # no Python
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.46\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/crontab_guru.png}\\
             {\scriptsize \texttt{crontab.guru} translates an expression into plain English. Bookmark it.}
@@ -294,7 +294,7 @@ jobs:
 
 \begin{frame}[fragile]{Fail loudly: monitor \& harden}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             The insidious failure is the \textbf{silent success}: the run is green, but the CSV row is all empty --- the site changed and no exception fired. Catch it with a validation step and a graceful exit:
 \begin{lstlisting}
 def main():
@@ -310,7 +310,7 @@ def main():
     && { echo "empty!"; exit 1; } || true
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/actions_run_log.png}\\
             {\scriptsize The Actions tab: green is not enough --- read the log.}
@@ -324,7 +324,7 @@ def main():
 
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Work through the notebook exercises in pairs:
             \begin{enumerate}\small
                 \item Build \& deploy a Actions scraper; run it $\geq$3 days, then analyze
@@ -335,7 +335,7 @@ def main():
                 \item[6.] \textcolor{tab-purple}{\textbf{5617}}: run a collector $\geq$2 weeks, then write an infrastructure post-mortem in the spirit of \textcite{wilson2017good}
             \end{enumerate}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
                 \footnotesize Come ready to share:
                 \begin{itemize}\footnotesize
@@ -374,7 +374,7 @@ def main():
                 \item Review two peers' PRs: kind, specific, actionable
             \end{enumerate}
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
@@ -396,7 +396,7 @@ def main():
 
 \begin{frame}{What makes a good revision \& a good review}
     \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{block}{A strong PR}
                 \begin{itemize}\small
                     \item One focused change, clearly titled
@@ -407,7 +407,7 @@ def main():
                 \end{itemize}
             \end{block}
         \end{column}
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{A strong review}
                 \begin{itemize}\small
                     \item Runs / reads the change, not just skims
