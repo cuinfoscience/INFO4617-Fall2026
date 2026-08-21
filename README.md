@@ -28,10 +28,13 @@ Evaluation: Notebook Labs (30%) · Textbook Revisions (30%) · Final Project (40
 
 ### Handouts
 
+Mirrors `slides/`: shared pages live in `handouts/common/`, week-specific ones
+under `handouts/week-NN/`.
+
 | File | Purpose |
 | --- | --- |
-| [`handouts/setup.md`](handouts/setup.md) | Self-paced environment setup — Anaconda, Git, GitHub — done before the first notebook lab |
-| [`handouts/revision-framework.md`](handouts/revision-framework.md) | The framework for proposing textbook revisions: three families, seven types, the issue/PR skeleton, and how revisions are graded. Used every Friday. |
+| [`handouts/week-01/setup.md`](handouts/week-01/setup.md) | Self-paced environment setup — Anaconda, Git, GitHub — done before the first notebook lab |
+| [`handouts/common/revision-framework.md`](handouts/common/revision-framework.md) | The framework for proposing textbook revisions: three families, seven types, the issue/PR skeleton, and how revisions are graded. Used every Friday. |
 
 ## Building
 

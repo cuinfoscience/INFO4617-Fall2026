@@ -194,8 +194,11 @@ proposal without asking you a single follow-up question.
 
 ## How this maps onto the semester
 
-- **Week 1** — you file your first *issue*. No git required: browse the book,
-  find one real problem, describe it with this skeleton.
+- **Week 1** — you find and describe your first *issue*. No git required:
+  browse the book, find one real problem, describe it with this skeleton.
+  Week 1 packs a textbook intro, a GitHub intro, and this activity into one
+  session — if you don't get to actually filing it in class, finish it as
+  homework and have it posted before Week 2's Monday session.
 - **Weeks 2–14** — you open *pull requests* and review two classmates'.
 - Each week's lecture deck ends with a **revision menu**: the same seven types,
   aimed at that specific chapter's known thin spots.
