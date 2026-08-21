@@ -19,7 +19,7 @@
 \usepackage{hwemoji}
 \DeclareUnicodeCharacter{FE0F}{}
 
-\newcommand{\cupids}[1][1]{\scalerel*{\includegraphics{slides/common/cupids-logo.pdf}}{X}\scalebox{#1}{}}
+\newcommand{\cupids}[1][1]{\scalerel*{\includegraphics{../common/cupids-logo.pdf}}{X}\scalebox{#1}{}}
 
 % Bibliography
 \usepackage[style=authoryear,
@@ -59,14 +59,24 @@
 }
 
 % ------------------------------------------------------------------ helpers
-\newcommand{\bottomcite}[1]{
-    \vspace*{\fill}
-    \vspace{-\baselineskip}
-    {\tiny
-    \rule{\textwidth}{0.3pt}\\
-    #1
-    }
-    \vspace{0.5ex}
+% \bottomcite{text} -- a small attribution/citation line, drawn at a fixed
+% position flush above the page number on every frame. Placed via a TikZ
+% overlay anchored to the physical page rather than to the frame body, so
+% it neither depends on how much content precedes it (unlike \vspace*{\fill},
+% which inherits beamer's own bottom text-margin and drifts inside a
+% `columns` environment) nor competes with the footline template's own
+% fixed-height box (which clips a second stacked line -- see git history).
+% 3.5ex exactly clears the footline box's own height (ht=2.5ex + dp=1ex),
+% so the rule sits flush on top of it -- verified against every existing
+% \bottomcite call in this repo with no body-content collisions (see the
+% commit that introduced this). 2ex matches the page number's own margin.
+\newcommand{\bottomcite}[1]{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[anchor=south west, align=flush left,
+          text width=\dimexpr\paperwidth-4ex\relax, inner sep=0pt]
+      at ([xshift=2ex, yshift=3.5ex]current page.south west)
+      {\tiny\rule{\linewidth}{0.3pt}\\[-1.8ex]#1};
+  \end{tikzpicture}%
 }
 
 % Consistent code styling for the Wednesday "applied notebook" frames.
