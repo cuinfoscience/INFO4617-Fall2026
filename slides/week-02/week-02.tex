@@ -328,16 +328,16 @@ def responsible_get(url, headers=None, delay=1.0):
     \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (30\%).}
 \end{frame}
 
-\begin{frame}{A revision menu for Chapter 2}
+\begin{frame}{A revision menu for Chapter 2 --- pre-checked, ready to file}
     High-value targets --- pick one and scope it to a single PR:
     \begin{itemize}
-        \item \textbf{Re-run the live code.} \texttt{robots.txt} files drift --- verify the described Wikipedia \texttt{/w/} rules and Reddit patterns still hold, then update the prose and expected output.
-        \item \textbf{Close a gap in ``Common Issues to Debug.''} Add a worked \textbf{403-with-a-good-User-Agent} case, a \texttt{robots.txt} 404 example, or a note on CAPTCHA / bot-detection beyond \texttt{robots.txt}.
-        \item \textbf{Add a figure.} A clean five-question framework diagram, an annotated \texttt{robots.txt} anatomy, or a CFAA case timeline.
-        \item \textbf{Strengthen an exercise.} Add a rubric or expected output to the framework exercise, or a starter cell so it self-checks.
-        \item \textbf{Update the legal landscape.} The ``Current Landscape (mid-2026)'' section dates quickly --- verify a recent ruling or add a Colorado Privacy Act explainer tied to the ``Public Interest Connection'' callout.
+        \item \textbf{A confirmed gap.} Wikipedia's live \texttt{robots.txt} now has a \texttt{Disallow: /trap/} rule the chapter doesn't mention --- a honeypot for bad bots. Explain what it's for and add it to the comparison.
+        \item \textbf{Close a gap in ``Common Issues to Debug.''} Not covered yet: a blocked page can return \textbf{HTTP 200 with a Cloudflare challenge page}, not a 403 --- \texttt{raise\_for\_status()} won't catch it. Add this as a worked case.
+        \item \textbf{Add a figure --- there are currently zero in this chapter.} A clean five-question framework diagram, an annotated \texttt{robots.txt} anatomy, or a CFAA case timeline.
+        \item \textbf{Add a missing citation.} The Meta v.\ Bright Data (2024) and X Corp.\ rulings are described in prose with no source link --- find and add one.
+        \item \textbf{Strengthen an exercise.} Add a rubric or expected output to the framework exercise (\#3), or a starter cell so it self-checks.
     \end{itemize}
-    \bottomcite{Targets drawn from the chapter's callouts, ``Common Issues,'' and ``Further Reading.''}
+    \bottomcite{Targets confirmed against the live chapter and current \texttt{robots.txt} --- not hypothetical.}
 \end{frame}
 
 \begin{frame}{What makes a good revision \& a good review}
