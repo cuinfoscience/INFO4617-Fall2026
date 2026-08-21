@@ -77,3 +77,16 @@ clean. Never leave a broken deck.
   comparison, or two columns that must stay visually symmetric.
 - Use `\texttt{}` for inline code, package, and file names.
 - Escape `_`, `#`, `%`, `&`, `$` in prose; inside `lstlisting` they are literal.
+- **Matplotlib: object-oriented interface only.** Any plotting code shown in a
+  deck uses `fig, ax = plt.subplots()` and calls methods on `ax`
+  (`ax.plot(...)`, `ax.set_xlabel(...)`, `ax.set_title(...)`) — never the
+  implicit pyplot state-machine (`plt.plot(...)`, `plt.xlabel(...)`,
+  `plt.title(...)`). The OO interface is explicit about which figure/axes
+  it's drawing to, which is what a slide's necessarily-short snippet should
+  model, and it's the interface [Matplotlib's own docs recommend for
+  anything beyond a one-off interactive
+  plot](https://matplotlib.org/stable/tutorials/lifecycle.html) (see also
+  [pyplot vs. object-oriented
+  interface](https://matplotlib.org/matplotblog/posts/pyplot-vs-object-oriented-interface/)).
+  `plt.subplots()` itself is the one acceptable `plt.` call — it's how you
+  obtain the `fig`/`ax` objects in the first place.

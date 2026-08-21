@@ -40,6 +40,12 @@ slides/
   Makefile
 ```
 
+Full authoring rules — including code style — live in
+[`common/AUTHORING.md`](common/AUTHORING.md). One to know up front: any
+matplotlib code shown in a deck uses the **object-oriented interface**
+(`fig, ax = plt.subplots()`, then `ax.plot(...)`, `ax.set_xlabel(...)`, …),
+never the implicit `plt.plot()` / `plt.xlabel()` pyplot state machine.
+
 ## Building
 
 Requires a TeX Live install with `beamer`, `fbb`, `expl3`, `biber`, and
