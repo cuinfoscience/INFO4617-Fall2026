@@ -28,21 +28,21 @@
         \begin{column}{0.62\textwidth}
             Two formats carry almost all web data: \textbf{XML} (a tree of tags) and \textbf{JSON} (nested lists and dictionaries). This week we learn to parse both.
 
-            \vspace{0.75em}
+            \bigskip
 
             \dayband{Monday}{Labor Day --- \textcolor{tab-red}{no class}}
             \begin{itemize}\small
                 \item Monday's concept intro is \textbf{folded into Wednesday}
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Wednesday}{Concepts \& notebook lab}
             \begin{itemize}\small
                 \item XML \& JSON concepts, then the Chapter 4 notebook: Congress, tweets, and weather
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Friday}{Textbook revisions}
             \begin{itemize}\small
@@ -67,19 +67,19 @@
 \begin{frame}{Why data formats matter}
     {\small\textcolor{tab-gray}{No class Monday (Labor Day) --- these concepts open Wednesday's session, just before the notebook.}}
 
-    \vspace{0.5em}
+    \medskip
 
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
             Before you can \textit{extract} data from the web, you have to understand how it is \textit{structured}. Two formats dominate:
 
-            \vspace{0.6em}
+            \medskip
             \begin{itemize}\small
                 \item \textbf{XML} --- the older, document-centric format; a tree of nested tags. Born from the 1990s web.
                 \item \textbf{JSON} --- the newer, lighter format of the API economy; maps directly onto Python lists and dictionaries.
             \end{itemize}
 
-            \vspace{0.6em}
+            \medskip
             Every page, API response, and data feed you meet this semester is one of these --- or HTML, which is XML's sibling.
         \end{column}
         \begin{column}{0.4\textwidth}
@@ -98,10 +98,10 @@
         \begin{column}{0.54\textwidth}
             XML organizes data as a \textbf{hierarchy}: each tag can hold text, attributes, and child tags.
 
-            \vspace{0.75em}
+            \bigskip
             XML and HTML are \textbf{siblings}, not parent and child --- both descend from SGML. Only the stricter XHTML dialect is well-formed XML; the HTML in the wild is not, which is exactly why the forgiving parsers of \textcolor{tab-gray}{Ch.~6} exist.
 
-            \vspace{0.75em}
+            \bigskip
             A value can hide in one of two places:
             \begin{itemize}\small
                 \item \textbf{text} --- between an opening and closing tag (read with \texttt{.text})
@@ -126,10 +126,10 @@
                 \item a JSON \textbf{object} is a Python \textbf{dict} --- accessed by key
             \end{itemize}
 
-            \vspace{0.75em}
+            \bigskip
             Real data \textbf{nests} them --- dicts inside lists inside dicts, several levels deep. The skill is navigating from the outside in, one key or index at a time.
 
-            \vspace{0.75em}
+            \bigskip
             {\footnotesize Created by Douglas Crockford in the early 2000s; the rise of AJAX made JSON the default API format by the 2010s.}
         \end{column}
         \begin{column}{0.42\textwidth}
@@ -146,15 +146,15 @@
         \begin{column}{0.58\textwidth}
             Whether data starts as XML, JSON, HTML, or PDF text, the move into analysis is always the same:
 
-            \vspace{0.6em}
+            \medskip
             \begin{center}
                 \textbf{find records} $\rightarrow$ \textbf{extract fields} $\rightarrow$\\[0.2em] \textbf{list of dictionaries} $\rightarrow$ \texttt{pd.DataFrame}
             \end{center}
 
-            \vspace{0.6em}
+            \medskip
             The DataFrame is the \textbf{universal intermediate format}. Reach it and all of pandas opens up: filter, group, cross-tabulate, merge.
 
-            \vspace{0.6em}
+            \medskip
             The source changes; the tag names change; \textbf{the pipeline stays the same}.
         \end{column}
         \begin{column}{0.38\textwidth}
@@ -215,11 +215,11 @@ m.find("party").text if m.find("party") else None
         \begin{column}{0.44\textwidth}
             Working out \textit{which} of the two holds your value is half the parsing battle --- real XML uses both.
 
-            \vspace{0.75em}
+            \bigskip
 
             Calling \texttt{.text} on a \texttt{None} is the \textbf{single most common} scraping error. The \texttt{if \dots else None} guard keeps one missing field from crashing a 441-record loop.
 
-            \vspace{0.75em}
+            \bigskip
 
             XML always hands you \textbf{text}: converting \texttt{"2nd"} or \texttt{"\$1,234"} to a number is your job.
         \end{column}
@@ -343,7 +343,7 @@ data.get("elevation", "unknown")  # .get avoids KeyError
         \begin{column}{0.6\textwidth}
             Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-04-data-formats.qmd} and reviews a classmate's.
 
-            \vspace{1em}
+            \bigskip
             The workflow (from Week 1):
             \begin{enumerate}\small
                 \item Branch / fork the book repo
@@ -397,7 +397,7 @@ data.get("elevation", "unknown")  # .get avoids KeyError
             \end{block}
         \end{column}
     \end{columns}
-    \vspace{0.5em}
+    \medskip
     \centering\small Next week: \textbf{Web Architecture \& Protocols} --- how a URL becomes a rendered page (HTTP, requests, status codes).
 \end{frame}
 
@@ -410,7 +410,7 @@ data.get("elevation", "unknown")  # .get avoids KeyError
         \item The \texttt{find\_all} $\rightarrow$ list-of-dicts $\rightarrow$ \texttt{DataFrame} pipeline is the bridge from raw web data to analysis.
         \item Format is a \textbf{transparency} choice: open XML/JSON serves public oversight; scanned PDFs quietly enclose it.
     \end{enumerate}
-    \vspace{0.75em}
+    \bigskip
     \bottomcite{Reading: Textbook Ch.~4. Related: \textcite{mitchell2018web}; \textcite{vandenbroucke2018practical}.}
 \end{frame}
 

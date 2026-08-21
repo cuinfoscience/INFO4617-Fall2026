@@ -24,21 +24,21 @@
         \begin{column}{0.62\textwidth}
             PDFs are the web's filing cabinets. This week we pry official records out of them and turn locked documents into data.
 
-            \vspace{1em}
+            \bigskip
 
             \dayband{Monday}{Concepts \& notebook intro}
             \begin{itemize}\small
                 \item Why PDFs resist extraction; reconstruction vs.\ reading
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Wednesday}{Notebook lab}
             \begin{itemize}\small
                 \item Work the Chapter 9 notebook: PyPDF, regex cleanup, Boulder City Council minutes
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Friday}{Textbook revisions}
             \begin{itemize}\small
@@ -65,11 +65,11 @@
         \begin{column}{0.58\textwidth}
             PDFs are everywhere in institutional record-keeping: council minutes, bill texts, financial reports, court filings, academic papers, environmental impact assessments.
 
-            \vspace{1em}
+            \bigskip
 
             They are the format of choice for ``official'' documents because they \textbf{preserve visual layout} across any device or printer. But that priority --- visual fidelity over semantic structure --- makes them \textbf{hostile to programmatic extraction}.
 
-            \vspace{1em}
+            \bigskip
 
             The records locked inside are \textit{readymade} data (\textcite{salganik2018bit}): created for administration, not research, yet repurposable --- with effort --- to answer questions their creators never anticipated.
         \end{column}
@@ -87,11 +87,11 @@
         \begin{column}{0.56\textwidth}
             When \textbf{you} read a PDF you see paragraphs, tables, headers, and page numbers.
 
-            \vspace{1em}
+            \bigskip
 
             When a \textbf{computer} reads one it sees a sequence of drawing instructions: \textit{place this character at $(x, y)$; draw a line from here to there; embed this image}.
 
-            \vspace{1em}
+            \bigskip
 
             So text extraction is \textbf{reconstruction, not reading} --- the computer must infer logical structure from spatial layout. The results will not be perfect, but they can be good enough to turn inaccessible records into analyzable datasets.
         \end{column}
@@ -109,11 +109,11 @@
         \begin{column}{0.58\textwidth}
             When governments publish minutes, budgets, and filings \textit{only} as PDFs, they create what the book's post-API chapter calls \textbf{soft enclosure}: records that are nominally public but practically inaccessible for analysis.
 
-            \vspace{0.75em}
+            \bigskip
 
             Building extraction skills enacts the \textbf{oversight} and \textbf{ownership} values --- public records belong to the public, and technical barriers are themselves a form of enclosure.
 
-            \vspace{0.75em}
+            \bigskip
 
             Adobe created the PDF in 1993 for visual fidelity across devices --- at the cost of semantic accessibility. \textbf{DocumentCloud} (ProPublica \& IRE), \textbf{MuckRock} (automating FOIA), and the \textbf{Sunlight Foundation} built the infrastructure that bridges public documents and accessible data.
         \end{column}
@@ -135,7 +135,7 @@
         \item \textbf{Pipeline} --- a reusable class that processes a whole corpus of PDFs into a DataFrame
     \end{itemize}
 
-    \vspace{0.75em}
+    \bigskip
 
     \begin{alertblock}{Connecting to Ch.~7 \& the post-API theme}
         \footnotesize Once text is out, the \textbf{bag-of-words} preprocessing from the archives chapter (Ch.~7) sharpens topic tracking across many meetings. And PDF-only publishing \textit{is} the ``soft enclosure'' the post-API chapter warns about --- extraction is how we push back.
@@ -182,11 +182,11 @@ clean = '\n'.join(ln for ln in lines if ln)
         \begin{column}{0.44\textwidth}
             The most important choice is what \textit{not} to collapse.
 
-            \vspace{0.75em}
+            \bigskip
 
             Line structure is real information: section headings are recognizable \textbf{precisely because they sit alone on their own lines}.
 
-            \vspace{0.75em}
+            \bigskip
 
             Erase the newlines and no heading detector can ever find them.
         \end{column}
@@ -231,7 +231,7 @@ def extract_attendance(pdf_path):
             {\scriptsize Counts across meetings become a trend --- scale reveals what one PDF can't.}
         \end{column}
     \end{columns}
-    \vspace{0.3em}
+    \smallskip
     {\small Be honest about limits: ``Absent: None'' becomes a phantom member named \texttt{None}; titles and separators vary. Treat output as a \textbf{first draft} --- spot-check and patch.}
     \bottomcite{Textbook Ch.~9, ``Case Study: Boulder City Council Minutes.'' Filenames encode the date --- parse them, not the PDF text.}
 \end{frame}
@@ -270,7 +270,7 @@ class PDFCorpusAnalyzer:
 \begin{frame}[fragile]{When PyPDF is not enough}
     PyPDF handles text-based PDFs well, but two common cases defeat it.
 
-    \vspace{0.4em}
+    \medskip
     \textbf{Tables} --- PyPDF flattens them into a text stream, losing rows and columns. \texttt{pdfplumber} preserves the grid:
 \begin{lstlisting}
 import pdfplumber
@@ -329,7 +329,7 @@ with pdfplumber.open("report.pdf") as pdf:
         \begin{column}{0.6\textwidth}
             Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-09-pdfs.qmd} and reviews a classmate's.
 
-            \vspace{1em}
+            \bigskip
 
             The workflow (from Week 1):
             \begin{enumerate}\small
@@ -384,7 +384,7 @@ with pdfplumber.open("report.pdf") as pdf:
             \end{block}
         \end{column}
     \end{columns}
-    \vspace{0.5em}
+    \medskip
     \centering\small Next week: a new module on \textbf{APIs} --- when data arrives as JSON and no parsing is required (starting with Wikipedia).
 \end{frame}
 
@@ -397,7 +397,7 @@ with pdfplumber.open("report.pdf") as pdf:
         \item Abstract into a \textbf{pipeline} so one bad file doesn't kill a corpus run; test patterns across documents.
         \item Know PyPDF's limits: \texttt{pdfplumber} for tables, OCR for scans. Imprecision is the price of scale.
     \end{enumerate}
-    \vspace{1em}
+    \bigskip
     \bottomcite{Reading: Textbook Ch.~9. Related: \textcite{salganik2018bit}; \textcite{gebru2021datasheets}.}
 \end{frame}
 

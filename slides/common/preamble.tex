@@ -21,6 +21,17 @@
 
 \newcommand{\cupids}[1][1]{\scalerel*{\includegraphics{../common/cupids-logo.pdf}}{X}\scalebox{#1}{}}
 
+% Named vertical-space vocabulary for use in frame bodies, in place of
+% ad hoc \vspace{Nem} calls. LaTeX's kernel defaults for \smallskip /
+% \medskip / \bigskip (3pt/6pt/12pt) are tuned for 10-12pt body text and
+% land too large at this deck's 9pt base size and \tiny/\footnotesize/
+% \small frame content -- \bigskip alone would exceed every \vspace value
+% previously used in this repo. Recalibrated here to match the deck's
+% established rhythm instead.
+\setlength{\smallskipamount}{2.5pt plus 1pt minus 1pt}
+\setlength{\medskipamount}{5pt plus 1.5pt minus 1.5pt}
+\setlength{\bigskipamount}{8pt plus 2pt minus 2pt}
+
 % Bibliography
 \usepackage[style=authoryear,
             backend=biber,

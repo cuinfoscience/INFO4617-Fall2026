@@ -24,21 +24,21 @@
         \begin{column}{0.62\textwidth}
             Last week the data came from governments obligated to be open. This week it comes from private platforms that share it \textit{at their discretion} --- and can stop.
 
-            \vspace{1em}
+            \bigskip
 
             \dayband{Monday}{Concepts \& notebook intro}
             \begin{itemize}\small
                 \item OAuth2, four platforms, and the governance spectrum from proprietary to open
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Wednesday}{Notebook lab}
             \begin{itemize}\small
                 \item Reddit, Spotify, Bluesky, and Mastodon --- authenticate, retrieve, analyze
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Friday}{Textbook revisions}
             \begin{itemize}\small
@@ -65,11 +65,11 @@
         \begin{column}{0.58\textwidth}
             Social platforms mediate an enormous share of public discourse. Their APIs are a \textbf{different animal} from last week's government APIs (Ch.~11): those exist because of transparency mandates; these exist at the discretion of a private company.
 
-            \vspace{0.8em}
+            \bigskip
 
             So access can change overnight --- Reddit's 2023 pricing shift and Twitter's post-acquisition lockout are the cautionary cases.
 
-            \vspace{0.8em}
+            \bigskip
 
             We study four platforms spanning the spectrum from \textbf{proprietary} (Reddit, Spotify) to \textbf{open} (Bluesky, Mastodon) --- the enclosure-vs-openness tension from the post-API age (Ch.~2).
         \end{column}
@@ -87,7 +87,7 @@
         \begin{column}{0.54\textwidth}
             Almost every platform API authenticates with \textbf{OAuth2}. The idea: don't send your password with each request --- exchange your app's credentials for a \textit{scoped}, \textit{revocable} token.
 
-            \vspace{0.8em}
+            \bigskip
 
             Two flows you should recognize:
             \begin{itemize}
@@ -95,7 +95,7 @@
                 \item \textbf{Authorization code} --- additionally asks a \textit{user} to grant your app permission to act for them. Every ``Sign in with Google'' dialog.
             \end{itemize}
 
-            \vspace{0.6em}
+            \medskip
 
             Store client IDs and secrets in environment variables, \textbf{never} in the notebook.
         \end{column}
@@ -110,7 +110,7 @@
 
 \begin{frame}{Four platforms, four architectures}
     The differences are not cosmetic --- they decide what data exists, on what terms, and how durable your access is:
-    \vspace{0.6em}
+    \medskip
 
     \centering
     \footnotesize
@@ -125,7 +125,7 @@
         \bottomrule
     \end{tabular}
 
-    \vspace{0.9em}
+    \bigskip
     \raggedright
     Reddit and Spotify can \textit{unilaterally} rewrite their terms because they own both the platform \textbf{and} the protocol. Bluesky and Mastodon cannot --- their protocols are open standards anyone can implement. That is the architectural embodiment of \textbf{ownership} (Ch.~2).
     \bottomcite{Textbook Ch.~12, ``Comparing Platform Architectures.''}
@@ -141,7 +141,7 @@
     \end{itemize}
     Every one: \textbf{authenticate $\rightarrow$ request $\rightarrow$ parse nested JSON $\rightarrow$ DataFrame}.
 
-    \vspace{0.8em}
+    \bigskip
 
     \begin{alertblock}{Connecting to Ch.~2 (Ethics): social data is people data}
         \footnotesize Every post, comment, and listening pattern was produced by a person who never imagined a research dataset. Check the ToS, consider IRB, collect the \textit{minimum} you need, never touch private or DM content, and don't quote posts in ways a search engine can re-identify.
@@ -193,7 +193,7 @@ df.groupby("depth")["score"].mean()
             \includegraphics[width=\textwidth]{img/reddit_depth_decay.png}\\
             {\scriptsize Depth 0 comments score highest.}
 
-            \vspace{0.5em}
+            \medskip
             \raggedright\footnotesize Not a measure of quality --- an artifact of interface design, where nested replies are progressively collapsed and harder to reach.
         \end{column}
     \end{columns}
@@ -223,11 +223,11 @@ print(artist["name"], f'{artist["followers"]["total"]:,}',
         \begin{column}{0.56\textwidth}
             For a decade the API's signature research offering was \textbf{audio features} --- danceability, energy, valence, tempo for every track. Hundreds of studies mapped genres and modeled hits with them.
 
-            \vspace{0.7em}
+            \bigskip
 
             November 2024: cut off for all newly created apps. No stated research alternative --- just as generative AI made music data newly valuable.
 
-            \vspace{0.7em}
+            \bigskip
 
             The lasting lesson: those scores were never ground truth. They were Spotify's \textit{proprietary model} of what music \textit{is}. You always analyze the platform's model of the world as much as the world itself.
         \end{column}
@@ -267,7 +267,7 @@ df = pd.DataFrame(posts)
             \includegraphics[width=0.92\textwidth]{img/bluesky_network.png}\\
             {\scriptsize Social graph via \texttt{get\_followers} / \texttt{get\_follows}.}
 
-            \vspace{0.4em}
+            \medskip
             \raggedright\footnotesize An \textbf{app password} is a revocable delegated credential --- OAuth's principle, simpler. Identity and graph are portable across any AT-Protocol service.
         \end{column}
     \end{columns}
@@ -335,7 +335,7 @@ tagged = mastodon.timeline_hashtag("datascience", limit=20)
         \begin{column}{0.6\textwidth}
             Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-12-social.qmd} and reviews a classmate's.
 
-            \vspace{1em}
+            \bigskip
 
             The workflow (from Week 1):
             \begin{enumerate}\small
@@ -345,7 +345,7 @@ tagged = mastodon.timeline_hashtag("datascience", limit=20)
                 \item Review two peers' PRs: kind, specific, actionable
             \end{enumerate}
 
-            \vspace{0.8em}
+            \bigskip
 
             \footnotesize This chapter drifts \textit{fast} --- endpoints and rate limits change --- so ``test it against the live API'' is unusually valuable here.
         \end{column}
@@ -394,7 +394,7 @@ tagged = mastodon.timeline_hashtag("datascience", limit=20)
             \end{block}
         \end{column}
     \end{columns}
-    \vspace{0.5em}
+    \medskip
     \centering\small Next week: \textbf{AI \& Language-Model APIs} --- sending prompts to models as one more data pipeline.
 \end{frame}
 
@@ -407,7 +407,7 @@ tagged = mastodon.timeline_hashtag("datascience", limit=20)
         \item Open protocols (AT, ActivityPub) make access an \textbf{architectural feature}; proprietary APIs make it a revocable business decision.
         \item Access is conditional, costly, and fragile --- build across open \textbf{and} closed so no single closure ends your research.
     \end{enumerate}
-    \vspace{1em}
+    \bigskip
     \bottomcite{Reading: Textbook Ch.~12. Related: \textcite{baumgartner2020pushshift}; \textcite{diener2026mastodonpy}; \textcite{bruns2019after}.}
 \end{frame}
 
