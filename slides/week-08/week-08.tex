@@ -65,15 +65,15 @@
         \begin{column}{0.58\textwidth}
             Last week's tools --- \texttt{requests} + BeautifulSoup --- work on \textbf{static} pages, whose content is fully present in the initial HTML.
 
-            \vspace{1em}
+            \vspace{0.85em}
 
             But most modern sites are \textbf{dynamic}: their content is loaded or rendered by JavaScript \textit{after} the HTML arrives. \texttt{requests.get()} hands you the skeleton \textit{before} that code has run.
 
-            \vspace{1em}
+            \vspace{0.85em}
 
             The data you see in your browser may simply not exist in the response. Diagnose it: compare \texttt{requests.get(url).text} to the page in your browser --- if the content you want is missing, the page is dynamic.
 
-            \vspace{1em}
+            \vspace{0.85em}
 
             The fix: a tool that \textit{executes} JavaScript --- a real browser, driven by code. That tool is \textbf{Selenium}.
         \end{column}
