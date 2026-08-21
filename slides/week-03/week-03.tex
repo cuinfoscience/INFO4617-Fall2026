@@ -21,7 +21,7 @@
 % -------------------------------------------------------------------------
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             The web used to invite us in. This week we ask \textit{why} that changed --- and how to keep doing public-interest research anyway.
 
             \bigskip
@@ -45,7 +45,7 @@
                 \item Propose \& peer-review pull requests improving Chapter 3
             \end{itemize}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Companion notebook}
                 \footnotesize \texttt{ch-03-post-api.ipynb}
             \end{block}
@@ -74,7 +74,7 @@
 
             When researchers today say the \textbf{``post-API age''} \parencite{freelon2018computational}, this is the era they measure against.
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Built on the bargain}
                 \footnotesize The Wikipedia and Reddit studies that trained a generation --- including the instructor's --- ran on open APIs, public dumps, and volunteer archives like Pushshift \parencite{baumgartner2020pushshift}. No permission, partnership, or payment required.
             \end{block}
@@ -86,7 +86,7 @@
 
 \begin{frame}{Pressure 1 --- Enclosure}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             Three pressures explain the shift since $\sim$2018: \textbf{\textcolor{tab-blue}{enclosure}}, \textbf{\textcolor{tab-orange}{exemption}}, \textbf{\textcolor{tab-red}{erosion}}.
 
             \medskip
@@ -98,7 +98,7 @@
             \end{itemize}
             \textbf{The driver: generative AI.} Once text became training data, an open API stopped looking like ecosystem-building and started looking like giving away inventory (Reddit--Google: $\sim$\$60M/year).
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/three_pressures.png}\\
             {\scriptsize Three forces fencing the open web.}
@@ -109,7 +109,7 @@
 
 \begin{frame}{Pressure 2 --- Exemption}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             \textbf{Exemption}: platforms operate beyond outside scrutiny while running the same studies internally at will.
 
             \medskip
@@ -122,7 +122,7 @@
             \end{itemize}
             When ``privacy'' restricts only accountability research --- never ad targeting on the same users --- it is functioning as exemption, not protection.
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/ad_observatory.png}\\
             {\scriptsize Consenting users' data, still shut down.}
@@ -133,7 +133,7 @@
 
 \begin{frame}{Pressure 3 --- Erosion}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             \textbf{Erosion} is the quietest pressure: enclosure and exemption are things platforms \textit{do}; erosion is what happens to the web \textit{itself}.
             \begin{itemize}\small
                 \item \textbf{Links rot.} About half the links in U.S. Supreme Court opinions are dead; a 2024 Pew study found about a third of 2013 web pages gone a decade later.
@@ -145,7 +145,7 @@
 
             For research this is a \textbf{reproducibility crisis}: a study on the Twitter Academic API cannot be rerun at any price \parencite{davidson2023platform}.
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/link_rot.png}\\
             {\scriptsize The record decays unless someone saves it.}
@@ -195,7 +195,7 @@
 
 \begin{frame}{Lab 1 --- build the timeline}
     \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
+        \begin{column}{0.6\textwidth}
             \textbf{Exercise 1.} In the notebook, build a timeline of major API-access changes from \textbf{2008 to today}.
             \begin{itemize}\small
                 \item At least \textbf{five events} across at least \textbf{three platforms}.
@@ -206,7 +206,7 @@
 
             The point is not memorizing dates --- it is seeing the \textbf{trend}: free-and-open access for outside observers is what is disappearing, replaced by paid tiers, gated programs, and licensing deals.
         \end{column}
-        \begin{column}{0.46\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/api_timeline.png}\\
             {\scriptsize Start here; add the events you already know.}
@@ -217,7 +217,7 @@
 
 \begin{frame}{Lab 2 --- apply the framework, then plan for closure}
     \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
+        \begin{column}{0.6\textwidth}
             \textbf{Exercise 2 --- name the pressure.} Pick a platform change \textit{not} in the chapter and write 500 words applying the framework. Ask:
             \begin{itemize}\small
                 \item Was a shared resource fenced? (\textcolor{tab-blue}{enclosure})
@@ -225,7 +225,7 @@
                 \item Did the record simply decay? (\textcolor{tab-red}{erosion})
             \end{itemize}
         \end{column}
-        \begin{column}{0.46\textwidth}
+        \begin{column}{0.35\textwidth}
             \textbf{Exercise 3 --- a contingency plan.} Design a project on one web source, then plan for it vanishing mid-study. Redundancy is the strategy; keep $\geq 3$ fallbacks in your repertoire:
             \begin{itemize}\small
                 \item \textbf{Official research programs} (Meta Content Library, TikTok, Reddit) --- real but rationed.
@@ -258,7 +258,7 @@ pathlib.Path("datasheet.json").write_text(json.dumps(collection, indent=2))
 
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Work through the notebook prompts in pairs:
             \begin{enumerate}\small
                 \item Timeline: five events, three platforms, tag each pressure
@@ -268,7 +268,7 @@ pathlib.Path("datasheet.json").write_text(json.dumps(collection, indent=2))
                 \item[5.] \textcolor{tab-purple}{\textbf{5617}}: read \textcite{davidson2023platform} \& \textcite{perriam2020digital}; write a 2--3 page ``state of research access'' brief for one platform, ending with a recommendation.
             \end{enumerate}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
                 \footnotesize Come ready to share:
                 \begin{itemize}\footnotesize
@@ -311,7 +311,7 @@ pathlib.Path("datasheet.json").write_text(json.dumps(collection, indent=2))
 
             This is a \textbf{fast-moving} chapter --- prices, lawsuits, and regulations change monthly --- so it always needs hands.
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
@@ -334,7 +334,7 @@ pathlib.Path("datasheet.json").write_text(json.dumps(collection, indent=2))
 
 \begin{frame}{What makes a good revision \& a good review}
     \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{block}{A strong PR}
                 \begin{itemize}\small
                     \item One focused change, clearly titled
@@ -345,7 +345,7 @@ pathlib.Path("datasheet.json").write_text(json.dumps(collection, indent=2))
                 \end{itemize}
             \end{block}
         \end{column}
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{A strong review}
                 \begin{itemize}\small
                     \item Runs / reads the change, not just skims

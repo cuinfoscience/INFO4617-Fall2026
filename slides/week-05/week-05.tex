@@ -21,7 +21,7 @@
 % -------------------------------------------------------------------------
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             We open the hood on the web --- the layered stack of protocols that turns a URL into a rendered page, and turns web data collection from \textit{magic} into \textit{engineering}.
 
             \bigskip
@@ -45,7 +45,7 @@
                 \item Propose \& peer-review pull requests improving Chapter 5
             \end{itemize}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Companion notebook}
                 \footnotesize \texttt{ch-05-protocols.ipynb}
             \end{block}
@@ -62,7 +62,7 @@
 
 \begin{frame}{What happens when you load a web page?}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
             Type a URL, press Enter, and in milliseconds a precise sequence unfolds:
             \begin{enumerate}\small
                 \item \textbf{DNS} resolves the domain name to an IP address
@@ -76,7 +76,7 @@
 
             Understanding this sequence transforms web data collection \textbf{from magic into engineering} --- and turns debugging from guesswork into systematic diagnosis.
         \end{column}
-        \begin{column}{0.38\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/request_lifecycle.png}\\
             {\scriptsize URL to rendered page, one layer at a time.}
@@ -98,7 +98,7 @@
 
             \textbf{DNS --- the address book.} It maps a name like \texttt{en.wikipedia.org} to an IP. Names are hierarchical --- \texttt{subdomain.domain.TLD} --- and services follow conventions: \texttt{api.agency.gov}, \texttt{data.agency.gov}.
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/protocol_stack.png}\\
             {\scriptsize Four protocols, one layered conversation.}
@@ -109,7 +109,7 @@
 
 \begin{frame}{See it yourself: browser developer tools}
     \begin{columns}[T]
-        \begin{column}{0.52\textwidth}
+        \begin{column}{0.6\textwidth}
             Before writing a line of code, inspect the page by hand. Open dev tools with \texttt{Ctrl+Shift+I} or \texttt{F12} (\texttt{Cmd+Opt+I} on a Mac).
 
             \bigskip
@@ -120,7 +120,7 @@
 
             \textbf{Network} reveals every request a page makes --- often hundreds: HTML, CSS, JS, images, fonts, trackers. Each shows a URL, method, status code, and headers like \texttt{User-Agent} and \texttt{Cookie}.
         \end{column}
-        \begin{column}{0.44\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/dev_tools_network.png}\\
             {\scriptsize The Network tab: one page load, dozens of requests.}
@@ -131,7 +131,7 @@
 
 \begin{frame}{The upper stack: HTTP status codes \& URLs}
     \begin{columns}[T]
-        \begin{column}{0.54\textwidth}
+        \begin{column}{0.6\textwidth}
             \textbf{HTTP} structures the conversation: a request carries a method (GET, POST, \dots) and headers; a response carries a \textbf{status code}:
             \begin{itemize}\small
                 \item \textcolor{tab-green}{\textbf{200}} OK --- the body has your data
@@ -141,7 +141,7 @@
                 \item \textcolor{tab-purple}{\textbf{500}} the server's problem, not yours
             \end{itemize}
         \end{column}
-        \begin{column}{0.42\textwidth}
+        \begin{column}{0.35\textwidth}
             \textbf{URLs} identify the target, with a fixed structure:
 
             \medskip
@@ -215,7 +215,7 @@ def diagnose_request(url, headers=None):
 
 \begin{frame}[fragile]{Make an API call, get a time series}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
         The Wikimedia pageviews API rejects the default client with \textbf{403} --- add a meaningful \texttt{User-Agent} and it returns \textbf{200}:
 \begin{lstlisting}
 url = ("https://wikimedia.org/api/rest_v1/"
@@ -234,7 +234,7 @@ df["timestamp"] = pd.to_datetime(df["timestamp"],
 df.plot(x="timestamp", y="views")
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pageviews_timeseries.png}\\
             {\scriptsize Daily pageviews --- spikes line up with real-world events.}
@@ -284,7 +284,7 @@ requests.get(base, params={"titles": "University of Colorado Boulder"})
 
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Work through the chapter's exercises in pairs:
             \begin{enumerate}\small
                 \item Network tab: a Wikipedia article vs.\ a news site --- how many requests? What fraction is content vs.\ tracking?
@@ -294,7 +294,7 @@ requests.get(base, params={"titles": "University of Colorado Boulder"})
                 \item \textcolor{tab-purple}{\textbf{5617:}} profile a site's delivery infrastructure --- redirect chain, CDN headers, traceroute hops --- in a 500-word memo
             \end{enumerate}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
                 \footnotesize Come ready to share:
                 \begin{itemize}\footnotesize
@@ -336,7 +336,7 @@ requests.get(base, params={"titles": "University of Colorado Boulder"})
                 \item Review two peers' PRs: kind, specific, actionable
             \end{enumerate}
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
@@ -358,7 +358,7 @@ requests.get(base, params={"titles": "University of Colorado Boulder"})
 
 \begin{frame}{What makes a good revision \& a good review}
     \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{block}{A strong PR}
                 \begin{itemize}\small
                     \item One focused change, clearly titled
@@ -369,7 +369,7 @@ requests.get(base, params={"titles": "University of Colorado Boulder"})
                 \end{itemize}
             \end{block}
         \end{column}
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{A strong review}
                 \begin{itemize}\small
                     \item Runs / reads the change, not just skims

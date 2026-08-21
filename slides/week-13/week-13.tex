@@ -21,7 +21,7 @@
 % -------------------------------------------------------------------------
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             An LLM is just another API --- authenticate, send a request, parse the response. We use it to turn the messy text of Chapters~6--9 into structured data.
 
             \bigskip
@@ -45,7 +45,7 @@
                 \item Propose \& peer-review pull requests improving Chapter~13 --- with AI disclosure
             \end{itemize}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Companion notebook}
                 \footnotesize \texttt{ch-13-ai-apis.ipynb}
             \end{block}
@@ -62,7 +62,7 @@
 
 \begin{frame}{LLMs are another API to learn}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
             Large language models are a new category of tool for web data science: they transform the \textbf{unstructured text} you scraped in Chapters~6--9 (web pages, PDFs, archived documents) into structured, analyzable data.
 
             \bigskip
@@ -73,7 +73,7 @@
 
             The same three moves you already know apply: \textbf{authenticate}, \textbf{construct a request}, \textbf{parse the response}.
         \end{column}
-        \begin{column}{0.38\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{alertblock}{But LLMs are different}
                 \footnotesize Three properties set them apart from a REST API:
                 \begin{itemize}\footnotesize
@@ -89,7 +89,7 @@
 
 \begin{frame}{Anatomy of a chat request}
     \begin{columns}[T]
-        \begin{column}{0.52\textwidth}
+        \begin{column}{0.6\textwidth}
             A chat request is a \textbf{list of messages}, each with a role:
             \begin{itemize}\small
                 \item \texttt{system} --- sets the assistant's behavior
@@ -105,7 +105,7 @@
 
             Two providers, near-identical shape: OpenAI's \texttt{chat.completions.create} and Anthropic's \texttt{messages.create} (where \texttt{system} is its own argument).
         \end{column}
-        \begin{column}{0.44\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/chat_api_request.png}\\
             {\scriptsize Messages in, one completion out.}
@@ -117,7 +117,7 @@
 \begin{frame}{From free text to structured data}
     For research you rarely want prose --- you want \textbf{fields you can put in a DataFrame}. Two techniques get you there:
     \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{block}{Few-shot prompting}
                 \footnotesize Show the model examples of the input$\rightarrow$output format you want, then ask it to continue the pattern:
                 \begin{quote}\scriptsize
@@ -129,7 +129,7 @@
                 Set \texttt{temperature=0} to make classification as repeatable as possible.
             \end{block}
         \end{column}
-        \begin{column}{0.5\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Let the API enforce the schema}
                 \footnotesize \textbf{Structured Outputs} accept a JSON Schema and \textit{guarantee} the response conforms --- no more brittle parsing. Lighter-weight JSON mode guarantees valid JSON without a fixed schema; Anthropic gets there via \textbf{tool use}.
             \end{block}
@@ -142,7 +142,7 @@
 
 \begin{frame}{The catch: non-determinism, cost \& reproducibility}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             When you parse HTML, the same input always gives the same output. LLMs \textbf{break that guarantee}:
             \begin{itemize}\small
                 \item Even at \texttt{temperature=0}, outputs vary slightly (floating-point non-determinism)
@@ -158,7 +158,7 @@
 
             \textbf{Treat the model as a measurement instrument} --- and calibrate it against human judgment.
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/model_comparison.png}\\
             {\scriptsize Two models, one prompt --- agreement is a finding, not a given.}
@@ -242,7 +242,7 @@ result = json.loads(response.choices[0].message.content)  # always parses
 
 \begin{frame}[fragile]{Embeddings: meaning as vectors}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 def get_embeddings(texts, client,
                    model="text-embedding-3-small"):
@@ -259,7 +259,7 @@ emb = get_embeddings(summaries, client)
 sim = 1 - cosine(emb[i], emb[j])
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/embeddings_heatmap.png}\\
             {\scriptsize Bills about ``school funding'' and ``educational resources'' score high despite no shared keywords.}
@@ -291,7 +291,7 @@ print(openai_label, anthropic_label, openai_label == anthropic_label)
 
 \begin{frame}[fragile]{Mind the cost, pin the version}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # Estimate BEFORE a big batch.
 # gpt-4o-mini ~ $0.15 in / $0.60 out per 1M tok
@@ -303,7 +303,7 @@ print(f"Estimated cost: ${cost:.4f}")
 \end{lstlisting}
             {\footnotesize For research, pin the \textbf{dated} model (\texttt{gpt-4o-mini-2024-07-18}) and log every call --- model, full prompt, params, timestamp --- to a JSONL audit trail.}
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/token_pricing.png}\\
             {\scriptsize Flagship models cost $>$10$\times$ their mini siblings. Develop on mini; promote to the big model only after validating prompts.}
@@ -314,7 +314,7 @@ print(f"Estimated cost: ${cost:.4f}")
 
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Work through the notebook exercises in pairs:
             \begin{enumerate}\small
                 \item Structured extraction from 10+ scraped documents --- design, test, assess quality
@@ -325,7 +325,7 @@ print(f"Estimated cost: ${cost:.4f}")
                 \item[6.] \textcolor{tab-purple}{\textbf{5617}}: a validation study \textit{vs.}\ \textcite{ziems2024can} --- 50 items, 25 hand-coded, report Cohen's $\kappa$
             \end{enumerate}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
                 \footnotesize Come ready to share:
                 \begin{itemize}\footnotesize
@@ -368,7 +368,7 @@ print(f"Estimated cost: ${cost:.4f}")
 
             This chapter is \textit{about} AI --- so if an LLM helped you revise it, that is exactly the kind of use the book asks you to \textbf{disclose}.
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
@@ -391,7 +391,7 @@ print(f"Estimated cost: ${cost:.4f}")
 
 \begin{frame}{A good revision, a good review --- and honest disclosure}
     \begin{columns}[T]
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{block}{A strong PR}
                 \begin{itemize}\footnotesize
                     \item One focused change, clearly titled
@@ -408,7 +408,7 @@ print(f"Estimated cost: ${cost:.4f}")
                 \end{itemize}
             \end{block}
         \end{column}
-        \begin{column}{0.6\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{alertblock}{Disclose your AI use}
                 \footnotesize The book's \textbf{AI Coauthorship \& Responsible Disclosure} appendix asks four questions --- answer them in your PR when AI helped:
                 \begin{enumerate}\footnotesize

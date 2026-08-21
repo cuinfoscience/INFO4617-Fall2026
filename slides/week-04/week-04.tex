@@ -25,7 +25,7 @@
 % -------------------------------------------------------------------------
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Two formats carry almost all web data: \textbf{XML} (a tree of tags) and \textbf{JSON} (nested lists and dictionaries). This week we learn to parse both.
 
             \bigskip
@@ -49,7 +49,7 @@
                 \item Propose \& peer-review pull requests improving Chapter 4
             \end{itemize}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Companion notebook}
                 \footnotesize \texttt{ch-04-data-formats.ipynb}
             \end{block}
@@ -70,7 +70,7 @@
     \medskip
 
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             Before you can \textit{extract} data from the web, you have to understand how it is \textit{structured}. Two formats dominate:
 
             \medskip
@@ -82,7 +82,7 @@
             \medskip
             Every page, API response, and data feed you meet this semester is one of these --- or HTML, which is XML's sibling.
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{When to use which}
                 \footnotesize
                 \textbf{XML}: older web services, government feeds (Congress, SEC, RSS), configuration files.\\[0.5em]
@@ -95,7 +95,7 @@
 
 \begin{frame}{XML: a tree of nested tags}
     \begin{columns}[T]
-        \begin{column}{0.54\textwidth}
+        \begin{column}{0.6\textwidth}
             XML organizes data as a \textbf{hierarchy}: each tag can hold text, attributes, and child tags.
 
             \bigskip
@@ -108,7 +108,7 @@
                 \item \textbf{attributes} --- key/value pairs inside the opening tag (read with brackets)
             \end{itemize}
         \end{column}
-        \begin{column}{0.42\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/xml_tree.png}\\
             {\scriptsize The House \texttt{MemberData} feed, drawn as a tree.}
@@ -119,7 +119,7 @@
 
 \begin{frame}{JSON: lists and dictionaries you already know}
     \begin{columns}[T]
-        \begin{column}{0.54\textwidth}
+        \begin{column}{0.6\textwidth}
             JSON maps onto two Python structures you already use:
             \begin{itemize}\small
                 \item a JSON \textbf{array} is a Python \textbf{list} --- ordered, indexed by position
@@ -132,7 +132,7 @@
             \bigskip
             {\footnotesize Created by Douglas Crockford in the early 2000s; the rise of AJAX made JSON the default API format by the 2010s.}
         \end{column}
-        \begin{column}{0.42\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/json_onion.png}\\
             {\scriptsize ``Peel the onion'': \texttt{type()}, then \texttt{.keys()}, one layer deeper each time.}
@@ -143,7 +143,7 @@
 
 \begin{frame}{One pipeline unifies the whole course}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
             Whether data starts as XML, JSON, HTML, or PDF text, the move into analysis is always the same:
 
             \medskip
@@ -157,7 +157,7 @@
             \medskip
             The source changes; the tag names change; \textbf{the pipeline stays the same}.
         \end{column}
-        \begin{column}{0.38\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{You reuse this pattern in\dots}
                 \footnotesize
                 \begin{itemize}\footnotesize
@@ -197,7 +197,7 @@ for m in members:
 
 \begin{frame}[fragile]{The two-place problem --- and the crash that guards it}
     \begin{columns}[T]
-        \begin{column}{0.54\textwidth}
+        \begin{column}{0.6\textwidth}
             A value is either \textbf{text} or an \textbf{attribute}:
 \begin{lstlisting}
 state = soup.find("state")
@@ -212,7 +212,7 @@ m.find("party").text
 m.find("party").text if m.find("party") else None
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.44\textwidth}
+        \begin{column}{0.35\textwidth}
             Working out \textit{which} of the two holds your value is half the parsing battle --- real XML uses both.
 
             \bigskip
@@ -246,7 +246,7 @@ for m in soup.find_all("member"):    # 441 members
 df = pd.DataFrame(records)   # find_all -> dicts -> DataFrame
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/house_xml_raw.png}\\
             {\scriptsize The Clerk's live \texttt{MemberData.xml}.}
@@ -275,7 +275,7 @@ df = pd.DataFrame(census)         # one dict per row, keys -> columns
 
 \begin{frame}[fragile]{JSON: peel the onion on a live API}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 import requests
 
@@ -292,7 +292,7 @@ highs = data["daily"]["temperature_2m_max"]  # a list
 data.get("elevation", "unknown")  # .get avoids KeyError
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/weather_forecast_plot.png}\\
             {\scriptsize Boulder's 7-day forecast, straight from the nested lists.}
@@ -303,7 +303,7 @@ data.get("elevation", "unknown")  # .get avoids KeyError
 
 \begin{frame}{Lab: work these in pairs, then show-and-tell}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             From the Chapter 4 notebook:
             \begin{enumerate}\small
                 \item \textbf{RSS feed} --- parse a news feed with the \texttt{"xml"} parser; pull title, link, pubDate $\rightarrow$ DataFrame
@@ -314,7 +314,7 @@ data.get("elevation", "unknown")  # .get avoids KeyError
                 \item[6.] \textcolor{tab-purple}{\textbf{5617}}: a datasheet-style critique of a public XML/JSON dataset (\textcite{gebru2021datasheets})
             \end{enumerate}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
                 \footnotesize Come ready to share:
                 \begin{itemize}\footnotesize
@@ -352,7 +352,7 @@ data.get("elevation", "unknown")  # .get avoids KeyError
                 \item Review two peers' PRs: kind, specific, actionable
             \end{enumerate}
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
@@ -374,7 +374,7 @@ data.get("elevation", "unknown")  # .get avoids KeyError
 
 \begin{frame}{What makes a good revision \& a good review}
     \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{block}{A strong PR}
                 \begin{itemize}\small
                     \item One focused change, clearly titled
@@ -385,7 +385,7 @@ data.get("elevation", "unknown")  # .get avoids KeyError
                 \end{itemize}
             \end{block}
         \end{column}
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{A strong review}
                 \begin{itemize}\small
                     \item Runs / reads the change, not just skims

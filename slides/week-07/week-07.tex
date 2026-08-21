@@ -22,7 +22,7 @@
 % -------------------------------------------------------------------------
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             The web is not permanent. This week we scrape the \textit{past} --- and measure how pages change over time.
 
             \bigskip
@@ -46,7 +46,7 @@
                 \item Propose \& peer-review pull requests improving Chapter 7
             \end{itemize}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Companion notebook}
                 \footnotesize \texttt{ch-07-archives.ipynb}
             \end{block}
@@ -63,7 +63,7 @@
 
 \begin{frame}{The web is not permanent}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
+        \begin{column}{0.6\textwidth}
             Pages change, disappear, and get redesigned constantly. A large fraction of URLs break within a few years --- \textbf{link rot}.
 
             \bigskip
@@ -78,7 +78,7 @@
 
             It is both a data source and \textit{counter-erosion infrastructure} --- a community-governed public resource (the book's ``post-API'' ownership theme).
         \end{column}
-        \begin{column}{0.38\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/wayback_calendar.png}\\
             {\scriptsize The Wayback calendar: every dot is a capture you can retrieve.}
@@ -89,7 +89,7 @@
 
 \begin{frame}{From snapshots to a longitudinal source}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             One old snapshot is a curiosity. \textbf{Comparing snapshots across time} is where the research value lives.
 
             \bigskip
@@ -105,7 +105,7 @@
 
             You are not just reading old pages --- you are measuring \textbf{institutional behavior over time}.
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/change_timeline.png}\\
             {\scriptsize A ``change timeline'' we build Wednesday: spikes mark major revisions.}
@@ -116,7 +116,7 @@
 
 \begin{frame}{Raw or wrapped? The \texttt{id\_} rule}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             A snapshot URL looks like:\\
             {\scriptsize\texttt{web.archive.org/web/\textbf{20000815052826}/http://cnn.com/}}
 
@@ -130,7 +130,7 @@
             {\scriptsize\texttt{.../20000815052826\textbf{id\_}/http://cnn.com/}}\\
             to get the \textbf{original, unmodified capture}. Raw doesn't render prettily --- but for measurement, raw is exactly what you want.
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/wrapped_vs_raw.png}\\
             {\scriptsize Wrapped (toolbar + rewritten links) vs.\ the \texttt{id\_} raw capture.}
@@ -202,7 +202,7 @@ stats = {"year": ts[:4], "num_links": len(soup.find_all("a")),
 \begin{frame}[fragile]{The whole history --- the CDX Server API}
     Availability finds \textit{one} snapshot; CDX enumerates \textit{all} of them. Two params filter server-side --- less data, less cleanup:
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 cdx = "https://web.archive.org/cdx/search/cdx"
 params = {"url": "facebook.com/terms",
@@ -217,7 +217,7 @@ df["timestamp"] = pd.to_datetime(
     df["timestamp"], format="%Y%m%d%H%M%S")
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/cdx_response.png}\\
             {\scriptsize Row 0 is the header; each later row is one distinct capture.}
@@ -269,7 +269,7 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
 
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
+        \begin{column}{0.6\textwidth}
             Work through the notebook exercises in pairs:
             \begin{enumerate}\small
                 \item Track a policy document (privacy, academic-integrity, agency FAQ) across $\geq 5$ time points; plot length
@@ -280,7 +280,7 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
                 \item[6.] \textcolor{tab-purple}{\textbf{5617}}: assess Wayback's limits (toolbar, capture bias, gaps) vs.\ \textcite{rogers2019doing}
             \end{enumerate}
         \end{column}
-        \begin{column}{0.34\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
                 \footnotesize Come ready to share:
                 \begin{itemize}\footnotesize
@@ -319,7 +319,7 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
                 \item Review two peers' PRs: kind, specific, actionable
             \end{enumerate}
         \end{column}
-        \begin{column}{0.36\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
@@ -341,7 +341,7 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
 
 \begin{frame}{What makes a good revision \& a good review}
     \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{block}{A strong PR}
                 \begin{itemize}\small
                     \item One focused change, clearly titled
@@ -352,7 +352,7 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
                 \end{itemize}
             \end{block}
         \end{column}
-        \begin{column}{0.48\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{block}{A strong review}
                 \begin{itemize}\small
                     \item Runs / reads the change, not just skims
