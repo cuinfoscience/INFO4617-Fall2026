@@ -10,7 +10,7 @@ than arriving without a working environment —
 | | What | Why |
 |---|---|---|
 | 1 | **Python, via Anaconda** | The language plus a curated scientific stack and the `conda` package manager |
-| 2 | **Git** | Version control — tracks every change and lets many people edit one project safely |
+| 2 | **GitHub Desktop or the `gh` CLI** | Get changes from your laptop into a pull request — no command-line `git` required |
 | 3 | **A free GitHub account** | Where the textbook lives and where you submit revisions |
 
 ---
@@ -81,18 +81,47 @@ norm we take seriously starting in Week 2.
 
 ---
 
-## 2 · Git
+## 2 · GitHub Desktop or the `gh` CLI
 
-Install Git from [git-scm.com/downloads](https://git-scm.com/downloads)
-(macOS: `xcode-select --install` also works; Windows: use Git for Windows,
-which includes Git Bash).
+This course works entirely through GitHub — cloning the textbook, making a
+change, opening a pull request — without ever typing a raw `git` command.
+Pick whichever fits how you work; either is fine for every assignment this
+semester.
 
-Then tell Git who you are — this is what gets recorded on every change you make:
+### Option A: GitHub Desktop (recommended if this is new to you)
+
+Download [GitHub Desktop](https://desktop.github.com) and sign in with your
+GitHub account. That's the whole install — it bundles everything it needs, no
+separate download.
+
+Desktop gives you a button for everything you'll do this semester: **Clone** a
+repository, create a **branch**, **commit** changes with a message, **push**,
+and **Create Pull Request** — each one a click, not a command.
+
+### Option B: the `gh` CLI (if you're comfortable in a terminal)
+
+Install [`gh`](https://cli.github.com), then authenticate once:
+
+```bash
+gh auth login    # follow the prompts; browser sign-in is easiest
+```
+
+`gh` needs Git itself present underneath (macOS/Linux usually already have it;
+Windows: install [Git for Windows](https://git-scm.com/downloads) alongside
+`gh`) — but you'll interact through `gh`'s commands, not raw `git` ones:
+
+```bash
+gh repo clone cuinfoscience/Web-Data-Science-Book
+gh pr create                        # from a branch with your changes committed
+gh pr view --web                    # open your PR in the browser
+```
+
+One-time only: tell Git who you are, so your commits are attributed to you —
+this is the one identity detail `gh` doesn't set for you:
 
 ```bash
 git config --global user.name "Your Name"
 git config --global user.email "you@colorado.edu"
-git --version                      # confirm it's installed
 ```
 
 ---
