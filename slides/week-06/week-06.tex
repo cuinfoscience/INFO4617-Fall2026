@@ -24,21 +24,21 @@
         \begin{column}{0.62\textwidth}
             We turn HTML --- the language of web pages --- into data you can analyze.
 
-            \vspace{1em}
+            \bigskip
 
             \dayband{Monday}{Concepts \& notebook intro}
             \begin{itemize}\small
                 \item From HTML to a DataFrame; three scraping strategies
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Wednesday}{Notebook lab}
             \begin{itemize}\small
                 \item Work through and share the Chapter 6 notebook: box office, Wikipedia, and the Oscars
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Friday}{Textbook revisions}
             \begin{itemize}\small
@@ -65,15 +65,15 @@
         \begin{column}{0.6\textwidth}
             The goal of scraping: convert one structured format --- HTML --- into another suited to analysis (a pandas DataFrame, CSV, or JSON).
 
-            \vspace{1em}
+            \bigskip
 
             HTML and XML are \textbf{siblings} (both descend from SGML), so your \texttt{BeautifulSoup} skills transfer directly.
 
-            \vspace{1em}
+            \bigskip
 
             But browsers \textit{tolerate} malformed markup --- unclosed tags, missing quotes, bad nesting --- so real HTML is far messier than clean XML.
 
-            \vspace{1em}
+            \bigskip
 
             The core skill this week: \textbf{cutting through the noise} of navigation bars, ads, tracking scripts, and nested \texttt{<div>}s to reach the data.
         \end{column}
@@ -91,13 +91,13 @@
         \begin{column}{0.58\textwidth}
         \begin{enumerate}
             \item \textbf{Manual table parsing} --- walk \texttt{<table>} $\rightarrow$ \texttt{<tr>} $\rightarrow$ \texttt{<td>} by hand. Most control, most code.
-            \vspace{0.5em}
+            \medskip
             \item \texttt{\textbf{pandas.read\_html()}} --- one call grabs every table on a page. Least code, least control.
-            \vspace{0.5em}
+            \medskip
             \item \textbf{Custom parser} --- navigate the DOM tree for data that isn't in a table (\texttt{<div>}s + CSS classes).
         \end{enumerate}
 
-        \vspace{1em}
+        \bigskip
 
         Choose the \textit{simplest} strategy that fits the page --- and be ready to fall back to a more general one.
         \end{column}
@@ -114,7 +114,7 @@
         \begin{column}{0.5\textwidth}
             Every scrape starts in the browser's developer tools, not in Python.
 
-            \vspace{1em}
+            \bigskip
 
             \begin{itemize}
                 \item Right-click the data $\rightarrow$ \textbf{Inspect}
@@ -123,7 +123,7 @@
                 \item ``Copy selector'' gives you a CSS path to paste into \texttt{select()}
             \end{itemize}
 
-            \vspace{1em}
+            \bigskip
 
             The page is a \textbf{hypothesis}: inspect, guess an anchor, verify the count, refine.
         \end{column}
@@ -145,7 +145,7 @@
         \item \textbf{Reuse} --- abstract a working parser into a function; rate-limit; handle errors
     \end{itemize}
 
-    \vspace{1em}
+    \bigskip
 
     \begin{alertblock}{Connecting to Ch.~2 (Ethics)}
         Before pointing a loop at any site, check its \texttt{robots.txt} and Terms of Service, and reuse \texttt{responsible\_get()} from the ethics chapter. Politeness is not optional.
@@ -191,11 +191,11 @@ values = [c.get_text(strip=True)
         \begin{column}{0.44\textwidth}
             A blank header cell (the ``previous rank'' column) is easy to lose.
 
-            \vspace{0.75em}
+            \bigskip
 
             Split-on-newline drops it --- and every value after shifts one column left, so \textbf{Movie} quietly fills with distributor names.
 
-            \vspace{0.75em}
+            \bigskip
 
             The extra line of code buys correctness.
         \end{column}
@@ -306,7 +306,7 @@ except requests.RequestException as e:
         \begin{column}{0.6\textwidth}
             Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-06-static-pages.qmd} and reviews a classmate's.
 
-            \vspace{1em}
+            \bigskip
 
             The workflow (from Week 1):
             \begin{enumerate}\small
@@ -361,7 +361,7 @@ except requests.RequestException as e:
             \end{block}
         \end{column}
     \end{columns}
-    \vspace{0.5em}
+    \medskip
     \centering\small Next week: \textbf{Archived web pages} --- scraping the past with the Wayback Machine.
 \end{frame}
 
@@ -374,7 +374,7 @@ except requests.RequestException as e:
         \item Abstract into functions, rate-limit in the loop, and code defensively.
         \item Pages change: the durable skill is \textbf{inspect, hypothesize, verify} --- not memorized class names.
     \end{enumerate}
-    \vspace{1em}
+    \bigskip
     \bottomcite{Reading: Textbook Ch.~6. Related: \textcite{mitchell2018web}; \textcite{vandenbroucke2018practical}.}
 \end{frame}
 

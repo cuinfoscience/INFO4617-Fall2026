@@ -24,21 +24,21 @@
         \begin{column}{0.62\textwidth}
             We query the data the government is \textit{required} to publish --- and combine it into stories no single dataset can tell.
 
-            \vspace{1em}
+            \bigskip
 
             \dayband{Monday}{Concepts \& API keys}
             \begin{itemize}\small
                 \item Why government data is open; managing keys like a professional
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Wednesday}{Notebook lab}
             \begin{itemize}\small
                 \item Query the Census, FRED, and FEC --- then join two of them
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Friday}{Textbook revisions}
             \begin{itemize}\small
@@ -70,7 +70,7 @@
                 \item The \textbf{FEC} must disclose campaign-finance records.
             \end{itemize}
 
-            \vspace{0.75em}
+            \bigskip
 
             They embody the \textbf{openness} value from Ch.~3, \textit{The Post-API Age}: public data, freely accessible by mandate rather than platform goodwill.
         \end{column}
@@ -108,7 +108,7 @@
         \begin{column}{0.56\textwidth}
             A \textbf{key} identifies your app, tracks usage, and enforces rate limits. \textbf{Never hardcode one} --- share the notebook and the key goes with it.
 
-            \vspace{0.75em}
+            \bigskip
 
             Two safe patterns, both ending at the same variables:
             \begin{itemize}\small
@@ -116,7 +116,7 @@
                 \item \textbf{A JSON config} --- \texttt{api\_keys.json}, added to \texttt{.gitignore} \textit{before your first commit}.
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             Because both yield \texttt{census\_key} / \texttt{fred\_key} / \texttt{fec\_key}, downstream code is identical.
         \end{column}
@@ -137,7 +137,7 @@
         \item \textbf{Integrate} --- join Census housing vintage with FRED mortgage rates in one figure.
     \end{itemize}
 
-    \vspace{0.75em}
+    \bigskip
 
     \begin{alertblock}{Public interest (Ch.~3)}
         \footnotesize Open data is a mandate, not a guarantee. Datasets get withdrawn and APIs deprecated; political pressure can shape what is collected and how. The \textbf{fragility} of public data infrastructure is itself a public-interest concern.
@@ -313,7 +313,7 @@ df_rate = pd.DataFrame(rate["observations"])
         \begin{column}{0.6\textwidth}
             Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-11-government.qmd} and reviews a classmate's.
 
-            \vspace{1em}
+            \bigskip
 
             The workflow (from Week 1):
             \begin{enumerate}\small
@@ -368,7 +368,7 @@ df_rate = pd.DataFrame(rate["observations"])
             \end{block}
         \end{column}
     \end{columns}
-    \vspace{0.5em}
+    \medskip
     \centering\small Next week: \textbf{Social \& media platform APIs} --- OAuth, Mastodon, and Bluesky in the post-API age.
 \end{frame}
 
@@ -381,7 +381,7 @@ df_rate = pd.DataFrame(rate["observations"])
         \item \textbf{Combine sources} for stories no single dataset tells: Census says \textit{what}, FRED says \textit{why}.
         \item Mind the \textbf{institutional context} --- using open data well is a form of civic engagement.
     \end{enumerate}
-    \vspace{1em}
+    \bigskip
     \bottomcite{Reading: Textbook Ch.~11. Related: \textcite{salganik2018bit}; \textcite{munzert2014automated}.}
 \end{frame}
 

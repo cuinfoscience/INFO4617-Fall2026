@@ -24,21 +24,21 @@
         \begin{column}{0.62\textwidth}
             An LLM is just another API --- authenticate, send a request, parse the response. We use it to turn the messy text of Chapters~6--9 into structured data.
 
-            \vspace{1em}
+            \bigskip
 
             \dayband{Monday}{Concepts \& notebook intro}
             \begin{itemize}\small
                 \item Chat completions, prompting for structure, embeddings, and the reproducibility catch
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Wednesday}{Notebook lab}
             \begin{itemize}\small
                 \item Classify, extract, and cluster Colorado bills across two providers
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             \dayband{Friday}{Textbook revisions}
             \begin{itemize}\small
@@ -65,11 +65,11 @@
         \begin{column}{0.58\textwidth}
             Large language models are a new category of tool for web data science: they transform the \textbf{unstructured text} you scraped in Chapters~6--9 (web pages, PDFs, archived documents) into structured, analyzable data.
 
-            \vspace{0.8em}
+            \bigskip
 
             Typical jobs: sentiment analysis, entity extraction, content coding, and summarization --- \textbf{at scale}.
 
-            \vspace{0.8em}
+            \bigskip
 
             The same three moves you already know apply: \textbf{authenticate}, \textbf{construct a request}, \textbf{parse the response}.
         \end{column}
@@ -97,11 +97,11 @@
                 \item \texttt{assistant} --- lets you seed prior turns
             \end{itemize}
 
-            \vspace{0.6em}
+            \medskip
 
             You get back a list of choices; the text lives at\\ \texttt{response.choices[0].message.content}.
 
-            \vspace{0.8em}
+            \bigskip
 
             Two providers, near-identical shape: OpenAI's \texttt{chat.completions.create} and Anthropic's \texttt{messages.create} (where \texttt{system} is its own argument).
         \end{column}
@@ -133,7 +133,7 @@
             \begin{block}{Let the API enforce the schema}
                 \footnotesize \textbf{Structured Outputs} accept a JSON Schema and \textit{guarantee} the response conforms --- no more brittle parsing. Lighter-weight JSON mode guarantees valid JSON without a fixed schema; Anthropic gets there via \textbf{tool use}.
             \end{block}
-            \vspace{0.3em}
+            \smallskip
             {\footnotesize Beyond extraction, \textbf{embeddings} turn text into vectors so you can measure \textit{semantic} similarity --- more on Wednesday.}
         \end{column}
     \end{columns}
@@ -150,11 +150,11 @@
                 \item Retired models make exact replication \textbf{impossible}
             \end{itemize}
 
-            \vspace{0.5em}
+            \medskip
 
             Send the same prompt to two models and they mostly agree --- but \textbf{disagree at the boundaries} (is an EV-incentive bill \texttt{environment} or \texttt{transportation}?). That is genuine ambiguity, not a bug.
 
-            \vspace{0.4em}
+            \medskip
 
             \textbf{Treat the model as a measurement instrument} --- and calibrate it against human judgment.
         \end{column}
@@ -354,7 +354,7 @@ print(f"Estimated cost: ${cost:.4f}")
         \begin{column}{0.6\textwidth}
             Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-13-ai-apis.qmd} and reviews a classmate's.
 
-            \vspace{1em}
+            \bigskip
 
             The workflow (from Week 1):
             \begin{enumerate}\small
@@ -364,7 +364,7 @@ print(f"Estimated cost: ${cost:.4f}")
                 \item Review two peers' PRs: kind, specific, actionable
             \end{enumerate}
 
-            \vspace{0.6em}
+            \medskip
 
             This chapter is \textit{about} AI --- so if an LLM helped you revise it, that is exactly the kind of use the book asks you to \textbf{disclose}.
         \end{column}
@@ -417,12 +417,12 @@ print(f"Estimated cost: ${cost:.4f}")
                     \item \textbf{What oversight?} how you tested \& verified the output
                     \item \textbf{What limitations?} where you are unsure
                 \end{enumerate}
-                \vspace{0.2em}
+                \smallskip
                 {\scriptsize Disclosure is about \textit{transparency, not permission} --- and you remain fully accountable for what you submit.}
             \end{alertblock}
         \end{column}
     \end{columns}
-    \vspace{0.3em}
+    \smallskip
     \centering\small Next week: \textbf{Automating data collection} --- schedulers, pipelines, and keeping a scraper alive.
 \end{frame}
 
@@ -435,7 +435,7 @@ print(f"Estimated cost: ${cost:.4f}")
         \item Non-determinism, cost, and reproducibility are \textbf{real}: estimate spend, pin dated model versions, and log every call.
         \item Treat the model as a \textbf{measurement instrument} --- validate against human judgment and \textbf{disclose} how AI was used.
     \end{enumerate}
-    \vspace{1em}
+    \bigskip
     \bottomcite{Reading: Textbook Ch.~13. Related: \textcite{ziems2024can}; OpenAI \& Anthropic API docs. Disclosure: the AI Coauthorship appendix.}
 \end{frame}
 
