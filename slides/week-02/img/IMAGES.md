@@ -9,3 +9,4 @@ These are auto-generated gray **placeholders** so the deck compiles. Replace eac
 | `robots_txt_browser.png` | 1200x820 | Screenshot: Wikipedia robots.txt opened in a browser with User-agent, Allow, Disallow, and Crawl-delay directives highlighted |
 | `user_agent_devtools.png` | 1200x760 | Screenshot: browser dev-tools Network tab showing a request outgoing headers, with a custom User-Agent string that identifies the researcher and contact email |
 | `pr_review.png` | 1300x760 | Screenshot: a GitHub pull-request Files-changed view with an inline review comment on ch-02-ethics.qmd |
+| `github_issue.png` | 1300x820 | Screenshot: the GitHub "New issue" form on the Web-Data-Science-Book repo, filled in with the Title/Location/Problem/Why/Proposal skeleton |

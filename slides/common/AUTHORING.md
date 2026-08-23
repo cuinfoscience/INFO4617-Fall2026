@@ -24,7 +24,7 @@ their structure, preamble usage, and style exactly.
 4. `\section{Monday · Concepts}` — 3–4 frames: motivation + the chapter's core concepts, grounded in its conceptual prose. Note cross-references the chapter makes to other chapters.
 5. `\section{Wednesday · Notebook Lab}` — 4–6 frames:
    - condensed **real code** from the chapter as `[fragile]` frames with `lstlisting` (trim each snippet to ≤ ~12 lines; keep it runnable-looking and faithful);
-   - a frame listing the chapter's **Exercises** to work in pairs (mark any "graduate / INFO 5617" exercise with `\textcolor{tab-purple}`);
+   - a frame listing the chapter's **Exercises** to work in pairs (mark any "graduate / INFO 5617" exercise with a bold `\textbf{5617}` label);
    - a **Show-and-Tell** prompt (bring a bug / interesting data / a research provocation — the instructor's recurring habit);
    - one `[standout]` frame with a memorable takeaway from the chapter.
 6. `\section{Friday · Textbook Revisions}` — 3 frames: the PR + peer-review workflow (reuse week-06's), a **chapter-specific "revision menu"** (concrete targets pulled from *this* chapter's callouts / "Common Issues" / "Further Reading" / thin exercises), and "what makes a good PR / good review" (reuse week-06's). End the last frame with a one-line teaser of next week.
@@ -76,6 +76,12 @@ clean. Never leave a broken deck.
   (left/right) unless a frame genuinely needs a different ratio — e.g. a three-column
   comparison, or two columns that must stay visually symmetric.
 - Use `\texttt{}` for inline code, package, and file names.
+- **Body text is black and white.** Never colorize prose — no
+  `\textcolor{tab-blue}{\textbf{...}}` labels, no color-coded key terms, no
+  colored block titles. Use `\textbf{}` and `\textit{}` for emphasis and let
+  the layout carry the rest. (The `tab-*` colors remain in the palette for
+  the theme's own chrome and for `lstlisting` syntax highlighting — not for
+  prose.)
 - Escape `_`, `#`, `%`, `&`, `$` in prose; inside `lstlisting` they are literal.
 - **Matplotlib: object-oriented interface only.** Any plotting code shown in a
   deck uses `fig, ax = plt.subplots()` and calls methods on `ax`

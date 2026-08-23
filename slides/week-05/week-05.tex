@@ -134,11 +134,11 @@
         \begin{column}{0.6\textwidth}
             \textbf{HTTP} structures the conversation: a request carries a method (GET, POST, \dots) and headers; a response carries a \textbf{status code}:
             \begin{itemize}\small
-                \item \textcolor{tab-green}{\textbf{200}} OK --- the body has your data
-                \item \textcolor{tab-blue}{\textbf{301/302}} redirect --- follow \texttt{Location}
-                \item \textcolor{tab-red}{\textbf{403}} forbidden --- often a missing \texttt{User-Agent}
-                \item \textcolor{tab-orange}{\textbf{404}} not found \quad \textcolor{tab-red}{\textbf{429}} slow down
-                \item \textcolor{tab-purple}{\textbf{500}} the server's problem, not yours
+                \item \textbf{200} OK --- the body has your data
+                \item \textbf{301/302} redirect --- follow \texttt{Location}
+                \item \textbf{403} forbidden --- often a missing \texttt{User-Agent}
+                \item \textbf{404} not found \quad \textbf{429} slow down
+                \item \textbf{500} the server's problem, not yours
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
@@ -291,7 +291,7 @@ requests.get(base, params={"titles": "University of Colorado Boulder"})
                 \item Resolve five related domains with \texttt{dns.resolver} --- do any share an IP address?
                 \item Plot pageviews for three related articles; hypothesize what caused the spikes
                 \item Write \texttt{diagnose\_url()} and test it on a 200, a 404, a redirect, an API, and a blocked site
-                \item \textcolor{tab-purple}{\textbf{5617:}} profile a site's delivery infrastructure --- redirect chain, CDN headers, traceroute hops --- in a 500-word memo
+                \item \textbf{5617:} profile a site's delivery infrastructure --- redirect chain, CDN headers, traceroute hops --- in a 500-word memo
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
@@ -341,7 +341,7 @@ requests.get(base, params={"titles": "University of Colorado Boulder"})
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
     \end{columns}
-    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (30\%).}
+    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (15\%).}
 \end{frame}
 
 \begin{frame}{A revision menu for Chapter 5}

@@ -152,7 +152,7 @@ a revision yet — you have a hunch. Go back to the chapter and reproduce it.
 
 ## How issues and pull requests are graded
 
-Textbook Revisions are **30% of the course grade**, scored weekly out of **10
+Textbook Revisions are **15% of the course grade**, scored weekly out of **10
 points**. The rubric follows the skeleton above, so a proposal that fills in
 every field scores well by construction.
 
@@ -194,14 +194,13 @@ proposal without asking you a single follow-up question.
 
 ## How this maps onto the semester
 
-- **Week 1** — you find and describe your first *issue*. No git required:
-  browse the book, find one real problem, describe it with this skeleton.
-  Week 1 packs a textbook intro, a GitHub intro, and this activity into one
-  session — if you don't get to actually filing it in class, finish it as
-  homework and have it posted before Week 2's Monday session.
-- **Weeks 2–14** — you open *pull requests* and review two classmates'.
+- **Weeks 1–2** — you find, describe, and file your first *issue*. No git
+  required: browse the book, find one real problem, describe it with this
+  skeleton. Week 1 is a single short session, so **Week 2's Friday** is where
+  everyone gets GitHub working and files that first issue for credit.
+- **Weeks 3–14** — you open *pull requests* and review two classmates'.
 - Each week's lecture deck ends with a **revision menu**: the same seven types,
   aimed at that specific chapter's known thin spots.
 
-Contributions and reviews together are **30%** of your grade. The target for the
+Contributions and reviews together are **15%** of your grade. The target for the
 semester is posted on Canvas.
