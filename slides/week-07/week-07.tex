@@ -68,7 +68,7 @@
 
             \bigskip
 
-            This is a research problem: how do you study something that might not be there tomorrow, or measure how it \textit{changed} when only today's version is visible?
+            This is a research problem. How do you study something that can disappear tomorrow? How do you measure a \textit{change} when you can see only today's version?
 
             \bigskip
 
@@ -270,23 +270,23 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Work through the notebook exercises in pairs:
+            Work in pairs. Do these exercises from the notebook:
             \begin{enumerate}\small
-                \item Track a policy document (privacy, academic-integrity, agency FAQ) across $\geq 5$ time points; plot length
-                \item CDX: compare capture frequency \& page size for two rival organizations
-                \item Pairwise similarity across \textit{all} versions $\rightarrow$ a heatmap of turning points
-                \item Archival history of a government site --- gaps? coverage? size drift?
-                \item Then-and-now: earliest vs.\ latest snapshot, 200-word diff analysis
-                \item[6.] \textbf{5617}: assess Wayback's limits (toolbar, capture bias, gaps) vs.\ \textcite{rogers2019doing}
+                \item Select a policy document. Get 5 or more versions from different dates. Plot the length of each version.
+                \item Use the CDX API. Compare the capture frequency and the page size of two competing organizations.
+                \item Calculate the similarity between all pairs of versions. Make a heatmap. Identify the points of change.
+                \item Examine the archive history of a government site. Report the gaps, the coverage, and the change in size.
+                \item Compare the earliest snapshot with the most recent snapshot. Write 200 words about the differences.
+                \item[6.] \textbf{5617}: assess the limits of the Wayback Machine. Include the toolbar, the capture bias, and the gaps. Compare your results with \textcite{rogers2019doing}
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
-                \footnotesize Come ready to share:
+                \footnotesize Bring one of these to class:
                 \begin{itemize}\footnotesize
-                    \item a challenging bug
+                    \item a bug that you could not solve
                     \item a change you found in the archived past
-                    \item a provocation for a research design
+                    \item a question for a research design
                 \end{itemize}
             \end{block}
         \end{column}

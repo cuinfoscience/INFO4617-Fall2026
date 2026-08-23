@@ -76,6 +76,19 @@ clean. Never leave a broken deck.
   (left/right) unless a frame genuinely needs a different ratio — e.g. a three-column
   comparison, or two columns that must stay visually symmetric.
 - Use `\texttt{}` for inline code, package, and file names.
+- **Write procedures in Simplified Technical English (ASD-STE100).** Anything a
+  student *executes* — lab exercises, in-class activities, setup steps, the
+  Friday workflow — follows STE: start each step with an imperative verb, one
+  instruction per sentence, 20 words or fewer, active voice, no `-ing` forms,
+  no idioms, and no dashes or colons standing in for omitted words. Write
+  "Get a Wikipedia table with `read_html`. Then make a visualization." — not
+  "Wikipedia table via `read_html` + a visualization."
+- **Explanatory prose stays plain, not STE.** Concept frames keep the teaching
+  voice: rhetorical questions, deliberate metaphor, and the course's real
+  vocabulary (*enclosure*, *proportionality*, *authentication*) are all fine —
+  STE's controlled dictionary has no words for this subject. Apply only its
+  clarity rules there: keep sentences under 25 words, prefer active voice, and
+  cut idioms a non-native reader would miss.
 - **Body text is black and white.** Never colorize prose — no
   `\textcolor{tab-blue}{\textbf{...}}` labels, no color-coded key terms, no
   colored block titles. Use `\textbf{}` and `\textit{}` for emphasis and let

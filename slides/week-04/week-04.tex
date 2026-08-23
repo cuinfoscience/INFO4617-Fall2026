@@ -304,23 +304,23 @@ data.get("elevation", "unknown")  # .get avoids KeyError
 \begin{frame}{Lab: work these in pairs, then show-and-tell}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            From the Chapter 4 notebook:
+            Work in pairs. Do these exercises from the Chapter 4 notebook:
             \begin{enumerate}\small
-                \item \textbf{RSS feed} --- parse a news feed with the \texttt{"xml"} parser; pull title, link, pubDate $\rightarrow$ DataFrame
-                \item \textbf{Nested JSON} --- Open-Meteo dates + max temps $\rightarrow$ DataFrame
-                \item \textbf{XML vs.\ JSON} --- same data, both formats: which parses easier? which carries more metadata?
-                \item \textbf{Reusable} --- write \texttt{xml\_to\_dataframe(soup, tag, fields)}; test on Congress, then an RSS feed
-                \item \textbf{Weather} --- plot high \& low temperatures; flag days that drop below freezing
-                \item[6.] \textbf{5617}: a datasheet-style critique of a public XML/JSON dataset (\textcite{gebru2021datasheets})
+                \item \textbf{RSS feed} --- parse a news feed with the \texttt{"xml"} parser. Extract the title, the link, and the date. Put them in a DataFrame.
+                \item \textbf{Nested JSON} --- get the dates and the maximum temperatures from Open-Meteo. Put them in a DataFrame.
+                \item \textbf{XML and JSON} --- get the same data in both formats. Report which format is easier to parse. Report which format has more metadata.
+                \item \textbf{Reusable} --- write \texttt{xml\_to\_dataframe(soup, tag, fields)}. Test it on the Congress data. Then test it on an RSS feed.
+                \item \textbf{Weather} --- plot the high and low temperatures. Mark the days below freezing.
+                \item[6.] \textbf{5617}: write a critique of a public XML or JSON dataset. Use the datasheet format of \textcite{gebru2021datasheets}
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
-                \footnotesize Come ready to share:
+                \footnotesize Bring one of these to class:
                 \begin{itemize}\footnotesize
-                    \item a challenging bug
-                    \item interesting data you pulled
-                    \item a provocation for a research design
+                    \item a bug that you could not solve
+                    \item data that you collected and find interesting
+                    \item a question for a research design
                 \end{itemize}
             \end{block}
         \end{column}

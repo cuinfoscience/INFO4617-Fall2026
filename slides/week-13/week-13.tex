@@ -63,7 +63,7 @@
 \begin{frame}{LLMs are another API to learn}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Large language models are a new category of tool for web data science: they transform the \textbf{unstructured text} you scraped in Chapters~6--9 (web pages, PDFs, archived documents) into structured, analyzable data.
+            Large language models are a new category of tool for web data science. In Chapters~6--9 you collected \textbf{unstructured text} from web pages, PDFs, and archived documents. These models turn that text into structured data that you can analyze.
 
             \bigskip
 
@@ -315,22 +315,22 @@ print(f"Estimated cost: ${cost:.4f}")
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Work through the notebook exercises in pairs:
+            Work in pairs. Do these exercises from the notebook:
             \begin{enumerate}\small
-                \item Structured extraction from 10+ scraped documents --- design, test, assess quality
-                \item Embedding analysis: cluster 20+ documents by cosine similarity; do clusters match intuition?
-                \item Human--AI agreement: hand-code 20, then have an LLM classify; where does it disagree?
-                \item Cross-model comparison: GPT-4o-mini \textit{vs.}\ Claude on 20 hand-coded samples
-                \item Hierarchical clustering: dendrogram of 30 Wikipedia titles across three topics
-                \item[6.] \textbf{5617}: a validation study \textit{vs.}\ \textcite{ziems2024can} --- 50 items, 25 hand-coded, report Cohen's $\kappa$
+                \item Extract structured data from 10 or more documents that you collected. Design the method, test it, and assess the quality.
+                \item Cluster 20 or more documents by cosine similarity. Report if the clusters agree with your expectation.
+                \item Code 20 items manually. Then let a language model classify them. Report the items where the two results disagree.
+                \item Compare two models on 20 items that you coded manually.
+                \item Make a dendrogram of 30 Wikipedia titles from three topics.
+                \item[6.] \textbf{5617}: do a validation study. Use 50 items and code 25 of them manually. Report Cohen's $\kappa$. Compare your result with \textcite{ziems2024can}
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
-                \footnotesize Come ready to share:
+                \footnotesize Bring one of these to class:
                 \begin{itemize}\footnotesize
                     \item a prompt that surprised you (good or bad)
-                    \item interesting extracted data
+                    \item data that you extracted and find interesting
                     \item a research provocation about LLMs as instruments
                 \end{itemize}
             \end{block}
@@ -366,7 +366,7 @@ print(f"Estimated cost: ${cost:.4f}")
 
             \medskip
 
-            This chapter is \textit{about} AI --- so if an LLM helped you revise it, that is exactly the kind of use the book asks you to \textbf{disclose}.
+            This chapter is \textit{about} AI. If a language model helped you to revise it, \textbf{disclose} that help. The book asks for this disclosure.
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering

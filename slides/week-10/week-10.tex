@@ -90,7 +90,7 @@
 \begin{frame}{What is an API?}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            An \textbf{API} (Application Programming Interface) is a \textbf{contract}: it specifies what you may request, what parameters you may pass, and what format the response will take.
+            An \textbf{API} (Application Programming Interface) is a \textbf{contract}. It specifies what you can request. It specifies which parameters you can send. It also specifies the format of the response.
 
             \bigskip
 
@@ -102,7 +102,7 @@
 
             \bigskip
 
-            The tradeoff: an API only exposes what its operator \textit{chooses} to. You cannot query a missing field, exceed the rate limits, or count on it forever --- the ``post-API age'' (later this module) is a graveyard of APIs that were restricted, repriced, or shut down.
+            The tradeoff: an API only exposes what its operator \textit{chooses} to. You cannot request a field that the API does not include. You cannot exceed the rate limits. You cannot rely on the API forever. The ``post-API age'' later in this module lists many APIs that operators restricted, repriced, or shut down.
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
@@ -291,23 +291,23 @@ for r in data["query"]["search"]:
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Work through the chapter's exercises in pairs:
+            Work in pairs. Do these exercises from the chapter:
             \begin{enumerate}\small
-                \item Compare revision histories of two related articles (unique editors, edits-per-editor, monthly activity)
-                \item Detect events: daily pageviews for five articles --- did they spike together or separately?
-                \item Link network: overlap of outgoing wikilinks across three related articles
-                \item Raw API practice: build a request for a new endpoint (\texttt{extlinks}, \texttt{recentchanges}, \texttt{redirects}) from the docs
-                \item Editor network: top-20 editors of an article, then what \textit{else} they edit
-                \item[6.] \textbf{5617}: reproduce a measure from \textcite{mesgari2015sum} --- e.g.\ a Gini coefficient of edits per editor
+                \item Compare the revision histories of two related articles. Report the unique editors, the edits for each editor, and the monthly activity.
+                \item Get the daily pageviews of five articles. Report if the spikes occur together or separately.
+                \item Find the outgoing wikilinks of three related articles. Report the links that they share.
+                \item Read the API documentation. Write a request for a new endpoint such as \texttt{extlinks} or \texttt{recentchanges}.
+                \item Find the 20 most frequent editors of an article. Then find the other articles that they edit.
+                \item[6.] \textbf{5617}: reproduce one measure from \textcite{mesgari2015sum}. For example, calculate a Gini coefficient of the edits for each editor
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
-                \footnotesize Come ready to share:
+                \footnotesize Bring one of these to class:
                 \begin{itemize}\footnotesize
-                    \item a challenging bug
-                    \item interesting data you pulled
-                    \item a provocation for a research design
+                    \item a bug that you could not solve
+                    \item data that you collected and find interesting
+                    \item a question for a research design
                 \end{itemize}
             \end{block}
         \end{column}

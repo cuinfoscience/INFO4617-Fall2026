@@ -134,7 +134,7 @@
 \begin{frame}{Two events that shaped everything after}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \textbf{Aaron Swartz (2011--2013).} Swartz used MIT's network to bulk-download academic articles from JSTOR. Federal prosecutors charged him under the CFAA --- eleven counts, decades of theoretical exposure --- on a theory that violating a terms-of-use agreement was ``unauthorized access.'' He died by suicide in 2013, at 26.
+            \textbf{Aaron Swartz (2011--2013).} Swartz used MIT's network to bulk-download academic articles from JSTOR. Federal prosecutors charged him under the CFAA with eleven counts. Together they carried decades of theoretical exposure. The prosecutors argued that a violation of a terms-of-use agreement was ``unauthorized access.'' He died by suicide in 2013, at 26.
 
             \medskip
 
@@ -213,7 +213,7 @@
 \begin{frame}{\textit{Sandvig v.\ Barr} (2020)}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \textbf{The facts.} Researchers wanted to run \textbf{audit studies} of algorithmic discrimination --- creating test profiles on housing and employment sites to see whether the algorithms treated them differently by race. Doing that violates those sites' Terms of Service. Fearing CFAA prosecution, they sued \textit{first}.
+            \textbf{The facts.} Researchers wanted to run \textbf{audit studies} of algorithmic discrimination. They planned to make test profiles on housing and employment sites. The profiles would show if the algorithms treated people differently by race. This method violates the Terms of Service of those sites. The researchers feared prosecution under the CFAA, so they sued \textit{first}.
 
             \medskip
 
@@ -287,7 +287,7 @@
 \begin{frame}{The AI front: \textit{NYT v.\ OpenAI}}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \textit{The New York Times v.\ OpenAI and Microsoft} (filed 2023), and a wave of similar suits, ask a question none of the earlier cases did: is scraping copyrighted content to \textbf{train a model} infringement, or fair use?
+            \textit{The New York Times v.\ OpenAI and Microsoft} (filed 2023) asks a question that no earlier case asked. Many similar suits ask it too. Is it infringement to collect copyrighted content and \textbf{train a model} on it? Or is it fair use?
 
             \medskip
 
@@ -314,7 +314,7 @@
 \begin{frame}{State privacy law reaches you}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            The U.S.\ has no comprehensive federal privacy law, so states filled the gap. California's \textbf{CCPA/CPRA} came first; by 2026 more than a dozen states have comprehensive statutes --- including the \textbf{Colorado Privacy Act}, which covers data about Colorado residents.
+            The U.S.\ has no comprehensive federal privacy law, so states filled the gap. California wrote the \textbf{CCPA/CPRA} first. By 2026 more than a dozen states have comprehensive statutes. They include the \textbf{Colorado Privacy Act}, which covers data about Colorado residents.
 
             \medskip
 
@@ -405,19 +405,19 @@
 \begin{frame}{Activity: audit a platform you use}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \textbf{Eight minutes.} Pick a platform \textit{you personally use} --- and open either its Terms of Service or its privacy policy.
+            \textbf{Eight minutes.} Select a platform that you use. Open its Terms of Service or its privacy policy.
 
             \medskip
 
             \begin{enumerate}
-                \item Run the keyword search from the last slide.
+                \item Search the document for the keywords on the last slide.
                 \item Answer the four questions.
-                \item Find \textbf{one clause that surprised you}.
+                \item Find one clause that surprised you.
             \end{enumerate}
 
             \medskip
 
-            \textbf{Come back ready to say:} would this platform permit the data collection you want to do for this class --- and how confident are you that you actually know?
+            Then report two things. First, does this platform permit the data collection that you plan for this class? Second, how sure are you?
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{alertblock}{Public institutions have terms too}
@@ -435,7 +435,7 @@
 \begin{frame}{Discussion: four dispatches from the scraping wars}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \textbf{Ten minutes: four minutes in groups, six reporting back.} One article per group:
+            \textbf{Ten minutes. Four minutes in groups, then six minutes for reports.} Each group takes one article:
             \begin{enumerate}\small
                 \item \textbf{The terms move} --- \textcite{tan_terms_2024}, on ToS rewritten to permit AI training
                 \item \textbf{The web pushes back} --- \textcite{koebler_backlash_2024}, on measurable mass blocking
@@ -501,7 +501,7 @@
 
             \medskip
 
-            You will fetch and compare \texttt{robots.txt} across a spread of real sites, then build the \texttt{responsible\_get()} function you will reuse for the rest of the semester.
+            You will get the \texttt{robots.txt} file of many real sites and compare them. Then you will build the \texttt{responsible\_get()} function. You will use that function for the rest of the semester.
 
             \medskip
 
@@ -559,7 +559,7 @@ for name, url in sites.items():
             \textbf{Wikipedia} --- permissive where it matters (openness is the mission; data flows through its API + dumps). \textbf{Reddit} --- tolerates access within limits. \textbf{NY Times} --- restrictive; the content is a commercial product. Reading it tells you \textit{what kind of organization} you're dealing with.
 
             \medskip
-            Two caveats: it's a \textbf{norm, not a law} (violating it isn't illegal, but it's rude and gets you IP-blocked); and a \textbf{404} means \textit{no rules}, not ``crawl aggressively.''
+            Two cautions. First, it is a \textbf{norm, not a law}: a violation is not illegal, but it is impolite and the site can block your IP address. Second, a \textbf{404} means \textit{no rules}. It does not mean ``crawl aggressively.''
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
@@ -572,7 +572,7 @@ for name, url in sites.items():
 \begin{frame}{Activity: survey a sector}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Three sites tell you little. A \textbf{sector} tells you about a business model. Take one row, fetch every \texttt{robots.txt} in it, and compare:
+            Three sites tell you little. A \textbf{sector} tells you about a business model. Select one row. Get the \texttt{robots.txt} file of each site in that row. Compare them:
             \begin{itemize}\small
                 \item \textbf{Search} --- \texttt{google.com}, \texttt{bing.com}, \texttt{duckduckgo.com}
                 \item \textbf{Social} --- \texttt{facebook.com}, \texttt{instagram.com}, \texttt{linkedin.com}, \texttt{x.com}, \texttt{reddit.com}
@@ -705,23 +705,23 @@ def responsible_get(url, headers=None, delay=1.0):
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Work through the notebook exercises in pairs:
+            Work in pairs. Do these exercises from the notebook:
             \begin{enumerate}\small
-                \item Compare \texttt{robots.txt} for five sites in one category --- what patterns emerge?
-                \item ToS audit --- find three clauses restricting automated collection; do research exceptions apply?
-                \item Run the five-question framework on a scenario: scraping a dating app's profiles to study self-presentation
-                \item Rate-limit experiment --- time five requests with \texttt{time.time()} at 1s then 2s; does timing match intent?
-                \item Audit a site you use daily: reconcile \texttt{robots.txt}, ToS, and the framework in 300 words --- where do they conflict?
-                \item[6.] \textbf{5617}: read \textcite{fiesler2020no} + EFF's CFAA explainer + \textit{Van Buren}; write a two-page platform-collection memo
+                \item Compare the \texttt{robots.txt} files of five sites in one category. Report the patterns that you find.
+                \item Read one Terms of Service. Find three clauses that limit automated collection. Report if research is an exception.
+                \item Apply the five-question framework to this plan: collect dating-app profiles to study self-presentation.
+                \item Measure five requests with \texttt{time.time()}. Use a 1-second delay, then a 2-second delay. Compare the times with your intent.
+                \item Select a site that you use each day. Compare its \texttt{robots.txt}, its Terms of Service, and the framework. Write 300 words. Show where they disagree.
+                \item[6.] \textbf{5617}: read \textcite{fiesler2020no}, the EFF page about the CFAA, and \textit{Van Buren}. Then write a two-page memo about collection from platforms
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
-                \footnotesize Come ready to share:
+                \footnotesize Bring one of these to class:
                 \begin{itemize}\footnotesize
-                    \item a challenging bug
-                    \item interesting data you pulled
-                    \item a provocation for a research design
+                    \item a bug that you could not solve
+                    \item data that you collected and find interesting
+                    \item a question for a research design
                 \end{itemize}
             \end{block}
         \end{column}
@@ -797,19 +797,19 @@ def responsible_get(url, headers=None, delay=1.0):
 \begin{frame}{Setup, together: two paths}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \textbf{Filing an issue needs nothing but a browser} --- that is today, and it will work for everyone.
+            \textbf{To file an issue you need only a browser.} That is today's task, and it works for everyone.
 
             \medskip
 
-            But we are also getting your \textbf{tooling} working while I am standing here, so next week's pull-request day does not collapse. Pick one:
+            We will also set up your \textbf{tools} now, while I am here to help. Next week you need them for pull requests. Select one tool:
 
             \smallskip
 
-            \textbf{GitHub Desktop} --- download, sign in, \textbf{Clone} the textbook repo. Everything after that is a button: branch, commit, push, Create Pull Request.
+            \textbf{GitHub Desktop} --- download it, sign in, then \textbf{Clone} the textbook repository. Each later step is a button: branch, commit, push, Create Pull Request.
 
             \smallskip
 
-            \textbf{The \texttt{gh} CLI} --- install, then \texttt{gh auth login}, then:
+            \textbf{The \texttt{gh} CLI} --- install it, run \texttt{gh auth login}, then use these commands:
             {\footnotesize
             \begin{itemize}\footnotesize
                 \item \texttt{gh repo clone cuinfoscience/Web-Data-Science-Book}
@@ -818,11 +818,11 @@ def responsible_get(url, headers=None, delay=1.0):
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{alertblock}{Checkpoint --- raise a hand}
-                \footnotesize You are done when you can \textbf{see the textbook repo locally} in Desktop, or \texttt{gh repo clone} finishes without an error.
+                \footnotesize You are done when Desktop shows the textbook repository on your computer, or when \texttt{gh repo clone} completes with no error.
 
                 \smallskip
 
-                Do not silently fall behind here. This is the one class period where fixing it is free.
+                Tell me if a step fails. Today is the one class period when I can repair it for you.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -880,21 +880,21 @@ Proposal: The concrete change you'd make.
 \begin{frame}{File it: your first issue}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \textbf{Fifteen minutes. Everyone files one.}
+            \textbf{Fifteen minutes. Each student files one issue.}
 
             \medskip
 
             \begin{enumerate}
-                \item Open \texttt{ch-02-ethics.qmd} in the textbook repo --- or the rendered chapter, whichever you prefer to read.
-                \item Find one thing from the revision menu, or anything else that genuinely tripped you.
-                \item Reproduce it. Copy the exact passage, command, or output.
-                \item \textbf{Issues} tab $\rightarrow$ \textbf{New issue} $\rightarrow$ fill in the skeleton $\rightarrow$ \textbf{Submit}.
-                \item Paste your issue URL into the Canvas assignment.
+                \item Read \texttt{ch-02-ethics.qmd} in the textbook repository. You can also read the published chapter.
+                \item Find one problem. Use the revision menu, or use a different problem that stopped you.
+                \item Do the step again and record the result. Copy the passage, the command, or the output.
+                \item Select the \textbf{Issues} tab. Select \textbf{New issue}. Complete the skeleton. Select \textbf{Submit}.
+                \item Copy the URL of your issue into the Canvas assignment.
             \end{enumerate}
 
             \medskip
 
-            Check open issues first --- if someone already filed yours, \textbf{say so in a comment} and add what they missed. That counts.
+            Read the open issues first. If another student filed your issue, add a comment to it. Write what that issue does not include. This also gets credit.
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
