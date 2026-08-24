@@ -23,7 +23,7 @@
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Before we collect a single row, we settle the harder question --- not \textit{can} we, but \textbf{should} we, and if so, how responsibly?
+            This week covers the rules that govern collection: what is legal, what a site permits, and what is ethical.
 
             \bigskip
 
@@ -61,7 +61,7 @@
 \section{Monday · Concepts}
 % =========================================================================
 
-\begin{frame}{Monday at a glance}
+\begin{frame}{Agenda}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             \begin{tabular}{@{}ll@{}}
@@ -70,14 +70,14 @@
                                         & and what is still moving \\[0.3em]
                 \textbf{00:20 -- 00:26} & Terms of Service \& privacy policies \\[0.3em]
                 \textbf{00:26 -- 00:34} & \textbf{Activity}: audit a platform you use \\[0.3em]
-                \textbf{00:34 -- 00:44} & \textbf{Discussion}: four dispatches from \\
-                                        & the scraping wars \\[0.3em]
+                \textbf{00:34 -- 00:44} & \textbf{Discussion}: four articles on \\
+                                        & AI scraping \\[0.3em]
                 \textbf{00:44 -- 00:50} & The framework, and Wednesday \\
             \end{tabular}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Two things to have open}
-                \footnotesize A browser, and the four articles from the reading. Half of today is you reading primary sources --- not me talking.
+            \begin{alertblock}{Before we start}
+                \footnotesize A browser, and the four articles from the reading. You will read primary sources for about half of today.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -86,18 +86,18 @@
 \begin{frame}{The ethics of retrieval}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            ``Web scraping'' is a popular phrase --- and a faintly pejorative one. Data is \textbf{valuable}: other people invested time, money, and effort to create and host what you are about to retrieve programmatically.
+            ``Web scraping'' is a popular phrase --- and a faintly pejorative one. Data is \textbf{valuable}. Other people spent time, money, and effort to create and host what you are about to retrieve.
 
             \bigskip
 
-            So the question is never simply \textbf{``can I scrape this?''} but \textbf{``should I --- and if so, how do I do it responsibly?''}
+            Ask two questions, in order. \textbf{Can I scrape this?} Then: \textbf{should I, and how do I do it responsibly?}
 
             \bigskip
 
             This chapter builds a \textbf{decision framework} to revisit before every collection project in this course and beyond. Three layers of guidance, none sufficient alone: \textbf{law}, \textbf{technical norms} (\texttt{robots.txt}), and \textbf{ethics}.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{alertblock}{One idea to carry all semester}
+            \begin{alertblock}{Key idea}
                 \footnotesize ``It's technically possible'' is not the same as ``it's legal,'' and ``it's legal'' is not the same as ``it's ethical.''
             \end{alertblock}
         \end{column}
@@ -105,7 +105,7 @@
     \bottomcite{Textbook Ch.~2, ``The Ethics of Retrieval.''}
 \end{frame}
 
-\begin{frame}{The CFAA: a 1986 law meets the modern web}
+\begin{frame}{The Computer Fraud and Abuse Act (1986)}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             The \textbf{Computer Fraud and Abuse Act} was enacted in 1986, expanding a narrower 1984 statute, during a national panic about ``computer crime.'' The web did not exist.
@@ -116,22 +116,22 @@
 
             \medskip
 
-            That gap matters because the CFAA is a \textbf{criminal} statute. The question ``was that authorized?'' is not an abstraction --- it is the difference between a research method and a federal charge.
+            The CFAA is a \textbf{criminal} statute. That makes the question ``was this access authorized?'' the difference between a research method and a federal charge.
 
             \medskip
 
-            Forty years of litigation have been an argument about that one word.
+            Courts have argued over that phrase for forty years.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Why you should care}
-                \footnotesize Every collection decision you make this semester sits underneath a criminal statute drafted before the web existed --- and interpreted by courts that are still disagreeing.
+            \begin{alertblock}{Relevance to your work}
+                \footnotesize Every collection decision this semester falls under a criminal statute written before the web existed. Courts still disagree about how it applies.
             \end{alertblock}
         \end{column}
     \end{columns}
     \bottomcite{Textbook Ch.~2, ``The Computer Fraud and Abuse Act.''}
 \end{frame}
 
-\begin{frame}{Two events that shaped everything after}
+\begin{frame}{Aaron Swartz and Cambridge Analytica}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             \textbf{Aaron Swartz (2011--2013).} Swartz used MIT's network to bulk-download academic articles from JSTOR. Federal prosecutors charged him under the CFAA with eleven counts. Together they carried decades of theoretical exposure. The prosecutors argued that a violation of a terms-of-use agreement was ``unauthorized access.'' He died by suicide in 2013, at 26.
@@ -141,16 +141,16 @@
             \textbf{Cambridge Analytica (2018).} A researcher collected Facebook data through the platform's API for ostensibly academic purposes, then handed it to a political consulting firm. The fallout closed APIs across the industry --- for everyone, including the researchers who had done nothing wrong.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{One shock each way}
-                \footnotesize \textbf{Swartz} taught researchers that a vague statute could be aimed at them.
+            \begin{block}{Consequences}
+                \footnotesize After \textbf{Swartz}, researchers knew that a vague statute could be aimed at them.
 
                 \smallskip
 
-                \textbf{Cambridge Analytica} taught platforms that open access was a liability.
+                After \textbf{Cambridge Analytica}, platforms treated open access as a liability.
 
                 \smallskip
 
-                Together they explain why the doors were closing before AI ever showed up (Ch.~3).
+                Access was already closing before AI arrived (Ch.~3).
             \end{block}
         \end{column}
     \end{columns}
@@ -171,22 +171,22 @@
             \textbf{Why it matters to you.} Before \textit{Van Buren}, a prosecutor could plausibly argue that breaking a website's stated terms was a federal crime. After it, that theory is very hard to sustain.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{The test, in one line}
-                \footnotesize Did you go \textbf{around a gate}, or did you break a \textbf{rule} about data you could already reach?
+            \begin{block}{The test}
+                \footnotesize Did you get past an authentication barrier, or did you break a rule about data you could already reach?
 
                 \smallskip
 
-                Only the first is the CFAA's business.
+                Only the first is a CFAA question.
             \end{block}
         \end{column}
     \end{columns}
     \bottomcite{Textbook Ch.~2, ``Legal Frameworks.'' A gate is authentication --- a login, a paywall, an API key.}
 \end{frame}
 
-\begin{frame}{\textit{hiQ Labs v.\ LinkedIn} (2019--2022): read the whole arc}
+\begin{frame}{\textit{hiQ Labs v.\ LinkedIn} (2019--2022)}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            This is the case people cite \textit{wrong}. It has three acts:
+            The case has three parts, and the third is usually left out:
             \begin{enumerate}\small
                 \item hiQ, an analytics company, scraped \textbf{public} LinkedIn profiles. LinkedIn sent a cease-and-desist and blocked it.
                 \item The Ninth Circuit held --- in 2019, and \textbf{again in 2022} after the Supreme Court sent it back in light of \textit{Van Buren} --- that scraping publicly accessible data likely does \textbf{not} violate the CFAA. No authentication gate was bypassed.
@@ -194,12 +194,12 @@
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{alertblock}{The half-quote}
-                \footnotesize You will hear ``\textit{hiQ} means scraping public data is legal.''
+            \begin{alertblock}{A common misreading}
+                \footnotesize A common summary is ``\textit{hiQ} means scraping public data is legal.''
 
                 \smallskip
 
-                That is act two of three. The company still lost, and stopped scraping.
+                That describes only the second part. hiQ still lost and stopped scraping.
 
                 \smallskip
 
@@ -221,22 +221,22 @@
 
             \medskip
 
-            \textbf{Why it matters.} Audit studies are how we know what we know about algorithmic discrimination. This ruling is modest --- one district court --- but it is real cover for a whole research method.
+            \textbf{Why it matters.} Audit studies are the main source of evidence about algorithmic discrimination. This ruling is from one district court, so it is limited, but it protects the method.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{The tension it names}
-                \footnotesize Platforms write the rules that govern how they may be studied.
+            \begin{block}{The underlying tension}
+                \footnotesize Platforms write the rules that govern how researchers may study them.
 
                 \smallskip
 
-                A ToS that forbids test accounts is also a ToS that forbids auditing you for discrimination.
+                Terms of Service that forbid test accounts also prevent an audit for discrimination.
             \end{block}
         \end{column}
     \end{columns}
     \bottomcite{Textbook Ch.~2, ``Legal Frameworks.'' Audit methodology and ToS restrictions: \textcite{fiesler2020no}.}
 \end{frame}
 
-\begin{frame}{Four rulings, one through-line}
+\begin{frame}{Summary of the rulings}
     \begin{center}\small
     \begin{tabular}{@{}p{0.20\textwidth}p{0.36\textwidth}p{0.36\textwidth}@{}}
         \toprule
@@ -250,7 +250,7 @@
     \end{tabular}
     \end{center}
     \medskip
-    {\footnotesize \textbf{The through-line:} the CFAA polices \textbf{authentication barriers}, not \textbf{use restrictions} --- gates, not rules. But what left criminal law did not disappear. It moved to \textbf{contract}, which changes which court you are in and what the penalty is, not whether you are exposed.}
+    {\footnotesize \textbf{Summary:} the CFAA covers \textbf{authentication barriers}, not \textbf{use restrictions}. What left criminal law did not disappear. It moved to \textbf{contract law}, which changes the court and the penalty, not whether you are exposed.}
     \bottomcite{Textbook Ch.~2, ``Legal Frameworks'' \& ``The Current Landscape.''}
 \end{frame}
 
@@ -268,16 +268,16 @@
             These are trial-court rulings, not nationwide rules. But the direction is consistent with \textit{hiQ}: risk concentrates at \textbf{authentication barriers and contractual relationships}, not at public visibility.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{alertblock}{The distinction to internalize}
-                \footnotesize \textbf{Logged out} --- you agreed to nothing, so there is no contract to breach.
+            \begin{alertblock}{The key distinction}
+                \footnotesize \textbf{Logged out}: you agreed to nothing, so there is no contract to breach.
 
                 \smallskip
 
-                \textbf{Logged in} --- you agreed, and the ToS is now enforceable against you.
+                \textbf{Logged in}: you agreed, and the Terms of Service are enforceable against you.
 
                 \smallskip
 
-                Same data. Very different exposure.
+                The data is the same. The legal exposure is not.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -299,19 +299,19 @@
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{alertblock}{You are downstream}
-                \footnotesize You are not a party to this fight, but you live with its result.
+            \begin{alertblock}{Effect on your work}
+                \footnotesize You are not a party to these suits, but the result affects you.
 
                 \smallskip
 
-                A door closed against OpenAI is closed against your class project too. We will meet this again as \textbf{enclosure} in Ch.~3.
+                A site that blocks OpenAI also blocks your class project. Ch.~3 covers this as \textbf{enclosure}.
             \end{alertblock}
         \end{column}
     \end{columns}
     \bottomcite{Textbook Ch.~2, ``The Current Landscape.'' Data revolts against AI scraping: \parencite{frenkel_not_2023}.}
 \end{frame}
 
-\begin{frame}{State privacy law reaches you}
+\begin{frame}{State privacy law}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             The U.S.\ has no comprehensive federal privacy law, so states filled the gap. California wrote the \textbf{CCPA/CPRA} first. By 2026 more than a dozen states have comprehensive statutes. They include the \textbf{Colorado Privacy Act}, which covers data about Colorado residents.
@@ -329,12 +329,12 @@
             If your scraped dataset contains personal information about residents of these places, these laws can apply to \textbf{you} --- student status is not an exemption.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{alertblock}{The habit this should build}
-                \footnotesize Treat personal data as a \textbf{liability, not an asset}.
+            \begin{alertblock}{Practical rule}
+                \footnotesize Treat personal data as a \textbf{liability}.
 
                 \smallskip
 
-                Every extra field is extra risk you are choosing to hold. Collect the minimum that answers your question.
+                Each extra field is more risk that you have chosen to hold. Collect the minimum that answers your question.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -344,7 +344,7 @@
 \begin{frame}{Terms of Service as quasi-law}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Follow the through-line to its conclusion: as the CFAA retreated, \textbf{contract advanced}. The Terms of Service is where the real constraint on your work now lives.
+            As CFAA exposure narrowed, contract law expanded. The Terms of Service is now the document that constrains your work.
 
             \medskip
 
@@ -352,10 +352,10 @@
 
             \medskip
 
-            And the agreement is \textbf{asymmetric}: you accepted it once, by clicking. They amend it by posting. \textcite{tan_terms_2024} documents platforms quietly rewriting terms and privacy policies to permit \textbf{AI training} on data users had already shared.
+            The agreement is also \textbf{asymmetric}. You accepted it once by clicking. The platform amends it by posting a new version. \textcite{tan_terms_2024} documents platforms rewriting terms and privacy policies to permit \textbf{AI training} on data that users had already shared.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{alertblock}{This course's own warning}
+            \begin{alertblock}{Course warning}
                 \footnotesize Code in several chapters retrieves data in ways that may violate a platform's ToS. It is here to teach technique.
 
                 \smallskip
@@ -370,7 +370,7 @@
 \begin{frame}{Reading a ToS or privacy policy}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            These documents are long, and they are written not to be read. So do not read them linearly --- \textbf{search them like a scraper}.
+            These documents are long, and few people read them from start to finish. Search them instead.
 
             \medskip
 
@@ -390,7 +390,7 @@
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Question 4 is the sharp one}
+            \begin{block}{Note on question 4}
                 \footnotesize \textcite{tan_terms_2024} found changes as small as a few words --- inserting ``artificial intelligence'' or ``machine learning'' into a policy you agreed to years ago.
 
                 \smallskip
@@ -420,7 +420,7 @@
             Then report two things. First, does this platform permit the data collection that you plan for this class? Second, how sure are you?
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Public institutions have terms too}
+            \begin{alertblock}{Public institutions also have terms}
                 \footnotesize The Colorado General Assembly publishes every bill, sponsor, and vote --- and still has a privacy policy governing its site.
 
                 \smallskip
@@ -432,7 +432,7 @@
     \bottomcite{Report back in pairs. We will collect the surprising clauses on the board.}
 \end{frame}
 
-\begin{frame}{Discussion: four dispatches from the scraping wars}
+\begin{frame}{Discussion: four articles on AI scraping}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             \textbf{Ten minutes. Four minutes in groups, then six minutes for reports.} Each group takes one article:
@@ -444,7 +444,7 @@
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Three questions each}
+            \begin{block}{Questions for each group}
                 \footnotesize
                 \begin{enumerate}\footnotesize
                     \item What \textbf{changed}, concretely?
@@ -457,17 +457,17 @@
     \bottomcite{All four are on Canvas. Question 3 is the one I will push you on.}
 \end{frame}
 
-\begin{frame}{What the four add up to}
-    The informal bargain that made the open web scrapable is coming apart --- in four moves:
+\begin{frame}{Common findings}
+    The four articles report four related changes:
     \begin{enumerate}\small
-        \item \textbf{The contract layer shifts under you.} Terms are quietly amended to permit AI training on data already shared --- until the FTC warns that doing it retroactively may be ``unfair or deceptive'' \parencite{tan_terms_2024}.
-        \item \textbf{The norm layer hardens.} Of 14,000 sites studied, full AI restrictions went from \textasciitilde1\% to 5--7\% in a year --- and \textbf{28\%} of the most actively maintained, critical sources added restrictions \parencite{koebler_backlash_2024}.
-        \item \textbf{The norm layer does not actually work.} Reuters and Condé Nast blocked two \textit{retired} Anthropic crawlers while the active one walked through. Meanwhile iFixit was hit \textasciitilde1M times in a day, and Read the Docs ate \$5,000 in bandwidth \parencite{koebler_wrong_2024}.
-        \item \textbf{Some actors ignore it entirely.} Perplexity reached blocked pages from an unpublicized IP --- and then fabricated a claim that a named police officer had committed a crime \parencite{mehrotra_perplexity_2024}.
+        \item \textbf{Terms change.} Platforms amend them to permit AI training on data that users already shared. In February 2024 the FTC warned that doing this retroactively may be ``unfair or deceptive'' \parencite{tan_terms_2024}.
+        \item \textbf{Sites add restrictions.} Of 14,000 sites studied, full AI restrictions went from about 1\% to 5--7\% in one year. \textbf{28\%} of the most actively maintained sources added restrictions \parencite{koebler_backlash_2024}.
+        \item \textbf{The blocks often fail.} Reuters and Condé Nast blocked two \textit{retired} Anthropic crawlers but not the active one. iFixit received about 1 million requests in one day. Read the Docs spent \$5,000 on bandwidth \parencite{koebler_wrong_2024}.
+        \item \textbf{Some operators ignore the rules.} Perplexity reached blocked pages from an unpublished IP address. It then fabricated a claim that a named police officer had committed a crime \parencite{mehrotra_perplexity_2024}.
     \end{enumerate}
     \smallskip
-    \begin{alertblock}{Where the bill lands}
-        \footnotesize Blanket blocks cannot tell a bad-faith AI crawler from a search engine, an archive, or a student project. \textbf{The enforcement aimed at them catches you.}
+    \begin{alertblock}{Effect on student projects}
+        \footnotesize A blanket block cannot distinguish an AI crawler from a search engine, an archive, or a student project. Restrictions aimed at AI companies also apply to your coursework.
     \end{alertblock}
 \end{frame}
 
@@ -494,10 +494,10 @@
     \bottomcite{Textbook Ch.~2, ``An Ethical Decision Framework'' \& ``IRBs and Web Data.'' The Belmont Report maps consent~$\to$~respect, proportionality/privacy~$\to$~beneficence, risk~$\to$~justice.}
 \end{frame}
 
-\begin{frame}{Wednesday: \texttt{robots.txt} in the wild}
+\begin{frame}{Wednesday: \texttt{robots.txt}}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Today was the \textbf{law} and the \textbf{contract}. Wednesday is the third layer --- the \textbf{technical norm} --- and we go straight at it with code.
+            Today covered the \textbf{law} and the \textbf{contract}. Wednesday covers the third layer, the \textbf{technical norm}, in code.
 
             \medskip
 
@@ -572,7 +572,7 @@ for name, url in sites.items():
 \begin{frame}{Activity: survey a sector}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Three sites tell you little. A \textbf{sector} tells you about a business model. Select one row. Get the \texttt{robots.txt} file of each site in that row. Compare them:
+            Three sites tell you little. A whole sector shows you how a business model affects access. Select one row. Get the \texttt{robots.txt} file of each site in that row. Compare them:
             \begin{itemize}\small
                 \item \textbf{Search} --- \texttt{google.com}, \texttt{bing.com}, \texttt{duckduckgo.com}
                 \item \textbf{Social} --- \texttt{facebook.com}, \texttt{instagram.com}, \texttt{linkedin.com}, \texttt{x.com}, \texttt{reddit.com}
@@ -606,19 +606,19 @@ for name, url in sites.items():
 
             \medskip
 
-            Then look for the failure \textcite{koebler_wrong_2024} found: a site blocking a \textbf{retired} crawler name while the operator's \textbf{active} one walks straight through. Copy-pasted blocklists rot.
+            Then look for the error that \textcite{koebler_wrong_2024} found: a site blocks a \textbf{retired} crawler name, but not the operator's \textbf{active} one. Copied blocklists go out of date.
 
             \medskip
 
-            \textbf{The deeper limit:} \texttt{robots.txt} has no enforcement mechanism. It is a sign on a door, not a lock --- \textcite{mehrotra_perplexity_2024} documents a company reaching blocked pages from an unpublicized IP address.
+            \texttt{robots.txt} also has no enforcement mechanism. \textcite{mehrotra_perplexity_2024} documents a company that reached blocked pages from an unpublished IP address.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{alertblock}{So why respect it?}
-                \footnotesize Because you are not trying to get away with something --- you are trying to do defensible research.
+            \begin{alertblock}{Why respect it}
+                \footnotesize Because your goal is defensible research, not avoiding detection.
 
                 \smallskip
 
-                The norm is weak against bad actors and completely effective against your reputation.
+                The norm does not stop bad actors, but ignoring it will damage your reputation.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -675,7 +675,7 @@ def responsible_get(url, headers=None, delay=1.0):
     \bottomcite{Textbook Ch.~2, ``Building a Responsible Scraper Function.''}
 \end{frame}
 
-\begin{frame}{Why it's built that way --- and reused everywhere}
+\begin{frame}{Design choices, and later reuse}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             \begin{block}{Every default encodes a principle}
@@ -690,7 +690,7 @@ def responsible_get(url, headers=None, delay=1.0):
             \end{block}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{alertblock}{You'll import this again}
+            \begin{alertblock}{Reused in later chapters}
                 \footnotesize \texttt{responsible\_get()} returns in \textbf{Ch.~6} (scraping HTML tables), \textbf{Ch.~7} (Wayback snapshots), and throughout the \textbf{API chapters}.
 
                 \medskip
@@ -794,7 +794,7 @@ def responsible_get(url, headers=None, delay=1.0):
     \bottomcite{This is how essentially all open-source software gets built --- including every library in this course.}
 \end{frame}
 
-\begin{frame}{Setup, together: two paths}
+\begin{frame}{Setup: two options}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             \textbf{To file an issue you need only a browser.} That is today's task, and it works for everyone.
@@ -817,7 +817,7 @@ def responsible_get(url, headers=None, delay=1.0):
             \end{itemize}}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Checkpoint --- raise a hand}
+            \begin{alertblock}{Checkpoint}
                 \footnotesize You are done when Desktop shows the textbook repository on your computer, or when \texttt{gh repo clone} completes with no error.
 
                 \smallskip
@@ -829,7 +829,7 @@ def responsible_get(url, headers=None, delay=1.0):
     \bottomcite{Full instructions, both paths: \texttt{handouts/week-01/setup.md}. No raw \texttt{git} commands required in this course.}
 \end{frame}
 
-\begin{frame}{A revision menu for Chapter 2 --- pre-checked, ready to file}
+\begin{frame}{Revision targets for Chapter 2}
     High-value targets --- pick one and scope it to a single PR:
     \begin{itemize}
         \item \textbf{A confirmed gap.} Wikipedia's live \texttt{robots.txt} now has a \texttt{Disallow: /trap/} rule the chapter doesn't mention --- a honeypot for bad bots. Explain what it's for and add it to the comparison.
@@ -869,7 +869,7 @@ Proposal: The concrete change you'd make.
                     \item \textbf{Reviews} (2) --- from next week on
                 \end{itemize}
             \end{block}
-            \begin{alertblock}{Merged is not the bar}
+            \begin{alertblock}{Grading does not depend on merging}
                 \footnotesize A well-evidenced issue I decline still earns full credit. A one-character typo fix does not.
             \end{alertblock}
         \end{column}
