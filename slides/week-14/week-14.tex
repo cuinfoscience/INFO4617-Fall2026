@@ -295,7 +295,7 @@ jobs:
 \begin{frame}[fragile]{Fail loudly: monitor \& harden}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            The insidious failure is the \textbf{silent success}: the run is green, but the CSV row is all empty --- the site changed and no exception fired. Catch it with a validation step and a graceful exit:
+            The dangerous failure is the \textbf{silent success}. The run reports no error, but the CSV row is empty. The site changed and the code raised no exception. Add a validation step to find this failure. Then stop the run cleanly:
 \begin{lstlisting}
 def main():
     try:
@@ -325,23 +325,23 @@ def main():
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Work through the notebook exercises in pairs:
+            Work in pairs. Do these exercises from the notebook:
             \begin{enumerate}\small
-                \item Build \& deploy a Actions scraper; run it $\geq$3 days, then analyze
-                \item Convert an earlier project to a headless \texttt{.py} script; run it from the terminal
-                \item Design a monitoring check (file size, row count, or freshness)
-                \item Government data (Open-Meteo, OpenAQ, USGS): collect a week, visualize the change
-                \item \texttt{check\_freshness.py}: warn if the newest row is $>$24h old
-                \item[6.] \textcolor{tab-purple}{\textbf{5617}}: run a collector $\geq$2 weeks, then write an infrastructure post-mortem in the spirit of \textcite{wilson2017good}
+                \item Build a scraper that runs in GitHub Actions. Deploy it. Run it for 3 or more days. Then analyze the data.
+                \item Convert an earlier project into a \texttt{.py} script with no interface. Run the script from the terminal.
+                \item Design a check that monitors the output. Use the file size, the row count, or the age of the data.
+                \item Select a government source such as Open-Meteo or USGS. Collect data for one week. Make a visualization of the change.
+                \item Write \texttt{check\_freshness.py}. The script must give a warning if the newest row is more than 24 hours old.
+                \item[6.] \textbf{5617}: run a collector for 2 or more weeks. Then write a report about the infrastructure. Use \textcite{wilson2017good} as a model
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
-                \footnotesize Come ready to share:
+                \footnotesize Bring one of these to class:
                 \begin{itemize}\footnotesize
-                    \item a challenging bug
-                    \item interesting data you pulled
-                    \item a provocation for a research design
+                    \item a bug that you could not solve
+                    \item data that you collected and find interesting
+                    \item a question for a research design
                 \end{itemize}
             \end{block}
         \end{column}
@@ -379,7 +379,7 @@ def main():
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
     \end{columns}
-    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (30\%).}
+    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (15\%).}
 \end{frame}
 
 \begin{frame}{A revision menu for Chapter 14}

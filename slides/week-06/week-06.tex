@@ -267,23 +267,23 @@ except requests.RequestException as e:
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Work through the notebook exercises in pairs:
+            Work in pairs. Do these exercises from the notebook:
             \begin{enumerate}\small
-                \item Wikipedia table via \texttt{read\_html} + a visualization
-                \item Custom parser for a non-tabular page (document your selectors)
-                \item Extend it to multiple pages (sleep, try/except, a function)
-                \item Non-English Wikipedia --- what encoding cleanup is needed?
-                \item Cache-first: download once to \texttt{cache/}, parse offline
-                \item[6.] \textcolor{tab-purple}{\textbf{5617}}: audit two sites' ToS \& \texttt{robots.txt} vs.\ \textcite{fiesler2020no}
+                \item Get a Wikipedia table with \texttt{read\_html}. Then make a visualization.
+                \item Write a parser for a page that has no table. Record your selectors.
+                \item Extend the parser to more than one page. Add a delay, error handling, and a function.
+                \item Parse a Wikipedia page that is not in English. Report the encoding problems that you correct.
+                \item Download each page one time into \texttt{cache/}. Then parse the files offline.
+                \item[6.] \textbf{5617}: examine the Terms of Service and the \texttt{robots.txt} file of two sites. Compare them with \textcite{fiesler2020no}
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
-                \footnotesize Come ready to share:
+                \footnotesize Bring one of these to class:
                 \begin{itemize}\footnotesize
-                    \item a challenging bug
-                    \item interesting data you pulled
-                    \item a provocation for a research design
+                    \item a bug that you could not solve
+                    \item data that you collected and find interesting
+                    \item a question for a research design
                 \end{itemize}
             \end{block}
         \end{column}
@@ -321,7 +321,7 @@ except requests.RequestException as e:
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
     \end{columns}
-    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (30\%).}
+    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (15\%).}
 \end{frame}
 
 \begin{frame}{A revision menu for Chapter 6}

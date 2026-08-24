@@ -71,7 +71,7 @@
 
             \bigskip
 
-            The records locked inside are \textit{readymade} data (\textcite{salganik2018bit}): created for administration, not research, yet repurposable --- with effort --- to answer questions their creators never anticipated.
+            The records inside are \textit{readymade} data (\textcite{salganik2018bit}). Somebody made them for administration, not for research. With effort you can still use them to answer questions that their authors never expected.
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
@@ -89,7 +89,7 @@
 
             \bigskip
 
-            When a \textbf{computer} reads one it sees a sequence of drawing instructions: \textit{place this character at $(x, y)$; draw a line from here to there; embed this image}.
+            A \textbf{computer} reads a different thing. It sees a sequence of drawing instructions: \textit{put this character at $(x, y)$. Draw a line from here to there. Add this image}.
 
             \bigskip
 
@@ -107,7 +107,7 @@
 \begin{frame}{Soft enclosure \& the infrastructure of transparency}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            When governments publish minutes, budgets, and filings \textit{only} as PDFs, they create what the book's post-API chapter calls \textbf{soft enclosure}: records that are nominally public but practically inaccessible for analysis.
+            Some governments publish minutes, budgets, and filings \textit{only} as PDFs. The post-API chapter calls this \textbf{soft enclosure}. The records are public in name. In practice you cannot analyze them.
 
             \bigskip
 
@@ -290,23 +290,23 @@ with pdfplumber.open("report.pdf") as pdf:
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Work through the notebook exercises in pairs:
+            Work in pairs. Do these exercises from the notebook:
             \begin{enumerate}\small
-                \item Find \& extract one consistent element across $\geq 10$ government PDFs $\rightarrow$ a DataFrame
-                \item Compare PyPDF quality on a text report, a table-heavy doc, and a slide deck
-                \item Tables, not text: extract a budget table with \texttt{pdfplumber} vs.\ \texttt{pypdf}; build numeric columns
-                \item Topic tracking: count a term (``housing,'' ``police,'' ``flood'') across a year of minutes; plot spikes (reuse Ch.~7 bag-of-words)
-                \item Tool comparison: \texttt{pdfplumber} vs.\ \texttt{pypdf} on the same PDF
-                \item[6.] \textcolor{tab-purple}{\textbf{5617}}: quantify extraction quality across two cities' PDFs; write a data-quality memo using \textcite{gebru2021datasheets} categories
+                \item Find one element that occurs in 10 or more government PDFs. Extract it. Put the results in a DataFrame.
+                \item Compare the quality of PyPDF on three documents: a text report, a document with many tables, and a slide deck.
+                \item Extract a budget table with \texttt{pdfplumber}. Extract it again with \texttt{pypdf}. Make numeric columns from the result.
+                \item Select a term such as ``housing'' or ``police.'' Count it in one year of meeting minutes. Plot the spikes. Use the bag-of-words method from Ch.~7.
+                \item Compare \texttt{pdfplumber} and \texttt{pypdf} on the same PDF.
+                \item[6.] \textbf{5617}: measure the extraction quality for the PDFs of two cities. Write a memo about data quality. Use the categories of \textcite{gebru2021datasheets}
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
-                \footnotesize Come ready to share:
+                \footnotesize Bring one of these to class:
                 \begin{itemize}\footnotesize
-                    \item a challenging bug
-                    \item interesting data you pulled
-                    \item a provocation for a research design
+                    \item a bug that you could not solve
+                    \item data that you collected and find interesting
+                    \item a question for a research design
                 \end{itemize}
             \end{block}
         \end{column}
@@ -344,7 +344,7 @@ with pdfplumber.open("report.pdf") as pdf:
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
     \end{columns}
-    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (30\%).}
+    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (15\%).}
 \end{frame}
 
 \begin{frame}{A revision menu for Chapter 9}

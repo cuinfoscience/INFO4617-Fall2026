@@ -15,7 +15,8 @@ Course materials for **INFO 4617: Web Data Science**, University of Colorado Bou
 | **Wednesday** | Notebook Lab — work through and share the exercises |
 | **Friday** | Textbook Revisions — propose and peer-review pull requests to the book |
 
-Evaluation: Notebook Labs (30%) · Textbook Revisions (30%) · Final Project (40%). No exams.
+Evaluation: Notebook Labs (30%) · Textbook Revisions (15%) · Attendance (15%) · Final
+Project (40%). No exams. The lowest two lab scores are dropped.
 
 ## Layout
 

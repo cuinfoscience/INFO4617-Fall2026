@@ -22,7 +22,7 @@
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            We open the hood on the web --- the layered stack of protocols that turns a URL into a rendered page, and turns web data collection from \textit{magic} into \textit{engineering}.
+            This week we examine the layers of protocols below the web. These layers turn a URL into a page on your screen. They also turn web data collection from \textit{magic} into \textit{engineering}.
 
             \bigskip
 
@@ -134,11 +134,11 @@
         \begin{column}{0.6\textwidth}
             \textbf{HTTP} structures the conversation: a request carries a method (GET, POST, \dots) and headers; a response carries a \textbf{status code}:
             \begin{itemize}\small
-                \item \textcolor{tab-green}{\textbf{200}} OK --- the body has your data
-                \item \textcolor{tab-blue}{\textbf{301/302}} redirect --- follow \texttt{Location}
-                \item \textcolor{tab-red}{\textbf{403}} forbidden --- often a missing \texttt{User-Agent}
-                \item \textcolor{tab-orange}{\textbf{404}} not found \quad \textcolor{tab-red}{\textbf{429}} slow down
-                \item \textcolor{tab-purple}{\textbf{500}} the server's problem, not yours
+                \item \textbf{200} OK --- the body has your data
+                \item \textbf{301/302} redirect --- follow \texttt{Location}
+                \item \textbf{403} forbidden --- often a missing \texttt{User-Agent}
+                \item \textbf{404} not found \quad \textbf{429} slow down
+                \item \textbf{500} the server's problem, not yours
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
@@ -285,22 +285,22 @@ requests.get(base, params={"titles": "University of Colorado Boulder"})
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Work through the chapter's exercises in pairs:
+            Work in pairs. Do these exercises from the chapter:
             \begin{enumerate}\small
-                \item Network tab: a Wikipedia article vs.\ a news site --- how many requests? What fraction is content vs.\ tracking?
-                \item Resolve five related domains with \texttt{dns.resolver} --- do any share an IP address?
-                \item Plot pageviews for three related articles; hypothesize what caused the spikes
-                \item Write \texttt{diagnose\_url()} and test it on a 200, a 404, a redirect, an API, and a blocked site
-                \item \textcolor{tab-purple}{\textbf{5617:}} profile a site's delivery infrastructure --- redirect chain, CDN headers, traceroute hops --- in a 500-word memo
+                \item Open the Network tab on a Wikipedia article and on a news site. Count the requests. Give the fraction that is content and the fraction that is tracking.
+                \item Resolve five related domains with \texttt{dns.resolver}. Report the domains that share an IP address.
+                \item Plot the pageviews of three related articles. Give a possible cause for each spike.
+                \item Write \texttt{diagnose\_url()}. Test it on a 200 response, a 404 response, a redirect, an API, and a blocked site.
+                \item \textbf{5617:} examine the delivery infrastructure of one site. Record the redirect chain, the CDN headers, and the traceroute hops. Write a 500-word memo
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
-                \footnotesize Come ready to share:
+                \footnotesize Bring one of these to class:
                 \begin{itemize}\footnotesize
-                    \item a challenging bug
-                    \item interesting data you pulled
-                    \item a provocation for a research design
+                    \item a bug that you could not solve
+                    \item data that you collected and find interesting
+                    \item a question for a research design
                 \end{itemize}
             \end{block}
         \end{column}
@@ -341,7 +341,7 @@ requests.get(base, params={"titles": "University of Colorado Boulder"})
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
     \end{columns}
-    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (30\%).}
+    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (15\%).}
 \end{frame}
 
 \begin{frame}{A revision menu for Chapter 5}
