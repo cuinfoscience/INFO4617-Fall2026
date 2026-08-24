@@ -87,7 +87,7 @@
 \begin{frame}{Pressure 1 --- Enclosure}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Three pressures explain the shift since $\sim$2018: \textbf{\textcolor{tab-blue}{enclosure}}, \textbf{\textcolor{tab-orange}{exemption}}, \textbf{\textcolor{tab-red}{erosion}}.
+            Three pressures explain the shift since $\sim$2018: \textbf{enclosure}, \textbf{exemption}, \textbf{erosion}.
 
             \medskip
 
@@ -199,12 +199,12 @@
             \textbf{Exercise 1.} In the notebook, build a timeline of major API-access changes from \textbf{2008 to today}.
             \begin{itemize}\small
                 \item At least \textbf{five events} across at least \textbf{three platforms}.
-                \item For each, tag which pressure best fits: \textcolor{tab-blue}{enclosure}, \textcolor{tab-orange}{exemption}, or \textcolor{tab-red}{erosion}.
+                \item For each, tag which pressure best fits: enclosure, exemption, or erosion.
             \end{itemize}
 
             \medskip
 
-            The point is not memorizing dates --- it is seeing the \textbf{trend}: free-and-open access for outside observers is what is disappearing, replaced by paid tiers, gated programs, and licensing deals.
+            Do not memorize the dates. Look at the \textbf{trend}. Free and open access for outside observers is disappearing. Paid tiers, gated programs, and licensing deals replace it.
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
@@ -220,9 +220,9 @@
         \begin{column}{0.6\textwidth}
             \textbf{Exercise 2 --- name the pressure.} Pick a platform change \textit{not} in the chapter and write 500 words applying the framework. Ask:
             \begin{itemize}\small
-                \item Was a shared resource fenced? (\textcolor{tab-blue}{enclosure})
-                \item Was scrutiny blocked while internal study continued? (\textcolor{tab-orange}{exemption})
-                \item Did the record simply decay? (\textcolor{tab-red}{erosion})
+                \item Was a shared resource fenced? (enclosure)
+                \item Was scrutiny blocked while internal study continued? (exemption)
+                \item Did the record simply decay? (erosion)
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
@@ -259,22 +259,22 @@ pathlib.Path("datasheet.json").write_text(json.dumps(collection, indent=2))
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Work through the notebook prompts in pairs:
+            Work in pairs. Do these prompts from the notebook:
             \begin{enumerate}\small
-                \item Timeline: five events, three platforms, tag each pressure
-                \item Framework application --- 500 words on a fresh case
-                \item Contingency plan --- three concrete fallbacks
-                \item Public-interest audit: take an API-enabled project (paper, investigation, or civic tool) and assess how today's restrictions would hit it. Which value does it embody?
-                \item[5.] \textcolor{tab-purple}{\textbf{5617}}: read \textcite{davidson2023platform} \& \textcite{perriam2020digital}; write a 2--3 page ``state of research access'' brief for one platform, ending with a recommendation.
+                \item Make a timeline of five events across three platforms. Label the pressure that applies to each event.
+                \item Apply the framework to a new case. Write 500 words.
+                \item Write a contingency plan. Give three alternative methods.
+                \item Select a project that used an API. Assess how current restrictions would limit it. Name the value that it serves.
+                \item[5.] \textbf{5617}: read \textcite{davidson2023platform} and \textcite{perriam2020digital}. Write a brief of 2 to 3 pages about research access to one platform. End with a recommendation.
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{block}{Show-and-Tell}
-                \footnotesize Come ready to share:
+                \footnotesize Bring one of these to class:
                 \begin{itemize}\footnotesize
                     \item an access change that surprised you
                     \item a dataset you fear losing
-                    \item a provocation for a research design
+                    \item a question for a research design
                 \end{itemize}
             \end{block}
         \end{column}
@@ -295,15 +295,15 @@ pathlib.Path("datasheet.json").write_text(json.dumps(collection, indent=2))
 \begin{frame}{Improving Chapter 3 together}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-03-post-api.qmd} and reviews a classmate's.
+            Last week you filed an \textbf{issue} --- a report that something is wrong. Today you take the next step and propose the \textbf{fix} itself: your \textbf{first pull request}, against \texttt{ch-03-post-api.qmd}, plus reviews of two classmates'.
 
             \bigskip
 
-            The workflow (from Week 1):
+            The workflow, in GitHub Desktop or \texttt{gh} (no raw \texttt{git} needed):
             \begin{enumerate}\small
-                \item Branch / fork the book repo
-                \item Edit the chapter; commit with a clear message
-                \item Open a PR describing \textit{what} and \textit{why}
+                \item \textbf{Clone} the book repo, then create a \textbf{branch}
+                \item Edit the chapter; \textbf{commit} with a clear message
+                \item \textbf{Push}, then open a PR describing \textit{what} and \textit{why}
                 \item Review two peers' PRs: kind, specific, actionable
             \end{enumerate}
 
@@ -316,7 +316,7 @@ pathlib.Path("datasheet.json").write_text(json.dumps(collection, indent=2))
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
     \end{columns}
-    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (30\%).}
+    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (15\%).}
 \end{frame}
 
 \begin{frame}{A revision menu for Chapter 3}

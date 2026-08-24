@@ -33,7 +33,13 @@ def _font(size):
     return ImageFont.load_default()
 
 
-def make_stub(path, w, h, caption):
+def make_stub(path, w, h, caption, force=False):
+    # Never clobber a real asset. Once a placeholder has been replaced with an
+    # actual screenshot or figure, a later `make` would otherwise silently
+    # overwrite it with a gray box again -- and the loss is invisible until
+    # someone opens the PDF. Pass --force to regenerate deliberately.
+    if os.path.exists(path) and not force:
+        return False
     img = Image.new("RGB", (w, h), (228, 228, 230))
     d = ImageDraw.Draw(img)
     # border
@@ -62,9 +68,10 @@ def make_stub(path, w, h, caption):
     fb = d.textbbox((0, 0), fn, font=ff)
     d.text(((w - (fb[2] - fb[0])) / 2, h * 0.9), fn, fill=(140, 140, 145), font=ff)
     img.save(path)
+    return True
 
 
-def process(week_dir):
+def process(week_dir, force=False):
     # Resolve before naming: the Makefile invokes this as `make_stubs.py .`
     # from inside the week folder, so basename() on the raw argument would
     # label everything "." instead of "week-NN".
@@ -76,6 +83,7 @@ def process(week_dir):
         return
     os.makedirs(img_dir, exist_ok=True)
     rows = []
+    made = kept = 0
     with open(manifest) as f:
         for raw in f:
             line = raw.rstrip("\n")
@@ -91,7 +99,10 @@ def process(week_dir):
             except ValueError:
                 print(f"  skip bad size {size!r} for {fname}")
                 continue
-            make_stub(os.path.join(img_dir, fname), w, h, caption)
+            if make_stub(os.path.join(img_dir, fname), w, h, caption, force):
+                made += 1
+            else:
+                kept += 1
             rows.append((fname, f"{w}x{h}", caption))
     # write IMAGES.md
     with open(os.path.join(img_dir, "IMAGES.md"), "w") as md:
@@ -102,10 +113,13 @@ def process(week_dir):
         md.write("| File | Size | Should show |\n|---|---|---|\n")
         for fname, size, caption in rows:
             md.write(f"| `{fname}` | {size} | {caption} |\n")
-    print(f"  {week_name}: generated {len(rows)} stub(s)")
+    note = f", kept {kept} existing" if kept else ""
+    print(f"  {week_name}: generated {made} stub(s){note}")
 
 
 if __name__ == "__main__":
-    targets = sys.argv[1:] or ["."]
+    args = sys.argv[1:]
+    force = "--force" in args
+    targets = [a for a in args if a != "--force"] or ["."]
     for t in targets:
-        process(t)
+        process(t, force)
