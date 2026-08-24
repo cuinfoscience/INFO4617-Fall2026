@@ -60,7 +60,7 @@
 \section{Monday · Concepts}
 % =========================================================================
 
-\begin{frame}{What happens when you load a web page?}
+\begin{frame}{Loading a web page, step by step}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             Type a URL, press Enter, and in milliseconds a precise sequence unfolds:
@@ -154,7 +154,7 @@
     \bottomcite{Textbook Ch.~5, ``HTTP: The Application Layer'' \& ``URLs: Anatomy and Parsing.''}
 \end{frame}
 
-\begin{frame}{What the notebook covers}
+\begin{frame}{In the notebook}
     This week's companion notebook walks \emph{down} the stack, then back \emph{up}:
     \begin{itemize}
         \item \textbf{Addressing} --- find your local and public IP (\texttt{socket}, \texttt{ipify}); resolve a domain with \texttt{dns.resolver}; trace the route to Wikipedia
@@ -174,7 +174,7 @@
 \section{Wednesday · Notebook Lab}
 % =========================================================================
 
-\begin{frame}[fragile]{Where am I? Where is the server?}
+\begin{frame}[fragile]{Locating yourself and the server}
     Your public IP is how the internet sees you; DNS is how a name becomes a routable address:
 \begin{lstlisting}
 import requests
@@ -356,7 +356,7 @@ requests.get(base, params={"titles": "University of Colorado Boulder"})
     \bottomcite{Targets drawn from the chapter's callouts, ``Common Issues to Debug,'' and ``Further Reading.''}
 \end{frame}
 
-\begin{frame}{What makes a good revision \& a good review}
+\begin{frame}{A good revision, and a good review}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             \begin{block}{A strong PR}

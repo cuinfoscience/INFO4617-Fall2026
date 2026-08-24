@@ -239,7 +239,7 @@
 \end{frame}
 
 \begin{frame}[fragile]{Openness in practice --- document the collection}
-    The chapter has no scraping code --- but openness \textit{does} have a concrete artifact. Record not just \textbf{what} you collected but \textbf{how}: endpoints, parameters, dates, and the platform's constraints \parencite{gebru2021datasheets}. A future reader (or you, in a year) can then reconstruct exactly what was allowed:
+    The chapter has no scraping code, but openness still has a concrete artifact. Record \textbf{what} you collected and also \textbf{how}: endpoints, parameters, dates, and the platform's constraints \parencite{gebru2021datasheets}. A future reader (or you, in a year) can then reconstruct exactly what was allowed:
 \begin{lstlisting}
 collection = {
     "source":      "reddit.com  (PRAW, r/ClimateChange)",
@@ -332,7 +332,7 @@ pathlib.Path("datasheet.json").write_text(json.dumps(collection, indent=2))
     \bottomcite{Targets drawn from the chapter's callouts, thin exercises, ``Common Misconceptions,'' and ``Further Reading.''}
 \end{frame}
 
-\begin{frame}{What makes a good revision \& a good review}
+\begin{frame}{A good revision, and a good review}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             \begin{block}{A strong PR}

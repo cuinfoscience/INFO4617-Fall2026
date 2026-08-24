@@ -64,7 +64,7 @@
 \section{Monday · Concepts}
 % =========================================================================
 
-\begin{frame}{Why data formats matter}
+\begin{frame}{The role of data formats}
     {\small No class Monday (Labor Day) --- these concepts open Wednesday's session, just before the notebook.}
 
     \medskip
@@ -372,7 +372,7 @@ data.get("elevation", "unknown")  # .get avoids KeyError
     \bottomcite{Targets drawn from the chapter's callouts, ``Common Issues,'' exercises \& ``Further Reading.''}
 \end{frame}
 
-\begin{frame}{What makes a good revision \& a good review}
+\begin{frame}{A good revision, and a good review}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             \begin{block}{A strong PR}
@@ -408,7 +408,7 @@ data.get("elevation", "unknown")  # .get avoids KeyError
         \item BeautifulSoup navigates XML with \texttt{.find()}, \texttt{.find\_all()}, and \texttt{.text}; attributes come out with bracket notation.
         \item For JSON, \textbf{peel the onion} --- inspect \texttt{type()} and \texttt{.keys()} top-down, and use \texttt{.get()} for safe access.
         \item The \texttt{find\_all} $\rightarrow$ list-of-dicts $\rightarrow$ \texttt{DataFrame} pipeline is the bridge from raw web data to analysis.
-        \item Format is a \textbf{transparency} choice: open XML/JSON serves public oversight; scanned PDFs quietly enclose it.
+        \item Format is a \textbf{transparency} choice: open XML and JSON support public oversight; scanned PDFs prevent it.
     \end{enumerate}
     \bigskip
     \bottomcite{Reading: Textbook Ch.~4. Related: \textcite{mitchell2018web}; \textcite{vandenbroucke2018practical}.}
