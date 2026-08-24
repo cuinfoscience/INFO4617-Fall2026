@@ -61,310 +61,260 @@
 \section{Monday · Concepts}
 % =========================================================================
 
-\begin{frame}{Agenda}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \begin{tabular}{@{}ll@{}}
-                \textbf{00:00 -- 00:04} & The ethics of retrieval \\[0.3em]
-                \textbf{00:04 -- 00:20} & The law: the CFAA, four rulings, \\
-                                        & and what is still moving \\[0.3em]
-                \textbf{00:20 -- 00:26} & Terms of Service \& privacy policies \\[0.3em]
-                \textbf{00:26 -- 00:34} & \textbf{Activity}: audit a platform you use \\[0.3em]
-                \textbf{00:34 -- 00:44} & \textbf{Discussion}: four articles on \\
-                                        & AI scraping \\[0.3em]
-                \textbf{00:44 -- 00:50} & The framework, and Wednesday \\
-            \end{tabular}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Before we start}
-                \footnotesize A browser, and the four articles from the reading. You will read primary sources for about half of today.
-            \end{alertblock}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 \begin{frame}{The ethics of retrieval}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            ``Web scraping'' is a popular phrase --- and a faintly pejorative one. Data is \textbf{valuable}. Other people spent time, money, and effort to create and host what you are about to retrieve.
+            ``Web scraping'' is a slightly pejorative phrase. Data is \textbf{valuable}. Other people spent time, money, and effort to create and host what you are about to retrieve for free.
 
             \bigskip
-
-            Ask two questions, in order. \textbf{Can I scrape this?} Then: \textbf{should I, and how do I do it responsibly?}
+            \textbf{Can I scrape this?}
+            
+            \bigskip
+            \textbf{Should I scrape this?}
+            
+            \bigskip
+            \textbf{How do I responsibly scrape this?}
 
             \bigskip
-
-            This chapter builds a \textbf{decision framework} to revisit before every collection project in this course and beyond. Three layers of guidance, none sufficient alone: \textbf{law}, \textbf{technical norms} (\texttt{robots.txt}), and \textbf{ethics}.
+            We need a decision framework from \textbf{law}, \textbf{skills}, and \textbf{ethics}.
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Key idea}
-                \footnotesize ``It's technically possible'' is not the same as ``it's legal,'' and ``it's legal'' is not the same as ``it's ethical.''
-            \end{alertblock}
+        \begin{column}{0.35\textwidth}\centering
+            \includegraphics[width=.65\textwidth]{slides/week-02/img/ben-parker.jpg}\\
+            {\small With great power comes great responsibility.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~2, ``The Ethics of Retrieval.''}
+    \begin{alertblock}{Reminder}\small
+        We will discuss the law but \textbf{nothing in this or any other lecture is legal advice}. Talk to a lawyer before web scraping a private website that might make rich people mad.
+    \end{alertblock}
 \end{frame}
 
 \begin{frame}{The Computer Fraud and Abuse Act (1986)}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            The \textbf{Computer Fraud and Abuse Act} was enacted in 1986, expanding a narrower 1984 statute, during a national panic about ``computer crime.'' The web did not exist.
+            The \textbf{Computer Fraud and Abuse Act} was enacted in 1986 during a national panic about ``computer crime.''
 
             \medskip
 
-            Its key provision prohibits \textbf{``unauthorized access''} to a computer system. What the statute never does is say what makes access to a \textit{public web page} unauthorized.
+            \begin{quote}
+                ``Whoever intentionally accesses a computer without authorization or exceeds authorized access, and thereby obtains information from any protected computer... and as a result of such conduct, recklessly causes damage or loss''
+            \end{quote}
 
             \medskip
-
             The CFAA is a \textbf{criminal} statute. That makes the question ``was this access authorized?'' the difference between a research method and a federal charge.
 
             \medskip
 
-            Courts have argued over that phrase for forty years.
+            Every data collection decision we make in this class is subject to a criminal statute written before a decade before the the web.
+            
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Relevance to your work}
-                \footnotesize Every collection decision this semester falls under a criminal statute written before the web existed. Courts still disagree about how it applies.
-            \end{alertblock}
+            \centering
+            \includegraphics[width=.75\textwidth]{slides/week-02/img/war-games-poster.jpg}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~2, ``The Computer Fraud and Abuse Act.''}
 \end{frame}
 
-\begin{frame}{Aaron Swartz and Cambridge Analytica}
+\begin{frame}{Aaron Swartz}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \textbf{Aaron Swartz (2011--2013).} Swartz used MIT's network to bulk-download academic articles from JSTOR. Federal prosecutors charged him under the CFAA with eleven counts. Together they carried decades of theoretical exposure. The prosecutors argued that a violation of a terms-of-use agreement was ``unauthorized access.'' He died by suicide in 2013, at 26.
+            \textbf{Aaron Swartz} was an influential hacker from the 2000s: RSS, Creative Commons, web.py, Markdown, Reddit
+            
+            \medskip
+            In 2010 and 2011, Swartz used MIT's open network to bulk download academic articles from JSTOR \textit{maybe} with the intent to break the paywall: \href{https://en.wikipedia.org/wiki/Guerilla_Open_Access_Manifesto}{Guerille Open Access Manifesto}
+            
+            \medskip
+            Federal prosecutors charged him in 2011 under the CFAA's  ``unauthorized access'' rule carrying several decades of jail time
+            
+            \medskip
+            He died by suicide in 2013, at 26.
 
             \medskip
+            ``\href{https://archive.org/details/TheInternetsOwnBoyTheStoryOfAaronSwartz}{The Internet's Own Boy: The Story of Aaron Swartz}'' (2014)
 
-            \textbf{Cambridge Analytica (2018).} A researcher collected Facebook data through the platform's API for ostensibly academic purposes, then handed it to a political consulting firm. The fallout closed APIs across the industry --- for everyone, including the researchers who had done nothing wrong.
+            \medskip
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{Consequences}
-                \footnotesize After \textbf{Swartz}, researchers knew that a vague statute could be aimed at them.
-
-                \smallskip
-
-                After \textbf{Cambridge Analytica}, platforms treated open access as a liability.
-
-                \smallskip
-
-                Access was already closing before AI arrived (Ch.~3).
-            \end{block}
+        \begin{column}{0.35\textwidth}\centering
+            \includegraphics[width=.75\textwidth]{slides/week-02/img/aaron-swartz.jpg}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~2, ``Social History and Public Interest.'' On the CFAA's use against researchers: \textcite{fiesler2020no}.}
+    \begin{alertblock}{Consequences}
+        \small Federal prosecutors have substantial discretion over how aggressively to prosecute charges. After Swartz, researchers and hacktivists became much more worried about CFAA prosecutions.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Cambridge Analytica}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \textbf{Cambridge Analytica} was a political consulting firm active in the 2016 elections in both US and UK.
+            
+            \medskip
+            A researcher collected data on millions of Facebook users through the platform's API.
+
+            \medskip
+            Users completed a survey about political identity but Facebook's Graph API allowed the researcher to pull their entire friend list
+
+            \medskip
+            ``\href{https://www.netflix.com/title/80117542}{The Great Hack}'' (2019, Netflix)
+            
+        \end{column}
+        \begin{column}{0.35\textwidth}\centering
+            \includegraphics[width=.75\textwidth]{slides/week-02/img/cambridge-analytica-logo.png}
+        \end{column}
+    \end{columns}
+    \begin{alertblock}{Consequences}
+        \small Platforms shifted their stance from permissive access and began to see researchers as liabilities and shut down access maybe to protect users' privacy but mostly to avoid bad press.
+    \end{alertblock}
 \end{frame}
 
 \begin{frame}{\textit{Van Buren v.\ United States} (2021)}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \textbf{The facts.} A police sergeant ran a license-plate search in a database he was \textit{authorized} to use --- but did it for a bribe, not police work. He was charged under the CFAA's ``exceeds authorized access'' clause.
+            A police sergeant ran a license plate search in a database for a bribe. He was \textit{authorized} to use this database. Prosecutors charged him under the CFAA's ``exceeds authorized access''
 
             \medskip
-
-            \textbf{The holding.} The Supreme Court adopted a \textbf{``gates-up-or-down''} reading: the CFAA targets entering areas you are not entitled to enter. It does \textit{not} reach misusing information you were allowed to see.
+            The Supreme Court ruled adopted a ``gates-up-or-down'' reading: the CFAA targets entering areas you are not entitled to enter but does \textit{not} reach the misuse of information you were allowed to see.
 
             \medskip
-
-            \textbf{Why it matters to you.} Before \textit{Van Buren}, a prosecutor could plausibly argue that breaking a website's stated terms was a federal crime. After it, that theory is very hard to sustain.
+            After \textit{Van Buren}, is is more difficult for prosecutors to argue that breaking a website's terms of service rises to a federal crime. But the CFAA is not the \textit{only} federal law for prosecuting cybercrime.
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{The test}
-                \footnotesize Did you get past an authentication barrier, or did you break a rule about data you could already reach?
-
-                \smallskip
-
-                Only the first is a CFAA question.
-            \end{block}
+        \begin{column}{0.35\textwidth}\centering
+            \includegraphics[width=.75\textwidth]{slides/week-02/img/vanburen-us.png}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~2, ``Legal Frameworks.'' A gate is authentication --- a login, a paywall, an API key.}
+    \begin{alertblock}{Consequences}
+        \small CFAA only applies to barriers in code not term-of-use violations, removing a tool prosecutors and platforms had been able to use against researchers and activists.
+    \end{alertblock}
 \end{frame}
 
-\begin{frame}{\textit{hiQ Labs v.\ LinkedIn} (2019--2022)}
+\begin{frame}{\textit{hiQ Labs v.\ LinkedIn} (2017--2022)}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            The case has three parts, and the third is usually left out:
-            \begin{enumerate}\small
-                \item hiQ, an analytics company, scraped \textbf{public} LinkedIn profiles. LinkedIn sent a cease-and-desist and blocked it.
-                \item The Ninth Circuit held --- in 2019, and \textbf{again in 2022} after the Supreme Court sent it back in light of \textit{Van Buren} --- that scraping publicly accessible data likely does \textbf{not} violate the CFAA. No authentication gate was bypassed.
-                \item Later in 2022, hiQ \textbf{lost} on LinkedIn's \textbf{breach-of-contract} claim: it kept scraping after agreeing to the ToS and receiving the C\&D. The case settled with hiQ agreeing to stop.
-            \end{enumerate}
+            hiQ is an analytics company that scraped \textbf{public} LinkedIn profiles. LinkedIn sent a cease-and-desist and blocked it in 2017.
+
+            \medskip
+            Based on \textit{Van Buren} (2021), the Ninth Circuit held that scraping publicly accessible data does \textbf{not} violate the CFAA. hiQ never bypassed a login page or agreed to terms of service to view the data itself.
+
+            \medskip
+            hiQ \textbf{lost} on LinkedIn's \textbf{breach-of-contract} claim after it continued to scrape despite agreeing to LinkedIn's User Agreement and used fake accounts to get around LinkedIn's rate limiting.
+
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{alertblock}{A common misreading}
-                \footnotesize A common summary is ``\textit{hiQ} means scraping public data is legal.''
-
-                \smallskip
-
-                That describes only the second part. hiQ still lost and stopped scraping.
-
-                \smallskip
-
-                \textbf{The CFAA is not the only law in the room.}
-            \end{alertblock}
+        \begin{column}{0.35\textwidth}\centering
+            \includegraphics[width=\textwidth]{slides/week-02/img/yes-but-actually-no.jpg}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~2, ``Legal Frameworks.'' Criminal exposure and contractual exposure are different questions with different answers.}
+    \begin{alertblock}{Consequences}
+        \small \textit{Van Buren} limited the ability to use CFAA to prosecute public web scraping, but hiQ still lost under contract law. Scraping \textit{public} data got legally safer; ignoring the Terms of Service to scrape did not.
+    \end{alertblock}
 \end{frame}
 
 \begin{frame}{\textit{Sandvig v.\ Barr} (2020)}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \textbf{The facts.} Researchers wanted to run \textbf{audit studies} of algorithmic discrimination. They planned to make test profiles on housing and employment sites. The profiles would show if the algorithms treated people differently by race. This method violates the Terms of Service of those sites. The researchers feared prosecution under the CFAA, so they sued \textit{first}.
+            Researchers wanted to run \textbf{audit studies} of algorithmic discrimination with fake profiles. This method violates the Terms of Service of those sites. The researchers feared prosecution under the CFAA.
 
             \medskip
-
-            \textbf{The holding.} A federal district court held in 2020 that merely violating a website's Terms of Service is \textbf{not} a CFAA crime.
+            Violating a website's Terms of Service is \textbf{not} a CFAA crime. Enforcing TOS would turn each website into its own criminal jurisdiction.
 
             \medskip
+            Audit studies are well-established method offline and are the main source of evidence about algorithmic discrimination.
 
-            \textbf{Why it matters.} Audit studies are the main source of evidence about algorithmic discrimination. This ruling is from one district court, so it is limited, but it protects the method.
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{The underlying tension}
-                \footnotesize Platforms write the rules that govern how researchers may study them.
-
-                \smallskip
-
-                Terms of Service that forbid test accounts also prevent an audit for discrimination.
-            \end{block}
+        \begin{column}{0.35\textwidth}\centering
+            \includegraphics[width=.75\textwidth]{slides/week-02/img/research-cat.jpg}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~2, ``Legal Frameworks.'' Audit methodology and ToS restrictions: \textcite{fiesler2020no}.}
+    \begin{alertblock}{Consequences}
+        \small Platforms still write their own Terms of Service and can lead to civil suits for breach of contract, even after \textit{Sandvig} removed the threat of federal prosecution.
+    \end{alertblock}
 \end{frame}
 
-\begin{frame}{Summary of the rulings}
-    \begin{center}\small
-    \begin{tabular}{@{}p{0.20\textwidth}p{0.36\textwidth}p{0.36\textwidth}@{}}
-        \toprule
-        \textbf{Case} & \textbf{Holding} & \textbf{What it means for you} \\
-        \midrule
-        \textit{Van Buren} (2021) & CFAA reaches gates, not use restrictions & Breaking a rule $\neq$ a federal crime \\
-        \textit{hiQ} (2019, 2022) & Public scraping likely not CFAA --- but breach of contract & Winning on the CFAA is not winning \\
-        \textit{Sandvig} (2020) & ToS violation alone is not a CFAA crime & Audit research has some cover \\
-        \textit{Bright Data} (2024) & Logged-out public scraping survived contract claims & Never agreeing means no contract \\
-        \bottomrule
-    \end{tabular}
-    \end{center}
-    \medskip
-    {\footnotesize \textbf{Summary:} the CFAA covers \textbf{authentication barriers}, not \textbf{use restrictions}. What left criminal law did not disappear. It moved to \textbf{contract law}, which changes the court and the penalty, not whether you are exposed.}
-    \bottomcite{Textbook Ch.~2, ``Legal Frameworks'' \& ``The Current Landscape.''}
-\end{frame}
-
-\begin{frame}{2024: Bright Data and the limits of contract}
+\begin{frame}{Bright Data (2024)}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Two rulings against the same data broker mark where the line is now:
-            \begin{itemize}\small
-                \item \textbf{Meta v.\ Bright Data} (early 2024) --- Meta's breach-of-contract claims \textbf{failed}. The scraping at issue collected only public data \textit{without logging in}, so the account terms Meta relied on never attached.
-                \item \textbf{X Corp.\ v.\ Bright Data} (later 2024) --- \textbf{dismissed}, with the court warning against letting platforms use contract law to claim exclusive ownership of public web data.
-            \end{itemize}
+            \textbf{Meta v.\ Bright Data} --- Meta's breach-of-contract claims failed. Bright Data held Facebook/Instagram accounts but the scraping happened while \textit{logged out}.
 
             \medskip
+            \textbf{X Corp.\ v.\ Bright Data} --- dismissed on different grounds: X's users, not X, hold rights in their posts; X could not use its ToS to claim ownership over content it does not own.
 
-            These are trial-court rulings, not nationwide rules. But the direction is consistent with \textit{hiQ}: risk concentrates at \textbf{authentication barriers and contractual relationships}, not at public visibility.
+            \medskip
+            These are trial-court rulings, but the direction is consistent with \textit{hiQ}: platforms are struggling to use contract law to fence off public data.
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{alertblock}{The key distinction}
-                \footnotesize \textbf{Logged out}: you agreed to nothing, so there is no contract to breach.
-
-                \smallskip
-
-                \textbf{Logged in}: you agreed, and the Terms of Service are enforceable against you.
-
-                \smallskip
-
-                The data is the same. The legal exposure is not.
-            \end{alertblock}
+        \begin{column}{0.35\textwidth}\centering
+            \includegraphics[width=\textwidth]{slides/week-02/img/spongebob-window.jpg}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~2, ``The Current Landscape.''}
+    \begin{alertblock}{Consequences}
+        \small A contract needs terms that clearly reach the conduct at issue and a company cannot use its terms to claim ownership over content or data it does not itself own.
+    \end{alertblock}
 \end{frame}
 
-\begin{frame}{The AI front: \textit{NYT v.\ OpenAI}}
+\begin{frame}{\textit{The New York Times v.\ OpenAI}}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \textit{The New York Times v.\ OpenAI and Microsoft} (filed 2023) asks a question that no earlier case asked. Many similar suits ask it too. Is it infringement to collect copyrighted content and \textbf{train a model} on it? Or is it fair use?
+            The New York Times sued OpenAI and Microsoft to block its infringing collection of copyrighted content to train a statistical model. Or is it fair use?
 
             \medskip
+            Publishers hardened their sites against crawlers: within a year of the suit, most major news sites blocked OpenAI's GPTBot
 
-            That question is unresolved. But the \textit{litigation} has already changed the web, without waiting for a ruling:
-            \begin{itemize}\small
-                \item publishers hardened their sites against crawlers
-                \item AI-specific directives appeared in \texttt{robots.txt}
-                \item exclusive licensing deals carved up access
-            \end{itemize}
+            \medskip
+            AI-specific directives appeared in \texttt{robots.txt}, distinguishing crawlers for \textbf{training} from crawlers for \textbf{search}
+
+            \medskip
+            Exclusive licensing deals carved up access, e.g.\ the AP, \textit{Financial Times}, and News Corp.\ struck paid deals with OpenAI while others sued
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Effect on your work}
-                \footnotesize You are not a party to these suits, but the result affects you.
-
-                \smallskip
-
-                A site that blocks OpenAI also blocks your class project. Ch.~3 covers this as \textbf{enclosure}.
-            \end{alertblock}
+        \begin{column}{0.35\textwidth}\centering
+            \includegraphics[width=\textwidth]{slides/week-02/img/nyt-openai.jpg}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~2, ``The Current Landscape.'' Data revolts against AI scraping: \parencite{frenkel_not_2023}.}
+    \begin{alertblock}{Consequences}\small
+        A site that blocks OpenAI also blocks your class project. Robots.txt cannot tell a researcher's crawler from a commercial one. Ch.~3 covers this as \textbf{enclosure}.
+    \end{alertblock}
 \end{frame}
 
 \begin{frame}{State privacy law}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            The U.S.\ has no comprehensive federal privacy law, so states filled the gap. California wrote the \textbf{CCPA/CPRA} first. By 2026 more than a dozen states have comprehensive statutes. They include the \textbf{Colorado Privacy Act}, which covers data about Colorado residents.
+            The U.S.\ has no comprehensive federal privacy law, so states filled the gap. California wrote the \textbf{CCPA/CPRA} first. By 2026 close to twenty states have comprehensive statutes. They include the \textbf{Colorado Privacy Act}, which covers data about Colorado residents.
 
             \medskip
-
             They import GDPR-like concepts: \textbf{personal data rights}, \textbf{purpose limitation}, and obligations on whoever processes the data.
 
             \medskip
-
             The \textbf{GDPR} itself reaches EU residents' personal data regardless of where \textit{you} are sitting.
 
             \medskip
-
-            If your scraped dataset contains personal information about residents of these places, these laws can apply to \textbf{you} --- student status is not an exemption.
+            If your scraped dataset contains personal information about residents of these places, these laws can apply to \textbf{you}.
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Practical rule}
-                \footnotesize Treat personal data as a \textbf{liability}.
-
-                \smallskip
-
-                Each extra field is more risk that you have chosen to hold. Collect the minimum that answers your question.
-            \end{alertblock}
+        \begin{column}{0.35\textwidth}\centering
+            \includegraphics[width=\textwidth]{slides/week-02/img/co-state-house.jpg}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~2, ``The Current Landscape'' \& ``International Considerations.''}
+    \begin{alertblock}{Consequences}
+        \footnotesize Collecting data about individuals still means assuming some personal risk in an increasing number of jurisdictions. Collect the minimum that answers your question.
+    \end{alertblock}
 \end{frame}
 
 \begin{frame}{Terms of Service as quasi-law}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            As CFAA exposure narrowed, contract law expanded. The Terms of Service is now the document that constrains your work.
+            Although CFAA exposure has narrowed, the Terms of Service still constrains what you can legally scrape from most websites
+
+            \medskip
+
+            The agreement is also \textbf{asymmetric}: You accepted it once by clicking and the platform can amends it whenever it wants to say almost anything.
 
             \medskip
 
             Every major platform's ToS restricts automated collection. When you created an account, you agreed. Consequences run from account suspension to IP blocking to litigation.
-
-            \medskip
-
-            The agreement is also \textbf{asymmetric}. You accepted it once by clicking. The platform amends it by posting a new version. \textcite{tan_terms_2024} documents platforms rewriting terms and privacy policies to permit \textbf{AI training} on data that users had already shared.
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Course warning}
-                \footnotesize Code in several chapters retrieves data in ways that may violate a platform's ToS. It is here to teach technique.
-
-                \smallskip
-
-                \textbf{You} are responsible for the terms of anything you access. When in doubt: use the API, or don't collect it.
-            \end{alertblock}
+        \begin{column}{0.35\textwidth}\centering
+            \includegraphics[width=.75\textwidth]{slides/week-02/img/this-is-fine.jpg}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~2, ``Terms of Service as Quasi-Law.'' ToS rewritten for AI training: \textcite{tan_terms_2024}.}
+    
+    \begin{alertblock}{Consequences}
+        \small We will run code that may violate CFAA and platforms' ToS in educational or research capacities. That insulates us from some liability but those protections stop with commercial or abusive applications.
+    \end{alertblock}
 \end{frame}
 
 \begin{frame}{Reading a ToS or privacy policy}
@@ -390,43 +340,38 @@
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Note on question 4}
-                \footnotesize \textcite{tan_terms_2024} found changes as small as a few words --- inserting ``artificial intelligence'' or ``machine learning'' into a policy you agreed to years ago.
-
-                \smallskip
-
-                In February 2024 the \textbf{FTC} warned that rewriting a privacy policy to retroactively cover data already collected may be ``\textbf{unfair or deceptive}.''
-            \end{block}
+            
+           \includegraphics[width=\textwidth]{slides/week-02/img/eyes-crossed.jpg}
         \end{column}
     \end{columns}
-    \bottomcite{Method adapted from the prior offering of this course. ToS drift: \textcite{tan_terms_2024}.}
 \end{frame}
 
 \begin{frame}{Activity: audit a platform you use}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \textbf{Eight minutes.} Select a platform that you use. Open its Terms of Service or its privacy policy.
+            Select a platform that you use. Scroll to the bottom and open its Terms of Service or Privacy Policy.
 
             \medskip
 
             \begin{enumerate}
-                \item Search the document for the keywords on the last slide.
+                \item Search the document for the keywords.
                 \item Answer the four questions.
                 \item Find one clause that surprised you.
             \end{enumerate}
 
             \medskip
 
-            Then report two things. First, does this platform permit the data collection that you plan for this class? Second, how sure are you?
+            Does this platform permit the data collection that you plan for this class? Second, how sure are you?
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Public institutions also have terms}
-                \footnotesize The Colorado General Assembly publishes every bill, sponsor, and vote --- and still has a privacy policy governing its site.
-
-                \smallskip
-
-                \textbf{``Public data'' never means ``no terms.''} It is the first place students assume otherwise.
-            \end{alertblock}
+            \begin{block}{Four questions}
+                \begin{enumerate}\small
+                \item Is \textbf{automated access} addressed at all?
+                \item Is there a \textbf{research or academic} exception?
+                \item What does it say about \textbf{personal data} and \textbf{AI training}?
+                \item When was it \textbf{last updated} --- and what changed?
+            \end{enumerate}
+            \end{block}
         \end{column}
     \end{columns}
     \bottomcite{Report back in pairs. We will collect the surprising clauses on the board.}
@@ -435,8 +380,8 @@
 \begin{frame}{Discussion: four articles on AI scraping}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \textbf{Ten minutes. Four minutes in groups, then six minutes for reports.} Each group takes one article:
-            \begin{enumerate}\small
+            Each group takes one article:
+            \begin{enumerate}
                 \item \textbf{The terms move} --- \textcite{tan_terms_2024}, on ToS rewritten to permit AI training
                 \item \textbf{The web pushes back} --- \textcite{koebler_backlash_2024}, on measurable mass blocking
                 \item \textbf{The defense misfires} --- \textcite{koebler_wrong_2024}, on sites blocking the wrong bots
@@ -449,12 +394,11 @@
                 \begin{enumerate}\footnotesize
                     \item What \textbf{changed}, concretely?
                     \item Who \textbf{gains} and who is \textbf{harmed}?
-                    \item What does it mean for \textbf{your} project this semester?
+                    \item What could it mean for what \textbf{we} do in class?
                 \end{enumerate}
             \end{block}
         \end{column}
     \end{columns}
-    \bottomcite{All four are on Canvas. Question 3 is the one I will push you on.}
 \end{frame}
 
 \begin{frame}{Common findings}
@@ -465,10 +409,6 @@
         \item \textbf{The blocks often fail.} Reuters and Condé Nast blocked two \textit{retired} Anthropic crawlers but not the active one. iFixit received about 1 million requests in one day. Read the Docs spent \$5,000 on bandwidth \parencite{koebler_wrong_2024}.
         \item \textbf{Some operators ignore the rules.} Perplexity reached blocked pages from an unpublished IP address. It then fabricated a claim that a named police officer had committed a crime \parencite{mehrotra_perplexity_2024}.
     \end{enumerate}
-    \smallskip
-    \begin{alertblock}{Effect on student projects}
-        \footnotesize A blanket block cannot distinguish an AI crawler from a search engine, an archive, or a student project. Restrictions aimed at AI companies also apply to your coursework.
-    \end{alertblock}
 \end{frame}
 
 \begin{frame}{An ethical decision framework}
@@ -486,9 +426,9 @@
             {\footnotesize No framework substitutes for judgment --- but working these questions surfaces the risks.}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{IRBs \& web data}
+            \begin{alertblock}{IRBs \& web data}
                 \footnotesize Scraping becomes \textit{human-subjects research} when you collect data about \textbf{identifiable people} to produce \textbf{generalizable knowledge}. Public officials' votes: usually not. Social-media profiles for health or politics: almost certainly. When in doubt, ask your IRB.
-            \end{block}
+            \end{alertblock}
         \end{column}
     \end{columns}
     \bottomcite{Textbook Ch.~2, ``An Ethical Decision Framework'' \& ``IRBs and Web Data.'' The Belmont Report maps consent~$\to$~respect, proportionality/privacy~$\to$~beneficence, risk~$\to$~justice.}
