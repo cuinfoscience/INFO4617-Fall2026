@@ -118,6 +118,8 @@
 \def\githuburl{https://github.com/cuinfoscience/INFO4617-Fall2026}
 \def\bookurl{https://cuinfoscience.github.io/Web-Data-Science-Book/}
 \def\bookgithuburl{https://github.com/cuinfoscience/Web-Data-Science-Book}
+% Link a chapter on the rendered Quarto site (not the .qmd source on GitHub).
+\newcommand{\bookch}[2]{\href{\bookurl#1.html}{#2}}
 \def\meetingdays{Mondays, Wednesdays, and Fridays}
 \def\starttime{12:20 pm}
 \def\endtime{1:10 pm}
@@ -218,7 +220,7 @@ There is no textbook to purchase. The required text is the open-source \textit{W
 The source code you will be editing, can be accessed here:
 \vspace{-8pt}
     \begin{center}
-    \href{\bookurl}{\bookgithuburl}
+    \href{\bookgithuburl}{\bookgithuburl}
     \end{center}
 \vspace{-8pt}
 
@@ -361,59 +363,59 @@ The schedule will evolve throughout the semester, so please consult the schedule
 
 \section{Week 1 -- Foundations: Introduction \& setup}
 \textcolor{CUGold}{\textbf{Friday, August 21}}\\
-Course overview and motivation; setting up the Python computing environment, Git, and GitHub; how our textbook-revision workflow will work. \textit{Because the semester begins on a Thursday, our first meeting is this Friday only.} Textbook: \href{\bookurl/blob/main/ch-01-introduction.qmd}{Chapter 1 (Introduction)}.
+Course overview and motivation; setting up the Python computing environment, Git, and GitHub; how our textbook-revision workflow will work. \textit{Because the semester begins on a Thursday, our first meeting is this Friday only.} Textbook: \bookch{ch-01-introduction}{Chapter 1 (Introduction)}.
 
 \section{Week 2 -- Foundations: Ethics, law \& responsible collection}
 \textcolor{CUGold}{\textbf{August 24, 26 \& 28}}\\
-The legal and ethical contours of web data retrieval: terms of service, copyright, privacy, and research ethics. Textbook: \href{\bookurl/blob/main/ch-02-ethics.qmd}{Chapter 2 (Ethics, Law, and Responsible Data Collection)}.
+The legal and ethical contours of web data retrieval: terms of service, copyright, privacy, and research ethics. Textbook: \bookch{ch-02-ethics}{Chapter 2 (Ethics, Law, and Responsible Data Collection)}.
 
 \section{Week 3 -- Foundations: The post-API age}
 \textcolor{CUGold}{\textbf{August 31, September 2 \& 4}}\\
-Changing contexts of data access, platform transparency, and the ``post-API'' turn. Textbook: \href{\bookurl/blob/main/ch-03-post-api.qmd}{Chapter 3 (The Post-API Age)}.
+Changing contexts of data access, platform transparency, and the ``post-API'' turn. Textbook: \bookch{ch-03-post-api}{Chapter 3 (The Post-API Age)}.
 
 \section{Week 4 -- Foundations: Data formats (XML \& JSON)}
 \textcolor{CUGold}{\textbf{September 9 \& 11}}\\
-JSON and XML data formats and supporting libraries. \textit{No class Monday, September 7 (Labor Day); this week the concept and notebook are introduced on Wednesday and we hold the revision workshop on Friday.} Textbook: \href{\bookurl/blob/main/ch-04-data-formats.qmd}{Chapter 4 (Data Formats: XML and JSON)}.
+JSON and XML data formats and supporting libraries. \textit{No class Monday, September 7 (Labor Day); this week the concept and notebook are introduced on Wednesday and we hold the revision workshop on Friday.} Textbook: \bookch{ch-04-data-formats}{Chapter 4 (Data Formats: XML and JSON)}.
 
 \section{Week 5 -- Foundations: Web architecture \& protocols}
 \textcolor{CUGold}{\textbf{September 14, 16 \& 18}}\\
-Web protocols like IP and HTTP using libraries like \href{https://docs.python.org/3/library/urllib.html}{\texttt{urllib}} and \href{https://requests.readthedocs.io/}{\texttt{requests}}. Textbook: \href{\bookurl/blob/main/ch-05-protocols.qmd}{Chapter 5 (Web Architecture and Protocols)}.
+Web protocols like IP and HTTP using libraries like \href{https://docs.python.org/3/library/urllib.html}{\texttt{urllib}} and \href{https://requests.readthedocs.io/}{\texttt{requests}}. Textbook: \bookch{ch-05-protocols}{Chapter 5 (Web Architecture and Protocols)}.
 
 \section{Week 6 -- Documents: Parsing static web pages}
 \textcolor{CUGold}{\textbf{September 21, 23 \& 25}}\\
-HTML elements and document parsing on static web pages with \href{https://www.crummy.com/software/BeautifulSoup/bs4/doc/}{\texttt{BeautifulSoup}}. Textbook: \href{\bookurl/blob/main/ch-06-static-pages.qmd}{Chapter 6 (Parsing Static Web Pages)}.
+HTML elements and document parsing on static web pages with \href{https://www.crummy.com/software/BeautifulSoup/bs4/doc/}{\texttt{BeautifulSoup}}. Textbook: \bookch{ch-06-static-pages}{Chapter 6 (Parsing Static Web Pages)}.
 
 \section{Week 7 -- Documents: Archived web pages}
 \textcolor{CUGold}{\textbf{September 28, 30 \& October 2}}\\
-Using the Internet Archive's Wayback Machine to analyze archived web pages. Textbook: \href{\bookurl/blob/main/ch-07-archives.qmd}{Chapter 7 (Archived Web Pages and the Wayback Machine)}.
+Using the Internet Archive's Wayback Machine to analyze archived web pages. Textbook: \bookch{ch-07-archives}{Chapter 7 (Archived Web Pages and the Wayback Machine)}.
 
 \section{Week 8 -- Documents: Dynamic web pages}
 \textcolor{CUGold}{\textbf{October 5, 7 \& 9}}\\
-Rendering and scraping dynamic web pages with \href{https://selenium-python.readthedocs.io/}{\texttt{selenium}}. Textbook: \href{\bookurl/blob/main/ch-08-dynamic-pages.qmd}{Chapter 8 (Dynamic Web Pages with Selenium)}.
+Rendering and scraping dynamic web pages with \href{https://selenium-python.readthedocs.io/}{\texttt{selenium}}. Textbook: \bookch{ch-08-dynamic-pages}{Chapter 8 (Dynamic Web Pages with Selenium)}.
 
 \section{Week 9 -- Documents: Extracting data from PDFs}
 \textcolor{CUGold}{\textbf{October 12, 14 \& 16}}\\
-Accessing and parsing PDFs with \href{https://pypdf.readthedocs.io/}{\texttt{pypdf}}. Textbook: \href{\bookurl/blob/main/ch-09-pdfs.qmd}{Chapter 9 (Extracting Data from PDFs)}.
+Accessing and parsing PDFs with \href{https://pypdf.readthedocs.io/}{\texttt{pypdf}}. Textbook: \bookch{ch-09-pdfs}{Chapter 9 (Extracting Data from PDFs)}.
 
 \section{Week 10 -- APIs: Wikipedia}
 \textcolor{CUGold}{\textbf{October 19, 21 \& 23}}\\
-Retrieving data from Wikipedia's APIs. \textbf{Final Project proposal due Friday, October 23.} Textbook: \href{\bookurl/blob/main/ch-10-wikipedia.qmd}{Chapter 10 (Introduction to APIs: Wikipedia)}.
+Retrieving data from Wikipedia's APIs. \textbf{Final Project proposal due Friday, October 23.} Textbook: \bookch{ch-10-wikipedia}{Chapter 10 (Introduction to APIs: Wikipedia)}.
 
 \section{Week 11 -- APIs: Government data}
 \textcolor{CUGold}{\textbf{October 26, 28 \& 30}}\\
-Retrieving and filtering data from government APIs like the Census and Federal Reserve. Textbook: \href{\bookurl/blob/main/ch-11-government.qmd}{Chapter 11 (Government Data APIs)}.
+Retrieving and filtering data from government APIs like the Census and Federal Reserve. Textbook: \bookch{ch-11-government}{Chapter 11 (Government Data APIs)}.
 
 \section{Week 12 -- APIs: Social \& media platforms}
 \textcolor{CUGold}{\textbf{November 2, 4 \& 6}}\\
-Retrieving content, social graphs, and activity streams from social and media platform APIs. Textbook: \href{\bookurl/blob/main/ch-12-social.qmd}{Chapter 12 (Social and Media Platform APIs)}.
+Retrieving content, social graphs, and activity streams from social and media platform APIs. Textbook: \bookch{ch-12-social}{Chapter 12 (Social and Media Platform APIs)}.
 
 \section{Week 13 -- APIs: AI \& language models}
 \textcolor{CUGold}{\textbf{November 9, 11 \& 13}}\\
-Accessing and using AI and large language models through their APIs. Textbook: \href{\bookurl/blob/main/ch-13-ai-apis.qmd}{Chapter 13 (AI and Language Model APIs)}.
+Accessing and using AI and large language models through their APIs. Textbook: \bookch{ch-13-ai-apis}{Chapter 13 (AI and Language Model APIs)}.
 
 \section{Week 14 -- Practice: Automating data collection}
 \textcolor{CUGold}{\textbf{November 16, 18 \& 20}}\\
-Automating and scheduling web data retrieval with tools like \href{https://docs.github.com/en/actions}{GitHub Actions}. Textbook: \href{\bookurl/blob/main/ch-14-automation.qmd}{Chapter 14 (Automating Data Collection)}.
+Automating and scheduling web data retrieval with tools like \href{https://docs.github.com/en/actions}{GitHub Actions}. Textbook: \bookch{ch-14-automation}{Chapter 14 (Automating Data Collection)}.
 
 \section{Week 15 -- Fall Break}
 \textcolor{CUGold}{\textbf{November 23--27}}\\
@@ -421,7 +423,7 @@ No class (Fall Break; university closed November 26 \& 27). Use this week to mak
 
 \section{Week 16 -- Practice: Research design \& final presentations}
 \textcolor{CUGold}{\textbf{November 30, December 2 \& 4}}\\
-Matching web data sources with research designs; workshopping and presenting Final Projects. \textit{December 4 is the last day of class and follows a Monday schedule.} Textbook: \href{\bookurl/blob/main/ch-15-research-design.qmd}{Chapter 15 (Research Design with Web Data)}. \textbf{Final Project repository and write-up due Monday, December 7.}
+Matching web data sources with research designs; workshopping and presenting Final Projects. \textit{December 4 is the last day of class and follows a Monday schedule.} Textbook: \bookch{ch-15-research-design}{Chapter 15 (Research Design with Web Data)}. \textbf{Final Project repository and write-up due Monday, December 7.}
 
 % \newpage
 
