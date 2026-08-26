@@ -32,6 +32,8 @@ INSTRUCTOR_OFFICE = "INFO 129"
 OFFICE_HOURS = "TBD — posted on Canvas"     # placeholder, mirrors the syllabus
 
 BOOK_URL = "https://github.com/cuinfoscience/Web-Data-Science-Book"
+# Rendered Quarto site. Students read here; the repo above is for editing.
+BOOK_SITE_URL = "https://cuinfoscience.github.io/Web-Data-Science-Book"
 REPO_URL = "https://github.com/cuinfoscience/INFO4617-Fall2026"
 
 TZ = ZoneInfo("America/Denver")
@@ -190,7 +192,11 @@ def week_info(week_number: int):
 
 
 def chapter_url(chapter_file: str) -> str:
-    return f"{BOOK_URL}/blob/main/{chapter_file}"
+    """Link the rendered chapter, not the .qmd source: students read the site.
+    Takes the source filename (ch-02-ethics.qmd) so the week table stays the
+    single place a chapter is named."""
+    slug = chapter_file.removesuffix(".qmd")
+    return f"{BOOK_SITE_URL}/{slug}.html"
 
 
 def notebook_url(slug: str) -> str:
