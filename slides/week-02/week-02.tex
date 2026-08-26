@@ -80,7 +80,7 @@
             We need a decision framework from \textbf{law}, \textbf{skills}, and \textbf{ethics}.
         \end{column}
         \begin{column}{0.35\textwidth}\centering
-            \includegraphics[width=.65\textwidth]{slides/week-02/img/ben-parker.jpg}\\
+            \includegraphics[width=.65\textwidth]{img/ben-parker.jpg}\\
             {\small With great power comes great responsibility.}
         \end{column}
     \end{columns}
@@ -110,7 +110,7 @@
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
-            \includegraphics[width=.75\textwidth]{slides/week-02/img/war-games-poster.jpg}
+            \includegraphics[width=.75\textwidth]{img/war-games-poster.jpg}
         \end{column}
     \end{columns}
 \end{frame}
@@ -135,7 +135,7 @@
             \medskip
         \end{column}
         \begin{column}{0.35\textwidth}\centering
-            \includegraphics[width=.75\textwidth]{slides/week-02/img/aaron-swartz.jpg}
+            \includegraphics[width=.75\textwidth]{img/aaron-swartz.jpg}
         \end{column}
     \end{columns}
     \begin{alertblock}{Consequences}
@@ -159,7 +159,7 @@
             
         \end{column}
         \begin{column}{0.35\textwidth}\centering
-            \includegraphics[width=.75\textwidth]{slides/week-02/img/cambridge-analytica-logo.png}
+            \includegraphics[width=.75\textwidth]{img/cambridge-analytica-logo.png}
         \end{column}
     \end{columns}
     \begin{alertblock}{Consequences}
@@ -179,7 +179,7 @@
             After \textit{Van Buren}, is is more difficult for prosecutors to argue that breaking a website's terms of service rises to a federal crime. But the CFAA is not the \textit{only} federal law for prosecuting cybercrime.
         \end{column}
         \begin{column}{0.35\textwidth}\centering
-            \includegraphics[width=.75\textwidth]{slides/week-02/img/vanburen-us.png}
+            \includegraphics[width=.75\textwidth]{img/vanburen-us.png}
         \end{column}
     \end{columns}
     \begin{alertblock}{Consequences}
@@ -200,7 +200,7 @@
 
         \end{column}
         \begin{column}{0.35\textwidth}\centering
-            \includegraphics[width=\textwidth]{slides/week-02/img/yes-but-actually-no.jpg}
+            \includegraphics[width=\textwidth]{img/yes-but-actually-no.jpg}
         \end{column}
     \end{columns}
     \begin{alertblock}{Consequences}
@@ -221,7 +221,7 @@
 
         \end{column}
         \begin{column}{0.35\textwidth}\centering
-            \includegraphics[width=.75\textwidth]{slides/week-02/img/research-cat.jpg}
+            \includegraphics[width=.75\textwidth]{img/research-cat.jpg}
         \end{column}
     \end{columns}
     \begin{alertblock}{Consequences}
@@ -241,7 +241,7 @@
             These are trial-court rulings, but the direction is consistent with \textit{hiQ}: platforms are struggling to use contract law to fence off public data.
         \end{column}
         \begin{column}{0.35\textwidth}\centering
-            \includegraphics[width=\textwidth]{slides/week-02/img/spongebob-window.jpg}
+            \includegraphics[width=\textwidth]{img/spongebob-window.jpg}
         \end{column}
     \end{columns}
     \begin{alertblock}{Consequences}
@@ -264,7 +264,7 @@
             Exclusive licensing deals carved up access, e.g.\ the AP, \textit{Financial Times}, and News Corp.\ struck paid deals with OpenAI while others sued
         \end{column}
         \begin{column}{0.35\textwidth}\centering
-            \includegraphics[width=\textwidth]{slides/week-02/img/nyt-openai.jpg}
+            \includegraphics[width=\textwidth]{img/nyt-openai.jpg}
         \end{column}
     \end{columns}
     \begin{alertblock}{Consequences}\small
@@ -287,7 +287,7 @@
             If your scraped dataset contains personal information about residents of these places, these laws can apply to \textbf{you}.
         \end{column}
         \begin{column}{0.35\textwidth}\centering
-            \includegraphics[width=\textwidth]{slides/week-02/img/co-state-house.jpg}
+            \includegraphics[width=\textwidth]{img/co-state-house.jpg}
         \end{column}
     \end{columns}
     \begin{alertblock}{Consequences}
@@ -309,7 +309,7 @@
             Every major platform's ToS restricts automated collection. When you created an account, you agreed. Consequences run from account suspension to IP blocking to litigation.
         \end{column}
         \begin{column}{0.35\textwidth}\centering
-            \includegraphics[width=.75\textwidth]{slides/week-02/img/this-is-fine.jpg}
+            \includegraphics[width=.75\textwidth]{img/this-is-fine.jpg}
         \end{column}
     \end{columns}
     
@@ -342,7 +342,7 @@
         \end{column}
         \begin{column}{0.35\textwidth}
             
-           \includegraphics[width=\textwidth]{slides/week-02/img/eyes-crossed.jpg}
+           \includegraphics[width=\textwidth]{img/eyes-crossed.jpg}
         \end{column}
     \end{columns}
 \end{frame}
@@ -530,24 +530,59 @@ print(os.getcwd())
 \end{frame}
 
 \begin{frame}[fragile]{\texttt{robots.txt}: read it before you scrape}
-    A \texttt{robots.txt} at a site's root declares what automated agents may fetch. Read it raw, or parse it and ask permission per URL:
+    A \texttt{robots.txt} at a site's root declares what automated agents may fetch. Fetch it \textbf{with your own User-Agent}, then parse it and ask permission per URL:
 \begin{lstlisting}
 import requests
 from urllib.robotparser import RobotFileParser
 
-print(requests.get("https://en.wikipedia.org/robots.txt").text[:400])
-# User-agent: *  /  Disallow: /w/  /  Allow: ...  /  Crawl-delay: ...
+HEADERS = {"User-Agent": "WebDataScience/1.0 (INFO 4617; you@colorado.edu)"}
+text = requests.get("https://en.wikipedia.org/robots.txt",
+                    headers=HEADERS).text
 
 rp = RobotFileParser()
-rp.set_url("https://en.wikipedia.org/robots.txt")
-rp.read()
+rp.parse(text.splitlines())   # NOT rp.read() -- see the next slide
 
 rp.can_fetch("*", "https://en.wikipedia.org/wiki/Python_(programming_language)")  # True
 rp.can_fetch("*", "https://en.wikipedia.org/w/api.php")                           # False
-rp.crawl_delay("*")   # seconds between requests, or None -> pick a polite default
+rp.can_fetch("*", "https://en.wikipedia.org/wiki/Special:Search")                 # False
 \end{lstlisting}
-    The nuance: \texttt{/wiki/} articles are open, but \texttt{/w/} (dynamic pages + API) is disallowed \textit{for crawlers}. Deliberate API clients follow different norms (Ch.~10) --- \texttt{robots.txt} is one input, not the whole rulebook.
+    {\footnotesize \texttt{/wiki/} articles are open, but \texttt{/w/} (dynamic pages + API) and \texttt{Special:} are disallowed \textit{for crawlers}. Deliberate API clients follow different norms (Ch.~10).}
     \bottomcite{Textbook Ch.~2, ``Technical Norms: \texttt{robots.txt}.''}
+\end{frame}
+
+\begin{frame}[fragile]{The problem with \texttt{rp.read()}}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \texttt{RobotFileParser.read()} fetches the file itself, using \texttt{urllib} with the default User-Agent \texttt{Python-urllib/3.x}. Wikipedia answers that with \textbf{403 Forbidden}.
+
+            \medskip
+
+            The failure is \textbf{silent}. From the standard library:
+\begin{lstlisting}[basicstyle=\ttfamily\tiny]
+except urllib.error.HTTPError as err:
+    if err.code in (401, 403):
+        self.disallow_all = True
+\end{lstlisting}
+
+            \medskip
+
+            A 403 becomes ``this site disallows everything.'' No exception. Every \texttt{can\_fetch()} then returns \texttt{False}, and you conclude Wikipedia bans crawlers.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{This chapter's own lesson}
+                \footnotesize The library that reads the politeness file is impolite by default.
+
+                \smallskip
+
+                \texttt{requests} fails the same way: its default \texttt{python-requests/2.x} is also refused.
+
+                \smallskip
+
+                Fetch with your header, then \texttt{rp.parse()}.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+    \bottomcite{Verified against \texttt{urllib.robotparser} in Python 3.11 and Wikipedia's live \texttt{robots.txt}.}
 \end{frame}
 
 \begin{frame}[fragile]{What \texttt{robots.txt} reveals across platforms}
@@ -557,7 +592,7 @@ sites = {"Wikipedia": "https://en.wikipedia.org/robots.txt",
          "NY Times":  "https://www.nytimes.com/robots.txt"}
 
 for name, url in sites.items():
-    lines = requests.get(url).text.strip().split("\n")
+    lines = requests.get(url, headers=HEADERS).text.strip().split("\n")
     disallow = sum(l.startswith("Disallow") for l in lines)
     allow    = sum(l.startswith("Allow")    for l in lines)
     print(f"{name}: {len(lines)} lines, {disallow} Disallow, {allow} Allow")
@@ -565,7 +600,10 @@ for name, url in sites.items():
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             \footnotesize
-            \textbf{Wikipedia} --- permissive where it matters (openness is the mission; data flows through its API + dumps). \textbf{Reddit} --- tolerates access within limits. \textbf{NY Times} --- restrictive; the content is a commercial product. Reading it tells you \textit{what kind of organization} you're dealing with.
+            \textbf{Wikipedia} runs to about 700 lines and 460 \texttt{Disallow} rules, but it is permissive where it matters: \texttt{/wiki/} is open, and bulk users get the API and the dumps. \textbf{NY Times} restricts selectively; the content is a commercial product. \textbf{Reddit} is eight lines: \texttt{User-agent: *} then \texttt{Disallow: /}, plus a pointer to its Public Content Policy and a researcher program.
+
+            \medskip
+            \textbf{Line count is not restrictiveness.} Reddit's file is the shortest and the strictest.
 
             \medskip
             Two cautions. First, it is a \textbf{norm, not a law}: a violation is not illegal, but it is impolite and the site can block your IP address. Second, a \textbf{404} means \textit{no rules}. It does not mean ``crawl aggressively.''
@@ -894,7 +932,7 @@ Proposal: The concrete change you'd make.
             \medskip
 
             \begin{enumerate}
-                \item Read \texttt{ch-02-ethics.qmd} in the textbook repository. You can also read the published chapter.
+                \item Read the chapter: {\footnotesize \url{https://cuinfoscience.github.io/Web-Data-Science-Book/ch-02-ethics.html}}
                 \item Find one problem. Use the revision menu, or use a different problem that stopped you.
                 \item Do the step again and record the result. Copy the passage, the command, or the output.
                 \item Select the \textbf{Issues} tab. Select \textbf{New issue}. Complete the skeleton. Select \textbf{Submit}.
