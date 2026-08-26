@@ -509,29 +509,32 @@
         \begin{column}{0.6\textwidth}
             Jupyter shows you whatever folder it's launched \textit{from} --- so \texttt{cd} there first, every time:
             
-            \begin{lstlisting}
-            cd /INFO4617                 # 1. the folder where you saved the notebook
-            conda activate webdata        # 2. the environment from Week 1's setup.md
-            jupyter notebook              # 3. starts the server; your browser opens automatically
-            \end{lstlisting}
-                In the file-browser tab that opens, click \texttt{ch-02-ethics.ipynb} to open it. Before running anything, confirm you're where you think you are:
-            \begin{lstlisting}
-            import os
-            print(os.getcwd())
-            \end{lstlisting}
-            should print the folder you launched Jupyter from -- if it doesn't, stop the server (Ctrl+C), cd to the right folder, and relaunch
+\begin{lstlisting}
+cd /INFO4617                 # 1. the folder where you saved the notebook
+conda activate webdata        # 2. the environment from Week 1's setup.md
+jupyter notebook              # 3. starts the server; your browser opens automatically
+\end{lstlisting}
 
-            \medskip
-            
-            This three-command sequence --- \texttt{cd}, activate, launch --- is worth memorizing now. Every notebook lab this semester starts the same way.
+\medskip
+
+                In the file-browser tab that opens, click \texttt{ch-02-ethics.ipynb} to open it. Before running anything, confirm you're where you think you are:
+\begin{lstlisting}
+import os
+print(os.getcwd())
+\end{lstlisting}
+
+\medskip
+
+            These should print the folder you launched Jupyter from -- if it doesn't, stop the server (Ctrl+C), \texttt{cd} to the right folder, and relaunch
         \end{column}
+        
         \begin{column}{0.35\textwidth}
             \begin{alertblock}{``Jupyter shows no files''}
                 \footnotesize Almost always the wrong folder. Stop the server, \texttt{cd} to where you saved the notebook, relaunch.
             \end{alertblock}
 
             \begin{alertblock}{``Could not find conda environment: webdata''}
-                \footnotesize Check the 
+                \footnotesize Check the \texttt{setup.md} \href{https://github.com/cuinfoscience/INFO4617-Fall2026/blob/main/handouts/week-01/setup.md}{handout from week-01}.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -594,6 +597,9 @@ except urllib.error.HTTPError as err:
 \end{frame}
 
 \begin{frame}[fragile]{What \texttt{robots.txt} reveals across platforms}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+
 \begin{lstlisting}
 sites = {"Wikipedia": "https://en.wikipedia.org/robots.txt",
          "Reddit":    "https://www.reddit.com/robots.txt",
@@ -605,10 +611,6 @@ for name, url in sites.items():
     allow    = sum(l.startswith("Allow")    for l in lines)
     print(f"{name}: {len(lines)} lines, {disallow} Disallow, {allow} Allow")
 \end{lstlisting}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \footnotesize
-            \textbf{Wikipedia} runs to about 700 lines and 460 \texttt{Disallow} rules, but it is permissive where it matters: \texttt{/wiki/} is open, and bulk users get the API and the dumps. \textbf{NY Times} restricts selectively; the content is a commercial product. \textbf{Reddit} is eight lines: \texttt{User-agent: *} then \texttt{Disallow: /}, plus a pointer to its Public Content Policy and a researcher program.
 
             \medskip
             \textbf{Line count is not restrictiveness.} Reddit's file is the shortest and the strictest.
@@ -681,7 +683,9 @@ for name, url in sites.items():
 \end{frame}
 
 \begin{frame}[fragile]{Identify yourself, then slow down}
-    Two habits make you a good citizen of the web --- a truthful \texttt{User-Agent} and rate limiting:
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+Two habits make you a good citizen of the web --- a truthful \texttt{User-Agent} and rate limiting:
 \begin{lstlisting}
 import time, requests
 
@@ -694,9 +698,8 @@ for url in urls:
     # ... process the response ...
     time.sleep(1)          # a good default: about one request per second
 \end{lstlisting}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \footnotesize The default \texttt{requests} User-Agent marks you as an anonymous bot. A good one \textbf{identifies you and gives contact info}, so operators can reach you instead of simply blocking you --- and some APIs \textit{require} it. Hundreds of requests per second is an accidental \textbf{denial-of-service}: respect any \texttt{Crawl-delay} and stay well inside documented API limits.
+
+            \footnotesize The default \texttt{requests} User-Agent marks you as an anonymous bot. A good one \textbf{identifies you and gives contact info}, so operators can reach you instead of simply blocking you --- and some APIs \textit{require} it.
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
@@ -792,37 +795,6 @@ def responsible_get(url, headers=None, delay=1.0):
 % =========================================================================
 \section{Friday · Textbook Revisions}
 % =========================================================================
-
-\begin{frame}{Friday: your first contribution}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Week 1 was a single short session and we ran out of room before anyone filed anything. So today we do it properly, and slowly.
-
-            \medskip
-
-            \textbf{By the end of class you will have:}
-            \begin{enumerate}\small
-                \item a working GitHub setup, verified with me in the room
-                \item \textbf{one real issue filed} against Chapter~2
-            \end{enumerate}
-
-            \medskip
-
-            Pull requests start \textbf{next week}. Today is the cheaper, faster half of contributing --- and it is the half that finds the problems.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{tabular}{@{}ll@{}}
-                \textbf{00:00 -- 00:06} & The four objects \\[0.2em]
-                \textbf{00:06 -- 00:18} & Setup, together \\[0.2em]
-                \textbf{00:18 -- 00:26} & What to look for \\[0.2em]
-                \textbf{00:26 -- 00:32} & Anatomy of an issue \\[0.2em]
-                \textbf{00:32 -- 00:47} & File it \\[0.2em]
-                \textbf{00:47 -- 00:50} & Next week \\
-            \end{tabular}
-        \end{column}
-    \end{columns}
-    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (15\%).}
-\end{frame}
 
 \begin{frame}{Four objects you'll use all semester}
     \begin{columns}[T]
