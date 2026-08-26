@@ -484,49 +484,57 @@
         \begin{column}{0.6\textwidth}
             Every week's companion notebook lives in the textbook's GitHub repository, in a \texttt{notebooks/} folder. Today's is \texttt{ch-02-ethics.ipynb} --- this is a habit you'll repeat every Wednesday, so let's do it slowly once:
             \begin{enumerate}\small
-                \item Go to \texttt{github.com/cuinfoscience/Web-Data-Science-Book}
+                \item Go to \url{github.com/cuinfoscience/Web-Data-Science-Book}
                 \item Open the \texttt{notebooks} folder, then click \texttt{ch-02-ethics.ipynb}
-                \item Click \textbf{Download raw file} in the file toolbar (the down-arrow icon). If your browser opens the raw JSON instead of downloading it, right-click the button and choose \textbf{Save Link As\ldots}
-                \item Save it into one folder you'll reuse all semester --- e.g.\ \texttt{\textasciitilde/INFO4617/} --- so you always know where this week's notebook landed
+                \item Click \textbf{Download raw file} in the file toolbar (the down-arrow icon). 
+                \begin{itemize}
+                    \item If your browser opens the raw JSON instead of downloading it, right-click the button and choose \textbf{Save Link As\ldots}
+                \end{itemize}
+                \item Save it into one folder you'll reuse all semester --- \textit{e.g.}, \ \texttt{/Documents/INFO4617/} --- so you always know where each week's notebook landed
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{block}{Where to look}
                 \footnotesize The Companion Notebooks appendix of the published book also links every chapter's notebook in one place, if you'd rather click than browse the repo.
             \end{block}
-            \begin{alertblock}{One folder, all semester}
-                \footnotesize Reusing the same folder means Jupyter always opens to a place with last week's notebook already in it too.
-            \end{alertblock}
+
+            \includegraphics[width=\textwidth]{slides/week-02/img/github-download-raw-file.png}
+            
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Appendix A, ``Companion Notebooks.''}
 \end{frame}
 
-\begin{frame}[fragile]{Then: launch Jupyter and open it}
-    Jupyter shows you whatever folder it's launched \textit{from} --- so \texttt{cd} there first, every time:
-\begin{lstlisting}
-cd ~/INFO4617                 # 1. the folder where you saved the notebook
-conda activate webdata        # 2. the environment from Week 1's setup.md
-jupyter notebook              # 3. starts the server; your browser opens automatically
-\end{lstlisting}
-    In the file-browser tab that opens, click \texttt{ch-02-ethics.ipynb} to open it. Before running anything, confirm you're where you think you are:
-\begin{lstlisting}
-import os
-print(os.getcwd())
-# should print the folder you launched Jupyter from -- if it doesn't,
-# stop the server (Ctrl+C), cd to the right folder, and relaunch
-\end{lstlisting}
+\begin{frame}[fragile]{Then: launch Jupyter and open the notebook}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \footnotesize This three-command sequence --- \texttt{cd}, activate, launch --- is worth memorizing now. Every notebook lab this semester starts the same way.
+            Jupyter shows you whatever folder it's launched \textit{from} --- so \texttt{cd} there first, every time:
+            
+            \begin{lstlisting}
+            cd /INFO4617                 # 1. the folder where you saved the notebook
+            conda activate webdata        # 2. the environment from Week 1's setup.md
+            jupyter notebook              # 3. starts the server; your browser opens automatically
+            \end{lstlisting}
+                In the file-browser tab that opens, click \texttt{ch-02-ethics.ipynb} to open it. Before running anything, confirm you're where you think you are:
+            \begin{lstlisting}
+            import os
+            print(os.getcwd())
+            \end{lstlisting}
+            should print the folder you launched Jupyter from -- if it doesn't, stop the server (Ctrl+C), cd to the right folder, and relaunch
+
+            \medskip
+            
+            This three-command sequence --- \texttt{cd}, activate, launch --- is worth memorizing now. Every notebook lab this semester starts the same way.
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{alertblock}{``Jupyter shows no files''}
                 \footnotesize Almost always the wrong folder. Stop the server, \texttt{cd} to where you saved the notebook, relaunch.
             \end{alertblock}
+
+            \begin{alertblock}{``Could not find conda environment: webdata''}
+                \footnotesize Check the 
+            \end{alertblock}
         \end{column}
     \end{columns}
-    \bottomcite{\textit{Missing Manual} Ch.~16, ``Launching Jupyter the right way'' \& ``The common failure: `Jupyter shows no notebooks'.''}
 \end{frame}
 
 \begin{frame}[fragile]{\texttt{robots.txt}: read it before you scrape}
