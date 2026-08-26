@@ -546,24 +546,56 @@
 % =========================================================================
 
 \begin{frame}[fragile]{\texttt{robots.txt}: read it before you scrape}
-    A \texttt{robots.txt} at a site's root declares what automated agents may fetch. Read it raw, or parse it and ask permission per URL:
+    A \texttt{robots.txt} at a site's root declares what automated agents may fetch. Fetch it \textbf{with your own User-Agent}, then parse it and ask permission per URL:
 \begin{lstlisting}
 import requests
 from urllib.robotparser import RobotFileParser
 
-print(requests.get("https://en.wikipedia.org/robots.txt").text[:400])
-# User-agent: *  /  Disallow: /w/  /  Allow: ...  /  Crawl-delay: ...
+HEADERS = {"User-Agent": "WebDataScience/1.0 (INFO 4617; you@colorado.edu)"}
+text = requests.get("https://en.wikipedia.org/robots.txt",
+                    headers=HEADERS).text
 
 rp = RobotFileParser()
-rp.set_url("https://en.wikipedia.org/robots.txt")
-rp.read()
+rp.parse(text.splitlines())   # NOT rp.read() -- see the warning below
 
 rp.can_fetch("*", "https://en.wikipedia.org/wiki/Python_(programming_language)")  # True
 rp.can_fetch("*", "https://en.wikipedia.org/w/api.php")                           # False
-rp.crawl_delay("*")   # seconds between requests, or None -> pick a polite default
+rp.can_fetch("*", "https://en.wikipedia.org/wiki/Special:Search")                 # False
 \end{lstlisting}
-    The nuance: \texttt{/wiki/} articles are open, but \texttt{/w/} (dynamic pages + API) is disallowed \textit{for crawlers}. Deliberate API clients follow different norms (Ch.~10) --- \texttt{robots.txt} is one input, not the whole rulebook.
+    \vspace{-0.4em}
+    {\footnotesize \texttt{/wiki/} articles are open, but \texttt{/w/} (dynamic pages + API) and \texttt{Special:} are disallowed \textit{for crawlers}. Deliberate API clients follow different norms (Ch.~10).}
     \bottomcite{Textbook Ch.~2, ``Technical Norms: \texttt{robots.txt}.''}
+\end{frame}
+
+\begin{frame}[fragile]{The problem with \texttt{rp.read()}}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \texttt{RobotFileParser.read()} fetches the file itself, using \texttt{urllib} with the default User-Agent \texttt{Python-urllib/3.x}. Wikipedia answers that with \textbf{403 Forbidden}.
+
+            \medskip
+
+            The failure is \textbf{silent}. Look at the standard library:
+\begin{lstlisting}[basicstyle=\ttfamily\tiny]
+except urllib.error.HTTPError as err:
+    if err.code in (401, 403):
+        self.disallow_all = True
+\end{lstlisting}
+
+            \medskip
+
+            A 403 becomes ``this site disallows everything.'' No exception, no warning. Every \texttt{can\_fetch()} then returns \texttt{False}, and you conclude Wikipedia bans crawlers.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{The chapter's own lesson}
+                \footnotesize This is the failure the User-Agent rule exists to prevent. The library that reads the politeness file is itself impolite by default.
+
+                \smallskip
+
+                Fetch with \texttt{requests} and your header, then hand the text to \texttt{rp.parse()}.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+    \bottomcite{Verified against \texttt{urllib.robotparser} in Python 3.11 and Wikipedia's live \texttt{robots.txt}.}
 \end{frame}
 
 \begin{frame}[fragile]{What \texttt{robots.txt} reveals across platforms}
@@ -573,7 +605,7 @@ sites = {"Wikipedia": "https://en.wikipedia.org/robots.txt",
          "NY Times":  "https://www.nytimes.com/robots.txt"}
 
 for name, url in sites.items():
-    lines = requests.get(url).text.strip().split("\n")
+    lines = requests.get(url, headers=HEADERS).text.strip().split("\n")
     disallow = sum(l.startswith("Disallow") for l in lines)
     allow    = sum(l.startswith("Allow")    for l in lines)
     print(f"{name}: {len(lines)} lines, {disallow} Disallow, {allow} Allow")
@@ -581,7 +613,10 @@ for name, url in sites.items():
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             \footnotesize
-            \textbf{Wikipedia} --- permissive where it matters (openness is the mission; data flows through its API + dumps). \textbf{Reddit} --- tolerates access within limits. \textbf{NY Times} --- restrictive; the content is a commercial product. Reading it tells you \textit{what kind of organization} you're dealing with.
+            \textbf{Wikipedia} runs to about 700 lines and 460 \texttt{Disallow} rules, but it is permissive where it matters: \texttt{/wiki/} is open, and bulk users get the API and the dumps. \textbf{The New York Times} restricts selectively; the content is a commercial product. \textbf{Reddit} is eight lines: \texttt{User-agent: *} then \texttt{Disallow: /}, and a pointer to its Public Content Policy and a separate researcher program.
+
+            \medskip
+            \textbf{Line count is not restrictiveness.} Reddit's file is the shortest and the strictest of the three.
 
             \medskip
             Two cautions. First, it is a \textbf{norm, not a law}: a violation is not illegal, but it is impolite and the site can block your IP address. Second, a \textbf{404} means \textit{no rules}. It does not mean ``crawl aggressively.''
