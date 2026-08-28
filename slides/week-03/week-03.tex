@@ -26,7 +26,7 @@
 
             \bigskip
 
-            \dayband{Monday}{Concepts \& notebook intro}
+            \dayband{Monday}{Concepts}
             \begin{itemize}\small
                 \item The golden age, then enclosure, exemption \& erosion
             \end{itemize}
@@ -35,7 +35,7 @@
 
             \dayband{Wednesday}{Notebook lab}
             \begin{itemize}\small
-                \item A discussion notebook: build a timeline, apply the framework, plan for closure
+                \item Measure access instead of just describing it: the access matrix and dead-endpoint forensics
             \end{itemize}
 
             \medskip
@@ -49,9 +49,9 @@
             \begin{block}{Companion notebook}
                 \footnotesize \texttt{ch-03-post-api.ipynb}
             \end{block}
-            \begin{alertblock}{A conceptual week}
-                \footnotesize No code today --- the notebook is a space for notes, arguments, and evidence. Bring a laptop and an example that matters to you.
-            \end{alertblock}
+            \begin{block}{Take-home}
+                \footnotesize The notebook's \textbf{Recommended Exercises}: a 7-step guided audit. Fill in the empty cells, run everything, export to HTML, upload to Canvas by \textbf{Sunday 11:59pm}.
+            \end{block}
         \end{column}
     \end{columns}
 \end{frame}
@@ -193,53 +193,114 @@
     \bottomcite{Textbook Ch.~3, ``Three Counter-Values.'' Federated platforms return in Ch.~12 (Social).}
 \end{frame}
 
-\begin{frame}{Lab 1 --- build the timeline}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \textbf{Exercise 1.} In the notebook, build a timeline of major API-access changes from \textbf{2008 to today}.
-            \begin{itemize}\small
-                \item At least \textbf{five events} across at least \textbf{three platforms}.
-                \item For each, tag which pressure best fits: enclosure, exemption, or erosion.
-            \end{itemize}
-
-            \medskip
-
-            Do not memorize the dates. Look at the \textbf{trend}. Free and open access for outside observers is disappearing. Paid tiers, gated programs, and licensing deals replace it.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/api_timeline.png}\\
-            {\scriptsize Start here; add the events you already know.}
-        \end{column}
-    \end{columns}
-    \bottomcite{Textbook Ch.~3, Exercise~1.}
+\begin{frame}[fragile]{Claims you can check --- the access matrix}
+    Enclosure, exemption, and erosion are claims about the world. Claims about the world can be checked. The chapter's audit asks eight endpoints one question: \textit{if I show up with no credentials, what happens?}
+\begin{lstlisting}
+def probe(name, url):
+    """Ask one endpoint for data without credentials; describe the answer."""
+    try:
+        response = requests.get(url, headers=HEADERS, timeout=20)
+    except requests.RequestException as error:   # no answer is a result too
+        return {"api": name, "status": None, "verdict": "unreachable"}
+    verdict = ("open" if response.status_code == 200
+               else "gated" if response.status_code in (401, 403) else "other")
+    return {"api": name, "status": response.status_code, "verdict": verdict,
+            "content_type": response.headers.get("content-type", "")}
+\end{lstlisting}
+    \small Measured 28 Aug 2026: Wikipedia, Hacker News, arXiv, Mastodon, Bluesky \textbf{open}; Reddit and X \textbf{gated}; Meta Graph refuses without a token. Your run \textit{will} differ --- that is the finding, so record the date.
+    \bottomcite{Textbook Ch.~3, ``An Access Matrix.'' Mastodon is the only host that states its rate limit before you hit it.}
 \end{frame}
 
-\begin{frame}{Lab 2 --- apply the framework, then plan for closure}
+\begin{frame}{Read the rows, not the totals}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \textbf{Exercise 2 --- name the pressure.} Pick a platform change \textit{not} in the chapter and write 500 words applying the framework. Ask:
+            The useful information is in the differences:
             \begin{itemize}\small
-                \item Was a shared resource fenced? (enclosure)
-                \item Was scrutiny blocked while internal study continued? (exemption)
-                \item Did the record simply decay? (erosion)
+                \item \textbf{Wikipedia, Hacker News, arXiv} answer anonymous requests with data, and have for a decade --- a non-profit, an incubator, a university consortium. No one here monetizes attention.
+                \item \textbf{Reddit}: status 403, content-type \texttt{text/html} --- not an API refusing you, a \textit{block page} served where JSON lived from 2008 to 2023. Enclosure is a content-type header.
+                \item \textbf{X}: \texttt{401 application/problem+json} --- a machine-readable, honest refusal. Differently built gates tell you whether applying for access would even help.
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \textbf{Exercise 3 --- a contingency plan.} Design a project on one web source, then plan for it vanishing mid-study. Redundancy is the strategy; keep $\geq 3$ fallbacks in your repertoire:
-            \begin{itemize}\small
-                \item \textbf{Official research programs} (Meta Content Library, TikTok, Reddit) --- real but rationed.
-                \item \textbf{Data donation} --- users' export rights, with consent built in.
-                \item \textbf{FOIA / records requests} --- see Ch.~11 (Government).
-                \item \textbf{Crowdsourcing} --- when no one holds the data, communities create it.
-            \end{itemize}
+            \begin{alertblock}{Attribute before you conclude}
+                \footnotesize While the chapter was drafted, GitHub returned 403 --- a striking finding, since GitHub allows 60 anonymous requests/hour. The \textit{body} named the drafting sandbox, not GitHub. Check \texttt{server} and \texttt{via}, read the body, retest from a second network.
+            \end{alertblock}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~3, Exercises~2--3 \& ``What This Means for Practice.''}
+    \bottomcite{Textbook Ch.~3, ``Reading the Failure, Not Just the Status Code.'' A measurement that describes your instrument is worse than none.}
+\end{frame}
+
+\begin{frame}{Dead-endpoint forensics --- three ways to die}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            How a retired endpoint refuses tells you whether anything can be recovered:
+            \begin{itemize}\small
+                \item \textbf{Pushshift} answers \texttt{403} in JSON: \texttt{\{"detail": "Not authenticated"\}}. \textbf{Gated, not gone} --- it still runs, for Reddit moderators. A gated service can be negotiated with.
+                \item \textbf{CrowdTangle} does not resolve at all. No HTTP conversation happens. \textbf{Enclosure completed}; nothing left to ask.
+                \item \textbf{Twitter v1.1} parses your request and rejects it (error 215). Alive, serving paying customers. \textbf{Repriced, not removed.}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{block}{The archive keeps the receipts}
+                \footnotesize Wayback's last captures: \texttt{api.pushshift.io} --- 25 May 2023, six weeks before Reddit's pricing took effect. \texttt{crowdtangle.com} --- 14 Aug 2024, the month Meta retired it. The shutdowns are written in the archival record.
+            \end{block}
+            {\scriptsize Archived docs are how you reconstruct what a five-year-old paper's dataset contained. More in Ch.~7.}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~3, ``Dead-Endpoint Forensics.'' Always pass \texttt{timeout=} --- a dead host may drop packets rather than refuse.}
+\end{frame}
+
+\begin{frame}{The take-home --- a guided audit in seven steps}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            The notebook's \textbf{Recommended Exercises} walk the audit end to end. Fill in each empty cell:
+            \begin{enumerate}\small
+                \item Define \texttt{HEADERS} with your named User-Agent
+                \item Probe \textbf{one} endpoint by hand; look at the answer
+                \item Build the eight-endpoint matrix as a DataFrame
+                \item Add \textbf{two} endpoints you might actually study
+                \item Diagnose one refusal: \texttt{server}, \texttt{via}, body
+                \item Autopsy one retired endpoint: gone, gated, or repriced?
+                \item Interpret: what differed from the book, and why?
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{block}{Submitting}
+                \footnotesize Run all cells, then export: \textit{File $\rightarrow$ Save and Export Notebook As $\rightarrow$ HTML}. Upload the \texttt{.html} file to Canvas by \textbf{Sunday 11:59pm}. Canvas accepts only \texttt{.html} --- code and output together, as executed.
+            \end{block}
+            {\scriptsize Start in class, finish at home. Work in pairs; submit your own run.}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~3, Recommended Exercises. Date-stamp your matrix --- it is a snapshot, not a fact.}
+\end{frame}
+
+\begin{frame}{If you finish early --- the additional exercises}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            The chapter's \textbf{Additional Exercises} are optional, open-ended extensions --- worth your time, not required:
+            \begin{enumerate}\small
+                \item \textbf{Extend the autopsy} --- two more retired endpoints: gone, gated, or repriced, and who is left to ask?
+                \item \textbf{Timeline} --- five API-access events, three platforms, 2008 to today; tag each with its pressure.
+                \item \textbf{Framework application} --- 500 words on a platform change \textit{not} in the chapter.
+                \item \textbf{Contingency plan} --- a project on one source, plus three fallbacks if it vanishes mid-study.
+                \item \textbf{Public interest audit} --- how would current restrictions hit a real API-enabled project?
+                \item[6.] \textbf{5617}: read \textcite{davidson2023platform} and \textcite{perriam2020digital}; write a 2--3 page research-access brief for one platform.
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{block}{Fallbacks worth knowing}
+                \footnotesize Official research programs (real but rationed) $\cdot$ data donation $\cdot$ FOIA / records requests (Ch.~11) $\cdot$ crowdsourcing.
+            \end{block}
+            \begin{block}{Show-and-Tell}
+                \footnotesize Bring one: an access change that surprised you, a dataset you fear losing, or a question for a research design.
+            \end{block}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~3, Additional Exercises \& ``What This Means for Practice.''}
 \end{frame}
 
 \begin{frame}[fragile]{Openness in practice --- document the collection}
-    The chapter has no scraping code, but openness still has a concrete artifact. Record \textbf{what} you collected and also \textbf{how}: endpoints, parameters, dates, and the platform's constraints \parencite{gebru2021datasheets}. A future reader (or you, in a year) can then reconstruct exactly what was allowed:
+    The audit teaches you to date-stamp a measurement; openness generalizes that habit. Record \textbf{what} you collected and also \textbf{how}: endpoints, parameters, dates, and the platform's constraints \parencite{gebru2021datasheets}. A future reader (or you, in a year) can then reconstruct exactly what was allowed:
 \begin{lstlisting}
 collection = {
     "source":      "reddit.com  (PRAW, r/ClimateChange)",
@@ -254,31 +315,6 @@ pathlib.Path("datasheet.json").write_text(json.dumps(collection, indent=2))
 # The datasheet travels next to the data; the source may change, the record does not.
 \end{lstlisting}
     \bottomcite{Textbook Ch.~3, ``Openness'' --- documentation as the practice that survives enclosure.}
-\end{frame}
-
-\begin{frame}{Lab: work these, then show-and-tell}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Work in pairs. Do these prompts from the notebook:
-            \begin{enumerate}\small
-                \item Make a timeline of five events across three platforms. Label the pressure that applies to each event.
-                \item Apply the framework to a new case. Write 500 words.
-                \item Write a contingency plan. Give three alternative methods.
-                \item Select a project that used an API. Assess how current restrictions would limit it. Name the value that it serves.
-                \item[5.] \textbf{5617}: read \textcite{davidson2023platform} and \textcite{perriam2020digital}. Write a brief of 2 to 3 pages about research access to one platform. End with a recommendation.
-            \end{enumerate}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{Show-and-Tell}
-                \footnotesize Bring one of these to class:
-                \begin{itemize}\footnotesize
-                    \item an access change that surprised you
-                    \item a dataset you fear losing
-                    \item a question for a research design
-                \end{itemize}
-            \end{block}
-        \end{column}
-    \end{columns}
 \end{frame}
 
 \begin{frame}[standout]
@@ -322,10 +358,10 @@ pathlib.Path("datasheet.json").write_text(json.dumps(collection, indent=2))
 \begin{frame}{A revision menu for Chapter 3}
     High-value targets --- pick one and scope it to a single PR:
     \begin{itemize}\small
-        \item \textbf{Add the missing figures.} This chapter is \textit{all prose}. Contribute a three-pressures diagram, an API-access timeline (2008--2026), or a link-rot chart --- the deck's placeholders show the need.
+        \item \textbf{Add the missing figures.} The chapter still has no figures. Contribute a three-pressures diagram, an API-access timeline (2008--2026), or a link-rot chart --- the deck's placeholders show the need.
+        \item \textbf{Re-run the audit.} The access matrix and forensics outputs are dated 28 Aug 2026 and \textit{will} drift. Re-run the chapter's code, and where a row changed, update the printed output and the prose that reads it. This is the chapter's built-in revision engine.
         \item \textbf{Update the moving numbers.} Verify and re-cite the Twitter/X pricing, the Reddit--Google deal, and DSA Article~40's implementation status ``as of mid-2026.'' Flag what has gone stale.
         \item \textbf{Resolve the editorial TODOs.} The source carries author-voice and ``add citation when published'' notes (the openness/oversight/ownership framing). Track down a source or draft the text.
-        \item \textbf{Strengthen the open-ended exercises.} Add a rubric, a deliverable format, or a starter table for the timeline so Exercise~1 is self-checking.
         \item \textbf{Extend a Misconception or Further Reading.} Add a post-2023 source on AI-training licensing, tied to ``enclosure logic is spreading.''
         \item \textbf{Verify the cross-references.} Ch.~3 leans on many \texttt{@sec-} links (ethics, wikipedia, archives, automation, social, government). Confirm each resolves and is described accurately.
     \end{itemize}
@@ -368,6 +404,7 @@ pathlib.Path("datasheet.json").write_text(json.dumps(collection, indent=2))
         \item \textbf{Enclosure} converts collective data into private assets: shutdowns, repricing, and AI-training licensing deals.
         \item \textbf{Exemption} is the asymmetry of scrutiny --- platforms study users freely while blocking those who study platforms.
         \item \textbf{Erosion} is infrastructural decay, so reproducibility is a problem you must solve \textit{at collection time}.
+        \item \textbf{Access is measurable, not just arguable} --- an unauthenticated probe places a platform on the open-to-closed gradient today, and \textit{how} a dead endpoint refuses tells you whether anyone is left to negotiate with.
         \item The response is \textbf{redundancy}: openness, oversight, ownership --- and mastery of many access techniques so no single closure ends your research.
     \end{enumerate}
     \medskip
