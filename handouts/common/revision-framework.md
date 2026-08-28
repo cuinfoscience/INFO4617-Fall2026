@@ -32,32 +32,59 @@ Not "what could be added in principle" — what actually tripped *you*.
 
 ---
 
-## Three families
+## Three forms
 
-Sort what you noticed into one of three families. This tells you what kind of
-evidence your proposal needs.
+The book's issue tracker gives you three forms. Which one you pick is the first
+decision you make, and it is not a filing detail — each form asks for the
+evidence that its kind of problem actually needs.
 
-| Family | Means | Your proposal must show |
+| Form | Use it when | It asks you to show |
 |---|---|---|
-| **Broken** | It is wrong, or no longer works | What you ran, and what happened instead |
-| **Unclear** | It is right, but you couldn't follow it | Where you got stuck, and why |
-| **Missing** | You needed something that wasn't there | That the gap is real, not just possible |
+| **Something is wrong** | It is wrong, or no longer works | What you ran, and what happened instead |
+| **Gap report** | You needed something and it was missing or unclear, and it *stopped you* | Where you got stuck, and who else would hit it |
+| **Suggestion** | It would be better, but nothing blocked you | What you would change, and who benefits |
+
+Two things follow from this.
+
+**The dividing line between a gap and a suggestion is whether you got stuck.**
+Not how big the change is. A single missing sentence that cost you forty minutes
+is a gap report. A whole section you would reorganize, having understood it fine,
+is a suggestion. Gap reports and broken reports get priority, so put it there if
+it fits.
+
+**You do not need to know the fix.** Every form makes the proposed fix optional
+and the evidence required. Reporting where you got stuck is the whole
+contribution — you are reading this material for the first time, which is
+exactly what makes you able to see the hole.
+
+Go to
+[the book's issue tracker](https://github.com/cuinfoscience/Web-Data-Science-Book/issues/new/choose)
+and pick one. Blank issues are turned off, so there is always a form. If you
+genuinely cannot tell which fits, pick the closest — a report in the wrong form
+is still a useful report and can be relabelled.
 
 ---
 
 ## Seven types of revision
 
-These cover nearly everything you'll propose all semester.
+These cover nearly everything you'll propose all semester. The **Form** column
+tells you where each one goes.
 
-| # | Type | Family | You noticed… | Your contribution includes | Size |
+| # | Type | Form | You noticed… | Your contribution includes | Size |
 |---|---|---|---|---|---|
-| 1 | **Code drift** | Broken | An example errors, returns nothing, or returns the wrong shape | The error text, the corrected code, and one line on what changed upstream | M |
-| 2 | **Stale figure** | Broken | A screenshot no longer matches today's interface | A fresh screenshot — same filename, same crop, same thing highlighted | S |
-| 3 | **Common issue** | Missing | You hit an error that isn't in the chapter's "Common Issues to Debug" | Symptom → cause → fix, written in the list's existing format | S |
-| 4 | **Missing figure** | Missing | You had to sketch it yourself before it made sense | The figure, a caption, and alt text | M |
-| 5 | **Reading** | Missing | You found a source that grounds or complicates a claim | The citation added to `references.bib`, plus one line on why it belongs | S |
-| 6 | **Exercise** | Unclear / Missing | An exercise is ambiguous, unverifiable, or too thin | Expected output, a rubric, a starter cell — or a new exercise with all three | M |
-| 7 | **Explanation** | Unclear | You reread a passage three times | The rewrite, plus a sentence on what confused you the first time | M |
+| 1 | **Code drift** | Something is wrong | An example errors, returns nothing, or returns the wrong shape | The error text, the corrected code, and one line on what changed upstream | M |
+| 2 | **Stale figure** | Something is wrong | A screenshot no longer matches today's interface | A fresh screenshot — same filename, same crop, same thing highlighted | S |
+| 3 | **Common issue** | Gap report | You hit an error that isn't in the chapter's "Common Issues to Debug" | Symptom → cause → fix, written in the list's existing format | S |
+| 4 | **Missing figure** | Gap report | You had to sketch it yourself before it made sense | The figure, a caption, and alt text | M |
+| 5 | **Reading** | Suggestion | You found a source that grounds or complicates a claim | The citation added to `references.bib`, plus one line on why it belongs | S |
+| 6 | **Exercise** | Suggestion | An exercise is ambiguous, unverifiable, or too thin | Expected output, a rubric, a starter cell — or a new exercise with all three | M |
+| 7 | **Explanation** | Gap report | You reread a passage three times | The rewrite, plus a sentence on what confused you the first time | M |
+
+Two of these move depending on how they hit you. A **missing figure** you drew
+yourself before the section made sense is a gap; one you think would be a nice
+addition is a suggestion. An **exercise** so vague you could not tell whether you
+had finished it is a gap; one you completed and think could be stronger is a
+suggestion.
 
 **Size** is a rough guide to review effort: **S** is a few lines, **M** is a
 paragraph or a code block. Anything bigger than M should start as an issue or a
@@ -125,24 +152,87 @@ standard in the course syllabus.
 
 ---
 
-## Anatomy of a good issue or pull request
+## Filling in a form well
 
-Both use the same skeleton:
+The forms ask short questions. Short questions invite short answers, and short
+answers are where most of the credit is lost. Here is the same real problem
+filed twice, field by field.
+
+A student runs the `robots.txt` example in Chapter 2 and cannot work out where
+to find a site's `robots.txt` in the first place. Nothing errored. The book just
+never said. That is a **gap report**.
+
+**Where were you?** — a dropdown, so this one is free. Pick `Ch. 2 — Ethics,
+Law, and Responsible Data Collection`.
+
+**Which section or heading?** Copy the nearest heading exactly.
+
+> ✗ "the robots part"
+> ✓ "Technical Norms: robots.txt"
+
+The first makes someone search the chapter. The second is a jump target. This
+field costs you five seconds and is worth 2 of 10 points.
+
+**What kind of gap?** — `Something was missing`, `Something was unclear`, or
+`Not sure / both`. If you hesitate, `Not sure / both` is a real answer, not a
+cop-out. Nobody is grading your taxonomy.
+
+**Where did you get stuck?** This is the field that decides your score.
+
+> ✗ "This section is confusing and needs more detail."
+>
+> ✓ "I was trying to run the first `robots.txt` example. The text says to check
+> whether a page is allowed, but I did not know where to find a site's
+> `robots.txt` to begin with, and I could not tell whether I was supposed to
+> open it in a browser or fetch it in Python. I spent about fifteen minutes
+> guessing URLs before I searched outside the book."
+
+The second is longer, but length is not why it is better. It names what you were
+trying to do, the exact sentence you got stuck on, what you tried, and how long
+you lost. Someone can now reproduce your confusion without asking you anything.
+
+**Who else would hit this?** One sentence. Resist the urge to say "everyone."
+
+> ✗ "Everyone."
+> ✓ "Anyone running this chapter's first code block without having seen a
+> `robots.txt` before."
+
+This field is how the editor decides priority. A gap that stops every reader at
+the first code block outranks one that only affects someone attempting an
+optional exercise.
+
+**What would have helped?** Optional — and leaving it blank costs you nothing if
+you genuinely do not know. But a guess is usually worth writing:
+
+> ✓ "One sentence saying `robots.txt` always lives at the site root, with an
+> example URL like `https://example.com/robots.txt`."
+
+You are not committing to write the fix. You are showing you understood your own
+problem well enough to imagine its shape.
+
+**Before you submit** — a required checkbox confirming you searched the open
+issues. Actually search. Duplicates earn no credit, and if someone already filed
+yours, reviewing theirs does.
+
+### What carries over to pull requests
+
+Titles are handled for you: each form prefixes `Broken:`, `Gap:`, or
+`Suggestion:`, and you complete the sentence. Make what you add specific —
+`Gap: no explanation of where to find robots.txt` beats `Gap: confusing section`.
+
+Pull requests have no form. From week 3 on, write the PR description with the
+same fields the forms would have asked, in this order:
 
 ```
-Title:    <type>: <specific thing> in Ch. N
-          e.g. "Common issue: kernel/environment mismatch in Ch. 1"
-
-Location: Chapter and section — and the file, e.g. ch-06-static-pages.qmd,
-          "Strategy 1: Manual Table Parsing"
+Location: Chapter and section, and the source file —
+          e.g. ch-06-static-pages.qmd, "Strategy 1: Manual Table Parsing"
 
 Problem:  What you did, what you expected, what happened.
           Paste the code and the output.
 
 Why:      Who this affects and how much. One sentence.
 
-Proposal: The concrete change. For an issue: what you'd write.
-          For a PR: the diff itself.
+Change:   What this PR does, and anything you chose not to do.
 ```
 
 If you can't fill in **Location** and **Problem** with specifics, you don't have
@@ -153,12 +243,12 @@ a revision yet — you have a hunch. Go back to the chapter and reproduce it.
 ## How issues and pull requests are graded
 
 Textbook Revisions are **15% of the course grade**, scored weekly out of **10
-points**. The rubric follows the skeleton above, so a proposal that fills in
-every field scores well by construction.
+points**. The rubric follows the same fields the forms ask for, so a proposal
+that answers every question properly scores well by construction.
 
 | | Criterion | What earns full marks | Pts |
 |---|---|---|---|
-| **Located** | You can find it | Chapter, section, and source file named precisely | 2 |
+| **Located** | You can find it | Chapter and section named precisely — plus the source file, for a pull request | 2 |
 | **Evidenced** | I can reproduce it | The command, output, error, or quoted passage — enough that I hit the same wall | 3 |
 | **Actionable** | I can act on it | A concrete proposed change, correctly scoped to one thing | 3 |
 | **Reviews** | You reviewed two peers | Specific, kind, separates must-fix from nice-to-have, ends with a clear verdict | 2 |
@@ -195,12 +285,15 @@ proposal without asking you a single follow-up question.
 ## How this maps onto the semester
 
 - **Weeks 1–2** — you find, describe, and file your first *issue*. No git
-  required: browse the book, find one real problem, describe it with this
-  skeleton. Week 1 is a single short session, so **Week 2's Friday** is where
+  required: browse the book, find one real problem, and fill in the form that
+  fits it. Week 1 is a single short session, so **Week 2's Friday** is where
   everyone gets GitHub working and files that first issue for credit.
 - **Weeks 3–14** — you open *pull requests* and review two classmates'.
 - Each week's lecture deck ends with a **revision menu**: the same seven types,
   aimed at that specific chapter's known thin spots.
+
+Deadlines are **Sunday at 11:59pm**, covering both that week's notebook lab and
+that week's revision.
 
 Contributions and reviews together are **15%** of your grade. The target for the
 semester is posted on Canvas.
