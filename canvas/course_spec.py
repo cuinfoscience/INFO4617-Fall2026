@@ -119,9 +119,9 @@ GROUPS = [
                  "the Web Data Science book plus the peer reviews you provide.",
     },
     {
-        # Carries no assignments yet. Canvas leaves an empty weighted group out
-        # of the running total, so this weight does nothing until attendance is
-        # actually recorded against something.
+        # One 1-point entry per meeting week (see attendance_assignments).
+        # Canvas ignores ungraded assignments in the running total, so the
+        # weight takes effect as attendance is actually recorded.
         "name": "Attendance",
         "group_weight": 15,
         "position": 3,
@@ -246,15 +246,30 @@ def lab_assignments():
             "name": f"Week {wk} Lab — {topic}",
             "points_possible": LAB_POINTS,
             "due_at": due_at(sunday_of(wk)),
-            "submission_types": ["online_upload", "online_text_entry", "online_url"],
+            # HTML export only: the file shows code and output together,
+            # and the upload widget refuses anything but .html
+            "submission_types": ["online_upload"],
+            "allowed_extensions": ["html", "htm"],
             "description": (
-                f"<p>Work through the companion notebook for "
-                f'<a href="{chapter_url(chfile)}">Chapter {ch}: {topic}</a> and share '
-                f"your implementation of the exercises.</p>"
+                f"<p>Read <a href=\"{chapter_url(chfile)}\">Chapter {ch}: "
+                f"{topic}</a> and work through its code in the companion "
+                f"notebook — we do this together in Wednesday's lab.</p>"
+                f"<p>The take-home is the chapter's <strong>Recommended "
+                f"Exercises</strong>: a guided, step-by-step build at the end "
+                f"of the notebook. Fill in each empty code cell and answer the "
+                f"final interpretation step in your own words.</p>"
                 f'<p><strong>Notebook:</strong> <a href="{notebook_url(slug)}">'
                 f"{slug}.ipynb</a></p>"
-                "<p>Submit your completed notebook (<code>.ipynb</code>) or a link to it. "
-                "Labs are graded on participation and completion rather than perfection — "
+                "<p><strong>Submit your completed notebook as HTML</strong>, "
+                "with all cells run so your code and its output are both "
+                "visible. In JupyterLab: <em>File &rarr; Save and Export "
+                "Notebook As&hellip; &rarr; HTML</em> (see the "
+                '<a href="https://jupyterlab.readthedocs.io/en/stable/user/'
+                'export.html">JupyterLab export guide</a>), then upload the '
+                "<code>.html</code> file here.</p>"
+                "<p>The <em>Additional Exercises</em> are optional "
+                "extensions — worth your time, not required. Labs are graded "
+                "on participation and completion rather than perfection — "
                 "come with questions, work with a partner, and bring something to "
                 "show-and-tell: a challenging bug, interesting data, or a provocation "
                 "for a research design.</p>"
@@ -275,20 +290,55 @@ def revision_assignments():
             "name": f"Week {wk} Revision — Chapter {ch}",
             "points_possible": REVISION_POINTS,
             "due_at": due_at(sunday_of(wk)),
-            "submission_types": ["online_url", "online_text_entry"],
+            # URL only: the deliverable is the pull request itself
+            "submission_types": ["online_url"],
             "description": (
                 f"<p>Propose a revision to "
                 f'<a href="{chapter_url(chfile)}">Chapter {ch}: {topic}</a> as a '
                 f"<strong>pull request</strong> to the "
                 f'<a href="{BOOK_URL}">Web Data Science book</a>, and review two '
                 f"classmates' pull requests.</p>"
-                "<p><strong>Submit:</strong> the URL of your pull request, plus links to "
-                "the reviews you left.</p>"
+                "<p><strong>Submit:</strong> the URL of your pull request. Leave "
+                "your two reviews on classmates' pull requests on GitHub — they "
+                "are visible from your account, so no separate links are needed.</p>"
                 "<p>A strong PR makes one focused change, explains the problem it fixes, "
                 "builds without errors, matches the book's voice, and discloses any AI "
                 "assistance. A strong review runs or reads the change, names specifics, "
                 "separates &ldquo;must fix&rdquo; from &ldquo;nice to have,&rdquo; and ends "
                 "with a clear verdict.</p>"
+            ),
+        })
+    return out
+
+
+ATTENDANCE_POINTS = 1
+
+def attendance_assignments():
+    """One attendance entry per week the class actually meets.
+
+    meeting_days() already knows the calendar: week 15 falls entirely
+    inside Fall Break and drops out on its own, week 1 keeps its single
+    Friday, and week 16 runs through the December 4 last day. That
+    yields 15 entries. Graded by the instructor -- there is nothing to
+    submit -- so no due date and a "none" submission type.
+    """
+    out = []
+    for row in WEEKS:
+        wk = row[0]
+        if not meeting_days(wk):
+            continue
+        days = ", ".join(d.strftime("%b %-d") for d in meeting_days(wk))
+        out.append({
+            "group": "Attendance",
+            "name": f"Week {wk:02d} Attendance",
+            "points_possible": ATTENDANCE_POINTS,
+            "due_at": None,
+            "submission_types": ["none"],
+            "description": (
+                f"<p>Attendance for week {wk} ({days}). Recorded by the "
+                "instructor — nothing to submit. If circumstances prevent "
+                "your attendance, email me so we can work out an "
+                "accommodation plan.</p>"
             ),
         })
     return out
@@ -309,7 +359,8 @@ def final_assignments():
 
 
 def all_assignments():
-    return lab_assignments() + revision_assignments() + final_assignments()
+    return (lab_assignments() + revision_assignments()
+            + attendance_assignments() + final_assignments())
 
 
 # --------------------------------------------------------------------------
