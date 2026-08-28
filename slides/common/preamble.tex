@@ -11,6 +11,10 @@
 \usepackage{fbb}
 \usepackage{booktabs}
 \usepackage{graphicx}
+% Resolve images whether a deck is compiled from its own folder (img/...)
+% or from the repo root, as Overleaf does (slides/week-NN/img/...). Both
+% dialects appear in instructor- and agent-authored frames; make both build.
+\graphicspath{{./}{../../}}
 \usepackage{tikz}
 \usepackage{xcolor}
 \usepackage{multirow}
