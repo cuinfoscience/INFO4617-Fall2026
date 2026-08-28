@@ -796,6 +796,40 @@ def responsible_get(url, headers=None, delay=1.0):
 \section{Friday · Textbook Revisions}
 % =========================================================================
 
+\begin{frame}{Daily note questions, part I}\small 
+
+    \begin{itemize}
+        \item \textbf{Will we use Claude Code, Antigravity, etc.?} --- Check out Weeks 13 and 14
+        \item \textbf{Why GitHub?} --- Common development and project management environment, building a technical portfolio
+        \item \textbf{What if you scrape data you shouldn't have?}--- Depends on the reason!
+        \item \textbf{Final project details?} --- Individual submissions but group work mayb e an option
+        \item \textbf{Scrape data from a specific API} --- Look in \texttt{robots.txt} or developer docs for API, we'll discuss hidden APIs and screen scraping later
+        \item \textbf{Is INFO1701 enough programming?} --- Probably!
+        \item \textbf{How are rules enforced?} --- Normative, technical, and legal layers for different reasons
+        \item \textbf{Changing terms and accessiblity?} --- Websites for non-public orgs have very little responsibilty/accountability
+        \item \textbf{What to look for in a ToS?} --- What data is collected, who can use it, and for what?
+        \item \textbf{Making automated scrapers?} --- Week 14 or earlier
+        \item \textbf{Research institutions scraping?} --- All the time but still have to respect rules of the road!
+        \item \textbf{How common are civil suits?} --- Most likely when using someone else's data for sale or abuse
+    \end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Daily note questions, part II}\small 
+    \begin{itemize}
+        \item \textbf{How much law breaking?} --- Often under the broadest reading of CFAA, but rarely-to-never under exceptions for research and teaching exceptions
+        \item \textbf{Will scraping ever be illegal?} --- Unlikely for technical, legal, and financial reasons
+        \item \textbf{Scrape the NYT?} --- Use their API! \url{https://developer.nytimes.com/apis}
+        \item \textbf{Scraping for insider trading?} --- Not insider anymore once it's on the web, but check out SEC EDGAR \url{https://www.sec.gov/search-filings/edgar-application-programming-interfaces}
+        \item \textbf{Have to use terminal?} --- Not necessarily, but it might be worth taking off training wheels. Also check out Missing Manual \url{https://cuinfoscience.github.io/INFO-Missing-Manual/}
+        \item \textbf{Have to run Jupyter in browser?} --- Could use Labs or VS Code or similar if you're comfortable with it
+        \item \textbf{Do exercises and just submit?} --- That's the idea!
+        \item \textbf{How to open Terminal?} \textbf{Terminal is scary} --- I agree! Keep practicing and check out Missing Manual Ch. 11 \url{https://cuinfoscience.github.io/INFO-Missing-Manual/}
+        \item \textbf{Rate limit on robots.txt?} --- Not really
+    \end{itemize}
+    
+\end{frame}
+
 \begin{frame}{Four objects you'll use all semester}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
@@ -810,31 +844,35 @@ def responsible_get(url, headers=None, delay=1.0):
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Issue vs.\ pull request}
+            \begin{alertblock}{Issue vs.\ pull request}
                 \footnotesize An \textbf{issue} says \textit{something is wrong}. A \textbf{pull request} says \textit{here is the correction} --- and shows the exact diff.
                 \smallskip
 
-                Issues are cheap and fast; PRs are the real contribution. \textbf{Today: an issue.} From next week on: pull requests.
-            \end{block}
+                Issues are cheap and fast; PRs are the real contribution. 
+                
+                \smallskip
+                Today on issues and pull requests later.
+            \end{alertblock}
         \end{column}
     \end{columns}
-    \bottomcite{This is how essentially all open-source software gets built --- including every library in this course.}
 \end{frame}
 
 \begin{frame}{Setup: two options}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \textbf{To file an issue you need only a browser.} That is today's task, and it works for everyone.
+            To file an issue you need only a browser.
 
             \medskip
 
-            We will also set up your \textbf{tools} now, while I am here to help. Next week you need them for pull requests. Select one tool:
+            We will also set up your \textbf{tools} now, while I am here to help.
 
             \smallskip
 
-            \textbf{GitHub Desktop} --- download it, sign in, then \textbf{Clone} the textbook repository. Each later step is a button: branch, commit, push, Create Pull Request.
+            \textbf{GitHub Desktop} --- download it, sign in, then Clone the textbook repository. Each later step is a button: branch, commit, push, Create Pull Request.
 
-            \smallskip
+            \bigskip
+
+            If you want to be hardcore and use the terminal to interface with GitHub...
 
             \textbf{The \texttt{gh} CLI} --- install it, run \texttt{gh auth login}, then use these commands:
             {\footnotesize
@@ -846,33 +884,32 @@ def responsible_get(url, headers=None, delay=1.0):
         \begin{column}{0.35\textwidth}
             \begin{alertblock}{Checkpoint}
                 \footnotesize You are done when Desktop shows the textbook repository on your computer, or when \texttt{gh repo clone} completes with no error.
-
-                \smallskip
-
-                Tell me if a step fails. Today is the one class period when I can repair it for you.
             \end{alertblock}
         \end{column}
     \end{columns}
-    \bottomcite{Full instructions, both paths: \texttt{handouts/week-01/setup.md}. No raw \texttt{git} commands required in this course.}
 \end{frame}
 
-\begin{frame}{Revision targets for Chapter 2}
-    High-value targets --- pick one and scope it to a single PR:
+\begin{frame}{Revision targets}
+    Goldilocks issues: not too big, not too small.
     \begin{itemize}
-        \item \textbf{A confirmed gap.} Wikipedia's live \texttt{robots.txt} now has a \texttt{Disallow: /trap/} rule the chapter doesn't mention --- a honeypot for bad bots. Explain what it's for and add it to the comparison.
-        \item \textbf{Close a gap in ``Common Issues to Debug.''} Not covered yet: a blocked page can return \textbf{HTTP 200 with a Cloudflare challenge page}, not a 403 --- \texttt{raise\_for\_status()} won't catch it. Add this as a worked case.
-        \item \textbf{Add a figure --- there are currently zero in this chapter.} A clean five-question framework diagram, an annotated \texttt{robots.txt} anatomy, or a CFAA case timeline.
-        \item \textbf{Add a missing citation.} The Meta v.\ Bright Data (2024) and X Corp.\ rulings are described in prose with no source link --- find and add one.
-        \item \textbf{Strengthen an exercise.} Add a rubric or expected output to the framework exercise (\#3), or a starter cell so it self-checks.
+        \item \textbf{Gaps} --- Instructions make an assumption or skip a step that needs to be explained.
+        \item \textbf{Bugs} --- You ran the code as downloaded and ran into a problem that should just work.
+        \item \textbf{New features} --- The chapter would be stronger if it covered some other content or exampels.
+        \item \textbf{Common Issues to Debug} --- Add other issues that that aren't currently included.
+        \item \textbf{Add a figure} ---  Visuals and screenshots are always helpful so identify and suggest things to add.
+        \begin{itemize}
+            \item Bonus points for image macro memes that connect with the kids
+        \end{itemize}
+        \item \textbf{Add a missing citations or references.} The Meta v.\ Bright Data (2024) and X Corp.\ rulings are described in prose with no source link.
+        \item \textbf{Strengthen an exercise.} Add a rubric or expected output.
     \end{itemize}
-    \bottomcite{Targets confirmed against the live chapter and current \texttt{robots.txt} --- not hypothetical.}
 \end{frame}
 
 \begin{frame}[fragile]{Anatomy of a good issue}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Every issue you file this semester uses one skeleton:
-\begin{lstlisting}[language=,basicstyle=\ttfamily\scriptsize]
+            Every issue you file this semester uses a common template:
+\begin{lstlisting}[language=,basicstyle=\ttfamily\footnotesize]
 Title:    <type>: <specific thing> in Ch. 2
 Location: Section, and the file
           (ch-02-ethics.qmd)
@@ -882,6 +919,7 @@ Why:      Who this affects. One sentence.
 Proposal: The concrete change you'd make.
 \end{lstlisting}
 
+        Look for examples in the handout: \url{/INF4617-Fall2026/handouts/common/revision-framework.md}
             \smallskip
 
             If you cannot fill in \textbf{Location} and \textbf{Problem} with specifics, you do not have an issue yet --- you have a hunch. Go back and reproduce it.
@@ -891,91 +929,73 @@ Proposal: The concrete change you'd make.
                 \footnotesize
                 \begin{itemize}\footnotesize
                     \item \textbf{Located} (2) --- section and file named
-                    \item \textbf{Evidenced} (3) --- I can hit the same wall
-                    \item \textbf{Actionable} (3) --- one concrete change
+                    \item \textbf{Evidenced} (3) --- reproducible by others
+                    \item \textbf{Actionable} (3) --- a concrete change
                     \item \textbf{Reviews} (2) --- from next week on
                 \end{itemize}
             \end{block}
-            \begin{alertblock}{Grading does not depend on merging}
-                \footnotesize A well-evidenced issue I decline still earns full credit. A one-character typo fix does not.
-            \end{alertblock}
         \end{column}
     \end{columns}
-    \bottomcite{Full rubric and worked examples: \texttt{handouts/common/revision-framework.md}}
 \end{frame}
 
 \begin{frame}{File it: your first issue}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \textbf{Fifteen minutes. Each student files one issue.}
+
+            Work in groups or individually to find, write, and comment on new and existing issues. Issues welcome and credit given on both the Web-Data-Science-book and INFO-Missing-Manual.
 
             \medskip
 
             \begin{enumerate}
-                \item Read the chapter: {\footnotesize \url{https://cuinfoscience.github.io/Web-Data-Science-Book/ch-02-ethics.html}}
-                \item Find one problem. Use the revision menu, or use a different problem that stopped you.
-                \item Do the step again and record the result. Copy the passage, the command, or the output.
-                \item Select the \textbf{Issues} tab. Select \textbf{New issue}. Complete the skeleton. Select \textbf{Submit}.
-                \item Copy the URL of your issue into the Canvas assignment.
+                \item Find one problem in this week's chapter that no one else has found.
+                \item If someone else has already beaten you to an issue, add a comment below with any other details or suggestions.
+                \item Re-run the step from scratch to confirm it's a reproducible problem. Copy the passage, the command, or the output.
+                \item Go to the textbook GitHub repo. Select the \textbf{Issues} tab. Select \textbf{New issue}. Complete the skeleton. Select \textbf{Submit}.
+                \item Copy the URL of your issue or comment into the Canvas assignment.
             \end{enumerate}
+\end{frame}
 
-            \medskip
+\begin{frame}{What to submit}
 
-            Read the open issues first. If another student filed your issue, add a comment to it. Write what that issue does not include. This also gets credit.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/github_issue.png}\\
-            {\scriptsize One browser tab. No install required.}
-        \end{column}
-    \end{columns}
-    \bottomcite{Due tonight at midnight if you do not finish in class --- but the point is that you finish in class.}
+    You will have two things you need to submit to Canvas every week:
+
+    \medskip
+
+    \textbf{Notebook labs} --- Wednesday notebook exercises to bottom, save as HTML, submit to Canvas
+
+    \medskip
+
+    \textbf{Textbook revisions} --- Revisions to textbook and notebook, copy link to your issue or comment, submit to Canvas
+
+    \medskip
+
+    Both due Sundays before midnight
+    
 \end{frame}
 
 \begin{frame}{Next week: from issues to pull requests}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            An issue says \textit{something is wrong}. Starting next week you say \textit{here is the fix} --- and back it with a diff.
+    
+    Next week: \textbf{The Post-API Age} 
+    \begin{itemize}
+        \item Why the open web is closing
+        \item How researchers are adapting
+        \item What it means for your ability to retrieve data
+    \end{itemize}
 
-            \medskip
+    \textbf{Notebook lab} --- 
 
-            \begin{block}{A strong PR}
-                \begin{itemize}\small
-                    \item One focused change, clearly titled
-                    \item Explains the problem it fixes
-                    \item Builds (\texttt{quarto render}) without errors
-                    \item Matches the book's voice and notation
-                    \item Discloses any AI assistance
-                \end{itemize}
-            \end{block}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{A strong review}
-                \begin{itemize}\small
-                    \item Runs / reads the change, not just skims
-                    \item Names specifics (line, claim, code)
-                    \item Separates ``must fix'' from ``nice to have''
-                    \item Is generous --- assume good faith
-                    \item Ends with a clear verdict
-                \end{itemize}
-            \end{block}
-        \end{column}
-    \end{columns}
-    \medskip
-    \centering\small Next week: \textbf{The Post-API Age} --- why the open web is closing, and how researchers adapt.
+    \textbf{Textbook revisions} --- Submitting pull requests: if an issue says \textit{something is wrong}, a pull requests say \textit{here is the fix}.
+
 \end{frame}
 
 % =========================================================================
 \begin{frame}{Key takeaways}
     \begin{enumerate}
-        \item \textbf{``Can I?'' is not ``should I?''} --- the real question is how to collect data \textit{responsibly}.
-        \item The law is unsettled: the CFAA targets \textbf{bypassing gates} (Van Buren), but \textbf{contracts and ToS} still bite (hiQ); state privacy laws and GDPR reach personal data.
-        \item \texttt{robots.txt} is a \textbf{norm, not a law} --- read it, respect \texttt{Disallow} and \texttt{Crawl-delay}; a 404 means no rules, not open season.
+        \item \textbf{Great power and responsibility} --- Just because you can doesn't mean you should.
+        \item \textbf{The law is unsettled} --- new case law revising and rescoping risks under CFAA, but not risk-free
+        \item \texttt{robots.txt} is a \textbf{norm, not a law} --- read it, respect \texttt{Disallow} and \texttt{Crawl-delay}.
         \item \textbf{Identify yourself} (custom \texttt{User-Agent}) and \textbf{rate-limit} (\texttt{time.sleep}) --- then wrap both into \texttt{responsible\_get()} and reuse it.
         \item Run the \textbf{five-question framework} before every project; when in doubt, use an API, collect less, and err toward caution.
     \end{enumerate}
     \bigskip
-    \bottomcite{Reading: Textbook Ch.~2. Related: \textcite{fiesler2020no}; \textcite{freelon2018computational}.}
 \end{frame}
 
 \end{document}
