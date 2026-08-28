@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Update the live lab assignments' descriptions to match course_spec.py.
+"""Sync live lab and revision assignments with course_spec.py.
 
 The book's chapters now split their exercises into a guided "Recommended
 Exercises" build (the take-home, submitted as a completed notebook) and
@@ -7,10 +7,12 @@ open-ended "Additional Exercises". The lab descriptions on Canvas still
 described a single undifferentiated exercises section; this pushes the
 new wording from spec.lab_assignments() to the live course.
 
-Assignments are matched by Canvas id via the "Week N Lab" prefix, not by
-full name, because the live course has drifted from the spec (week 2's
-lab carries a different title than the spec generates). Only the
-description field is written -- names, points, and due dates are left
+Labs get their description, submission_types (upload only), and
+allowed_extensions (html only). Revisions get their description and
+submission_types (URL only). Assignments are matched by Canvas id via
+the "Week N Lab" / "Week N Revision" prefix, not by full name, because
+the live course has drifted from the spec (week 2 carries different
+titles than the spec generates). Names, points, and due dates are left
 alone.
 
 Dry run unless you pass --apply.
@@ -43,7 +45,7 @@ def call(method, path, data=None):
     body = None
     headers = {"Authorization": f"Bearer {TOKEN}"}
     if data is not None:
-        body = urllib.parse.urlencode(data).encode()
+        body = urllib.parse.urlencode(data, doseq=True).encode()
         headers["Content-Type"] = "application/x-www-form-urlencoded"
     req = urllib.request.Request(url, data=body, headers=headers, method=method)
     with urllib.request.urlopen(req, timeout=30) as f:
@@ -69,47 +71,69 @@ def get_all(path, **params):
 
 def main():
     mode = "APPLY" if APPLY else "DRY RUN"
-    print(f"=== {mode} — lab descriptions, course {CID} ===\n")
+    print(f"=== {mode} — lab + revision sync, course {CID} ===\n")
 
-    # The spec's new description for each teaching week, keyed by week.
+    # What the spec wants for each assignment kind, keyed by week.
     want = {}
     for a in spec.lab_assignments():
         wk = int(re.match(r"Week (\d+) Lab", a["name"]).group(1))
-        want[wk] = a["description"]
+        want[("Lab", wk)] = a
+    for a in spec.revision_assignments():
+        wk = int(re.match(r"Week (\d+) Revision", a["name"]).group(1))
+        want[("Revision", wk)] = a
 
     groups = {g["name"]: g for g in get_all(f"/courses/{CID}/assignment_groups")}
-    lab_gid = groups["Notebook Labs"]["id"]
+    kind_of_gid = {groups["Notebook Labs"]["id"]: "Lab",
+                   groups["Textbook Revisions"]["id"]: "Revision"}
+
+    def visible(html):
+        text = re.sub(r"<[^>]+>", " ", html or "")
+        return " ".join(unescape(text).split())
 
     changed = skipped = same = 0
     for a in get_all(f"/courses/{CID}/assignments"):
-        if a["assignment_group_id"] != lab_gid:
+        kind = kind_of_gid.get(a["assignment_group_id"])
+        if kind is None:
             continue
-        m = re.match(r"^Week (\d+) Lab\b", a["name"])
+        m = re.match(rf"^Week (\d+) {kind}\b", a["name"])
         if not m:
             print(f"  !! unparsed name, left alone: {a['name']}")
             skipped += 1
             continue
-        wk = int(m.group(1))
-        new = want.get(wk)
-        if new is None:
-            print(f"  !! no spec description for week {wk}: {a['name']}")
+        spec_a = want.get((kind, int(m.group(1))))
+        if spec_a is None:
+            print(f"  !! no spec entry: {a['name']}")
             skipped += 1
             continue
-        # Canvas rewrites stored HTML (link attributes, entity encoding),
-        # so compare the visible text, entities decoded, not the raw markup.
-        def visible(html):
-            text = re.sub(r"<[^>]+>", " ", html or "")
-            return " ".join(unescape(text).split())
-        if visible(a.get("description")) == visible(new):
+
+        diffs = []
+        # Week 2's revision is the customized "first issue" assignment --
+        # its live description is intentionally different from the generic
+        # PR text the spec generates, so never overwrite it.
+        keep_description = (kind, int(m.group(1))) == ("Revision", 2)
+        if not keep_description and \
+                visible(a.get("description")) != visible(spec_a["description"]):
+            diffs.append("description")
+        if sorted(a.get("submission_types") or []) != sorted(spec_a["submission_types"]):
+            diffs.append(f"types {a.get('submission_types')} -> {spec_a['submission_types']}")
+        want_ext = spec_a.get("allowed_extensions") or []
+        if want_ext and sorted(a.get("allowed_extensions") or []) != sorted(want_ext):
+            diffs.append(f"extensions {a.get('allowed_extensions')} -> {want_ext}")
+
+        if not diffs:
             same += 1
             continue
         print(f"  -> {a['name']}")
-        old_text = re.sub(r"<[^>]+>", "", a.get("description") or "")
-        print(f"       was: {old_text[:90]}...")
+        for d in diffs:
+            print(f"       {d}")
         changed += 1
         if APPLY:
-            call("PUT", f"/courses/{CID}/assignments/{a['id']}",
-                 {"assignment[description]": new})
+            data = {"assignment[submission_types][]": spec_a["submission_types"]}
+            if not keep_description:
+                data["assignment[description]"] = spec_a["description"]
+            if want_ext:
+                data["assignment[allowed_extensions][]"] = want_ext
+            call("PUT", f"/courses/{CID}/assignments/{a['id']}", data)
     print(f"\n  {changed} to change, {same} already current, {skipped} skipped")
     if not APPLY:
         print("\nDry run. Re-run with --apply to make these changes.")

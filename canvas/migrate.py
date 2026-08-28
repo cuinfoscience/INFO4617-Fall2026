@@ -362,10 +362,17 @@ def build_assignments(api, args, group_ids):
             "name": a["name"],
             "description": a["description"],
             "points_possible": a["points_possible"],
-            "due_at": a["due_at"],
             "submission_types": a["submission_types"],
             "published": True,
         }}
+        # Attendance rows have no due date; sending None would reach
+        # Canvas as the string "None"
+        if a.get("due_at"):
+            payload["assignment"]["due_at"] = a["due_at"]
+        # Labs restrict uploads to HTML exports; only send the field
+        # when the spec sets it, since [] would clear a restriction
+        if a.get("allowed_extensions"):
+            payload["assignment"]["allowed_extensions"] = a["allowed_extensions"]
         if gid and not str(gid).startswith("<dry-run"):
             payload["assignment"]["assignment_group_id"] = gid
         if a["name"] in existing:
