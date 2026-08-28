@@ -227,7 +227,7 @@ def cmd_copy(api: Canvas, args):
     if selective:
         # Only bring across durable assets. The old course's assignments and
         # modules follow the 2024 design (Attendance/Module Assignments/Final)
-        # and would fight the new 30/30/40 structure, so they stay behind.
+        # and would fight the new 30/15/15/40 structure, so they stay behind.
         payload["selective_import"] = True
         print("  scope: files + pages only (old assignments/modules intentionally skipped)")
         print("         pass --everything to copy the entire old course instead")
@@ -304,7 +304,7 @@ def build_settings(api, args):
 
 
 def build_groups(api, args):
-    print("\n--- assignment groups (30 / 30 / 40) ---")
+    print("\n--- assignment groups (30 / 15 / 15 / 40) ---")
     existing = _index_by_name(api.get_all(f"/courses/{spec.NEW_COURSE_ID}/assignment_groups"))
     ids = {}
     for g in spec.GROUPS:
@@ -465,7 +465,7 @@ def build_syllabus(api, args):
     print("\n--- syllabus page ---")
     html = spec.syllabus_html()
     print(f"  {len(html)} chars of HTML "
-          f"({len(spec.WEEKS)}-week schedule table, 30/30/40 grading table)")
+          f"({len(spec.WEEKS)}-week schedule table, 30/15/15/40 grading table)")
     api.write("PUT", f"/courses/{spec.NEW_COURSE_ID}",
               {"course": {"syllabus_body": html}}, label="update syllabus body")
 
@@ -540,7 +540,7 @@ def cmd_plan(args):
 
     html = spec.syllabus_html()
     print(f"\nSyllabus page: {len(html)} chars of HTML "
-          f"({html.count('<tr')} table rows: weekly rhythm, 30/30/40 grading, "
+          f"({html.count('<tr')} table rows: weekly rhythm, 30/15/15/40 grading, "
           f"{len(spec.WEEKS)}-week schedule)")
     if args.write_html:
         Path(args.write_html).write_text(html)

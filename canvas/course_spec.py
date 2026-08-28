@@ -97,7 +97,7 @@ WEEKS = [
 TEACHING_WEEKS = [w for w in range(2, 15)]
 
 # --------------------------------------------------------------------------
-# Assignment groups (weights come straight from the syllabus: 30/30/40)
+# Assignment groups (weights come straight from the syllabus: 30/15/15/40)
 # --------------------------------------------------------------------------
 
 GROUPS = [
@@ -107,21 +107,32 @@ GROUPS = [
         "position": 1,
         # The syllabus drops the two lowest lab scores.
         "rules": "drop_lowest:2\n",
-        "blurb": "Wednesday labs. Graded on participation and completion; "
-                 "your two lowest scores are dropped.",
+        "blurb": "Wednesday labs, due the following Sunday. Graded on "
+                 "participation and completion; your two lowest scores are dropped.",
     },
     {
         "name": "Textbook Revisions",
-        "group_weight": 30,
+        "group_weight": 15,
         "position": 2,
         "rules": "",
-        "blurb": "Friday workshops. Pull requests to the Web Data Science book "
-                 "plus the peer reviews you provide.",
+        "blurb": "Friday workshops, due the following Sunday. Pull requests to "
+                 "the Web Data Science book plus the peer reviews you provide.",
+    },
+    {
+        # Carries no assignments yet. Canvas leaves an empty weighted group out
+        # of the running total, so this weight does nothing until attendance is
+        # actually recorded against something.
+        "name": "Attendance",
+        "group_weight": 15,
+        "position": 3,
+        "rules": "",
+        "blurb": "Attendance is required. The methods are cumulative, so missed "
+                 "sessions are hard to recover from.",
     },
     {
         "name": "Final Project",
         "group_weight": 40,
-        "position": 3,
+        "position": 4,
         "rules": "",
         "blurb": "Proposal, in-class presentation, and the project repository "
                  "and write-up.",
@@ -174,13 +185,25 @@ def due_at(day: date, hour: int = 23, minute: int = 59) -> str:
 
 
 def lab_day(week_number: int):
-    """The Wednesday of a week (the notebook lab)."""
+    """The Wednesday of a week (the notebook lab meets in class)."""
     return next((d for d in meeting_days(week_number) if d.weekday() == 2), None)
 
 
 def revision_day(week_number: int):
-    """The Friday of a week (the textbook-revision workshop)."""
+    """The Friday of a week (the textbook-revision workshop meets in class)."""
     return next((d for d in meeting_days(week_number) if d.weekday() == 4), None)
+
+
+def sunday_of(week_number: int):
+    """The Sunday that closes a teaching week — when its work is due.
+
+    Labs and revisions meet on Wednesday and Friday but are both due the
+    following Sunday night, so students have the weekend. lab_day() and
+    revision_day() still decide *whether* a week runs each session; this
+    only sets the deadline.
+    """
+    from datetime import timedelta
+    return week_monday(week_number) + timedelta(days=6)
 
 
 def week_info(week_number: int):
@@ -212,18 +235,17 @@ def slides_url(week_number: int) -> str:
 # --------------------------------------------------------------------------
 
 def lab_assignments():
-    """One notebook lab per teaching week, due the night of its Wednesday."""
+    """One notebook lab per teaching week, met Wednesday and due that Sunday."""
     out = []
     for wk in TEACHING_WEEKS:
         _, _, ch, topic, slug, chfile, _ = week_info(wk)
-        day = lab_day(wk)
-        if day is None:
+        if lab_day(wk) is None:
             continue
         out.append({
             "group": "Notebook Labs",
             "name": f"Week {wk} Lab — {topic}",
             "points_possible": LAB_POINTS,
-            "due_at": due_at(day),
+            "due_at": due_at(sunday_of(wk)),
             "submission_types": ["online_upload", "online_text_entry", "online_url"],
             "description": (
                 f"<p>Work through the companion notebook for "
@@ -242,18 +264,17 @@ def lab_assignments():
 
 
 def revision_assignments():
-    """One textbook-revision workshop per teaching week, due its Friday."""
+    """One textbook-revision workshop per teaching week, met Friday and due that Sunday."""
     out = []
     for wk in TEACHING_WEEKS:
         _, _, ch, topic, _, chfile, _ = week_info(wk)
-        day = revision_day(wk)
-        if day is None:
+        if revision_day(wk) is None:
             continue
         out.append({
             "group": "Textbook Revisions",
             "name": f"Week {wk} Revision — Chapter {ch}",
             "points_possible": REVISION_POINTS,
-            "due_at": due_at(day),
+            "due_at": due_at(sunday_of(wk)),
             "submission_types": ["online_url", "online_text_entry"],
             "description": (
                 f"<p>Propose a revision to "
@@ -470,17 +491,24 @@ def syllabus_html() -> str:
       <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;"><strong>Notebook Labs</strong></td>
       <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;text-align:center;">30%</td>
       <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;">
-        Wednesday labs. Graded on participation and completion; the two lowest
-        scores are dropped.</td>
+        Wednesday labs, due the following Sunday at 11:59pm. Graded on
+        participation and completion; the two lowest scores are dropped.</td>
     </tr>
     <tr>
       <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;"><strong>Textbook Revisions</strong></td>
-      <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;text-align:center;">30%</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;text-align:center;">15%</td>
       <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;">
-        Friday workshops. Both the revisions you propose and the peer reviews you
-        provide.</td>
+        Friday workshops, due the following Sunday at 11:59pm. Both the revisions
+        you propose and the peer reviews you provide.</td>
     </tr>
     <tr style="background:#FAF8F2;">
+      <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;"><strong>Attendance</strong></td>
+      <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;text-align:center;">15%</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;">
+        Attendance is required. The methods are cumulative and build on each
+        other, so missed sessions are hard to recover from.</td>
+    </tr>
+    <tr>
       <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;"><strong>Final Project</strong></td>
       <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;text-align:center;">40%</td>
       <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;">
@@ -488,12 +516,13 @@ def syllabus_html() -> str:
         and write-up (Dec 11).</td>
     </tr>
   </table>
-  <p>Because the Wednesday labs and Friday revision workshops are collaborative
-  and graded on in-class participation, regular attendance is essential; there is
-  no separate attendance grade, but missing these sessions directly affects those
-  components. If personal, professional, medical, or other circumstances will
+  <p>Attendance is required and carries its own weight. We cover technical
+  methods that are cumulative and that require sustained effort, so a missed
+  session is hard to recover from, and there is no way to make up missed
+  attendance. If personal, professional, medical, or other circumstances will
   prevent your attendance, please email me so we can develop an accommodation
-  plan together.</p>
+  plan together. If you need to miss several classes, come to office hours so we
+  can check in on the material and your progress.</p>
 
   <h3>Computing</h3>
   <p>We use <a href="https://jupyter.org/">Jupyter notebooks</a> in Python 3; the
