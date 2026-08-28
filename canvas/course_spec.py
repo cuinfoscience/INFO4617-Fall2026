@@ -257,8 +257,14 @@ def lab_assignments():
                 f"final interpretation step in your own words.</p>"
                 f'<p><strong>Notebook:</strong> <a href="{notebook_url(slug)}">'
                 f"{slug}.ipynb</a></p>"
-                "<p>Submit your completed notebook (<code>.ipynb</code>) or a "
-                "link to it. The <em>Additional Exercises</em> are optional "
+                "<p><strong>Submit your completed notebook as HTML</strong>, "
+                "with all cells run so your code and its output are both "
+                "visible. In JupyterLab: <em>File &rarr; Save and Export "
+                "Notebook As&hellip; &rarr; HTML</em> (see the "
+                '<a href="https://jupyterlab.readthedocs.io/en/stable/user/'
+                'export.html">JupyterLab export guide</a>), then upload the '
+                "<code>.html</code> file here.</p>"
+                "<p>The <em>Additional Exercises</em> are optional "
                 "extensions — worth your time, not required. Labs are graded "
                 "on participation and completion rather than perfection — "
                 "come with questions, work with a partner, and bring something to "
