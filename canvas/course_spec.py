@@ -248,13 +248,19 @@ def lab_assignments():
             "due_at": due_at(sunday_of(wk)),
             "submission_types": ["online_upload", "online_text_entry", "online_url"],
             "description": (
-                f"<p>Work through the companion notebook for "
-                f'<a href="{chapter_url(chfile)}">Chapter {ch}: {topic}</a> and share '
-                f"your implementation of the exercises.</p>"
+                f"<p>Read <a href=\"{chapter_url(chfile)}\">Chapter {ch}: "
+                f"{topic}</a> and work through its code in the companion "
+                f"notebook — we do this together in Wednesday's lab.</p>"
+                f"<p>The take-home is the chapter's <strong>Recommended "
+                f"Exercises</strong>: a guided, step-by-step build at the end "
+                f"of the notebook. Fill in each empty code cell and answer the "
+                f"final interpretation step in your own words.</p>"
                 f'<p><strong>Notebook:</strong> <a href="{notebook_url(slug)}">'
                 f"{slug}.ipynb</a></p>"
-                "<p>Submit your completed notebook (<code>.ipynb</code>) or a link to it. "
-                "Labs are graded on participation and completion rather than perfection — "
+                "<p>Submit your completed notebook (<code>.ipynb</code>) or a "
+                "link to it. The <em>Additional Exercises</em> are optional "
+                "extensions — worth your time, not required. Labs are graded "
+                "on participation and completion rather than perfection — "
                 "come with questions, work with a partner, and bring something to "
                 "show-and-tell: a challenging bug, interesting data, or a provocation "
                 "for a research design.</p>"
