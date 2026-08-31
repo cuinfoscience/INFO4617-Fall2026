@@ -34,6 +34,7 @@
             \begin{itemize}\small
                 \item The golden age
                 \item Enclosure, exemption \& erosion
+                \item Counter-values, lineages \& misconceptions
             \end{itemize}
 
             \medskip
@@ -130,7 +131,7 @@
 
             \medskip
 
-            \textbf{The asymmetry is the tell.} Every A/B test is a behavioral study, and internal teams have total access --- but outside researchers meet:
+            Every A/B test is a behavioral study, and internal teams run them at will --- while outside researchers meet:
             \begin{itemize}\small
                 \item cease-and-desist letters citing the Computer Fraud and Abuse Act;
                 \item Terms of Service that prohibit the very collection research needs \parencite{fiesler2020no};
@@ -170,44 +171,280 @@
     \bottomcite{Textbook Ch.~3, ``Erosion.'' Two later chapters are counter-erosion: archives (Ch.~7) and automation (Ch.~14).}
 \end{frame}
 
-\begin{frame}{This is an old problem --- public-interest lineages}
-    Data science is not the first profession to face powerful actors gatekeeping information the public needs. Each precedent offers a hard-won lesson:
-    \begin{itemize}\small
-        \item \textbf{Journalism} --- freedom-of-information laws and the muckraking tradition established that records, public \emph{and} private, are legitimate targets of scrutiny. (You work in this lineage when you file a records request.)
-        \item \textbf{Law} --- discovery rules compel disclosure; due process demands decisions be explainable and reviewable --- inherited almost verbatim by algorithmic accountability.
-        \item \textbf{Accounting} --- after 1929, mandatory audits turned private finances into public record. Lesson: trustworthy disclosure at scale needs \textbf{standards and independent examiners}, not goodwill.
-        \item \textbf{Urban planning} --- impact statements and public comment periods make community input a precondition for decisions about shared resources.
-        \item \textbf{Engineering} --- licensure and safety codes established duties to the public that override duties to an employer. Data science is still writing its equivalent.
-    \end{itemize}
+\begin{frame}{Activity: which pressure hits your source?}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Pick a platform or dataset you would actually want for a project --- ideally one you are considering for the final project.
+
+            \medskip
+
+            \begin{enumerate}
+                \item Name what you would collect, concretely: which records, which fields, how far back.
+                \item Decide which pressure is most likely to close it on you, and why.
+                \item Find one piece of evidence \textit{right now}: a pricing page, an API changelog, a developer-forum complaint, a dead third-party tool.
+            \end{enumerate}
+
+            \medskip
+
+            Report back in pairs; we will tally the pressures on the board.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{block}{The three suspects}
+                \small
+                \begin{itemize}\small
+                    \item \textbf{Enclosure} --- paywalled, repriced, licensed away
+                    \item \textbf{Exemption} --- bans, cease-and-desists, ToS traps
+                    \item \textbf{Erosion} --- link rot, shutdowns, redesigns
+                \end{itemize}
+            \end{block}
+            \begin{alertblock}{Keep your pick}
+                \small Step 4 of this week's take-home asks you to add two endpoints \textit{you} care about to the access matrix. Use this one.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Counter-value 1 --- Openness}
+    Three values guide public-interest work inside the post-API age. They are a stance for working under the pressures, and each has a practice attached.
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \textbf{Openness}: conduct your own work so that it resists enclosure.
+            \begin{itemize}\small
+                \item Document \textit{how} you collected, beyond what: endpoints, parameters, dates, and the platform's constraints at collection time \parencite{gebru2021datasheets}. That record lets a future researcher understand your dataset after the source changes or vanishes.
+                \item Practice redundancy: deposit data in durable repositories (Zenodo, institutional archives), lean on the Internet Archive and Common Crawl, prefer openly licensed sources.
+                \item Wikipedia is the standing counter-example to enclosure --- open API, open license, full public dumps (Ch.~10).
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{block}{Openness in one habit}
+                \small Record the date. Your access matrix is a snapshot; the date is what turns it into evidence someone else can build on.
+            \end{block}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~3, ``Openness.''}
+\end{frame}
+
+\begin{frame}{Counter-value 2 --- Oversight}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \textbf{Oversight}: consequential systems should be inspectable by parties who do \textit{not} own them.
+            \begin{itemize}\small
+                \item Independent audits of platform algorithms and content moderation; documentation standards that make datasets and methods legible to review.
+                \item Regulation converts access from a favor into an obligation: EU DSA Article~40 compels vetted-researcher access to very large platforms.
+                \item Oversight is the direct answer to exemption --- the A/B-test asymmetry, closed from the outside.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{This course is oversight}
+                \small Someone who can retrieve, parse, and analyze web data independently is someone a platform cannot simply refuse. The skills taught here are oversight skills.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~3, ``Oversight.''}
+\end{frame}
+
+\begin{frame}{Counter-value 3 --- Ownership}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \textbf{Ownership}: prefer arrangements where communities govern the infrastructure their data lives in.
+            \begin{itemize}\small
+                \item Federated systems on open protocols --- ActivityPub (Mastodon), AT~Protocol (Bluesky) --- distribute control: no single acquisition or pricing decision can enclose the whole network (Ch.~12).
+                \item Community archives, data cooperatives, and volunteer efforts like ArchiveTeam hold collective traces collectively.
+                \item The long-horizon value: hardest to practice, and the durable answer to enclosure.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{block}{The trade}
+                \small Federation exchanges convenience for control: smaller populations, uneven moderation, more work per query. You will feel both sides of that trade in Ch.~12.
+            \end{block}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~3, ``Ownership.''}
+\end{frame}
+
+\begin{frame}{Lineage 1 --- Journalism}
+    Other professions met this problem long before us --- powerful actors controlling information the public needs --- and built institutions in response. Five lineages, five lessons.
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \begin{itemize}\small
+                \item Freedom-of-information laws exist because reporters and reformers spent decades establishing that \textbf{government records belong to the public}.
+                \item The muckraking tradition established that \textbf{private power, too, is a legitimate target} of sustained scrutiny --- Standard Oil, the meatpacking industry.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{block}{The echo in data science}
+                \small You work in this lineage every time you file a records request for data an agency will not publish (Ch.~11) --- one of the ``four more doors'' coming up.
+            \end{block}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~3, ``Public Interest Lineages.''}
+\end{frame}
+
+\begin{frame}{Lineage 2 --- Law}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \begin{itemize}\small
+                \item \textbf{Discovery} compels parties to produce documents they would prefer to hide, on the theory that adjudication without evidence is theater.
+                \item \textbf{Due process} demands that decisions affecting people be explainable and reviewable --- a proceduralist answer to arbitrary power.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{block}{The echo in data science}
+                \small Algorithmic accountability inherits the due-process demand almost verbatim: explainability and review, aimed at software. Week~2's cases (\emph{Sandvig}, \emph{hiQ}) were this lineage in court.
+            \end{block}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~3, ``Public Interest Lineages.''}
+\end{frame}
+
+\begin{frame}{Lineage 3 --- Accounting}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \begin{itemize}\small
+                \item After the 1929 crash, mandatory audits and standardized reporting turned corporate finances \textbf{from private mystery into public record}.
+                \item The machinery that makes disclosure trustworthy at scale: \textbf{standards, professional norms, and independent examiners} --- goodwill does not audit itself.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{block}{The echo in data science}
+                \small Datasheets, model cards, and dataset documentation standards are early drafts of the same machinery for data and models \parencite{gebru2021datasheets}.
+            \end{block}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~3, ``Public Interest Lineages.''}
+\end{frame}
+
+\begin{frame}{Lineage 4 --- Urban planning}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \begin{itemize}\small
+                \item Environmental impact statements and public comment periods encode a principle: decisions about \textbf{shared resources} require \textbf{advance disclosure and community input}.
+                \item The affected get to speak \textit{before} the bulldozer moves, and the record of what was said is public.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{block}{The echo in data science}
+                \small Algorithmic impact assessments copy the template: disclose before deploying, and take comment from the people the system will govern.
+            \end{block}
+        \end{column}
+    \end{columns}
+    \bottomcite{Textbook Ch.~3, ``Public Interest Lineages.''}
+\end{frame}
+
+\begin{frame}{Lineage 5 --- Engineering}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \begin{itemize}\small
+                \item Licensure, safety codes, and ethics canons --- many written in the aftermath of collapsed bridges and exploded boilers --- established that practitioners owe \textbf{duties to the public that override duties to employers}.
+                \item An engineer can refuse to sign off, and the refusal has institutional backing: a license the employer cannot revoke.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{The unfinished echo}
+                \small Data science is still writing its equivalent: no license to lose, no canon with teeth --- yet. You are entering the field while its canon is being drafted.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
     \bottomcite{Textbook Ch.~3, ``Public Interest Lineages.'' Missing Manual Ch.~8: ``Artifacts Have Politics.''}
+\end{frame}
+
+\begin{frame}{What this means for practice --- the course roadmap}
+    The rest of this course equips you with a diverse toolkit precisely because no single method of access is reliable.
+    \medskip
+    \begin{center}
+    \small
+    \begin{tabular}{ll}
+        \toprule
+        \textbf{When this closes\ldots} & \textbf{\ldots we go here} \\
+        \midrule
+        APIs shut down or reprice & scrape the HTML --- Ch.~6 (static), Ch.~8 (dynamic) \\
+        pages change or vanish & web archives --- Ch.~7 \\
+        records locked inside PDFs & document extraction --- Ch.~9 \\
+        platforms restrict automation & federated alternatives --- Ch.~12 \\
+        one-off pulls stop sufficing & scheduled automation --- Ch.~14 \\
+        \bottomrule
+    \end{tabular}
+    \end{center}
+    \medskip
+    The strategic lesson is \textbf{redundancy and flexibility}: skills across the full range, so the closure of any single source cannot shut down your research program.
+    \bottomcite{Textbook Ch.~3, ``What This Means for Practice.''}
+\end{frame}
+
+\begin{frame}{Four more doors --- beyond the toolkit}
+    \begin{enumerate}\small
+        \item \textbf{Official research access programs} --- the Meta Content Library, TikTok's Research API, Reddit's researcher program. Real but rationed: narrow eligibility, publication restrictions, revocable access. Use them, and document their constraints in your methods.
+        \item \textbf{Data donation} --- users hold export rights to their own data and can volunteer it. Donation studies and instrumented browser extensions convert individual data rights into collective observation, with consent built in.
+        \item \textbf{FOIA and public records requests} --- disclosure law reaches data no API offers: inspection records, communications, contracts. Ch.~11 covers what agencies publish proactively.
+        \item \textbf{Crowdsourcing and citizen science} --- when no one holds the data, communities create it: distributed observation and collaborative annotation, from air quality to political advertising.
+    \end{enumerate}
+    \bottomcite{Textbook Ch.~3, ``What This Means for Practice.''}
+\end{frame}
+
+\begin{frame}{Myth check --- vote before the next slide}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Five claims students arrive with. For each, commit: \textbf{true or false?}
+            \begin{enumerate}
+                \item ``The post-API age means APIs are gone.''
+                \item ``If the API closes, I'll just scrape.''
+                \item ``If data is publicly visible, collecting it is permitted and ethical.''
+                \item ``This only matters for social media research.''
+                \item ``Nothing can be done about it.''
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{block}{Rules}
+                \small Write your five answers down first; then we take a hand count, myth by myth. Defend your minority votes --- some of these are \textit{almost} true.
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Myth check --- what Chapter 3 says}
+    \begin{enumerate}\small
+        \item \textbf{APIs are everywhere.} More exist than ever; what is disappearing is \textit{free access for outside observers}, replaced by paid tiers, gated programs, and licensing deals.
+        \item \textbf{Scraping is one tool in a portfolio.} Ch.~6 \& 8 teach it --- and it carries legal ambiguity (Ch.~2), breaks when sites redesign, and scales poorly.
+        \item \textbf{Visibility, permission, and ethics are three different questions} \parencite{fiesler2020no}. A public post's author may never have expected a dataset; a viewable page's ToS may forbid automated collection.
+        \item \textbf{Enclosure follows AI-training value} wherever it appears: news archives, code repositories, forums, image libraries. Government data (Ch.~11) stays open by legal mandate.
+        \item \textbf{The environment is contested.} Regulation is creating access obligations, archives are institutionalizing preservation, federated platforms are growing --- and practitioners' choices are part of the contest.
+    \end{enumerate}
+    \bottomcite{Textbook Ch.~3, ``Common Misconceptions.''}
+\end{frame}
+
+\begin{frame}{Wednesday: measure it, then take it home}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Monday's claims are checkable, and Wednesday we check them:
+            \begin{itemize}\small
+                \item Build an \textbf{access matrix}: probe eight live endpoints with no credentials and tabulate who answers, who refuses, and how.
+                \item Run \textbf{dead-endpoint forensics}: autopsies of Pushshift, CrowdTangle, and Twitter v1.1 --- three retirements, three different failure signatures.
+            \end{itemize}
+            \medskip
+            Bring a laptop with the course environment working; we start from \texttt{ch-03-post-api.ipynb}.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{block}{Take-home: the 7-step audit}
+                \footnotesize
+                \begin{enumerate}\footnotesize
+                    \item Named \texttt{User-Agent}
+                    \item Probe one endpoint by hand
+                    \item All eight $\rightarrow$ dated DataFrame
+                    \item Add two endpoints \textit{you} care about
+                    \item Diagnose one refusal, attribute it
+                    \item Autopsy one retired endpoint
+                    \item Write up what changed
+                \end{enumerate}
+            \end{block}
+            \begin{alertblock}{Deliverable}
+                \footnotesize Completed notebook, exported to \textbf{HTML}, on Canvas by \textbf{Sunday 11:59pm}.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 % =========================================================================
 \section{Wednesday · Notebook Lab}
 % =========================================================================
-
-\begin{frame}{Working inside it --- openness, oversight, ownership}
-    The counter-values are not a fix for the post-API age; they are a \textbf{stance} for working inside it. They frame everything we do today.
-    \begin{columns}[T]
-        \begin{column}{0.32\textwidth}
-            \begin{block}{Openness}
-                \footnotesize Make your \textit{own} work resist enclosure: transparent pipelines, documented collection, and redundant deposits (Zenodo, Internet Archive, open licenses). Wikipedia is the standing counter-example.
-            \end{block}
-        \end{column}
-        \begin{column}{0.32\textwidth}
-            \begin{block}{Oversight}
-                \footnotesize Insist consequential systems be inspectable by parties who do \textit{not} own them: audits, documentation standards, DSA Article~40. \textbf{The skills this course teaches are oversight skills.}
-            \end{block}
-        \end{column}
-        \begin{column}{0.32\textwidth}
-            \begin{block}{Ownership}
-                \footnotesize Prefer community-governed infrastructure: federated protocols (ActivityPub, AT~Protocol), data cooperatives, ArchiveTeam. The long-horizon answer to enclosure.
-            \end{block}
-        \end{column}
-    \end{columns}
-    \medskip
-    \bottomcite{Textbook Ch.~3, ``Three Counter-Values.'' Federated platforms return in Ch.~12 (Social).}
-\end{frame}
 
 \begin{frame}[fragile]{Claims you can check --- the access matrix}
     Enclosure, exemption, and erosion are claims about the world. Claims about the world can be checked. The chapter's audit asks eight endpoints one question: \textit{if I show up with no credentials, what happens?}
