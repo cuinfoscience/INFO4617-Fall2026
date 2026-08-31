@@ -22,36 +22,44 @@
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            The web used to invite us in. This week we ask \textit{why} that changed --- and how to keep doing public-interest research anyway.
+            The web used to invite us in. That has changed in recent year. 
+
+            \bigskip
+            
+            \textit{Why} did this bargain change? \textit{How} can we keep doing public interest research anyway?
 
             \bigskip
 
             \dayband{Monday}{Concepts}
             \begin{itemize}\small
-                \item The golden age, then enclosure, exemption \& erosion
+                \item The golden age
+                \item Enclosure, exemption \& erosion
             \end{itemize}
 
             \medskip
 
             \dayband{Wednesday}{Notebook lab}
             \begin{itemize}\small
-                \item Measure access instead of just describing it: the access matrix and dead-endpoint forensics
+                \item Measure data access and forensic analysis of dead endpoints
             \end{itemize}
 
             \medskip
 
             \dayband{Friday}{Textbook revisions}
             \begin{itemize}\small
-                \item Propose \& peer-review pull requests improving Chapter 3
+                \item Reviewing issues and proposing pull requests
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Companion notebook}
-                \footnotesize \texttt{ch-03-post-api.ipynb}
-            \end{block}
-            \begin{block}{Take-home}
-                \footnotesize The notebook's \textbf{Recommended Exercises}: a 7-step guided audit. Fill in the empty cells, run everything, export to HTML, upload to Canvas by \textbf{Sunday 11:59pm}.
-            \end{block}
+            \begin{alertblock}{Monday lecture}
+                \small Read Chapter 03 of the Web Data Science book
+            \end{alertblock}
+            \begin{alertblock}{Wednesday lab}
+                \small Complete \textbf{Recommended Exercises}: fill in the empty cells, run everything, export to HTML, upload to Canvas by \textbf{Sunday 11:59pm}
+            \end{alertblock}
+            \begin{alertblock}{Friday notebook}
+                \small You do not need to wait until Friday to begin to submit issues from textbook or notebook, upload link to issue by \textbf{Sunday 11:59pm}
+            \end{alertblock}
         \end{column}
     \end{columns}
 \end{frame}
@@ -63,51 +71,59 @@
 \begin{frame}{The golden age of web data access}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            For roughly a decade --- about \textbf{2008 to 2018} --- the web behaved as if it wanted to be studied.
+            Between roughly 2008 to 2018 the web was a mostly open book that was easy(ish) to study
             \begin{itemize}\small
-                \item Twitter opened its API in 2006; Facebook launched the Graph API in 2010; Reddit's API was free and essentially unrestricted; Google exposed trends, maps, and books.
-                \item This was not charity: platforms traded \textbf{data access} for \textbf{ecosystems}, credibility, and lock-in.
-                \item The bargain built a field --- computational social science \parencite{lazer2009computational} --- and a generation of data journalism and civic tech.
+                \item Websites rendered a mix of static and dynamic content
+                \item Social platforms shared data: Twitter in 2006; Facebook in 2010; Reddit's API was free; Google exposed trends
+                \item Platforms traded data access for lock-in to their ecosystems, credibility, recruitment
+                \item This built my field of computational social science and a generation of data journalism and civic tech
             \end{itemize}
 
             \medskip
 
             When researchers today say the \textbf{``post-API age''} \parencite{freelon2018computational}, this is the era they measure against.
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{Built on the bargain}
-                \footnotesize The Wikipedia and Reddit studies that trained a generation --- including the instructor's --- ran on open APIs, public dumps, and volunteer archives like Pushshift \parencite{baumgartner2020pushshift}. No permission, partnership, or payment required.
-            \end{block}
-            {\scriptsize You will use those same open interfaces in Ch.~10 (Wikipedia).}
+        \begin{column}{0.35\textwidth}\centering
+            \includegraphics[width=\textwidth]{slides/week-03/img/grandpa-simpson.jpg}
+            {\scriptsize They just gave out data for free!}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~3, ``The Golden Age of Web Data Access.''}
+
+    \medskip
+
+    \begin{block}{Three pressures}
+        (1) Enclosure, (2) Exemption, (3) Erosion
+    \end{block}
 \end{frame}
 
-\begin{frame}{Pressure 1 --- Enclosure}
+\begin{frame}{Pressure 1 --- Enclosure}\small
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Three pressures explain the shift since $\sim$2018: \textbf{enclosure}, \textbf{exemption}, \textbf{erosion}.
+
+            \textbf{Enclosure} privatizes a shared resource --- traces back to the fencing in of English common land. The data still exist, just on the other side of a paywall.
+            \begin{itemize}\small
+                \item \textbf{Twitter/X}: a free academic archive (2006--2021) $\rightarrow$ discontinued; enterprise access starts at \$42{,}000/month
+                \item \textbf{Reddit}: free since 2008--2023 $\rightarrow$ \$0.24 per 1{,}000 calls; 7,000+ subreddit protests and Pushshift cut off
+            \end{itemize}
 
             \medskip
-
-            \textbf{Enclosure} privatizes a shared resource --- the name echoes the fencing of English common land. The posts still exist; the \textit{terms of access} are fenced.
-            \begin{itemize}\small
-                \item \textbf{Twitter/X}: a free academic archive (2021) $\rightarrow$ discontinued; enterprise access from \$42{,}000/month. Hundreds of tools went dark.
-                \item \textbf{Reddit}: free since 2008 $\rightarrow$ \$0.24 per 1{,}000 calls (2023); Apollo shut down; 7{,}000+ subreddits went dark; Pushshift was cut off.
-            \end{itemize}
-            \textbf{The driver: generative AI.} Once text became training data, an open API stopped looking like ecosystem-building and started looking like giving away inventory (Reddit--Google: $\sim$\$60M/year).
+            
+            Two drivers:
+            \begin{enumerate}
+                \item \textbf{Independent scrutiny} --- researchers and journalists answering uncomfortable questions about polarization, harassment, privacy, financials, \textit{etc}.
+                \item \textbf{AI training data} --- uncontaminated user-generated content becomes enormously valuable for training AI models
+            \end{enumerate}
         \end{column}
-        \begin{column}{0.35\textwidth}
+        \begin{column}{0.35\textwidth}\centering
             \centering
-            \includegraphics[width=\textwidth]{img/three_pressures.png}\\
-            {\scriptsize Three forces fencing the open web.}
+            \includegraphics[width=\textwidth]{slides/week-03/img/richmond-enclosure.jpg}\\
+            {\scriptsize This land is my land now, it isn't your land anymore}
         \end{column}
     \end{columns}
     \bottomcite{Textbook Ch.~3, ``Enclosure.'' Facebook's CrowdTangle shutdown (2024) was the template.}
 \end{frame}
 
-\begin{frame}{Pressure 2 --- Exemption}
+\begin{frame}{Pressure 2 --- Exemption}\small
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             \textbf{Exemption}: platforms operate beyond outside scrutiny while running the same studies internally at will.
