@@ -288,7 +288,14 @@ proposal without asking you a single follow-up question.
   required: browse the book, find one real problem, and fill in the form that
   fits it. Week 1 is a single short session, so **Week 2's Friday** is where
   everyone gets GitHub working and files that first issue for credit.
-- **Weeks 3–14** — you open *pull requests* and review two classmates'.
+- **Weeks 3–4** — everything still happens in the browser. Week 3: read the
+  open issues, *comment* to claim one or sharpen one, and watch a pull request
+  made with GitHub's web editor (from a fork — you don't need write access).
+  The deliverable is an issue or a substantive comment. Week 4: the same flow
+  in github.dev (press `.` on any repo page), where you can edit several files
+  in one change.
+- **Weeks 5–14** — you open *pull requests* from your own clone (GitHub
+  Desktop or `gh`) and review two classmates'.
 - Each week's lecture deck ends with a **revision menu**: the same seven types,
   aimed at that specific chapter's known thin spots.
 

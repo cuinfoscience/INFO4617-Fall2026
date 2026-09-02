@@ -48,7 +48,7 @@
 
             \dayband{Friday}{Textbook revisions}
             \begin{itemize}\small
-                \item Reviewing issues and proposing pull requests
+                \item Reading and commenting on issues; first pull requests from the browser
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
@@ -59,7 +59,7 @@
                 \small Complete \textbf{Recommended Exercises}: fill in the empty cells, run everything, export to HTML, upload to Canvas by \textbf{Sunday 11:59pm}
             \end{alertblock}
             \begin{alertblock}{Friday notebook}
-                \small You do not need to wait until Friday to begin to submit issues from textbook or notebook, upload link to issue by \textbf{Sunday 11:59pm}
+                \small You do not need to wait until Friday to begin to submit issues from textbook or notebook, upload the link to your issue or comment by \textbf{Sunday 11:59pm}
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -890,73 +890,244 @@ def probe(name, url):
 \section{Friday · Textbook Revisions}
 % =========================================================================
 
-\begin{frame}{Improving Chapter 3 together}
+\begin{frame}{Friday: a slower on-ramp}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Last week you filed an \textbf{issue} --- a report that something is wrong. Today you take the next step and propose the \textbf{fix} itself: your \textbf{first pull request}, against \texttt{ch-03-post-api.qmd}, plus reviews of two classmates'.
-
-            \bigskip
-
-            The workflow, in GitHub Desktop or \texttt{gh} (no raw \texttt{git} needed):
-            \begin{enumerate}\small
-                \item \textbf{Clone} the book repo, then create a \textbf{branch}
-                \item Edit the chapter; \textbf{commit} with a clear message
-                \item \textbf{Push}, then open a PR describing \textit{what} and \textit{why}
-                \item Review two peers' PRs: kind, specific, actionable
-            \end{enumerate}
+            Last week you filed an issue. The original plan was to jump straight to cloning the repo and pushing pull requests today. We will climb that ladder one rung a week instead, and today's rungs need only a browser.
 
             \medskip
 
-            This is a \textbf{fast-moving} chapter --- prices, lawsuits, and regulations change monthly --- so it always needs hands.
+            \begin{enumerate}\small
+                \item[0.] \textbf{Keep filing issues} on Chapter 3 --- slides, textbook, Missing Manual
+                \item \textbf{Read the queue} --- what is already open across the three repos
+                \item \textbf{Comment} --- claim an issue you will tackle, or sharpen one that needs detail
+                \item \textbf{Edit in the browser} and open a pull request --- demonstrated, not required today
+                \item \textbf{Attach the issue} to the pull request
+                \item \textbf{Review} --- the basics of reading someone else's change
+            \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/pr_review.png}
+            \begin{alertblock}{This week's deliverable}
+                \small The URL of a \textbf{new issue} or a \textbf{substantive comment} on an existing one, on Canvas by \textbf{Sunday 11:59pm}. Pull requests are welcome, not required.
+            \end{alertblock}
+            \begin{alertblock}{Not today}
+                \small No installs, no clone, no terminal. GitHub Desktop and the command line return in a couple of weeks.
+            \end{alertblock}
         \end{column}
     \end{columns}
-    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (15\%).}
+\end{frame}
+
+\begin{frame}{Step 0 --- keep filing issues}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Chapter 3 changed this week: Why Platforms Say No, the three pushbacks, the negotiation exercise, and five expanded lineages landed days ago, and no student has read them yet. Fresh prose has the most problems.
+
+            \medskip
+
+            Three repos take issues, and the same three forms work in each --- \textbf{Broken}, \textbf{Gap}, \textbf{Suggestion}:
+            {\footnotesize
+            \begin{itemize}\footnotesize
+                \item \textbf{Textbook} --- \href{https://github.com/cuinfoscience/Web-Data-Science-Book/issues}{\texttt{github.com/cuinfoscience/Web-Data-Science-Book/issues}}
+                \item \textbf{Slides \& course} --- \href{https://github.com/cuinfoscience/INFO4617-Fall2026/issues}{\texttt{github.com/cuinfoscience/INFO4617-Fall2026/issues}}
+                \item \textbf{Missing Manual} --- \href{https://github.com/cuinfoscience/INFO-Missing-Manual/issues}{\texttt{github.com/cuinfoscience/INFO-Missing-Manual/issues}}
+            \end{itemize}}
+
+            \medskip
+
+            Every textbook page now has \textbf{Report an issue} and \textbf{Edit this page} links in its sidebar. Start from the page you are reading, not from the repo.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Point at the line}
+                \small On any file in GitHub, click a line number, then \textbf{Copy permalink}. Press \texttt{y} first to freeze the URL to the current version. An issue that links the line beats one that describes it.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Prep before class: label a handful of open issues "good first issue" so the
+% queue has obvious things to claim.
+\begin{frame}{Step 1 --- read the queue}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Before you write anything, read what is already open. An issue page has more on it than a title:
+            \begin{itemize}\small
+                \item \textbf{Title prefix} --- \texttt{Broken:} / \texttt{Gap:} / \texttt{Suggestion:} tells you the type at a glance
+                \item \textbf{Labels and assignee} --- what kind of work it is, and whether someone already owns it
+                \item \textbf{The thread} --- reproductions, counter-evidence, scope decisions; read to the bottom before adding to it
+                \item \textbf{Linked pull requests} --- a fix may already be in flight
+            \end{itemize}
+
+            \medskip
+
+            Use the search box: \texttt{is:open ch-03} finds every open issue that mentions the chapter; sort by \textbf{Most commented} to find the live ones. If your problem is already there, good --- you have found your Step 2.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{React, don't ``+1''}
+                \small A \textbf{thumbs-up reaction} on the issue is how you say ``me too.'' A comment that only says ``me too'' costs everyone a notification and earns nothing.
+            \end{alertblock}
+            \begin{alertblock}{Subscribe}
+                \small Commenting subscribes you to that thread; \textbf{Watch} on the repo covers everything. Otherwise you will never see the reply.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 2 --- comment: claim it or sharpen it}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Two kinds of comment earn credit this week.
+
+            \medskip
+
+            \textbf{Claim it.} ``I'll take this one --- planning to \ldots'' plus a sentence on your approach. You cannot assign yourself without write access, so the comment \textit{is} the claim; I will set the assignee. Claiming prevents two people fixing the same paragraph, which is the fastest route to a merge conflict.
+
+            \medskip
+
+            \textbf{Sharpen it.} Reproduce the problem and say what you saw. Add the missing \textbf{Location} or the missing \textbf{Evidence}. Propose a scope: ``this is really two issues.'' Ask the author the one question a fixer would need answered.
+
+            \medskip
+
+            The grammar: quote with \texttt{>}, mention with \texttt{@name}, reference with \texttt{\#12}, and across repos with \texttt{cuinfoscience/Web-Data-Science-Book\#12}.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Same rubric as an issue}
+                \small \textbf{Located}, \textbf{evidenced}, \textbf{actionable}. A comment that adds one of those to someone else's issue is a contribution; ``I agree'' is not.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 3 --- the browser is an editor}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            You do not have write access to these repos, and that is fine --- GitHub handles it:
+            \begin{enumerate}\small
+                \item Open the chapter's source (\textbf{Edit this page}, or find \texttt{ch-03-post-api.qmd} in the repo) and click the pencil
+                \item GitHub says you need to \textbf{fork} the repository --- click it. A fork is your own copy, under your account, that you \textit{can} edit
+                \item Make one change. Check the \textbf{Preview} tab
+                \item \textbf{Commit changes\ldots} --- a one-line title, and a description that says why
+                \item \textbf{Propose changes} --- GitHub saves it to a branch in your fork (it will name it \texttt{patch-1})
+                \item \textbf{Compare \& pull request} --- from \texttt{you:patch-1} into \texttt{cuinfoscience:main}
+                \item Fill in the description (next slide), then \textbf{Create pull request}
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Edit the right file}
+                \small The \texttt{.qmd} is the source. Never the rendered HTML, and never the \texttt{.ipynb} --- notebooks are regenerated from the chapter and your edit would be overwritten. For slides, the \texttt{.tex}.
+            \end{alertblock}
+            \begin{alertblock}{One change per PR}
+                \small A PR is a conversation about one change. Twenty typos is one issue listing them --- not twenty PRs, and not one PR of twenty.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 4 --- attach the issue}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            A pull request that fixes an issue should say so where GitHub can read it. In the PR description:
+            \begin{itemize}\small
+                \item \texttt{Fixes \#12} or \texttt{Closes \#12} --- same repo
+                \item \texttt{Fixes cuinfoscience/Web-Data-Science-Book\#12} --- from another repo
+            \end{itemize}
+            GitHub links the two immediately (see \textbf{Development} in the sidebar) and closes the issue automatically when the PR merges. The reporter gets notified; the queue stays honest; the grader finds your work.
+
+            \medskip
+
+            The description itself uses the fields you already know from the forms --- \texttt{Location} $\cdot$ \texttt{Problem} $\cdot$ \texttt{Why} --- plus one new one: \texttt{Change}, what this PR does and what you chose not to do.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Draft first}
+                \small Not sure it is ready? Open it as a \textbf{Draft pull request}. Reviewers can see it; nobody can merge it until you mark it ready.
+            \end{alertblock}
+            \begin{alertblock}{Disclose}
+                \small If an AI tool helped write or check the change, say so in the description (Appendix~B of the book).
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5 --- review basics}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Open a classmate's PR and go to \textbf{Files changed}. Hover a line, click the \textbf{+}, and you are commenting on that exact line. The most useful thing a new reviewer can learn is the \textbf{suggestion}: propose the replacement text, and the author applies it with one click.
+\begin{lstlisting}[language=,basicstyle=\ttfamily\footnotesize]
+```suggestion
+Reddit's API had been free since 2008.
+```
+\end{lstlisting}
+            Finish with \textbf{Review changes}: \textbf{Comment} (observations), \textbf{Approve} (ship it), or \textbf{Request changes} (must-fix first). Say which items are must-fix and which are nice-to-have, and end with a verdict.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Who merges}
+                \small I do. \textbf{Merged is not the bar}: you are graded on the diagnosis and the review, not on acceptance.
+            \end{alertblock}
+            \begin{alertblock}{Tone}
+                \small Kind, specific, actionable. Assume good faith; name the line; propose the fix.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{After the click: checks, conflicts, deploys}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \textbf{Checks.} Every textbook PR triggers a render. A green check means the book still builds with your change; a red one means read the log before asking --- the failing line is usually named.
+
+            \medskip
+
+            \textbf{Conflicts.} ``This branch has conflicts that must be resolved'' means someone else changed the same lines first. Small PRs and claiming in Step 2 prevent most of it; for a one-liner, GitHub's conflict editor lets you pick a side in the browser. Otherwise, ask.
+
+            \medskip
+
+            \textbf{Deploys.} When a PR merges, the book republishes itself. Open the repo's \textbf{Actions} tab, watch the run go green, reload the chapter: your sentence is live in about two minutes.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{The loop you just closed}
+                \small Reader $\rightarrow$ issue $\rightarrow$ comment $\rightarrow$ fork $\rightarrow$ PR $\rightarrow$ review $\rightarrow$ merge $\rightarrow$ live page. Every step of it happened in a browser tab.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{A revision menu for Chapter 3}
-    High-value targets --- pick one and scope it to a single PR:
+    Issues to file or claim --- pick one and scope it to a single thing:
     \begin{itemize}\small
-        \item \textbf{Add the missing figures.} The chapter still has no figures. Contribute a three-pressures diagram, an API-access timeline (2008--2026), or a link-rot chart --- the deck's placeholders show the need.
-        \item \textbf{Re-run the audit.} The access matrix and forensics outputs are dated 28 Aug 2026 and \textit{will} drift. Re-run the chapter's code, and where a row changed, update the printed output and the prose that reads it. This is the chapter's built-in revision engine.
-        \item \textbf{Update the moving numbers.} Verify and re-cite the Twitter/X pricing, the Reddit--Google deal, and DSA Article~40's implementation status ``as of mid-2026.'' Flag what has gone stale.
-        \item \textbf{Resolve the editorial TODOs.} The source carries author-voice and ``add citation when published'' notes (the openness/oversight/ownership framing). Track down a source or draft the text.
-        \item \textbf{Extend a Misconception or Further Reading.} Add a post-2023 source on AI-training licensing, tied to ``enclosure logic is spreading.''
-        \item \textbf{Verify the cross-references.} Ch.~3 leans on many \texttt{@sec-} links (ethics, wikipedia, archives, automation, social, government). Confirm each resolves and is described accurately.
+        \item \textbf{Read the new material first.} Why Platforms Say No, the three pushbacks (litigate, build, legislate), the negotiation exercise, and the expanded lineages all landed this week. Gaps, overclaims, and unclear passages are likeliest there.
+        \item \textbf{Add the missing citations.} \emph{X Corp.\ v.\ Bonta}, \emph{Lindke v.\ Freed}, PATA, and Social Science One are described in prose with no source link.
+        \item \textbf{Update the moving numbers.} Twitter/X pricing, the Reddit--Google deal, and DSA Article~40's status ``as of mid-2026.'' Flag what has gone stale.
+        \item \textbf{Re-run the audit.} The access matrix and forensics outputs are dated 28 Aug 2026 and \textit{will} drift. Where a row changed, file it with your output.
+        \item \textbf{Add a figure.} The chapter still has none: a three-pressures diagram, an API-access timeline (2008--2026), a link-rot chart. Memes welcome.
+        \item \textbf{Verify the cross-references.} Ch.~3 leans on many \texttt{@sec-} links. Confirm each resolves and is described accurately.
     \end{itemize}
-    \bottomcite{Targets drawn from the chapter's callouts, thin exercises, ``Common Misconceptions,'' and ``Further Reading.''}
 \end{frame}
 
-\begin{frame}{A good revision, and a good review}
+\begin{frame}{The road from browser to clone}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \begin{block}{A strong PR}
-                \begin{itemize}\small
-                    \item One focused change, clearly titled
-                    \item Explains the problem it fixes
-                    \item Builds (\texttt{quarto render}) without errors
-                    \item Matches the book's voice and notation
-                    \item Discloses any AI assistance
-                \end{itemize}
-            \end{block}
+            \textbf{Week 3 (today)} --- issues, comments, and the browser editor: one file, one change, one PR from a fork.
+
+            \medskip
+
+            \textbf{Week 4} --- press \texttt{.} on any repo page and GitHub opens VS Code in your browser (github.dev): several files, one commit, still nothing to install.
+
+            \medskip
+
+            \textbf{Week 5 and after} --- GitHub Desktop or \texttt{gh}: clone, branch, commit, push. The full loop on your own machine, with the rendered book checked locally before you propose.
+
+            \medskip
+
+            Each rung uses the same four objects --- repository, issue, pull request, review --- and only changes where the editing happens.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{A strong review}
-                \begin{itemize}\small
-                    \item Runs / reads the change, not just skims
-                    \item Names specifics (line, claim, source)
-                    \item Separates ``must fix'' from ``nice to have''
-                    \item Is generous --- assume good faith
-                    \item Ends with a clear verdict
-                \end{itemize}
+            \begin{alertblock}{What to submit}
+                \small \textbf{Notebook lab}: the exported HTML. \textbf{Textbook revision}: the URL of your issue or comment. Both on Canvas by \textbf{Sunday 11:59pm}.
+            \end{alertblock}
+            \begin{block}{Next week}
+                \small \textbf{Data formats} --- XML \& JSON, the shapes web data actually arrives in.
             \end{block}
         \end{column}
     \end{columns}
-    \medskip
-    \centering\small Next week: \textbf{Data formats} --- XML \& JSON, the shapes web data actually arrives in.
 \end{frame}
 
 % =========================================================================
