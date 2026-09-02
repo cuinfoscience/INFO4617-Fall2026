@@ -758,17 +758,18 @@
             Run dead-endpoint forensics: autopsies of Pushshift, CrowdTangle, and Twitter v1.1 --- three retirements, three different failure signatures
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Take-home: the 7-step audit}
+            \begin{alertblock}{Take-home: the 7-step audit, new targets}
                 \footnotesize
                 \begin{enumerate}\footnotesize
                     \item Named \texttt{User-Agent}
-                    \item Probe one endpoint by hand
-                    \item All eight $\rightarrow$ dated DataFrame
-                    \item Add two endpoints \textit{you} care about
+                    \item Probe the anchor by hand (OpenAlex)
+                    \item Anchor + two public-institution APIs $\rightarrow$ dated DataFrame
+                    \item Add two institutional endpoints \textit{you} care about
                     \item Diagnose one refusal, attribute it
-                    \item Autopsy one retired endpoint
-                    \item Write up what changed
+                    \item Autopsy one retired institutional API
+                    \item Write up what you found
                 \end{enumerate}
+                None of the take-home's endpoints were shown in class.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -862,15 +863,15 @@ def probe(name, url):
 \begin{frame}{A guided audit in seven steps}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            The notebook's \textbf{Recommended Exercises} walk you through your own audit end-to-end. Fill in each empty cell:
-            \begin{enumerate}\small
+            The notebook's \textbf{Recommended Exercises} walk you through your own audit of \textbf{public-institution APIs} --- none of which we probed today. Fill in each empty cell:
+            \begin{enumerate}\footnotesize
                 \item Define \texttt{HEADERS} with your named User-Agent
-                \item Probe \textbf{one} endpoint by hand; look at the answer
-                \item Build the eight-endpoint matrix as a DataFrame
-                \item Add \textbf{two} endpoints you might actually study
-                \item Diagnose one refusal: \texttt{server}, \texttt{via}, body
-                \item Autopsy one retired endpoint: gone, gated, or repriced?
-                \item Interpret: what differed from the book, and why?
+                \item Probe the anchor by hand: \textbf{OpenAlex} and its \texttt{X-RateLimit} headers
+                \item Anchor + at least \textbf{two} menu endpoints (government, science, museum APIs) $\rightarrow$ dated DataFrame
+                \item Add \textbf{two} institutional endpoints of your own
+                \item Diagnose one refusal: \texttt{server}, \texttt{via}, body --- even a \texttt{200} that is really a web page
+                \item Autopsy one retired institutional API: gone, gated, or repriced?
+                \item Interpret: does ``held open by legal mandate'' hold?
             \end{enumerate}
 
             \medskip
