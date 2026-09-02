@@ -22,11 +22,11 @@
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            The web used to invite us in. That has changed in recent year. 
+            The web used to invite us in. That began to change in recent years. 
 
             \bigskip
             
-            \textit{Why} did this bargain change? \textit{How} can we keep doing public interest research anyway?
+            \textit{Why} did this bargain change? \textit{How} can we keep doing web data science anyway?
 
             \bigskip
 
@@ -779,7 +779,7 @@
 % =========================================================================
 
 \begin{frame}[fragile]{Claims you can check --- the access matrix}
-    Enclosure, exemption, and erosion are claims about the world. Claims about the world can be checked. The chapter's audit asks eight endpoints one question: \textit{if I show up with no credentials, what happens?}
+    What happens if you show up to a website with no credentials and ask for data?
 \begin{lstlisting}
 def probe(name, url):
     """Ask one endpoint for data without credentials; describe the answer."""
@@ -798,46 +798,52 @@ def probe(name, url):
 \begin{frame}{Read the rows, not the totals}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            The useful information is in the differences:
-            \begin{itemize}\small
-                \item \textbf{Wikipedia, Hacker News, arXiv} answer anonymous requests with data, and have for a decade --- a non-profit, an incubator, a university consortium. No one here monetizes attention.
-                \item \textbf{Reddit}: status 403, content-type \texttt{text/html} --- not an API refusing you, a \textit{block page} served where JSON lived from 2008 to 2023. Enclosure is a content-type header.
-                \item \textbf{X}: \texttt{401 application/problem+json} --- a machine-readable, honest refusal. Differently built gates tell you whether applying for access would even help.
-            \end{itemize}
+            
+            \textbf{Wikipedia, Hacker News, arXiv} answer anonymous requests with data
+            
+            \medskip
+            
+            \textbf{Reddit}: status 403, content-type \texttt{text/html} a \textit{block page} served where JSON lived from 2008 to 2023
+            
+            \medskip
+            
+            \textbf{X}: \texttt{401 application/problem+json} --- a machine-readable refusal
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Attribute before you conclude}
-                \footnotesize While the chapter was drafted, GitHub returned 403 --- a striking finding, since GitHub allows 60 anonymous requests/hour. The \textit{body} named the drafting sandbox, not GitHub. Check \texttt{server} and \texttt{via}, read the body, retest from a second network.
-            \end{alertblock}
+        \begin{column}{0.35\textwidth}\centering\footnotesize
+            \includegraphics[width=.75\textwidth]{slides/week-03/img/no-thanks.jpg}\\
+            Platforms' responses to my data requests
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~3, ``Reading the Failure, Not Just the Status Code.'' A measurement that describes your instrument is worse than none.}
 \end{frame}
 
 \begin{frame}{Dead-endpoint forensics --- three ways to die}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             How a retired endpoint refuses tells you whether anything can be recovered:
-            \begin{itemize}\small
-                \item \textbf{Pushshift} answers \texttt{403} in JSON: \texttt{\{"detail": "Not authenticated"\}}. \textbf{Gated, not gone} --- it still runs, for Reddit moderators. A gated service can be negotiated with.
-                \item \textbf{CrowdTangle} does not resolve at all. No HTTP conversation happens. \textbf{Enclosure completed}; nothing left to ask.
-                \item \textbf{Twitter v1.1} parses your request and rejects it (error 215). Alive, serving paying customers. \textbf{Repriced, not removed.}
-            \end{itemize}
+
+            \medskip
+            \textbf{Pushshift} answers \texttt{403} in JSON. It still runs (for Reddit moderators) but not for you.
+            
+            \medskip
+            \textbf{CrowdTangle} does not resolve at all. No HTTP conversation happens. Enclosed, or destroyed?
+            
+            \medskip
+            \textbf{Twitter v1.1} parses your request and rejects it (error 215). Alive, but only for paying customers. 
+            
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{The archive keeps the receipts}
-                \footnotesize Wayback's last captures: \texttt{api.pushshift.io} --- 25 May 2023, six weeks before Reddit's pricing took effect. \texttt{crowdtangle.com} --- 14 Aug 2024, the month Meta retired it. The shutdowns are written in the archival record.
+            \begin{block}{HTTP errors}\footnotesize
+                HTTP errors reveal different causes of death: \url{https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status}
             \end{block}
-            {\scriptsize Archived docs are how you reconstruct what a five-year-old paper's dataset contained. More in Ch.~7.}
         \end{column}
     \end{columns}
     \bottomcite{Textbook Ch.~3, ``Dead-Endpoint Forensics.'' Always pass \texttt{timeout=} --- a dead host may drop packets rather than refuse.}
 \end{frame}
 
-\begin{frame}{The take-home --- a guided audit in seven steps}
+\begin{frame}{A guided audit in seven steps}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            The notebook's \textbf{Recommended Exercises} walk the audit end to end. Fill in each empty cell:
+            The notebook's \textbf{Recommended Exercises} walk you through your own audit end-to-end. Fill in each empty cell:
             \begin{enumerate}\small
                 \item Define \texttt{HEADERS} with your named User-Agent
                 \item Probe \textbf{one} endpoint by hand; look at the answer
@@ -847,65 +853,37 @@ def probe(name, url):
                 \item Autopsy one retired endpoint: gone, gated, or repriced?
                 \item Interpret: what differed from the book, and why?
             \end{enumerate}
+
+            \medskip
+            Start in class, finish at home, submit your own.
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{block}{Submitting}
-                \footnotesize Run all cells, then export: \textit{File $\rightarrow$ Save and Export Notebook As $\rightarrow$ HTML}. Upload the \texttt{.html} file to Canvas by \textbf{Sunday 11:59pm}. Canvas accepts only \texttt{.html} --- code and output together, as executed.
+                \footnotesize Run all cells, then export: \textit{File $\rightarrow$ Save and Export Notebook As $\rightarrow$ HTML}. 
+                
+                \smallskip
+                Upload the \texttt{.html} file to Canvas by \textbf{Sunday 11:59pm}.
             \end{block}
-            {\scriptsize Start in class, finish at home. Work in pairs; submit your own run.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~3, Recommended Exercises. Date-stamp your matrix --- it is a snapshot, not a fact.}
 \end{frame}
 
-\begin{frame}{If you finish early --- the additional exercises}
+\begin{frame}{Additional exercises}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            The chapter's \textbf{Additional Exercises} are optional, open-ended extensions --- worth your time, not required:
+            The chapter's \textbf{Additional Exercises} are optional and worth your time if you are curious:
             \begin{enumerate}\small
                 \item \textbf{Extend the autopsy} --- two more retired endpoints: gone, gated, or repriced, and who is left to ask?
                 \item \textbf{Timeline} --- five API-access events, three platforms, 2008 to today; tag each with its pressure.
                 \item \textbf{Framework application} --- 500 words on a platform change \textit{not} in the chapter.
                 \item \textbf{Contingency plan} --- a project on one source, plus three fallbacks if it vanishes mid-study.
                 \item \textbf{Public interest audit} --- how would current restrictions hit a real API-enabled project?
-                \item[6.] \textbf{5617}: read \textcite{davidson2023platform} and \textcite{perriam2020digital}; write a 2--3 page research-access brief for one platform.
             \end{enumerate}
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{Fallbacks worth knowing}
-                \footnotesize Official research programs (real but rationed) $\cdot$ data donation $\cdot$ FOIA / records requests (Ch.~11) $\cdot$ crowdsourcing.
-            \end{block}
-            \begin{block}{Show-and-Tell}
-                \footnotesize Bring one: an access change that surprised you, a dataset you fear losing, or a question for a research design.
-            \end{block}
+        \begin{column}{0.35\textwidth}\centering
+            \includegraphics[width=\textwidth]{slides/week-03/img/extra-room.png}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~3, Additional Exercises \& ``What This Means for Practice.''}
-\end{frame}
-
-\begin{frame}[fragile]{Openness in practice --- document the collection}
-    The audit teaches you to date-stamp a measurement; openness generalizes that habit. Record \textbf{what} you collected and also \textbf{how}: endpoints, parameters, dates, and the platform's constraints \parencite{gebru2021datasheets}. A future reader (or you, in a year) can then reconstruct exactly what was allowed:
-\begin{lstlisting}
-collection = {
-    "source":      "reddit.com  (PRAW, r/ClimateChange)",
-    "endpoint":    "GET /r/{sub}/top   params: t=year, limit=1000",
-    "collected":   "2026-02-14",
-    "access_tier": "researcher program (application-gated)",
-    "constraints": "no redistribution of raw comments; 100 req/min",
-    "known_gaps":  "pre-2023 history unavailable -- Pushshift offline",
-}
-import json, pathlib
-pathlib.Path("datasheet.json").write_text(json.dumps(collection, indent=2))
-# The datasheet travels next to the data; the source may change, the record does not.
-\end{lstlisting}
-    \bottomcite{Textbook Ch.~3, ``Openness'' --- documentation as the practice that survives enclosure.}
-\end{frame}
-
-\begin{frame}[standout]
-    ``If the API closes, I'll just scrape.''\\[0.6em]
-    {\large Visibility, permission, and ethics are three different questions.}\\[1em]
-    Scraping is one tool in a portfolio ---\\
-    not an escape hatch that makes enclosure irrelevant.
 \end{frame}
 
 % =========================================================================
