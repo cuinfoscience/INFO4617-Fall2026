@@ -778,6 +778,23 @@
 \section{Wednesday · Notebook Lab}
 % =========================================================================
 
+\begin{frame}{Daily note questions} \small
+
+    \begin{itemize}
+        \item \textbf{Other resources?} --- If you find them, please add links to them for the book (more on Friday!)
+        \item \textbf{Need more breakdown} --- Last week was a lot, we'll get into a flow every Wednesday and can also use Fridays
+        \item \textbf{Highly sensitive ``public'' data} --- Voting registration, property records, criminal records, \textit{etc}.
+        \item \textbf{Scrape White House YouTube?} --- violation of ToS but permissible under 1A and public officials doctrines
+        \item \textbf{Real data negotiations?} --- Usually a ``wheel war'' and uneasy settlements
+        \item \textbf{How are GitHub issues resolved?} \textbf{What will happen to our issues?} --- We will discuss reviewing, claiming, pull requests, and closing issues on Friday!
+        \item \textbf{How often will a site block your scraping?} --- Depends how hard you scrape and how sensitive they are: increasing reliance on anti-bot filters and adversarial design
+        \item \textbf{How to protect user data?} --- Don't generate it in the first place: VPN, Tor, rotating email addresses
+        \item \textbf{How to prevent APIs from breaking?} --- Need better models in public sphere of supporting for decades
+        \item \textbf{What happens if we run out of issues?} --- There will always be 40+ things that me or Claude get wrong
+    \end{itemize}
+    
+\end{frame}
+
 \begin{frame}[fragile]{Claims you can check --- the access matrix}
     What happens if you show up to a website with no credentials and ask for data?
 \begin{lstlisting}
@@ -792,10 +809,9 @@ def probe(name, url):
     return {"api": name, "status": response.status_code, "verdict": verdict,
             "content_type": response.headers.get("content-type", "")}
 \end{lstlisting}
-    \small Measured 28 Aug 2026: Wikipedia, Hacker News, arXiv, Mastodon, Bluesky \textbf{open}; Reddit and X \textbf{gated}; Meta Graph refuses without a token. Your run \textit{will} differ --- that is the finding, so record the date.
 \end{frame}
 
-\begin{frame}{Read the rows, not the totals}
+\begin{frame}{Popular web data sources}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             
@@ -803,20 +819,24 @@ def probe(name, url):
             
             \medskip
             
-            \textbf{Reddit}: status 403, content-type \texttt{text/html} a \textit{block page} served where JSON lived from 2008 to 2023
+            \textbf{Reddit}: status 403, content-type \texttt{text/html} a block page served where JSON lived from 2008 to 2023
             
             \medskip
             
             \textbf{X}: \texttt{401 application/problem+json} --- a machine-readable refusal
+
+            \medskip
+            
+            Also fall back to copying the URLs into your web browser
         \end{column}
         \begin{column}{0.35\textwidth}\centering\footnotesize
             \includegraphics[width=.75\textwidth]{slides/week-03/img/no-thanks.jpg}\\
-            Platforms' responses to my data requests
+            Asking platforms for data these days
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{Dead-endpoint forensics --- three ways to die}
+\begin{frame}{Three ways web data dies}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             How a retired endpoint refuses tells you whether anything can be recovered:
@@ -837,7 +857,6 @@ def probe(name, url):
             \end{block}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~3, ``Dead-Endpoint Forensics.'' Always pass \texttt{timeout=} --- a dead host may drop packets rather than refuse.}
 \end{frame}
 
 \begin{frame}{A guided audit in seven steps}
@@ -855,15 +874,26 @@ def probe(name, url):
             \end{enumerate}
 
             \medskip
-            Start in class, finish at home, submit your own.
+            \textbf{Effort over perfection} --- start in class, finish at home, submit what you got working
+
+            \medskip
+            Graded on good-faith attempt to complete rather than getting everything working
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{block}{Submitting}
-                \footnotesize Run all cells, then export: \textit{File $\rightarrow$ Save and Export Notebook As $\rightarrow$ HTML}. 
+                \footnotesize 
+                Run all cells, then export: \textit{File $\rightarrow$ Save and Export Notebook As $\rightarrow$ HTML}. 
                 
                 \smallskip
                 Upload the \texttt{.html} file to Canvas by \textbf{Sunday 11:59pm}.
             \end{block}
+            \begin{alertblock}{Error flavors}
+                \footnotesize
+                    There is some code that is designed to break --- these do not need GitHub issues. 
+            
+                    \medskip
+                    Other code may genuinely be broken --- experiment to confirm it doesn't work and then search+file issues on GitHub
+            \end{alertblock}
         \end{column}
     \end{columns}
 \end{frame}
@@ -879,6 +909,9 @@ def probe(name, url):
                 \item \textbf{Contingency plan} --- a project on one source, plus three fallbacks if it vanishes mid-study.
                 \item \textbf{Public interest audit} --- how would current restrictions hit a real API-enabled project?
             \end{enumerate}
+
+        \medskip
+        Advising theses, letters of recommendation, joining research group, \textit{etc}. --- email me with findings or file issues if you notice something
         \end{column}
         \begin{column}{0.35\textwidth}\centering
             \includegraphics[width=\textwidth]{slides/week-03/img/extra-room.png}
@@ -893,15 +926,15 @@ def probe(name, url):
 \begin{frame}{Friday: a slower on-ramp}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Last week you filed an issue. The original plan was to jump straight to cloning the repo and pushing pull requests today. We will climb that ladder one rung a week instead, and today's rungs need only a browser.
+            Last week you filed an issue and today you will propose some simple edits.
 
             \medskip
 
             \begin{enumerate}\small
-                \item[0.] \textbf{Keep filing issues} on Chapter 3 --- slides, textbook, Missing Manual
-                \item \textbf{Read the queue} --- what is already open across the three repos
-                \item \textbf{Comment} --- claim an issue you will tackle, or sharpen one that needs detail
-                \item \textbf{Edit in the browser} and open a pull request --- demonstrated, not required today
+                \item[0.] \textbf{Keep filing issues} --- slides, textbook, Missing Manual
+                \item \textbf{Read the issues} --- what is already open across the three repos?
+                \item \textbf{Comment} --- claim an issue you will tackle, or sharpen an issue that needs more detail
+                \item \textbf{Edit in the browser} and open a pull request
                 \item \textbf{Attach the issue} to the pull request
                 \item \textbf{Review} --- the basics of reading someone else's change
             \end{enumerate}
@@ -910,9 +943,6 @@ def probe(name, url):
             \begin{alertblock}{This week's deliverable}
                 \small The URL of a \textbf{new issue} or a \textbf{substantive comment} on an existing one, on Canvas by \textbf{Sunday 11:59pm}. Pull requests are welcome, not required.
             \end{alertblock}
-            \begin{alertblock}{Not today}
-                \small No installs, no clone, no terminal. GitHub Desktop and the command line return in a couple of weeks.
-            \end{alertblock}
         \end{column}
     \end{columns}
 \end{frame}
@@ -920,11 +950,8 @@ def probe(name, url):
 \begin{frame}{Step 0 --- keep filing issues}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Chapter 3 changed this week: Why Platforms Say No, the three pushbacks, the negotiation exercise, and five expanded lineages landed days ago, and no student has read them yet. Fresh prose has the most problems.
 
-            \medskip
-
-            Three repos take issues, and the same three forms work in each --- \textbf{Broken}, \textbf{Gap}, \textbf{Suggestion}:
+            You can submit issues to any of the three repos this class touches:
             {\footnotesize
             \begin{itemize}\footnotesize
                 \item \textbf{Textbook} --- \href{https://github.com/cuinfoscience/Web-Data-Science-Book/issues}{\texttt{github.com/cuinfoscience/Web-Data-Science-Book/issues}}
@@ -934,11 +961,11 @@ def probe(name, url):
 
             \medskip
 
-            Every textbook page now has \textbf{Report an issue} and \textbf{Edit this page} links in its sidebar. Start from the page you are reading, not from the repo.
+            Every textbook page now has \textbf{Report an issue} and \textbf{Edit this page} links in its sidebar. Start from either page you are reading or the repo itself.
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{alertblock}{Point at the line}
-                \small On any file in GitHub, click a line number, then \textbf{Copy permalink}. Press \texttt{y} first to freeze the URL to the current version. An issue that links the line beats one that describes it.
+                \small On any file in GitHub, click a line number, then \textbf{Copy permalink}. Press \texttt{y} first to freeze the URL to the current version. An issue that links to a line of code almost always beats descriptions.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -959,11 +986,11 @@ def probe(name, url):
 
             \medskip
 
-            Use the search box: \texttt{is:open ch-03} finds every open issue that mentions the chapter; sort by \textbf{Most commented} to find the live ones. If your problem is already there, good --- you have found your Step 2.
+            Use the search box to find open issues; sort by \textbf{Most commented} to find the live ones.
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{alertblock}{React, don't ``+1''}
-                \small A \textbf{thumbs-up reaction} on the issue is how you say ``me too.'' A comment that only says ``me too'' costs everyone a notification and earns nothing.
+                \small A \textbf{thumbs-up reaction} on the issue is how you say ``me too.'' A comment that only says ``me too'' costs everyone a notification.
             \end{alertblock}
             \begin{alertblock}{Subscribe}
                 \small Commenting subscribes you to that thread; \textbf{Watch} on the repo covers everything. Otherwise you will never see the reply.
