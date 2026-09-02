@@ -278,6 +278,55 @@ def lab_assignments():
     return out
 
 
+# Week 3 is the browser-only on-ramp: students read and comment on the open
+# issues and see a web-editor pull request demonstrated. The deliverable is an
+# issue or a substantive comment; the pull-request deliverable starts later.
+COMMENT_WEEKS = {3}
+
+ISSUE_QUEUES = (
+    ("Web Data Science book", "https://github.com/cuinfoscience/Web-Data-Science-Book/issues"),
+    ("course repository", "https://github.com/cuinfoscience/INFO4617-Fall2026/issues"),
+    ("Missing Manual", "https://github.com/cuinfoscience/INFO-Missing-Manual/issues"),
+)
+
+
+def _comment_week_description(ch, topic, chfile):
+    queues = ", ".join(f'<a href="{url}">{name}</a>' for name, url in ISSUE_QUEUES)
+    return (
+        f"<p>Keep improving "
+        f'<a href="{chapter_url(chfile)}">Chapter {ch}: {topic}</a>. This week the '
+        f"work happens in the browser: read the open issues, then either "
+        f"<strong>file a new issue</strong> or <strong>add a substantive comment</strong> "
+        f"to an existing one — a reproduction, a missing location or piece of "
+        f"evidence, a scoping proposal, or a claim that you will tackle it.</p>"
+        f"<p><strong>Submit:</strong> the URL of your issue or your comment. "
+        f"Issues in the {queues} all count. Pull requests are demonstrated in "
+        f"class and welcome, not required this week.</p>"
+        "<p>A strong issue or comment is <em>located</em> (chapter, section, and "
+        "file), <em>evidenced</em> (the passage, command, or output), and "
+        "<em>actionable</em> (a concrete change someone else could make). "
+        "&ldquo;I agree&rdquo; earns nothing; a thumbs-up reaction says that for free.</p>"
+    )
+
+
+def _pull_request_description(ch, topic, chfile):
+    return (
+        f"<p>Propose a revision to "
+        f'<a href="{chapter_url(chfile)}">Chapter {ch}: {topic}</a> as a '
+        f"<strong>pull request</strong> to the "
+        f'<a href="{BOOK_URL}">Web Data Science book</a>, and review two '
+        f"classmates' pull requests.</p>"
+        "<p><strong>Submit:</strong> the URL of your pull request. Leave "
+        "your two reviews on classmates' pull requests on GitHub — they "
+        "are visible from your account, so no separate links are needed.</p>"
+        "<p>A strong PR makes one focused change, explains the problem it fixes, "
+        "builds without errors, matches the book's voice, and discloses any AI "
+        "assistance. A strong review runs or reads the change, names specifics, "
+        "separates &ldquo;must fix&rdquo; from &ldquo;nice to have,&rdquo; and ends "
+        "with a clear verdict.</p>"
+    )
+
+
 def revision_assignments():
     """One textbook-revision workshop per teaching week, met Friday and due that Sunday."""
     out = []
@@ -285,28 +334,15 @@ def revision_assignments():
         _, _, ch, topic, _, chfile, _ = week_info(wk)
         if revision_day(wk) is None:
             continue
+        describe = _comment_week_description if wk in COMMENT_WEEKS else _pull_request_description
         out.append({
             "group": "Textbook Revisions",
             "name": f"Week {wk} Revision — Chapter {ch}",
             "points_possible": REVISION_POINTS,
             "due_at": due_at(sunday_of(wk)),
-            # URL only: the deliverable is the pull request itself
+            # URL only: the deliverable is the issue, comment, or pull request itself
             "submission_types": ["online_url"],
-            "description": (
-                f"<p>Propose a revision to "
-                f'<a href="{chapter_url(chfile)}">Chapter {ch}: {topic}</a> as a '
-                f"<strong>pull request</strong> to the "
-                f'<a href="{BOOK_URL}">Web Data Science book</a>, and review two '
-                f"classmates' pull requests.</p>"
-                "<p><strong>Submit:</strong> the URL of your pull request. Leave "
-                "your two reviews on classmates' pull requests on GitHub — they "
-                "are visible from your account, so no separate links are needed.</p>"
-                "<p>A strong PR makes one focused change, explains the problem it fixes, "
-                "builds without errors, matches the book's voice, and discloses any AI "
-                "assistance. A strong review runs or reads the change, names specifics, "
-                "separates &ldquo;must fix&rdquo; from &ldquo;nice to have,&rdquo; and ends "
-                "with a clear verdict.</p>"
-            ),
+            "description": describe(ch, topic, chfile),
         })
     return out
 
