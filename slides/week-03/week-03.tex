@@ -1000,14 +1000,18 @@ def probe(name, url):
     \end{columns}
 \end{frame}
 
-\begin{frame}{Step 2 --- comment: claim it or sharpen it}
+\begin{frame}{Step 2 --- comment: claim it or sharpen it}\small
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Two kinds of comment earn credit this week.
+            Comments to claim, link, and sharpen issues are all welcome.
 
             \medskip
 
-            \textbf{Claim it.} ``I'll take this one --- planning to \ldots'' plus a sentence on your approach. You cannot assign yourself without write access, so the comment \textit{is} the claim; I will set the assignee. Claiming prevents two people fixing the same paragraph, which is the fastest route to a merge conflict.
+            \textbf{Claim it.} Claim an issue and offer a sentence on your approach. So the comment \textit{is} the claim; I will set the assignee. Claiming prevents two people fixing the same paragraph, which is the fastest route to a merge conflict.
+
+            \medskip
+
+            \textbf{Link it.} Some issues are similar to each other, so adding a comment and referencing the other issue number can link those issues together and keep us from having parallel conversations.
 
             \medskip
 
@@ -1028,7 +1032,7 @@ def probe(name, url):
 \begin{frame}{Step 3 --- the browser is an editor}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            You do not have write access to these repos, and that is fine --- GitHub handles it:
+            I have not yet given you write access to these repos, you can still contribute like any other external user:
             \begin{enumerate}\small
                 \item Open the chapter's source (\textbf{Edit this page}, or find \texttt{ch-03-post-api.qmd} in the repo) and click the pencil
                 \item GitHub says you need to \textbf{fork} the repository --- click it. A fork is your own copy, under your account, that you \textit{can} edit
@@ -1078,17 +1082,26 @@ def probe(name, url):
 \begin{frame}[fragile]{Step 5 --- review basics}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Open a classmate's PR and go to \textbf{Files changed}. Hover a line, click the \textbf{+}, and you are commenting on that exact line. The most useful thing a new reviewer can learn is the \textbf{suggestion}: propose the replacement text, and the author applies it with one click.
+            Open a classmate's PR and go to \textbf{Files changed}. 
+            
+            \medskip
+            Hover a line, click the \textbf{+}, and you are commenting on that exact line. 
+            
+            \medskip
+            The most useful thing a new reviewer can learn is the \textbf{suggestion}: propose the replacement text, and the author applies it with one click.
 \begin{lstlisting}[language=,basicstyle=\ttfamily\footnotesize]
 ```suggestion
 Reddit's API had been free since 2008.
 ```
 \end{lstlisting}
-            Finish with \textbf{Review changes}: \textbf{Comment} (observations), \textbf{Approve} (ship it), or \textbf{Request changes} (must-fix first). Say which items are must-fix and which are nice-to-have, and end with a verdict.
+            Finish with \textbf{Review changes}: \textbf{Comment} (observations), \textbf{Approve} (ship it), or \textbf{Request changes} (must-fix first). 
+            
+            \medskip
+            Say which items are must-fix and which are nice-to-have, and end with a verdict.
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{alertblock}{Who merges}
-                \small I do. \textbf{Merged is not the bar}: you are graded on the diagnosis and the review, not on acceptance.
+                \small \textbf{Merged is not the bar}: you are graded on the diagnosis and the review, not on acceptance.
             \end{alertblock}
             \begin{alertblock}{Tone}
                 \small Kind, specific, actionable. Assume good faith; name the line; propose the fix.
@@ -1100,7 +1113,7 @@ Reddit's API had been free since 2008.
 \begin{frame}{After the click: checks, conflicts, deploys}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \textbf{Checks.} Every textbook PR triggers a render. A green check means the book still builds with your change; a red one means read the log before asking --- the failing line is usually named.
+            \textbf{Checks.} Every textbook PR triggers a render. A green check means the book still builds with your change; a red one means the build broke and you need to diagnose where and why.
 
             \medskip
 
@@ -1130,10 +1143,10 @@ Reddit's API had been free since 2008.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{The road from browser to clone}
+\begin{frame}{Next week}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \textbf{Week 3 (today)} --- issues, comments, and the browser editor: one file, one change, one PR from a fork.
+            \textbf{Data formats} --- XML \& JSON, the shapes web data actually arrives in.
 
             \medskip
 
@@ -1141,19 +1154,16 @@ Reddit's API had been free since 2008.
 
             \medskip
 
-            \textbf{Week 5 and after} --- GitHub Desktop or \texttt{gh}: clone, branch, commit, push. The full loop on your own machine, with the rendered book checked locally before you propose.
+            \textbf{Week 5 and after} --- GitHub Desktop or \texttt{gh}: clone, branch, commit, push. The full loop on your own machine.
 
             \medskip
 
-            Each rung uses the same four objects --- repository, issue, pull request, review --- and only changes where the editing happens.
+            Same four objects --- repository, issue, pull request, review --- in future weeks, just working through different editing strategies.
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{alertblock}{What to submit}
                 \small \textbf{Notebook lab}: the exported HTML. \textbf{Textbook revision}: the URL of your issue or comment. Both on Canvas by \textbf{Sunday 11:59pm}.
             \end{alertblock}
-            \begin{block}{Next week}
-                \small \textbf{Data formats} --- XML \& JSON, the shapes web data actually arrives in.
-            \end{block}
         \end{column}
     \end{columns}
 \end{frame}
@@ -1161,15 +1171,12 @@ Reddit's API had been free since 2008.
 % =========================================================================
 \begin{frame}{Key takeaways}
     \begin{enumerate}
-        \item The open-API era ($\sim$2008--2018) was a \textbf{strategic bargain}, not a natural state --- and computational social science was built on the trade.
+        \item The open-API era ($\sim$2008--2018) was a \textbf{temporary bargain} around open access to platform data.
         \item \textbf{Enclosure} converts collective data into private assets: shutdowns, repricing, and AI-training licensing deals.
         \item \textbf{Exemption} is the asymmetry of scrutiny --- platforms study users freely while blocking those who study platforms.
         \item \textbf{Erosion} is infrastructural decay, so reproducibility is a problem you must solve \textit{at collection time}.
-        \item \textbf{Access is measurable, not just arguable} --- an unauthenticated probe places a platform on the open-to-closed gradient today, and \textit{how} a dead endpoint refuses tells you whether anyone is left to negotiate with.
-        \item The response is \textbf{redundancy}: openness, oversight, ownership --- and mastery of many access techniques so no single closure ends your research.
+        \item \textbf{Access is measurable} --- what platforms are still open, what has closed, and what's left behind
     \end{enumerate}
-    \medskip
-    \bottomcite{Reading: Textbook Ch.~3. See \textcite{freelon2018computational}; \textcite{bruns2019after}; \textcite{lazer2020computational}.}
 \end{frame}
 
 \end{document}
