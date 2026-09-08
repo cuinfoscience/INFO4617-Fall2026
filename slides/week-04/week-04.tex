@@ -3,9 +3,8 @@
 % Build:  latexmk -pdf week-04.tex   (from this folder; no env vars needed)
 % (or run `make` from the slides/ directory to build every deck)
 %
-% NOTE: No class Monday, Sept 7 (Labor Day). Monday's concept intro folds into
-% Wednesday, so this week runs Wednesday (concepts + notebook) and Friday
-% (revisions). The three Mon/Wed/Fri sections are kept for a consistent spine.
+% NOTE: No class Monday, Sept 7 (Labor Day). This deck runs Wednesday
+% (concepts + notebook, merged into one section) and Friday (revisions).
 % ==========================================================================
 \documentclass[9pt,aspectratio=169]{beamer}
 % Resolve the shared theme/preamble in ../common/ when compiling this
@@ -61,21 +60,17 @@
 \end{frame}
 
 % =========================================================================
-\section{Monday · Concepts}
+\section{Wednesday · Concepts \& Notebook Lab}
 % =========================================================================
 
 \begin{frame}{The role of data formats}
-    {\small No class Monday (Labor Day) --- these concepts open Wednesday's session, just before the notebook.}
-
-    \medskip
-
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             Before you can \textit{extract} data from the web, you have to understand how it is \textit{structured}. Two formats dominate:
 
             \medskip
             \begin{itemize}\small
-                \item \textbf{XML} --- the older, document-centric format; a tree of nested tags. Born from the 1990s web.
+                \item \textbf{XML} --- the older, document-centric format; a tree of nested tags.
                 \item \textbf{JSON} --- the newer, lighter format of the API economy; maps directly onto Python lists and dictionaries.
             \end{itemize}
 
@@ -90,55 +85,187 @@
             \end{block}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~4, ``Why Data Formats Matter'' \& ``When to Use Which.''}
 \end{frame}
 
-\begin{frame}{XML: a tree of nested tags}
+\begin{frame}{A brief history of XML}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            XML organizes data as a \textbf{hierarchy}: each tag can hold text, attributes, and child tags.
+            XML began in 1996, when a W3C working group set out to simplify SGML --- a much older, much more complicated markup standard --- into something the web could actually use.
 
-            \bigskip
-            XML and HTML are \textbf{siblings}, not parent and child --- both descend from SGML. Only the stricter XHTML dialect is well-formed XML; the HTML in the wild is not, which is exactly why the forgiving parsers of Ch.~6 exist.
+            \medskip
+            The goal was explicit: keep SGML's extensibility (define your own tags) while making documents both human-readable \textit{and} machine-parseable, without SGML's complexity.
 
-            \bigskip
-            A value can hide in one of two places:
-            \begin{itemize}\small
-                \item \textbf{text} --- between an opening and closing tag (read with \texttt{.text})
-                \item \textbf{attributes} --- key/value pairs inside the opening tag (read with brackets)
-            \end{itemize}
+            \medskip
+            XML 1.0 became a W3C Recommendation on \textbf{February 10, 1998}. It was designed as a foundation, not a single format --- a whole family of languages is built on it: XHTML, SVG, MathML, RSS, RDF.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/xml_tree.png}\\
-            {\scriptsize The House \texttt{MemberData} feed, drawn as a tree.}
+            \begin{block}{Timeline}
+                \footnotesize
+                \textbf{1996} --- W3C working group begins
+
+                \medskip
+                \textbf{Feb 1998} --- XML 1.0 becomes a W3C Recommendation
+
+                \medskip
+                \textbf{Today} --- backbone of RSS, SOAP, government feeds, Office file formats
+            \end{block}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~4, ``The Tree Structure.'' The siblings-with-HTML idea returns in Ch.~6.}
 \end{frame}
 
-\begin{frame}{JSON: lists and dictionaries you already know}
+\begin{frame}{A brief history of JSON}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            JSON maps onto two Python structures you already use:
-            \begin{itemize}\small
-                \item a JSON \textbf{array} is a Python \textbf{list} --- ordered, indexed by position
-                \item a JSON \textbf{object} is a Python \textbf{dict} --- accessed by key
-            \end{itemize}
+            Douglas Crockford specified JSON in the early 2000s --- describing a format he noticed was already implicit in JavaScript's own object syntax, rather than inventing something new. \texttt{json.org} went live not long after.
 
-            \bigskip
-            Real data \textbf{nests} them --- dicts inside lists inside dicts, several levels deep. The skill is navigating from the outside in, one key or index at a time.
+            \medskip
+            JSON's design goal was the opposite of XML's: no tags, no schema, no comments --- just the two structures (objects and arrays) that ``virtually all modern programming languages support,'' built to be parsed by a machine in one step.
 
-            \bigskip
-            {\footnotesize Created by Douglas Crockford in the early 2000s; the rise of AJAX made JSON the default API format by the 2010s.}
+            \medskip
+            Standardization came later, in stages: RFC 4627 (2006), ECMA-404 (2013), and the current IETF standard, RFC 8259 (2017). By the 2010s, AJAX and the API economy had made it the default.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/json_onion.png}\\
-            {\scriptsize ``Peel the onion'': \texttt{type()}, then \texttt{.keys()}, one layer deeper each time.}
+            \begin{block}{Timeline}
+                \footnotesize
+                \textbf{Early 2000s} --- Crockford specifies JSON; \texttt{json.org} launches
+
+                \medskip
+                \textbf{2006} --- RFC 4627, the first formal spec
+
+                \medskip
+                \textbf{2013 / 2017} --- ECMA-404, then RFC 8259
+            \end{block}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~4, ``JSON and Python Data Structures.''}
+\end{frame}
+
+\begin{frame}[fragile]{XML: a tree of nested tags}
+    XML organizes data as a \textbf{hierarchy}: each tag can hold text, attributes, and child tags. The House \texttt{MemberData} feed, drawn as a tree:
+\begin{lstlisting}[basicstyle=\large\ttfamily]
+<MemberData>
+  <member>                     # repeats 441x
+    <member-info>
+      <firstname>Joe</firstname>     # value in TEXT
+      <lastname>Neguse</lastname>
+      <party>D</party>
+    </member-info>
+    <state postal-code="CO">         # value in an ATTRIBUTE
+      <state-fullname>Colorado</state-fullname>
+    </state>
+  </member>
+</MemberData>
+\end{lstlisting}
+    A value hides in one of two places: \textbf{text} (read with \texttt{.text}) or an \textbf{attribute} (read with brackets).
+\end{frame}
+
+\begin{frame}{XML and HTML: siblings, not parent and child}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            XML and HTML are often assumed to be one a subset of the other. They are not --- they are \textbf{siblings}. Both descend from SGML, an older and far more complex markup standard from the 1980s.
+
+            \medskip
+            The difference is strictness. XML enforces well-formedness: every tag closes, attributes are quoted, nesting is exact --- break any rule and the parser refuses to continue. HTML historically did not: browsers were built to guess at malformed markup and render it anyway.
+
+            \medskip
+            Only the stricter \textbf{XHTML} dialect is actually valid XML. The HTML you scrape in the wild almost never is --- which is exactly why Ch.~6 teaches you a forgiving parser instead of a strict one.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{block}{The XML family}
+                \footnotesize XHTML, SVG, MathML, RSS, and RDF are all XML --- ``define your own tags'' turns out to be useful for more than one problem.
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{JSON: lists and dictionaries you already know}
+    JSON maps onto two Python structures you already use. The weather forecast, peeled one layer at a time:
+\begin{lstlisting}[basicstyle=\large\ttfamily]
+{                              # dict: type(data) is dict
+  "latitude": 40.01,
+  "daily": {                    # dict: data["daily"]
+    "time": [...],               # list: data["daily"]["time"]
+    "temperature_2m_max": [...]
+  }
+}
+\end{lstlisting}
+    A JSON \textbf{array} is a Python \textbf{list}; a JSON \textbf{object} is a Python \textbf{dict}. Real data nests them several levels deep --- the skill is navigating from the outside in, one \texttt{type()} and \texttt{.keys()} call at a time.
+\end{frame}
+
+\begin{frame}{JSON vs.\ XML: pick your trade-offs}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{block}{JSON}
+                \footnotesize
+                \textbf{+} Compact --- no repeated tag names
+
+                \textbf{+} Parses natively in JavaScript
+
+                \textbf{+} Simple: objects, arrays, 4 scalar types
+
+                \textbf{--} No comments allowed
+
+                \textbf{--} No native schema enforcement
+
+                \textbf{--} No display semantics --- data only
+            \end{block}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{XML}
+                \footnotesize
+                \textbf{+} Schema validation (DTD/XSD) before parsing
+
+                \textbf{+} Rich vocabulary: attributes, mixed content, namespaces
+
+                \textbf{+} Can double as a document format (SVG, DOCX)
+
+                \textbf{--} Verbose --- every tag closes
+
+                \textbf{--} No native browser/JS parsing
+
+                \textbf{--} Everything parses as text; you convert types
+            \end{block}
+        \end{column}
+    \end{columns}
+    \medskip
+    \centering\small Neither is ``better'' --- each is a different bet about who, or what, reads the document.
+\end{frame}
+
+\begin{frame}{Where JSON shows up}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            JSON dominates anywhere a \textbf{program} is the primary reader.
+
+            \medskip
+            REST APIs return it almost by default now. SOAP, the XML-based protocol REST displaced, wraps every request in an XML namespace envelope that JSON has no equivalent for --- part of why SOAP use has declined for years while REST and GraphQL grew.
+
+            \medskip
+            JSON Web Tokens (the credential your browser holds after you log in) are JSON underneath. So are most modern config files --- \texttt{package.json}, Kubernetes manifests --- because the ecosystem around them is JavaScript-adjacent and a program on both ends is doing the reading.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Rule of thumb}
+                \footnotesize If a program wrote it and a program will read it, expect JSON.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Where XML persists}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            XML persists where a \textbf{human} sometimes needs to read the document, where a \textbf{strict contract} matters, or where the data \textbf{predates the JSON era}.
+
+            \medskip
+            Government and legislative systems (today's House roster), SEC filings, and enterprise data interchange still commonly use XML --- partly legacy, partly because XSD validation mechanically guarantees a submitted document has the fields it is supposed to have.
+
+            \medskip
+            And XML hides in plain sight: open a \texttt{.docx}, \texttt{.xlsx}, or \texttt{.svg} file's internals and you are looking at it. Office files are a zip archive of XML documents; SVG is XML a browser renders directly.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Rule of thumb}
+                \footnotesize If a document needs to double as data \textit{and} something a human might open, expect XML.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{One pipeline unifies the whole course}
@@ -169,14 +296,9 @@
             \end{block}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~4, ``From XML to DataFrame.'' The same pattern recurs in every later chapter.}
 \end{frame}
 
-% =========================================================================
-\section{Wednesday · Notebook Lab}
-% =========================================================================
-
-\begin{frame}[fragile]{Wednesday --- parsing XML with BeautifulSoup}
+\begin{frame}[fragile]{Parsing XML with BeautifulSoup}
     Parse the string into a navigable tree, then search it. \texttt{.find()} returns the first match, \texttt{.find\_all()} returns them all --- each searches the \textit{entire} subtree beneath a tag:
 \begin{lstlisting}
 from bs4 import BeautifulSoup
@@ -192,7 +314,6 @@ for m in members:
     party = m.find("party").text
     print(f"{first} {last} ({party})")    # Joe Neguse (D) / Jeff Hurd (R)
 \end{lstlisting}
-    \bottomcite{Textbook Ch.~4, ``Parsing with BeautifulSoup.'' Hyphenated names like \texttt{member-info} break dot-notation --- use \texttt{.find()}.}
 \end{frame}
 
 \begin{frame}[fragile]{The two-place problem --- and the crash that guards it}
@@ -224,12 +345,11 @@ m.find("party").text if m.find("party") else None
             XML always hands you \textbf{text}: converting \texttt{"2nd"} or \texttt{"\$1,234"} to a number is your job.
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~4, ``Parsing with BeautifulSoup'' \& ``Common Issues to Debug.''}
 \end{frame}
 
 \begin{frame}[fragile]{XML $\rightarrow$ DataFrame: the real House roster}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
+        \begin{column}{0.55\textwidth}
 \begin{lstlisting}
 import requests, pandas as pd
 
@@ -246,13 +366,25 @@ for m in soup.find_all("member"):    # 441 members
 df = pd.DataFrame(records)   # find_all -> dicts -> DataFrame
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/house_xml_raw.png}\\
-            {\scriptsize The Clerk's live \texttt{MemberData.xml}.}
+        \begin{column}{0.42\textwidth}
+            \textbf{\footnotesize The raw response, before parsing:}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
+July 1, 2026
+<member>
+ <member-info>
+  <firstname>Joe</firstname>
+  <lastname>Neguse</lastname>
+  <party>D</party>
+ </member-info>
+ <state postal-code="CO">
+  <state-fullname>
+   Colorado
+  </state-fullname>
+ </state>
+</member>
+\end{lstlisting}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~4, ``From XML to DataFrame.'' 441 = 435 voting members + 6 delegates; record the \texttt{publish-date}.}
 \end{frame}
 
 \begin{frame}[fragile]{JSON: parse a string, then the list-of-dictionaries pipeline}
@@ -270,7 +402,6 @@ census = [                        # the list-of-dictionaries pattern:
 ]
 df = pd.DataFrame(census)         # one dict per row, keys -> columns
 \end{lstlisting}
-    \bottomcite{Textbook Ch.~4, ``Parsing JSON Strings'' \& ``The List-of-Dictionaries Pattern.''}
 \end{frame}
 
 \begin{frame}[fragile]{JSON: peel the onion on a live API}
@@ -295,10 +426,9 @@ data.get("elevation", "unknown")  # .get avoids KeyError
         \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/weather_forecast_plot.png}\\
-            {\scriptsize Boulder's 7-day forecast, straight from the nested lists.}
+            {\scriptsize Boulder's 7-day forecast, fetched live on Sept.~8.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~4, ``Handling Deeply Nested JSON.'' \texttt{.get(key, default)} returns a default instead of raising \texttt{KeyError}.}
 \end{frame}
 
 \begin{frame}{Lab: work these in pairs, then show-and-tell}
@@ -323,6 +453,22 @@ data.get("elevation", "unknown")  # .get avoids KeyError
                     \item a question for a research design
                 \end{itemize}
             \end{block}
+            \begin{alertblock}{Error flavors}
+                \footnotesize Some code here is \textit{designed} to break (a guard demonstrating a crash) --- that does not need a GitHub issue. Other code may be \textit{genuinely} broken: confirm it, then search and file an issue.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Effort over perfection}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Start the lab in class, finish at home, submit what you got working. Graded on a good-faith attempt to complete the notebook, not on getting every cell to run.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{block}{Submitting}
+                \footnotesize Run all cells, then export: \textit{File $\rightarrow$ Save and Export Notebook As $\rightarrow$ HTML}. Upload to Canvas by \textbf{Sunday 11:59pm}.
+            \end{block}
         \end{column}
     \end{columns}
 \end{frame}
@@ -338,26 +484,31 @@ data.get("elevation", "unknown")  # .get avoids KeyError
 \section{Friday · Textbook Revisions}
 % =========================================================================
 
-\begin{frame}{Friday --- improving Chapter 4 together}
+\begin{frame}[fragile]{Friday --- improving Chapter 4 together}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-04-data-formats.qmd} and reviews a classmate's.
 
             \bigskip
-            The workflow (from Week 1):
+            The workflow (from Week 3):
             \begin{enumerate}\small
-                \item Branch / fork the book repo
+                \item Fork or branch the book repo
                 \item Edit the chapter; commit with a clear message
                 \item Open a PR describing \textit{what} and \textit{why}
                 \item Review two peers' PRs: kind, specific, actionable
             \end{enumerate}
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/pr_review.png}
+        \begin{column}{0.4\textwidth}
+            \textbf{\footnotesize The reviewer's tool: a suggestion}
+\begin{lstlisting}[language=,basicstyle=\ttfamily\footnotesize]
+```suggestion
+XML 1.0 became a W3C
+Recommendation in 1998.
+```
+\end{lstlisting}
+            {\footnotesize One click for the author to accept it.}
         \end{column}
     \end{columns}
-    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (15\%).}
 \end{frame}
 
 \begin{frame}{A revision menu for Chapter 4}
@@ -365,11 +516,10 @@ data.get("elevation", "unknown")  # .get avoids KeyError
     \begin{itemize}
         \item \textbf{Test the code against live sources.} The House roster drifts (441 today; the \texttt{publish-date} changes) and Open-Meteo dates roll forward. Run the notebook, report what changed, and pin the snapshot.
         \item \textbf{Close a gap in ``Common Issues to Debug.''} Add a worked \texttt{json.JSONDecodeError} case --- a trailing comma, single quotes, or an HTML error page returned instead of JSON.
-        \item \textbf{Add a figure.} The chapter has \textit{no} diagrams: contribute a clean XML-tree or a JSON ``peel-the-onion'' figure.
+        \item \textbf{Verify a real-world-patterns claim.} The chapter names specific places JSON and XML show up (JWTs, SOAP, Office file formats). Check one against a primary source and tighten the citation.
         \item \textbf{Strengthen an exercise.} Give the RSS or weather exercise expected output, a rubric, or a starter cell so it is self-checking.
         \item \textbf{Extend the RSS / post-API story.} Tie the decline-of-RSS narrative to a concrete citation and the ``soft enclosure'' theme (Ch.~3).
     \end{itemize}
-    \bottomcite{Targets drawn from the chapter's callouts, ``Common Issues,'' exercises \& ``Further Reading.''}
 \end{frame}
 
 \begin{frame}{A good revision, and a good review}
@@ -405,13 +555,11 @@ data.get("elevation", "unknown")  # .get avoids KeyError
 \begin{frame}{Key takeaways}
     \begin{enumerate}
         \item \textbf{XML} is a tree of tags; \textbf{JSON} is nested lists and dictionaries --- the two structural languages of web data.
-        \item BeautifulSoup navigates XML with \texttt{.find()}, \texttt{.find\_all()}, and \texttt{.text}; attributes come out with bracket notation.
-        \item For JSON, \textbf{peel the onion} --- inspect \texttt{type()} and \texttt{.keys()} top-down, and use \texttt{.get()} for safe access.
+        \item XML (1998, from SGML) favors strict contracts and documents a human might read; JSON (early 2000s, from JavaScript) favors compact, program-to-program exchange.
+        \item BeautifulSoup navigates XML with \texttt{.find()}, \texttt{.find\_all()}, and \texttt{.text}; attributes come out with bracket notation. For JSON, \textbf{peel the onion} --- \texttt{type()} and \texttt{.keys()}, top-down.
         \item The \texttt{find\_all} $\rightarrow$ list-of-dicts $\rightarrow$ \texttt{DataFrame} pipeline is the bridge from raw web data to analysis.
         \item Format is a \textbf{transparency} choice: open XML and JSON support public oversight; scanned PDFs prevent it.
     \end{enumerate}
-    \bigskip
-    \bottomcite{Reading: Textbook Ch.~4. Related: \textcite{mitchell2018web}; \textcite{vandenbroucke2018practical}.}
 \end{frame}
 
 \end{document}
