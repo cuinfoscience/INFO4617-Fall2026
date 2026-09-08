@@ -1,10 +1,16 @@
 # Authoring a weekly lecture deck — contract
 
 Every weekly deck in `slides/week-NN/` is built to this spec so the set is
-consistent. Two reference decks, for different things: **`week-06/week-06.tex`**
-for build mechanics and preamble usage, and **`week-02/week-02.tex` as it stands
-on main** — the instructor rewrote it by hand — for voice, frame patterns, and
-density. When the two disagree about how a frame should read, week-02 wins.
+consistent. Three reference decks, for different things: **`week-06/week-06.tex`**
+for build mechanics and preamble usage, and **`week-02/week-02.tex`** and
+**`week-03/week-03.tex`, both as they stand on main** — the instructor
+hand-rewrote both, extensively — for voice, frame patterns, and density.
+week-02 set the original voice; week-03 is that voice three weeks into a live
+classroom, and is where the course-operations patterns below (grading
+philosophy, error triage, the Daily-note-questions frame) repeated often
+enough to codify as rules rather than one-off choices. When decks disagree
+about how a frame should read, prefer whichever was hand-edited more
+recently — voice evolves forward, not backward.
 
 ## Files a week folder must contain
 - `week-NN.tex` — the deck source, named for its folder (this spec)
@@ -29,7 +35,8 @@ density. When the two disagree about how a frame should read, week-02 wins.
    - a **Show-and-Tell** prompt (bring a bug / interesting data / a research provocation — the instructor's recurring habit);
    - one `[standout]` frame with a memorable takeaway from the chapter.
 6. `\section{Friday · Textbook Revisions}` — 3 frames: the PR + peer-review workflow (reuse week-06's), a **chapter-specific "revision menu"** (concrete targets pulled from *this* chapter's callouts / "Common Issues" / "Further Reading" / thin exercises), and "what makes a good PR / good review" (reuse week-06's). End the last frame with a one-line teaser of next week.
-7. **"Key takeaways"** — 5 numbered points from the chapter + a `\bottomcite` reading line.
+7. **"Key takeaways"** — 5 numbered points from the chapter, trimmed to short
+   plain statements. No trailing reading-list line (see Citations, below).
 
 ## Images
 List every image you reference in `img/stubs.tsv` — tab-separated:
@@ -46,13 +53,15 @@ python3 ../common/make_stubs.py .
 This renders labeled gray placeholders and writes `IMAGES.md`. Reference images
 as `img/name.png`.
 
-## Voice and frame patterns (learned from the instructor's week-02 rewrite)
+## Voice and frame patterns (learned from the instructor's week-02 and week-03 rewrites)
 
 The instructor hand-rewrote the week-02 deck in August 2026 (commits `9362b5b`,
-`d07486a`, `8c4aa64`, `6f8641b`, `9e511ef`). Those edits are the best available
-record of how these slides should sound. The patterns below were each applied
-repeatedly across frames — treat them as the house voice, and treat the current
-`week-02/week-02.tex` as the exemplar to imitate.
+`d07486a`, `8c4aa64`, `6f8641b`, `9e511ef`, `1e76b18`) and the week-03 deck across
+late August and early September (commits `f23c248`, `ae10824`, `310d5d1`,
+`99e0292`, `d0ccebe`). Those edits are the best available record of how these
+slides should sound. The patterns below were each applied repeatedly across
+frames — treat them as the house voice, and treat the current
+`week-02/week-02.tex` and `week-03/week-03.tex` as the exemplars to imitate.
 
 **The concept-frame formula.** A frame that presents one case, event, or idea:
 a bare, factual title (*"Aaron Swartz"*, *"Bright Data (2024)"* — not *"2024:
@@ -69,6 +78,26 @@ on. No minute-by-minute agenda frames — the "This week at a glance" frame is
 the only roadmap — and no end-of-section summary tables; the Consequences
 blocks carry the through-line.
 
+**Cut the meta-commentary — start with the question.** The instructor
+repeatedly deleted sentences that announce what a section is about to do,
+leaving only the thing itself. Week-03's access-matrix frame opened with
+"Enclosure, exemption, and erosion are claims about the world. Claims about
+the world can be checked. The chapter's audit asks eight endpoints one
+question:" — he cut all three sentences to one: "What happens if you show up
+to a website with no credentials and ask for data?" A frame's opening line
+should be the question, the claim, or the case — never a sentence describing
+that a question, claim, or case is coming.
+
+**A live frame can end on a question a book chapter would answer.**
+Declarative verdicts work in prose meant to be read alone; a frame meant to
+be *taught* can leave the verdict open for the room. The instructor changed
+"CrowdTangle does not resolve at all. No HTTP conversation happens. Enclosure
+completed; nothing left to ask." to "CrowdTangle does not resolve at all. No
+HTTP conversation happens. Enclosed, or destroyed?" — same evidence, but the
+frame now invites the class to argue the label instead of receiving it. Use
+this only where the room genuinely has something to discuss; a frame stating
+a fact with no live debate in it should still end on the fact.
+
 **Vertical rhythm beats run-in prose.** Body paragraphs are one or two
 sentences, stacked with `\medskip`. A sequence of questions gets one bold
 question per line with space between, not a sentence that lists them. When a
@@ -82,7 +111,11 @@ asks for "image macro memes that connect with the kids"), alongside real
 artifacts: court-filing headers, logos, screenshots. Enrichment links to
 documentaries and films are welcome (*The Internet's Own Boy*, *The Great
 Hack*). Keep placeholder stubs for anything you cannot source; never ship a
-diagram where a meme lands better.
+diagram where a meme lands better. The instructor demonstrated the trade
+directly in week-03: he deleted a full `alertblock` carrying a paragraph of
+attribution reasoning (the GitHub-403-in-the-drafting-sandbox anecdote) and
+replaced it with a meme image and a five-word caption — the meme carried the
+point the paragraph was working to make.
 
 **The register is direct, personal, and occasionally funny.** "Talk to a lawyer
 before web scraping a private website that might make rich people mad." "If you
@@ -96,14 +129,51 @@ disclaimer once per deck.
 structure misses: the daily-note URL and a read-the-chapter reminder on the
 Monday→Wednesday transition frame; a "What to submit" frame stating the week's
 deliverables and the Sunday-11:59pm / HTML-export mechanics; links to the
-handouts and the Missing Manual where students will actually need them; and,
-when the daily note produced questions, one or two "Daily note questions"
-frames on Friday answering them in one bold-question-one-answer lines.
+handouts and the Missing Manual where students will actually need them. Four
+specific pieces of course-operations furniture are now confirmed recurring
+(present in both week-02 and week-03) and should be treated as standing
+rules, not per-week choices:
+
+- **"Daily note questions" frames on Friday.** When the daily note produced
+  questions, answer them in one or two frames of stacked
+  `\textbf{Question?} --- answer` one-liners — bold question, dash, short
+  plain answer, `\medskip` between. No elaboration beyond the one line; if an
+  answer needs more, it belongs in the chapter, not the FAQ frame.
+- **"Effort over perfection" on the lab-submission frame.** State explicitly
+  that the lab is graded on a good-faith attempt to complete, not on getting
+  every cell working — week-03's exact phrasing was "Graded on good-faith
+  attempt to complete rather than getting everything working." This is a
+  grading fact, not a mood; state it as a fact.
+- **"Error flavors" on a debugging or lab frame.** Distinguish code that is
+  *designed* to break (a guard demonstrating a crash, an intentionally-missing
+  field) from code that is *genuinely* broken. Only the second needs a GitHub
+  issue. Give students this triage before sending them to file issues, or
+  every deliberate crash becomes a duplicate report.
+- **A "claim / link / sharpen" taxonomy for comments**, not just claim and
+  sharpen. Claim an issue with a sentence on your approach (the comment is the
+  claim; the instructor sets the assignee, since students lack write access).
+  Sharpen an issue by adding a missing location, reproduction, or scope.
+  *Link* two similar issues to each other by commenting with a cross-reference
+  — this keeps parallel conversations about the same problem from forking.
 
 **Don't script the instructor's patter.** Cut sentences that perform the
 instructor's role — "tell me if a step fails," "you will use this for the rest
 of the semester," timing promises. Slides state content; the person at the
 front of the room supplies the rest.
+
+**Trim hardest at the very end of the deck.** Both rewrites cut the "Key
+takeaways" frame further than any other: week-03 dropped its closing
+`\bottomcite` reading list entirely and shortened multi-clause bullets to
+short plain statements ("The open-API era ($\sim$2008--2018) was a
+**strategic bargain**, not a natural state — and computational social science
+was built on the trade" became "a **temporary bargain** around open access to
+platform data"). A deck's last frame is not the place to reach for a citation
+or a literary flourish it skipped everywhere else — if anything, cut more
+there than you did in the body. Frame titles get the same treatment: drop
+throat-clearing prefixes ("The take-home — a guided audit in seven steps" →
+"A guided audit in seven steps"; "The road from browser to clone" → "Next
+week," which also promoted next week's topic from a footnote to the frame's
+main content).
 
 ## Working alongside the instructor (process)
 
@@ -115,6 +185,12 @@ front of the room supplies the rest.
   it. If a shipped frame came back rewritten, that rewrite *is* the review
   comment: imitate it in the next deck instead of restoring the old shape.
   Fix outright typos quietly in passing; do not restructure while doing so.
+- **A commented-out frame is parked, not rejected.** The instructor cut week-02's
+  "Anatomy of a good issue" frame by wrapping every line in `%` rather than
+  deleting it — content he may want back, not content he's decided against.
+  Leave `%`-commented blocks alone when touching a file; don't delete them to
+  "clean up," and don't silently un-comment them either without a signal that
+  he wants it back.
 - **Image paths come in two dialects.** Overleaf compiles from the repo root,
   so instructor-authored frames say `slides/week-NN/img/foo.png`; local builds
   compile from the week folder and want `img/foo.png`. The preamble's
@@ -123,18 +199,21 @@ front of the room supplies the rest.
   one directory.
 
 ## Citations
-Only cite keys that exist in `slides/common/bibliography.bib`. The chapter's own
-`@key` references are safe (they are in that bib) — reuse those. `grep` to
-confirm any key before using it. When unsure, attribute in plain text via
-`\bottomcite{Textbook Ch. C, ...}` with **no** `\cite`. Undefined citations are
-a build failure.
+**`\bottomcite` is retired — do not use it.** It started as a per-frame
+attribution footer, the instructor spent two decks trimming it down (week-02
+kept a quarter of its instances, week-03 kept none), and it was removed
+outright from all fourteen decks in one pass rather than continuing to argue
+over which quarter earns its place. If Overleaf syncs one back in on a frame
+you're touching, delete it in passing — that is now a bug, not a style
+choice. Anything the line was carrying that is actually worth keeping (a
+citable study, a dataset, a ruling) goes as plain text in the frame body, in
+the voice of the surrounding prose, not as a separate footer.
 
-Cite **sparingly**. The textbook is the bibliography; the deck is not. When the
-instructor edited week-02 he deleted three quarters of the `\bottomcite` lines —
-a "Textbook Ch. N" footer on every frame is noise, not attribution. Use
-`\bottomcite` only where a frame makes a claim a student might want to chase
-(a study, a dataset, a ruling), roughly one frame in four or fewer. Never use it
-to store instructions or logistics — that content belongs in the frame body.
+`\textcite`, `\cite`, and `\parencite` are still in normal use inline and are
+unaffected by this — only cite keys that exist in `slides/common/bibliography.bib`.
+The chapter's own `@key` references are safe (they are in that bib) — reuse
+those. `grep` to confirm any key before using it; undefined citations are a
+build failure.
 
 ## Build & verify (must pass before you finish)
 From the week folder, run this **twice** (the second pass resolves citations) —
