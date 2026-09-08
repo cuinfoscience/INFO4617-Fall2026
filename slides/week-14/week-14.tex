@@ -84,7 +84,6 @@
             {\scriptsize Same code, three environments.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~14, ``From Exploration to Production.''}
 \end{frame}
 
 \begin{frame}{Automation: a snapshot vs.\ a time series}
@@ -111,7 +110,6 @@
             {\scriptsize The payoff of collecting the same thing, repeatedly.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~14, ``Why Automate?''}
 \end{frame}
 
 \begin{frame}{Automation raises the stakes}
@@ -138,7 +136,6 @@
             \end{block}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~14, ``Public Interest Connection.'' Post-API framing: \textcite{perriam2020digital}; \textcite{freelon2018computational}.}
 \end{frame}
 
 \begin{frame}{In the notebook}
@@ -190,7 +187,6 @@ if __name__ == "__main__":   # the entry point
             \end{itemize}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~14, ``Step 1: Notebook to Script.''}
 \end{frame}
 
 \begin{frame}[fragile]{Headless Selenium on a server}
@@ -224,7 +220,6 @@ soup = BeautifulSoup(
             The \texttt{-deprecated} element names are the site's own web components; the suffix warns they change often. When they do, fix it in dev tools, not here.
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~14, ``Notebook to Script.'' Selenium ecosystem: \textcite{garcia_SurveySeleniumEcosystem_2020}.}
 \end{frame}
 
 \begin{frame}[fragile]{Step 2 --- schedule it with GitHub Actions}
@@ -252,7 +247,6 @@ jobs:
           git diff --staged --quiet || git commit -am "scores $(date -u)"
           git pull --rebase origin main && git push
 \end{lstlisting}
-    \bottomcite{Textbook Ch.~14, ``Step 2: GitHub Actions.'' The default \texttt{GITHUB\_TOKEN} is read-only --- \texttt{contents: write} is not optional.}
 \end{frame}
 
 \begin{frame}[fragile]{Scheduling with cron --- and a Python-free option}
@@ -289,7 +283,6 @@ jobs:
             {\scriptsize \texttt{crontab.guru} translates an expression into plain English. Bookmark it.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~14, ``Understanding Cron Syntax'' \& ``Python-Free Scraping.'' Actions may delay scheduled runs by minutes.}
 \end{frame}
 
 \begin{frame}[fragile]{Fail loudly: monitor \& harden}
@@ -319,7 +312,6 @@ def main():
             {\footnotesize Harden further: \texttt{timeout-minutes} kills a hung job, a \texttt{concurrency} group stops overlaps, pip caching speeds runs, and retry-with-backoff (Ch.~Protocols) rides out transient 503s.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~14, ``Monitoring,'' ``Handling Failures,'' \& ``Hardening the Workflow.''}
 \end{frame}
 
 \begin{frame}{Lab: work these, then show-and-tell}
@@ -379,7 +371,6 @@ def main():
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
     \end{columns}
-    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (15\%).}
 \end{frame}
 
 \begin{frame}{A revision menu for Chapter 14}
@@ -391,7 +382,6 @@ def main():
         \item \textbf{Make an exercise turnkey.} Ship a starter \texttt{requirements.txt} + workflow template and expected output so Exercises 1 and 4 are self-checking.
         \item \textbf{Extend ``Further Reading.''} A public-interest collector (air-quality network, transit tracker) tied to the ownership callout.
     \end{itemize}
-    \bottomcite{Targets drawn from the chapter's callouts, ``Common Issues,'' and ``Further Reading.''}
 \end{frame}
 
 \begin{frame}{A good revision, and a good review}
@@ -433,7 +423,6 @@ def main():
         \item Automation is not ``set and forget'' --- owning your data infrastructure means committing to its \textbf{stewardship}.
     \end{enumerate}
     \bigskip
-    \bottomcite{Reading: Textbook Ch.~14. Related: \textcite{munzert2014automated}; \textcite{mitchell2018web}. Archival precedents: \textcite{baumgartner2020pushshift}.}
 \end{frame}
 
 \end{document}

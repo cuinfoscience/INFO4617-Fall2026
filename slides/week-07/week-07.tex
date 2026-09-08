@@ -84,7 +84,6 @@
             {\scriptsize The Wayback calendar: every dot is a capture you can retrieve.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~7, ``The Web Is Not Permanent.''}
 \end{frame}
 
 \begin{frame}{From snapshots to a longitudinal source}
@@ -111,7 +110,6 @@
             {\scriptsize A ``change timeline'' we build Wednesday: spikes mark major revisions.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~7, ``Comparing Multiple Snapshots'' \& ``Tracking Policy Changes.''}
 \end{frame}
 
 \begin{frame}{Raw or wrapped? The \texttt{id\_} rule}
@@ -136,7 +134,6 @@
             {\scriptsize Wrapped (toolbar + rewritten links) vs.\ the \texttt{id\_} raw capture.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~7, ``The Availability API.'' See also \textcite{brugger_UnderstandingArchivedWeb_2019} on archived-web caveats.}
 \end{frame}
 
 \begin{frame}{In the notebook}
@@ -175,7 +172,6 @@ if data["archived_snapshots"]:
 else:
     print("No snapshot available near this date")
 \end{lstlisting}
-    \bottomcite{Textbook Ch.~7, ``The Availability API.''}
 \end{frame}
 
 \begin{frame}[fragile]{Retrieve it raw with \texttt{id\_}, then measure}
@@ -196,7 +192,6 @@ stats = {"year": ts[:4], "num_links": len(soup.find_all("a")),
 #   2000        150         8500          20            2   # largely static HTML
 #   2024        800        45000         120           95   # a JS app that renders
 \end{lstlisting}
-    \bottomcite{Textbook Ch.~7, ``Comparing Multiple Snapshots.'' Without \texttt{id\_}, every count is inflated by the toolbar.}
 \end{frame}
 
 \begin{frame}[fragile]{The whole history --- the CDX Server API}
@@ -223,7 +218,6 @@ df["timestamp"] = pd.to_datetime(
             {\scriptsize Row 0 is the header; each later row is one distinct capture.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~7, ``The CDX Server API.'' Add \texttt{"limit": 100} while developing.}
 \end{frame}
 
 \begin{frame}[fragile]{Tracking a document over time}
@@ -245,7 +239,6 @@ import json
 with open("fb_tos_history.json", "w") as f:
     json.dump(results, f, indent=2)   # (also cache each raw capture as you go)
 \end{lstlisting}
-    \bottomcite{Textbook Ch.~7, ``Retrieving Historical Content,'' ``Serializing,'' \& ``Caching Raw Captures.''}
 \end{frame}
 
 \begin{frame}[fragile]{Measuring change --- bag-of-words}
@@ -264,7 +257,6 @@ index = similarities.SparseMatrixSimilarity(corpus, num_features=len(dct))
 change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1=all-new
 \end{lstlisting}
     Plotting \texttt{change} over time is the timeline from Monday: spikes flag major revisions --- a new policy, a redesign, a response to controversy.
-    \bottomcite{Textbook Ch.~7, ``Document Similarity with Bag-of-Words'' \& ``Visualizing Document Change.''}
 \end{frame}
 
 \begin{frame}{Lab: work these, then show-and-tell}
@@ -324,7 +316,6 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
     \end{columns}
-    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (15\%).}
 \end{frame}
 
 \begin{frame}{A revision menu for Chapter 7}
@@ -336,7 +327,6 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
         \item \textbf{Make an exercise self-checking.} Add expected output, a rubric, or a starter cell to the open-ended policy-tracking and heatmap exercises.
         \item \textbf{Promote the limitations into the main text.} Capture-frequency bias, coverage gaps, and link rewriting currently live only in the graduate exercise --- tie them to ``Further Reading'' (\textcite{brugger_SAGEHandbookWeb_2018}).
     \end{itemize}
-    \bottomcite{Targets drawn from the chapter's callouts, ``Common Issues,'' exercises, \& ``Further Reading.''}
 \end{frame}
 
 \begin{frame}{A good revision, and a good review}
@@ -378,7 +368,6 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
         \item Be a good citizen: \texttt{sleep} between requests, cache raw captures, and \textbf{serialize} --- you may not be able to re-scrape.
     \end{enumerate}
     \bigskip
-    \bottomcite{Reading: Textbook Ch.~7. Related: \textcite{brugger_SAGEHandbookWeb_2018}; \textcite{rogers2019doing}.}
 \end{frame}
 
 \end{document}

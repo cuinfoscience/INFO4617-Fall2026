@@ -79,7 +79,6 @@
             {\scriptsize Boulder City Council minutes --- our target this week.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~9, ``The Web's Filing Cabinets.''}
 \end{frame}
 
 \begin{frame}{A computer never reads a PDF}
@@ -101,7 +100,6 @@
             {\scriptsize Glyphs at coordinates, not sentences --- structure is inferred.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~9, ``The Web's Filing Cabinets.''}
 \end{frame}
 
 \begin{frame}{Soft enclosure \& the infrastructure of transparency}
@@ -123,7 +121,6 @@
             {\scriptsize DocumentCloud: shared infrastructure for analyzing document dumps.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~9, ``Public Interest Connection'' \& ``Social History and Public Interest.''}
 \end{frame}
 
 \begin{frame}{In the notebook}
@@ -160,7 +157,6 @@ text = page.extract_text()
 print(text[:500])   # expect mess: headers/footers mixed in, tables garbled,
                     # line breaks that don't match paragraphs
 \end{lstlisting}
-    \bottomcite{Textbook Ch.~9, ``PyPDF Basics.'' Messy output is normal --- cleaning it up is the core of the workflow.}
 \end{frame}
 
 \begin{frame}[fragile]{The one line that flattens the page}
@@ -191,7 +187,6 @@ clean = '\n'.join(ln for ln in lines if ln)
             Erase the newlines and no heading detector can ever find them.
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~9, ``Cleanup Strategies.''}
 \end{frame}
 
 \begin{frame}[fragile]{A regex toolkit for PDF text}
@@ -207,7 +202,6 @@ headings = re.findall(r'^[A-Z][A-Z0-9 .:&-]{5,}$', text, re.MULTILINE)
 # -> ['CALL TO ORDER', 'PUBLIC COMMENT', 'CONSENT AGENDA', 'ADJOURNMENT']
 \end{lstlisting}
     Each pattern encodes an assumption (slash dates, a leading \texttt{\$}, uppercase headings). \textbf{Test across multiple pages and documents} before trusting a pipeline. New to regex? See \textit{Missing Manual} Ch.~18.
-    \bottomcite{Textbook Ch.~9, ``Regular Expressions for PDF Text.''}
 \end{frame}
 
 \begin{frame}[fragile]{Case study --- council attendance}
@@ -233,7 +227,6 @@ def extract_attendance(pdf_path):
     \end{columns}
     \smallskip
     {\small Be honest about limits: ``Absent: None'' becomes a phantom member named \texttt{None}; titles and separators vary. Treat output as a \textbf{first draft} --- spot-check and patch.}
-    \bottomcite{Textbook Ch.~9, ``Case Study: Boulder City Council Minutes.'' Filenames encode the date --- parse them, not the PDF text.}
 \end{frame}
 
 \begin{frame}[fragile]{Scale it --- a reusable corpus pipeline}
@@ -264,7 +257,6 @@ class PDFCorpusAnalyzer:
             {\scriptsize Discover $\rightarrow$ extract $\rightarrow$ clean $\rightarrow$ regex fields $\rightarrow$ DataFrame.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~9, ``Building a Reusable PDF Pipeline.'' Pass document-specific cleanup patterns in; wrap each file defensively.}
 \end{frame}
 
 \begin{frame}[fragile]{The limits of PyPDF}
@@ -284,7 +276,6 @@ with pdfplumber.open("report.pdf") as pdf:
 # accuracy varies with scan quality. (camelot is another table option.)
 \end{lstlisting}
     Know your tool's limits: reach for \texttt{pdfplumber}, \texttt{camelot}, or OCR when the layout demands it.
-    \bottomcite{Textbook Ch.~9, ``When PyPDF Is Not Enough'' \& ``Common Issues to Debug.''}
 \end{frame}
 
 \begin{frame}{Lab: work these, then show-and-tell}
@@ -344,7 +335,6 @@ with pdfplumber.open("report.pdf") as pdf:
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
     \end{columns}
-    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (15\%).}
 \end{frame}
 
 \begin{frame}{A revision menu for Chapter 9}
@@ -356,7 +346,6 @@ with pdfplumber.open("report.pdf") as pdf:
         \item \textbf{Make an exercise self-checking.} Add expected output, a rubric, or a starter cell to the open-ended ``find and extract'' and ``topic tracking'' exercises.
         \item \textbf{Deepen ``When PyPDF Is Not Enough.''} Turn the two-line \texttt{pdfplumber} / OCR sketches into a runnable table-extraction or Tesseract example tied to ``Further Reading.''
     \end{itemize}
-    \bottomcite{Targets drawn from the chapter's callouts, ``Common Issues,'' exercises, \& ``Further Reading.''}
 \end{frame}
 
 \begin{frame}{A good revision, and a good review}
@@ -398,7 +387,6 @@ with pdfplumber.open("report.pdf") as pdf:
         \item Know PyPDF's limits: \texttt{pdfplumber} for tables, OCR for scans. Imprecision is the price of scale.
     \end{enumerate}
     \bigskip
-    \bottomcite{Reading: Textbook Ch.~9. Related: \textcite{salganik2018bit}; \textcite{gebru2021datasheets}.}
 \end{frame}
 
 \end{document}

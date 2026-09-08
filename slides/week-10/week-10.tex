@@ -84,7 +84,6 @@
             {\scriptsize Ask, don't reverse-engineer.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~10, ``From Document Scraping to API Access.''}
 \end{frame}
 
 \begin{frame}{What is an API?}
@@ -110,7 +109,6 @@
             {\scriptsize A request is a URL you assemble on purpose.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~10, ``What Is an API?''}
 \end{frame}
 
 \begin{frame}{The case for Wikipedia}
@@ -137,7 +135,6 @@
             {\scriptsize Every edit, ever, is queryable.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~10, ``Why Wikipedia?'' \& the ``Public Interest Connection'' callout.}
 \end{frame}
 
 \begin{frame}{The anatomy of a request --- and what the notebook covers}
@@ -170,7 +167,6 @@
             \end{alertblock}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~10, ``The Anatomy of an API Call.'' See also \textit{Missing Manual} Ch.~5, ``Reading Official Documentation.''}
 \end{frame}
 
 % =========================================================================
@@ -196,7 +192,6 @@ pages = data["query"]["pages"]
 page_id = list(pages.keys())[0]
 print(pages[page_id]["title"], pages[page_id]["pageid"])
 \end{lstlisting}
-    \bottomcite{Textbook Ch.~10, ``The Anatomy of an API Call.'' Define \texttt{HEADERS} once and reuse it everywhere.}
 \end{frame}
 
 \begin{frame}[fragile]{Revisions --- and the pagination loop}
@@ -232,7 +227,6 @@ def get_revisions(title, headers=HEADERS):
             Two habits: \texttt{raise\_for\_status()} to fail loudly, and \texttt{maxlag=5} so bulk jobs yield to human readers.
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~10, ``Getting Revisions'' \& ``Understanding Pagination.'' The same loop returns in the government \& social chapters.}
 \end{frame}
 
 \begin{frame}[fragile]{Same pattern, more endpoints}
@@ -260,7 +254,6 @@ def get_pageviews(title, start, end, headers=HEADERS):
             {\footnotesize How many of Wikipedia's 300+ languages carry an article is a rough proxy for \textbf{global significance} --- one that skews toward the Global North.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~10, ``Getting Pageviews,'' ``Getting Links and Categories,'' ``Interlanguage Links.''}
 \end{frame}
 
 \begin{frame}[fragile]{From documentation to working code}
@@ -285,7 +278,6 @@ for r in data["query"]["search"]:
             \includegraphics[width=\textwidth]{img/mediawiki_api_sandbox.png}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~10, ``Writing Raw API Requests from Documentation.''}
 \end{frame}
 
 \begin{frame}{Lab: work these, then show-and-tell}
@@ -348,7 +340,6 @@ for r in data["query"]["search"]:
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
     \end{columns}
-    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (15\%).}
 \end{frame}
 
 \begin{frame}{A revision menu for Chapter 10}
@@ -360,7 +351,6 @@ for r in data["query"]["search"]:
         \item \textbf{Strengthen an exercise.} Exercises 1--5 have no expected output or starter cell --- add a rubric or a self-checking assertion.
         \item \textbf{Deepen ``Social History.''} Turn the gender-gap discussion into a reproducible measurement (tie it to WikiProject Women in Red) using this chapter's helper functions.
     \end{itemize}
-    \bottomcite{Targets drawn from the chapter's ``Common Issues,'' callouts, thin exercises, and ``Further Reading.''}
 \end{frame}
 
 \begin{frame}{A good revision, and a good review}
@@ -402,7 +392,6 @@ for r in data["query"]["search"]:
         \item Openness is a \textit{choice}, not a guarantee of completeness --- Wikipedia's data still inherits its volunteer community's biases.
     \end{enumerate}
     \bigskip
-    \bottomcite{Reading: Textbook Ch.~10. Further: \textcite{ford2022writing}; \textcite{mesgari2015sum}; \textcite{salganik2018bit}.}
 \end{frame}
 
 \end{document}

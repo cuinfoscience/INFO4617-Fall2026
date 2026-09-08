@@ -79,7 +79,6 @@
             {\scriptsize Proprietary to open: who controls access.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~12, ``Platforms, Data, and Power.'' Cross-refs: Government APIs (Ch.~11), the post-API age (Ch.~2).}
 \end{frame}
 
 \begin{frame}{OAuth2: credentials for a scoped, revocable token}
@@ -105,7 +104,6 @@
             {\scriptsize Bluesky app passwords and Mastodon tokens are the same delegated-credential idea, implemented more simply.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~12, ``Authentication.'' Credential hygiene: \textit{Missing Manual} Ch.~34.}
 \end{frame}
 
 \begin{frame}{Four platforms, four architectures}
@@ -128,7 +126,6 @@
     \bigskip
     \raggedright
     Reddit and Spotify can \textit{unilaterally} rewrite their terms because they own both the platform \textbf{and} the protocol. Bluesky and Mastodon cannot --- their protocols are open standards anyone can implement. That is the architectural embodiment of \textbf{ownership} (Ch.~2).
-    \bottomcite{Textbook Ch.~12, ``Comparing Platform Architectures.''}
 \end{frame}
 
 \begin{frame}{In the notebook}
@@ -168,7 +165,6 @@ print(f"Subscribers: {subreddit.subscribers:,}")
 for rule in subreddit.rules:          # PRAW returns Rule objects
     print("-", rule.short_name)
 \end{lstlisting}
-    \bottomcite{Textbook Ch.~12, ``Reddit via PRAW.'' Free tier: 100 queries/minute for non-commercial use.}
 \end{frame}
 
 \begin{frame}[fragile]{Reddit --- comment trees \& the depth-decay pattern}
@@ -197,7 +193,6 @@ df.groupby("depth")["score"].mean()
             \raggedright\footnotesize Not a measure of quality --- an artifact of interface design, where nested replies are progressively collapsed and harder to reach.
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~12, ``Analyzing Comment Engagement.'' Score is skewed --- prefer a Spearman rank correlation.}
 \end{frame}
 
 \begin{frame}[fragile]{Spotify via spotipy --- search \& artist profile}
@@ -215,7 +210,6 @@ top = sp.artist_top_tracks(artist["id"])["tracks"]
 print(artist["name"], f'{artist["followers"]["total"]:,}',
       [t["popularity"] for t in top[:5]])   # popularity is 0-100
 \end{lstlisting}
-    \bottomcite{Textbook Ch.~12, ``Spotify via spotipy.'' \texttt{popularity} is engagement-weighted and recomputed on Spotify's schedule.}
 \end{frame}
 
 \begin{frame}{The audio features story --- enclosure in miniature}
@@ -239,7 +233,6 @@ print(artist["name"], f'{artist["followers"]["total"]:,}',
             \end{alertblock}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~12, ``The Audio Features Story.'' Enclosure \& the post-API age (Ch.~2).}
 \end{frame}
 
 \begin{frame}[fragile]{Bluesky via the AT Protocol --- open by design}
@@ -271,7 +264,6 @@ df = pd.DataFrame(posts)
             \raggedright\footnotesize An \textbf{app password} is a revocable delegated credential --- OAuth's principle, simpler. Identity and graph are portable across any AT-Protocol service.
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~12, ``Bluesky via AT Protocol.'' No single company controls access.}
 \end{frame}
 
 \begin{frame}[fragile]{Mastodon via Mastodon.py --- federated, per-instance}
@@ -290,7 +282,6 @@ for toot in mastodon.timeline_public(limit=10):
 tagged = mastodon.timeline_hashtag("datascience", limit=20)
 \end{lstlisting}
     Comprehensive collection means engaging \textit{many} instances --- each with its own rules, rate limits, and moderation norms.
-    \bottomcite{Textbook Ch.~12, ``Mastodon via Mastodon.py'' \textcite{diener2026mastodonpy}. Built on ActivityPub.}
 \end{frame}
 
 \begin{frame}{Lab: work these, then show-and-tell}
@@ -354,7 +345,6 @@ tagged = mastodon.timeline_hashtag("datascience", limit=20)
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
     \end{columns}
-    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (15\%).}
 \end{frame}
 
 \begin{frame}{A revision menu for Chapter 12}
@@ -366,7 +356,6 @@ tagged = mastodon.timeline_hashtag("datascience", limit=20)
         \item \textbf{Strengthen a thin exercise.} The Bluesky and playlist exercises need expected output, a rubric, or starter cells so they are self-checking.
         \item \textbf{Refresh the comparison table \& ``Further Reading.''} Verify mid-2026 rate limits and endpoint availability; add a Fediverse-measurement paper tied to the \textbf{ownership} callout.
     \end{itemize}
-    \bottomcite{Targets drawn from the chapter's callouts, ``Common Issues,'' thin exercises, and ``Further Reading.''}
 \end{frame}
 
 \begin{frame}{A good revision, and a good review}
@@ -408,7 +397,6 @@ tagged = mastodon.timeline_hashtag("datascience", limit=20)
         \item Access is conditional, costly, and fragile --- build across open \textbf{and} closed so no single closure ends your research.
     \end{enumerate}
     \bigskip
-    \bottomcite{Reading: Textbook Ch.~12. Related: \textcite{baumgartner2020pushshift}; \textcite{diener2026mastodonpy}; \textcite{bruns2019after}.}
 \end{frame}
 
 \end{document}

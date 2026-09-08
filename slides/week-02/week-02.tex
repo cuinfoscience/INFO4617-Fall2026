@@ -558,7 +558,6 @@ rp.can_fetch("*", "https://en.wikipedia.org/w/api.php")                         
 rp.can_fetch("*", "https://en.wikipedia.org/wiki/Special:Search")                 # False
 \end{lstlisting}
     {\footnotesize \texttt{/wiki/} articles are open, but \texttt{/w/} (dynamic pages + API) and \texttt{Special:} are disallowed \textit{for crawlers}. Deliberate API clients follow different norms (Ch.~10).}
-    \bottomcite{Textbook Ch.~2, ``Technical Norms: \texttt{robots.txt}.''}
 \end{frame}
 
 \begin{frame}[fragile]{The problem with \texttt{rp.read()}}
@@ -593,7 +592,6 @@ except urllib.error.HTTPError as err:
             \end{alertblock}
         \end{column}
     \end{columns}
-    \bottomcite{Verified against \texttt{urllib.robotparser} in Python 3.11 and Wikipedia's live \texttt{robots.txt}.}
 \end{frame}
 
 \begin{frame}[fragile]{What \texttt{robots.txt} reveals across platforms}
@@ -623,7 +621,6 @@ for name, url in sites.items():
             \includegraphics[width=\textwidth]{img/robots_txt_browser.png}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~2, ``Comparing \texttt{robots.txt} Across Platforms.''}
 \end{frame}
 
 \begin{frame}{Activity: survey a sector}
@@ -650,7 +647,6 @@ for name, url in sites.items():
             \end{block}
         \end{column}
     \end{columns}
-    \bottomcite{Sector list adapted from the prior offering of this course. Count \texttt{Disallow} vs \texttt{Allow} lines with the loop from the last slide.}
 \end{frame}
 
 \begin{frame}{Which AI crawlers does this site block?}
@@ -679,7 +675,6 @@ for name, url in sites.items():
             \end{alertblock}
         \end{column}
     \end{columns}
-    \bottomcite{Crawler-name rot: \textcite{koebler_wrong_2024}. Ignoring the protocol outright: \textcite{mehrotra_perplexity_2024}.}
 \end{frame}
 
 \begin{frame}[fragile]{Identify yourself, then slow down}
@@ -707,7 +702,6 @@ for url in urls:
             {\scriptsize Your header is visible to every server you touch.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~2, ``Responsible Request Headers'' \& ``Rate Limiting.'' HTTP mechanics: \textit{Missing Manual} Ch.~24.}
 \end{frame}
 
 \begin{frame}[fragile]{\texttt{responsible\_get()}: build it once}
@@ -730,7 +724,6 @@ def responsible_get(url, headers=None, delay=1.0):
         print(f"Request failed ({type(e).__name__}): {url}")
         return None
 \end{lstlisting}
-    \bottomcite{Textbook Ch.~2, ``Building a Responsible Scraper Function.''}
 \end{frame}
 
 \begin{frame}{Design choices, and later reuse}
@@ -757,7 +750,6 @@ def responsible_get(url, headers=None, delay=1.0):
             \end{alertblock}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~2. Reused in later chapters on static pages, archives, and APIs.}
 \end{frame}
 
 \begin{frame}{Lab: work these, then show-and-tell}

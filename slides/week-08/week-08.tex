@@ -83,7 +83,6 @@
             {\scriptsize Same URL, two very different payloads.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~8, ``When Static Scraping Fails.''}
 \end{frame}
 
 \begin{frame}{Selenium: a browser you drive with code}
@@ -109,7 +108,6 @@
             {\scriptsize ``Controlled by automated test software.''}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~8, ``Setting Up Selenium.''}
 \end{frame}
 
 \begin{frame}{A powerful last resort --- and not a loophole}
@@ -138,7 +136,6 @@
             \end{alertblock}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~8, ``When to Use Selenium vs.\ APIs'' \& ``The Fragility Problem.''}
 \end{frame}
 
 \begin{frame}{In the notebook}
@@ -177,7 +174,6 @@ title = driver.find_element(By.XPATH, "//div[@id='ctitle']")       # by XPath
 print(title.text)                    # the title of the current comic
 \end{lstlisting}
     Prefer a stable anchor --- an \texttt{id} or a semantic \texttt{class} --- over a brittle, position-based path.
-    \bottomcite{Textbook Ch.~8, ``Navigating and Finding Elements.''}
 \end{frame}
 
 \begin{frame}[fragile]{Read attributes, then act like a user}
@@ -201,7 +197,6 @@ btn.click()
             \includegraphics[width=\textwidth]{img/xkcd_inspect.png}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~8, ``Extracting Data'' \& ``Simulating Interactions.''}
 \end{frame}
 
 \begin{frame}[fragile]{Type, submit --- then wait \textit{well}}
@@ -221,7 +216,6 @@ WebDriverWait(driver, 10).until(         # not a blind time.sleep(2)!
 print(driver.title)                      # -> Colorado Buffaloes - Wikipedia
 \end{lstlisting}
     \texttt{WebDriverWait} polls every 0.5\,s, returns \textit{the instant} the condition holds, and raises \texttt{TimeoutException} if it never does --- faster, and it fails loudly. Common conditions: \texttt{presence\_of\_element\_located}, \texttt{visibility\_of\_element\_located}, \texttt{element\_to\_be\_clickable}.
-    \bottomcite{Textbook Ch.~8, ``Typing and Searching'' \& ``Waiting for Dynamic Content.''}
 \end{frame}
 
 \begin{frame}[fragile]{Scraping an infinite-scroll page}
@@ -247,7 +241,6 @@ def scrape_infinite_scroll(driver, max_scrolls=20, pause=2):
             \includegraphics[width=\textwidth]{img/infinite_scroll.png}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~8, ``Scraping Infinite Scroll Pages.''}
 \end{frame}
 
 \begin{frame}[fragile]{Selenium renders; BeautifulSoup reads}
@@ -268,7 +261,6 @@ finally:
     driver.quit()                    # each driver is a whole browser process
 \end{lstlisting}
     Selenium is the \textbf{hands} that navigate; BeautifulSoup is the \textbf{eyes} that read. \texttt{try/finally} guarantees the browser closes even when parsing throws.
-    \bottomcite{Textbook Ch.~8, ``Passing to BeautifulSoup'' \& ``A Practical Selenium Workflow.''}
 \end{frame}
 
 \begin{frame}{Lab: work these, then show-and-tell}
@@ -328,7 +320,6 @@ finally:
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
     \end{columns}
-    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (15\%).}
 \end{frame}
 
 \begin{frame}{A revision menu for Chapter 8}
@@ -341,7 +332,6 @@ finally:
         \item \textbf{Strengthen an exercise.} Add expected output, a rubric, or a starter cell (e.g.\ a public infinite-scroll demo page) so Exercise 1 or 4 is self-checking.
         \item \textbf{Extend ``Further Reading.''} A public-interest case study that turned to browser automation after an API closed --- tying the ``Public Interest'' callout to the post-API enclosure.
     \end{itemize}
-    \bottomcite{Targets drawn from the chapter's callouts, ``Common Issues,'' and ``Further Reading.''}
 \end{frame}
 
 \begin{frame}{A good revision, and a good review}
@@ -383,7 +373,6 @@ finally:
         \item Selenium is a slow, fragile \textbf{last resort}: API~$\rightarrow$~static~$\rightarrow$~browser. Automation never suspends \texttt{robots.txt} or a site's ToS.
     \end{enumerate}
     \bigskip
-    \bottomcite{Reading: Textbook Ch.~8. Related: \textcite{mitchell2018web}; \textcite{garcia_SurveySeleniumEcosystem_2020}; \textcite{perriam2020digital}.}
 \end{frame}
 
 \end{document}
