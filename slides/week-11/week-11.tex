@@ -80,7 +80,6 @@
             \end{block}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~11, ``Public Data by Mandate.''}
 \end{frame}
 
 \begin{frame}{The challenge is navigation, not access}
@@ -100,7 +99,6 @@
             {\scriptsize Read the code: group, index, \texttt{E}=estimate / \texttt{M}=margin of error.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~11, ``Navigating the Variable Catalog'' \& ``Finding the Right Variable.''}
 \end{frame}
 
 \begin{frame}{Manage your keys like a professional}
@@ -125,7 +123,6 @@
             \includegraphics[width=\textwidth]{img/api_key_flow.png}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~11, ``API Key Management.'' Mechanics in \textit{Missing Manual} Ch.~34, Environment Variables and Secrets.}
 \end{frame}
 
 \begin{frame}{In the notebook}
@@ -164,7 +161,6 @@ for name, key in [("CENSUS_API_KEY", census_key),
     if not key:
         raise ValueError(f"{name} not set -- get a free key first.")
 \end{lstlisting}
-    \bottomcite{Textbook Ch.~11, ``Environment Variables.'' The loop turns a confusing \texttt{None} downstream into a clear error now.}
 \end{frame}
 
 \begin{frame}[fragile]{Census --- from the catalog to a real place}
@@ -182,7 +178,6 @@ params = {
 data = requests.get(census_url, params=params).json()
 df = pd.DataFrame(data[1:], columns=data[0])   # row 0 is the header
 \end{lstlisting}
-    \bottomcite{Textbook Ch.~11, ``Querying for Specific Places.'' Pass \texttt{place:07850,45970} to compare Boulder and Longmont.}
 \end{frame}
 
 \begin{frame}[fragile]{FRED --- let the server do the math}
@@ -211,7 +206,6 @@ df = pd.DataFrame(obs)
             {\scriptsize Find series IDs on the FRED website, then copy them \textit{exactly}.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~11, ``Server-Side Transformations.'' Other units: \texttt{chg}, \texttt{log}, \texttt{pca}.}
 \end{frame}
 
 \begin{frame}[fragile]{FEC --- money in politics in two steps}
@@ -239,7 +233,6 @@ tot = requests.get(url, params={"api_key": fec_key,
             {\scriptsize IDs encode the office: \texttt{P}/\texttt{S}/\texttt{H} = candidate, \texttt{C} = committee.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~11, ``FEC API'' \& ``Getting Campaign Finance Data.'' This data powers accountability journalism.}
 \end{frame}
 
 \begin{frame}[fragile]{Combine two agencies --- and mind the sentinels}
@@ -269,7 +262,6 @@ df_rate = pd.DataFrame(rate["observations"])
             {\scriptsize Census says \textit{what} the housing stock is; FRED says \textit{why}.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~11, ``Combining Census and FRED Data.''}
 \end{frame}
 
 \begin{frame}{Lab: work these, then show-and-tell}
@@ -328,7 +320,6 @@ df_rate = pd.DataFrame(rate["observations"])
             \includegraphics[width=\textwidth]{img/pr_review_ch11.png}
         \end{column}
     \end{columns}
-    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (15\%).}
 \end{frame}
 
 \begin{frame}{A revision menu for Chapter 11}
@@ -340,7 +331,6 @@ df_rate = pd.DataFrame(rate["observations"])
         \item \textbf{Strengthen a thin exercise.} The six exercises are open-ended --- add expected output, a rubric, or a starter cell so they self-check.
         \item \textbf{Extend ``Further Reading.''} A data-journalism example tied to the \textbf{Public Interest} callout --- a documented withdrawn dataset or deprecated API.
     \end{itemize}
-    \bottomcite{Targets drawn from the chapter's callouts, ``Common Issues to Debug,'' and ``Further Reading.''}
 \end{frame}
 
 \begin{frame}{A good revision, and a good review}
@@ -382,7 +372,6 @@ df_rate = pd.DataFrame(rate["observations"])
         \item Mind the \textbf{institutional context} --- using open data well is a form of civic engagement.
     \end{enumerate}
     \bigskip
-    \bottomcite{Reading: Textbook Ch.~11. Related: \textcite{salganik2018bit}; \textcite{munzert2014automated}.}
 \end{frame}
 
 \end{document}

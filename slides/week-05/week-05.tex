@@ -82,7 +82,6 @@
             {\scriptsize URL to rendered page, one layer at a time.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~5, ``What Happens When You Load a Web Page?''}
 \end{frame}
 
 \begin{frame}{The lower stack: client--server, TCP/IP \& DNS}
@@ -104,7 +103,6 @@
             {\scriptsize Four protocols, one layered conversation.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~5, ``The Client--Server Model,'' ``TCP/IP,'' and ``DNS.''}
 \end{frame}
 
 \begin{frame}{See it yourself: browser developer tools}
@@ -126,7 +124,6 @@
             {\scriptsize The Network tab: one page load, dozens of requests.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~5, ``Browser Developer Tools.''}
 \end{frame}
 
 \begin{frame}{The upper stack: HTTP status codes \& URLs}
@@ -151,7 +148,6 @@
             {\scriptsize \texttt{scheme://host:port/path?query\#fragment}}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~5, ``HTTP: The Application Layer'' \& ``URLs: Anatomy and Parsing.''}
 \end{frame}
 
 \begin{frame}{In the notebook}
@@ -191,7 +187,6 @@ for rec in dns.resolver.resolve("en.wikipedia.org", "A"):
     \begin{alertblock}{\texttt{scapy} traceroute needs root}
         \footnotesize The notebook's \texttt{traceroute("en.wikipedia.org")} maps each router hop, but raw packets require admin privileges (Npcap on Windows). Can't run it? Read along --- nothing later depends on it.
     \end{alertblock}
-    \bottomcite{Textbook Ch.~5, ``TCP/IP'' \& ``DNS.'' \texttt{socket.gethostbyname} often returns a loopback address --- query an external service for your real public IP.}
 \end{frame}
 
 \begin{frame}[fragile]{Diagnosing HTTP errors, not guessing}
@@ -210,7 +205,6 @@ def diagnose_request(url, headers=None):
     return r
 \end{lstlisting}
     A \textbf{403} from an API usually means a missing \texttt{User-Agent} (a one-line fix); a \textbf{403} from a news site may block scraping outright. A \textbf{429} means slow down; a \textbf{500} is the server's problem --- retry later.
-    \bottomcite{Textbook Ch.~5, ``Diagnosing HTTP Errors.''}
 \end{frame}
 
 \begin{frame}[fragile]{Make an API call, get a time series}
@@ -240,7 +234,6 @@ df.plot(x="timestamp", y="views")
             {\scriptsize Daily pageviews --- spikes line up with real-world events.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~5, ``Making API Requests with Custom Headers.''}
 \end{frame}
 
 \begin{frame}[fragile]{A loop over one host is your cue for a Session}
@@ -261,7 +254,6 @@ for article in ["Web_scraping", "Data_science"]:
     r = session.get(f"https://en.wikipedia.org/wiki/{article}")
 \end{lstlisting}
     Six lines of setup replace the hand-rolled backoff loop --- and carry over unchanged into the scraping, Wikipedia, and government-data chapters.
-    \bottomcite{Textbook Ch.~5, ``Connections, Sessions, and Retries.''}
 \end{frame}
 
 \begin{frame}[fragile]{Parse --- and build --- URLs with the right tool}
@@ -279,7 +271,6 @@ quote("AC/DC", safe="")   # 'AC%2FDC' -- the slash MUST be encoded
 requests.get(base, params={"titles": "University of Colorado Boulder"})
 \end{lstlisting}
     Mixing them up --- query-encoding a value the API expects in its path --- is a classic source of confusing 404s.
-    \bottomcite{Textbook Ch.~5, ``URLs: Anatomy and Parsing'' \& ``Building URLs Programmatically.''}
 \end{frame}
 
 \begin{frame}{Lab: work these, then show-and-tell}
@@ -341,7 +332,6 @@ requests.get(base, params={"titles": "University of Colorado Boulder"})
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
     \end{columns}
-    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (15\%).}
 \end{frame}
 
 \begin{frame}{A revision menu for Chapter 5}
@@ -353,7 +343,6 @@ requests.get(base, params={"titles": "University of Colorado Boulder"})
         \item \textbf{Strengthen an exercise.} Give the \texttt{diagnose\_url()} exercise expected output, a rubric, or a starter cell so it is self-checking.
         \item \textbf{Extend ``Further Reading.''} Tie the HTTP/1.1 RFC or MDN's HTTP overview to the ``openness'' callout on the web as public infrastructure.
     \end{itemize}
-    \bottomcite{Targets drawn from the chapter's callouts, ``Common Issues to Debug,'' and ``Further Reading.''}
 \end{frame}
 
 \begin{frame}{A good revision, and a good review}
@@ -395,7 +384,6 @@ requests.get(base, params={"titles": "University of Colorado Boulder"})
         \item \textbf{Never regex a URL.} \texttt{urllib.parse} both parses and builds; know path-segment (\texttt{quote}) from query-parameter (\texttt{params=}) APIs.
     \end{enumerate}
     \bigskip
-    \bottomcite{Reading: Textbook Ch.~5. Related: \textcite{mitchell2018web}; \textcite{vandenbroucke2018practical}; \textcite{mozilladevelopernetwork_HTTP_2023}.}
 \end{frame}
 
 \end{document}

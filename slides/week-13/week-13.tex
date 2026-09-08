@@ -84,7 +84,6 @@
             \end{alertblock}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~13, ``LLMs as Web Data Science Tools.'' Builds on the scraping of Ch.~6--9.}
 \end{frame}
 
 \begin{frame}{Anatomy of a chat request}
@@ -111,7 +110,6 @@
             {\scriptsize Messages in, one completion out.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~13, ``The OpenAI API'' \& ``The Anthropic API.''}
 \end{frame}
 
 \begin{frame}{From free text to structured data}
@@ -137,7 +135,6 @@
             {\footnotesize Beyond extraction, \textbf{embeddings} turn text into vectors so you can measure \textit{semantic} similarity --- more on Wednesday.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~13, ``Structured Output and Few-Shot Prompting'' \& ``Structured Outputs.''}
 \end{frame}
 
 \begin{frame}{The catch: non-determinism, cost \& reproducibility}
@@ -164,7 +161,6 @@
             {\scriptsize Two models, one prompt --- agreement is a finding, not a given.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~13, ``Reproducibility and Documentation'' \& ``Comparing Model Outputs.'' Connects to the book's AI-disclosure appendix.}
 \end{frame}
 
 % =========================================================================
@@ -189,7 +185,6 @@ response = client.chat.completions.create(
 )
 answer = response.choices[0].message.content   # the model's reply text
 \end{lstlisting}
-    \bottomcite{Textbook Ch.~13, ``Basic Chat Completion.'' Key storage: \textit{Missing Manual} Ch.~29.}
 \end{frame}
 
 \begin{frame}[fragile]{Few-shot classification, one bill at a time}
@@ -214,7 +209,6 @@ for bill in bills:                       # each bill is a dict with a "summary"
     bill["category"] = classify_bill(bill["summary"], client)
     time.sleep(1)                        # rate-limit between API calls
 \end{lstlisting}
-    \bottomcite{Textbook Ch.~13, ``Applied Example: Legislative Bill Analysis,'' Step 1.}
 \end{frame}
 
 \begin{frame}[fragile]{Get JSON out --- and stop it from breaking}
@@ -237,7 +231,6 @@ response = client.chat.completions.create(
 result = json.loads(response.choices[0].message.content)  # always parses
 \end{lstlisting}
     Anthropic reaches the same guarantee through \textbf{tool use}. Keep the \texttt{try/except} for models that offer no guarantee.
-    \bottomcite{Textbook Ch.~13, Step 2 \& ``Structured Outputs: Letting the API Enforce the Format.''}
 \end{frame}
 
 \begin{frame}[fragile]{Embeddings: meaning as vectors}
@@ -265,7 +258,6 @@ sim = 1 - cosine(emb[i], emb[j])
             {\scriptsize Bills about ``school funding'' and ``educational resources'' score high despite no shared keywords.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~13, ``Text Embeddings'' \& Step 3. Internals: \textit{Missing Manual} Ch.~36.}
 \end{frame}
 
 \begin{frame}[fragile]{Two providers, one prompt}
@@ -286,7 +278,6 @@ anthropic_label = resp.content[0].text.strip()
 print(openai_label, anthropic_label, openai_label == anthropic_label)
 \end{lstlisting}
     Agreement on 85\% of cases is common; the 15\% of disagreements are exactly where you need a human-labeled sample to calibrate.
-    \bottomcite{Textbook Ch.~13, ``The Anthropic API'' \& ``Comparing Model Outputs.''}
 \end{frame}
 
 \begin{frame}[fragile]{Mind the cost, pin the version}
@@ -309,7 +300,6 @@ print(f"Estimated cost: ${cost:.4f}")
             {\scriptsize Flagship models cost $>$10$\times$ their mini siblings. Develop on mini; promote to the big model only after validating prompts.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~13, ``Cost Management'' \& ``Reproducibility and Documentation.''}
 \end{frame}
 
 \begin{frame}{Lab: work these, then show-and-tell}
@@ -373,7 +363,6 @@ print(f"Estimated cost: ${cost:.4f}")
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
     \end{columns}
-    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (15\%).}
 \end{frame}
 
 \begin{frame}{A revision menu for Chapter 13}
@@ -386,7 +375,6 @@ print(f"Estimated cost: ${cost:.4f}")
         \item \textbf{Strengthen a thin exercise.} Add expected output, a rubric, or a starter cell so an exercise is self-checking.
         \item \textbf{Extend ``Further Reading.''} An open-weight-models entry (LLaMA, Mistral, Qwen) tied to the access-inequality callout.
     \end{itemize}
-    \bottomcite{Targets drawn from the chapter's callouts, ``Common Issues to Debug,'' and ``Further Reading.''}
 \end{frame}
 
 \begin{frame}{A good revision, a good review --- and honest disclosure}
@@ -436,7 +424,6 @@ print(f"Estimated cost: ${cost:.4f}")
         \item Treat the model as a \textbf{measurement instrument} --- validate against human judgment and \textbf{disclose} how AI was used.
     \end{enumerate}
     \bigskip
-    \bottomcite{Reading: Textbook Ch.~13. Related: \textcite{ziems2024can}; OpenAI \& Anthropic API docs. Disclosure: the AI Coauthorship appendix.}
 \end{frame}
 
 \end{document}

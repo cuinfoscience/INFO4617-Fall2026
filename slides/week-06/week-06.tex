@@ -83,7 +83,6 @@
             {\scriptsize Inspect first, code second.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~6, ``From HTML to Data.''}
 \end{frame}
 
 \begin{frame}{Three strategies, increasingly general}
@@ -106,7 +105,6 @@
             \includegraphics[width=\textwidth]{img/dom_tree.png}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~6.}
 \end{frame}
 
 \begin{frame}{Inspect before you parse}
@@ -133,7 +131,6 @@
             {\scriptsize The Numbers weekly box-office chart --- our first target.}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~6, ``Retrieving and Inspecting.''}
 \end{frame}
 
 \begin{frame}{In the notebook}
@@ -170,7 +167,6 @@ tables = soup.find_all("table")
 for i, table in enumerate(tables):          # inspect each candidate
     print(i, len(table.find_all("tr")), "rows")
 \end{lstlisting}
-    \bottomcite{Textbook Ch.~6, Strategy 1.}
 \end{frame}
 
 \begin{frame}[fragile]{The one-line bug that shifts every column}
@@ -200,7 +196,6 @@ values = [c.get_text(strip=True)
             The extra line of code buys correctness.
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~6, ``Extracting Row Data.''}
 \end{frame}
 
 \begin{frame}[fragile]{Strategy 2 --- \texttt{pandas.read\_html()}}
@@ -219,7 +214,6 @@ df["worldwide_gross"] = pd.to_numeric(               # "$1,234" -> 1234
     df["worldwide_gross"].str.replace(r"[\$,]", "", regex=True), errors="coerce")
 df["studio"] = df["studio"].ffill()                  # fill merged (colspan) cells
 \end{lstlisting}
-    \bottomcite{Textbook Ch.~6, Strategy 2. \texttt{errors="coerce"} keeps the pipeline alive on bad cells.}
 \end{frame}
 
 \begin{frame}[fragile]{Strategy 3 --- custom parser \& CSS selectors}
@@ -241,7 +235,6 @@ soup.select("div.field--name-field-award-categories div.view-grouping")
             \includegraphics[width=\textwidth]{img/oscars_page.png}
         \end{column}
     \end{columns}
-    \bottomcite{Textbook Ch.~6, Strategy 3.}
 \end{frame}
 
 \begin{frame}[fragile]{Make it reusable --- and defensive}
@@ -261,7 +254,6 @@ except requests.RequestException as e:
 # AttributeError fires when .find() returns None and you call .text on it
 # -- the single most common scraping error.
 \end{lstlisting}
-    \bottomcite{Textbook Ch.~6, ``Abstracting into Functions'' \& ``Error Handling Patterns.''}
 \end{frame}
 
 \begin{frame}{Lab: work these, then show-and-tell}
@@ -321,7 +313,6 @@ except requests.RequestException as e:
             \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
     \end{columns}
-    \bottomcite{Contributions \& reviews count toward the Textbook Revisions grade (15\%).}
 \end{frame}
 
 \begin{frame}{A revision menu for Chapter 6}
@@ -333,7 +324,6 @@ except requests.RequestException as e:
         \item \textbf{Strengthen an exercise.} Add expected output, a rubric, or a starter cell so exercises are self-checking.
         \item \textbf{Extend ``Further Reading.''} A data-journalism scrape (ProPublica, The Markup) tied to the ``Public Interest'' callout.
     \end{itemize}
-    \bottomcite{Targets drawn from the chapter's callouts, ``Common Issues,'' and ``Further Reading.''}
 \end{frame}
 
 \begin{frame}{A good revision, and a good review}
@@ -375,7 +365,6 @@ except requests.RequestException as e:
         \item Pages change: the durable skill is \textbf{inspect, hypothesize, verify} --- not memorized class names.
     \end{enumerate}
     \bigskip
-    \bottomcite{Reading: Textbook Ch.~6. Related: \textcite{mitchell2018web}; \textcite{vandenbroucke2018practical}.}
 \end{frame}
 
 \end{document}
