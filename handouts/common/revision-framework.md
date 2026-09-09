@@ -238,6 +238,10 @@ Change:   What this PR does, and anything you chose not to do.
 If you can't fill in **Location** and **Problem** with specifics, you don't have
 a revision yet — you have a hunch. Go back to the chapter and reproduce it.
 
+For the click-by-click mechanics — matching your bug to a file, editing it in
+GitHub's web editor, opening the PR, and what happens after it merges — see
+[`pull-request-walkthrough.md`](pull-request-walkthrough.md).
+
 ---
 
 ## How issues and pull requests are graded
@@ -290,10 +294,12 @@ proposal without asking you a single follow-up question.
   everyone gets GitHub working and files that first issue for credit.
 - **Weeks 3–4** — everything still happens in the browser. Week 3: read the
   open issues, *comment* to claim one or sharpen one, and watch a pull request
-  made with GitHub's web editor (from a fork — you don't need write access).
-  The deliverable is an issue or a substantive comment. Week 4: the same flow
-  in github.dev (press `.` on any repo page), where you can edit several files
-  in one change.
+  made with GitHub's web editor (from a fork — you don't need write access
+  yet). The deliverable is an issue or a substantive comment. **Week 4: you
+  get write access** — no fork required. Open your own pull request directly
+  in GitHub's web editor, one file at a time; see
+  [`pull-request-walkthrough.md`](pull-request-walkthrough.md) for the exact
+  steps.
 - **Weeks 5–14** — you open *pull requests* from your own clone (GitHub
   Desktop or `gh`) and review two classmates'.
 - Each week's lecture deck ends with a **revision menu**: the same seven types,
