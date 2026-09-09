@@ -25,13 +25,13 @@
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Two formats carry almost all web data: \textbf{XML} (a tree of tags) and \textbf{JSON} (nested lists and dictionaries). This week we learn to parse both.
+            Two formats carry almost all web data: \textbf{XML} (a tree of tags) and \textbf{JSON} (nested lists and dictionaries).
 
             \bigskip
 
             \dayband{Monday}{Labor Day --- no class}
             \begin{itemize}\small
-                \item Monday's concept intro is \textbf{folded into Wednesday}
+                \item Monday's concept intro is folded into Wednesday
             \end{itemize}
 
             \medskip
@@ -45,42 +45,41 @@
 
             \dayband{Friday}{Textbook revisions}
             \begin{itemize}\small
-                \item Propose \& peer-review pull requests improving Chapter 4
+                \item Propose \& peer-review pull requests from Chapters 1--4
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{block}{Companion notebook}
                 \footnotesize \texttt{ch-04-data-formats.ipynb}
             \end{block}
-            \begin{alertblock}{Short week}
-                \footnotesize No class Monday (Labor Day). We meet \textbf{Wednesday} (concepts + notebook) and \textbf{Friday} (revisions).
-            \end{alertblock}
         \end{column}
     \end{columns}
 \end{frame}
 
 % =========================================================================
-\section{Wednesday · Concepts \& Notebook Lab}
+\section{Wednesday · Concepts \& Notebook}
 % =========================================================================
 
 \begin{frame}{The role of data formats}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Before you can \textit{extract} data from the web, you have to understand how it is \textit{structured}. Two formats dominate:
+            Two formats dominate data from the web:
 
             \medskip
             \begin{itemize}\small
-                \item \textbf{XML} --- the older, document-centric format; a tree of nested tags.
-                \item \textbf{JSON} --- the newer, lighter format of the API economy; maps directly onto Python lists and dictionaries.
+                \item \textbf{XML} --- the older format and a down-payment on HTML: a tree of nested tags.
+                \item \textbf{JSON} --- the newer, lighter format of the API economy: lists and dictionaries.
             \end{itemize}
 
             \medskip
-            Every page, API response, and data feed you meet this semester is one of these --- or HTML, which is XML's sibling.
+            Every page, API response, and data feed you meet this semester is going to be a flavor of XML or JSON
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{block}{When to use which}
                 \footnotesize
-                \textbf{XML}: older web services, government feeds (Congress, SEC, RSS), configuration files.\\[0.5em]
+                \textbf{XML}: older web services, government feeds (Congress, SEC, RSS), configuration files.
+
+                \medskip
                 \textbf{JSON}: modern web APIs, database exports, service-to-service exchange.
             \end{block}
         \end{column}
@@ -90,25 +89,19 @@
 \begin{frame}{A brief history of XML}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            XML began in 1996, when a W3C working group set out to simplify SGML --- a much older, much more complicated markup standard --- into something the web could actually use.
+            XML and HTML are often assumed to be one a subset of the other, but they are siblings descending from SGML
+            
+            \medskip
+            The HTML you scrape in the wild almost never is valid XML, need a different more generous parser
 
             \medskip
-            The goal was explicit: keep SGML's extensibility (define your own tags) while making documents both human-readable \textit{and} machine-parseable, without SGML's complexity.
+            XML is a foundation for a whole family of other languages: XHTML (websites), SVG (images), MathML (math equations), RSS (podcasts)
 
             \medskip
-            XML 1.0 became a W3C Recommendation on \textbf{February 10, 1998}. It was designed as a foundation, not a single format --- a whole family of languages is built on it: XHTML, SVG, MathML, RSS, RDF.
+            XML hides in plain sight: open a \texttt{.docx}, \texttt{.xlsx}, or \texttt{.svg} file's internals and you are looking at it.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Timeline}
-                \footnotesize
-                \textbf{1996} --- W3C working group begins
-
-                \medskip
-                \textbf{Feb 1998} --- XML 1.0 becomes a W3C Recommendation
-
-                \medskip
-                \textbf{Today} --- backbone of RSS, SOAP, government feeds, Office file formats
-            \end{block}
+            \includegraphics[width=\textwidth]{slides/week-04/img/zip-folders.png}
         \end{column}
     \end{columns}
 \end{frame}
@@ -116,25 +109,19 @@
 \begin{frame}{A brief history of JSON}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Douglas Crockford specified JSON in the early 2000s --- describing a format he noticed was already implicit in JavaScript's own object syntax, rather than inventing something new. \texttt{json.org} went live not long after.
+            JSON specified in the early 2000s
 
             \medskip
-            JSON's design goal was the opposite of XML's: no tags, no schema, no comments --- just the two structures (objects and arrays) that ``virtually all modern programming languages support,'' built to be parsed by a machine in one step.
+            JSON's design goal was the opposite of XML's: no tags, no schema, no comments --- ``just the data''
+            
+            \medskip
+            Objects and arrays that can be recognized by all modern programming languages and easy for machines to parse
 
             \medskip
-            Standardization came later, in stages: RFC 4627 (2006), ECMA-404 (2013), and the current IETF standard, RFC 8259 (2017). By the 2010s, AJAX and the API economy had made it the default.
+            As Python-native coders, JSON intuitively matches lists and dictionaries you already know
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Timeline}
-                \footnotesize
-                \textbf{Early 2000s} --- Crockford specifies JSON; \texttt{json.org} launches
-
-                \medskip
-                \textbf{2006} --- RFC 4627, the first formal spec
-
-                \medskip
-                \textbf{2013 / 2017} --- ECMA-404, then RFC 8259
-            \end{block}
+            \includegraphics[width=\textwidth]{slides/week-04/img/json-statham.jpg}
         \end{column}
     \end{columns}
 \end{frame}
@@ -158,25 +145,6 @@
     A value hides in one of two places: \textbf{text} (read with \texttt{.text}) or an \textbf{attribute} (read with brackets).
 \end{frame}
 
-\begin{frame}{XML and HTML: siblings, not parent and child}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            XML and HTML are often assumed to be one a subset of the other. They are not --- they are \textbf{siblings}. Both descend from SGML, an older and far more complex markup standard from the 1980s.
-
-            \medskip
-            The difference is strictness. XML enforces well-formedness: every tag closes, attributes are quoted, nesting is exact --- break any rule and the parser refuses to continue. HTML historically did not: browsers were built to guess at malformed markup and render it anyway.
-
-            \medskip
-            Only the stricter \textbf{XHTML} dialect is actually valid XML. The HTML you scrape in the wild almost never is --- which is exactly why Ch.~6 teaches you a forgiving parser instead of a strict one.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{The XML family}
-                \footnotesize XHTML, SVG, MathML, RSS, and RDF are all XML --- ``define your own tags'' turns out to be useful for more than one problem.
-            \end{block}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 \begin{frame}[fragile]{JSON: lists and dictionaries you already know}
     JSON maps onto two Python structures you already use. The weather forecast, peeled one layer at a time:
 \begin{lstlisting}[basicstyle=\large\ttfamily]
@@ -195,7 +163,7 @@
     \begin{columns}[T]
         \begin{column}{0.48\textwidth}
             \begin{block}{JSON}
-                \footnotesize
+                \small
                 \textbf{+} Compact --- no repeated tag names
 
                 \textbf{+} Parses natively in JavaScript
@@ -211,7 +179,7 @@
         \end{column}
         \begin{column}{0.48\textwidth}
             \begin{block}{XML}
-                \footnotesize
+                \small
                 \textbf{+} Schema validation (DTD/XSD) before parsing
 
                 \textbf{+} Rich vocabulary: attributes, mixed content, namespaces
@@ -227,80 +195,48 @@
         \end{column}
     \end{columns}
     \medskip
-    \centering\small Neither is ``better'' --- each is a different bet about who, or what, reads the document.
+    \centering\small Neither is intrinsically better than the other --- just different tools for different needs
 \end{frame}
 
-\begin{frame}{Where JSON shows up}
+\begin{frame}{Where JSON and XML show up}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            JSON dominates anywhere a \textbf{program} is the primary reader.
+            JSON dominates anywhere a \textbf{program} is the primary reader, particularly APIs
 
             \medskip
-            REST APIs return it almost by default now. SOAP, the XML-based protocol REST displaced, wraps every request in an XML namespace envelope that JSON has no equivalent for --- part of why SOAP use has declined for years while REST and GraphQL grew.
+            XML persists where a human sometimes needs to read the document, where a strict contract matters, or where the data predates the JSON era.
 
             \medskip
-            JSON Web Tokens (the credential your browser holds after you log in) are JSON underneath. So are most modern config files --- \texttt{package.json}, Kubernetes manifests --- because the ecosystem around them is JavaScript-adjacent and a program on both ends is doing the reading.
+            Government and legislative systems still commonly use XML --- partly because XSD validation guarantees a submitted document has the fields it is supposed to have.
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{alertblock}{Rule of thumb}
-                \footnotesize If a program wrote it and a program will read it, expect JSON.
+                \footnotesize 
+                If a program wrote it and a program will read it, expect JSON.
+
+                \medskip
+                If humans are involved in read/write or high-stakes data, expect XML.
             \end{alertblock}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{Where XML persists}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            XML persists where a \textbf{human} sometimes needs to read the document, where a \textbf{strict contract} matters, or where the data \textbf{predates the JSON era}.
+\begin{frame}{Common pipeline}
 
-            \medskip
-            Government and legislative systems (today's House roster), SEC filings, and enterprise data interchange still commonly use XML --- partly legacy, partly because XSD validation mechanically guarantees a submitted document has the fields it is supposed to have.
-
-            \medskip
-            And XML hides in plain sight: open a \texttt{.docx}, \texttt{.xlsx}, or \texttt{.svg} file's internals and you are looking at it. Office files are a zip archive of XML documents; SVG is XML a browser renders directly.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Rule of thumb}
-                \footnotesize If a document needs to double as data \textit{and} something a human might open, expect XML.
-            \end{alertblock}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{One pipeline unifies the whole course}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
             Whether data starts as XML, JSON, HTML, or PDF text, the move into analysis is always the same:
 
             \medskip
             \begin{center}
-                \textbf{find records} $\rightarrow$ \textbf{extract fields} $\rightarrow$\\[0.2em] \textbf{list of dictionaries} $\rightarrow$ \texttt{pd.DataFrame}
+                \textbf{find records} $\rightarrow$ \textbf{extract fields} $\rightarrow$ \textbf{\texttt{lists} + \texttt{dicts}} $\rightarrow$ \texttt{pd.DataFrame}
             \end{center}
 
             \medskip
-            The DataFrame is the \textbf{universal intermediate format}. Reach it and all of pandas opens up: filter, group, cross-tabulate, merge.
-
-            \medskip
-            The source changes; the tag names change; \textbf{the pipeline stays the same}.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{You reuse this pattern in\dots}
-                \footnotesize
-                \begin{itemize}\footnotesize
-                    \item HTML tables --- Ch.~6
-                    \item archived pages --- Ch.~7
-                    \item PDF text --- Ch.~9
-                    \item Wikipedia, government \& social APIs --- Ch.~10--12
-                \end{itemize}
-            \end{block}
-        \end{column}
-    \end{columns}
+            Once you are in a DataFrame, a whole host of other data science methods for cleaning, filtering, grouping, aggregating, merging open up
 \end{frame}
 
 \begin{frame}[fragile]{Parsing XML with BeautifulSoup}
     Parse the string into a navigable tree, then search it. \texttt{.find()} returns the first match, \texttt{.find\_all()} returns them all --- each searches the \textit{entire} subtree beneath a tag:
-\begin{lstlisting}
+\begin{lstlisting}[basicstyle=\small\ttfamily]
 from bs4 import BeautifulSoup
 
 soup = BeautifulSoup(house_raw, "xml")   # the "xml" parser comes from lxml
@@ -316,17 +252,19 @@ for m in members:
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{The two-place problem --- and the crash that guards it}
+\begin{frame}[fragile]{Data exists in two different places in XML}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             A value is either \textbf{text} or an \textbf{attribute}:
-\begin{lstlisting}
+\begin{lstlisting}[basicstyle=\small\ttfamily]
 state = soup.find("state")
 state["postal-code"]                # "CO"
 state.find("state-fullname").text   # "Colorado"
 \end{lstlisting}
+            
+            \bigskip
             A missing tag makes \texttt{.find()} return \texttt{None}:
-\begin{lstlisting}
+\begin{lstlisting}[basicstyle=\small\ttfamily]
 # AttributeError: None has no .text
 m.find("party").text
 # guard every extraction instead:
@@ -350,7 +288,7 @@ m.find("party").text if m.find("party") else None
 \begin{frame}[fragile]{XML $\rightarrow$ DataFrame: the real House roster}
     \begin{columns}[T]
         \begin{column}{0.55\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 import requests, pandas as pd
 
 url = "https://clerk.house.gov/xml/lists/MemberData.xml"
@@ -389,7 +327,7 @@ July 1, 2026
 
 \begin{frame}[fragile]{JSON: parse a string, then the list-of-dictionaries pipeline}
     \texttt{json.loads()} turns a \textbf{s}tring into Python objects (\texttt{json.load()} reads a \textbf{f}ile). With \texttt{requests}, \texttt{response.json()} does it for you:
-\begin{lstlisting}
+\begin{lstlisting}[basicstyle=\small\ttfamily]
 import json, pandas as pd
 
 data = json.loads('{"state": "Colorado", "population": 5773714}')
@@ -407,7 +345,7 @@ df = pd.DataFrame(census)         # one dict per row, keys -> columns
 \begin{frame}[fragile]{JSON: peel the onion on a live API}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-\begin{lstlisting}
+\begin{lstlisting}[basicstyle=\small\ttfamily]
 import requests
 
 url = "https://api.open-meteo.com/v1/forecast"
@@ -473,13 +411,6 @@ data.get("elevation", "unknown")  # .get avoids KeyError
     \end{columns}
 \end{frame}
 
-\begin{frame}[standout]
-    The data source changes.\\
-    The tag names change.\\
-    The pipeline stays the same.\\[1em]
-    {\large \texttt{find\_all} $\rightarrow$ dicts $\rightarrow$ \texttt{DataFrame}.}
-\end{frame}
-
 % =========================================================================
 \section{Friday · Textbook Revisions}
 % =========================================================================
@@ -524,7 +455,7 @@ Recommendation in 1998.
 
 \begin{frame}{A good revision, and a good review}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
+        \begin{column}{0.45\textwidth}
             \begin{block}{A strong PR}
                 \begin{itemize}\small
                     \item One focused change, clearly titled
@@ -535,7 +466,7 @@ Recommendation in 1998.
                 \end{itemize}
             \end{block}
         \end{column}
-        \begin{column}{0.35\textwidth}
+        \begin{column}{0.45\textwidth}
             \begin{block}{A strong review}
                 \begin{itemize}\small
                     \item Runs / reads the change, not just skims
