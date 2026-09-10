@@ -49,6 +49,8 @@ name a chapter without linking to it. Starting from the live page, the fix
 began with **Edit this page** — GitHub opens `ch-04-data-formats.qmd`, the
 same source Wednesday's slides used.
 
+![The live chapter page, with "Edit this page" and "Report an issue" at the bottom of the right-hand sidebar](../../slides/week-04/img/handout_edit_this_page.png)
+
 ---
 
 ## 2 · Edit the file in GitHub's web editor
@@ -65,6 +67,9 @@ You land on the raw `.qmd` source in GitHub's file viewer. From here:
    whole file. Search for a distinctive phrase from your bug — for the
    worked example, `Missing Manual Reference` — so you land in the same spot
    every time.
+
+   ![GitHub's in-editor search bar, open and searching for "missing manual" — not the browser's find](../../slides/week-04/img/handout_editor_search.png)
+
 3. Make the edit. Shape depends on what you found — a broken link, a stale
    code block, a missing citation — but a Markdown link fix is the most
    common first PR, and it's small enough to see the whole pattern at once:
@@ -86,6 +91,8 @@ You land on the raw `.qmd` source in GitHub's file viewer. From here:
    change reads correctly (a link is blue and underlined), any formatting
    around it survived, and nothing else on the page moved.
 
+   ![The diff view after the edit — the old line in red, the new linked version in green](../../slides/week-04/img/handout_preview_diff.png)
+
 > **Note:** one change per pull request. Add the fix you came for, not every
 > other thing you happen to notice along the way — save those for their own
 > PRs.
@@ -102,6 +109,9 @@ You land on the raw `.qmd` source in GitHub's file viewer. From here:
    `main`; that doesn't mean you should. A branch gives a reviewer something
    to read before your change ships, and it's what triggers the checks
    described in §5 below.
+
+   ![The commit panel: a title, then the two save options — "Commit directly to the main branch" is selected by default, but "Create a new branch..." is the one to pick](../../slides/week-04/img/handout_commit_branch_choice.png)
+
 3. Click **Propose changes**. GitHub moves you to the **Comparing changes**
    screen — your branch on the left, `main` on the right, the diff between
    them. Check it: one line removed, one added, nothing else. That's what

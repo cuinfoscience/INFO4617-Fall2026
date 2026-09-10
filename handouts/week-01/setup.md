@@ -38,7 +38,7 @@ jupyter notebook
 
 Jupyter opens in your browser. It holds code, notes, and results in one file.
 
-![Anaconda starts Jupyter in your browser](../slides/week-01/img/anaconda_jupyter.png)
+![Anaconda starts Jupyter in your browser](../../slides/week-01/img/anaconda_jupyter.png)
 
 > **Note:** do all coursework in Python. Do not use spreadsheet or business
 > intelligence software (Excel, Tableau, Power BI) for assignments.
