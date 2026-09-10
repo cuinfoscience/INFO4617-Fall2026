@@ -14,9 +14,10 @@ description you write, and what happens after you merge are identical either
 way. Only the editor changes.
 
 **Running example.** Wednesday's slides walked through one real fix: Chapter
-4's "Missing Manual Reference" callout names Chapter 20 but never links to
-it. That example runs through every step below. Your bug will be different;
-the mechanics won't be.
+4's "Missing Manual Reference" callout named Chapter 20 but never linked to
+it. That gap is already fixed on `main` — what follows is a worked example
+of exactly how, not a live task. Your bug will be a different one; the
+mechanics below are identical either way.
 
 ---
 
@@ -43,10 +44,10 @@ you start, because GitHub finds it for you:
 > matching `.qmd` by a script, so a direct edit gets silently overwritten the
 > next time someone regenerates them.
 
-**Worked example.** Rereading Chapter 4, you notice the "Missing Manual
-Reference" callout names a chapter but gives no way to click through to it.
-You're on the live page, so you click **Edit this page**. GitHub opens
-`ch-04-data-formats.qmd` — the same source Wednesday's slides used.
+**Worked example.** Chapter 4's "Missing Manual Reference" callout used to
+name a chapter without linking to it. Starting from the live page, the fix
+began with **Edit this page** — GitHub opens `ch-04-data-formats.qmd`, the
+same source Wednesday's slides used.
 
 ---
 

@@ -424,19 +424,19 @@ data.get("elevation", "unknown")  # .get avoids KeyError
 \section{Friday · Textbook Revisions}
 % =========================================================================
 
-\begin{frame}{Today's case study --- link the Missing Manual}
+\begin{frame}{A worked example --- linking the Missing Manual}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Open \texttt{ch-04-data-formats.qmd} and find this line:
+            Until this week, \texttt{ch-04-data-formats.qmd} had this line:
 
             \medskip
             \textit{``For more on data file formats\ldots{} see Missing Manual Chapter 20: Data File Formats.''}
 
             \medskip
-            It names a chapter. It does not link to it. A reader has to leave the page, find the Missing Manual site, and search for Chapter 20 by hand.
+            It named a chapter. It didn't link to it. A reader had to leave the page, find the Missing Manual site, and search for Chapter 20 by hand.
 
             \medskip
-            Your fix: wrap that name in a Markdown link. Eight steps, start to finish.
+            Here's exactly how that got fixed --- eight steps, start to finish. Yours will be a different gap; the mechanics are identical.
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{alertblock}{The target}
@@ -594,10 +594,10 @@ Change:   Wrapped the existing text in a Markdown link to
             Watch for a reviewer's comments. Push a follow-up commit to the same branch if asked, or defend your choice.
 
             \medskip
-            When it merges, the book republishes itself. Reload the chapter in a few minutes --- your link is live.
+            When it merges, the book republishes itself. Reload the chapter in a few minutes --- your fix is live, the same way this one is.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{alertblock}{The loop you just closed}
+            \begin{alertblock}{The loop you're about to close}
                 \footnotesize Reader $\rightarrow$ found a gap $\rightarrow$ edited $\rightarrow$ opened a PR $\rightarrow$ merged $\rightarrow$ live page. All of it in a browser tab.
             \end{alertblock}
         \end{column}
