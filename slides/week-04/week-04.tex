@@ -424,29 +424,182 @@ data.get("elevation", "unknown")  # .get avoids KeyError
 \section{Friday · Textbook Revisions}
 % =========================================================================
 
-\begin{frame}[fragile]{Friday --- improving Chapter 4 together}
+\begin{frame}{A worked example --- linking the Missing Manual}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-04-data-formats.qmd} and reviews a classmate's.
+            Until this week, \texttt{ch-04-data-formats.qmd} had this line:
 
-            \bigskip
-            The workflow (from Week 3):
+            \medskip
+            \textit{``For more on data file formats\ldots{} see Missing Manual Chapter 20: Data File Formats.''}
+
+            \medskip
+            It named a chapter. It didn't link to it. A reader had to leave the page, find the Missing Manual site, and search for Chapter 20 by hand.
+
+            \medskip
+            Here's exactly how that got fixed --- eight steps, start to finish. Yours will be a different gap; the mechanics are identical.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{The target}
+                \footnotesize \url{https://cuinfoscience.github.io/INFO-Missing-Manual/chapters/data-file-formats.html}
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 1 --- find the file}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Two ways in:
             \begin{enumerate}\small
-                \item Fork or branch the book repo
-                \item Edit the chapter; commit with a clear message
-                \item Open a PR describing \textit{what} and \textit{why}
-                \item Review two peers' PRs: kind, specific, actionable
+                \item Open the rendered chapter. Click \textbf{Edit this page} in the sidebar.
+                \item Or browse the repo directly: \texttt{cuinfoscience/Web-Data-Science-Book}, then open \texttt{ch-04-data-formats.qmd}.
+            \end{enumerate}
+
+            \medskip
+            Both paths land on the same page: the raw \texttt{.qmd} source, in GitHub's file viewer.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Edit the right file}
+                \footnotesize The \texttt{.qmd} is the source. Never the rendered HTML, and never the \texttt{.ipynb} --- it is generated from the chapter, and your edit would be overwritten.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 2 --- open the editor}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Click the pencil icon in the top right of the file view --- \textbf{Edit this file}.
+
+            \medskip
+            You have write access now. GitHub takes you straight into an in-browser text editor. No fork, no separate copy --- you are editing the real repository.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{One change per PR}
+                \footnotesize A PR is a conversation about one change. Add one link today, not everything you happen to notice.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 3 --- find the line}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            The chapter runs past 500 lines. Do not scroll to find one sentence.
+
+            \medskip
+            Click inside the editor. Press \textbf{Ctrl+F} (\textbf{Cmd+F} on a Mac) to open the editor's own search bar.
+
+            \medskip
+            Search for \texttt{Missing Manual Reference}. It appears once, near the end of the chapter.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{The wrong search bar still works, badly}
+                \footnotesize Your browser's Ctrl+F only searches what is currently rendered. GitHub's editor holds the whole file. Search inside the editor pane, not the page.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4 --- write the Markdown link}
+    A Markdown link has the form \texttt{[text](url)}. Wrap the existing phrase --- do not retype it:
+\begin{lstlisting}[language=,basicstyle=\ttfamily\small]
+Before:
+...see *Missing Manual* Chapter 20: Data File Formats.
+
+After:
+...see [*Missing Manual* Chapter 20: Data File Formats]
+(https://cuinfoscience.github.io/INFO-Missing-Manual/
+chapters/data-file-formats.html).
+\end{lstlisting}
+    The italics markup stays inside the brackets. Link text can carry other formatting.
+\end{frame}
+
+\begin{frame}{Step 5 --- preview it}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Click the \textbf{Preview} tab above the editor.
+
+            \medskip
+            Check three things:
+            \begin{enumerate}\small
+                \item The phrase is blue and underlined --- a live link.
+                \item The italics survived --- \textit{Missing Manual} still reads in italics.
+                \item Nothing else on the page changed.
             \end{enumerate}
         \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{\footnotesize The reviewer's tool: a suggestion}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Do not click the link yet}
+                \footnotesize Verify it visually first. Test that it actually resolves after the PR's render check runs.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 6 --- commit to a new branch}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Scroll down. Below the editor, GitHub asks how to save your change.
+
+            \medskip
+            Write a short commit title: \textit{``Link the Missing Manual chapter reference in Ch.~4.''}
+
+            \medskip
+            Select \textbf{Create a new branch for this commit and start a pull request} --- not \textit{Commit directly to the main branch}.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Write access is not a shortcut}
+                \footnotesize You can push straight to \texttt{main}. That does not mean you should. A branch gives a reviewer something to read before it ships.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 7 --- open the pull request}
+    Click \textbf{Propose changes}.
+
+    \medskip
+    GitHub moves you to the \textbf{Comparing changes} screen: your branch on the left, \texttt{main} on the right, the diff in between.
+
+    \medskip
+    Check the diff. One line removed, one line added, nothing else. That is what ``one change per PR'' looks like on screen, not just in principle.
+
+    \medskip
+    Click \textbf{Create pull request} to open the title and description form.
+\end{frame}
+
+\begin{frame}[fragile]{Step 8 --- write a good description}
+    Use the same four fields as your issues, now describing a fix instead of a problem:
 \begin{lstlisting}[language=,basicstyle=\ttfamily\footnotesize]
-```suggestion
-XML 1.0 became a W3C
-Recommendation in 1998.
-```
+Location: ch-04-data-formats.qmd, "Missing Manual Reference"
+
+Problem:  The callout names Chapter 20 but gives no way to
+          click through to it.
+
+Why:      A reader has to leave the page and search the
+          Missing Manual site by hand to find the chapter.
+
+Change:   Wrapped the existing text in a Markdown link to
+          the chapter's page.
 \end{lstlisting}
-            {\footnotesize One click for the author to accept it.}
+    Click \textbf{Create pull request}. Your PR is open.
+\end{frame}
+
+\begin{frame}{What happens next}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Every PR against the book triggers a render check. Green means the book still builds with your change. Red means read the log before asking --- the failing line is usually named.
+
+            \medskip
+            Watch for a reviewer's comments. Push a follow-up commit to the same branch if asked, or defend your choice.
+
+            \medskip
+            When it merges, the book republishes itself. Reload the chapter in a few minutes --- your fix is live, the same way this one is.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{The loop you're about to close}
+                \footnotesize Reader $\rightarrow$ found a gap $\rightarrow$ edited $\rightarrow$ opened a PR $\rightarrow$ merged $\rightarrow$ live page. All of it in a browser tab.
+            \end{alertblock}
         \end{column}
     \end{columns}
 \end{frame}
@@ -489,6 +642,23 @@ Recommendation in 1998.
     \end{columns}
     \medskip
     \centering\small Next week: \textbf{Web Architecture \& Protocols} --- how a URL becomes a rendered page (HTTP, requests, status codes).
+\end{frame}
+
+\begin{frame}[fragile]{The reviewer's tool --- a suggestion}
+    \begin{columns}[T]
+        \begin{column}{0.55\textwidth}
+            Reviewing someone else's PR? Do not just describe the fix in a comment. Propose it directly:
+\begin{lstlisting}[language=,basicstyle=\ttfamily\footnotesize]
+```suggestion
+XML 1.0 became a W3C
+Recommendation in 1998.
+```
+\end{lstlisting}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            One click for the author to accept it. This is the fastest way to turn ``must fix'' into a merged change.
+        \end{column}
+    \end{columns}
 \end{frame}
 
 % =========================================================================

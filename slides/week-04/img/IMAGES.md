@@ -39,3 +39,37 @@ EOF
 Re-run before class if you want the forecast current for that day; the
 chapter's own framing ("yours will differ, and that's fine — record the
 date") applies here too.
+
+## Handout screenshots (`handout_*.png`)
+
+Four real GitHub screenshots for `handouts/common/pull-request-walkthrough.md`,
+captured by the instructor from an actual write-access session — not scripted
+or regenerable, so recapture manually if GitHub's UI changes enough to make
+these stale:
+
+- `handout_edit_this_page.png` — the live chapter page's sidebar, showing
+  **Edit this page** / **Report an issue**.
+- `handout_editor_search.png` — GitHub's in-editor search bar, open and
+  searching for the target line.
+- `handout_preview_diff.png` — the diff view after the edit, old line in red
+  and new line in green.
+- `handout_commit_branch_choice.png` — the commit panel, showing both save
+  options.
+
+`handout_commit_branch_choice.png` had one field redacted before use: the
+"Commit Email" dropdown showed the instructor's real address, which has no
+pedagogical value in the handout and shouldn't be published to a public repo.
+Redacted with:
+
+```python
+from PIL import Image, ImageDraw
+im = Image.open("4.png").convert("RGB")
+draw = ImageDraw.Draw(im)
+draw.rectangle([20, 968, 520, 1058], fill=(30, 33, 40))
+draw.rectangle([20, 968, 520, 1058], outline=(70, 74, 84), width=2)
+```
+
+All four were then downscaled to 700px wide (LANCZOS), preserving each
+image's own aspect ratio rather than force-cropping to a fixed size — these
+are dense UI screenshots and a hard crop would either cut content or blur
+small text.
