@@ -60,13 +60,19 @@ Most sites don't advertise their feed on the homepage:
 
 ## Browse further
 
-Ten examples won't cover everyone's interests. [Feedspot](https://www.feedspot.com/)
-maintains a much larger, actively updated directory, organized by category:
+Ten examples won't cover everyone's interests. A few larger, actively
+maintained resources for finding more:
 
-- [Best News RSS Feeds by Category](https://rss.feedspot.com/news_rss_feeds/)
-  — national, business, politics, regional, and more
-- [Best Podcast RSS Feeds by Category](https://rss.feedspot.com/bestpodcasts_rss_feeds/)
-  — organized by topic; each entry links to its actual feed
+- [awesome-rsshub-routes](https://github.com/JackyST0/awesome-rsshub-routes)
+  — a searchable, health-checked directory of both official RSS feeds and
+  [RSSHub](https://docs.rsshub.app/)-generated ones, for sites that don't
+  publish a native feed at all.
+- [awesome-rss-feeds](https://github.com/plenaryapp/awesome-rss-feeds) — a
+  curated list of RSS feeds (and OPML files) across news and other
+  categories.
+- [Most Popular RSS Feeds](https://rss.com/blog/popular-rss-feeds/#the-most-popular-podcast-rss-feeds)
+  — a roundup of widely-followed podcast feeds specifically (the link jumps
+  straight to that section).
 
 Pick something you'd actually want to read or listen to. The exercise works
 the same regardless of topic, and you'll enjoy the debugging more if the
