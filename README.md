@@ -35,6 +35,7 @@ under `handouts/week-NN/`.
 | File | Purpose |
 | --- | --- |
 | [`handouts/week-01/setup.md`](handouts/week-01/setup.md) | Self-paced environment setup — Anaconda, Git, GitHub — done before the first notebook lab |
+| [`handouts/week-04/rss-feeds.md`](handouts/week-04/rss-feeds.md) | Starter RSS feeds (news and podcasts), the feed-finding technique, and a directory to browse more — for Chapter 4's lab and take-home. |
 | [`handouts/common/revision-framework.md`](handouts/common/revision-framework.md) | The framework for proposing textbook revisions: three families, seven types, the issue/PR skeleton, and how revisions are graded. Used every Friday. |
 | [`handouts/common/pull-request-walkthrough.md`](handouts/common/pull-request-walkthrough.md) | The click-by-click mechanics: matching a bug to its file, editing in GitHub's web editor, opening the PR, writing the description, and what happens after it merges. |
 
