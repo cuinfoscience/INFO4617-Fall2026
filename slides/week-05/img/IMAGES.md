@@ -1,13 +1,28 @@
 # Images for `week-05`
 
-Five of the six images are **real, script-generated assets** as of the Ch.~5
-slide restructure: `protocol_stack.png`, `url_anatomy.png`,
-`request_lifecycle.png`, and `tcp_handshake.png` are diagrams drawn by
-`generate_images.py`; `pageviews_timeseries.png` is a live chart pulled from
-the Wikimedia pageviews API, using the exact same call and date range
+Four images are **real, script-generated assets** as of the Ch.~5 slide
+restructure: `protocol_stack.png`, `url_anatomy.png`, `request_lifecycle.png`,
+and `tcp_handshake.png` are diagrams drawn by `generate_images.py`;
+`pageviews_timeseries.png` is a live chart pulled from the Wikimedia
+pageviews API, using the exact same call and date range
 (`University_of_Colorado_Boulder`, `20260101`-`20260131`) shown in the
 Wednesday "Make an API call, get a time series" slide, so the chart matches
 what students actually see if they run that cell themselves.
+
+## Real, hand-sourced images
+
+- `arpanet_map_1977.png` -- "ARPANET Logical Map, March 1977," downloaded
+  from [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Arpanet_logical_map,_march_1977.png)
+  (public domain, US no-notice; Computer History Museum collection). Used
+  on the "A brief history: ARPANET and a persistent myth" frame.
+- `network-requests-inspector.png` -- a real DevTools Network-tab
+  screenshot, captured and dropped in directly (via Overleaf), replacing
+  the `dev_tools_network.png` placeholder this file previously described.
+  `dev_tools_network.png` itself is no longer referenced by any frame but
+  is left in place rather than deleted.
+- `how-do-you-do.jpeg` -- a still from the "How do you do, fellow kids"
+  meme, added to the User-Agent-spoofing frame. Not regenerable/scripted;
+  replace by hand if it ever needs to change.
 
 Regenerate all five with:
 
