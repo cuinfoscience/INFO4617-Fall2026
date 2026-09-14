@@ -74,7 +74,7 @@
 
             \bigskip
 
-            Understanding this sequence transforms web data collection \textbf{from magic into engineering} --- and turns debugging from guesswork into systematic diagnosis.
+            Web data science can fail at any of these levels, so debugging requires diagnoses each part.
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
@@ -91,8 +91,7 @@
 
             \bigskip
 
-            \textbf{TCP/IP --- the transport.} Every machine on a public network has an IP address. IPv4 offers $2^{32}\approx4.3$ billion of them; IPv6 offers $2^{128}\approx3.4\times10^{38}$. Data hops router to router to arrive --- as discrete \textbf{packets}, each wrapped in its own routing headers.
-
+            \textbf{TCP/IP --- the transport.} Every machine on a public network has an IP address. Data is broken into packets, which hop across different router to router paths, and are re-assembled on arrival.
             \bigskip
 
             \textbf{DNS --- the address book.} It maps a name like \texttt{en.wikipedia.org} to an IP. Names are hierarchical --- \texttt{subdomain.domain.TLD} --- and services follow conventions: \texttt{api.agency.gov}, \texttt{data.agency.gov}.
@@ -100,7 +99,7 @@
         \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/protocol_stack.png}\\
-            {\scriptsize Four protocols, one layered conversation.}
+            {\scriptsize Four protocols.}
         \end{column}
     \end{columns}
 \end{frame}
@@ -110,41 +109,39 @@
 
     \medskip
 
-    \begin{columns}[T]
-        \begin{column}{0.55\textwidth}
-            \begin{itemize}\small
-                \item What you see is the \textbf{DOM}, not the original HTML --- the page \emph{after} JavaScript finished modifying it. View Source shows the original bytes; if an element is in the Inspector but missing from \texttt{requests.get(url).text}, JavaScript put it there.
-                \item \textbf{Hover} a node to highlight it on the page; the \textbf{element picker} icon does the reverse --- click the page, land on the node.
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.45\textwidth}
-            \begin{itemize}\small
-                \item Right-click a node for \textbf{Copy selector} / \textbf{Copy XPath} --- a working starting point for \texttt{soup.select()}, though often longer than it needs to be.
-                \item Edits here are local and temporary --- safe to delete a cookie banner and see the structure beneath.
-            \end{itemize}
-        \end{column}
-    \end{columns}
+    \begin{itemize}\small 
+        \item What you see is the ``document object model'' --- the page \emph{after} JavaScript finished making it look nicer.
+        \item ``View Source'' shows the original bytes --- if an element is in the Inspector but missing from \texttt{requests.get(url).text}, JavaScript put it there.
+        \item \textbf{Hover} a node to highlight it on the page
+        \item Right-click a node for \textbf{Copy selector} / \textbf{Copy XPath} --- a working starting point for \texttt{soup.select()}, though often longer than it needs to be.
+        \item Edits here are local and temporary --- safe to delete a cookie banner and see the structure beneath.
+    \end{itemize}
 
     \medskip
-    \small Start on a plain Wikipedia article --- commercial sites bury structure under tracking scripts.
+    Start on a plain Wikipedia article --- commercial sites bury structure under tracking scripts.
 \end{frame}
 
 \begin{frame}{Inspecting requests: the Network tab}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Same DevTools window, \textbf{Network} tab. Reload \emph{after} opening it --- it only records what happens while visible. Check \textbf{Preserve log} to survive a redirect or multi-step flow.
+            Click the \textbf{Network} tab. Reload \emph{after} opening it.
+
+            \bigskip
+            A page load is dozens or hundreds of requests: HTML, CSS, JS, images, trackers. 
+            
+            \bigskip
+            Each row shows Name, Status, Type, Size, etc.
 
             \bigskip
 
-            A page load is dozens or hundreds of requests: HTML, CSS, JS, images, trackers. The \textbf{filter bar} narrows it --- \textbf{Fetch/XHR} is where API calls and dynamically-loaded data live. Each row shows Name, Status, Type, Size, and a \textbf{Waterfall} (queuing, DNS, connect, TTFB, download).
+            Click a request for \textbf{Headers} (incl.\ \texttt{User-Agent}, \texttt{Cookie}), \textbf{Response} (the raw JSON), and \textbf{Timing}. 
 
             \bigskip
-
-            Click a request for \textbf{Headers} (incl.\ \texttt{User-Agent}, \texttt{Cookie}), \textbf{Response} (the raw JSON), and \textbf{Timing}. Right-click \textbf{Copy} $\to$ \textbf{Copy as cURL} reproduces the exact request --- headers, cookies, body.
+            Right-click \textbf{Copy} $\to$ \textbf{Copy as cURL} reproduces the exact request --- headers, cookies, body.
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{img/dev_tools_network.png}\\
+            \includegraphics[width=\textwidth]{slides/week-05/img/network-requests-inspector.png}\\
             {\scriptsize One page load, dozens of requests.}
         \end{column}
     \end{columns}
@@ -157,16 +154,21 @@
 
             \bigskip
 
-            The U.S.\ has its own country-code TLD, \texttt{.us} --- and almost nobody uses it: roughly three-quarters of U.S.\ sites use \texttt{.com} instead. Most other countries went the opposite way: in Germany, \texttt{.de} is the \emph{default}, unmarked choice for a German site, not a special-purpose alternative the way \texttt{.us} is at home.
+            The U.S.\ has its own country-code TLD, \texttt{.us} that no one uses: \texttt{www.sos.state.co.us/}
+
+            \bigskip
+            
+            \bigskip
+            Most other countries went the opposite way: \texttt{bbc.co.uk}, \texttt{spiegel.de}, \texttt{rakuten.co.jp}
         \end{column}
         \begin{column}{0.4\textwidth}
             \begin{block}{Two wrinkles to recognize}
                 \footnotesize
-                \textbf{Repurposed ccTLDs.} \texttt{.io} (British Indian Ocean Territory $\to$ ``input/output''), \texttt{.ai} (Anguilla $\to$ AI startups), \texttt{.tv} (Tuvalu $\to$ streaming). Ordinary ccTLDs underneath --- you cannot infer origin from the letters.
+                \textbf{Repurposed TLDs.} \texttt{.io} (British Indian Ocean Territory $\to$ ``input/output''), \texttt{.ai} (Anguilla $\to$ AI startups), \texttt{.tv} (Tuvalu $\to$ streaming)
 
                 \medskip
 
-                \textbf{Non-Latin domains.} DNS is ASCII-only; a Cyrillic domain shown in your address bar is transparently \textbf{punycode} underneath: \texttt{xn--80aswg.xn--p1ai}. An \texttt{xn--} prefix in \texttt{requests} or \texttt{urlparse()} output is this encoding, not an error.
+                \textbf{Non-Latin domains.} DNS is ASCII-only but a common attack vector
             \end{block}
         \end{column}
     \end{columns}
@@ -197,27 +199,28 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{User-Agent spoofing: identity is self-reported}
+\begin{frame}{User-Agent spoofing}
     \begin{columns}[T]
         \begin{column}{0.55\textwidth}
-            Every request so far has identified \emph{honestly} --- \texttt{WebDataScience/1.0 (you@colorado.edu)}. \textbf{Spoofing} means sending a \texttt{User-Agent} that claims to be a browser or device you are not.
+            Every request so far has identified \emph{honestly} --- \texttt{WebDataScience/1.0 (you@colorado.edu)}. 
+            
+            \bigskip
+            \textbf{Spoofing} means sending a \texttt{User-Agent} that claims to be a browser or device you are not.
+            
+            \bigskip
+            Defeating a site's stated block with a spoofed user-agent has CFAA/ToS liability from Ch.~2.
 
             \bigskip
 
-            The protocols in this chapter run on an \textbf{honor system}: a client just states who it is. Legitimate reasons to change it exist (testing your own site's mobile layout); so do illegitimate ones.
+            A changed \texttt{User-Agent} string alone is weak and easily noticed
 
             \bigskip
-
-            \footnotesize A changed \texttt{User-Agent} string alone is weak and easily noticed --- not a reliable way to look like a real browser, and modern \textbf{Client Hints} headers can expose the mismatch.
+            Identify yourself honestly; treat a block as a signal to stop
         \end{column}
         \begin{column}{0.4\textwidth}
-            \begin{alertblock}{Ethical \& legal stakes}
-                \footnotesize Not illegal as a technical act --- what matters is \emph{what you do it for}. Checking your own site's rendering is unremarkable; defeating a site's stated block is a different act, with the same CFAA/ToS stakes Ch.~2 covers.
-
-                \smallskip
-
-                Class rule: identify honestly by default; treat a block as a signal to stop, not to route around. Ask your instructor first if a research need suggests otherwise.
-            \end{alertblock}
+            \centering\footnotesize
+            \includegraphics[width=\textwidth]{slides/week-05/img/how-do-you-do.jpeg}
+            How do you do fellow browsers?
         \end{column}
     \end{columns}
 \end{frame}
@@ -228,7 +231,7 @@
 
 \begin{frame}[fragile]{Locating yourself and the server}
     Your public IP is how the internet sees you; DNS is how a name becomes a routable address:
-\begin{lstlisting}
+\begin{lstlisting}[basicstyle=\normalsize\ttfamily]
 import requests
 import dns.resolver
 
@@ -240,7 +243,7 @@ print(requests.get("https://api.ipify.org?format=json").json())
 for rec in dns.resolver.resolve("en.wikipedia.org", "A"):
     print("IP address:", rec)
 \end{lstlisting}
-    \footnotesize Before reaching for Python, \texttt{ping en.wikipedia.org} from any terminal is the fastest reachability check --- no install required, works on every platform.
+    Before reaching for Python, \texttt{ping en.wikipedia.org} from any terminal is the fastest reachability check --- no install required, works on every platform.
 \end{frame}
 
 \begin{frame}[fragile]{Getting \texttt{scapy} running: the sudo dance}
