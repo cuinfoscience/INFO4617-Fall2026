@@ -16,9 +16,11 @@
 *.vrb
 .DS_Store
 
+# Python build artifacts (e.g. slides/week-*/img/generate_images.py)
+__pycache__/
+
 # Canvas migration: never commit tokens or course data dumps
 canvas/.token
 canvas/*_token*
 canvas/canvas_key.json
 canvas/canvas_snapshot.json
-canvas/__pycache__/

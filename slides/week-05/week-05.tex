@@ -28,14 +28,14 @@
 
             \dayband{Monday}{Concepts \& notebook intro}
             \begin{itemize}\small
-                \item Client--server, TCP/IP, DNS, HTTP, and URLs as one stack
+                \item Client--server, TCP/IP, DNS, and HTTP as one stack --- and how a server decides who, or what, is asking
             \end{itemize}
 
             \medskip
 
             \dayband{Wednesday}{Notebook lab}
             \begin{itemize}\small
-                \item Trace the stack in Python: DNS lookups, HTTP diagnosis, a live API call turned into a time series
+                \item Trace the stack in Python \emph{and} the terminal: a packet capture, a live API call, curl/wget
             \end{itemize}
 
             \medskip
@@ -50,7 +50,7 @@
                 \footnotesize \texttt{ch-05-protocols.ipynb}
             \end{block}
             \begin{alertblock}{Bring a laptop}
-                \footnotesize Wednesday is hands-on --- we watch the requests fly.
+                \footnotesize Wednesday is hands-on --- we watch the requests, and the packets, fly.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -91,7 +91,7 @@
 
             \bigskip
 
-            \textbf{TCP/IP --- the transport.} Every machine on a public network has an IP address. IPv4 offers $2^{32}\approx4.3$ billion of them; IPv6 offers $2^{128}\approx3.4\times10^{38}$. Data hops router to router to arrive.
+            \textbf{TCP/IP --- the transport.} Every machine on a public network has an IP address. IPv4 offers $2^{32}\approx4.3$ billion of them; IPv6 offers $2^{128}\approx3.4\times10^{38}$. Data hops router to router to arrive --- as discrete \textbf{packets}, each wrapped in its own routing headers.
 
             \bigskip
 
@@ -105,23 +105,69 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{See it yourself: browser developer tools}
+\begin{frame}{Inspecting a page: the Inspector tab}
+    Before writing a line of code, inspect the page by hand. Open dev tools with \texttt{Ctrl+Shift+I} or \texttt{F12} (\texttt{Cmd+Opt+I} on a Mac) --- or faster: \textbf{right-click the exact thing you care about} and choose \textbf{Inspect} (Chrome, Firefox) or \textbf{Inspect Element} (Safari). This jumps straight to that element instead of the top of a page that might be thousands of lines long.
+
+    \medskip
+
+    \begin{columns}[T]
+        \begin{column}{0.55\textwidth}
+            \begin{itemize}\small
+                \item What you see is the \textbf{DOM}, not the original HTML --- the page \emph{after} JavaScript finished modifying it. View Source shows the original bytes; if an element is in the Inspector but missing from \texttt{requests.get(url).text}, JavaScript put it there.
+                \item \textbf{Hover} a node to highlight it on the page; the \textbf{element picker} icon does the reverse --- click the page, land on the node.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.45\textwidth}
+            \begin{itemize}\small
+                \item Right-click a node for \textbf{Copy selector} / \textbf{Copy XPath} --- a working starting point for \texttt{soup.select()}, though often longer than it needs to be.
+                \item Edits here are local and temporary --- safe to delete a cookie banner and see the structure beneath.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+
+    \medskip
+    \small Start on a plain Wikipedia article --- commercial sites bury structure under tracking scripts.
+\end{frame}
+
+\begin{frame}{Inspecting requests: the Network tab}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Before writing a line of code, inspect the page by hand. Open dev tools with \texttt{Ctrl+Shift+I} or \texttt{F12} (\texttt{Cmd+Opt+I} on a Mac).
+            Same DevTools window, \textbf{Network} tab. Reload \emph{after} opening it --- it only records what happens while visible. Check \textbf{Preserve log} to survive a redirect or multi-step flow.
 
             \bigskip
 
-            \textbf{Inspector} shows the HTML as a tree you can hover and expand. Start on a simple Wikipedia article --- commercial sites bury structure under tracking scripts.
+            A page load is dozens or hundreds of requests: HTML, CSS, JS, images, trackers. The \textbf{filter bar} narrows it --- \textbf{Fetch/XHR} is where API calls and dynamically-loaded data live. Each row shows Name, Status, Type, Size, and a \textbf{Waterfall} (queuing, DNS, connect, TTFB, download).
 
             \bigskip
 
-            \textbf{Network} reveals every request a page makes --- often hundreds: HTML, CSS, JS, images, fonts, trackers. Each shows a URL, method, status code, and headers like \texttt{User-Agent} and \texttt{Cookie}.
+            Click a request for \textbf{Headers} (incl.\ \texttt{User-Agent}, \texttt{Cookie}), \textbf{Response} (the raw JSON), and \textbf{Timing}. Right-click \textbf{Copy} $\to$ \textbf{Copy as cURL} reproduces the exact request --- headers, cookies, body.
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/dev_tools_network.png}\\
-            {\scriptsize The Network tab: one page load, dozens of requests.}
+            {\scriptsize One page load, dozens of requests.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Domain names aren't all \texttt{.com}}
+    \begin{columns}[T]
+        \begin{column}{0.55\textwidth}
+            Most of this chapter's examples end in \texttt{.org}, \texttt{.gov}, or \texttt{.edu} --- a U.S.-centered artifact of who built the early internet.
+
+            \bigskip
+
+            The U.S.\ has its own country-code TLD, \texttt{.us} --- and almost nobody uses it: roughly three-quarters of U.S.\ sites use \texttt{.com} instead. Most other countries went the opposite way: in Germany, \texttt{.de} is the \emph{default}, unmarked choice for a German site, not a special-purpose alternative the way \texttt{.us} is at home.
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{block}{Two wrinkles to recognize}
+                \footnotesize
+                \textbf{Repurposed ccTLDs.} \texttt{.io} (British Indian Ocean Territory $\to$ ``input/output''), \texttt{.ai} (Anguilla $\to$ AI startups), \texttt{.tv} (Tuvalu $\to$ streaming). Ordinary ccTLDs underneath --- you cannot infer origin from the letters.
+
+                \medskip
+
+                \textbf{Non-Latin domains.} DNS is ASCII-only; a Cyrillic domain shown in your address bar is transparently \textbf{punycode} underneath: \texttt{xn--80aswg.xn--p1ai}. An \texttt{xn--} prefix in \texttt{requests} or \texttt{urlparse()} output is this encoding, not an error.
+            \end{block}
         \end{column}
     \end{columns}
 \end{frame}
@@ -137,6 +183,7 @@
                 \item \textbf{404} not found \quad \textbf{429} slow down
                 \item \textbf{500} the server's problem, not yours
             \end{itemize}
+            \footnotesize The Network tab's \textbf{Status} column already shows you these, before you open a notebook.
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{URLs} identify the target, with a fixed structure:
@@ -150,20 +197,29 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{In the notebook}
-    This week's companion notebook walks \emph{down} the stack, then back \emph{up}:
-    \begin{itemize}
-        \item \textbf{Addressing} --- find your local and public IP (\texttt{socket}, \texttt{ipify}); resolve a domain with \texttt{dns.resolver}; trace the route to Wikipedia
-        \item \textbf{Diagnosis} --- a \texttt{diagnose\_request()} helper that reads status codes, headers, and redirect history
-        \item \textbf{A live API} --- the Wikimedia pageviews endpoint: fix a 403, parse the JSON, and plot a time series
-        \item \textbf{Scaling up} --- a \texttt{Session} with retries; parsing \emph{and} building URLs with \texttt{urllib.parse}
-    \end{itemize}
+\begin{frame}{User-Agent spoofing: identity is self-reported}
+    \begin{columns}[T]
+        \begin{column}{0.55\textwidth}
+            Every request so far has identified \emph{honestly} --- \texttt{WebDataScience/1.0 (you@colorado.edu)}. \textbf{Spoofing} means sending a \texttt{User-Agent} that claims to be a browser or device you are not.
 
-    \medskip
+            \bigskip
 
-    \begin{alertblock}{Connecting to Ch.~2 (Ethics) \& Ch.~3 (Post-API)}
-        ``View source'' and network inspection exist because the web was built as \textbf{open} public infrastructure --- open standards in public RFCs, not proprietary products. That same openness is what platforms increasingly fight, the tension you will study in the post-API age.
-    \end{alertblock}
+            The protocols in this chapter run on an \textbf{honor system}: a client just states who it is. Legitimate reasons to change it exist (testing your own site's mobile layout); so do illegitimate ones.
+
+            \bigskip
+
+            \footnotesize A changed \texttt{User-Agent} string alone is weak and easily noticed --- not a reliable way to look like a real browser, and modern \textbf{Client Hints} headers can expose the mismatch.
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{alertblock}{Ethical \& legal stakes}
+                \footnotesize Not illegal as a technical act --- what matters is \emph{what you do it for}. Checking your own site's rendering is unremarkable; defeating a site's stated block is a different act, with the same CFAA/ToS stakes Ch.~2 covers.
+
+                \smallskip
+
+                Class rule: identify honestly by default; treat a block as a signal to stop, not to route around. Ask your instructor first if a research need suggests otherwise.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 % =========================================================================
@@ -184,9 +240,58 @@ print(requests.get("https://api.ipify.org?format=json").json())
 for rec in dns.resolver.resolve("en.wikipedia.org", "A"):
     print("IP address:", rec)
 \end{lstlisting}
-    \begin{alertblock}{\texttt{scapy} traceroute needs root}
-        \footnotesize The notebook's \texttt{traceroute("en.wikipedia.org")} maps each router hop, but raw packets require admin privileges (Npcap on Windows). Can't run it? Read along --- nothing later depends on it.
+    \footnotesize Before reaching for Python, \texttt{ping en.wikipedia.org} from any terminal is the fastest reachability check --- no install required, works on every platform.
+\end{frame}
+
+\begin{frame}[fragile]{Getting \texttt{scapy} running: the sudo dance}
+    \texttt{scapy} sends and receives raw packets --- a privileged OS operation everywhere, unrelated to \texttt{scapy} itself. Skipping these steps is the \#1 way to get stuck:
+\begin{lstlisting}[language=]
+1. pip install scapy          # or: conda install -c conda-forge scapy
+2. Windows only: install Npcap (a driver, not a pip package)
+3. Launch Jupyter WITH ELEVATED PRIVILEGES:
+     macOS/Linux:  sudo jupyter notebook
+     Windows:      Anaconda Prompt -> right-click -> Run as administrator
+\end{lstlisting}
+    \begin{alertblock}{Two gotchas}
+        \footnotesize \texttt{sudo} resets your shell's \texttt{PATH} --- a bare \texttt{sudo jupyter notebook} can launch the \emph{wrong} Jupyter and fail with \texttt{ModuleNotFoundError}. Fix: \texttt{sudo \$(which jupyter) notebook}. And: an elevated notebook gives \emph{every} cell full system access, not just the one that needs it --- close it when you're done. Machine won't cooperate? The terminal backup on the next frame needs no privileges at all.
     \end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Traceroute: reading the hops}
+\begin{lstlisting}
+from scapy.all import traceroute
+
+result, unans = traceroute("en.wikipedia.org", maxttl=20)
+\end{lstlisting}
+    Each line is one hop --- an IP (or hostname) and a round-trip time. Patterns worth recognizing:
+    \begin{itemize}\small
+        \item \texttt{* * *} --- an unanswered hop, not a broken path; many routers rate-limit or drop probes on purpose
+        \item Private IPs (\texttt{10.}, \texttt{192.168.}, \texttt{172.16--31.}) in the first hop or two --- your own network, normal
+        \item A sudden RTT jump --- often a long-haul or undersea link, not a problem
+        \item Hostnames often encode geography (\texttt{iad}, \texttt{ord}) --- a fast, informal location guess
+    \end{itemize}
+    \footnotesize No privileges needed: \texttt{traceroute en.wikipedia.org} (macOS/Linux) or \texttt{tracert en.wikipedia.org} (Windows) from any terminal.
+\end{frame}
+
+\begin{frame}[fragile]{Packet sniffing: watching your own traffic}
+    Every message in this chapter travels as \textbf{packets}. \textbf{Sniffing} captures them off an interface --- meaningfully more invasive than anything else here, so this book sniffs only \textbf{loopback traffic you generate yourself}, to a server on your own machine:
+\begin{lstlisting}
+from scapy.all import AsyncSniffer
+import requests, threading
+from http.server import HTTPServer, SimpleHTTPRequestHandler
+
+httpd = HTTPServer(("127.0.0.1", 8899), SimpleHTTPRequestHandler)
+threading.Thread(target=httpd.serve_forever, daemon=True).start()
+
+sniffer = AsyncSniffer(filter="tcp port 8899", iface="lo0")  # "lo" on Linux
+sniffer.start()
+requests.get("http://127.0.0.1:8899/")
+packets = sniffer.stop()
+
+for pkt in packets:
+    print(pkt.summary())
+\end{lstlisting}
+    \footnotesize The first packets are TCP's \textbf{handshake} --- \texttt{SYN}, \texttt{SYN-ACK}, \texttt{ACK} --- before a byte of your actual request goes out. Prefer clicking to scripting? \textbf{Wireshark} is the standard GUI packet analyzer, same idea, no code.
 \end{frame}
 
 \begin{frame}[fragile]{Diagnosing HTTP errors, not guessing}
@@ -216,7 +321,7 @@ url = ("https://wikimedia.org/api/rest_v1/"
        "metrics/pageviews/per-article/en.wikipedia/"
        "all-access/all-agents/"
        "University_of_Colorado_Boulder/daily/"
-       "20240101/20240131")
+       "20260101/20260131")
 ua = {"User-Agent": "WebDataScience/1.0 (you@colorado.edu)"}
 data = requests.get(url, headers=ua).json()
 \end{lstlisting}
@@ -234,6 +339,23 @@ df.plot(x="timestamp", y="views")
             {\scriptsize Daily pageviews --- spikes line up with real-world events.}
         \end{column}
     \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{User-Agent spoofing, mechanically}
+    Spoofing is just the \texttt{headers} dict you already know --- with a value describing a browser you are not:
+\begin{lstlisting}
+honest = {"User-Agent": "WebDataScience/1.0 (you@colorado.edu)"}
+spoofed = {"User-Agent": (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+)}
+
+# httpbin.org just echoes back whatever header you sent --
+# a safe way to see exactly what a server receives
+print(requests.get("https://httpbin.org/user-agent", headers=honest).json())
+print(requests.get("https://httpbin.org/user-agent", headers=spoofed).json())
+\end{lstlisting}
+    You already saw this header change real behavior earlier today: the pageviews API's default client got \textbf{403}; a named one got \textbf{200}. Same mechanism, different intent.
 \end{frame}
 
 \begin{frame}[fragile]{A loop over one host is your cue for a Session}
@@ -254,6 +376,51 @@ for article in ["Web_scraping", "Data_science"]:
     r = session.get(f"https://en.wikipedia.org/wiki/{article}")
 \end{lstlisting}
     Six lines of setup replace the hand-rolled backoff loop --- and carry over unchanged into the scraping, Wikipedia, and government-data chapters.
+\end{frame}
+
+\begin{frame}[fragile]{The same requests, from the terminal}
+    Every Python lookup so far has a direct terminal equivalent --- no install beyond what your OS already ships:
+\begin{lstlisting}[language=]
+dig en.wikipedia.org              # or: nslookup en.wikipedia.org (any OS)
+  -> same A record as dns.resolver, plus which server answered and its TTL
+
+whois wikipedia.org
+  -> a different question than DNS: who registered this, and when
+
+curl -I https://en.wikipedia.org  # headers only -- fast status check
+curl -v https://en.wikipedia.org  # full request/response, like the Network tab
+\end{lstlisting}
+    All four take a User-Agent flag (\texttt{curl -A "..."}) the same way the \texttt{headers} dict does in Python.
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{curl} and \texttt{wget}: alternatives to \texttt{requests}}
+    Every tool in this section fetches; \textbf{neither parses}. The moment you need JSON, HTML, or a DataFrame, you are back to \texttt{requests}. They earn their place for a one-off check, a shell script, a server with no Python, or saving straight to disk.
+
+    \medskip
+
+    \texttt{curl} is built for control (headers, methods, auth); \texttt{wget} is built for downloading (saves to disk automatically, resumes, rate-limits). Setting a User-Agent, either way:
+\begin{lstlisting}[language=]
+curl -A "WebDataScience/1.0 (you@colorado.edu)" https://en.wikipedia.org/wiki/Web_scraping
+wget --user-agent="WebDataScience/1.0 (you@colorado.edu)" https://en.wikipedia.org/wiki/Web_scraping
+\end{lstlisting}
+    \footnotesize \texttt{curl} prints to your terminal by default (\texttt{-O} saves to a file); \texttt{wget} always saves to disk.
+\end{frame}
+
+\begin{frame}[fragile]{Replicating \texttt{sleep()}, and fetching many files}
+    \texttt{wget} has rate-limiting \textbf{built in}; \texttt{curl} does not:
+\begin{lstlisting}[language=]
+wget --wait=2 --random-wait URL1 URL2
+  -> jitters 0.5x-1.5x of --wait automatically
+
+for url in URL1 URL2; do curl -O "$url"; sleep 2; done
+  -> curl needs a shell loop -- the terminal version of time.sleep()
+\end{lstlisting}
+    A known list of files, one call, rate-limited for free:
+\begin{lstlisting}[language=]
+wget -i articles.txt --wait=2 --random-wait \
+     --user-agent="WebDataScience/1.0 (you@colorado.edu)"
+\end{lstlisting}
+    \footnotesize Same task as this morning's \texttt{Session} loop over three articles --- a text file of URLs instead of a Python list.
 \end{frame}
 
 \begin{frame}[fragile]{Parse --- and build --- URLs with the right tool}
@@ -282,6 +449,7 @@ requests.get(base, params={"titles": "University of Colorado Boulder"})
                 \item Resolve five related domains with \texttt{dns.resolver}. Report the domains that share an IP address.
                 \item Plot the pageviews of three related articles. Give a possible cause for each spike.
                 \item Write \texttt{diagnose\_url()}. Test it on a 200 response, a 404 response, a redirect, an API, and a blocked site.
+                \item Run the packet-sniffer cell against your own loopback request. Identify the \texttt{SYN}, \texttt{SYN-ACK}, and \texttt{ACK} packets in the output.
                 \item \textbf{5617:} examine the delivery infrastructure of one site. Record the redirect chain, the CDN headers, and the traceroute hops. Write a 500-word memo
             \end{enumerate}
         \end{column}
@@ -314,60 +482,55 @@ requests.get(base, params={"titles": "University of Colorado Boulder"})
 
 \begin{frame}{Improving Chapter 5 together}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
+        \begin{column}{0.48\textwidth}
             Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-05-protocols.qmd} and reviews a classmate's.
 
-            \bigskip
+            \medskip
 
-            The workflow (from Week 1):
-            \begin{enumerate}\small
+            \textbf{The workflow} (from Week 1):
+            \begin{enumerate}\footnotesize
                 \item Branch / fork the book repo
                 \item Edit the chapter; commit with a clear message
                 \item Open a PR describing \textit{what} and \textit{why}
                 \item Review two peers' PRs: kind, specific, actionable
             \end{enumerate}
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/pr_review.png}
+        \begin{column}{0.5\textwidth}
+            \begin{block}{A strong PR}
+                \footnotesize
+                \begin{itemize}\footnotesize
+                    \item One focused change, clearly titled; explains the problem it fixes
+                    \item Builds (\texttt{quarto render}) without errors; matches the book's voice
+                    \item Discloses any AI assistance
+                \end{itemize}
+            \end{block}
+            \begin{block}{A strong review}
+                \footnotesize
+                \begin{itemize}\footnotesize
+                    \item Runs / reads the change, not just skims; names specifics (line, claim, code)
+                    \item Separates ``must fix'' from ``nice to have''; generous, ends with a clear verdict
+                \end{itemize}
+            \end{block}
         \end{column}
     \end{columns}
 \end{frame}
 
 \begin{frame}{A revision menu for Chapter 5}
-    High-value targets --- pick one and scope it to a single PR:
-    \begin{itemize}
-        \item \textbf{Test the code against live services.} \texttt{api.ipify.org}, \texttt{ip-api.com} (45 req/min), the Wikimedia pageviews API, and DNS results all drift. Run the notebook, report what broke, and fix it.
-        \item \textbf{Deepen ``Common Issues to Debug.''} Add a worked \texttt{Retry-After} example, an IPv6 \texttt{AAAA} lookup, or a step-by-step \texttt{scapy}/Npcap install note --- the chapter's thinnest section.
-        \item \textbf{Add a figure.} A clean layered-stack diagram, an annotated Network-tab screenshot, or a labeled URL-anatomy figure would anchor the concepts.
-        \item \textbf{Strengthen an exercise.} Give the \texttt{diagnose\_url()} exercise expected output, a rubric, or a starter cell so it is self-checking.
-        \item \textbf{Extend ``Further Reading.''} Tie the HTTP/1.1 RFC or MDN's HTTP overview to the ``openness'' callout on the web as public infrastructure.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{A good revision, and a good review}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \begin{block}{A strong PR}
-                \begin{itemize}\small
-                    \item One focused change, clearly titled
-                    \item Explains the problem it fixes
-                    \item Builds (\texttt{quarto render}) without errors
-                    \item Matches the book's voice and notation
-                    \item Discloses any AI assistance
-                \end{itemize}
-            \end{block}
+            High-value targets --- pick one and scope it to a single PR:
+            \begin{itemize}\footnotesize
+                \item \textbf{Test the code against live services.} \texttt{ipify}, \texttt{ip-api.com} (45 req/min), the Wikimedia pageviews API, and DNS results all drift. Run the notebook, report what broke, and fix it.
+                \item \textbf{Add a figure.} The chapter still has zero diagrams --- a layered-stack or annotated Network-tab figure would anchor the concepts.
+                \item \textbf{Deepen ``Common Issues to Debug.''} An IPv6 \texttt{AAAA} lookup, and a \texttt{curl}/\texttt{wget}-specific gotcha, are still missing.
+                \item \textbf{Strengthen an exercise.} Give \texttt{diagnose\_url()} expected output, a rubric, or a starter cell so it is self-checking.
+                \item \textbf{Add a missing citation.} ICANN, Verisign, and \texttt{ip-api.com} are all named in the chapter without a link.
+            \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{A strong review}
-                \begin{itemize}\small
-                    \item Runs / reads the change, not just skims
-                    \item Names specifics (line, claim, code)
-                    \item Separates ``must fix'' from ``nice to have''
-                    \item Is generous --- assume good faith
-                    \item Ends with a clear verdict
-                \end{itemize}
-            \end{block}
+            \centering
+            \includegraphics[width=\textwidth]{img/pr_review.png}\\
+            {\scriptsize A real review comment on a real PR.}
         \end{column}
     \end{columns}
     \medskip
@@ -376,12 +539,13 @@ requests.get(base, params={"titles": "University of Colorado Boulder"})
 
 % =========================================================================
 \begin{frame}{Key takeaways}
-    \begin{enumerate}
+    \begin{enumerate}\small
         \item The web is a \textbf{layered stack}: TCP/IP transports, DNS resolves names, HTTP structures the conversation, URLs identify the target.
+        \item \textbf{Traceroute and packet sniffing} make that transport layer directly observable; the \texttt{User-Agent} header --- honest or spoofed --- is how a server decides who, or what, is asking.
         \item Debugging is \textbf{systematic diagnosis}, not guesswork: reach the server? right address? which status code? headers correct? URL well-formed?
-        \item A meaningful \texttt{User-Agent} fixes most \textbf{403}s; backoff or a \texttt{Retry} policy handles \textbf{429}s.
-        \item A \texttt{for} loop over one host is your cue to use a \texttt{Session} --- persistent connection, shared headers, automatic retries.
+        \item A meaningful \texttt{User-Agent} fixes most \textbf{403}s; backoff or a \texttt{Retry} policy handles \textbf{429}s. A \texttt{for} loop over one host is your cue for a \texttt{Session}.
         \item \textbf{Never regex a URL.} \texttt{urllib.parse} both parses and builds; know path-segment (\texttt{quote}) from query-parameter (\texttt{params=}) APIs.
+        \item \texttt{requests} has a terminal equivalent in \texttt{curl} and \texttt{wget} --- know when opening a notebook is more overhead than the task deserves.
     \end{enumerate}
     \bigskip
 \end{frame}
