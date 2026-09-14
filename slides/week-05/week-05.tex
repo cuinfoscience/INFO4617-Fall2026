@@ -29,6 +29,7 @@
             \dayband{Monday}{Concepts \& notebook intro}
             \begin{itemize}\small
                 \item Client--server, TCP/IP, DNS, and HTTP as one stack --- and how a server decides who, or what, is asking
+                \item Close with a live pair activity: hunt for Inspector patterns across real sites
             \end{itemize}
 
             \medskip
@@ -50,7 +51,7 @@
                 \footnotesize \texttt{ch-05-protocols.ipynb}
             \end{block}
             \begin{alertblock}{Bring a laptop}
-                \footnotesize Wednesday is hands-on --- we watch the requests, and the packets, fly.
+                \footnotesize Monday and Wednesday are both hands-on this week --- bring a laptop both days.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -223,6 +224,30 @@
             How do you do fellow browsers?
         \end{column}
     \end{columns}
+\end{frame}
+
+\begin{frame}{Closing activity (20 min): patterns across real sites}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Pair up.
+            \begin{enumerate}\small
+                \item Pick two sites: one plain (a Wikipedia article, a blog) and one busy (a news homepage, a commercial site, a social feed).
+                \item Explore both with the Inspector (10 min). Compare: \texttt{data-*} attributes, how deep the nesting gets, class names that look hand-written vs.\ auto-generated.
+                \item Find one annoying thing --- a cookie banner, a paywall overlay --- and delete it live. Note what it looked like before and after.
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{block}{Report back (7 min)}
+                \footnotesize Round robin, \textasciitilde30 sec/pair:
+                \begin{itemize}\footnotesize
+                    \item One pattern from comparing your two sites
+                    \item What you broke, and what happened
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+    \medskip
+    \footnotesize Reminder: edits are local and temporary --- reload to undo, nothing reaches the server.
 \end{frame}
 
 % =========================================================================
