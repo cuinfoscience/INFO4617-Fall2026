@@ -61,16 +61,19 @@
 \section{Monday · Concepts}
 % =========================================================================
 
-\begin{frame}{A brief history: ARPANET and a persistent myth}
+\begin{frame}{ARPANET and the bomb}
     \begin{columns}[T]
-        \begin{column}{0.55\textwidth}
-            \begin{itemize}\small
-                \item Paul Baran (RAND, early 1960s) proposed \textbf{packet-switching} specifically so communications could survive a nuclear attack --- no single point of failure to knock out.
-                \item \textbf{ARPANET} (1969, DARPA) used packet-switching, but its real job was resource-sharing between research computers, not surviving a war. Its own architects have spent decades correcting this popular myth.
-                \item \textbf{TCP/IP} (Cerf \& Kahn, 1970s) connected ARPANET to other, different networks, with robustness against unreliable or damaged links as a real design goal.
-            \end{itemize}
-            \medskip
-            \footnotesize Either way, the result is a decentralized network where packets route around damage --- a real property, whichever story motivated it.
+        \begin{column}{0.55\textwidth}\small 
+            Paul Baran (RAND, early 1960s) proposed \textbf{packet-switching} specifically so communications could survive a nuclear attack --- no single point of failure to knock out.
+
+            \bigskip
+            \textbf{ARPANET} (1969, DARPA) used packet-switching, but its real job was resource-sharing between expensive and inefficient research computers
+            
+            \bigskip
+            \textbf{TCP/IP} (Cerf \& Kahn, 1970s) connected ARPANET to other, different networks, with robustness against unreliable or damaged links as a real design goal
+            
+            \bigskip
+            The result is a decentralized network where packets route themselves around damage
         \end{column}
         \begin{column}{0.4\textwidth}
             \centering
@@ -220,23 +223,25 @@
 
 \begin{frame}{User-Agent spoofing}
     \begin{columns}[T]
-        \begin{column}{0.55\textwidth}
+        \begin{column}{0.6\textwidth}
             Every request so far has identified \emph{honestly} --- \texttt{WebDataScience/1.0 (you@colorado.edu)}. 
             
             \bigskip
             \textbf{Spoofing} means sending a \texttt{User-Agent} that claims to be a browser or device you are not.
+
+            \bigskip
+            {\footnotesize \texttt{Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:155.0) Gecko/20100101 Firefox/155.0}}
             
             \bigskip
             Defeating a site's stated block with a spoofed user-agent has CFAA/ToS liability from Ch.~2.
 
             \bigskip
-
             A changed \texttt{User-Agent} string alone is weak and easily noticed
 
             \bigskip
             Identify yourself honestly; treat a block as a signal to stop
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \centering\footnotesize
             \includegraphics[width=\textwidth]{slides/week-05/img/how-do-you-do.jpeg}
             How do you do fellow browsers?
@@ -244,28 +249,24 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{Closing activity (20 min): patterns across real sites}
+\begin{frame}{Closing activity: inspection patterns across real sites}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Pair up.
-            \begin{enumerate}\small
-                \item Pick two sites: one plain (a Wikipedia article, a blog) and one busy (a news homepage, a commercial site, a social feed).
-                \item Explore both with the Inspector (10 min). Compare: \texttt{data-*} attributes, how deep the nesting gets, class names that look hand-written vs.\ auto-generated.
-                \item Find one annoying thing --- a cookie banner, a paywall overlay --- and delete it live. Note what it looked like before and after.
+        \begin{column}{0.6\textwidth}\small
+            \begin{enumerate}
+                \item Pick one plain site (a Wikipedia article, a blog) and one busy site (news, ecommerce, social feed)
+                \item Explore each with the Inspector: \texttt{data-*} attributes, how deep the nesting gets before you get to text, class names that look hand-written vs.\ auto-generated
+                \item Explore each with Network: how many requests are needed to load a page, what kinds of files and errors, are some requests going to other domains?
+                \item Find one value or attribute and edit it inside the Inspector to see it render on the page
+                \item Find one annoying thing --- a cookie banner, a paywall overlay --- and delete it live. Note what it looked like before and after
             \end{enumerate}
+
+            \bigskip
+            Report back with some gnarly examples
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Report back (7 min)}
-                \footnotesize Round robin, \textasciitilde30 sec/pair:
-                \begin{itemize}\footnotesize
-                    \item One pattern from comparing your two sites
-                    \item What you broke, and what happened
-                \end{itemize}
-            \end{block}
+            \includegraphics[width=\textwidth]{slides/week-05/img/ptsd.jpg}
         \end{column}
     \end{columns}
-    \medskip
-    \footnotesize Reminder: edits are local and temporary --- reload to undo, nothing reaches the server.
 \end{frame}
 
 % =========================================================================
