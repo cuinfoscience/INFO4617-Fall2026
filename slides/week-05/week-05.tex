@@ -61,6 +61,25 @@
 \section{Monday · Concepts}
 % =========================================================================
 
+\begin{frame}{A brief history: ARPANET and a persistent myth}
+    \begin{columns}[T]
+        \begin{column}{0.55\textwidth}
+            \begin{itemize}\small
+                \item Paul Baran (RAND, early 1960s) proposed \textbf{packet-switching} specifically so communications could survive a nuclear attack --- no single point of failure to knock out.
+                \item \textbf{ARPANET} (1969, DARPA) used packet-switching, but its real job was resource-sharing between research computers, not surviving a war. Its own architects have spent decades correcting this popular myth.
+                \item \textbf{TCP/IP} (Cerf \& Kahn, 1970s) connected ARPANET to other, different networks, with robustness against unreliable or damaged links as a real design goal.
+            \end{itemize}
+            \medskip
+            \footnotesize Either way, the result is a decentralized network where packets route around damage --- a real property, whichever story motivated it.
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/arpanet_map_1977.png}\\
+            {\scriptsize ARPANET's actual topology, March 1977.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}{Loading a web page, step by step}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
