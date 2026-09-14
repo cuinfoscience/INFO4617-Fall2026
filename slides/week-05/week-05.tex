@@ -197,28 +197,20 @@
 \end{frame}
 
 \begin{frame}{The upper stack: HTTP status codes \& URLs}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \textbf{HTTP} structures the conversation: a request carries a method (GET, POST, \dots) and headers; a response carries a \textbf{status code}:
-            \begin{itemize}\small
-                \item \textbf{200} OK --- the body has your data
-                \item \textbf{301/302} redirect --- follow \texttt{Location}
-                \item \textbf{403} forbidden --- often a missing \texttt{User-Agent}
-                \item \textbf{404} not found \quad \textbf{429} slow down
-                \item \textbf{500} the server's problem, not yours
-            \end{itemize}
-            \footnotesize The Network tab's \textbf{Status} column already shows you these, before you open a notebook.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \textbf{URLs} identify the target, with a fixed structure:
-
-            \medskip
-
-            \centering
-            \includegraphics[width=\textwidth]{img/url_anatomy.png}\\
-            {\scriptsize \texttt{scheme://host:port/path?query\#fragment}}
-        \end{column}
-    \end{columns}
+    \begin{center}
+        \includegraphics[width=.75\textwidth]{img/url_anatomy.png}
+    \end{center}
+    
+    \textbf{HTTP} structures the conversation: a request carries a method (GET, POST, \dots) and headers; a response carries a \textbf{status code}:
+    \begin{itemize}\small
+        \item \textbf{200} OK --- the body has your data
+        \item \textbf{301/302} redirect --- follow \texttt{Location}
+        \item \textbf{403} forbidden --- often a missing \texttt{User-Agent}
+        \item \textbf{404} not found \quad \textbf{429} slow down
+        \item \textbf{500} the server's problem, not yours
+    \end{itemize}
+    
+    The Network tab's \textbf{Status} column already shows you these, before you open a notebook.
 \end{frame}
 
 \begin{frame}{User-Agent spoofing}
