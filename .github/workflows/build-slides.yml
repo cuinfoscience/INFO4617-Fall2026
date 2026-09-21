@@ -9,10 +9,12 @@ on:
   pull_request:
     paths:
       - "slides/**"
+      - ".github/workflows/build-slides.yml"
   push:
     branches: [main]
     paths:
       - "slides/**"
+      - ".github/workflows/build-slides.yml"
 
 jobs:
   detect-changed-weeks:
