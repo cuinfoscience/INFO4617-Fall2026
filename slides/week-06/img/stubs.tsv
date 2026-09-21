@@ -4,7 +4,7 @@ the_numbers_table.png	2000x1500	Screenshot: The Numbers weekly box-office chart 
 wiki_highest_grossing_table.png	1200x900	Screenshot: the wikitable on "List of highest-grossing films" -- footnote markers and merged studio cells
 wiki_infobox_en.png	1200x900	Screenshot: the infobox on English Wikipedia's The Godfather article
 wiki_infobox_fr.png	1200x900	Screenshot: the infobox on French Wikipedia's Le Parrain (film) article -- same pattern, different site
-oscars_cards.png	1200x820	Screenshot: oscars.org 2026 ceremony page -- winner/nominee cards, not a table
+oscar-nominees.png	545x485	Screenshot: oscars.org 2026 ceremony page, Actor in a Leading Role category -- winner/nominee cards, not a table
 rt_movie_tiles.png	1200x900	Screenshot: Rotten Tomatoes "Movies in Theaters" tile grid -- a differently-shaped card layout
 imdb_rendered.png	1200x900	Screenshot: IMDb film page as a real browser renders it after JavaScript runs
 dev_tools_inspect.png	1300x820	Mockup: DevTools-style split view (rendered table + Elements panel) using real Box Office Mojo markup

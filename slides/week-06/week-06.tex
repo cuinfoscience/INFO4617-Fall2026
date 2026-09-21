@@ -452,11 +452,12 @@ print(facts["Titre original"])   # 'The Godfather' -- same film, new labels
 \end{frame}
 
 \begin{frame}[fragile]{Strategy 6 --- cards to rows: the Oscars parser}
-    Navigate down through the real container hierarchy, category by honoree:
+    oscars.org 403s an anonymous or browser-spoofed request --- but not this honestly-identified one. Then navigate down through the real container hierarchy, category by honoree:
 \begin{lstlisting}
+url = "https://www.oscars.org/oscars/ceremonies/2026"
+soup = BeautifulSoup(requests.get(url, headers=headers).text, "html.parser")
 area = soup.find("div", class_="field--name-field-award-categories")
 categories = area.find_all("div", class_="paragraph--type--award-category")
-
 rows = list()
 for cat in categories:
     name = cat.find(class_="field--name-field-award-category-oscars").get_text(strip=True)
