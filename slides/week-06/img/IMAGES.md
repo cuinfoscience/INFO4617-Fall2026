@@ -24,16 +24,21 @@ framework. None are gray placeholders.
   is not standardized across language editions the way `infobox`/`infobox_v3`
   might suggest), so the anchor that transfers is the `<caption>` text, not
   a class. Strategy 5.
-- `oscars_cards.png` -- a faithful recreation of the real
-  oscars.org/oscars/ceremonies/2026 page (Best Picture and Actor in a
-  Leading Role categories), built from the actual page HTML the instructor
-  retrieved and supplied directly, because oscars.org returns HTTP 403 to
-  every automated fetch (curl and headless-browser alike) -- confirmed as
-  the site's own bot protection, not a network issue on our end. The class
-  names shown (`field--name-field-award-categories`,
-  `paragraph--type--award-category`, `field--name-field-honoree-type`, etc.)
-  are the real ones, verified against the supplied page. Strategy 6, and the
-  chapter's running non-tabular example.
+- `oscar-nominees.png` -- a real screenshot of the Actor in a Leading Role
+  category from oscars.org/oscars/ceremonies/2026 (replaces an earlier
+  `oscars_cards.png` mockup built before a live screenshot was possible).
+  A live headless-browser session (Playwright/Chromium, needed to screenshot
+  the rendered page) still times out against oscars.org regardless of
+  User-Agent -- confirmed, the site's own bot protection, not a network
+  issue on our end. A plain HTTP fetch is different: `requests.get()` with
+  no headers or a browser-spoofed one gets HTTP 403, but one with an honest,
+  identifying `User-Agent` gets a clean 200 -- see Strategy 6 in the
+  notebook and the textbook chapter, both of which fetch the live page this
+  way. The class names in the Wednesday code
+  (`field--name-field-award-categories`, `paragraph--type--award-category`,
+  `field--name-field-honoree-type`, etc.) are the real ones, verified
+  against the live page. Strategy 6, and the chapter's running non-tabular
+  example.
 - `rt_movie_tiles.png` -- Rotten Tomatoes' "Movies in Theaters" tile grid
   (`rottentomatoes.com/browse/movies_in_theaters/`), repeating card elements
   with a visibly different template than the Oscars cards above. Strategy 7.
