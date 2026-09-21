@@ -1,0 +1,123 @@
+name: Build slide decks
+
+# Rebuilds every changed week-NN deck with latexmk and fails the same way
+# slides/common/AUTHORING.md's own "Build & verify" section already asks
+# authors to check by hand: two latexmk passes, zero undefined references
+# or citations, and a minimum page count. This just automates that check.
+
+on:
+  pull_request:
+    paths:
+      - "slides/**"
+      - ".github/workflows/build-slides.yml"
+  push:
+    branches: [main]
+    paths:
+      - "slides/**"
+      - ".github/workflows/build-slides.yml"
+
+jobs:
+  detect-changed-weeks:
+    runs-on: ubuntu-latest
+    outputs:
+      weeks: ${{ steps.changed.outputs.weeks }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: changed
+        run: |
+          BASE="${{ github.event.pull_request.base.sha }}"
+          if [ -z "$BASE" ]; then
+            BASE="${{ github.event.before }}"
+          fi
+          if [ -z "$BASE" ] || [ "$BASE" = "0000000000000000000000000000000000000000" ]; then
+            BASE=$(git rev-parse HEAD~1 2>/dev/null || echo "")
+          fi
+
+          if [ -n "$BASE" ] && git diff --name-only "$BASE" HEAD -- 'slides/common/' | grep -q .; then
+            # A shared theme/preamble/bibliography change can affect every
+            # deck's build, so rebuild all of them rather than guessing
+            # which ones are actually sensitive to it.
+            echo "slides/common/ changed -- building every week"
+            WEEKS=$(ls -d slides/week-*/ | xargs -n1 basename | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          elif [ -n "$BASE" ]; then
+            WEEKS=$(git diff --name-only "$BASE" HEAD -- 'slides/week-*/week-*.tex' \
+              | grep -oE 'week-[0-9]+' | sort -u | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          else
+            WEEKS='[]'
+          fi
+
+          echo "weeks=$WEEKS" >> "$GITHUB_OUTPUT"
+          echo "Weeks to build: $WEEKS"
+
+  build:
+    needs: detect-changed-weeks
+    if: needs.detect-changed-weeks.outputs.weeks != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        week: ${{ fromJson(needs.detect-changed-weeks.outputs.weeks) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache apt archives
+        uses: actions/cache@v4
+        with:
+          path: /var/cache/apt/archives
+          key: texlive-apt-${{ runner.os }}-v1
+
+      - name: Install TeX Live
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            texlive-latex-base texlive-latex-recommended texlive-latex-extra \
+            texlive-fonts-recommended texlive-fonts-extra texlive-bibtex-extra \
+            biber latexmk
+
+      - name: Build ${{ matrix.week }} (pass 1)
+        working-directory: slides/${{ matrix.week }}
+        run: latexmk -pdf -interaction=nonstopmode -halt-on-error ${{ matrix.week }}.tex
+
+      - name: Build ${{ matrix.week }} (pass 2 -- resolves citations)
+        working-directory: slides/${{ matrix.week }}
+        run: latexmk -pdf -interaction=nonstopmode -halt-on-error ${{ matrix.week }}.tex
+
+      - name: Check for undefined references/citations
+        working-directory: slides/${{ matrix.week }}
+        run: |
+          if grep -qi undefined ${{ matrix.week }}.log; then
+            echo "::error::Undefined references or citations in ${{ matrix.week }}.log"
+            grep -i undefined ${{ matrix.week }}.log
+            exit 1
+          fi
+          echo "No undefined references or citations."
+
+      - name: Check minimum page count (>= 15)
+        working-directory: slides/${{ matrix.week }}
+        run: |
+          PAGES=$(grep -oP 'Output written on .*\(\K[0-9]+(?= pages)' ${{ matrix.week }}.log | tail -1)
+          echo "Pages: ${PAGES:-0}"
+          if [ -z "$PAGES" ] || [ "$PAGES" -lt 15 ]; then
+            echo "::error::${{ matrix.week }}.pdf has ${PAGES:-0} pages (expected >= 15)"
+            exit 1
+          fi
+
+      - name: Upload built PDF
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.week }}-pdf
+          path: slides/${{ matrix.week }}/${{ matrix.week }}.pdf
+          if-no-files-found: ignore
+
+  daily-questions-check:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Daily note questions frames (informational -- never fails the build)
+        run: |
+          python3 slides/common/check_daily_questions.py || true
