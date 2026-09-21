@@ -22,20 +22,20 @@
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            We turn HTML --- the language of web pages --- into data you can analyze.
+            We turn HTML --- the language of web pages --- into data you can analyze. Movies carry the examples all week: box office charts, Wikipedia film pages, and the Oscars.
 
             \bigskip
 
             \dayband{Monday}{Concepts \& notebook intro}
             \begin{itemize}\small
-                \item From HTML to a DataFrame; three scraping strategies
+                \item Eight common shapes static pages hide their data in, and where each one sits on a single-site/multi-site, consistent/inconsistent design spectrum
             \end{itemize}
 
             \medskip
 
             \dayband{Wednesday}{Notebook lab}
             \begin{itemize}\small
-                \item Work through and share the Chapter 6 notebook: box office, Wikipedia, and the Oscars
+                \item Pilot each strategy in code: box office, Wikipedia, the Oscars, and Rotten Tomatoes
             \end{itemize}
 
             \medskip
@@ -79,30 +79,8 @@
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{img/dev_tools_inspect.png}\\
-            {\scriptsize Inspect first, code second.}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Three strategies, increasingly general}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-        \begin{enumerate}
-            \item \textbf{Manual table parsing} --- walk \texttt{<table>} $\rightarrow$ \texttt{<tr>} $\rightarrow$ \texttt{<td>} by hand. Most control, most code.
-            \medskip
-            \item \texttt{\textbf{pandas.read\_html()}} --- one call grabs every table on a page. Least code, least control.
-            \medskip
-            \item \textbf{Custom parser} --- navigate the DOM tree for data that isn't in a table (\texttt{<div>}s + CSS classes).
-        \end{enumerate}
-
-        \bigskip
-
-        Choose the \textit{simplest} strategy that fits the page --- and be ready to fall back to a more general one.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/dom_tree.png}
+            \includegraphics[width=\textwidth]{img/bom_weekly_chart.png}\\
+            {\scriptsize A page with the data already sitting in one table.}
         \end{column}
     \end{columns}
 \end{frame}
@@ -110,36 +88,224 @@
 \begin{frame}{Inspect before you parse}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Every scrape starts in the browser's developer tools, not in Python.
+            Chapter 5 already put you in the Inspector: right-click the data, choose \textbf{Inspect}, and read the DOM the browser actually built.
 
             \bigskip
 
-            \begin{itemize}
-                \item Right-click the data $\rightarrow$ \textbf{Inspect}
-                \item Find the \texttt{<table>}, or the repeating \texttt{<div>} container
-                \item Note the tags, \texttt{class} names, and \texttt{id}s that anchor your target
-                \item ``Copy selector'' gives you a CSS path to paste into \texttt{select()}
+            Today that skill gets a narrower job. You are not exploring a page cold --- you already know your target is data. The only question is \textbf{which shape the data is hiding in}, and every shape below answers that question with a different look inside the Inspector.
+
+            \bigskip
+
+            One habit from Chapter 5 carries forward unchanged: if an element is visible in the Inspector but missing from \texttt{requests.get(url).text}, JavaScript put it there after the fact --- keep that in mind for Strategy 8.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/dev_tools_inspect.png}\\
+            {\scriptsize The Elements panel on a real Box Office Mojo table.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Common research designs: a 2$\times$2 spectrum}
+    \begin{columns}[T]
+        \begin{column}{0.55\textwidth}
+            Before picking a parsing strategy, place your project on two axes: how many \textbf{sites} you're pulling from, and how \textbf{consistent} their design is page to page.
+            \bigskip
+            \begin{itemize}\small
+                \item \textbf{Single site, consistent design.} Fifty-two weekly Box Office Mojo pages --- same template every time.
+                \item \textbf{Single site, inconsistent design.} One oscars.org ceremony page where the winner's card and a nominee's card aren't shaped the same.
+                \item \textbf{Multiple sites, consistent design.} English and French Wikipedia film infoboxes --- same platform, same idea, different specifics.
+                \item \textbf{Multiple sites, inconsistent design.} The Numbers, Box Office Mojo, and Rotten Tomatoes --- three real sites, three unrelated HTML structures, for the same movies.
             \end{itemize}
+        \end{column}
+        \begin{column}{0.42\textwidth}
+            \tiny
+            \begin{tabular}{@{}p{1.1cm}p{2.0cm}p{2.0cm}@{}}
+                 & \textbf{1 site} & \textbf{multi-site} \\ \hline
+                \textbf{same design} & weekly BOM charts & EN/FR infoboxes \\[3pt] \hline
+                \textbf{differs} & Oscars: winner vs.\ nominee & Numbers vs.\ Mojo vs.\ RT \\
+            \end{tabular}
+            \bigskip
+
+            Complexity climbs left-to-right, top-to-bottom. Most real research projects live somewhere past the top-left cell.
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Strategy 1 --- the clean single table}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            The best case: one table, one target, nothing else on the page competing for it.
 
             \bigskip
 
-            The page is a \textbf{hypothesis}: inspect, guess an anchor, verify the count, refine.
+            Box Office Mojo's weekly chart is exactly this --- a single ranked table of that week's top movies. The moment you find it, you are basically done: no navigation tables, no decoys, no ambiguity about which element holds the data.
+
+            \bigskip
+
+            This is the case \texttt{pandas.read\_html()} was built for.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/bom_weekly_chart.png}\\
+            {\scriptsize boxofficemojo.com/weekend/2018W52/}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Strategy 2 --- a table hiding among decoys}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Real pages are rarely this polite. The Numbers' weekly chart has the \textit{same kind} of data as Box Office Mojo, but its HTML ships \textbf{two} \texttt{<table>} elements --- a full desktop layout and a separate mobile layout --- and only one is the table you want.
+
+            \bigskip
+
+            Same site, same page, same intent as Strategy 1 --- but now you must inspect and count before you trust \texttt{find\_all("table")[0]}.
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/the_numbers_table.png}\\
-            {\scriptsize The Numbers weekly box-office chart --- our first target.}
+            {\scriptsize the-numbers.com --- two tables, one is the data.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Strategy 3 --- the table that needs cleanup}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Sometimes the table extracts cleanly and the \textit{values} don't. Wikipedia's ``List of highest-grossing films'' is the classic case: \texttt{read\_html()} succeeds on the first try, and the real work starts after.
+
+            \bigskip
+
+            Footnote markers glue onto titles. A stray superscript letter sits in front of some dollar amounts. Numbers arrive as text. None of this breaks extraction --- it breaks \textit{analysis} until you clean it.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/wiki_highest_grossing_table.png}\\
+            {\scriptsize A table that parses fine and reads badly.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Strategy 4 --- the infobox pattern}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Not every page's real content lives inside a data \texttt{<table>}. Wikipedia's film infoboxes are a labeled key--value block --- ``Directed by,'' ``Produced by,'' ``Starring'' --- one row per fact, in roughly the same shape on every film's page.
+
+            \bigskip
+
+            Once you can pull one film's infobox apart, the same handful of lines pulls apart the next five hundred.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/wiki_infobox_en.png}\\
+            {\scriptsize en.wikipedia.org --- \textit{The Godfather}.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Strategy 5 --- porting the pattern to a new site}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            The infobox idea from Strategy 4 isn't just reusable across English Wikipedia pages --- it travels to any site built on the same platform. French Wikipedia runs the same software and lays out its film infobox the same conceptual way.
+
+            \bigskip
+
+            But it is not the same page. The anchor that worked on the English article --- a table class name --- does not exist here at all; the reliable anchor turns out to be the table's \texttt{<caption>} instead. \textbf{The strategy transfers. The specific selector has to be re-verified, every time.}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/wiki_infobox_fr.png}\\
+            {\scriptsize fr.wikipedia.org --- \textit{Le Parrain}, same idea.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Strategy 6 --- cards that need to become rows}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            The Academy Awards' own site lists nominees and winners as a grid of individual cards --- one per category, holding several honorees --- with \textbf{no table anywhere on the page}.
+
+            \bigskip
+
+            Turning this into a DataFrame means treating each honoree as one row: find the repeating category container, then pull category name, winner-or-nominee status, person, and film out of each honoree inside it.
+
+            \bigskip
+
+            This is the shape behind most gallery and directory pages --- and the one static-page pattern that shows up the most once you start looking for it.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/oscars_cards.png}\\
+            {\scriptsize oscars.org --- 2026 ceremony, one card per honoree.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Strategy 7 --- inconsistent cards, multiple sites}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Rotten Tomatoes' ``Movies in Theaters'' grid looks like the same idea as the Oscars cards --- a repeating tile per movie --- but the tile itself is a different shape entirely: a poster, a title, and a Tomatometer score, built from custom elements instead of plain \texttt{<div>}s.
+
+            \bigskip
+
+            A research question that needs \textit{both} box-office numbers and critical reception can't use one parser for both sites. You write one card-parser per site, then reconcile the two into a single schema --- one row per movie --- afterward. This is the general shape of most real scraping pipelines.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/rt_movie_tiles.png}\\
+            {\scriptsize rottentomatoes.com --- a differently-shaped card.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Strategy 8 --- when ``static'' isn't}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Every strategy so far assumes the HTML you fetch already contains the data you want. IMDb's own film pages break that assumption: a plain \texttt{requests.get()} against an IMDb title page returns HTTP \textbf{202} with \textbf{zero bytes} of body --- not ``missing the cast list,'' completely empty.
+
+            \bigskip
+
+            The real content is built by JavaScript after a browser loads the page, and \texttt{requests} never runs JavaScript. A real browser sees the fully populated page on the right; a script using \texttt{requests} sees nothing at all.
+
+            \bigskip
+
+            We come back to this once we've covered how to make a browser do the fetching for us.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/imdb_rendered.png}\\
+            {\scriptsize What a browser renders. \texttt{requests} gets 0 bytes.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Which strategy, and where on the spectrum?}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            In pairs, without writing any code: for each site below, name the strategy you'd reach for first, and place it on the 2$\times$2.
+            \begin{enumerate}\small
+                \item A film festival's ``official selections'' page --- posters and captions, no table
+                \item A newspaper's weekly bestseller list, archived and unchanging since 1995
+                \item IMDb's ``Top 250'' list page
+                \item A directory of every country's population, sourced from three different national statistics sites
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{block}{Discussion}
+                \footnotesize Which quadrant of the 2$\times$2 is hardest --- and is it hardest because of the \textit{code}, or because of something else (rate limits, permission, trust in what a source reports)?
+            \end{block}
         \end{column}
     \end{columns}
 \end{frame}
 
 \begin{frame}{In the notebook}
-    This week's companion notebook builds one skill at a time:
-    \begin{itemize}
-        \item \textbf{Strategy 1} --- box-office revenue from The Numbers, cell by cell
-        \item \textbf{Strategy 2} --- highest-grossing films from Wikipedia with \texttt{read\_html()} + cleanup
-        \item \textbf{Strategy 3} --- Oscar nominees from nested \texttt{<div>}s, then Colorado legislators
-        \item \textbf{Reuse} --- abstract a working parser into a function; rate-limit; handle errors
+    Wednesday's companion notebook pilots all eight strategies in code, one at a time:
+    \begin{itemize}\small
+        \item \textbf{Strategies 1--3} --- box-office and Wikipedia tables: clean, decoy-hiding, and needs-cleanup
+        \item \textbf{Strategies 4--5} --- the Wikipedia infobox pattern, then porting it across a language edition
+        \item \textbf{Strategies 6--7} --- Oscars cards, then Rotten Tomatoes' differently-shaped cards
+        \item \textbf{Strategy 8} --- watching \texttt{requests} fail against IMDb, live
     \end{itemize}
 
     \bigskip
@@ -153,8 +319,23 @@
 \section{Wednesday · Notebook Lab}
 % =========================================================================
 
-\begin{frame}[fragile]{Strategy 1 --- manual table parsing}
-    Retrieve, then find the right table (pages hide data tables among navigation tables):
+\begin{frame}[fragile]{Strategy 1 --- the one-line win}
+    One table, one call. When the page cooperates, take the win:
+\begin{lstlisting}
+import pandas as pd
+
+url = "https://www.boxofficemojo.com/weekend/2018W52/"
+tables = pd.read_html(url)
+print(f"{len(tables)} table(s) found")   # 1 -- no ambiguity here
+
+weekly = tables[0]
+print(weekly.head())
+\end{lstlisting}
+    No \texttt{requests}, no \texttt{BeautifulSoup} --- \texttt{read\_html()} fetches the page itself. Save this reflex for pages that look like Strategy 1; the next one won't be this easy.
+\end{frame}
+
+\begin{frame}[fragile]{Strategy 2 --- finding the real table among decoys}
+    Retrieve, then find the right table (pages hide data tables among navigation or mobile-layout tables):
 \begin{lstlisting}
 import requests
 from bs4 import BeautifulSoup
@@ -198,49 +379,118 @@ values = [c.get_text(strip=True)
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Strategy 2 --- \texttt{pandas.read\_html()}}
+\begin{frame}[fragile]{Strategy 3 --- cleaning up after \texttt{read\_html()}}
 \begin{lstlisting}
 import pandas as pd
 
-url = "https://en.wikipedia.org/wiki/2018_in_film"
-tables = pd.read_html(url)          # every table on the page -> list of DataFrames
-films = pd.read_html(url, header=0)[3]   # pick the right one by index
+url = "https://en.wikipedia.org/wiki/List_of_highest-grossing_films"
+df = pd.read_html(url, header=0)[0]     # verified by inspection: index 0
+print(df.dtypes)                        # "Worldwide gross" parsed as text
 \end{lstlisting}
-    Powerful, but rarely perfect. Expect to spend as long \textbf{cleaning} as extracting:
+    Expect to spend as long \textbf{cleaning} as extracting:
 \begin{lstlisting}
-df = df[df.iloc[:, 0] != df.columns[0]]              # drop repeated header rows
-df.columns = [c.strip().lower().replace(" ", "_") for c in df.columns]
-df["worldwide_gross"] = pd.to_numeric(               # "$1,234" -> 1234
-    df["worldwide_gross"].str.replace(r"[\$,]", "", regex=True), errors="coerce")
-df["studio"] = df["studio"].ffill()                  # fill merged (colspan) cells
+# a stray footnote-reference letter can sit in front of the "$" --
+# print a few raw values first so you know what you're stripping
+df["gross"] = pd.to_numeric(
+    df["Worldwide gross"].str.replace(r"[^0-9]", "", regex=True), errors="coerce")
+df["footnote_count"] = df["Ref"].str.count(r"\[")   # "[# 3][# 4]" -> 2
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{Strategy 3 --- custom parser \& CSS selectors}
-    Non-tabular data (Oscar nominees) lives in nested \texttt{<div>}s. Find a reliable anchor, then search within it --- \texttt{find()} + \texttt{find\_all()}, or one CSS selector:
+\begin{frame}[fragile]{Strategy 4 --- the infobox pattern}
+    A table without a useful class name, but a very reliable shape --- one \texttt{<th>}/\texttt{<td>} pair per row:
 \begin{lstlisting}
-# navigate: up to a unique parent, then down to the repeating rows
-area = soup.find("div", class_="field--name-field-award-categories")
-categories = area.find_all("div", class_="view-grouping") if area else []
+import requests
+from bs4 import BeautifulSoup
 
-# equivalent, in one readable line (paste from "Copy selector"):
-soup.select("div.field--name-field-award-categories div.view-grouping")
+url = "https://en.wikipedia.org/wiki/The_Godfather"
+headers = {"User-Agent": "WebDataScience/1.0 (you@colorado.edu)"}
+soup = BeautifulSoup(requests.get(url, headers=headers).text, "html.parser")
+
+infobox = soup.find("table", class_="infobox")
+facts = {}
+for row in infobox.find_all("tr"):
+    label, value = row.find("th"), row.find("td")
+    if label and value:
+        facts[label.get_text(strip=True)] = value.get_text(" ", strip=True)
+print(facts["Directed by"])   # 'Francis Ford Coppola'
 \end{lstlisting}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \texttt{select()} returns a list like \texttt{find\_all()}; \texttt{select\_one()} returns one like \texttt{find()}.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/oscars_page.png}
-        \end{column}
-    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Strategy 5 --- porting the parser to a new site}
+    The class name \texttt{infobox} doesn't exist on this page at all. Re-inspect, and anchor on the \texttt{<caption>} instead --- same loop as Strategy 4 after that:
+\begin{lstlisting}
+url = "https://fr.wikipedia.org/wiki/Le_Parrain_(film)"
+soup = BeautifulSoup(requests.get(url, headers=headers).text, "html.parser")
+
+infobox = soup.select("table:has(caption)")[0]   # the anchor that transfers
+facts = {}
+for row in infobox.find_all("tr"):
+    label, value = row.find("th"), row.find("td")
+    if label and value:
+        facts[label.get_text(strip=True)] = value.get_text(" ", strip=True)
+print(facts["Titre original"])   # 'The Godfather' -- same film, new labels
+\end{lstlisting}
+    The loop is identical. Only the anchor and the labels changed.
+\end{frame}
+
+\begin{frame}[fragile]{Strategy 6 --- cards to rows: the Oscars parser}
+    Navigate down through the real container hierarchy, category by honoree:
+\begin{lstlisting}
+area = soup.find("div", class_="field--name-field-award-categories")
+categories = area.find_all("div", class_="paragraph--type--award-category")
+
+rows = list()
+for cat in categories:
+    name = cat.find(class_="field--name-field-award-category-oscars").get_text(strip=True)
+    for h in cat.find_all("div", class_="paragraph--type--award-honoree"):
+        rows.append({
+            "category": name,
+            "type": h.find(class_="field--name-field-honoree-type").get_text(strip=True),
+            "entity": h.find(class_="field--name-field-award-entities").get_text(strip=True),
+        })
+df = pd.DataFrame(rows)   # 24 categories on the 2026 ceremony page
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Strategy 7 --- a different card, a different site}
+    Rotten Tomatoes' tiles are custom elements, not \texttt{<div>}s --- same idea, new anchors:
+\begin{lstlisting}
+url = "https://www.rottentomatoes.com/browse/movies_in_theaters/"
+soup = BeautifulSoup(requests.get(url, headers=headers).text, "html.parser")
+
+tiles = soup.find_all("tile-dynamic", attrs={"data-qa": "tile"})
+records = list()
+for tile in tiles:
+    title = tile.find("span", class_="p--small")
+    score = tile.find("rt-text", class_="critics-score")
+    records.append({
+        "title": title.get_text(strip=True) if title else None,
+        "tomatometer": score.get_text(strip=True) if score else None,
+    })
+# join records on title with the Oscars/box-office DataFrames -- one row per movie
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Strategy 8 --- watching \texttt{requests} fail, live}
+\begin{lstlisting}
+import requests
+
+url = "https://www.imdb.com/title/tt0068646/"
+headers = {"User-Agent": "WebDataScience/1.0 (you@colorado.edu)"}
+response = requests.get(url, headers=headers)
+print(response.status_code, len(response.text))
+# 202 0  -- zero bytes. Not a bad selector: there is nothing here to select.
+\end{lstlisting}
+    \begin{alertblock}{This is not an error in your code}
+        \footnotesize A 202 with an empty body means the server accepted the request and handed back a JavaScript shell instead of a page. \texttt{BeautifulSoup} has nothing to parse. This is the boundary this chapter's strategies don't cross --- dynamic pages get their own week.
+    \end{alertblock}
 \end{frame}
 
 \begin{frame}[fragile]{Make it reusable --- and defensive}
     Abstract the working parser into a function; keep the \texttt{sleep} in the \textit{caller}, not the function:
 \begin{lstlisting}
-for year in range(2020, 2025):
+for year in range(2020, 2027):
     df = scrape_oscar_year(year, headers)   # returns empty DataFrame on failure
     all_years.append(df)
     time.sleep(1)                           # politeness lives in the loop
@@ -254,6 +504,9 @@ except requests.RequestException as e:
 # AttributeError fires when .find() returns None and you call .text on it
 # -- the single most common scraping error.
 \end{lstlisting}
+    \begin{alertblock}{Error flavors}
+        \footnotesize Some code here is \textit{designed} to break (a guard demonstrating the \texttt{AttributeError} above) --- that does not need a GitHub issue. Other code may be \textit{genuinely} broken: confirm it, then search and file an issue.
+    \end{alertblock}
 \end{frame}
 
 \begin{frame}{Lab: work these, then show-and-tell}
@@ -270,13 +523,15 @@ except requests.RequestException as e:
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
+            \begin{block}{Submitting}
+                \footnotesize Start in class, finish at home, submit what you got working.
+
+                \smallskip
+
+                Graded on good-faith attempt to complete rather than getting everything working.
+            \end{block}
             \begin{block}{Show-and-Tell}
-                \footnotesize Bring one of these to class:
-                \begin{itemize}\footnotesize
-                    \item a bug that you could not solve
-                    \item data that you collected and find interesting
-                    \item a question for a research design
-                \end{itemize}
+                \footnotesize Bring one of these to class: a bug you could not solve, data you find interesting, or a question for a research design.
             \end{block}
         \end{column}
     \end{columns}
@@ -307,6 +562,10 @@ except requests.RequestException as e:
                 \item Open a PR describing \textit{what} and \textit{why}
                 \item Review two peers' PRs: kind, specific, actionable
             \end{enumerate}
+
+            \bigskip
+
+            Review comments still follow Week 3's claim / link / sharpen taxonomy --- claim what you'll fix, link related issues, sharpen ones missing detail.
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
@@ -318,9 +577,9 @@ except requests.RequestException as e:
 \begin{frame}{A revision menu for Chapter 6}
     High-value targets --- pick one and scope it to a single PR:
     \begin{itemize}
-        \item \textbf{Test the code against live sites.} The Numbers, Wikipedia, and Oscars pages drift. Run the notebook, report what broke, and fix the selectors (this is the chapter's own ``A Note on Fragility'').
+        \item \textbf{Test the code against live sites.} The Numbers, Wikipedia, the Oscars, and Rotten Tomatoes all drift. Run the notebook, report what broke, and fix the selectors (this is the chapter's own ``A Note on Fragility'').
         \item \textbf{Close a gap in ``Common Issues to Debug.''} Add a worked \texttt{\textbackslash xa0} / non-breaking-space example, or a \texttt{colspan}/\texttt{rowspan} case \texttt{read\_html} mishandles.
-        \item \textbf{Add a figure.} A clean DOM-tree diagram, or an annotated Inspector screenshot, would help Strategy 1 and 3.
+        \item \textbf{Add a figure.} An annotated Inspector screenshot, or a diagram of the 2$\times$2 research-design spectrum, would help readers place their own project.
         \item \textbf{Strengthen an exercise.} Add expected output, a rubric, or a starter cell so exercises are self-checking.
         \item \textbf{Extend ``Further Reading.''} A data-journalism scrape (ProPublica, The Markup) tied to the ``Public Interest'' callout.
     \end{itemize}
@@ -359,8 +618,8 @@ except requests.RequestException as e:
 \begin{frame}{Key takeaways}
     \begin{enumerate}
         \item Scraping is a pipeline: \textbf{retrieve $\rightarrow$ inspect $\rightarrow$ anchor $\rightarrow$ extract $\rightarrow$ DataFrame}.
-        \item Start with \texttt{read\_html()} for tables; fall back to manual or custom parsing for control.
-        \item Navigate cell by cell --- shortcuts silently misalign columns.
+        \item Place your project on the single/multi-site $\times$ consistent/inconsistent spectrum before picking a strategy.
+        \item Tables, decoys, infoboxes, and cards are different shapes of the same problem --- finding a reliable anchor.
         \item Abstract into functions, rate-limit in the loop, and code defensively.
         \item Pages change: the durable skill is \textbf{inspect, hypothesize, verify} --- not memorized class names.
     \end{enumerate}

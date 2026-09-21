@@ -35,7 +35,7 @@ syllabus for that schedule.
 ```
 slides/
   common/     shared Gotham theme (vendored), preamble.tex, bibliography.bib,
-              make_stubs.py, AUTHORING.md
+              make_stubs.py, check_daily_questions.py, AUTHORING.md
   week-NN/    week-NN.tex, week-NN.pdf, img/ (stub PNGs + IMAGES.md)
   Makefile
 ```
@@ -81,3 +81,18 @@ one should show. Replace them with real screenshots/figures (keeping the same
 filename) and rebuild. Every folder's `img/IMAGES.md` lists what belongs where.
 The manifest `img/stubs.tsv` regenerates the placeholders via
 `common/make_stubs.py`.
+
+## Before class
+
+The "Daily note questions" frame (see `common/AUTHORING.md`) answers real
+student questions and can't be written until they've been submitted, so a
+deck authored ahead of time can ship with it missing, blank, or — if a
+previous week's frame got copy-pasted as a starting point — still carrying
+last week's questions. Check the coming week right before class:
+
+```bash
+python3 common/check_daily_questions.py week-06
+```
+
+Run it with no arguments to sweep every week at once. It exits non-zero if
+anything needs attention.
