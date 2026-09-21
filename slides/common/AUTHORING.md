@@ -28,12 +28,29 @@ recently — voice evolves forward, not backward.
    `\author[Keegan]{\textbf{Brian C. Keegan, Ph.D.} \\ Associate Professor, Department of Information Science \\ University of Colorado Boulder}`,
    `\date{<dates>}`, then `\maketitle`.
 3. **"This week at a glance"** frame — the Monday/Wednesday/Friday roadmap using `\dayband{Day}{Topic}`, plus a companion-notebook block (`ch-NN-slug.ipynb`).
-4. `\section{Monday · Concepts}` — 3–4 frames: motivation + the chapter's core concepts, grounded in its conceptual prose. Note cross-references the chapter makes to other chapters.
-5. `\section{Wednesday · Notebook Lab}` — 4–6 frames:
-   - condensed **real code** from the chapter as `[fragile]` frames with `lstlisting` (trim each snippet to ≤ ~12 lines; keep it runnable-looking and faithful);
+4. `\section{Monday · Concepts}` — motivation + the chapter's core concepts,
+   grounded in its conceptual prose, one topic per frame. Shipped decks range
+   from 9 to 22 frames here (week-02: 17, week-03: 22, week-05: 9, week-06: 13)
+   depending on how many distinct concepts/strategies/cases the chapter's
+   material actually supports — let the chapter's own density decide the
+   count rather than aiming for a fixed number. Note cross-references the
+   chapter makes to other chapters, and back-reference (don't re-teach in
+   depth) any skill an earlier week already covered in full.
+5. `\section{Wednesday · Notebook Lab}` — condensed **real code** from the
+   chapter as `[fragile]` frames with `lstlisting` (trim each snippet to
+   ≤ ~12 lines; keep it runnable-looking and faithful), plus:
    - a frame listing the chapter's **Exercises** to work in pairs (mark any "graduate / INFO 5617" exercise with a bold `\textbf{5617}` label);
    - a **Show-and-Tell** prompt (bring a bug / interesting data / a research provocation — the instructor's recurring habit);
    - one `[standout]` frame with a memorable takeaway from the chapter.
+
+   Shipped decks range from 6 to 15 frames here (week-02: 12, week-03: 6,
+   week-05: 14, week-06: 12) — a chapter with more distinct strategies or
+   code patterns earns more frames; a chapter that's mostly one worked
+   example doesn't need padding to hit a number. If a chapter's Monday and
+   Wednesday material is thin enough that splitting them reads as padding,
+   merging into one `\section{Wednesday · Concepts \& Notebook}` is an
+   established alternative (week-04) — the three-section Monday/Wednesday/
+   Friday split is the default, not a hard requirement.
 6. `\section{Friday · Textbook Revisions}` — 3 frames: the PR + peer-review workflow (reuse week-06's), a **chapter-specific "revision menu"** (concrete targets pulled from *this* chapter's callouts / "Common Issues" / "Further Reading" / thin exercises), and "what makes a good PR / good review" (reuse week-06's). End the last frame with a one-line teaser of next week.
 7. **"Key takeaways"** — 5 numbered points from the chapter, trimmed to short
    plain statements. No trailing reading-list line (see Citations, below).
@@ -130,15 +147,24 @@ structure misses: the daily-note URL and a read-the-chapter reminder on the
 Monday→Wednesday transition frame; a "What to submit" frame stating the week's
 deliverables and the Sunday-11:59pm / HTML-export mechanics; links to the
 handouts and the Missing Manual where students will actually need them. Four
-specific pieces of course-operations furniture are now confirmed recurring
-(present in both week-02 and week-03) and should be treated as standing
-rules, not per-week choices:
+specific pieces of course-operations furniture were introduced across
+week-02 and week-03 and are **standing rules going forward, not per-week
+choices** — week-05 shipped with none of the four present, and that was a
+gap the deck should have caught, not a deliberate simplification. Include
+each one where it applies:
 
 - **"Daily note questions" frames on Friday.** When the daily note produced
   questions, answer them in one or two frames of stacked
   `\textbf{Question?} --- answer` one-liners — bold question, dash, short
   plain answer, `\medskip` between. No elaboration beyond the one line; if an
-  answer needs more, it belongs in the chapter, not the FAQ frame.
+  answer needs more, it belongs in the chapter, not the FAQ frame. Unlike the
+  other three items below, this one genuinely can't be written ahead of the
+  real questions students submit — a deck authored before class legitimately
+  has nothing to put here yet. That is exactly the gap
+  `slides/common/check_daily_questions.py` exists to catch: run it against
+  the coming week's deck before class and fill the frame in from that week's
+  actual daily-note responses, rather than shipping the deck with the frame
+  missing, blank, or (from copy-pasting a previous week) duplicated.
 - **"Effort over perfection" on the lab-submission frame.** State explicitly
   that the lab is graded on a good-faith attempt to complete, not on getting
   every cell working — week-03's exact phrasing was "Graded on good-faith
@@ -155,6 +181,12 @@ rules, not per-week choices:
   Sharpen an issue by adding a missing location, reproduction, or scope.
   *Link* two similar issues to each other by commenting with a cross-reference
   — this keeps parallel conversations about the same problem from forking.
+  This taxonomy is taught **in full once**, the week it's first needed for a
+  real PR/issue workflow (week-03) — later weeks that reuse the same GitHub
+  workflow give it a one-line back-reference ("comments still follow Week 3's
+  claim / link / sharpen taxonomy") rather than re-teaching the three terms
+  from scratch. Re-explaining it every week it's used is not the standing
+  rule; citing it briefly is.
 
 **Don't script the instructor's patter.** Cut sentences that perform the
 instructor's role — "tell me if a step fails," "you will use this for the rest
