@@ -29,7 +29,8 @@
 
             \dayband{Monday}{Concepts \& notebook intro}
             \begin{itemize}\small
-                \item Link rot, the Internet Archive, and two APIs into the past
+                \item Web archiving, the Wayback Machine by hand, how captures break, and what researchers do with them
+                \item Close with a live pair activity: time travel with the Wayback Machine
             \end{itemize}
 
             \medskip
@@ -51,7 +52,7 @@
                 \footnotesize \texttt{ch-07-archives.ipynb}
             \end{block}
             \begin{alertblock}{Bring a laptop}
-                \footnotesize Wednesday is hands-on --- we query the Archive live.
+                \footnotesize Monday and Wednesday are both hands-on this week --- bring a laptop both days.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -61,95 +62,370 @@
 \section{Monday · Concepts}
 % =========================================================================
 
-\begin{frame}{The web is not permanent}
+\begin{frame}{Link rot}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Pages change, disappear, and get redesigned constantly. A large fraction of URLs break within a few years --- \textbf{link rot}.
+            38\% of the web pages that existed in 2013 were gone a decade later.
 
             \bigskip
-
-            This is a research problem. How do you study something that can disappear tomorrow? How do you measure a \textit{change} when you can see only today's version?
-
-            \bigskip
-
-            The \textbf{Internet Archive} (Brewster Kahle, 1996) answers by archiving the web. Its \textbf{Wayback Machine} has captured over 800 billion pages, free to anyone.
+            Usually the website is still up --- one page on it was deleted or removed.
 
             \bigskip
+            {\footnotesize Pew Research Center, ``When Online Content Disappears'' (2024)}
 
-            It is both a data source and \textit{counter-erosion infrastructure} --- a community-governed public resource (the book's ``post-API'' ownership theme).
+            \bigskip
+            How do you study something that might not be there tomorrow?
+
+            \bigskip
+            How do you measure a \textit{change} when you can only see today's version?
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{img/wayback_calendar.png}\\
-            {\scriptsize The Wayback calendar: every dot is a capture you can retrieve.}
+            \includegraphics[width=\textwidth]{img/meme_link_rot.png}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{From snapshots to a longitudinal source}
+\begin{frame}{Web archiving}
+    \begin{center}
+        \includegraphics[width=.7\textwidth]{img/wayback_trillion.png}
+    \end{center}
+
+    \textbf{Web archiving}: collect pages as they looked at a moment, store them, and let anyone replay them later.
+
+    \bigskip
+    The \textbf{Internet Archive} is a nonprofit library Brewster Kahle founded in 1996. Its \textbf{Wayback Machine} opened to the public in 2001. In October 2025 it passed \textbf{one trillion} archived web pages.
+
+    \bigskip
+    National libraries and universities archive the web too. The Wayback Machine is the one anyone can search: \url{https://web.archive.org}
+\end{frame}
+
+\begin{frame}{Finding a capture}
+    \begin{center}
+        \includegraphics[width=.78\textwidth]{img/wayback_calendar.png}
+    \end{center}
+
+    Type a URL into \url{https://web.archive.org}. The bars across the top are the years --- taller means more captures that year.
+
+    \bigskip
+    Click a year for its calendar. Each dot is a day with captures, and a bigger dot means more of them. Hover a dot to list that day's capture times.
+\end{frame}
+
+\begin{frame}{Moving through time}
+    \begin{center}
+        \includegraphics[width=\textwidth]{img/toolbar.png}
+    \end{center}
+
+    Every capture opens with this toolbar: the URL, how many times it was captured, and a strip of bars across the years.
+
+    \bigskip
+    Click anywhere on the strip to jump to that moment. The arrows and the neighboring months and years step you backward and forward.
+
+    \bigskip
+    The big yellow date is the capture on screen --- here, facebook.com on January 21, 2004.
+\end{frame}
+
+\begin{frame}{The URL is the query}
+    \begin{center}
+        \includegraphics[width=.8\textwidth]{img/address_bar.png}
+    \end{center}
+
+    The 14 digits are a timestamp in UTC: year, month, day, hour, minute, second. \texttt{20040212031928} is February 12, 2004, at 03:19:28.
+
+    \bigskip
+    Shorten it and the Archive finds the closest capture: \texttt{web.archive.org/web/2004/thefacebook.com}
+
+    \bigskip
+    Add a star for a calendar, \texttt{/web/2005*/facebook.com}, or one at the end for every captured page on a site, \texttt{/web/*/thefacebook.com/*}
+
+    \bigskip
+    Nothing there yet? \textbf{Save Page Now} (\url{https://web.archive.org/save}) asks for a capture right now.
+\end{frame}
+
+\begin{frame}{About this capture}
+    \begin{center}
+        \includegraphics[width=\textwidth]{img/about_capture.png}
+    \end{center}
+
+    Click \textbf{About this capture} on the toolbar. \textbf{Collected by} names the organization and crawl that saved the page. \textbf{Timestamps} lists when each image, script, and stylesheet on it was saved.
+
+    \bigskip
+    The logo on this February 12, 2004 capture of Thefacebook was saved \textbf{three months and twenty days later}.
+
+    \bigskip
+    An archived page is a composite: pieces from different moments, stitched together when you replay it.
+\end{frame}
+
+\begin{frame}{Reading the dots}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            One old snapshot is a curiosity. \textbf{A comparison of snapshots over time} is what supports research.
+            A dot's color is the HTTP status code the crawler got that day (Week~5):
+
+            \medskip
+            \textbf{Blue} --- 2xx, the page loaded\\
+            \textbf{Green} --- 3xx, a redirect\\
+            \textbf{Orange} --- 4xx, like 403 Forbidden or 404 Not Found\\
+            \textbf{Red} --- 5xx, the server failed
 
             \bigskip
-
-            The Wayback Machine turns the web from a snapshot medium into a \textbf{longitudinal data source} --- you can \textit{measure} change, not merely observe it:
-            \begin{itemize}\small
-                \item Track a platform's Terms of Service across a decade
-                \item Follow a government page across administrations
-                \item Contrast two rivals' homepages as they evolve
-            \end{itemize}
+            facebook.com in 2005: blue through March, then a run of orange 403s, then blue again from August 6 --- now serving Thefacebook's homepage. The domain had changed hands.
 
             \bigskip
-
-            You are not just reading old pages --- you are measuring \textbf{institutional behavior over time}.
+            Orange is not the archive failing. It faithfully recorded that the site said no.
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{img/change_timeline.png}\\
-            {\scriptsize A ``change timeline'' we build Wednesday: spikes mark major revisions.}
+            \includegraphics[width=\textwidth]{img/calendar_dots_2005.png}\\
+            {\scriptsize facebook.com, 2005.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Broken captures}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            {\small \url{https://web.archive.org/web/19991114081850/http://x.com/}}
+
+            \bigskip
+            The HTML was saved on November 14, 1999. Most of its images were not.
+
+            \bigskip
+            Replay borrows each image from its nearest capture in time. Some of these were only saved months later, and some only as 404s after the site had changed.
+
+            \bigskip
+            Files served from another host --- \texttt{static.example.com}, a CDN --- have to be fetched on their own. Often they weren't.
+
+            \bigskip
+            URLs that JavaScript assembles while the page runs are often invisible to the crawler. Next week's problem.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/x_com_1999.png}\\
+            {\scriptsize x.com, November 14, 1999.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Missing captures}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Sometimes the Wayback Machine ``has not archived that URL.'' No crawler followed a link there, and nobody asked.
+
+            \bigskip
+            \textbf{Subdomains are separate sites.} \texttt{blog.example.com} can be missing while \texttt{example.com} has thousands of captures.
+
+            \bigskip
+            \textbf{Logins and paywalls} get saved as the login page.
+
+            \bigskip
+            \textbf{Exclusions.} Site owners can ask the Archive to hide their pages.
+
+            \bigskip
+            \textbf{Soft 404s.} A blue dot can still be an error page, if the server sent it with a 200.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/meme_archives_incomplete.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Why some sites are archived better}
+    \begin{center}
+        \includegraphics[width=.9\textwidth]{img/toolbar_counts.png}
+    \end{center}
+
+    google.com: almost 20 million captures. facebook.com: 8.4 million. x.com: 83,190. (September 2026)
+
+    \bigskip
+    Crawlers follow links, so well-linked, popular sites get found and revisited constantly. Captures also come from Save Page Now, volunteers rescuing dying sites (Archive Team), libraries (Archive-It), and special crawls like the End of Term archive of U.S.\ government sites at every presidential transition since 2008.
+
+    \begin{alertblock}{Consequences}
+        The archive is a sample, not a census. Popular, well-linked sites are over-represented --- and your sample inherits that.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Why is it so slow?}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            A nonprofit library serves more than a trillion archived pages, free, to anyone who asks.
+
+            \bigskip
+            It is also a target. In October 2024 a data breach and waves of DDoS attacks took the Wayback Machine offline for days.
+
+            \bigskip
+            And it is in court. It lost to book publishers in \textit{Hachette v.\ Internet Archive} (2024), and settled record labels' claim of up to \$621 million over its digitized 78s (2025).
+
+            \bigskip
+            Who should pay to remember the web?
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/wayback_down.png}\\
+            {\scriptsize web.archive.org, while making this slide.}
+        \end{column}
+    \end{columns}
+    \begin{alertblock}{Consequences}
+        Be a polite client: pause between requests, retry with backoff when it fails, and cache what you download.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{The Inspector still works}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            Right-click anything on an archived page and choose \textbf{Inspect}. Weeks 5 and 6 still apply: the DOM, selectors, attributes, tables.
+
+            \bigskip
+            The Archive adds a layer on top. \texttt{<div id="wm-ipp-base">} is its toolbar, and a comment marks \texttt{END WAYBACK TOOLBAR INSERT}. The original page starts right after.
+
+            \bigskip
+            Links stay inside the archive. Thefacebook's register link still carries a session ID from 2004: \texttt{register.php?PHPSESSID=df5154e5\ldots}
+        \end{column}
+        \begin{column}{0.45\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/devtools_archived.png}\\
+            {\scriptsize Chrome DevTools on Thefacebook, February 12, 2004.}
         \end{column}
     \end{columns}
 \end{frame}
 
 \begin{frame}{Raw or wrapped? The \texttt{id\_} rule}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            A snapshot URL looks like:\\
-            {\scriptsize\texttt{web.archive.org/web/\textbf{20000815052826}/http://cnn.com/}}
+        \begin{column}{0.5\textwidth}
+            What the Inspector shows is the \textit{wrapped} capture: the Archive's scripts in the \texttt{<head>}, its toolbar in the \texttt{<body>}, and links rewritten to stay in the archive.
 
             \bigskip
-
-            By default the Archive \textbf{injects} its own toolbar, banner, and JavaScript, and \textbf{rewrites} every link, script, and image to point back into the archive. Convenient for browsing --- \textbf{poison for measurement}: your link, script, and image counts include the scaffolding.
+            Fine for browsing. Poison for measurement --- your counts of links, scripts, and images include the scaffolding.
 
             \bigskip
+            Add \texttt{id\_} after the timestamp for the original bytes:\\
+            {\scriptsize\texttt{.../web/20040212031928\textbf{id\_}/http://www.thefacebook.com/}}
 
-            Append \texttt{id\_} to the timestamp\\
-            {\scriptsize\texttt{.../20000815052826\textbf{id\_}/http://cnn.com/}}\\
-            to get the \textbf{original, unmodified capture}. Raw doesn't render prettily --- but for measurement, raw is exactly what you want.
+            \bigskip
+            Wednesday's measurement code fetches every page this way.
         \end{column}
-        \begin{column}{0.35\textwidth}
+        \begin{column}{0.48\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/wrapped_vs_raw.png}\\
-            {\scriptsize Wrapped (toolbar + rewritten links) vs.\ the \texttt{id\_} raw capture.}
+            {\scriptsize The same capture, wrapped (top) and raw (bottom).}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{In the notebook}
-    This week's companion notebook builds one skill at a time:
-    \begin{itemize}
-        \item \textbf{Availability API} --- find the snapshot closest to a date; retrieve it raw with \texttt{id\_}
-        \item \textbf{CDX Server API} --- enumerate a URL's \textit{entire} capture history, filtered server-side
-        \item \textbf{Policy tracking} --- loop over quarterly dates, collect a document's history, serialize to JSON
-        \item \textbf{Bag-of-words} --- tokenize, drop stopwords, and measure how much consecutive versions changed
+\begin{frame}{Facebook before Facebook}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \centering
+            \includegraphics[width=.92\textwidth]{img/facebook_2004.png}\\
+            {\scriptsize facebook.com, January 21, 2004.}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \centering
+            \includegraphics[width=.92\textwidth]{img/thefacebook_2004.png}\\
+            {\scriptsize thefacebook.com, February 12, 2004.}
+        \end{column}
+    \end{columns}
+
+    \bigskip
+    Two weeks before Thefacebook launched, facebook.com belonged to AboutFace, ``The first name in directories.'' It sold software to help colleges ``eliminate the need for printed facebooks.''
+
+    \bigskip
+    Thefacebook bought the domain in 2005 for \$200,000 and dropped the ``The.''
+\end{frame}
+
+\begin{frame}{x.com before X}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/x_com_1997.png}\\
+            {\scriptsize x.com, April 11, 1997.}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/x_com_1999.png}\\
+            {\scriptsize x.com, November 14, 1999.}
+        \end{column}
+    \end{columns}
+
+    \bigskip
+    1997: ``not nearly the worst place on the web!!!'' --- home of Dave's World and Rob's House of Weather.
+
+    \bigskip
+    1999: X.com, an online bank Elon Musk co-founded. It merged with Confinity, the company behind PayPal, in 2000. Musk bought the domain back from PayPal in 2017, and X, formerly Twitter, started using it in 2023.
+\end{frame}
+
+\begin{frame}{google.com, November 1998}
+    \begin{center}
+        \includegraphics[width=.85\textwidth]{img/google_1998.png}
+    \end{center}
+
+    The oldest capture of google.com: a heading and two links.
+
+    \bigskip
+    ``Might-work-some-of-the-time-prototype that is much more up to date.''
+
+    \bigskip
+    Almost twenty million captures later (September 2026).
+\end{frame}
+
+\begin{frame}{Research designs with the archived web}
+    One old page is a curiosity. Many old pages, compared systematically, are data.
+
+    \bigskip
+    \begin{itemize}\small
+        \item \textbf{One site, over time.} A platform's Terms of Service across twenty years --- Wednesday's notebook. Amos et al.\ (2021) did it for over a million privacy policies from more than 130,000 websites.
+        \item \textbf{Many sites, over time.} How third-party tracking spread across the web from 1996 to 2016 (Lerner et al., 2016).
+        \item \textbf{Disappearance itself.} Which pages rot, how fast, and where (Pew Research Center, 2024).
+        \item \textbf{Before and after an event.} EDGI used the Wayback Machine to document climate-change language disappearing from federal websites in 2017.
     \end{itemize}
 
     \bigskip
+    \textcite{arora_UsingWaybackMachine_2016} is a methods guide to mining websites this way.
+\end{frame}
 
-    \begin{alertblock}{Connecting to Ch.~6 \& what's next}
-        \footnotesize Archived pages parse with \texttt{BeautifulSoup} exactly like live ones (Ch.~6), and the same \texttt{time.sleep()} politeness applies --- the Archive is a nonprofit. The JavaScript growth we measure is \textit{why} dynamic-page techniques (next week) exist.
+\begin{frame}{Internet Jones and the Raiders of the Lost Trackers}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Lerner, Kornfeld Simpson, Kohno, and Roesner (USENIX Security 2016) replayed archived pages from 1996 to 2016 and logged the third-party requests each one made.
+
+            \bigskip
+            Tracking grew in both prevalence and complexity, starting from the first tracker they found in 1996.
+
+            \bigskip
+            A big part of the paper measures where the archive's view of the past is imperfect --- today's failure modes --- and how to correct for it.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/meme_internet_jones.png}
+        \end{column}
+    \end{columns}
+    \begin{alertblock}{Consequences}
+        The archive's gaps are not a footnote. They belong in your methods section.
     \end{alertblock}
+\end{frame}
+
+\begin{frame}{Closing activity: time travel with the Wayback Machine}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}\small
+            \begin{enumerate}
+                \item Pick a site that matters to you: your high school, your hometown paper, a game, a band. Find its earliest capture
+                \item Find the capture closest to the day you were born
+                \item Find a broken capture. Use About this capture or the Inspector to explain what broke
+                \item Find the first capture where something changed: a logo, a slogan, a price. Open the capture halfway between two others. Repeat until you find the change
+                \item Find a page the Archive does not have yet. Save it with Save Page Now
+            \end{enumerate}
+
+            \bigskip
+            Stuck? Start with thefacebook.com, x.com, google.com, or colorado.edu
+
+            \bigskip
+            Report back with your oldest find, your weirdest find, and your most broken page
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/meme_i_was_there.png}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 % =========================================================================
@@ -256,7 +532,7 @@ corpus = [dct.doc2bow(d) for d in docs]    # each version -> word-count vector
 index = similarities.SparseMatrixSimilarity(corpus, num_features=len(dct))
 change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1=all-new
 \end{lstlisting}
-    Plotting \texttt{change} over time is the timeline from Monday: spikes flag major revisions --- a new policy, a redesign, a response to controversy.
+    Plotting \texttt{change} over time gives a change timeline: spikes flag major revisions --- a new policy, a redesign, a response to controversy.
 \end{frame}
 
 \begin{frame}{Lab: work these, then show-and-tell}
@@ -322,10 +598,10 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
     High-value targets --- pick one and scope it to a single PR:
     \begin{itemize}
         \item \textbf{Run it against the live APIs.} The comparison numbers and ``68 of 77 snapshots'' are \textit{illustrative}. Query the real Availability/CDX endpoints, report actual results, and label sample outputs as representative.
-        \item \textbf{Add the chapter's first figures.} It is all code today: a Wayback calendar view, an annotated wrapped-vs-\texttt{id\_} capture, or a CDX-response schema would anchor the APIs.
+        \item \textbf{Add a figure for the APIs.} The new figures cover the Wayback interface, but the Availability and CDX sections are still all code. An annotated CDX response would anchor them.
         \item \textbf{Close a gap in ``Common Issues to Debug.''} A worked \texttt{id\_} example (link counts wrapped vs.\ raw), a copy-paste \texttt{nltk.download("stopwords")} recipe, or a CDX missing-field case.
         \item \textbf{Make an exercise self-checking.} Add expected output, a rubric, or a starter cell to the open-ended policy-tracking and heatmap exercises.
-        \item \textbf{Promote the limitations into the main text.} Capture-frequency bias, coverage gaps, and link rewriting currently live only in the graduate exercise --- tie them to ``Further Reading'' (\textcite{brugger_SAGEHandbookWeb_2018}).
+        \item \textbf{Add a research design.} The chapter's research-designs section lists four. Add a fifth from your own field, with a citation --- \textcite{brugger_SAGEHandbookWeb_2018} is a good place to look.
     \end{itemize}
 \end{frame}
 

@@ -1,6 +1,22 @@
 # filename	WIDTHxHEIGHT	description of the real asset to drop in
-wayback_calendar.png	1200x820	Screenshot: the Wayback Machine calendar view for a URL (web.archive.org) with the year timeline and month grid of capture dots highlighted
-change_timeline.png	1200x560	Figure: matplotlib line plot of document change score (1 - bag-of-words similarity) across consecutive Facebook ToS versions, with spikes marking major revisions
-wrapped_vs_raw.png	1200x780	Diagram: side-by-side of a Wayback snapshot with the injected toolbar/banner and rewritten links (wrapped) vs the same page fetched with the id_ suffix (raw, unmodified capture), annotated
+meme_link_rot.png	1000x750	Meme: Thanos snap / "I don't feel so good" (Avengers: Infinity War) -- 38% of 2013's pages fading away (Link rot)
+wayback_trillion.png	810x105	Screenshot: Wayback Machine search header, "Explore more than 1 trillion web pages saved over time" (web.archive.org, 2026-09-22)
+wayback_calendar.png	1200x465	Screenshot: facebook.com calendar view for 2005 -- tabs, "Saved 8,461,424 times," year histogram, first months of dots
+toolbar.png	1280x68	Screenshot: the Wayback toolbar on facebook.com, January 21, 2004 -- URL, capture count, year sparkline, date navigation
+address_bar.png	1004x42	Screenshot: browser address bar showing web.archive.org/web/20040212031928/http://www.thefacebook.com/
+about_capture.png	1280x240	Screenshot: About this capture > Timestamps on thefacebook.com, 2004-02-12 -- logo-left.jpg saved +3 months 20 days later
+calendar_dots_2005.png	470x320	Screenshot: facebook.com 2005 calendar, March, April, July, August -- blue, then orange 403s, then blue again from August 6
+x_com_1999.png	1280x610	Screenshot: x.com, 1999-11-14 (X.com Corporation pre-launch page) with most images broken
+meme_archives_incomplete.png	1000x750	Meme: Obi-Wan in the Jedi Archives, "Perhaps the archives are incomplete" (Star Wars: Attack of the Clones) (Missing captures)
+toolbar_counts.png	1280x224	Screenshot composite: Wayback toolbars for google.com (19,954,262 captures), facebook.com (8,461,424), x.com (83,190), 2026-09-22
+wayback_down.png	254x42	Screenshot: web.archive.org answering "upstream request failed" (HTTP 502) while this deck was being made, 2026-09-22
+devtools_archived.png	1680x1050	Screenshot: Chrome DevTools Elements panel on the archived thefacebook.com page (2004-02-12) -- wm-ipp-base toolbar div, END WAYBACK TOOLBAR INSERT
+wrapped_vs_raw.png	1280x616	Screenshot composite: view-source of the same capture, wrapped (injected Wayback scripts) vs id_ raw (original bytes)
+facebook_2004.png	1280x800	Screenshot: facebook.com, 2004-01-21 -- AboutFace, "The first name in directories"
+thefacebook_2004.png	1280x530	Screenshot: thefacebook.com, 2004-02-12 -- "Welcome to Thefacebook"
+x_com_1997.png	1280x430	Screenshot: x.com, 1997-04-11 -- "not nearly the worst place on the web!!!"
+google_1998.png	1280x300	Screenshot: google.com, 1998-11-11 -- "Google Search Engine Prototype"
+meme_internet_jones.png	1000x750	Meme: Indiana Jones, "It belongs in a museum!" (Raiders of the Lost Ark / Last Crusade) -- for Lerner et al. 2016, "Internet Jones"
+meme_i_was_there.png	1000x750	Meme: Elrond, "I was there, Gandalf. I was there 3000 years ago" (The Lord of the Rings) -- closing Wayback activity
 cdx_response.png	1200x720	Screenshot: a CDX Server API JSON response, showing the header row then rows of timestamp / original / statuscode / length for successive captures
 pr_review.png	1300x760	Screenshot: a GitHub pull-request "Files changed" view with an inline review comment on ch-07-archives.qmd
