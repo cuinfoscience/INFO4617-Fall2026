@@ -38,13 +38,19 @@ drift daily; they are correct as of 2026-09-22 and the frames say so.
 - `address_bar.png` -- the browser address bar on
   `web.archive.org/web/20040212031928/http://www.thefacebook.com/`.
   (The URL is the query)
-- `about_capture.png` -- About this capture > Timestamps on the 2004-02-12
-  thefacebook.com capture: `images/logo-left.jpg` was saved "+3 months 20
-  days" after the page. (About this capture)
+- `about_capture.png` -- About this capture on the 2004-02-12
+  thefacebook.com capture, both sections open. Collected by: organization
+  Alexa Crawls, collection `alexa_dv` (the panel loads this section from
+  `/__wb/provenance` on hover, so it can lag a few seconds behind the
+  Timestamps list). Timestamps: `images/logo-right.jpg` "+1 year 3
+  months", `images/logo-left.jpg` "+3 months 20 days". Retaken 2026-09-22
+  to show Collected by, which the first take missed. (About this capture)
 - `x_com_1999.png` -- x.com, 1999-11-14, X.com Corporation's pre-launch
-  page with most images broken. The CDX API shows why: that page's images
-  were saved at other times (some months later in 2000) or only as 404s.
-  (Broken captures; x.com before X)
+  page with every visible image broken. The CDX API shows why: of the
+  seven images the page references, six have never been captured
+  successfully -- their first captures, from August and September 2000,
+  are all 404s -- and the seventh, a transparent `spacer.gif`, was saved
+  only in April 2000. (Broken captures; x.com before X)
 - `toolbar_counts.png` -- three toolbars stacked: google.com 19,954,262
   captures, facebook.com 8,461,424, x.com 83,190. (Why some sites are
   archived better)
