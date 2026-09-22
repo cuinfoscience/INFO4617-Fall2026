@@ -563,10 +563,10 @@ except requests.RequestException as e:
 \end{frame}
 
 % =========================================================================
-\section{Friday · Textbook Revisions}
+\section{Friday · No class}
 % =========================================================================
 
-\begin{frame}{Improving Chapter 6 together}
+\begin{frame}{Improving Chapter 6 and others}
     \begin{columns}
         \begin{column}{0.6\textwidth}
             Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-06-static-pages.qmd} and reviews a classmate's.
@@ -603,43 +603,13 @@ except requests.RequestException as e:
     \end{itemize}
 \end{frame}
 
-\begin{frame}{A good revision, and a good review}
-    \begin{columns}
-        \begin{column}{0.6\textwidth}
-            \begin{block}{A strong PR}
-                \begin{itemize}\small
-                    \item One focused change, clearly titled
-                    \item Explains the problem it fixes
-                    \item Builds (\texttt{quarto render}) without errors
-                    \item Matches the book's voice and notation
-                    \item Discloses any AI assistance
-                \end{itemize}
-            \end{block}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{A strong review}
-                \begin{itemize}\small
-                    \item Runs / reads the change, not just skims
-                    \item Names specifics (line, claim, code)
-                    \item Separates ``must fix'' from ``nice to have''
-                    \item Is generous --- assume good faith
-                    \item Ends with a clear verdict
-                \end{itemize}
-            \end{block}
-        \end{column}
-    \end{columns}
-    \medskip
-    \centering\small Next week: \textbf{Archived web pages} --- scraping the past with the Wayback Machine.
-\end{frame}
-
 % =========================================================================
 \begin{frame}{Key takeaways}
     \begin{enumerate}
         \item Scraping is a pipeline: \textbf{retrieve $\rightarrow$ inspect $\rightarrow$ anchor $\rightarrow$ extract $\rightarrow$ DataFrame}.
-        \item Place your project on the single/multi-site $\times$ consistent/inconsistent spectrum before picking a strategy.
         \item Tables, decoys, infoboxes, and cards are different shapes of the same problem --- finding a reliable anchor.
         \item Abstract into functions, rate-limit in the loop, and code defensively.
-        \item Pages change: the durable skill is \textbf{inspect, hypothesize, verify} --- not memorized class names.
+        \item Pages change: the durable skill is \textbf{inspect, hypothesize, verify} not memorized div class names.
     \end{enumerate}
     \bigskip
 \end{frame}
