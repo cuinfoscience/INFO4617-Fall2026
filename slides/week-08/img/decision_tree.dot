@@ -1,0 +1,23 @@
+digraph G {
+  graph [rankdir=TB, bgcolor="white", nodesep=0.35, ranksep=0.28, pad=0.2, dpi=220];
+  node  [fontname="DejaVu Sans", fontsize=15, shape=box, style="rounded,filled", fillcolor="#f2f2f2", color="#555555", penwidth=1.4, margin="0.18,0.10"];
+  edge  [fontname="DejaVu Sans", fontsize=13, color="#555555", penwidth=1.3, arrowsize=0.8];
+
+  q1 [label="Is there an API?", fillcolor="white"];
+  q2 [label="Is the data in View Source?\n(even inside a <script>)", fillcolor="white"];
+  q3 [label="Is it in the Network tab\nas JSON?", fillcolor="white"];
+  a1 [label="Use the API"];
+  a2 [label="requests + BeautifulSoup\n(or json.loads the script)"];
+  a3 [label="Request that JSON\ndirectly with requests"];
+  a4 [label="Drive a browser\nSelenium in the notebook\nPlaywright as a script", fillcolor="#CFB87C", color="#8a7a45"];
+
+  q1 -> a1 [label=" yes"];
+  q1 -> q2 [label=" no"];
+  q2 -> a2 [label=" yes"];
+  q2 -> q3 [label=" no"];
+  q3 -> a3 [label=" yes"];
+  q3 -> a4 [label=" no"];
+  {rank=same; q1; a1}
+  {rank=same; q2; a2}
+  {rank=same; q3; a3}
+}
