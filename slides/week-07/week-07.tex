@@ -21,7 +21,7 @@
 
 % -------------------------------------------------------------------------
 \begin{frame}{This week at a glance}
-    \begin{columns}[T]
+    \begin{columns}
         \begin{column}{0.6\textwidth}
             The web is not permanent. This week we scrape the \textit{past} --- and measure how pages change over time.
 
@@ -30,7 +30,6 @@
             \dayband{Monday}{Concepts \& notebook intro}
             \begin{itemize}\small
                 \item Web archiving, the Wayback Machine by hand, how captures break, and what researchers do with them
-                \item Close with a live pair activity: time travel with the Wayback Machine
             \end{itemize}
 
             \medskip
@@ -63,15 +62,12 @@
 % =========================================================================
 
 \begin{frame}{Link rot}
-    \begin{columns}[T]
+    \begin{columns}
         \begin{column}{0.6\textwidth}
             38\% of the web pages that existed in 2013 were gone a decade later.
 
             \bigskip
             Usually the website is still up --- one page on it was deleted or removed.
-
-            \bigskip
-            {\footnotesize Pew Research Center, ``When Online Content Disappears'' (2024)}
 
             \bigskip
             How do you study something that might not be there tomorrow?
@@ -81,7 +77,8 @@
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{img/meme_link_rot.png}
+            \includegraphics[width=\textwidth]{slides/week-07/img/i-dont-feel-so-good.jpg}\\
+            {\footnotesize Web pages after a decade or so}
         \end{column}
     \end{columns}
 \end{frame}
@@ -157,7 +154,7 @@
 \end{frame}
 
 \begin{frame}{Reading the dots}
-    \begin{columns}[T]
+    \begin{columns}
         \begin{column}{0.6\textwidth}
             A dot's color is the HTTP status code the crawler got that day (Week~5):
 
@@ -182,7 +179,7 @@
 \end{frame}
 
 \begin{frame}{Broken captures}
-    \begin{columns}[T]
+    \begin{columns}
         \begin{column}{0.6\textwidth}
             {\small \url{https://web.archive.org/web/19991114081850/http://x.com/}}
 
@@ -207,7 +204,7 @@
 \end{frame}
 
 \begin{frame}{Missing captures}
-    \begin{columns}[T]
+    \begin{columns}
         \begin{column}{0.6\textwidth}
             Sometimes the Wayback Machine ``has not archived that URL.'' No crawler followed a link there, and nobody asked.
 
@@ -218,14 +215,15 @@
             \textbf{Logins and paywalls} get saved as the login page.
 
             \bigskip
-            \textbf{Exclusions.} Site owners can ask the Archive to hide their pages.
+            \textbf{Exclusions.} Site owners can request to hide their pages.
 
             \bigskip
             \textbf{Soft 404s.} A blue dot can still be an error page, if the server sent it with a 200.
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{img/meme_archives_incomplete.png}
+            \includegraphics[width=\textwidth]{slides/week-07/img/archives-are-incomplete.jpg}\\
+            {\footnotesize Obi-Wan logging onto the Wayback Machine}
         \end{column}
     \end{columns}
 \end{frame}
@@ -246,7 +244,7 @@
 \end{frame}
 
 \begin{frame}{Why is it so slow?}
-    \begin{columns}[T]
+    \begin{columns}
         \begin{column}{0.6\textwidth}
             A nonprofit library serves more than a trillion archived pages, free, to anyone who asks.
 
@@ -271,7 +269,7 @@
 \end{frame}
 
 \begin{frame}{The Inspector still works}
-    \begin{columns}[T]
+    \begin{columns}
         \begin{column}{0.5\textwidth}
             Right-click anything on an archived page and choose \textbf{Inspect}. Weeks 5 and 6 still apply: the DOM, selectors, attributes, tables.
 
@@ -290,7 +288,7 @@
 \end{frame}
 
 \begin{frame}{Raw or wrapped? The \texttt{id\_} rule}
-    \begin{columns}[T]
+    \begin{columns}
         \begin{column}{0.5\textwidth}
             What the Inspector shows is the \textit{wrapped} capture: the Archive's scripts in the \texttt{<head>}, its toolbar in the \texttt{<body>}, and links rewritten to stay in the archive.
 
@@ -313,7 +311,7 @@
 \end{frame}
 
 \begin{frame}{Facebook before Facebook}
-    \begin{columns}[T]
+    \begin{columns}
         \begin{column}{0.48\textwidth}
             \centering
             \includegraphics[width=.92\textwidth]{img/facebook_2004.png}\\
@@ -334,7 +332,7 @@
 \end{frame}
 
 \begin{frame}{x.com before X}
-    \begin{columns}[T]
+    \begin{columns}
         \begin{column}{0.48\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/x_com_1997.png}\\
@@ -383,8 +381,8 @@
     \textcite{arora_UsingWaybackMachine_2016} is a methods guide to mining websites this way.
 \end{frame}
 
-\begin{frame}{Internet Jones and the Raiders of the Lost Trackers}
-    \begin{columns}[T]
+\begin{frame}{Internet Jones and the Echoes of the Lost Trackers}
+    \begin{columns}
         \begin{column}{0.6\textwidth}
             Lerner, Kornfeld Simpson, Kohno, and Roesner (USENIX Security 2016) replayed archived pages from 1996 to 2016 and logged the third-party requests each one made.
 
@@ -396,16 +394,13 @@
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{img/meme_internet_jones.png}
+            \includegraphics[width=.75\textwidth]{slides/week-07/img/train-bus.jpg}
         \end{column}
     \end{columns}
-    \begin{alertblock}{Consequences}
-        The archive's gaps are not a footnote. They belong in your methods section.
-    \end{alertblock}
 \end{frame}
 
 \begin{frame}{Closing activity: time travel with the Wayback Machine}
-    \begin{columns}[T]
+    \begin{columns}
         \begin{column}{0.6\textwidth}\small
             \begin{enumerate}
                 \item Pick a site that matters to you: your high school, your hometown paper, a game, a band. Find its earliest capture
@@ -423,7 +418,8 @@
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{img/meme_i_was_there.png}
+            \includegraphics[width=\textwidth]{slides/week-07/img/elrond-i-was-there.jpg}\\
+            {\footnotesize Loading the oldest snapshot on Wayback}
         \end{column}
     \end{columns}
 \end{frame}
@@ -472,7 +468,7 @@ stats = {"year": ts[:4], "num_links": len(soup.find_all("a")),
 
 \begin{frame}[fragile]{The whole history --- the CDX Server API}
     Availability finds \textit{one} snapshot; CDX enumerates \textit{all} of them. Two params filter server-side --- less data, less cleanup:
-    \begin{columns}[T]
+    \begin{columns}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 cdx = "https://web.archive.org/cdx/search/cdx"
@@ -536,7 +532,7 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
 \end{frame}
 
 \begin{frame}{Lab: work these, then show-and-tell}
-    \begin{columns}[T]
+    \begin{columns}
         \begin{column}{0.6\textwidth}
             Work in pairs. Do these exercises from the notebook:
             \begin{enumerate}\small
@@ -561,19 +557,12 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
     \end{columns}
 \end{frame}
 
-\begin{frame}[standout]
-    You are not reading old web pages.\\
-    You are measuring how institutions behaved ---\\
-    one archived capture at a time.\\[1em]
-    {\large The page you study today may be gone tomorrow:\\ serialize everything.}
-\end{frame}
-
 % =========================================================================
 \section{Friday · Textbook Revisions}
 % =========================================================================
 
 \begin{frame}{Improving Chapter 7 together}
-    \begin{columns}[T]
+    \begin{columns}
         \begin{column}{0.6\textwidth}
             Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-07-archives.qmd} and reviews a classmate's.
 
@@ -606,7 +595,7 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
 \end{frame}
 
 \begin{frame}{A good revision, and a good review}
-    \begin{columns}[T]
+    \begin{columns}
         \begin{column}{0.6\textwidth}
             \begin{block}{A strong PR}
                 \begin{itemize}\small
