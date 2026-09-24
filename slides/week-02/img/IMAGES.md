@@ -2,6 +2,7 @@
 
 These are auto-generated gray **placeholders** so the deck compiles. Replace each with the real asset described below (keep the same filename), then rebuild.
 
+<!-- stubs:begin: generated from stubs.tsv by slides/common/make_stubs.py; edits between these markers are replaced -->
 | File | Size | Should show |
 |---|---|---|
 | `legal_timeline.png` | 1240x560 | Diagram: timeline of CFAA scraping cases -- Van Buren v. United States (2021, gates-up-or-down), hiQ Labs v. LinkedIn (2019/2022, public data but breach of contract), Sandvig v. Barr (2020, ToS violation is not a crime) |
@@ -10,6 +11,10 @@ These are auto-generated gray **placeholders** so the deck compiles. Replace eac
 | `user_agent_devtools.png` | 1200x414 | REAL ASSET -- rendered from a live response by common/make_figures.py. The course User-Agent echoed back by httpbin.org/headers, i.e. what the server actually receives. |
 | `pr_review.png` | 1300x760 | Screenshot: a GitHub pull-request Files-changed view with an inline review comment on ch-02-ethics.qmd |
 | `github_issue.png` | 1300x820 | STILL A PLACEHOLDER -- needs a manual screenshot: the GitHub 'New issue' form on Web-Data-Science-Book, filled in with the Title/Location/Problem/Why/Proposal skeleton. Requires a signed-in browser. |
+<!-- stubs:end -->
+
+`make_stubs.py` keeps the table above in step with `stubs.tsv`. It rewrites
+only what is between the two markers; the notes below are safe.
 
 ## From the textbook's screenshot toolkit (chapter 2)
 
