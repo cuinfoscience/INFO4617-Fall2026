@@ -265,11 +265,11 @@ All of these live in the transcript, so the next session would have to find them
 | ID | Priority | Target | Change | Owner | Status |
 |----|----------|--------|--------|-------|--------|
 | P0-1 | P0 | `slides/common/make_stubs.py`, `AUTHORING.md` | Generated table between markers; never overwrite notes; stop hiding the output | auto-applyable | **Applied** (2026-09-24) — see §9 |
-| P0-2 | P0 | textbook `tools/shots/` | Build the screenshot toolkit per the plan | maintainer review | Plan approved (merged, #48); M1 next |
+| P0-2 | P0 | textbook `tools/shots/` | Build the screenshot toolkit per the plan | maintainer review | Plan approved (merged, #48); M1 in review (textbook PR #135) |
 | P0-3 | P0 | `AUTHORING.md`, week-01 images | Decide what counts as a screenshot; label every image's kind | maintainer decision | **Resolved: option (a)**, real or labeled — rule in `AUTHORING.md`; week-01's look-alikes replaced in the ch-01 back-fill |
-| P1-1 | P1 | textbook `images/ch-07`, `images/ch-08` | Provenance notes for the 11 existing figures | auto-applyable | Proposed (lands with toolkit M1) |
-| P1-2 | P1 | `AUTHORING.md`, textbook `claude.md`, toolkit | Numbers in captions need a complete, recorded query | auto-applyable + P0-2 | Rule **applied** in `AUTHORING.md` (2026-09-24); textbook `claude.md` and the toolkit check pending |
-| P1-3 | P1 | textbook `claude.md`, toolkit | Alt-text and as-of rules | auto-applyable | Proposed |
+| P1-1 | P1 | textbook `images/ch-07`, `images/ch-08` | Provenance notes for the 11 existing figures | auto-applyable | In review with M1 (textbook PR #135): `provenance.json` and `IMAGES.md` for all 11 |
+| P1-2 | P1 | `AUTHORING.md`, textbook `claude.md`, toolkit | Numbers in captions need a complete, recorded query | auto-applyable + P0-2 | Rule **applied** in `AUTHORING.md` (2026-09-24); textbook `claude.md` rule in review (#135); the toolkit's query check is M4 |
+| P1-3 | P1 | textbook `claude.md`, toolkit | Alt-text and as-of rules | auto-applyable | In review (#135): the `claude.md` rule and `check`, which flags 3 ch-07/08 captions that don't say when they were captured |
 | P1-4 | P1 | ch-01–05, weeks 01–05, handouts | Back-fill per the plan, pilot first | maintainer review | Plan approved (merged, #48) |
 | P2-1 | P2 | week-01 and week-05 `IMAGES.md` | Fix stale notes | auto-applyable, after P0-1 | **Applied** (2026-09-24) |
 
