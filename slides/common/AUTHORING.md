@@ -95,22 +95,33 @@ screenshot AAR, now in the textbook repo at
   query whose limit and paging are recorded next to the figure. If the query
   hit its limit, page until it doesn't, or don't print the number.
 
-**How much a screenshot shows** (decided 2026-09-24, P1-5): text in a
-screenshot must be readable where it is shown, so as a first, soft limit a
-screenshot shows at most 800×600 CSS pixels of the screen.
+**How much a screenshot shows** (decided 2026-09-24, P1-5; restated the same
+day as P0-1 of the
+[textbook AAR](https://github.com/cuinfoscience/Web-Data-Science-Book/blob/main/docs/aar/AAR_Web-Data-Science-Book_2026-09-24.md)):
+text in a screenshot must be readable where it is shown, at both ends. A
+student can't use text that is too small, and can't use a screenshot too
+crammed to follow. So scope each screenshot to what the slide discusses,
+then make it large.
 
-- Capture a small window (800×600), or crop to what the slide discusses.
-- For DevTools, zoom DevTools to 125–175% rather than widening the window.
+- Crop to what the slide discusses, and hide the panels, columns, and
+  sidebars it doesn't mention. As a soft limit, a screenshot shows at most
+  800×600 CSS pixels of the screen.
+- For DevTools, zoom DevTools to 125–175% rather than widening the window. A
+  row that wraps, or a column cut short with "…", means the capture shows
+  too much.
 - Capture at 2× (a 1600×1200 image), so text stays sharp on a projector.
-- On a slide, show a screenshot at least as large as it was on screen: a
-  capture W CSS pixels wide needs at least W/1680 of the text width. An
-  800-pixel capture needs `width=0.48\textwidth` or more. That keeps a
-  page's 16-pixel text at 16 pixels; DevTools' text is smaller, so a DevTools
-  capture usually needs more. The textbook's `tools/shots` computes the width
-  (`targets: {slides: {width: …}}`): week 05's Inspector figure needs 0.56.
-- Going over is allowed with a reason in `IMAGES.md`. For example, a thin
-  strip like the Wayback toolbar can be 1280 wide, because it is shown at
-  full width.
+- On a slide, the smallest text has to reach 16 pixels on a slide shown
+  1920 pixels wide. The textbook's `tools/shots/run check` is the one place
+  that judges this. Give the recipe the width you plan to use
+  (`targets: {slides: {width: …}}`), and `check` fails the figure if its
+  text comes out smaller.
+- As a starting point for a page's own text, a capture W CSS pixels wide
+  needs at least W/1680 of the text width. For an 800-pixel capture that is
+  `width=0.48\textwidth`. DevTools' text is smaller, so DevTools needs more:
+  week 05's Inspector figure needs 0.56.
+- Going over the soft limit is allowed with a reason in `IMAGES.md`. For
+  example, a thin strip like the Wayback toolbar can be 1280 wide, because it
+  is shown at full width.
 
 ## Voice and frame patterns (learned from the instructor's week-02 and week-03 rewrites)
 
