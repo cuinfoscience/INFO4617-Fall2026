@@ -41,6 +41,25 @@ Re-run `pageviews_timeseries.png` before class if you want the data current
 for that day; the chapter's own framing ("yours will differ, and that's
 fine -- record the date") applies here too.
 
+## From the textbook's screenshot toolkit (chapter 5)
+
+Four figures from the textbook's chapter 5, captured on 2026-09-24 by
+`tools/shots` in the textbook repo (recipes in `tools/shots/recipes/ch-05.yml`,
+provenance in `images/ch-05/provenance.json` there). These are copies: to
+refresh one, retake and promote it in the textbook, then copy it here. The
+`_annotated.pdf` files carry the numbered markers as vector graphics.
+
+| File | Shows | Used on | Narrowest legible width |
+|---|---|---|---|
+| `inspector-heading_annotated.pdf` | The article's title shaded on the page (1), its `<h1>` node selected in the Elements tree (2) | "Inspecting a page: what the Inspector shows" | `0.56\textwidth` |
+| `element-picker_annotated.pdf` | The element picker switched on (1) over the infobox, and the infobox's node in the tree (2) | not yet | `0.56\textwidth` |
+| `network-requests.png` | The Network tab after a first-visit reload: filter buttons, Name/Status/Type/Size/Time/Waterfall | not yet (the Network frame keeps the instructor's own capture) | `0.56\textwidth` |
+| `network-headers_annotated.pdf` | The article request's headers: Client Hints (1), this course's User-Agent (2) | not yet | `0.58\textwidth` |
+
+The narrowest legible width is where the figure's text reaches 16 pixels on a
+slide shown 1920 pixels wide (`slides/common/AUTHORING.md`, "How much a
+screenshot shows"). The Inspector frame shows its figure at `0.75\textwidth`.
+
 ## Still placeholders (`dev_tools_network.png`, `pr_review.png`)
 
 Two images remain auto-generated gray **placeholders** so the deck compiles.
