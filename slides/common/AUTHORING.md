@@ -94,6 +94,12 @@ screenshot AAR, now in the textbook repo at
 - A count, date, or total printed in a caption or on a slide comes from a
   query whose limit and paging are recorded next to the figure. If the query
   hit its limit, page until it doesn't, or don't print the number.
+- No browser banners (decided 2026-09-24). A screenshot never shows Chrome
+  for Testing's "only for automated testing" notice, or any other infobar. It
+  takes space and says nothing about the page. Run Chrome with
+  `--disable-infobars`: the textbook's `tools/shots` does, and fails a
+  capture with an infobar. The one exception is a screenshot whose subject is
+  the bar itself, week 08's `selenium_browser.png`.
 
 **How much a screenshot shows** (decided 2026-09-24, P1-5; restated the same
 day as P0-1 of the
@@ -104,11 +110,17 @@ crammed to follow. So scope each screenshot to what the slide discusses,
 then make it large.
 
 - Crop to what the slide discusses, and hide the panels, columns, and
-  sidebars it doesn't mention. As a soft limit, a screenshot shows at most
-  800×600 CSS pixels of the screen.
+  sidebars it doesn't mention. As a soft limit, a screenshot shows 800×600
+  CSS pixels of the screen by default.
+- It may relax to 1024×768 (decided 2026-09-24) when two things are true:
+  the extra room removes clutter (rows that wrap, columns cut short with "…",
+  panels squeezed together), and its text still reaches 16 pixels on the
+  slide. Say what the room removes in `IMAGES.md`, or in the recipe's
+  `oversize:` when the textbook's `tools/shots` makes it.
 - For DevTools, zoom DevTools to 125–175% rather than widening the window. A
   row that wraps, or a column cut short with "…", means the capture shows
-  too much.
+  too much for its size: crop it, or relax to 1024×768 if the text still
+  reaches 16 pixels.
 - Capture at 2× (a 1600×1200 image), so text stays sharp on a projector.
 - On a slide, the smallest text has to reach 16 pixels on a slide shown
   1920 pixels wide. The textbook's `tools/shots/run check` is the one place
@@ -117,9 +129,11 @@ then make it large.
   text comes out smaller.
 - As a starting point for a page's own text, a capture W CSS pixels wide
   needs at least W/1680 of the text width. For an 800-pixel capture that is
-  `width=0.48\textwidth`. DevTools' text is smaller, so DevTools needs more:
-  week 05's Inspector figure needs 0.56.
-- Going over the soft limit is allowed with a reason in `IMAGES.md`. For
+  `width=0.48\textwidth`, and for a 1024-pixel capture `width=0.61\textwidth`.
+  DevTools' text is smaller, so DevTools needs more: week 05's Inspector
+  figure needs 0.56, and a 1024-pixel DevTools capture zoomed to 150% about
+  0.6.
+- Going beyond 1024×768 is allowed with a reason in `IMAGES.md`. For
   example, a thin strip like the Wayback toolbar can be 1280 wide, because it
   is shown at full width.
 
