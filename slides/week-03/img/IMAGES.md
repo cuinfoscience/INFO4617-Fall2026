@@ -27,7 +27,7 @@ vector graphics.
 
 | File | Shows | For | Narrowest legible width |
 |---|---|---|---|
-| `dead-endpoints.png` | Two retired endpoints in Chrome, one above the other: Pushshift's 403, one line of JSON (`{"detail":"Not authenticated"}`), and Chrome's own error page for api.crowdtangle.com, which doesn't answer. It was captured through a proxy, so the error page names a failed tunnel (`ERR_TUNNEL_CONNECTION_FAILED`) | "Three ways web data dies", which describes both. Twitter v1.1, its third, isn't shown: api.twitter.com's robots.txt disallows every path, and the maintainer decides | `0.43\textwidth` |
+| `dead-endpoints.png` | The three retired endpoints in Chrome, one above another: Pushshift's 403, one line of JSON (`{"detail":"Not authenticated"}`); Chrome's own error page for api.crowdtangle.com, which doesn't answer, captured through a proxy, so it names a failed tunnel (`ERR_TUNNEL_CONNECTION_FAILED`); and Twitter v1.1's 400, error 215, "Bad Authentication data." Twitter's part is captured as an API client (the textbook's `docs/decisions.md`, 2026-09-24) | "Three ways web data dies", which describes all three | `0.43\textwidth` |
 | `dsa-article-40_annotated.pdf` | Article 40 of the Digital Services Act, "Data access and scrutiny", on EUR-Lex, from its heading through paragraph 4, boxed (1): very large platforms and search engines must give vetted researchers access to data | "Counter-value 2 --- Oversight against exemption", or "Pushback 3 --- Turn access into a policy problem" | `0.48\textwidth` |
 
 The narrowest legible width is where the figure's text reaches 16 pixels on a
