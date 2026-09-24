@@ -15,9 +15,13 @@ LATEXMK := latexmk -pdf -interaction=nonstopmode -halt-on-error
 
 all: $(WEEKS)
 
+# make_stubs.py draws placeholders for missing images and updates only the
+# marked table in img/IMAGES.md; its output stays visible so a skipped or
+# failed step is not silent.
 $(WEEKS):
 	@echo "==> $@"
-	@cd $@ && [ -f img/stubs.tsv ] && python3 ../common/make_stubs.py . >/dev/null 2>&1 || true
+	@cd $@ && if [ -f img/stubs.tsv ]; then python3 ../common/make_stubs.py . \
+	  || echo "  make_stubs.py failed; building without new placeholders"; fi
 	@cd $@ && $(TEXENV) $(LATEXMK) $@.tex
 	@cd $@ && $(TEXENV) $(LATEXMK) $@.tex >/dev/null 2>&1   # 2nd pass: resolve citations
 

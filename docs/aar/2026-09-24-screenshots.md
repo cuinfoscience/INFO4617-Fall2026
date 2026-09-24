@@ -264,11 +264,52 @@ All of these live in the transcript, so the next session would have to find them
 
 | ID | Priority | Target | Change | Owner | Status |
 |----|----------|--------|--------|-------|--------|
-| P0-1 | P0 | `slides/common/make_stubs.py`, `AUTHORING.md` | Generated table between markers; never overwrite notes; stop hiding the output | auto-applyable | Proposed |
-| P0-2 | P0 | textbook `tools/shots/` | Build the screenshot toolkit per the plan | maintainer review | Proposed |
-| P0-3 | P0 | `AUTHORING.md`, week-01 images | Decide what counts as a screenshot; label every image's kind | maintainer decision | Proposed — awaiting your call |
-| P1-1 | P1 | textbook `images/ch-07`, `images/ch-08` | Provenance notes for the 11 existing figures | auto-applyable | Proposed |
-| P1-2 | P1 | `AUTHORING.md`, textbook `claude.md`, toolkit | Numbers in captions need a complete, recorded query | auto-applyable + P0-2 | Proposed |
-| P1-3 | P1 | textbook `claude.md`, toolkit | Alt-text and as-of rules | auto-applyable | Proposed |
-| P1-4 | P1 | ch-01–05, weeks 01–05, handouts | Back-fill per the plan, pilot first | maintainer review | Proposed |
-| P2-1 | P2 | week-01 and week-05 `IMAGES.md` | Fix stale notes | auto-applyable, after P0-1 | Proposed |
+| P0-1 | P0 | `slides/common/make_stubs.py`, `AUTHORING.md` | Generated table between markers; never overwrite notes; stop hiding the output | auto-applyable | **Applied** (2026-09-24) — see §9 |
+| P0-2 | P0 | textbook `tools/shots/` | Build the screenshot toolkit per the plan | maintainer review | Plan approved (merged, #48); M1 in review (textbook PR #135) |
+| P0-3 | P0 | `AUTHORING.md`, week-01 images | Decide what counts as a screenshot; label every image's kind | maintainer decision | **Resolved: option (a)**, real or labeled — rule in `AUTHORING.md`; week-01's look-alikes replaced in the ch-01 back-fill |
+| P1-1 | P1 | textbook `images/ch-07`, `images/ch-08` | Provenance notes for the 11 existing figures | auto-applyable | In review with M1 (textbook PR #135): `provenance.json` and `IMAGES.md` for all 11 |
+| P1-2 | P1 | `AUTHORING.md`, textbook `claude.md`, toolkit | Numbers in captions need a complete, recorded query | auto-applyable + P0-2 | Rule **applied** in `AUTHORING.md` (2026-09-24); textbook `claude.md` rule in review (#135); the toolkit's query check is M4 |
+| P1-3 | P1 | textbook `claude.md`, toolkit | Alt-text and as-of rules | auto-applyable | In review (#135): the `claude.md` rule and `check`, which flags 3 ch-07/08 captions that don't say when they were captured |
+| P1-4 | P1 | ch-01–05, weeks 01–05, handouts | Back-fill per the plan, pilot first | maintainer review | Plan approved (merged, #48) |
+| P2-1 | P2 | week-01 and week-05 `IMAGES.md` | Fix stale notes | auto-applyable, after P0-1 | **Applied** (2026-09-24) |
+
+## 9. Resolution (2026-09-24)
+
+The maintainer merged this report and both plans (#48), then chose option
+(a) for P0-3: real captures, plus diagrams and renders labeled as such, and
+no look-alikes. `slides/common/AUTHORING.md` §Images now states the rule under
+"What counts as a screenshot," together with the P1-2 rule for numbers in
+captions. Week-01's `issue_form.png` and `pr_review.png` stay on the (already
+taught) deck until the chapter 1 back-fill replaces them with real captures.
+Week-01's `IMAGES.md` now says what they are. Week-02's two renders are the
+one place the new caption rule is not yet met; the chapter 2 back-fill offers
+a real-browser capture (2-1) for the instructor to choose between.
+
+P0-1 landed as planned, with one change to the design: an `IMAGES.md` with
+no markers that consists only of lines the old script wrote (weeks 01–03 and
+09–14 before this fix) is still regenerated in its old format, since it holds
+no notes. Those files therefore don't churn. A file with notes and no markers
+is left alone, and the script says so on every build. `make_stubs.py --check`
+reports what a build would change without changing anything.
+
+Applying it turned up three things this report had missed:
+
+- **Week-06's notes were at risk too.** Its `IMAGES.md` has 63 hand-written
+  lines that the old script would have erased. The fix protects them without
+  any edit to week-06, which stays untouched while students work on it; the
+  build prints a reminder that its table is not being maintained.
+- **Week-07's `stubs.tsv` still listed the four meme placeholders** the
+  instructor had replaced in Overleaf (`adb1ce4`) under new file names. The next
+  build would have drawn four unused gray `meme_*.png` files back into the
+  folder. The rows are gone, and week-07's notes now describe the
+  instructor's picks.
+- **Week-05's notes duplicated week-04's section on the handout screenshots**
+  and pointed at a folder that doesn't exist. The section is now a two-line
+  pointer to `slides/week-04/img/`.
+
+Tested on a copy of `slides/`: `make week-07` (exit 0, 34 pages) added a new
+`stubs.tsv` row to the table, drew its placeholder, and kept every line of
+the notes. A pure old-format file (week-09) picked up a new row in its old
+format. A missing `IMAGES.md` (week-10) was created with markers. Week-06's
+file was byte-identical afterward. On the real tree, `make_stubs.py --check
+week-*` reports nothing to change.

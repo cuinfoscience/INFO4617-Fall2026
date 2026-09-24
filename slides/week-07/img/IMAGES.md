@@ -2,10 +2,9 @@
 
 As of the Monday rebuild (web archiving, the Wayback Machine by hand, failure
 modes, research designs), 15 of this deck's 21 images are **real screenshots
-of the live Wayback Machine**, captured 2026-09-22. Four are **meme
-placeholders** left for the instructor to pick, and two (Wednesday's
-`cdx_response.png`, Friday's `pr_review.png`) are older gray placeholders
-this pass did not touch.
+of the live Wayback Machine**, captured 2026-09-22. Four are **memes the
+instructor picked**, and two (Wednesday's `cdx_response.png`, Friday's
+`pr_review.png`) are older gray placeholders this pass did not touch.
 
 ## How the screenshots were made
 
@@ -74,18 +73,18 @@ drift daily; they are correct as of 2026-09-22 and the frames say so.
 To retake any of these, open the URL above in a browser and screenshot it;
 expect to retry when the Archive returns 502.
 
-## Meme placeholders -- instructor's pick
+## Memes -- the instructor's picks
 
-Gray placeholders so the deck compiles. Each description in `stubs.tsv`
-suggests a meme; swap in whatever lands better, keeping the filename.
+The instructor replaced the four gray meme placeholders in Overleaf (commit
+`adb1ce4`, 2026-09-22) with these, under new file names. The old
+`meme_*.png` rows were then removed from `stubs.tsv`, so a build does not
+draw them again.
 
-- `meme_link_rot.png` -- Link rot (suggested: the Thanos snap).
-- `meme_archives_incomplete.png` -- Missing captures (suggested: Obi-Wan,
-  "Perhaps the archives are incomplete").
-- `meme_internet_jones.png` -- Internet Jones and the Raiders of the Lost
-  Trackers (suggested: Indiana Jones, "It belongs in a museum!").
-- `meme_i_was_there.png` -- Closing activity (suggested: Elrond, "I was
-  there 3000 years ago").
+- `i-dont-feel-so-good.jpg` -- Link rot.
+- `archives-are-incomplete.jpg` -- Missing captures.
+- `train-bus.jpg` -- Internet Jones and the Echoes of the Lost Trackers.
+- `elrond-i-was-there.jpg` -- Closing activity: time travel with the
+  Wayback Machine.
 
 ## Older placeholders, not touched in this pass
 
@@ -96,5 +95,30 @@ snapshots to a longitudinal source") was replaced by "Research designs with
 the archived web," and the one Wednesday sentence that pointed back at it
 no longer does.
 
-Note: `make_stubs.py` regenerates this file from `stubs.tsv` whenever `make`
-runs. If that happens, restore these notes from git history.
+## Listed in `stubs.tsv`
+
+`make_stubs.py` keeps this table in step with `stubs.tsv` and draws a gray
+placeholder for any listed image that is missing. It rewrites only what is
+between the two markers; the notes above are safe.
+
+<!-- stubs:begin: generated from stubs.tsv by slides/common/make_stubs.py; edits between these markers are replaced -->
+| File | Size | Should show |
+|---|---|---|
+| `wayback_trillion.png` | 810x105 | Screenshot: Wayback Machine search header, "Explore more than 1 trillion web pages saved over time" (web.archive.org, 2026-09-22) |
+| `wayback_calendar.png` | 1200x465 | Screenshot: facebook.com calendar view for 2005 -- tabs, "Saved 8,461,424 times," year histogram, first months of dots |
+| `toolbar.png` | 1280x68 | Screenshot: the Wayback toolbar on facebook.com, January 21, 2004 -- URL, capture count, year sparkline, date navigation |
+| `address_bar.png` | 1004x42 | Screenshot: browser address bar showing web.archive.org/web/20040212031928/http://www.thefacebook.com/ |
+| `about_capture.png` | 1280x240 | Screenshot: About this capture on thefacebook.com, 2004-02-12 -- Collected by Alexa Crawls (alexa_dv); Timestamps: logo-right.jpg +1 year 3 months, logo-left.jpg +3 months 20 days |
+| `calendar_dots_2005.png` | 470x320 | Screenshot: facebook.com 2005 calendar, March, April, July, August -- blue, then orange 403s, then blue again from August 6 |
+| `x_com_1999.png` | 1280x610 | Screenshot: x.com, 1999-11-14 (X.com Corporation pre-launch page) with every visible image broken |
+| `toolbar_counts.png` | 1280x224 | Screenshot composite: Wayback toolbars for google.com (19,954,262 captures), facebook.com (8,461,424), x.com (83,190), 2026-09-22 |
+| `wayback_down.png` | 254x42 | Screenshot: web.archive.org answering "upstream request failed" (HTTP 502) while this deck was being made, 2026-09-22 |
+| `devtools_archived.png` | 1680x1050 | Screenshot: Chrome DevTools Elements panel on the archived thefacebook.com page (2004-02-12) -- wm-ipp-base toolbar div, END WAYBACK TOOLBAR INSERT |
+| `wrapped_vs_raw.png` | 1280x616 | Screenshot composite: view-source of the same capture, wrapped (injected Wayback scripts) vs id_ raw (original bytes) |
+| `facebook_2004.png` | 1280x800 | Screenshot: facebook.com, 2004-01-21 -- AboutFace, "The first name in directories" |
+| `thefacebook_2004.png` | 1280x530 | Screenshot: thefacebook.com, 2004-02-12 -- "Welcome to Thefacebook" |
+| `x_com_1997.png` | 1280x430 | Screenshot: x.com, 1997-04-11 -- "not nearly the worst place on the web!!!" |
+| `google_1998.png` | 1280x300 | Screenshot: google.com, 1998-11-11 -- "Google Search Engine Prototype" |
+| `cdx_response.png` | 1200x720 | Screenshot: a CDX Server API JSON response, showing the header row then rows of timestamp / original / statuscode / length for successive captures |
+| `pr_review.png` | 1300x760 | Screenshot: a GitHub pull-request "Files changed" view with an inline review comment on ch-07-archives.qmd |
+<!-- stubs:end -->

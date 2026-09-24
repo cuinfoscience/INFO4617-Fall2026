@@ -73,3 +73,15 @@ All four were then downscaled to 700px wide (LANCZOS), preserving each
 image's own aspect ratio rather than force-cropping to a fixed size — these
 are dense UI screenshots and a hard crop would either cut content or blur
 small text.
+
+## Listed in `stubs.tsv`
+
+`make_stubs.py` keeps this table in step with `stubs.tsv` and draws a gray
+placeholder for any listed image that is missing. It rewrites only what is
+between the two markers; the notes above are safe.
+
+<!-- stubs:begin: generated from stubs.tsv by slides/common/make_stubs.py; edits between these markers are replaced -->
+| File | Size | Should show |
+|---|---|---|
+| `weather_forecast_plot.png` | 1200x560 | Real Boulder, CO 7-day high/low forecast from a live Open-Meteo call, matplotlib OO interface (regenerate periodically to keep it current -- see img/IMAGES.md) |
+<!-- stubs:end -->
