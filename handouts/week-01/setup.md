@@ -21,7 +21,7 @@ Install Anaconda from [anaconda.com](https://www.anaconda.com/download). Then
 make a separate environment for this course:
 
 ```bash
-conda create -n webdata python=3.11
+conda create -n webdata python=3.14
 conda activate webdata
 pip install notebook requests beautifulsoup4 pandas matplotlib seaborn
 ```
@@ -53,8 +53,11 @@ Make a new notebook. Run the code that follows. One call gets a web page:
 ```python
 import requests
 
+# Identify yourself: Wikipedia answers the library's default User-Agent with a 403
+headers = {"User-Agent": "WebDataScience/1.0 (your-email@colorado.edu)"}
+
 url = "https://en.wikipedia.org/wiki/University_of_Colorado_Boulder"
-response = requests.get(url)
+response = requests.get(url, headers=headers)
 
 print(response.status_code)   # 200 means success
 print(len(response.text))     # characters of raw HTML
@@ -69,7 +72,7 @@ import pandas as pd
 article = "University_of_Colorado_Boulder"
 api = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article"
 url = f"{api}/en.wikipedia/all-access/all-agents/{article}/daily/20240101/20240131"
-headers = {"User-Agent": "WebDataScience/1.0 (you@colorado.edu)"}
+headers = {"User-Agent": "WebDataScience/1.0 (your-email@colorado.edu)"}
 
 data = requests.get(url, headers=headers).json()   # JSON -> dict
 df = pd.DataFrame(data["items"])                   # list of dicts -> DataFrame
@@ -78,8 +81,9 @@ df.head()
 
 The setup is correct if you get a DataFrame with dates and view counts.
 
-The `User-Agent` header tells the server who sends the request. This is a
-courtesy rule. Week 2 explains why it is important.
+The `User-Agent` header tells the server who sends the request. Put your own
+e-mail address in it. Wikipedia refuses a request that does not identify its
+sender. Week 2 explains why this is important.
 
 ---
 
