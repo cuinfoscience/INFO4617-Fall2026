@@ -1,0 +1,465 @@
+% ==========================================================================
+% INFO 4617 Web Data Science -- Week 6 handout
+% Strategy 6, cards that need to become rows: the Oscars loop from Chapter 6,
+% built one step at a time.
+%
+% Every code block ran, in order, against the live page on 2026-09-24; each
+% output block is the real output of the code above it. The two screenshots
+% are real captures from the same day (see img/IMAGES.md).
+%
+% Build:  latexmk -pdf oscars-cards-to-rows.tex   (from this folder or the
+%         repo root; the class is handouts/common/handout.cls)
+% Check:  python check_outputs.py   (reruns every block against the live
+%         page and compares each output with the one printed here)
+% ==========================================================================
+\makeatletter\def\input@path{{../common/}{handouts/common/}}\makeatother
+\documentclass{handout}
+
+\usepackage{accsupp}
+\usetikzlibrary{decorations.pathreplacing}
+\hypersetup{pdftitle={Cards to rows: the Oscars, one step at a time},
+            pdfauthor={Brian C. Keegan}}
+
+% a class name in running text: typewriter, may break after a hyphen
+\DeclareUrlCommand\cls{\urlstyle{tt}}
+% a numbered marker; the same number marks the same part of a card everywhere
+\newcommand{\mk}[1]{\tikz[baseline=(m.base)]\node[circle,fill=tab-blue,
+  text=white,inner sep=0pt,minimum size=1.2em,
+  font=\sffamily\bfseries\scriptsize](m){#1};}
+\tikzset{
+  mkc/.style={circle,fill=tab-blue,text=white,inner sep=0pt,
+              minimum size=11pt,font=\sffamily\bfseries\scriptsize},
+  mkf/.style={mkc,minimum size=8.5pt,font=\sffamily\bfseries\tiny},
+  thinlead/.style={tab-blue,line width=0.5pt,densely dotted},
+  lead/.style={tab-blue,line width=0.8pt,densely dotted},
+  brace/.style={tab-blue,line width=0.9pt,decorate,
+                decoration={brace,amplitude=4pt}},
+}
+
+\title[INFO 4617 · Week 6 · Strategy 6 handout · checked against oscars.org on September 24, 2026]{Cards to rows: the Oscars, one step at a time}
+\subtitle{Week 6 · Documents module · Textbook Chapter 6, Strategy 6}
+\author{Brian C. Keegan, Ph.D.}
+\institute{Department of Information Science, University of Colorado Boulder}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+% ------------------------------------------------------------------ intro
+\begin{frame}{What you will build}
+\begin{columns}[T]
+\begin{column}{0.605\textwidth}
+The page for the 98th Academy Awards
+(\url{https://www.oscars.org/oscars/ceremonies/2026}) lists 24 award
+categories. It has no \texttt{<table>}. Each category is a \emph{card}: a
+name, then one block for each honoree, first the winner and then the
+nominees. Each honoree block names a person or group and a film
+(Figure~1). This handout builds the loop from Wednesday's slide one piece
+at a time and turns the cards into a DataFrame with one row per honoree:
+
+\smallskip
+{\fontsize{7.6}{9.2}\selectfont\setlength{\tabcolsep}{3.5pt}%
+\begin{tabular}{@{}llll@{}}
+\toprule
+\hd{category} & \hd{honoree\_type} & \hd{entity} & \hd{film}\\
+\midrule
+Actor in a Leading Role & Winner & Michael B. Jordan & Sinners\\
+Actor in a Leading Role & Nominees & Timoth\'ee Chalamet & Marty Supreme\\
+\multicolumn{4}{@{}l}{\itshape \dots\ 125 rows in all, from 24 cards}\\
+\bottomrule
+\end{tabular}}
+
+\smallskip
+Each step adds one thing to the step before it. Run each step in your
+notebook, and compare your output with the output here before you go to
+the next step.
+
+\smallskip
+\begin{tabular}{@{}l@{\hspace{5pt}}l@{}}
+{\color{cugold}\rule[-2pt]{2.4pt}{9pt}} & Code that you type.\\
+{\color{handoutblockbody}\rule[-2pt]{2.4pt}{9pt}} & What Python shows back.\\
+\mk{1}\,\dots\,\mk{7} & The same seven parts of a card, in\\
+ & every figure and every step.
+\end{tabular}
+\end{column}
+\begin{column}{0.375\textwidth}
+\setlength{\unitlength}{\dimexpr\linewidth/1185\relax}% 1 px of the image; room for the markers at right
+\BeginAccSupp{method=pdfstringdef,Alt={Screenshot of the Actor in a Leading Role card on oscars.org: the gold heading, then WINNER, MICHAEL B. JORDAN, Sinners, then NOMINEES and four more names with their films, then the next card, Actor in a Supporting Role. Numbered markers label the area around all the cards, one card, its name, one honoree, and the honoree's type, name, and film.}}%
+\begin{tikzpicture}[x=\unitlength,y=-\unitlength]
+  \node[anchor=north west,inner sep=0] at (0,0)
+    {\includegraphics[width=1120\unitlength]{handouts/week-06/img/oscars_card.png}};
+  \draw[black!25] (0,0) rectangle (1120,1190);
+  \node[mkf] at (992,67) {3};            % the card's name
+  \draw[thinlead] (156,172) -- (318,152); % Winner
+  \node[mkf] at (345,150) {5};
+  \node[mkf] at (360,212) {6};            % the person
+  \draw[thinlead] (144,257) -- (318,273); % the film
+  \node[mkf] at (345,275) {7};
+  \draw[brace] (405,156) -- (405,280);    % one honoree
+  \node[mkf] at (462,218) {4};
+  \draw[brace] (1040,28) -- (1040,871);   % one card
+  \node[mkf] at (1078,450) {2};
+  % the area around all 24 cards; it continues below the picture
+  \draw[tab-blue,line width=0.9pt] (1106,28) -- (1118,28) -- (1118,1150);
+  \draw[tab-blue,line width=0.9pt,-latex] (1118,1150) -- (1118,1205);
+  \node[mkf] at (1150,620) {1};
+\end{tikzpicture}%
+\EndAccSupp{}
+
+\vspace{2pt}
+{\small\raggedright \textbf{Figure 1.} One card as the browser shows it,
+September 24, 2026. The numbers match Figure~2 in Step~3.\par}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------ step 1
+\begin{frame}{Step 1 --- Ask for the page, and say who you are}
+\begin{code}
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+
+url = "https://www.oscars.org/oscars/ceremonies/2026"
+headers = {"User-Agent": "Web Data Science/v1 brian.keegan@colorado.edu"}
+response = requests.get(url, headers=headers)
+response.status_code
+\end{code}
+\begin{out}
+200
+\end{out}
+The \texttt{User-Agent} header tells the server who is asking: this course
+and a contact address. Without it, oscars.org answers \texttt{403}
+(Forbidden). \texttt{200} means that the server sent the page. In your own
+projects, put your own name and address in the header.
+\end{frame}
+
+% ------------------------------------------------------------------ step 2
+\begin{frame}{Step 2 --- Parse the HTML}
+\begin{code}
+soup = BeautifulSoup(response.text, "html.parser")
+soup.title.get_text()
+\end{code}
+\begin{out}
+'The 98th Academy Awards | 2026'
+\end{out}
+\texttt{soup} holds the page as a tree of tags that you can search. The
+title tells you that you have the ceremony page, not an error page.
+\end{frame}
+
+% ------------------------------------------------------------------ step 3
+\begin{frame}{Step 3 --- Find one card in DevTools}
+Open the page in Chrome, right-click the name MICHAEL B. JORDAN, and
+select \textbf{Inspect}. The Elements panel opens with the \texttt{<div>}
+for that name selected (Figure~2). Each indented line sits inside the
+nearest less-indented line above it: read up to find the containers around
+the name, and down to find the parts next to it. Click a triangle to open
+a line; Figure~2 has the film's \texttt{<div class="field">} open.
+
+The \texttt{class} attribute on each line holds several class names,
+separated by spaces; the line at \mk{5} has three: \cls{field},
+\cls{field--name-field-honoree-type}, and \cls{winner}. oscars.org is
+built with Drupal, a content management system that makes most of these
+names from the site's own field names: \cls{field--name-} plus a field
+name, and \cls{paragraph--type--} plus a type of block. These names tell
+you what a div holds; names such as \cls{field} and \cls{field__item} tell
+you only that the div is a box.
+
+\begin{columns}[T]
+\begin{column}{0.72\textwidth}
+\setlength{\unitlength}{\dimexpr\linewidth/1040\relax}% 1 px of the image
+\BeginAccSupp{method=pdfstringdef,Alt={Screenshot of the Chrome DevTools Elements panel for the Actor in a Leading Role card. Nested div tags, each with a long class attribute: the categories area, one category card with the name Actor in a Leading Role, the honorees list, and the first honoree with Winner, Michael B. Jordan (selected), and Sinners. Four more honorees are collapsed below. Numbered markers 1 to 7 point to the seven class names that the code uses.}}%
+\begin{tikzpicture}[x=\unitlength,y=-\unitlength]
+  \node[anchor=north west,inner sep=0] at (0,0)
+    {\includegraphics[width=1040\unitlength]{handouts/week-06/img/oscars_devtools.png}};
+  \draw[black!25] (0,0) rectangle (1040,824);
+  \foreach \n/\y/\x in {1/14/90, 2/96/132, 3/151/160, 4/287/195,
+                        5/341/222, 6/397/237, 7/562/243} {
+    \draw[lead] (46,\y) -- (\x,\y);
+    \node[mkc] at (30,\y) {\n};
+  }
+  % what you right-clicked
+  \node[overlay,fill=white,rounded corners=2pt,inner sep=2pt,text=tab-blue,
+        font=\sffamily\bfseries\scriptsize,anchor=west] at (905,451)
+        {$\leftarrow$ you clicked};
+  % the four collapsed honorees
+  \draw[brace] (596,688) -- (596,797);
+  \node[anchor=west,text=tab-blue,font=\sffamily\bfseries\scriptsize]
+    at (612,742) {4 more honorees \tikz[baseline=-0.6ex]\node[mkc]{4};};
+\end{tikzpicture}%
+\EndAccSupp{}
+\end{column}
+\begin{column}{0.26\textwidth}
+\small\raggedright
+\textbf{What each part holds}\par\smallskip
+\begin{tabular}{@{}l@{\hspace{4pt}}>{\raggedright\arraybackslash}p{0.82\linewidth}@{}}
+\mk{1} & the area that holds all 24 cards\\[2pt]
+\mk{2} & one card (a category)\\[2pt]
+\mk{3} & the card's name\\[2pt]
+\mk{4} & one honoree, a winner or a nominee\\[2pt]
+\mk{5} & \texttt{Winner} or \texttt{Nominees}\\[2pt]
+\mk{6} & the person or group (the \emph{entity})\\[2pt]
+\mk{7} & the film\\
+\end{tabular}
+
+\vspace{8pt}
+\textbf{Figure 2.} Chrome DevTools, Elements panel, after
+\textbf{Inspect} on MICHAEL B. JORDAN. September 24, 2026.
+\end{column}
+\end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------ step 4
+\begin{frame}{Step 4 --- Match one class name, then count the matches}
+\begin{code}
+name_tag = soup.find("div", class_="field--name-field-award-category-oscars")
+name_tag["class"]
+\end{code}
+\begin{out}
+['field',
+ 'field--name-field-award-category-oscars',
+ 'field--type-entity-reference',
+ 'field--label-hidden',
+ 'field__item']
+\end{out}
+BeautifulSoup keeps the \texttt{class} attribute as a list of names.
+\texttt{class\_="..."} matches a tag when your name is any one item in
+that list, so you give only the one name that you need. (The underscore
+is necessary because \texttt{class} is a reserved word in Python.) Now
+count what each name matches on the whole page. The last item is the
+whole attribute from the line at \mk{5}, copied from DevTools:
+\begin{code}
+for name in ["field", "field__item", "paragraph",
+             "field--name-field-award-categories", "paragraph--type--award-category",
+             "field--name-field-award-category-oscars", "paragraph--type--award-honoree",
+             "field--name-field-honoree-type", "field--name-field-award-entities",
+             "field--name-field-award-film",
+             "field field--name-field-honoree-type winner"]:
+    print(len(soup.find_all("div", class_=name)), name)
+\end{code}
+\begin{dfout}{@{}l@{\hspace{14pt}}c@{}}
+\ol|693 field| & \\
+\ol|445 field__item| & \\
+\ol|154 paragraph| & \\
+\ol|1 field--name-field-award-categories| & \mk{1}\\
+\ol|24 paragraph--type--award-category| & \mk{2}\\
+\ol|24 field--name-field-award-category-oscars| & \mk{3}\\
+\ol|125 paragraph--type--award-honoree| & \mk{4}\\
+\ol|125 field--name-field-honoree-type| & \mk{5}\\
+\ol|125 field--name-field-award-entities| & \mk{6}\\
+\ol|125 field--name-field-award-film| & \mk{7}\\
+\ol|25 field field--name-field-honoree-type winner| & \\
+\end{dfout}
+The general names match hundreds of divs across the page; the specific
+names match only what you want. Check each count against the page: it
+shows 24 category headings, so 24 cards \mk{2} is correct, and 125
+honorees \mk{4} with 125 of each field \mk{5}\,\mk{6}\,\mk{7} means one of
+each per honoree. The whole attribute finds only the 25 winners, because a
+string with spaces must match the attribute exactly, names and order.
+Select the one name that describes the content, then check its count.
+\end{frame}
+
+% ------------------------------------------------------------------ step 5
+\begin{frame}{Step 5 --- Go to the area \mk{1}, then collect the cards \mk{2}}
+\begin{code}
+area = soup.find("div", class_="field--name-field-award-categories")
+categories = area.find_all("div", class_="paragraph--type--award-category")
+len(categories)
+\end{code}
+\begin{out}
+24
+\end{out}
+\texttt{find} returns the first match: one tag. \texttt{find\_all} returns
+a list of all the matches. You call \texttt{find\_all} on \texttt{area},
+not on \texttt{soup}, so it searches only inside the awards area.
+\texttt{categories} is a list of the 24 cards, in the order of the page.
+\end{frame}
+
+% ------------------------------------------------------------------ step 6
+\begin{frame}{Step 6 --- Take one card and read its name \mk{3}}
+\begin{code}
+cat = categories[0]
+name_tag = cat.find(class_="field--name-field-award-category-oscars")
+name_tag.get_text(strip=True)
+\end{code}
+\begin{out}
+'Actor in a Leading Role'
+\end{out}
+Build the steps for one card before you build them for 24.
+\texttt{cat.find(...)} searches only inside this card. This \texttt{find}
+has no \texttt{"div"}, so it matches any tag with the class; every field
+on this page is a div, so both forms work. \texttt{get\_text(strip=True)}
+gives the text inside the tag, without the spaces and line breaks around
+it.
+\end{frame}
+
+% ------------------------------------------------------------------ step 7
+\begin{frame}{Step 7 --- Collect the honorees \mk{4} in that one card}
+\begin{code}
+honorees = cat.find_all("div", class_="paragraph--type--award-honoree")
+len(honorees)
+\end{code}
+\begin{out}
+5
+\end{out}
+In Step~4, this class name matched 125 divs on the whole page. Searched
+from \texttt{cat}, it matches the 5 in this card. Where you start a search
+decides what you get back. \texttt{find\_all} also looks at every level
+below \texttt{cat}, so you do not step through the two wrapper divs between
+the card and its honorees (\cls{field--name-field-award-honorees} and
+\cls{field__item} in Figure~2).
+\end{frame}
+
+% ------------------------------------------------------------------ step 8
+\begin{frame}{Step 8 --- Extract the three fields \mk{5}\,\mk{6}\,\mk{7} from one honoree}
+\begin{code}
+h = honorees[0]
+type_tag = h.find(class_="field--name-field-honoree-type")
+entity_tag = h.find(class_="field--name-field-award-entities")
+film_tag = h.find(class_="field--name-field-award-film")
+print(type_tag.get_text(strip=True))
+print(entity_tag.get_text(strip=True))
+print(film_tag.get_text(strip=True))
+\end{code}
+\begin{out}
+Winner
+Michael B. Jordan
+Sinners
+\end{out}
+Each \texttt{find} starts from \texttt{h}, so it finds only the fields of
+this honoree. To see what \texttt{strip=True} removes, look at the raw
+text:
+\begin{code}
+entity_tag.text
+\end{code}
+\begin{out}
+'\nMichael B. Jordan\n'
+\end{out}
+The line breaks come from the HTML around the inner \cls{field__item} div.
+The type is also a class name (\cls{winner} or \cls{nominee}), but the
+text is what you want in the table.
+\end{frame}
+
+% ------------------------------------------------------------------ step 9
+\begin{frame}{Step 9 --- Make one row for each honoree in the card}
+\begin{code}
+category_name = name_tag.get_text(strip=True)
+rows = []
+for h in honorees:
+    rows.append({
+        "category": category_name,
+        "honoree_type": h.find(class_="field--name-field-honoree-type").get_text(strip=True),
+        "entity": h.find(class_="field--name-field-award-entities").get_text(strip=True),
+        "film": h.find(class_="field--name-field-award-film").get_text(strip=True),
+    })
+rows[1]
+\end{code}
+\begin{out}
+{'category': 'Actor in a Leading Role',
+ 'honoree_type': 'Nominees',
+ 'entity': 'Timothée Chalamet',
+ 'film': 'Marty Supreme'}
+\end{out}
+The three \texttt{find} calls from Step~8 go inside the loop, and their
+text goes into a dictionary: one dictionary per row, keys as column names
+(\texttt{rows[1]} is the second of 5). \texttt{category\_name}, from
+Step~6, puts the card's name in each row. The page shows NOMINEES once,
+but the HTML has the label in every nominee block: a script hides the
+repeats in the browser (\texttt{style="display: none;"} in DevTools), and
+\texttt{requests} does not run scripts, so every row gets its label.
+\end{frame}
+
+% ----------------------------------------------------------------- step 10
+\begin{frame}{Step 10 --- Put the card loop inside a loop over all 24 cards}
+\begin{code}
+rows = []
+for cat in categories:                                                      # Step 5
+    name_tag = cat.find(class_="field--name-field-award-category-oscars")   # Step 6
+    if name_tag is None:                                                    # guard
+        continue
+    category_name = name_tag.get_text(strip=True)                           # Step 6
+    for h in cat.find_all("div", class_="paragraph--type--award-honoree"):  # Step 7
+        type_tag = h.find(class_="field--name-field-honoree-type")          # Step 8
+        entity_tag = h.find(class_="field--name-field-award-entities")      # Step 8
+        film_tag = h.find(class_="field--name-field-award-film")            # Step 8
+        rows.append({                                                       # Step 9
+            "category": category_name,
+            "honoree_type": type_tag.get_text(strip=True) if type_tag else None,
+            "entity": entity_tag.get_text(strip=True) if entity_tag else None,
+            "film": film_tag.get_text(strip=True) if film_tag else None,
+        })
+len(rows)
+\end{code}
+\begin{out}
+125
+\end{out}
+Two things are new. The outer loop \texttt{for cat in categories:} runs
+Steps~6 to~9 once per card, and \texttt{rows = []} moves above it so all
+24 cards add to one list. And guards: \texttt{find} returns \texttt{None}
+when nothing matches, and \texttt{.get\_text()} on \texttt{None} raises an
+\texttt{AttributeError} that stops the loop. \texttt{if name\_tag is None:
+continue} skips a card with no name; \texttt{... if type\_tag else None}
+records a missing field as \texttt{None}. No guard fires on the 2026 page;
+the guards keep the loop running if one card is shaped differently.
+\end{frame}
+
+% ----------------------------------------------------------------- step 11
+\begin{frame}{Step 11 --- Make the DataFrame, then check it against the page}
+\begin{code}
+df = pd.DataFrame(rows)
+df.shape
+\end{code}
+\begin{out}
+(125, 4)
+\end{out}
+\begin{code}
+df.head()
+\end{code}
+\begin{dfout}{@{}rllll@{}}
+ & \hd{category} & \hd{honoree\_type} & \hd{entity} & \hd{film}\\
+\midrule
+\textbf{0} & Actor in a Leading Role & Winner & Michael B. Jordan & Sinners\\
+\textbf{1} & Actor in a Leading Role & Nominees & Timoth\'ee Chalamet & Marty Supreme\\
+\textbf{2} & Actor in a Leading Role & Nominees & Leonardo DiCaprio & One Battle after Another\\
+\textbf{3} & Actor in a Leading Role & Nominees & Ethan Hawke & Blue Moon\\
+\textbf{4} & Actor in a Leading Role & Nominees & Wagner Moura & The Secret Agent\\
+\end{dfout}
+\begin{code}
+df["honoree_type"].value_counts()
+\end{code}
+\begin{out}
+honoree_type
+Nominees    100
+Winner       25
+Name: count, dtype: int64
+\end{out}
+25 winners for 24 categories looks like a bug in the loop. Look at the
+winners of one category:
+\begin{code}
+df[(df["category"] == "Live Action Short Film") & (df["honoree_type"] == "Winner")]
+\end{code}
+\begin{dfout}{@{}rllll@{}}
+ & \hd{category} & \hd{honoree\_type} & \hd{entity} & \hd{film}\\
+\midrule
+\textbf{70} & Live Action Short Film & Winner & Sam A. Davis and Jack Piatt & The Singers\\
+\textbf{71} & Live Action Short Film & Winner & Alexandre Singh and Natalie Musteata & Two People Exchanging Saliva\\
+\end{dfout}
+The category ended in a tie (the first Oscars tie since 2013), so the
+table is correct: check a surprising number against the page before you
+change your code. Check what each column holds, too. You named the
+columns, but the site decides what goes in each field: for International
+Feature Film, \texttt{entity} is the film and \texttt{film} is the country
+(\emph{Sentimental Value}, Norway); for Music (Original Song),
+\texttt{film} is the song title.
+
+\begin{alertblock}{The whole path}
+\texttt{soup} $\rightarrow$ area \mk{1} $\rightarrow$ each card \mk{2}
+$\rightarrow$ its name \mk{3} and honorees \mk{4} $\rightarrow$ each
+honoree's type \mk{5}, entity \mk{6}, and film \mk{7} $\rightarrow$ one
+dictionary per row $\rightarrow$ \texttt{pd.DataFrame(rows)}. If your
+counts differ, the page has changed: inspect a card again (Figure~2).
+\end{alertblock}
+\end{frame}
+
+\end{document}
