@@ -78,8 +78,9 @@ is no longer wanted, or you replace it under a new file name, delete its row
 from `stubs.tsv`, or the next build draws the placeholder again. Reference
 images as `img/name.png`.
 
-**What counts as a screenshot** (decided 2026-09-24; see
-`docs/aar/2026-09-24-screenshots.md`, P0-3):
+**What counts as a screenshot** (decided 2026-09-24; see P0-3 of the
+screenshot AAR, now in the textbook repo at
+[`docs/aar/2026-09-24-screenshots.md`](https://github.com/cuinfoscience/Web-Data-Science-Book/blob/main/docs/aar/2026-09-24-screenshots.md)):
 
 - A screenshot is a real capture of a real page, by a person or a tool.
   `IMAGES.md` records its URL, its date, and how it was made.
