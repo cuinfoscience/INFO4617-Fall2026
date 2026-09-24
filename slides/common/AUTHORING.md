@@ -94,6 +94,20 @@ images as `img/name.png`.
   query whose limit and paging are recorded next to the figure. If the query
   hit its limit, page until it doesn't, or don't print the number.
 
+**How much a screenshot shows** (decided 2026-09-24, P1-5): text in a
+screenshot must be readable where it is shown, so as a first, soft limit a
+screenshot shows at most 800×600 CSS pixels of the screen.
+
+- Capture a small window (800×600), or crop to what the slide discusses.
+- For DevTools, zoom DevTools to 125–175% rather than widening the window.
+- Capture at 2× (a 1600×1200 image), so text stays sharp on a projector.
+- On a slide, show a screenshot at least as large as it was on screen: a
+  capture W CSS pixels wide needs at least W/1680 of the text width. An
+  800-pixel capture needs `width=0.48\textwidth` or more.
+- Going over is allowed with a reason in `IMAGES.md`. For example, a thin
+  strip like the Wayback toolbar can be 1280 wide, because it is shown at
+  full width.
+
 ## Voice and frame patterns (learned from the instructor's week-02 and week-03 rewrites)
 
 The instructor hand-rewrote the week-02 deck in August 2026 (commits `9362b5b`,

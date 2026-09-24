@@ -243,6 +243,13 @@ All of these live in the transcript, so the next session would have to find them
 - **Owner:** maintainer review, one pilot chapter first
 - **Status:** Proposed
 
+### [P1-5] Keep a screenshot within 800×600 of the screen
+- **Target:** textbook `tools/shots/` and `claude.md`; `slides/common/AUTHORING.md`; both plans
+- **Root cause:** missing, and found after this report: the instructor's review on 2026-09-24 ("font sizes on some of these images are too small to be accessible"). §5.7 found no rule for scale or text size; the captures used whole 1280- and 1680-pixel windows, and the slides and the book show them far smaller.
+- **Change:** a first, soft limit. A screenshot shows at most 800×600 CSS pixels of the screen (1600×1200 image pixels at 2×): a small window, a crop to what the text discusses, and DevTools zoomed rather than a wider window. Going over is allowed with a stated reason. The measured legibility check (§7.7 of the toolkit plan) stays the finer test.
+- **Owner:** maintainer decision (made); the toolkit enforces it as a warning
+- **Status:** Applied in the toolkit (textbook PR #137) and in `AUTHORING.md`; existing figures flagged for retakes (§9)
+
 ### [P2-1] Fix the two stale `IMAGES.md` files
 - **Target:** `slides/week-01/img/IMAGES.md` (calls eight real or look-alike images "placeholders"); `slides/week-05/img/IMAGES.md` (points at a `handouts/common/img/` that does not exist)
 - **Root cause:** drift, caused by §5.2
@@ -265,12 +272,13 @@ All of these live in the transcript, so the next session would have to find them
 | ID | Priority | Target | Change | Owner | Status |
 |----|----------|--------|--------|-------|--------|
 | P0-1 | P0 | `slides/common/make_stubs.py`, `AUTHORING.md` | Generated table between markers; never overwrite notes; stop hiding the output | auto-applyable | **Applied** (2026-09-24) — see §9 |
-| P0-2 | P0 | textbook `tools/shots/` | Build the screenshot toolkit per the plan | maintainer review | Plan approved (merged, #48); M1 in review (textbook PR #135) |
+| P0-2 | P0 | textbook `tools/shots/` | Build the screenshot toolkit per the plan | maintainer review | Plan approved (merged, #48); M1 **merged** (textbook #135); M2 (#136) and M3 (#137) in review |
 | P0-3 | P0 | `AUTHORING.md`, week-01 images | Decide what counts as a screenshot; label every image's kind | maintainer decision | **Resolved: option (a)**, real or labeled — rule in `AUTHORING.md`; week-01's look-alikes replaced in the ch-01 back-fill |
-| P1-1 | P1 | textbook `images/ch-07`, `images/ch-08` | Provenance notes for the 11 existing figures | auto-applyable | In review with M1 (textbook PR #135): `provenance.json` and `IMAGES.md` for all 11 |
-| P1-2 | P1 | `AUTHORING.md`, textbook `claude.md`, toolkit | Numbers in captions need a complete, recorded query | auto-applyable + P0-2 | Rule **applied** in `AUTHORING.md` (2026-09-24); textbook `claude.md` rule in review (#135); the toolkit's query check is M4 |
-| P1-3 | P1 | textbook `claude.md`, toolkit | Alt-text and as-of rules | auto-applyable | In review (#135): the `claude.md` rule and `check`, which flags 3 ch-07/08 captions that don't say when they were captured |
+| P1-1 | P1 | textbook `images/ch-07`, `images/ch-08` | Provenance notes for the 11 existing figures | auto-applyable | **Applied** (merged with M1, textbook #135): `provenance.json` and `IMAGES.md` for all 11 |
+| P1-2 | P1 | `AUTHORING.md`, textbook `claude.md`, toolkit | Numbers in captions need a complete, recorded query | auto-applyable + P0-2 | Rules **applied** in `AUTHORING.md` and the textbook's `claude.md` (#135); the toolkit's query check is M4 |
+| P1-3 | P1 | textbook `claude.md`, toolkit | Alt-text and as-of rules | auto-applyable | **Applied** (#135): the `claude.md` rule and `check`, which flags 3 ch-07/08 captions that don't say when they were captured |
 | P1-4 | P1 | ch-01–05, weeks 01–05, handouts | Back-fill per the plan, pilot first | maintainer review | Plan approved (merged, #48) |
+| P1-5 | P1 | toolkit, `AUTHORING.md`, textbook `claude.md`, plans | A screenshot shows at most 800×600 CSS pixels (a soft limit) | maintainer decision | Rule **applied** in `AUTHORING.md`; toolkit warning in review (textbook #137); retakes listed in §9 |
 | P2-1 | P2 | week-01 and week-05 `IMAGES.md` | Fix stale notes | auto-applyable, after P0-1 | **Applied** (2026-09-24) |
 
 ## 9. Resolution (2026-09-24)
@@ -313,3 +321,32 @@ the notes. A pure old-format file (week-09) picked up a new row in its old
 format. A missing `IMAGES.md` (week-10) was created with markers. Week-06's
 file was byte-identical afterward. On the real tree, `make_stubs.py --check
 week-*` reports nothing to change.
+
+### Later the same day: text too small to read (P1-5)
+
+The instructor found the text in some images too small to be accessible and
+set a first, soft limit: a screenshot shows at most about 800×600 of the
+screen. Measured against it:
+
+- **Textbook:** all 11 ch-07 and ch-08 figures show 1100–1858 CSS pixels
+  across. The book's 778-pixel column shows their text at 42–71% of its size on
+  screen, and DevTools' text in the full-window captures at about 5 pixels.
+  The toolkit's `check` now flags each one.
+- **Slides:** 18 screenshots in weeks 01, 07, and 08 appear on their slides
+  smaller than they were on screen:
+  - week 01: all five, at about half;
+  - week 07: six, at 45–63%;
+  - week 08: seven, at 45–80%.
+
+  The thin strips (the Wayback toolbar, the address bar) are wider than 800
+  but are shown larger than life at full slide width, so they read fine.
+- **Week-06 handout:** within the limit or zoomed. The card shows 560×595 CSS
+  pixels; the DevTools figure is zoomed to 175%.
+
+A capture within the limit is possible even for DevTools. An 800×600 window
+with DevTools docked at the bottom, zoomed to 125%, and its Styles pane beside
+the tree puts xkcd's `<img>` and its `title` and `alt` at 13.4 pixels in the
+book's column. The same figure today is at 5.1.
+
+The retakes follow the back-fill's order, with ch-07 and ch-08 (and weeks 07
+and 08) after the chapter-5 pilot. Week 06 stays untouched this week.
