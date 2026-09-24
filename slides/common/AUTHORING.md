@@ -132,10 +132,26 @@ then make it large.
   `width=0.48\textwidth`, and for a 1024-pixel capture `width=0.61\textwidth`.
   DevTools' text is smaller, so DevTools needs more: week 05's Inspector
   figure needs 0.56, and a 1024-pixel DevTools capture zoomed to 150% about
-  0.6.
+  0.6. Chrome's XML viewer and View Source draw 13-pixel text, so an
+  800-pixel capture of either needs about 0.59: week 04's House roster does.
 - Going beyond 1024×768 is allowed with a reason in `IMAGES.md`. For
   example, a thin strip like the Wayback toolbar can be 1280 wide, because it
   is shown at full width.
+
+**Copies from the textbook.** A figure the textbook's `tools/shots` made is
+copied here, not retaken: to refresh it, retake and promote it in the
+textbook, then copy it again. Slides take the `_annotated.pdf`, whose markers
+are vector graphics. A Markdown handout, read on GitHub, takes the
+`_annotated.png`, because GitHub doesn't show a PDF inline. A copy the deck
+doesn't use yet gets a row in the week's `IMAGES.md` ("Used on: not yet") and
+none in `stubs.tsv`, which lists what the deck includes.
+
+**Field notes.** What earlier captures taught is in the textbook's
+[`tools/shots/README.md`](https://github.com/cuinfoscience/Web-Data-Science-Book/blob/main/tools/shots/README.md#field-notes),
+"Field notes": robots.txt rules per host and for AI agents, content types,
+Chrome's XML viewer and View Source, crops, and markers. Read it before a
+capture, and add a note when a capture teaches you something the next person
+would otherwise find out again.
 
 ## Voice and frame patterns (learned from the instructor's week-02 and week-03 rewrites)
 
