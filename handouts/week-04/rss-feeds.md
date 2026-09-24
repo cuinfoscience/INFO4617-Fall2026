@@ -35,9 +35,13 @@ is exactly how you'd notice.
 |---|---|
 | Data Skeptic | `https://dataskeptic.libsyn.com/rss` |
 | Planet Money (NPR) | `https://feeds.npr.org/510289/podcast.xml` |
-| The Changelog | `https://changelog.com/podcast/feed` |
+| Talk Python To Me | `https://talkpython.fm/episodes/rss` |
 | Data Engineering Podcast | no single published URL — find it on [dataengineeringpodcast.com](https://www.dataengineeringpodcast.com/) using the technique below |
 | The PolicyViz Podcast | no single published URL — find it on [policyviz.com/podcast](https://policyviz.com/podcast/) using the technique below |
+
+The Changelog, a software podcast, was on this list until a student ran the
+`robots.txt` check on it: its `robots.txt` disallows every path, its feed
+included. That check is worth running on every feed, these included.
 
 ---
 
