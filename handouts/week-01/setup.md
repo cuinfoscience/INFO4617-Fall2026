@@ -23,8 +23,11 @@ make a separate environment for this course:
 ```bash
 conda create -n webdata python=3.11
 conda activate webdata
-pip install requests beautifulsoup4 pandas matplotlib seaborn
+pip install notebook requests beautifulsoup4 pandas matplotlib seaborn
 ```
+
+A new environment has no Jupyter in it, so `notebook` is on the install
+line. Run `conda activate webdata` each time you open a new terminal.
 
 Use one environment for each project. The environment records the version of
 each library that your analysis used. This makes your results reproducible. It
@@ -142,6 +145,10 @@ Then star the course textbook. You can then find it quickly:
 On macOS and Linux, start your terminal again. If the error continues, run the
 `conda init` step of the installer. On Windows, use the "Anaconda Prompt"
 application.
+
+**`jupyter: command not found`** (or "not recognized" on Windows) — Jupyter
+is not installed in the active environment. Run `conda activate webdata`,
+then `pip install notebook`, and start `jupyter notebook` again.
 
 **`ModuleNotFoundError` for a library that you installed** — your notebook
 probably uses a different kernel than the environment. In the notebook, run

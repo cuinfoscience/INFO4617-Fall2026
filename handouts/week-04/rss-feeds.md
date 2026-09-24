@@ -41,20 +41,49 @@ is exactly how you'd notice.
 
 ---
 
+## What a feed looks like
+
+Open a feed's address in Chrome before you write any code. If the feed is
+served as XML (`text/xml` or `application/xml`), Chrome draws it as a tree
+you can fold: `<rss>`, then one `<channel>`, then one `<item>` per story.
+The `<item>` is the element that repeats, and the one your code will loop
+over. A feed served as `application/rss+xml`, such as PBS NewsHour's, shows
+as plain text instead, with the same structure.
+
+![Screenshot of Chrome's tree view of the feed. Marker 1: the rss root tag and its namespaces. Marker 2: channel, with title BBC News, description BBC News - Science & Environment, a link, and folded image and copyright. Marker 3: the first item, titled Elephants use medicinal plants to treat themselves, researchers find, with description, link, guid, pubDate of 24 September 2026, and thumbnail. Marker 3 again: the second item.](img/rss-feed-xml_annotated.png)
+
+*BBC News's science and environment feed in Chrome, September 2026, one of
+the feeds the BBC publishes for each section. `<rss>` ① holds one
+`<channel>` ②: the feed's title, description, and link, then one `<item>` ③
+per story. Each `CDATA` wrapper marks text the parser takes as it is, and
+BeautifulSoup's `.text` returns what is inside. Chrome's triangles fold the
+channel's `<image>` and `<copyright>`. (The textbook's Figure 4.3.)*
+
+---
+
 ## Finding a feed this list doesn't cover
 
 Most sites don't advertise their feed on the homepage:
 
 - Try appending `/rss`, `/feed`, or `/rss.xml` to the site's root URL — the
   most common convention.
-- View the page source (not the rendered page) and search for
-  `type="application/rss+xml"` — it names the feed URL directly in a
-  `<link>` tag, even when nothing is visible on the page itself.
+- View the page source, not the rendered page (right-click the page and
+  choose **View Page Source**, or press Ctrl + U; ⌘ + ⌥ + U on a Mac), and
+  search it for `application/rss+xml`. The `<link>` tag with that `type`
+  names the feed's address in its `href`, even when nothing on the page
+  itself links to the feed (see the figure below).
 - For a podcast specifically, check its listing on a podcast directory
   (Apple Podcasts, Podchaser, Listen Notes) — most display or link to the
   canonical feed even when the show's own site doesn't.
 - Look for a small RSS icon or a "Subscribe" link, often in a page footer
   or sidebar.
+
+![Screenshot of Chrome's toolbar over a View Source page. The address bar reads view-source:https://www.pbs.org/newshour/, and the find bar holds application/rss+xml, match 1 of 1. Under the end of a script, line 32 is a canonical link, and line 33 is a link with rel alternate, href https://www.pbs.org/newshour/feeds/rss/headlines, and type application/rss+xml, highlighted. Marker 1 is beside the href.](img/view-source-rss-link_annotated.png)
+
+*PBS NewsHour's home page in View Source, searched with Chrome's find bar
+(Ctrl + F, or ⌘ + F on a Mac) for `application/rss+xml`, September 2026.
+The one match is on line 33, in a `<link rel="alternate">` whose `href` ① is
+the feed's address. (The textbook's Figure 4.2.)*
 
 ---
 

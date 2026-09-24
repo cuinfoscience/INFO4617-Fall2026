@@ -74,6 +74,24 @@ image's own aspect ratio rather than force-cropping to a fixed size — these
 are dense UI screenshots and a hard crop would either cut content or blur
 small text.
 
+## From the textbook's screenshot toolkit (chapter 4)
+
+One figure from the textbook's chapter 4, captured on 2026-09-24 by
+`tools/shots` in the textbook repo (recipe in `tools/shots/recipes/ch-04.yml`,
+provenance in `images/ch-04/provenance.json` there). It is a copy: to refresh
+it, retake and promote it in the textbook, then copy it here. The
+`_annotated.pdf` carries the numbered markers as vector graphics.
+
+| File | Shows | Used on | Narrowest legible width |
+|---|---|---|---|
+| `house-xml-tree_annotated.pdf` | The House roster (published September 2, 2026) in Chrome's XML tree: `<MemberData>` (1), `<members>` (2), the first and second `<member>` (3), and the first `<member-info>` (4), with `<title-info>` and the first member's `<committee-assignments>` folded | not yet (for "XML → DataFrame: the real House roster") | `0.59\textwidth` |
+
+The narrowest legible width is where the figure's text reaches 16 pixels on a
+slide shown 1920 pixels wide (`slides/common/AUTHORING.md`, "How much a
+screenshot shows"). The chapter's two RSS figures are in the RSS handout
+(`handouts/week-04/img/`). The back-fill plan's JSON figure (Open-Meteo in
+Chrome's JSON view) was not made; the textbook's `docs/handoff.md` says why.
+
 ## Listed in `stubs.tsv`
 
 `make_stubs.py` keeps this table in step with `stubs.tsv` and draws a gray

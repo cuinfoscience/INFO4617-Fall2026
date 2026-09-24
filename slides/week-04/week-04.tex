@@ -301,7 +301,7 @@ m.find("party").text if m.find("party") else None
 import requests, pandas as pd
 
 url = "https://clerk.house.gov/xml/lists/MemberData.xml"
-soup = BeautifulSoup(requests.get(url).text, "xml")
+soup = BeautifulSoup(requests.get(url).content, "xml")
 print(soup.find("MemberData")["publish-date"])
 
 records = []
