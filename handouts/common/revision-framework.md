@@ -260,6 +260,9 @@ that answers every question properly scores well by construction.
 
 ### Merged is not the bar
 
+Pull requests merge in class. On a Friday, we hold a code-review standup: you
+present your change, a classmate reviews it, and I merge the approved ones.
+
 **You are graded on the proposal and the review, not on whether I merge it.** A
 well-evidenced, correctly scoped PR that I decline for editorial reasons earns
 full credit. A merged one-character typo fix does not. The skill being assessed

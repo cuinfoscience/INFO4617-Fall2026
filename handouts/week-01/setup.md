@@ -21,7 +21,7 @@ Install Anaconda from [anaconda.com](https://www.anaconda.com/download). Then
 make a separate environment for this course:
 
 ```bash
-conda create -n webdata python=3.11
+conda create -n webdata python=3.14
 conda activate webdata
 pip install notebook requests beautifulsoup4 pandas matplotlib seaborn
 ```

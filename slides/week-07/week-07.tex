@@ -514,7 +514,7 @@ with open("fb_tos_history.json", "w") as f:
 \end{frame}
 
 \begin{frame}[fragile]{Measuring change --- bag-of-words}
-    Represent each version as a vector of word frequencies (order ignored), then compare vectors:
+    Represent each version as a vector of word frequencies (order ignored), then compare vectors. Install once with \texttt{conda install -c conda-forge gensim nltk}; pip has no ready-made gensim for Python 3.14 yet.
 \begin{lstlisting}
 from gensim.utils import simple_preprocess
 from gensim import corpora, similarities

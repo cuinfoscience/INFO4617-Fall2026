@@ -10,7 +10,7 @@ no terminal, no local clone.
 This is the **weeks 3–4 method**. From week 5 on you'll do the same five
 stages from your own clone with GitHub Desktop or `gh` (see
 [`../week-01/setup.md`](../week-01/setup.md)) — the file you edit, the
-description you write, and what happens after you merge are identical either
+description you write, and what happens after it merges are identical either
 way. Only the editor changes.
 
 **Running example.** Wednesday's slides walked through one real fix: Chapter
@@ -172,7 +172,11 @@ change is needed (the same **Edit this file** pencil-icon flow, but now
 you're committing to your existing PR branch instead of creating a new one),
 or reply to explain your reasoning if you disagree.
 
-**After merge — publishing.** Merging your PR pushes your change to `main`,
+**The merge.** Pull requests merge in class, at a Friday code-review
+standup: you present your change, your reviewer gives a verdict, and I merge
+the approved ones. Don't merge your own, even if GitHub offers you the button.
+
+**After merge — publishing.** The merge pushes your change to `main`,
 which triggers a second, separate job: the book is rendered again in full
 and the result is published to the live site. This takes a few minutes.
 Reload the chapter afterward — your fix is live.
