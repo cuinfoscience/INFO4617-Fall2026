@@ -19,7 +19,7 @@ is:
 its GitHub repository. They were rendered in the browser from a local copy,
 because the session's proxy passed the pages but not their CDN-hosted styles
 and scripts. Both are to be re-captured live in the chapter 1 back-fill
-(`docs/plans/2026-09-24-screenshot-backfill-ch01-05.md`).
+(the textbook repo's `docs/plans/2026-09-24-screenshot-backfill-ch01-05.md`).
 
 **Look-alikes, to be replaced:** `issue_form.png` and `pr_review.png` are
 GitHub's interface rebuilt by hand and filled with the deck's worked example.
