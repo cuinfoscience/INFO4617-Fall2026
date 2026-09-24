@@ -89,7 +89,7 @@ One YAML file per chapter. This is how ch-05's Network-tab figure would look:
 chapter: ch-05
 defaults:
   user_agent: "Web Data Science/v1 brian.keegan@colorado.edu"   # the one the handouts teach
-  window: [1440, 900]      # CSS pixels
+  window: [800, 600]       # CSS pixels: at most what a figure shows (P1-5, a soft limit)
   scale: 2                 # device pixels per CSS pixel
   pause: [8, 30]           # seconds between page loads on one host
 
@@ -99,7 +99,7 @@ figures:
     section: "The Network Tab"
     url: https://en.wikipedia.org/wiki/University_of_Colorado_Boulder
     mode: headed                        # DevTools needs a real window
-    devtools: {panel: network, dock: bottom, zoom: 1.5, height: 460}
+    devtools: {panel: network, dock: bottom, zoom: 1.25, size: 340}   # zoom, not a wider window
     steps:
       - reload: {}                      # the panel records only while it is open
       - wait: {network_idle: true}
@@ -125,6 +125,9 @@ figures:
     alt: >-
       Screenshot of Chrome with the Wikipedia article above and DevTools below. …
 ```
+
+This sketch predates the toolkit, and the built syntax differs in places;
+the textbook's `tools/shots/README.md` is the reference.
 
 A page-only figure is shorter. It needs no `mode`, `devtools`, or `steps`
 beyond a `wait`, and its markers anchor to CSS selectors, for example
@@ -176,6 +179,7 @@ every capture task, and do not reuse an earlier session's answer.
 ### 7.3 Capture (`lib/browser.py`, `lib/steps.py`)
 - **One engine.** Playwright drives Chrome for Testing: headless for page-only figures, headed on the virtual display for anything that shows browser UI. That covers DevTools, View Source, and menus. Headed screenshots are grabbed with ImageMagick `import`. Selenium drives only the figures whose subject is Selenium (ch-08).
 - **Scale.** Every capture is at scale 2, and the virtual screen is sized from the window and scale plus a margin. Book, slide, and handout crops come from the same take.
+- **Size.** A figure shows at most 800×600 CSS pixels of the screen (P1-5, added 2026-09-24 after the instructor found text too small). That is a small window, or a crop to what the text discusses; DevTools is zoomed, not given a wider window. It is a soft limit: going over is a warning, and the recipe says why.
 - **Politeness.** Each request uses one User-Agent: the one the handouts teach, set once in the recipe defaults. Page loads on one host are 8–30 seconds apart. A 5xx or dropped connection is retried three times, backing off 30, 60, then 120 seconds. Cookie banners get "necessary only." The toolkit never logs in or types credentials.
 - **Steps.** Each step waits for its condition; none sleeps a fixed time. A step that reveals content on hover waits for that content to appear. On 2026-09-22 the Wayback toolbar's **Collected by** section was missed this way.
 
@@ -213,6 +217,8 @@ A figure whose subject is a refusal says so in its recipe (`expect: {block: true
 - **Retakes.** Anchors come from the new take, so markers follow the page.
 
 ### 7.7 Legibility (`lib/legibility.py`)
+The first check is a soft limit on size (P1-5): a figure that shows more than 800×600 CSS pixels gets a warning saying how small the book's column will make its text, unless its recipe says why it needs more.
+
 At capture time the tool records the computed font size of the visible text inside the crop. For DevTools, the size follows from the DevTools zoom. It then works out how tall that text will be at each target size:
 
 - the book's column;
