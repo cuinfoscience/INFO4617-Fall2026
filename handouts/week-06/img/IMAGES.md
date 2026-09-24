@@ -1,7 +1,8 @@
 # Images for the week-06 Oscars handout
 
-Both images in `oscars-cards-to-rows.pdf` are **real screenshots** of
-<https://www.oscars.org/oscars/ceremonies/2026>, captured 2026-09-24.
+Both figures in `oscars-cards-to-rows.pdf` and its notebook are **real
+screenshots** of <https://www.oscars.org/oscars/ceremonies/2026>, captured
+2026-09-24.
 
 ## How they were made
 
@@ -19,10 +20,15 @@ with real clicks (xdotool), not mocked up.
   click, and then Inspect was repeated so that the name stays selected.
   Figure 2.
 
-The numbered markers and braces are drawn by TikZ in the `.tex` file, not
-burned into the PNGs. If the page changes and you retake a screenshot, move
-the marker coordinates too; each image's markers are in pixel units of that
-image.
+## The annotated versions
+
+The numbered markers and braces are drawn with TikZ, not painted into the
+screenshots: `oscars_card_annotated.tex` and `oscars_devtools_annotated.tex`
+place them in pixel coordinates of the screenshot, with the marker styles
+from `../../common/handoutmarkers.sty`. `make figures` in `handouts/` builds
+each one twice: `*_annotated.pdf` (vector, for the PDF handout) and
+`*_annotated.png` (250 dpi, embedded in the notebook). If you retake a
+screenshot, move the coordinates too.
 
 ## What the live page does that the HTML does not
 

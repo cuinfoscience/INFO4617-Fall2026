@@ -43,6 +43,14 @@
 %   dfout   a DataFrame as Jupyter shows it: a tabular next to a gray bar;
 %           the argument is the column spec, e.g. \begin{dfout}{@{}rll@{}}
 %   \ol|text|  one line of output, typed literally (for use inside dfout)
+%   \marker{3} or just ③   a numbered marker (handoutmarkers.sty); the
+%           characters ① to ⑨ in the source print as markers
+%   \breakcode{field--name-x}   a code token that may break after a hyphen
+%
+% Most handouts are written in Quarto markdown instead: see
+% handouts/README.md. handout-template.tex and handout.lua turn a .qmd
+% into a document of this class, and make_notebook.py turns the same
+% .qmd into a companion notebook.
 % ==========================================================================
 \NeedsTeXFormat{LaTeX2e}
 % \input@path finds this file as ../common/handout or handouts/common/handout,
@@ -78,6 +86,20 @@
 \RequirePackage{lastpage}
 \RequirePackage[hyphens]{url}
 \RequirePackage[hidelinks]{hyperref}
+\RequirePackage{accsupp}               % alt text for figures
+\RequirePackage{handoutmarkers}        % \marker{n} and TikZ marker styles
+\RequirePackage{newunicodechar}
+
+% ①..⑨ in the source print as markers, so a .qmd can use the same
+% characters that a notebook shows; → prints as an arrow.
+\newunicodechar{①}{\marker{1}}\newunicodechar{②}{\marker{2}}
+\newunicodechar{③}{\marker{3}}\newunicodechar{④}{\marker{4}}
+\newunicodechar{⑤}{\marker{5}}\newunicodechar{⑥}{\marker{6}}
+\newunicodechar{⑦}{\marker{7}}\newunicodechar{⑧}{\marker{8}}
+\newunicodechar{⑨}{\marker{9}}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+% a code token in running text that may break after a hyphen
+\DeclareUrlCommand\breakcode{\urlstyle{tt}}
 
 % Images: the same two dialects as the slides (see header).
 \graphicspath{{./}{../../}}
@@ -204,7 +226,10 @@
 % \begin{columns}[T] \begin{column}{0.6\textwidth} ... \end{column} ...
 % Columns share the text width with the space between them, as with
 % beamer's [onlytextwidth]. Options: T (tops aligned), t, c (default), b.
-\newif\ifhandout@firstcol
+% Each column is set in its own box, and \end{columns} puts the boxes on one
+% line, so blank lines between the columns (which Pandoc writes) do not
+% stack them. Columns do not nest.
+\newcount\handout@ncols
 \def\handout@colpos{c}\def\handout@coltop{}
 \newcommand{\handout@setcolpos}[1]{%
   \gdef\handout@colpos{c}\gdef\handout@coltop{}%
@@ -213,15 +238,30 @@
       \gdef\handout@colpos{t}\gdef\handout@coltop{\vspace{0pt}}\fi
     \def\handout@tmp{t}\ifx\handout@opt\handout@tmp\gdef\handout@colpos{t}\fi
     \def\handout@tmp{b}\ifx\handout@opt\handout@tmp\gdef\handout@colpos{b}\fi}}
+\newcommand{\handout@colbox}[1]{\csname handout@colbox@\romannumeral#1\endcsname}
 \NewDocumentEnvironment{columns}{ O{} }{%
-  \par\addvspace{3pt}\noindent
-  \handout@setcolpos{#1}\global\handout@firstcoltrue\ignorespaces
-}{\par\addvspace{3pt}\ignorespacesafterend}
+  \par\addvspace{3pt}%
+  \handout@setcolpos{#1}\global\handout@ncols=0\relax\ignorespaces
+}{%
+  \par\noindent
+  \count@=0
+  \loop\ifnum\count@<\handout@ncols
+    \advance\count@ by 1
+    \ifnum\count@>1 \hfill\fi
+    \usebox{\handout@colbox{\count@}}%
+  \repeat
+  \par\addvspace{3pt}\ignorespacesafterend}
 \NewDocumentEnvironment{column}{ O{} m }{%
-  \ifhandout@firstcol\else\hfill\fi\global\handout@firstcolfalse
-  \IfNoValueF{#1}{\ifx\relax#1\relax\else\handout@setcolpos{#1}\fi}%
+  \global\advance\handout@ncols by 1
+  \@ifundefined{handout@colbox@\romannumeral\handout@ncols}%
+    {\expandafter\newsavebox\csname handout@colbox@\romannumeral\handout@ncols\endcsname}{}%
+  \ifx\relax#1\relax\else\handout@setcolpos{#1}\fi
+  \begin{lrbox}{\handout@colbox{\handout@ncols}}%
   \begin{minipage}[\handout@colpos]{#2}\handout@coltop
-}{\end{minipage}\ignorespacesafterend}
+}{\end{minipage}\end{lrbox}%
+  % lrbox fills the box only inside this environment; keep it for \end{columns}
+  \global\setbox\handout@colbox{\handout@ncols}=\box\handout@colbox{\handout@ncols}%
+  \ignorespacesafterend}
 
 % ------------------------------------------------------------------ blocks
 % block: gray title, pale text, gray body (the decks' plain block);
