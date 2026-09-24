@@ -103,7 +103,10 @@ screenshot shows at most 800×600 CSS pixels of the screen.
 - Capture at 2× (a 1600×1200 image), so text stays sharp on a projector.
 - On a slide, show a screenshot at least as large as it was on screen: a
   capture W CSS pixels wide needs at least W/1680 of the text width. An
-  800-pixel capture needs `width=0.48\textwidth` or more.
+  800-pixel capture needs `width=0.48\textwidth` or more. That keeps a
+  page's 16-pixel text at 16 pixels; DevTools' text is smaller, so a DevTools
+  capture usually needs more. The textbook's `tools/shots` computes the width
+  (`targets: {slides: {width: …}}`): week 05's Inspector figure needs 0.56.
 - Going over is allowed with a reason in `IMAGES.md`. For example, a thin
   strip like the Wayback toolbar can be 1280 wide, because it is shown at
   full width.
