@@ -1,0 +1,38 @@
+% ==========================================================================
+% handoutmarkers.sty -- numbered markers for INFO 4617 handouts
+%
+% A blue circle with a white number ties a part of a figure to the text
+% and the code that use it. handout.cls loads this package; standalone
+% figure sources (handouts/week-NN/img/*_annotated.tex) load it too, so a
+% marker drawn on a screenshot looks the same as one in the text.
+%
+%   \marker{3}                    inline, in text or a frame title
+%   \node[marker] at (x,y) {3};   in a tikzpicture (small marker: smaller)
+%   marker lead / marker thin lead / marker brace   dotted leaders, braces
+% ==========================================================================
+\NeedsTeXFormat{LaTeX2e}
+% \input@path finds this file under a path prefix; provide that same name
+% so LaTeX does not warn that the requested and provided names differ.
+\providecommand*\@currpath{}
+\edef\handoutmarkers@name{\@currpath\@currname}
+\expandafter\ProvidesPackage\expandafter{\handoutmarkers@name}%
+  [2026/09/24 numbered markers for INFO 4617 handouts]
+\RequirePackage{xcolor}
+\RequirePackage{tikz}
+\usetikzlibrary{decorations.pathreplacing}
+
+\providecolor{tab-blue}{HTML}{4E79A7}   % the slides' palette
+
+\tikzset{
+  marker/.style={circle,fill=tab-blue,text=white,inner sep=0pt,
+                 minimum size=11pt,font=\sffamily\bfseries\scriptsize},
+  small marker/.style={marker,minimum size=8.5pt,font=\sffamily\bfseries\tiny},
+  marker lead/.style={tab-blue,line width=0.8pt,densely dotted},
+  marker thin lead/.style={tab-blue,line width=0.5pt,densely dotted},
+  marker brace/.style={tab-blue,line width=0.9pt,decorate,
+                       decoration={brace,amplitude=4pt}},
+}
+\newcommand{\marker}[1]{\tikz[baseline=(m.base)]\node[marker,
+  minimum size=1.2em](m){#1};}
+
+\endinput

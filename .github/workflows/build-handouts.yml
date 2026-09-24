@@ -1,0 +1,82 @@
+name: Build handouts
+
+# Rebuilds every handout's companion notebook and PDF from its .qmd and
+# fails if a committed notebook or PDF is out of date with its source: the
+# notebook must be byte-identical, and the PDF must say the same thing
+# (compared as text, so small TeX Live differences on GitHub do not matter).
+# The check of printed outputs against the live pages (`make check`) stays
+# local: it fetches the real sites, which may refuse GitHub's servers.
+
+on:
+  pull_request:
+    paths:
+      - "handouts/**"
+      - ".github/workflows/build-handouts.yml"
+  push:
+    branches: [main]
+    paths:
+      - "handouts/**"
+      - ".github/workflows/build-handouts.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache apt archives
+        uses: actions/cache@v4
+        with:
+          path: /var/cache/apt/archives
+          key: texlive-apt-${{ runner.os }}-handouts-v1
+
+      - name: Install TeX Live and Poppler
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            texlive-latex-base texlive-latex-recommended texlive-latex-extra \
+            texlive-fonts-recommended texlive-fonts-extra texlive-pictures \
+            latexmk poppler-utils
+
+      - name: Install Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: 1.10.18
+
+      - name: Rebuild the notebooks
+        working-directory: handouts
+        run: make -B notebooks
+
+      - name: Notebooks match their .qmd sources
+        run: |
+          if ! git diff --exit-code --stat -- 'handouts/**/*.ipynb'; then
+            echo "::error::A committed notebook is out of date. Run make in handouts/ and commit it."
+            exit 1
+          fi
+
+      - name: Rebuild the PDFs next to the committed ones
+        working-directory: handouts
+        run: |
+          mkdir -p /tmp/committed
+          for pdf in week-*/*.pdf; do
+            mkdir -p "/tmp/committed/$(dirname "$pdf")"
+            cp "$pdf" "/tmp/committed/$pdf"
+          done
+          make -B pdf
+
+      - name: PDFs match their .qmd sources
+        working-directory: handouts
+        run: |
+          status=0
+          for pdf in week-*/*.pdf; do
+            python3 common/same_text.py "/tmp/committed/$pdf" "$pdf" || status=1
+          done
+          exit $status
+
+      - name: Upload the rebuilt PDFs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: handouts-pdf
+          path: handouts/week-*/*.pdf
+          if-no-files-found: ignore

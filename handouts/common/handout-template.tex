@@ -1,0 +1,29 @@
+% Pandoc/Quarto template for INFO 4617 handouts: a .qmd rendered with this
+% template and handout.lua becomes a handout.cls document. See
+% handouts/README.md. Quarto compiles in the handout's own folder, so the
+% class is found in ../common/.
+\makeatletter\def\input@path{{../common/}{handouts/common/}}\makeatother
+\documentclass{handout}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\pandocbounded}[1]{#1}
+$for(header-includes)$
+$header-includes$
+$endfor$
+$if(title)$
+\title$if(footer)$[$footer$]$endif${$title$}
+$endif$
+$if(subtitle)$
+\subtitle{$subtitle$}
+$endif$
+\author{$for(author)$$author$$sep$ \and $endfor$}
+$if(institute)$
+\institute{$for(institute)$$institute$$sep$ \and $endfor$}
+$endif$
+\date{$date$}
+\hypersetup{pdftitle={$title-meta$},pdfauthor={$author-meta$}}
+\begin{document}
+$if(title)$
+\maketitle
+$endif$
+$body$
+\end{document}
