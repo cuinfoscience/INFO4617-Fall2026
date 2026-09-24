@@ -37,10 +37,21 @@ file count) drift; they are correct as of the capture dates.
   `quotes.toscrape.com/scroll`, filtered to Fetch/XHR after scrolling:
   `quotes?page=1` through `page=4`, with Preview showing page 2's JSON
   (`has_next`, `page`, `quotes[0].author/tags/text`). (Check 3)
+  - Retaken 2026-09-24. The first version showed the whole 1680-pixel window,
+    with Chrome for Testing's "only for automated testing" notice under the
+    address bar. It is now the top 800×335 CSS pixels of the textbook's
+    `images/ch-08/network-tab-json.png`, cropped to end after
+    `quotes[0].text`. That figure was captured by `tools/shots`: DevTools
+    alone, zoomed to 125%, with no notice.
+  - At `0.8\textwidth` its text comes to about 23 pixels on a 1920-pixel
+    slide, above the 16-pixel floor. The frame needed no change, because the
+    crop is close to the old image's shape.
 - `selenium_browser.png` -- Chrome for Testing 154, downloaded by Selenium
   Manager and driven by Selenium, on xkcd.com. It shows CfT's own "only for
   automated testing" bar (not the classic "controlled by automated test
-  software" banner, which regular Chrome shows). The mouse happened to rest on
+  software" banner, which regular Chrome shows). It is the one screenshot
+  that keeps that bar, because the bar is the point of the slide; every
+  other screenshot is taken without it (`AUTHORING.md`). The mouse happened to rest on
   the comic, so xkcd's hover text is visible -- the `title` attribute the lab
   extracts. (Selenium: a browser you drive with code)
 - `playwright_home.png` -- playwright.dev/python, 2026-09-23: "Playwright
@@ -96,7 +107,7 @@ between the two markers; the notes above are safe.
 | `decision_tree.png` | 1619x1002 | Diagram (Graphviz): API? -> in View Source (even in a script)? -> JSON in the Network tab? -> drive a browser (Selenium in the notebook, Playwright as a script) |
 | `view_source_js.png` | 1100x290 | Screenshot: View Source of quotes.toscrape.com/js/, lines 27-43 -- the quotes sit in a script as var data = [ ... ] |
 | `js_off.png` | 900x700 | Screenshot: quotes.toscrape.com/js/ with JavaScript disabled -- title, Login, Next, footer, no quotes |
-| `network_json.png` | 1680x680 | Screenshot: Chrome DevTools Network tab on quotes.toscrape.com/scroll, Fetch/XHR filter, quotes?page=1..4, Preview of page 2's JSON |
+| `network_json.png` | 1600x670 | Screenshot: Chrome DevTools Network tab on quotes.toscrape.com/scroll, Fetch/XHR filter, quotes?page=1..4, Preview of page 2's JSON (a crop of the textbook's ch-08 network-tab-json, 2026-09-24) |
 | `selenium_browser.png` | 1280x860 | Screenshot: Chrome for Testing 154 (downloaded by Selenium Manager) driven by Selenium on xkcd.com, with its "only for automated testing" bar |
 | `meme_it_just_works.png` | 1000x750 | Meme: Todd Howard, "It just works" -- Selenium Manager fetching the driver and browser for you |
 | `playwright_home.png` | 1280x760 | Screenshot: playwright.dev/python home -- "Playwright enables reliable web automation for testing, scripting, and AI agents." |

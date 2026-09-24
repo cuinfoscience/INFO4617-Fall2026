@@ -94,6 +94,12 @@ screenshot AAR, now in the textbook repo at
 - A count, date, or total printed in a caption or on a slide comes from a
   query whose limit and paging are recorded next to the figure. If the query
   hit its limit, page until it doesn't, or don't print the number.
+- No browser banners (decided 2026-09-24). A screenshot never shows Chrome
+  for Testing's "only for automated testing" notice, or any other infobar. It
+  takes space and says nothing about the page. Run Chrome with
+  `--disable-infobars`: the textbook's `tools/shots` does, and fails a
+  capture with an infobar. The one exception is a screenshot whose subject is
+  the bar itself, week 08's `selenium_browser.png`.
 
 **How much a screenshot shows** (decided 2026-09-24, P1-5; restated the same
 day as P0-1 of the
