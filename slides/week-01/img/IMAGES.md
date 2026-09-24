@@ -9,7 +9,9 @@ is:
 
 - `anaconda_jupyter.png` -- a real Jupyter Notebook session running the
   `webdata` kernel on Chapter 1's first-request pipeline. Used by
-  `handouts/week-01/setup.md`; not on a slide.
+  `handouts/week-01/setup.md`; not on a slide. Two live captures from the textbook's chapter 1
+  back-fill (2026-09-24) are offered in its place, in `handouts/week-01/img/`;
+  replacing it is the instructor's call.
 - `pageviews_plot.png` -- that pipeline's real output: daily pageviews for
   "University of Colorado Boulder," January 2024. Not on a slide; the deck
   uses the instructor's `pageviews.pdf`.
