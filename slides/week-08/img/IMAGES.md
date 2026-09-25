@@ -7,13 +7,12 @@ screenshots or a real diagram**, first captured 2026-09-22/23. Four are
 older gray placeholders were replaced.
 
 On a slide shown 1,920 pixels wide, text should reach 16 pixels
-(`slides/common/AUTHORING.md`). Three screenshots were remade on 2026-09-25
-to reach it: `requests_vs_browser.png`, `js_off.png`, and
-`playwright_home.png`, whose text had come to about 7 to 11 pixels.
-`network_json.png`, retaken on 2026-09-24, reaches 23. Three still fall short
-and wait: `selenium_browser.png` and `codegen.png`, whose subject is the tool
-itself, for the toolkit's Selenium and codegen engines (milestone M4), and
-`pr_review.png`, for a session that can read github.com's `robots.txt`.
+(`slides/common/AUTHORING.md`). Five screenshots were remade on 2026-09-25
+to reach it: `requests_vs_browser.png`, `js_off.png`, `playwright_home.png`,
+`selenium_browser.png`, and `codegen.png`, whose text had come to about 6 to
+11 pixels. `network_json.png`, retaken on 2026-09-24, reaches 23. One still
+falls short and waits: `pr_review.png`, for a session that can read
+github.com's `robots.txt`.
 
 ## How the images were made
 
@@ -28,6 +27,14 @@ brian.keegan@colorado.edu`, and page loads on one host were 8--30 seconds
 apart; playwright.dev's `robots.txt` allows `/python/`. To retake one, run
 `tools/shots/run capture course --only week08-...` in the textbook repo and
 copy the take here under the deck's file name.
+
+The two whose subject is a tool come from the toolkit's engines (milestone
+M4). `selenium_browser.png` is a crop of the window `webdriver.Chrome()` opens,
+driven by Selenium 4.49.0 (`week08-selenium-browser`, `engine: selenium`).
+`codegen.png` is a copy of the textbook's figure 8.6,
+`images/ch-08/playwright-codegen.png` (`engine: codegen`): codegen's recorder in
+Chrome for Testing 154, fed real clicks. Its recipe names the slide's column
+as well as the book's, so `tools/shots/run check` judges both.
 
 **Captured 2026-09-22/23.** Selenium 4.49.0 and Playwright 1.63.0 in a fresh
 virtual environment. The Chrome windows are Chrome for Testing 154,
@@ -82,12 +89,15 @@ capture dates.
   automated testing" bar (not the classic "controlled by automated test
   software" banner, which regular Chrome shows). It is the one screenshot
   that keeps that bar, because the bar is the point of the slide; every
-  other screenshot is taken without it (`AUTHORING.md`). The mouse happened to rest on
-  the comic, so xkcd's hover text is visible -- the `title` attribute the lab
-  extracts. (Selenium: a browser you drive with code)
-  - Too small on its slide: 1,280 pixels across in a 35% column shows it at
-    46% of its size on screen. The window Selenium opens is the subject, so
-    the retake waits for the toolkit's Selenium engine (M4).
+  other screenshot is taken without it (`AUTHORING.md`). (Selenium: a browser
+  you drive with code)
+  - Remade 2026-09-25 (`week08-selenium-browser`): the top left 445×288 CSS
+    pixels of an 800×600 window, its tab, address bar, and the bar through
+    "is only for automated testing.", above the top of xkcd (comic #3302,
+    "Voyager Instruments"). Chrome's bars aren't in the page, so the take
+    measures only xkcd's text; the bar's text, about 14 pixels, comes to
+    about 18.5 in its 35% column. The 1,280-pixel version of 2026-09-22
+    showed it at about 6.
 - `playwright_home.png` -- playwright.dev/python, 2026-09-25: its menu bar
   and headline, "Playwright enables reliable web automation for testing,
   scripting, and AI agents." (Playwright)
@@ -95,14 +105,15 @@ capture dates.
     site shows its phone layout, cropped at the foot of the headline block
     (480×528 CSS pixels). In its 35% column its text comes to 19.6 pixels;
     the 1,280-pixel version of 2026-09-23 showed its menu at about 7.
-- `codegen.png` -- `playwright codegen --target python` on
-  quotes.toscrape.com after two recorded clicks (the tag *change*, then an
-  *(about)* link); the browser shows codegen's locator tooltip,
-  `get_by_role("heading", name="Albert Einstein")`, and the Inspector shows
-  the generated script. (Record, then read)
-  - Too small on its slide: 1,630 pixels across in a 55% column shows it at
-    57% of its size on screen. The retake waits for the toolkit's codegen
-    engine (M4).
+- `codegen.png` -- codegen's recorder on quotes.toscrape.com after two
+  recorded clicks (the tag *change*, then an *(about)* link): the browser
+  shows codegen's locator tooltip, `get_by_role("heading", name="Albert
+  Einstein")`, above the Inspector with the generated script through
+  `browser.close()`. (Record, then read)
+  - Remade 2026-09-25, as a copy of textbook figure 8.6 (800×534 CSS pixels,
+    the browser above the Inspector). In its 55% column the Inspector's
+    14-pixel code comes to 16.2 pixels; the 1,630-pixel version of 2026-09-22,
+    with the windows side by side, showed it at about 8.
 - `xkcd_inspect.png` -- DevTools Elements panel after right-click > Inspect on
   xkcd's comic: the selected `<img>` with its `title` (hover joke) and `alt`
   attributes. (Read attributes, then act like a user)
@@ -154,11 +165,11 @@ between the two markers; the notes above are safe.
 | `view_source_js.png` | 1100x290 | Screenshot: View Source of quotes.toscrape.com/js/, lines 27-43 -- the quotes sit in a script as var data = [ ... ] |
 | `js_off.png` | 960x800 | Screenshot: quotes.toscrape.com/js/ at 480 pixels wide with JavaScript disabled -- title, Login, Next, footer, no quotes (2026-09-25) |
 | `network_json.png` | 1600x670 | Screenshot: Chrome DevTools Network tab on quotes.toscrape.com/scroll, Fetch/XHR filter, quotes?page=1..4, Preview of page 2's JSON (a crop of the textbook's ch-08 network-tab-json, 2026-09-24) |
-| `selenium_browser.png` | 1280x860 | Screenshot: Chrome for Testing 154 (downloaded by Selenium Manager) driven by Selenium on xkcd.com, with its "only for automated testing" bar |
+| `selenium_browser.png` | 890x576 | Screenshot: the window webdriver.Chrome() opens (Chrome for Testing 154, found by Selenium Manager) on xkcd.com, its top left: tab, address bar, and the "only for automated testing" bar (2026-09-25) |
 | `meme_it_just_works.png` | 1000x750 | Meme: Todd Howard, "It just works" -- Selenium Manager fetching the driver and browser for you |
 | `playwright_home.png` | 960x1056 | Screenshot: playwright.dev/python at 480 pixels wide, its menu bar and headline -- "Playwright enables reliable web automation for testing, scripting, and AI agents." (2026-09-25) |
 | `meme_its_a_trap.png` | 1000x750 | Meme: Admiral Ackbar, "It's a trap!" -- Playwright's sync API inside a Jupyter notebook |
-| `codegen.png` | 1630x860 | Screenshot: playwright codegen recording on quotes.toscrape.com -- browser with locator tooltip, Inspector with the generated Python |
+| `codegen.png` | 1600x1068 | Screenshot (copy of textbook figure 8.6): codegen's recorder on quotes.toscrape.com -- the browser with the locator tooltip, above the Inspector with the generated Python (2026-09-25) |
 | `meme_captain_now.png` | 1000x750 | Meme: Captain Phillips, "Look at me. I am the captain now." -- an AI agent taking the wheel of your browser |
 | `meme_is_this_dynamic.png` | 1000x750 | Meme: "Is this a pigeon?" relabeled "Is this a dynamic page?" -- closing activity, Do you need a browser? |
 | `xkcd_inspect.png` | 555x300 | Screenshot: Chrome DevTools Elements panel on xkcd.com with the comic img selected -- title (hover joke) and alt attributes |
