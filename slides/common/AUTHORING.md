@@ -91,6 +91,12 @@ screenshot AAR, now in the textbook repo at
   content. If a page can't be captured (it needs a login, say), keep the
   placeholder until someone captures the real page, or show a real page that
   makes the same point.
+- A page behind a login is a person's screenshot, never the tool's: the
+  textbook's `tools/shots` never signs in. The screenshot goes through the
+  textbook's `tools/shots/run import`, for a recipe with `mode: hand`, which
+  blacks out the recipe's `redact:` boxes (the account's name and avatar),
+  leaves the screenshot's metadata behind, and records who took it and when.
+  `sync` then copies it here like any other figure.
 - A count, date, or total printed in a caption or on a slide comes from a
   query whose limit and paging are recorded next to the figure. If the query
   hit its limit, page until it doesn't, or don't print the number.
