@@ -34,7 +34,8 @@ Current contents:
 | File | What it is |
 |---|---|
 | `aar/2026-09-21-week-06-slides.md` | Slide-authoring contract vs. weeks 04–05; week-06 expansion |
-| `plans/2026-09-24-friday-code-review.md` | A Friday code-review standup for students' textbook pull requests: preparation, the session, and what follows. Proposed; the first date is the instructor's call. |
+| `plans/2026-09-24-friday-code-review.md` | A Friday code-review standup for students' textbook pull requests: preparation, the session, and what follows. Scheduled: the first standup is week 7's Friday, October 2, and that Friday's slides are built from its review table. |
+| `plans/2026-09-24-friday-code-review-table.md` | That plan's review table: the textbook's 39 open pull requests on 2026-09-24, by chapter, with their checks, conflicts, and overlaps. It's rebuilt the day before class. |
 
 Moved to the textbook repo's `docs/` (2026-09-24):
 
