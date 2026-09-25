@@ -37,3 +37,15 @@ slide shown 1920 pixels wide (`slides/common/AUTHORING.md`, "How much a
 screenshot shows"). These frames' right-hand columns are `0.35\textwidth`, so
 Reddit's post fits one; the other three need the wider column or a frame of
 their own.
+
+## Copied by tools/shots
+
+<!-- shots:begin: copies from the textbook's tools/shots, generated from shots.json; edits between these markers are replaced -->
+Copied here by the textbook's `tools/shots/run sync`; `tools/shots/run synced` checks them.
+
+| File | Copy of | Captured | Source | How |
+|---|---|---|---|---|
+| `crowdtangle-last-capture.png` | `ch-03/crowdtangle-last-capture` (images/ch-03/crowdtangle-last-capture.png, textbook `57dda60`) | 2026-09-25 |  | tools/shots: Google Chrome for Testing 154.0.8037.57, 776×600 at 2× |
+| `dead-endpoints.png` | `ch-03/dead-endpoints` (images/ch-03/dead-endpoints.png, textbook `dd0ff37`) | 2026-09-24 |  | tools/shots: Google Chrome for Testing 154.0.8037.57, 560×400 at 2× |
+| `reddit-api-pricing.png` | `ch-03/reddit-api-pricing` (images/ch-03/reddit-api-pricing.png, textbook `57dda60`) | 2026-09-25 |  | tools/shots: Google Chrome for Testing 154.0.8037.57, 776×600 at 2× |
+<!-- shots:end -->

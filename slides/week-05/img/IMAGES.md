@@ -85,6 +85,16 @@ The four `handout_*.png` screenshots used by
 not here. Their notes, including the email redaction, are in that folder's
 `IMAGES.md`.
 
+## Copied by tools/shots
+
+<!-- shots:begin: copies from the textbook's tools/shots, generated from shots.json; edits between these markers are replaced -->
+Copied here by the textbook's `tools/shots/run sync`; `tools/shots/run synced` checks them.
+
+| File | Copy of | Captured | Source | How |
+|---|---|---|---|---|
+| `network-requests.png` | `ch-05/network-requests` (images/ch-05/network-requests.png, textbook `ca2d23e`) | 2026-09-24 | https://en.wikipedia.org/wiki/University_of_Colorado_Boulder | tools/shots: Google Chrome for Testing 154.0.8037.57, 800×600 at 2× |
+<!-- shots:end -->
+
 ## Listed in `stubs.tsv`
 
 `make_stubs.py` keeps this table in step with `stubs.tsv` and draws a gray

@@ -151,6 +151,20 @@ suggests a meme; swap in whatever lands better, keeping the filename.
 infinite-scroll lab frame now points back to Monday's Network-tab check,
 which shows the same scroll page's JSON at a legible size.
 
+## Copied by tools/shots
+
+<!-- shots:begin: copies from the textbook's tools/shots, generated from shots.json; edits between these markers are replaced -->
+Copied here by the textbook's `tools/shots/run sync`; `tools/shots/run synced` checks them.
+
+| File | Copy of | Captured | Source | How |
+|---|---|---|---|---|
+| `codegen.png` | `ch-08/playwright-codegen` (images/ch-08/playwright-codegen.png, textbook `d5cede6`) | 2026-09-25 | https://quotes.toscrape.com/ | tools/shots: Google Chrome for Testing 154.0.8037.57, 800×230 at 2×, playwright codegen's recorder (Playwright 1.63.0), its Inspector 800×595 below |
+| `js_off.png` | `course/week08-js-off` (tools/shots/out/course/week08-js-off/20260925T035503Z.png, textbook `4e442d6`) | 2026-09-25 | https://quotes.toscrape.com/js/ | tools/shots: Google Chrome for Testing 154.0.8037.57, 480×400 at 2× |
+| `playwright_home.png` | `course/week08-playwright-home` (tools/shots/out/course/week08-playwright-home/20260925T035617Z.png, textbook `4e442d6`) | 2026-09-25 | https://playwright.dev/python/ | tools/shots: Google Chrome for Testing 154.0.8037.57, 480×600 at 2× |
+| `requests_vs_browser.png` | `course/week08-requests-vs-browser` (tools/shots/out/course/week08-requests-vs-browser/20260925T035442Z.png, textbook `4e442d6`) | 2026-09-25 | https://quotes.toscrape.com/js/ | tools/shots: Google Chrome for Testing 154.0.8037.57, 480×350 at 2× |
+| `selenium_browser.png` | `course/week08-selenium-browser` (tools/shots/out/course/week08-selenium-browser/20260925T044228Z.png, textbook `4e442d6`) | 2026-09-25 | https://xkcd.com/ | tools/shots: Google Chrome for Testing 154.0.8037.57, 800×600 at 2×, webdriver.Chrome() under Selenium 4.49.0 (ChromeDriver 154.0.8037.57) |
+<!-- shots:end -->
+
 ## Listed in `stubs.tsv`
 
 `make_stubs.py` keeps this table in step with `stubs.tsv` and draws a gray

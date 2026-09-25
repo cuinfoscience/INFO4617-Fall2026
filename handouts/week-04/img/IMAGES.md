@@ -15,3 +15,14 @@ by the toolkit, not painted into the screenshots.
 
 Both show things that change: the feed's headlines change through the day,
 and PBS's page source changes with each release of its site.
+
+## Copied by tools/shots
+
+<!-- shots:begin: copies from the textbook's tools/shots, generated from shots.json; edits between these markers are replaced -->
+Copied here by the textbook's `tools/shots/run sync`; `tools/shots/run synced` checks them.
+
+| File | Copy of | Captured | Source | How |
+|---|---|---|---|---|
+| `rss-feed-xml_annotated.png` | `ch-04/rss-feed-xml` (images/ch-04/rss-feed-xml_annotated.png, textbook `5e89cea`) | 2026-09-24 | https://feeds.bbci.co.uk/news/science_and_environment/rss.xml | tools/shots: Google Chrome for Testing 154.0.8037.57, 800×700 at 2× |
+| `view-source-rss-link_annotated.png` | `ch-04/view-source-rss-link` (images/ch-04/view-source-rss-link_annotated.png, textbook `5e89cea`) | 2026-09-24 | view-source:https://www.pbs.org/newshour/ | tools/shots: Google Chrome for Testing 154.0.8037.57, 816×600 at 2× |
+<!-- shots:end -->

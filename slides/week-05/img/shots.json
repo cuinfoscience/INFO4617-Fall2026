@@ -1,0 +1,28 @@
+{
+  "files": {
+    "network-requests.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headed on Xvfb, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-24T15:58:19+00:00",
+      "copied_from": "images/ch-05/network-requests.png",
+      "figure": "ch-05/network-requests",
+      "final_url": "https://en.wikipedia.org/wiki/University_of_Colorado_Boulder",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "d1bd27321c4c60bb6fa527fa63f2cc489fdeb87006dae2e245c1d307e19343a5",
+      "size": [
+        1600,
+        1200
+      ],
+      "source_sha256": "d1bd27321c4c60bb6fa527fa63f2cc489fdeb87006dae2e245c1d307e19343a5",
+      "synced": "2026-09-25T13:38:38+00:00",
+      "textbook_commit": "ca2d23e48c9d3b0878ac083ca950064c077deacf",
+      "url": "https://en.wikipedia.org/wiki/University_of_Colorado_Boulder",
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        800,
+        600
+      ]
+    }
+  }
+}
