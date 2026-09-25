@@ -122,23 +122,36 @@ You land on the raw `.qmd` source in GitHub's file viewer. From here:
 
 ## 4 · Write the PR description
 
-Pull requests use the same four fields the issue forms do — see
+GitHub fills the description box with the book's pull request template: the
+four fields the issue forms ask for, then **AI assistance** and **Checks**.
+Replace each bracketed hint with your answer; see
 [`revision-framework.md`](revision-framework.md#what-carries-over-to-pull-requests)
-for the template and why each field earns its place. Filled in for the
-worked example:
+for the whole template and why each field earns its place. Filled in for the
+worked example, which fixed no filed issue, so its `Closes` line is deleted:
 
 ```
-Location: ch-04-data-formats.qmd, "Missing Manual Reference"
+**Location:** `ch-04-data-formats.qmd`, "Missing Manual Reference"
 
-Problem:  The callout names Chapter 20 but gives no way to
-          click through to it.
+**Problem:** The callout names Chapter 20 but gives no way to click
+through to it.
 
-Why:      A reader has to leave the page and search the
-          Missing Manual site by hand to find the chapter.
+**Why:** A reader has to leave the page and search the Missing Manual
+site by hand to find the chapter.
 
-Change:   Wrapped the existing text in a Markdown link to
-          the chapter's page.
+**Change:** Wrapped the existing text in a Markdown link to the
+chapter's page.
+
+**AI assistance:** none.
+
+**Checks** (tick what you did; if you couldn't, say why):
+
+- [x] I changed the chapter's `.qmd` file, not a file in `notebooks/` or `images/`.
+- [ ] I regenerated the notebooks with `python tools/make_notebooks.py`.
+      Edited in the browser, so notebooks not regenerated.
+- [ ] The book builds with `quarto render`, or the **Render** check passes.
 ```
+
+Tick the last box once the **Render** check turns green (§5).
 
 Unlike issues, PR titles aren't prefixed for you — write one that names the
 change, not the fact that you made one:
@@ -146,8 +159,9 @@ change, not the fact that you made one:
 > ✗ "Update ch-04-data-formats.qmd"
 > ✓ "Link the Missing Manual chapter reference in Ch. 4"
 
-If you used a tool to help draft or diagnose the fix, disclose it in the
-description — same standard the book holds itself to.
+If a tool helped you draft or diagnose the fix, name it on the **AI
+assistance** line and say what it did — same standard the book holds itself
+to.
 
 Click **Create pull request**. It's open.
 
@@ -155,8 +169,8 @@ Click **Create pull request**. It's open.
 
 ## 5 · What happens after you click "Create pull request"
 
-Two separate automated jobs touch your change — one before it merges, one
-after.
+Automated jobs touch your change twice: checks before it merges, and
+publishing after.
 
 **Before merge — the render check.** Opening (or updating) a PR that touches
 a `.qmd` file automatically runs a full `quarto render` of the whole book,
@@ -165,6 +179,16 @@ elsewhere, like a cross-reference that no longer resolves. A green check
 means the book still builds with your change in it. A red check means
 something broke; open the check's log; the failing file and line are
 usually named directly in the output.
+
+**Before merge — two more checks.** **Notebook sync** compares each chapter
+with the notebook generated from it. The web editor can't regenerate a
+notebook, so after a browser edit this check fails. That is expected: your
+**Checks** already say "Edited in the browser, so notebooks not
+regenerated", and the notebooks can be regenerated before your pull request
+merges. **Trope lint** lists phrases the book avoids; it never fails, and its
+list is worth a look. A pull request that changes an image also gets a
+screenshot check, but yours shouldn't change one (see the revision
+framework's "Stale figure").
 
 **The review.** A classmate reads your diff and leaves comments — that's the
 other half of Friday. Push a follow-up commit to the *same* branch if a
@@ -177,7 +201,7 @@ standup: you present your change, your reviewer gives a verdict, and I merge
 the approved ones. Don't merge your own, even if GitHub offers you the button.
 
 **After merge — publishing.** The merge pushes your change to `main`,
-which triggers a second, separate job: the book is rendered again in full
+which triggers a separate job: the book is rendered again in full
 and the result is published to the live site. This takes a few minutes.
 Reload the chapter afterward — your fix is live.
 
