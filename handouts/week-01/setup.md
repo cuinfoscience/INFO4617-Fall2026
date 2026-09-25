@@ -39,9 +39,10 @@ Start your workspace:
 jupyter notebook
 ```
 
-Jupyter opens in your browser. It holds code, notes, and results in one file.
+Jupyter opens in your browser, at a list of the files in the folder you
+started it from. A notebook holds code, notes, and results in one file.
 
-![Anaconda starts Jupyter in your browser](../../slides/week-01/img/anaconda_jupyter.png)
+![Jupyter's file list in the browser, in Jupyter Notebook 7.6, September 2026 (the textbook's figure 1.1). This folder holds chapter 1's companion notebook (1). **New** (2) opens a menu whose first item, **Python 3 (ipykernel)** (3), makes a new notebook: started from `webdata`, that kernel is the environment's Python.](img/jupyter-new-menu_annotated.png)
 
 > **Note:** do all coursework in Python. Do not use spreadsheet or business
 > intelligence software (Excel, Tableau, Power BI) for assignments.
