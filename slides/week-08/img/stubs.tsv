@@ -1,12 +1,12 @@
 # filename	WIDTHxHEIGHT	description of the real asset to drop in
-requests_vs_browser.png	1858x758	Screenshot composite: quotes.toscrape.com/js/ with JavaScript off (no quotes) and on (quotes rendered), 2026-09-23
+requests_vs_browser.png	2020x820	Screenshot composite: quotes.toscrape.com/js/ at 480 pixels wide, JavaScript off (no quotes) and on (quotes rendered), 2026-09-25
 decision_tree.png	1619x1002	Diagram (Graphviz): API? -> in View Source (even in a script)? -> JSON in the Network tab? -> drive a browser (Selenium in the notebook, Playwright as a script)
 view_source_js.png	1100x290	Screenshot: View Source of quotes.toscrape.com/js/, lines 27-43 -- the quotes sit in a script as var data = [ ... ]
-js_off.png	900x700	Screenshot: quotes.toscrape.com/js/ with JavaScript disabled -- title, Login, Next, footer, no quotes
+js_off.png	960x800	Screenshot: quotes.toscrape.com/js/ at 480 pixels wide with JavaScript disabled -- title, Login, Next, footer, no quotes (2026-09-25)
 network_json.png	1600x670	Screenshot: Chrome DevTools Network tab on quotes.toscrape.com/scroll, Fetch/XHR filter, quotes?page=1..4, Preview of page 2's JSON (a crop of the textbook's ch-08 network-tab-json, 2026-09-24)
 selenium_browser.png	1280x860	Screenshot: Chrome for Testing 154 (downloaded by Selenium Manager) driven by Selenium on xkcd.com, with its "only for automated testing" bar
 meme_it_just_works.png	1000x750	Meme: Todd Howard, "It just works" -- Selenium Manager fetching the driver and browser for you
-playwright_home.png	1280x760	Screenshot: playwright.dev/python home -- "Playwright enables reliable web automation for testing, scripting, and AI agents."
+playwright_home.png	960x1056	Screenshot: playwright.dev/python at 480 pixels wide, its menu bar and headline -- "Playwright enables reliable web automation for testing, scripting, and AI agents." (2026-09-25)
 meme_its_a_trap.png	1000x750	Meme: Admiral Ackbar, "It's a trap!" -- Playwright's sync API inside a Jupyter notebook
 codegen.png	1630x860	Screenshot: playwright codegen recording on quotes.toscrape.com -- browser with locator tooltip, Inspector with the generated Python
 meme_captain_now.png	1000x750	Meme: Captain Phillips, "Look at me. I am the captain now." -- an AI agent taking the wheel of your browser
