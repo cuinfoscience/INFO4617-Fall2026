@@ -1,0 +1,52 @@
+{
+  "files": {
+    "rss-feed-xml_annotated.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-24T19:07:29+00:00",
+      "copied_from": "images/ch-04/rss-feed-xml_annotated.png",
+      "figure": "ch-04/rss-feed-xml",
+      "final_url": "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "98252761f12c7e62a36da389674897209462edd60aa777262c2d06e8ddddcc9b",
+      "size": [
+        1600,
+        1200
+      ],
+      "source_sha256": "98252761f12c7e62a36da389674897209462edd60aa777262c2d06e8ddddcc9b",
+      "synced": "2026-09-25T13:38:38+00:00",
+      "textbook_commit": "5e89cea5722f8dc591dbc3f961fe8de2d6d0d5e9",
+      "url": "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml",
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        800,
+        700
+      ]
+    },
+    "view-source-rss-link_annotated.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headed on Xvfb, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-24T19:11:27+00:00",
+      "copied_from": "images/ch-04/view-source-rss-link_annotated.png",
+      "figure": "ch-04/view-source-rss-link",
+      "final_url": "https://www.pbs.org/newshour/",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "5ecb2e6c168479ae43732abd0511aa03811abc4625dfd252f711fdad32c7ba41",
+      "size": [
+        1600,
+        318
+      ],
+      "source_sha256": "5ecb2e6c168479ae43732abd0511aa03811abc4625dfd252f711fdad32c7ba41",
+      "synced": "2026-09-25T13:38:38+00:00",
+      "textbook_commit": "5e89cea5722f8dc591dbc3f961fe8de2d6d0d5e9",
+      "url": "view-source:https://www.pbs.org/newshour/",
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        816,
+        600
+      ]
+    }
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "files": {
+    "codegen.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headed on Xvfb, Playwright 1.63.0's recorder)",
+      "by": "tools/shots",
+      "captured": "2026-09-25T04:39:20+00:00",
+      "copied_from": "images/ch-08/playwright-codegen.png",
+      "engine": {
+        "inspector": {
+          "at": "below",
+          "window": [
+            800,
+            595
+          ]
+        },
+        "language": "python",
+        "name": "codegen",
+        "playwright": "1.63.0"
+      },
+      "figure": "ch-08/playwright-codegen",
+      "final_url": "https://quotes.toscrape.com/author/Albert-Einstein/",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "34fb550b01d5a126042994839a11eef354cd39da48873d1c0ca0f38e9ce5f4e3",
+      "size": [
+        1600,
+        1068
+      ],
+      "source_sha256": "34fb550b01d5a126042994839a11eef354cd39da48873d1c0ca0f38e9ce5f4e3",
+      "synced": "2026-09-25T13:38:08+00:00",
+      "textbook_commit": "d5cede64a5a482ff3fcd54be872d97f52b183c63",
+      "url": "https://quotes.toscrape.com/",
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        800,
+        230
+      ]
+    },
+    "js_off.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-25T03:55:05+00:00",
+      "copied_from": "tools/shots/out/course/week08-js-off/20260925T035503Z.png",
+      "figure": "course/week08-js-off",
+      "final_url": "https://quotes.toscrape.com/js/",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "1b0da2c895f9a9a03c024de34466e03ff0be31dd35d414846206caf6ddb1b1c4",
+      "size": [
+        960,
+        800
+      ],
+      "source_sha256": "1b0da2c895f9a9a03c024de34466e03ff0be31dd35d414846206caf6ddb1b1c4",
+      "synced": "2026-09-25T13:38:35+00:00",
+      "textbook_commit": "4e442d6734083511114de33e1e2fd52a43e83fa2",
+      "url": "https://quotes.toscrape.com/js/",
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        480,
+        400
+      ]
+    },
+    "playwright_home.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-25T03:56:21+00:00",
+      "copied_from": "tools/shots/out/course/week08-playwright-home/20260925T035617Z.png",
+      "figure": "course/week08-playwright-home",
+      "final_url": "https://playwright.dev/python/",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "f0ebf92c680b2bae8d816e5bb0337609f709e1fdc40a9fa957980099b67ed757",
+      "size": [
+        960,
+        1056
+      ],
+      "source_sha256": "f0ebf92c680b2bae8d816e5bb0337609f709e1fdc40a9fa957980099b67ed757",
+      "synced": "2026-09-25T13:38:36+00:00",
+      "textbook_commit": "4e442d6734083511114de33e1e2fd52a43e83fa2",
+      "url": "https://playwright.dev/python/",
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        480,
+        600
+      ]
+    },
+    "requests_vs_browser.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-25T03:54:42+00:00",
+      "copied_from": "tools/shots/out/course/week08-requests-vs-browser/20260925T035442Z.png",
+      "figure": "course/week08-requests-vs-browser",
+      "final_url": "https://quotes.toscrape.com/js/",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "10dc883be63a46dcdf3e7896abdf56ba8e43e66232a25510477d9578a90907cc",
+      "size": [
+        2020,
+        820
+      ],
+      "source_sha256": "10dc883be63a46dcdf3e7896abdf56ba8e43e66232a25510477d9578a90907cc",
+      "synced": "2026-09-25T13:38:36+00:00",
+      "textbook_commit": "4e442d6734083511114de33e1e2fd52a43e83fa2",
+      "url": "https://quotes.toscrape.com/js/",
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        480,
+        350
+      ]
+    },
+    "selenium_browser.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headed on Xvfb, driven by Selenium 4.49.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-25T04:42:32+00:00",
+      "copied_from": "tools/shots/out/course/week08-selenium-browser/20260925T044228Z.png",
+      "engine": {
+        "browser": "154.0.8037.57",
+        "chromedriver": "154.0.8037.57",
+        "name": "selenium",
+        "selenium": "4.49.0"
+      },
+      "figure": "course/week08-selenium-browser",
+      "final_url": "https://xkcd.com/",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "f7e61c77ada6300d7ec68b9aa6ec56319b26ee90348bb3aac12fd815d1f44b2f",
+      "size": [
+        890,
+        576
+      ],
+      "source_sha256": "f7e61c77ada6300d7ec68b9aa6ec56319b26ee90348bb3aac12fd815d1f44b2f",
+      "synced": "2026-09-25T13:38:36+00:00",
+      "textbook_commit": "4e442d6734083511114de33e1e2fd52a43e83fa2",
+      "url": "https://xkcd.com/",
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        800,
+        600
+      ]
+    }
+  }
+}

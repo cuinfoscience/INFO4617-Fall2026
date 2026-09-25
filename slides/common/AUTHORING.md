@@ -140,7 +140,11 @@ then make it large.
 
 **Copies from the textbook.** A figure the textbook's `tools/shots` made is
 copied here, not retaken: to refresh it, retake and promote it in the
-textbook, then copy it again. Slides take the `_annotated.pdf`, whose markers
+textbook, then copy it again with `tools/shots/run sync ch-NN <figure> --to
+slides/week-NN/img --as <file>.png` (`course` for a course-only figure;
+`--annotated` for the marked-up PNG alone). `sync` records each copy in the
+folder's `shots.json` and lists it in `IMAGES.md`, and `tools/shots/run
+synced` finds a copy changed by hand or older than its source. Slides take the `_annotated.pdf`, whose markers
 are vector graphics. A Markdown handout, read on GitHub, takes the
 `_annotated.png`, because GitHub doesn't show a PDF inline. A copy the deck
 doesn't use yet gets a row in the week's `IMAGES.md` ("Used on: not yet") and

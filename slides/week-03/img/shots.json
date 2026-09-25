@@ -1,0 +1,76 @@
+{
+  "files": {
+    "crowdtangle-last-capture.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-25T00:58:14+00:00",
+      "copied_from": "images/ch-03/crowdtangle-last-capture.png",
+      "figure": "ch-03/crowdtangle-last-capture",
+      "final_url": "https://web.archive.org/web/20240814023608/https://www.crowdtangle.com/",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "2d1f07c20d9b61921216837f9780e2a60a5368bf5cb1a331fe3f08923ebd2a99",
+      "size": [
+        1600,
+        1076
+      ],
+      "source_sha256": "2d1f07c20d9b61921216837f9780e2a60a5368bf5cb1a331fe3f08923ebd2a99",
+      "synced": "2026-09-25T13:38:37+00:00",
+      "textbook_commit": "57dda603e8f82c9968ecae0cef19c6b860b5ffe7",
+      "url": null,
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        776,
+        600
+      ]
+    },
+    "dead-endpoints.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-24T22:36:36+00:00",
+      "copied_from": "images/ch-03/dead-endpoints.png",
+      "figure": "ch-03/dead-endpoints",
+      "final_url": "https://api.pushshift.io/reddit/search/submission?q=test&size=1",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "33c79677a3d5a18d158c1d84c0c4a63eca0e17110c14c2f2f466e8d04c13d341",
+      "size": [
+        1168,
+        951
+      ],
+      "source_sha256": "33c79677a3d5a18d158c1d84c0c4a63eca0e17110c14c2f2f466e8d04c13d341",
+      "synced": "2026-09-25T13:38:37+00:00",
+      "textbook_commit": "dd0ff3766989837bb64ec971ff3ef2e697a4ac3c",
+      "url": null,
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        560,
+        400
+      ]
+    },
+    "reddit-api-pricing.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-25T01:09:45+00:00",
+      "copied_from": "images/ch-03/reddit-api-pricing.png",
+      "figure": "ch-03/reddit-api-pricing",
+      "final_url": "https://web.archive.org/web/20230609174525/https://old.reddit.com/r/reddit/comments/145bram/addressing_the_community_about_changes_to_our_api/",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "b3d1fa43b86450b3cdc3566d38a90fabb34a37a5b647d0e4ff4cc40f29c18d6d",
+      "size": [
+        988,
+        840
+      ],
+      "source_sha256": "b3d1fa43b86450b3cdc3566d38a90fabb34a37a5b647d0e4ff4cc40f29c18d6d",
+      "synced": "2026-09-25T13:38:37+00:00",
+      "textbook_commit": "57dda603e8f82c9968ecae0cef19c6b860b5ffe7",
+      "url": null,
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        776,
+        600
+      ]
+    }
+  }
+}

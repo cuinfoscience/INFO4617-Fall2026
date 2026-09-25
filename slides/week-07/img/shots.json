@@ -1,0 +1,296 @@
+{
+  "files": {
+    "about_capture.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-25T01:54:36+00:00",
+      "copied_from": "images/ch-07/about-this-capture.png",
+      "figure": "ch-07/about-this-capture",
+      "final_url": "https://web.archive.org/web/20040212031928/http://www.thefacebook.com/",
+      "kind": "capture",
+      "open_shadow": true,
+      "scale": 2,
+      "sha256": "45dc12c9d43d4e3117d90f6b37f41f35272b2790b915352fbcd1f1298001ca6f",
+      "size": [
+        1600,
+        478
+      ],
+      "source_sha256": "45dc12c9d43d4e3117d90f6b37f41f35272b2790b915352fbcd1f1298001ca6f",
+      "synced": "2026-09-25T13:38:32+00:00",
+      "textbook_commit": "7bfff4779f7455fbefd71b095d0f00a53cdf3900",
+      "url": "https://web.archive.org/web/20040212031928/http://www.thefacebook.com/",
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        800,
+        600
+      ]
+    },
+    "calendar_dots_2005.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-25T03:25:17+00:00",
+      "copied_from": "tools/shots/out/course/week07-calendar-dots/20260925T032517Z.png",
+      "figure": "course/week07-calendar-dots",
+      "final_url": "https://web.archive.org/web/20050000000000*/facebook.com",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "7b3b367554c9cb108e6ac18b2831939d68d4f7995f1617476011a1fdd24c1daa",
+      "size": [
+        512,
+        560
+      ],
+      "source_sha256": "7b3b367554c9cb108e6ac18b2831939d68d4f7995f1617476011a1fdd24c1daa",
+      "synced": "2026-09-25T13:38:32+00:00",
+      "textbook_commit": "4e442d6734083511114de33e1e2fd52a43e83fa2",
+      "url": "https://web.archive.org/web/2005*/facebook.com",
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        800,
+        1100
+      ]
+    },
+    "devtools_archived.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headed on Xvfb, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-25T02:59:47+00:00",
+      "copied_from": "tools/shots/out/course/week07-devtools-archived/20260925T025940Z.png",
+      "figure": "course/week07-devtools-archived",
+      "final_url": "https://web.archive.org/web/20040212031928/http://www.thefacebook.com/",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "d7e7a4082380e362aadaaf40732cd0ba3dec5bb6e59f8919b9010c625ea989a4",
+      "size": [
+        1600,
+        736
+      ],
+      "source_sha256": "d7e7a4082380e362aadaaf40732cd0ba3dec5bb6e59f8919b9010c625ea989a4",
+      "synced": "2026-09-25T13:38:32+00:00",
+      "textbook_commit": "4e442d6734083511114de33e1e2fd52a43e83fa2",
+      "url": "https://web.archive.org/web/20040212031928/http://www.thefacebook.com/",
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        800,
+        1000
+      ]
+    },
+    "facebook_2004.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-25T03:01:40+00:00",
+      "copied_from": "tools/shots/out/course/week07-facebook-2004/20260925T030140Z.png",
+      "figure": "course/week07-facebook-2004",
+      "final_url": "https://web.archive.org/web/20040121224607/http://facebook.com/",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "c6cdaa354aa057f96e52a8d71b2a5b742185520130a1d6e6529ec2220c7d6270",
+      "size": [
+        542,
+        440
+      ],
+      "source_sha256": "c6cdaa354aa057f96e52a8d71b2a5b742185520130a1d6e6529ec2220c7d6270",
+      "synced": "2026-09-25T13:38:33+00:00",
+      "textbook_commit": "4e442d6734083511114de33e1e2fd52a43e83fa2",
+      "url": "https://web.archive.org/web/20040121224607/http://facebook.com/",
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        778,
+        600
+      ]
+    },
+    "google_1998.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-25T02:51:28+00:00",
+      "copied_from": "tools/shots/out/course/week07-google-1998/20260925T025122Z.png",
+      "figure": "course/week07-google-1998",
+      "final_url": "https://web.archive.org/web/19981111184551/http://google.com/",
+      "kind": "capture",
+      "open_shadow": true,
+      "scale": 2,
+      "sha256": "d6d1de302c5eea52db1329a5ae750b86e268f4cf277fde9f8f12b225d1699f5e",
+      "size": [
+        1600,
+        400
+      ],
+      "source_sha256": "d6d1de302c5eea52db1329a5ae750b86e268f4cf277fde9f8f12b225d1699f5e",
+      "synced": "2026-09-25T13:38:33+00:00",
+      "textbook_commit": "4e442d6734083511114de33e1e2fd52a43e83fa2",
+      "url": "https://web.archive.org/web/19981111184551/http://google.com/",
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        800,
+        600
+      ]
+    },
+    "thefacebook_2004.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-25T03:02:11+00:00",
+      "copied_from": "tools/shots/out/course/week07-thefacebook-2004/20260925T030204Z.png",
+      "figure": "course/week07-thefacebook-2004",
+      "final_url": "https://web.archive.org/web/20040212031928/http://www.thefacebook.com/",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "bbff3d3bc5c185ef72250f347bebf712c94ec97e024e8ac2b80521367ebec302",
+      "size": [
+        1092,
+        444
+      ],
+      "source_sha256": "bbff3d3bc5c185ef72250f347bebf712c94ec97e024e8ac2b80521367ebec302",
+      "synced": "2026-09-25T13:38:33+00:00",
+      "textbook_commit": "4e442d6734083511114de33e1e2fd52a43e83fa2",
+      "url": "https://web.archive.org/web/20040212031928/http://www.thefacebook.com/",
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        800,
+        600
+      ]
+    },
+    "toolbar.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-25T02:52:50+00:00",
+      "copied_from": "tools/shots/out/course/week07-toolbar/20260925T025241Z.png",
+      "figure": "course/week07-toolbar",
+      "final_url": "https://web.archive.org/web/20040121224607/http://facebook.com/",
+      "kind": "capture",
+      "open_shadow": true,
+      "scale": 2,
+      "sha256": "3dd6389746d1c46698495967c47b9275cbed6f6ca1fd59c109175e0a4dae9ae0",
+      "size": [
+        2080,
+        136
+      ],
+      "source_sha256": "3dd6389746d1c46698495967c47b9275cbed6f6ca1fd59c109175e0a4dae9ae0",
+      "synced": "2026-09-25T13:38:33+00:00",
+      "textbook_commit": "4e442d6734083511114de33e1e2fd52a43e83fa2",
+      "url": "https://web.archive.org/web/20040121224607/http://facebook.com/",
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        1280,
+        300
+      ]
+    },
+    "toolbar_counts.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-25T03:22:19+00:00",
+      "copied_from": "tools/shots/out/course/week07-toolbar-counts/20260925T032219Z.png",
+      "figure": "course/week07-toolbar-counts",
+      "final_url": "https://web.archive.org/web/19981111184551/http://google.com/",
+      "kind": "capture",
+      "open_shadow": true,
+      "scale": 2,
+      "sha256": "a8892105974ec1c8251377a8be5cf9bd2df7204deee31862112b762eaddf6214",
+      "size": [
+        1892,
+        382
+      ],
+      "source_sha256": "a8892105974ec1c8251377a8be5cf9bd2df7204deee31862112b762eaddf6214",
+      "synced": "2026-09-25T13:38:34+00:00",
+      "textbook_commit": "4e442d6734083511114de33e1e2fd52a43e83fa2",
+      "url": null,
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        1280,
+        300
+      ]
+    },
+    "wayback_calendar.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-25T02:34:20+00:00",
+      "copied_from": "tools/shots/out/course/week07-wayback-calendar/20260925T023414Z.png",
+      "figure": "course/week07-wayback-calendar",
+      "final_url": "https://web.archive.org/web/20050000000000*/facebook.com",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "a60ab2ed79c3dfc21c37291766340ebc50d5a86cbc1eec16d476986d4365c1c4",
+      "size": [
+        1480,
+        724
+      ],
+      "source_sha256": "a60ab2ed79c3dfc21c37291766340ebc50d5a86cbc1eec16d476986d4365c1c4",
+      "synced": "2026-09-25T13:38:34+00:00",
+      "textbook_commit": "4e442d6734083511114de33e1e2fd52a43e83fa2",
+      "url": "https://web.archive.org/web/2005*/facebook.com",
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        800,
+        700
+      ]
+    },
+    "wrapped_vs_raw.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headed on Xvfb, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-25T03:00:44+00:00",
+      "copied_from": "tools/shots/out/course/week07-wrapped-vs-raw/20260925T030044Z.png",
+      "figure": "course/week07-wrapped-vs-raw",
+      "final_url": "https://web.archive.org/web/20040212031928/http://www.thefacebook.com/",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "a5d165d1211dbb6414d6925e25d4d163c5a96a019fedc7b8f01b3debcd50b7db",
+      "size": [
+        1272,
+        1010
+      ],
+      "source_sha256": "a5d165d1211dbb6414d6925e25d4d163c5a96a019fedc7b8f01b3debcd50b7db",
+      "synced": "2026-09-25T13:38:34+00:00",
+      "textbook_commit": "4e442d6734083511114de33e1e2fd52a43e83fa2",
+      "url": null,
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        636,
+        560
+      ]
+    },
+    "x_com_1997.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-25T03:02:51+00:00",
+      "copied_from": "tools/shots/out/course/week07-x-com-1997/20260925T030246Z.png",
+      "figure": "course/week07-x-com-1997",
+      "final_url": "https://web.archive.org/web/19970411224438/http://x.com/",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "d02264e09c6c24df0be072a4c600e66354307a92a442d77de9f614e389b6a590",
+      "size": [
+        1460,
+        840
+      ],
+      "source_sha256": "d02264e09c6c24df0be072a4c600e66354307a92a442d77de9f614e389b6a590",
+      "synced": "2026-09-25T13:38:35+00:00",
+      "textbook_commit": "4e442d6734083511114de33e1e2fd52a43e83fa2",
+      "url": "https://web.archive.org/web/19970411224438/http://x.com/",
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        800,
+        600
+      ]
+    },
+    "x_com_1999.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-25T03:12:19+00:00",
+      "copied_from": "tools/shots/out/course/week07-x-com-1999/20260925T031208Z.png",
+      "figure": "course/week07-x-com-1999",
+      "final_url": "https://web.archive.org/web/19991114081850/http://x.com/",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "70e9952579280725a9bac832fe4ff8b92cd1bcb3330346cb8e8fc24838f56337",
+      "size": [
+        1120,
+        814
+      ],
+      "source_sha256": "70e9952579280725a9bac832fe4ff8b92cd1bcb3330346cb8e8fc24838f56337",
+      "synced": "2026-09-25T13:38:35+00:00",
+      "textbook_commit": "4e442d6734083511114de33e1e2fd52a43e83fa2",
+      "url": "https://web.archive.org/web/19991114081850/http://x.com/",
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        700,
+        600
+      ]
+    }
+  }
+}

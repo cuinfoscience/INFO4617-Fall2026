@@ -133,6 +133,27 @@ snapshots to a longitudinal source") was replaced by "Research designs with
 the archived web," and the one Wednesday sentence that pointed back at it
 no longer does.
 
+## Copied by tools/shots
+
+<!-- shots:begin: copies from the textbook's tools/shots, generated from shots.json; edits between these markers are replaced -->
+Copied here by the textbook's `tools/shots/run sync`; `tools/shots/run synced` checks them.
+
+| File | Copy of | Captured | Source | How |
+|---|---|---|---|---|
+| `about_capture.png` | `ch-07/about-this-capture` (images/ch-07/about-this-capture.png, textbook `7bfff47`) | 2026-09-25 | https://web.archive.org/web/20040212031928/http://www.thefacebook.com/ | tools/shots: Google Chrome for Testing 154.0.8037.57, 800×600 at 2×, closed shadow roots opened |
+| `calendar_dots_2005.png` | `course/week07-calendar-dots` (tools/shots/out/course/week07-calendar-dots/20260925T032517Z.png, textbook `4e442d6`) | 2026-09-25 | https://web.archive.org/web/2005*/facebook.com | tools/shots: Google Chrome for Testing 154.0.8037.57, 800×1100 at 2× |
+| `devtools_archived.png` | `course/week07-devtools-archived` (tools/shots/out/course/week07-devtools-archived/20260925T025940Z.png, textbook `4e442d6`) | 2026-09-25 | https://web.archive.org/web/20040212031928/http://www.thefacebook.com/ | tools/shots: Google Chrome for Testing 154.0.8037.57, 800×1000 at 2× |
+| `facebook_2004.png` | `course/week07-facebook-2004` (tools/shots/out/course/week07-facebook-2004/20260925T030140Z.png, textbook `4e442d6`) | 2026-09-25 | https://web.archive.org/web/20040121224607/http://facebook.com/ | tools/shots: Google Chrome for Testing 154.0.8037.57, 778×600 at 2× |
+| `google_1998.png` | `course/week07-google-1998` (tools/shots/out/course/week07-google-1998/20260925T025122Z.png, textbook `4e442d6`) | 2026-09-25 | https://web.archive.org/web/19981111184551/http://google.com/ | tools/shots: Google Chrome for Testing 154.0.8037.57, 800×600 at 2×, closed shadow roots opened |
+| `thefacebook_2004.png` | `course/week07-thefacebook-2004` (tools/shots/out/course/week07-thefacebook-2004/20260925T030204Z.png, textbook `4e442d6`) | 2026-09-25 | https://web.archive.org/web/20040212031928/http://www.thefacebook.com/ | tools/shots: Google Chrome for Testing 154.0.8037.57, 800×600 at 2× |
+| `toolbar.png` | `course/week07-toolbar` (tools/shots/out/course/week07-toolbar/20260925T025241Z.png, textbook `4e442d6`) | 2026-09-25 | https://web.archive.org/web/20040121224607/http://facebook.com/ | tools/shots: Google Chrome for Testing 154.0.8037.57, 1280×300 at 2×, closed shadow roots opened |
+| `toolbar_counts.png` | `course/week07-toolbar-counts` (tools/shots/out/course/week07-toolbar-counts/20260925T032219Z.png, textbook `4e442d6`) | 2026-09-25 |  | tools/shots: Google Chrome for Testing 154.0.8037.57, 1280×300 at 2×, closed shadow roots opened |
+| `wayback_calendar.png` | `course/week07-wayback-calendar` (tools/shots/out/course/week07-wayback-calendar/20260925T023414Z.png, textbook `4e442d6`) | 2026-09-25 | https://web.archive.org/web/2005*/facebook.com | tools/shots: Google Chrome for Testing 154.0.8037.57, 800×700 at 2× |
+| `wrapped_vs_raw.png` | `course/week07-wrapped-vs-raw` (tools/shots/out/course/week07-wrapped-vs-raw/20260925T030044Z.png, textbook `4e442d6`) | 2026-09-25 |  | tools/shots: Google Chrome for Testing 154.0.8037.57, 636×560 at 2× |
+| `x_com_1997.png` | `course/week07-x-com-1997` (tools/shots/out/course/week07-x-com-1997/20260925T030246Z.png, textbook `4e442d6`) | 2026-09-25 | https://web.archive.org/web/19970411224438/http://x.com/ | tools/shots: Google Chrome for Testing 154.0.8037.57, 800×600 at 2× |
+| `x_com_1999.png` | `course/week07-x-com-1999` (tools/shots/out/course/week07-x-com-1999/20260925T031208Z.png, textbook `4e442d6`) | 2026-09-25 | https://web.archive.org/web/19991114081850/http://x.com/ | tools/shots: Google Chrome for Testing 154.0.8037.57, 700×600 at 2× |
+<!-- shots:end -->
+
 ## Listed in `stubs.tsv`
 
 `make_stubs.py` keeps this table in step with `stubs.tsv` and draws a gray

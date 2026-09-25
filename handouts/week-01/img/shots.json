@@ -1,0 +1,52 @@
+{
+  "files": {
+    "jupyter-cells_annotated.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-24T20:52:24+00:00",
+      "copied_from": "images/ch-01/jupyter-cells_annotated.png",
+      "figure": "ch-01/jupyter-cells",
+      "final_url": "http://localhost:8888/notebooks/ch-01-introduction.ipynb",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "8efe6141811998504e2e4311a457adc3e1313cc5a8e74fbe4a0ecf1e852e0fa7",
+      "size": [
+        1600,
+        906
+      ],
+      "source_sha256": "8efe6141811998504e2e4311a457adc3e1313cc5a8e74fbe4a0ecf1e852e0fa7",
+      "synced": "2026-09-25T13:38:38+00:00",
+      "textbook_commit": "3ec43463fca8d0af89e098a8ec89e16b752345c4",
+      "url": "http://localhost:8888/notebooks/ch-01-introduction.ipynb",
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        800,
+        600
+      ]
+    },
+    "jupyter-new-menu_annotated.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-24T20:49:40+00:00",
+      "copied_from": "images/ch-01/jupyter-new-menu_annotated.png",
+      "figure": "ch-01/jupyter-new-menu",
+      "final_url": "http://localhost:8888/tree",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "5875e2dfd1f3cbb3b7a11c5c00231054d66f395dd1ca83a636e94524a2ef21ed",
+      "size": [
+        1648,
+        600
+      ],
+      "source_sha256": "5875e2dfd1f3cbb3b7a11c5c00231054d66f395dd1ca83a636e94524a2ef21ed",
+      "synced": "2026-09-25T13:38:38+00:00",
+      "textbook_commit": "3ec43463fca8d0af89e098a8ec89e16b752345c4",
+      "url": "http://localhost:8888/tree",
+      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "window": [
+        824,
+        600
+      ]
+    }
+  }
+}
