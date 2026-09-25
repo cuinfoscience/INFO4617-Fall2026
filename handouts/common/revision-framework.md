@@ -73,9 +73,9 @@ tells you where each one goes.
 | # | Type | Form | You noticed… | Your contribution includes | Size |
 |---|---|---|---|---|---|
 | 1 | **Code drift** | Something is wrong | An example errors, returns nothing, or returns the wrong shape | The error text, the corrected code, and one line on what changed upstream | M |
-| 2 | **Stale figure** | Something is wrong | A screenshot no longer matches today's interface | A fresh screenshot — same filename, same crop, same thing highlighted | S |
+| 2 | **Stale figure** | Something is wrong | A screenshot no longer matches today's interface | The figure's number, and a screenshot of what you see today attached to the issue | S |
 | 3 | **Common issue** | Gap report | You hit an error that isn't in the chapter's "Common Issues to Debug" | Symptom → cause → fix, written in the list's existing format | S |
-| 4 | **Missing figure** | Gap report | You had to sketch it yourself before it made sense | The figure, a caption, and alt text | M |
+| 4 | **Missing figure** | Gap report | You had to sketch it yourself before it made sense | Your sketch attached to the issue, and what it should show | M |
 | 5 | **Reading** | Suggestion | You found a source that grounds or complicates a claim | The citation added to `references.bib`, plus one line on why it belongs | S |
 | 6 | **Exercise** | Suggestion | An exercise is ambiguous, unverifiable, or too thin | Expected output, a rubric, a starter cell — or a new exercise with all three | M |
 | 7 | **Explanation** | Gap report | You reread a passage three times | The rewrite, plus a sentence on what confused you the first time | M |
@@ -100,8 +100,11 @@ found it (dev tools, "Copy selector") so the fix teaches the method, not just
 the answer.
 
 **2 · Stale figure.** The chapter shows the Network tab from an older browser
-version. Retake it at the same zoom, highlighting the same request, and keep
-the filename so nothing else has to change.
+version. Take a screenshot of what you see today, at the same step, and attach
+it to a *Something is wrong* issue with the figure's number. Don't replace the
+image file: every figure is made by the book's screenshot toolkit, which records
+where it came from, and a pull request that swaps an image by hand fails its
+checks. The instructor retakes it.
 
 **3 · Common issue.** You spent twenty minutes on a `ModuleNotFoundError`
 because your notebook kernel pointed at the wrong environment. That is a real
@@ -110,8 +113,10 @@ high-value contribution in the book — it converts your lost time into somebody
 else's saved time.
 
 **4 · Missing figure.** You couldn't hold the DOM tree in your head until you
-drew it. Contribute the drawing. Diagrams that helped *you* are far more likely
-to help the next reader than diagrams invented for completeness.
+drew it. Attach the drawing to a gap report, and say what it made clear.
+Diagrams that helped *you* are far more likely to help the next reader than
+diagrams invented for completeness. The instructor draws the book's version
+from yours, with the toolkit every figure in the book comes from.
 
 **5 · Reading.** The chapter asserts something about platform data access and
 cites nothing. You find the study, the court filing, or the news report that
@@ -138,17 +143,21 @@ PRs get merged; sprawling ones stall.
 because of the previous section, but the code returns Y" is evidence. Paste the
 command, the output, the error.
 
-**Match the book's voice.** The repository's `claude.md` documents editorial
-voice, formatting conventions, and chapter structure. Read it once; skim it
+**Match the book's voice.** The repository's `AGENTS.md` documents editorial
+voice, formatting conventions, and chapter structure, and `CONTRIBUTING.md`
+sums it up under "Style in brief". Read `AGENTS.md` once; skim the summary
 before each PR. A change in the wrong register costs a review round.
 
-**Check it builds.** The book is Quarto. If you can, run `quarto render` (or at
-minimum `quarto preview` on the chapter) before opening the PR. Note in the PR
-whether you did.
+**Check it builds.** The book is Quarto. On your own computer, regenerate the
+notebooks (`python tools/make_notebooks.py`) and build the whole book with
+`quarto render` before opening the PR; a chapter built alone shows
+cross-reference warnings that aren't real. In the browser you can do neither,
+and that's fine. Either way, tick what you ran under **Checks** in the PR, and
+say why you skipped the rest.
 
-**Disclose AI assistance.** If a tool helped you draft or diagnose, say so in
-the PR description — same standard the book holds itself to, and the same
-standard in the course syllabus.
+**Disclose AI assistance.** If a tool helped you draft or diagnose, say so on
+the PR's **AI assistance** line — same standard the book holds itself to, and
+the same standard in the course syllabus.
 
 ---
 
@@ -210,6 +219,9 @@ you genuinely do not know. But a guess is usually worth writing:
 You are not committing to write the fix. You are showing you understood your own
 problem well enough to imagine its shape.
 
+**Did an AI tool help you write this?** Optional. If one did, name it and say
+what it did: the same disclosure a pull request asks for.
+
 **Before you submit** — a required checkbox confirming you searched the open
 issues. Actually search. Duplicates earn no credit, and if someone already filed
 yours, reviewing theirs does.
@@ -220,20 +232,36 @@ Titles are handled for you: each form prefixes `Broken:`, `Gap:`, or
 `Suggestion:`, and you complete the sentence. Make what you add specific —
 `Gap: no explanation of where to find robots.txt` beats `Gap: confusing section`.
 
-Pull requests have no form. From week 3 on, write the PR description with the
-same fields the forms would have asked, in this order:
+Pull requests have a form too: when you open one, GitHub fills the description
+with the book's template. It asks for the fields the issue forms ask for, in
+this order, then two more. Replace each bracketed hint with your answer:
 
 ```
-Location: Chapter and section, and the source file —
-          e.g. ch-06-static-pages.qmd, "Strategy 1: Manual Table Parsing"
+Closes #[issue number, or delete this line]
 
-Problem:  What you did, what you expected, what happened.
-          Paste the code and the output.
+**Location:** [the file and the nearest heading, for example
+`ch-06-static-pages.qmd`, "Strategy 1: The Clean Single Table"]
 
-Why:      Who this affects and how much. One sentence.
+**Problem:** [what you did, what you expected, and what happened;
+paste the code and the output]
 
-Change:   What this PR does, and anything you chose not to do.
+**Why:** [who this affects, and how much, in one sentence]
+
+**Change:** [what this pull request changes, and anything you chose
+not to change]
+
+**AI assistance:** [none, or the tool and what it did]
+
+**Checks** (tick what you did; if you couldn't, say why):
+
+- [ ] I changed the chapter's `.qmd` file, not a file in `notebooks/` or `images/`.
+- [ ] I regenerated the notebooks with `python tools/make_notebooks.py`.
+      (You can't in the browser: say so here.)
+- [ ] The book builds with `quarto render`, or the **Render** check passes.
 ```
+
+**Closes** links the issue your pull request fixes: GitHub closes that issue
+when the pull request merges, so write it only for the issue this change fixes.
 
 If you can't fill in **Location** and **Problem** with specifics, you don't have
 a revision yet — you have a hunch. Go back to the chapter and reproduce it.
