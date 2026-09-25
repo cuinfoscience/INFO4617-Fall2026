@@ -76,9 +76,10 @@ Sizes on the slide are the text's, where the frame shows the image.
   Opportunities, Contact Us), and the logo's. The CDX API shows why: of the
   seven images the page references, six have never been captured
   successfully -- their first captures, from August and September 2000, are
-  all 404s -- and the seventh, a transparent `spacer.gif`, was saved only in
-  April 2000. The alt text reaches 16.8 pixels in the 0.35 column. (Broken
-  captures; x.com before X)
+  all 404s, and later ones redirects -- and the seventh, a transparent
+  `spacer.gif`, was saved on April 29 and May 5, 2000. The full query is the
+  textbook's evidence `x-com-images` (`images/ch-07/IMAGES.md`). The alt text
+  reaches 16.8 pixels in the 0.35 column. (Broken captures; x.com before X)
 - `toolbar_counts.png` -- three toolbars' counts and strips of bars, labeled:
   google.com 20,394,311 captures, facebook.com 8,516,746, x.com 94,893
   (2026-09-25). The counts read at 19 pixels; the date ranges under them
