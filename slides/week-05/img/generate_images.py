@@ -7,9 +7,8 @@ tcp_handshake.png (all script-drawn diagrams) and pageviews_timeseries.png
 (a live chart from the Wikimedia pageviews API, matching the exact call
 and date range shown in the Wednesday "Make an API call" slide).
 
-dev_tools_network.png and pr_review.png stay hand-made placeholders --
-one is a live browser DevTools panel, the other a real GitHub PR review
-comment, and neither is honestly reproducible by a script.
+pr_review.png stays a placeholder -- it needs a real GitHub PR review
+comment, which a script can't honestly reproduce.
 """
 import time
 

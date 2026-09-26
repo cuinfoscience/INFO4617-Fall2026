@@ -11,8 +11,8 @@ On a slide shown 1,920 pixels wide, text should reach 16 pixels
 to reach it: `requests_vs_browser.png`, `js_off.png`, `playwright_home.png`,
 `selenium_browser.png`, and `codegen.png`, whose text had come to about 6 to
 11 pixels. `network_json.png`, retaken on 2026-09-24, reaches 23. One still
-falls short and waits: `pr_review.png`, for a session that can read
-github.com's `robots.txt`.
+falls short and waits: `pr_review.png`, for a hand capture (the textbook's
+course recipe `pr-review`).
 
 ## How the images were made
 
@@ -123,9 +123,10 @@ capture dates.
   collapses the large `.qmd` diff for anonymous viewers. No student work is
   shown. (Improving Chapter 8 together)
   - Too small on its slide: 1,300 pixels across in a 35% column shows it at
-    45% of its size on screen. The retake waits for a session that can read
-    github.com's `robots.txt`: a cloud session reaches github.com only for
-    its own repositories.
+    45% of its size on screen. The retake is a hand capture, because a cloud
+    session reaches github.com only for its own repositories and a review
+    comment needs a signed-in account: the textbook's course recipe
+    `pr-review` gives the steps, and one image serves weeks 1, 8, and 13.
 
 To retake one of the 2026-09-22/23 images by hand, open the page in Chrome
 and screenshot it; the DevTools shots need the panel docked right at about

@@ -1,0 +1,28 @@
+{
+  "files": {
+    "book_website.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-09-25T18:55:05+00:00",
+      "copied_from": "tools/shots/out/course/week01-book-website/20260925T185502Z.png",
+      "figure": "course/week01-book-website",
+      "final_url": "https://cuinfoscience.github.io/Web-Data-Science-Book/",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "30307cefd6c8c2abea1d338b65871f837c3078e0a9dc9a3354985b0343abc4c0",
+      "size": [
+        776,
+        1024
+      ],
+      "source_sha256": "30307cefd6c8c2abea1d338b65871f837c3078e0a9dc9a3354985b0343abc4c0",
+      "synced": "2026-09-25T18:57:30+00:00",
+      "textbook_commit": "d4c04a33755d65f4b73b28e903f088b9b0323022",
+      "url": "https://cuinfoscience.github.io/Web-Data-Science-Book/",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        480,
+        760
+      ]
+    }
+  }
+}

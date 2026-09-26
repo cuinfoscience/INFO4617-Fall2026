@@ -18,8 +18,8 @@ what students actually see if they run that cell themselves.
 - `network-requests-inspector.png` -- a real DevTools Network-tab
   screenshot, captured and dropped in directly (via Overleaf), replacing
   the `dev_tools_network.png` placeholder this file previously described.
-  `dev_tools_network.png` itself is no longer referenced by any frame but
-  is left in place rather than deleted.
+  No frame used the placeholder after that, and it was deleted with its
+  `stubs.tsv` row on 2026-09-25.
 - `how-do-you-do.jpeg` -- a still from the "How do you do, fellow kids"
   meme, added to the User-Agent-spoofing frame. Not regenerable/scripted;
   replace by hand if it ever needs to change.
@@ -60,23 +60,16 @@ The narrowest legible width is where the figure's text reaches 16 pixels on a
 slide shown 1920 pixels wide (`slides/common/AUTHORING.md`, "How much a
 screenshot shows"). The Inspector frame shows its figure at `0.75\textwidth`.
 
-## Still placeholders (`dev_tools_network.png`, `pr_review.png`)
+## Still a placeholder (`pr_review.png`)
 
-Two images remain auto-generated gray **placeholders** so the deck compiles.
-Both show something a script cannot honestly fabricate -- replace by hand
-(keep the same filename), then rebuild:
-
-| File | Size | Should show |
-|---|---|---|
-| `dev_tools_network.png` | 1300x850 | Screenshot: browser Network tab on a live Wikipedia page load, showing dozens of requests with Name/Status/Type columns and the selected request's User-Agent and Cookie response headers |
-| `pr_review.png` | 1300x820 | Screenshot: a GitHub pull-request "Files changed" view with an inline review comment left on ch-05-protocols.qmd |
-
-`dev_tools_network.png` needs an actual interactive browser session --
-capturing a real DevTools panel isn't something a headless script can do
-cleanly. `pr_review.png` needs a real inline review comment on a real PR;
-rather than post a comment solely to manufacture a screenshot, this is left
-for the instructor to capture from an actual Friday peer-review session (or
-any real PR against this chapter with a genuine review comment on it).
+One image remains an auto-generated gray **placeholder** so the deck
+compiles: `pr_review.png` (1300x820), a GitHub pull request's "Files changed"
+view with an inline review comment left on ch-05-protocols.qmd. It needs a
+real inline review comment on a real PR; rather than post a comment solely to
+manufacture a screenshot, this is left for the instructor to capture from an
+actual Friday peer-review session (or any real PR against this chapter with a
+genuine review comment on it). The textbook's course recipe `pr-review` gives
+the steps for a hand capture, on a pull request that isn't a student's.
 
 ## Handout screenshots
 
@@ -106,7 +99,6 @@ between the two markers; the notes above are safe.
 |---|---|---|
 | `request_lifecycle.png` | 1000x900 | Diagram: the URL-to-rendered-page sequence -- DNS resolve, TCP connect, HTTP request, server response, browser render -- shown as a vertical waterfall across the protocol layers |
 | `protocol_stack.png` | 1000x900 | Diagram: the four-layer web stack (TCP/IP transport, DNS naming, HTTP application, URL identifier) drawn as stacked bands with example values at each layer |
-| `dev_tools_network.png` | 1300x850 | Screenshot: browser Network tab on a live Wikipedia page load, showing dozens of requests with Name/Status/Type columns and the selected request's User-Agent and Cookie response headers |
 | `url_anatomy.png` | 1300x480 | Diagram: a Census API URL broken into labeled parts -- scheme, host, port, path, query, fragment -- with each component called out beneath the string |
 | `pageviews_timeseries.png` | 1100x560 | Figure: matplotlib line chart of daily Wikipedia pageviews for University of Colorado Boulder over January 2026, with visible spikes |
 | `pr_review.png` | 1300x820 | Screenshot: a GitHub pull-request "Files changed" view with an inline review comment left on ch-05-protocols.qmd |

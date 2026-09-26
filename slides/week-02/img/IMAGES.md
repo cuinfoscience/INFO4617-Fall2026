@@ -1,16 +1,17 @@
-# Image placeholders for `week-02`
+# Images for `week-02`
 
-These are auto-generated gray **placeholders** so the deck compiles. Replace each with the real asset described below (keep the same filename), then rebuild.
+The two images `stubs.tsv` lists are real: renders of live text by
+`common/make_figures.py`. Four gray placeholders that no frame used,
+`legal_timeline.png`, `ethics_framework.png`, `pr_review.png`, and
+`github_issue.png`, were deleted with their rows on 2026-09-25; the rows'
+descriptions are in the file's history. The deck's other images were added by
+the instructor and aren't listed in `stubs.tsv`.
 
 <!-- stubs:begin: generated from stubs.tsv by slides/common/make_stubs.py; edits between these markers are replaced -->
 | File | Size | Should show |
 |---|---|---|
-| `legal_timeline.png` | 1240x560 | Diagram: timeline of CFAA scraping cases -- Van Buren v. United States (2021, gates-up-or-down), hiQ Labs v. LinkedIn (2019/2022, public data but breach of contract), Sandvig v. Barr (2020, ToS violation is not a crime) |
-| `ethics_framework.png` | 900x900 | Diagram: the five-question ethical decision framework as a top-to-bottom funnel/checklist -- legality, consent, proportionality, privacy, server impact |
 | `robots_txt_browser.png` | 1200x615 | REAL ASSET -- rendered from the live file by common/make_figures.py. Wikipedia's robots.txt: header comment plus the generic User-agent block, with Disallow: /trap/ highlighted. |
 | `user_agent_devtools.png` | 1200x414 | REAL ASSET -- rendered from a live response by common/make_figures.py. The course User-Agent echoed back by httpbin.org/headers, i.e. what the server actually receives. |
-| `pr_review.png` | 1300x760 | Screenshot: a GitHub pull-request Files-changed view with an inline review comment on ch-02-ethics.qmd |
-| `github_issue.png` | 1300x820 | STILL A PLACEHOLDER -- needs a manual screenshot: the GitHub 'New issue' form on Web-Data-Science-Book, filled in with the Title/Location/Problem/Why/Proposal skeleton. Requires a signed-in browser. |
 <!-- stubs:end -->
 
 `make_stubs.py` keeps the table above in step with `stubs.tsv`. It rewrites
