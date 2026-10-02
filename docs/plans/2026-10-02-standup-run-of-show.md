@@ -16,10 +16,11 @@ class". The counts on them were taken on October 1: 51 open pull requests and
 
 ## Before class (about 20 minutes)
 
-1. **Merge textbook #193** with a merge commit. It reverts the two commits made
-   straight to `main` on September 25: a Scapy note in chapter 5 and a caching
-   tip in chapter 6. Until it merges, every pull request's Notebook sync fails,
-   because `main`'s chapter 5 and 6 notebooks don't match their chapters.
+1. **Textbook #193 is merged** (October 2, with a merge commit). It reverted
+   the two commits made straight to `main` on September 25: a Scapy note in
+   chapter 5 and a caching tip in chapter 6. Before it merged, every pull
+   request's Notebook sync failed, because `main`'s chapter 5 and 6 notebooks
+   didn't match their chapters.
 2. **Turn on the rule.** In the textbook repository, go to Settings, then
    Rules, then Rulesets, then New branch ruleset:
    - name it `main`, set Enforcement to Active, and target the default branch;
@@ -72,8 +73,13 @@ class". The counts on them were taken on October 1: 51 open pull requests and
   #108 (chapter 5), and #182 (chapter 6). The next regeneration overwrites
   them.
 - **#180** regenerated the chapter 5 and 6 notebooks while the reverted
-  changes were still on `main`. After #193 merges, those notebooks need
+  changes were still on `main`. Now that #193 has merged, those notebooks need
   regenerating again.
+- **#194** (yours, opened October 2) replaces Scapy in chapter 5 with terminal
+  commands run from the notebook, and puts every library the chapters import
+  into chapter 1's `webdata`. #106 and #112 edit the Scapy text it removes, so
+  they conflict with it; #111 adds a note about Scapy; and #180's chapter 5
+  notebook conflicts with it too.
 - **#86** (chapter 4, Step 5) sends students to Open-Meteo, whose robots.txt
   disallows every path. Raise in its review whether the step should say why an
   API client may still call it (chapter 2's distinction).

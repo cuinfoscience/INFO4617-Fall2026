@@ -22,16 +22,34 @@ make a separate environment for this course. The first command is one long
 line:
 
 ```bash
-conda create -n webdata --override-channels -c conda-forge python=3.14 notebook requests beautifulsoup4 pandas matplotlib seaborn gensim
+conda create -n webdata --override-channels -c conda-forge python=3.14 notebook requests beautifulsoup4 lxml pandas matplotlib seaborn gensim dnspython selenium playwright-python pypdf pdfplumber praw spotipy atproto mastodon.py openai anthropic
 conda activate webdata
 ```
 
 The first command makes the environment and installs everything in it at
-once: Python, Jupyter (`notebook`), and the libraries the course uses most.
-They come from conda-forge, a community channel that builds packages for new
-versions of Python quickly. gensim, which week 7 uses, has no Python 3.14
-build that `pip` can install. Expect it to take a few minutes. Run
-`conda activate webdata` each time you open a new terminal.
+once: Python, Jupyter (`notebook`), and every library the textbook's chapters
+import, from `requests` in week 1 to `openai` in week 13. They come from
+conda-forge, a community channel that builds packages for new versions of
+Python quickly. gensim, which week 7 uses, has no Python 3.14 build that `pip`
+can install. Expect it to take a few minutes. Run `conda activate webdata`
+each time you open a new terminal.
+
+Only two later steps are not in this command. Week 8 downloads browsers for
+Playwright (`playwright install chromium`), and weeks 11 to 13 ask you for
+API keys.
+
+### Made `webdata` before October 2?
+
+The first version of this page installed fewer libraries. Add the rest once,
+from a terminal (on Windows, the Anaconda Prompt). This is one long line:
+
+```bash
+conda install -n webdata -c conda-forge gensim lxml dnspython selenium playwright-python pypdf pdfplumber praw spotipy atproto mastodon.py openai anthropic
+```
+
+Type `y` when conda asks to proceed. If Jupyter is open, restart the kernel
+afterwards (**Kernel** → **Restart Kernel**), so the notebook can import the
+new libraries.
 
 Use one environment for each project. The environment records the version of
 each library that your analysis used. This makes your results reproducible. It

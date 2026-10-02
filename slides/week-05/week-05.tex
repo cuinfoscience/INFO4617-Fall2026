@@ -36,7 +36,7 @@
 
             \dayband{Wednesday}{Notebook lab}
             \begin{itemize}\small
-                \item Trace the stack in Python \emph{and} the terminal: a packet capture, a live API call, curl/wget
+                \item Trace the stack in Python \emph{and} the terminal: ping and traceroute from a notebook cell, a live API call, curl/wget
             \end{itemize}
 
             \medskip
@@ -285,28 +285,34 @@ print(requests.get("https://api.ipify.org?format=json").json())
 for rec in dns.resolver.resolve("en.wikipedia.org", "A"):
     print("IP address:", rec)
 \end{lstlisting}
-    Before reaching for Python, \texttt{ping en.wikipedia.org} from any terminal is the fastest reachability check --- no install required, works on every platform.
 \end{frame}
 
-\begin{frame}[fragile]{Getting \texttt{scapy} running: the sudo dance}
-    \texttt{scapy} sends and receives raw packets --- a privileged OS operation everywhere, unrelated to \texttt{scapy} itself. Skipping these steps is the \#1 way to get stuck:
-\begin{lstlisting}[language=]
-1. pip install scapy          # or: conda install -c conda-forge scapy
-2. Windows only: install Npcap (a driver, not a pip package)
-3. Launch Jupyter WITH ELEVATED PRIVILEGES:
-     macOS/Linux:  sudo jupyter notebook
-     Windows:      Anaconda Prompt -> right-click -> Run as administrator
+\begin{frame}[fragile]{The terminal, inside the notebook: \texttt{!}}
+    A line in a code cell that starts with \texttt{!} runs in your computer's terminal, and its output appears under the cell. \texttt{ping}, \texttt{traceroute}, and \texttt{curl} come with your operating system: nothing to install, no administrator rights.
+\begin{lstlisting}[basicstyle=\normalsize\ttfamily]
+import platform
+
+# "Send 4 and stop": -n on Windows, -c on macOS and Linux
+if platform.system() == "Windows":
+    !ping -n 4 en.wikipedia.org
+else:
+    !ping -c 4 en.wikipedia.org
 \end{lstlisting}
-    \begin{alertblock}{Two gotchas}
-        \footnotesize \texttt{sudo} resets your shell's \texttt{PATH} --- a bare \texttt{sudo jupyter notebook} can launch the \emph{wrong} Jupyter and fail with \texttt{ModuleNotFoundError}. Fix: \texttt{sudo \$(which jupyter) notebook}. And: an elevated notebook gives \emph{every} cell full system access, not just the one that needs it --- close it when you're done. Machine won't cooperate? The terminal backup on the next frame needs no privileges at all.
+    \texttt{ping} sends a few small packets and reports whether, and how fast, the host replies. No reply after four tries: the host is unreachable, or a firewall drops the probes.
+    \begin{alertblock}{Forgot the \texttt{-c}?}
+        \footnotesize On macOS and Linux, \texttt{ping} runs until you stop it. Press the notebook's interrupt button ($\blacksquare$).
     \end{alertblock}
 \end{frame}
 
 \begin{frame}[fragile]{Traceroute: reading the hops}
-\begin{lstlisting}
-from scapy.all import traceroute
+\begin{lstlisting}[basicstyle=\small\ttfamily]
+import platform
 
-result, unans = traceroute("en.wikipedia.org", maxttl=20)
+# Stop after 20 hops: -h on Windows, -m on macOS and Linux
+if platform.system() == "Windows":
+    !tracert -h 20 en.wikipedia.org
+else:
+    !traceroute -m 20 en.wikipedia.org
 \end{lstlisting}
     Each line is one hop --- an IP (or hostname) and a round-trip time. Patterns worth recognizing:
     \begin{itemize}\small
@@ -315,28 +321,22 @@ result, unans = traceroute("en.wikipedia.org", maxttl=20)
         \item A sudden RTT jump --- often a long-haul or undersea link, not a problem
         \item Hostnames often encode geography (\texttt{iad}, \texttt{ord}) --- a fast, informal location guess
     \end{itemize}
-    \footnotesize No privileges needed: \texttt{traceroute en.wikipedia.org} (macOS/Linux) or \texttt{tracert en.wikipedia.org} (Windows) from any terminal.
+    \footnotesize It takes a minute: the tool waits for routers that don't answer. Linux without \texttt{traceroute}? Use \texttt{!tracepath}. To loop over the lines in Python: \texttt{hops = !traceroute -m 20 en.wikipedia.org}
 \end{frame}
 
-\begin{frame}[fragile]{Packet sniffing: watching your own traffic}
-    Every message in this chapter travels as \textbf{packets}. \textbf{Sniffing} captures them off an interface --- meaningfully more invasive than anything else here, so this book sniffs only \textbf{loopback traffic you generate yourself}, to a server on your own machine:
-\begin{lstlisting}
-from scapy.all import AsyncSniffer
-import requests, threading
-from http.server import HTTPServer, SimpleHTTPRequestHandler
-
-httpd = HTTPServer(("127.0.0.1", 8899), SimpleHTTPRequestHandler)
-threading.Thread(target=httpd.serve_forever, daemon=True).start()
-
-sniffer = AsyncSniffer(filter="tcp port 8899", iface="lo0")  # "lo" on Linux
-sniffer.start()
-requests.get("http://127.0.0.1:8899/")
-packets = sniffer.stop()
-
-for pkt in packets:
-    print(pkt.summary())
+\begin{frame}[fragile]{Watching one connection: \texttt{curl -v}}
+    Capturing \textbf{packets} (``sniffing'') needs administrator rights, and on a shared network it can see other people's traffic, so we don't. \texttt{curl -v} narrates one connection from your side:
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
+# -v narrates, -I asks for headers only, -A sets your User-Agent
+!curl -v -I -A "WebDataScience/1.0 (you@colorado.edu)" https://en.wikipedia.org/wiki/Web_scraping
 \end{lstlisting}
-    \footnotesize The first packets are TCP's \textbf{handshake} --- \texttt{SYN}, \texttt{SYN-ACK}, \texttt{ACK} --- before a byte of your actual request goes out. Prefer clicking to scripting? \textbf{Wireshark} is the standard GUI packet analyzer, same idea, no code.
+    Read it from the top:
+    \begin{itemize}\small
+        \item \texttt{*} lines are curl's notes. By \texttt{Connected to ... port 443}, TCP's \textbf{handshake} (\texttt{SYN}, \texttt{SYN-ACK}, \texttt{ACK}) is done. The TLS handshake comes next.
+        \item \texttt{>} lines are the request you sent: method, path, \texttt{Host}, \texttt{User-Agent}
+        \item \texttt{<} lines are the response: the status line and the headers the Network tab showed
+    \end{itemize}
+    \footnotesize Want the packets themselves? \textbf{Wireshark} --- on a computer you own, and only your own traffic.
 \end{frame}
 
 \begin{frame}[fragile]{Diagnosing HTTP errors, not guessing}
@@ -435,7 +435,7 @@ whois wikipedia.org
 curl -I https://en.wikipedia.org  # headers only -- fast status check
 curl -v https://en.wikipedia.org  # full request/response, like the Network tab
 \end{lstlisting}
-    All four take a User-Agent flag (\texttt{curl -A "..."}) the same way the \texttt{headers} dict does in Python.
+    In a notebook, put \texttt{!} in front of any of them. \texttt{curl} takes a User-Agent flag (\texttt{-A "..."}) the way \texttt{requests} takes a \texttt{headers} dict; DNS and WHOIS lookups don't send one.
 \end{frame}
 
 \begin{frame}[fragile]{\texttt{curl} and \texttt{wget}: alternatives to \texttt{requests}}
@@ -494,7 +494,7 @@ requests.get(base, params={"titles": "University of Colorado Boulder"})
                 \item Resolve five related domains with \texttt{dns.resolver}. Report the domains that share an IP address.
                 \item Plot the pageviews of three related articles. Give a possible cause for each spike.
                 \item Write \texttt{diagnose\_url()}. Test it on a 200 response, a 404 response, a redirect, an API, and a blocked site.
-                \item Run the packet-sniffer cell against your own loopback request. Identify the \texttt{SYN}, \texttt{SYN-ACK}, and \texttt{ACK} packets in the output.
+                \item Run the \texttt{curl -v} cell. Mark where the TCP handshake had finished, where TLS was set up, the lines you sent (\texttt{>}), and the lines you got back (\texttt{<}).
                 \item \textbf{5617:} examine the delivery infrastructure of one site. Record the redirect chain, the CDN headers, and the traceroute hops. Write a 500-word memo
             \end{enumerate}
         \end{column}
@@ -586,7 +586,7 @@ requests.get(base, params={"titles": "University of Colorado Boulder"})
 \begin{frame}{Key takeaways}
     \begin{enumerate}\small
         \item The web is a \textbf{layered stack}: TCP/IP transports, DNS resolves names, HTTP structures the conversation, URLs identify the target.
-        \item \textbf{Traceroute and packet sniffing} make that transport layer directly observable; the \texttt{User-Agent} header --- honest or spoofed --- is how a server decides who, or what, is asking.
+        \item \textbf{Traceroute and \texttt{curl -v}}, run from a notebook cell with \texttt{!}, make that transport layer directly observable; the \texttt{User-Agent} header --- honest or spoofed --- is how a server decides who, or what, is asking.
         \item Debugging is \textbf{systematic diagnosis}, not guesswork: reach the server? right address? which status code? headers correct? URL well-formed?
         \item A meaningful \texttt{User-Agent} fixes most \textbf{403}s; backoff or a \texttt{Retry} policy handles \textbf{429}s. A \texttt{for} loop over one host is your cue for a \texttt{Session}.
         \item \textbf{Never regex a URL.} \texttt{urllib.parse} both parses and builds; know path-segment (\texttt{quote}) from query-parameter (\texttt{params=}) APIs.
