@@ -5,8 +5,8 @@ Machine**. Twelve were remade on 2026-09-25 so that their text reaches 16
 pixels on a slide shown 1,920 pixels wide (`slides/common/AUTHORING.md`); the
 2026-09-22 crops they replace showed it at 6 to 15. Three small crops from
 2026-09-22 already reached it and were kept. Four are **memes the instructor
-picked**, and two (Wednesday's `cdx_response.png`, Friday's `pr_review.png`)
-are older gray placeholders.
+picked**, one more is borrowed from week 2 (below), and Wednesday's
+`cdx_response.png` is an older gray placeholder.
 
 ## How the screenshots were made
 
@@ -124,9 +124,16 @@ draw them again.
 - `elrond-i-was-there.jpg` -- Closing activity: time travel with the
   Wayback Machine.
 
-## Older placeholders, not touched in this pass
+Friday's "Find your chapter" frame shows week 2's `this-is-fine.jpg`, by its
+path from the repository's root (`slides/week-02/img/this-is-fine.jpg`), so
+it is not copied here or listed in `stubs.tsv`.
 
-- `cdx_response.png` (Wednesday) and `pr_review.png` (Friday).
+## Older placeholders
+
+- `cdx_response.png` (Wednesday), not touched in this pass.
+- `pr_review.png` (Friday) was deleted with its `stubs.tsv` row on
+  2026-10-02, when the Friday section became the code-review standup and no
+  frame used it.
 
 `change_timeline.png` was removed: the Monday frame that used it ("From
 snapshots to a longitudinal source") was replaced by "Research designs with
@@ -179,5 +186,4 @@ between the two markers; the notes above are safe.
 | `x_com_1997.png` | 1460x840 | Screenshot: x.com, 1997-04-11 -- "not nearly the worst place on the web!!!", Dave's World, Rob's House of Weather |
 | `google_1998.png` | 1600x400 | Screenshot: google.com, 1998-11-11, under the toolbar (20,394,311 captures) -- "Welcome to Google", "Google Search Engine Prototype" |
 | `cdx_response.png` | 1200x720 | Screenshot: a CDX Server API JSON response, showing the header row then rows of timestamp / original / statuscode / length for successive captures |
-| `pr_review.png` | 1300x760 | Screenshot: a GitHub pull-request "Files changed" view with an inline review comment on ch-07-archives.qmd |
 <!-- stubs:end -->
