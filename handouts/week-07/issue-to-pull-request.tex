@@ -1,0 +1,230 @@
+% ==========================================================================
+% INFO 4617 Web Data Science -- Week 7 Friday activity: Issue to pull request
+% Build: `make` in handouts/, or `latexmk -pdf issue-to-pull-request.tex`
+% here. The figures are annotated from real captures (img/IMAGES.md). A
+% screen that needs a signed-in browser is a hand capture: \handcapture
+% prints it once img/NAME.png exists, and leaves it out until then.
+% ==========================================================================
+\makeatletter\def\input@path{{../common/}{handouts/common/}}\makeatother
+\documentclass{handout}
+\usepackage{amssymb}   % \checkmark
+
+\title[INFO 4617 · Week 7 · Friday activities · Issue to pull request]{Issue to pull request}
+\subtitle{Week 7 Friday activity · hard · about 30 minutes}
+\author{Brian C. Keegan, Ph.D.}
+\institute{Department of Information Science, University of Colorado Boulder}
+\date{October 2, 2026}
+
+% A numbered figure: [width]{path from the repo root}{alt text}{caption}
+\newcounter{handoutfig}
+\newcommand{\activityfigure}[4][\linewidth]{%
+  \par\smallskip\refstepcounter{handoutfig}%
+  {\centering
+   \BeginAccSupp{method=pdfstringdef,Alt={#3}}%
+   \includegraphics[width=#1]{#2}%
+   \EndAccSupp{}\par}%
+  \smallskip{\small\raggedright\textbf{Figure \thehandoutfig.} #4\par}}
+% A hand capture: {file in handouts/week-07/img/}{alt text}{caption}
+\newcommand{\handcapture}[3]{%
+  \IfFileExists{handouts/week-07/img/#1}%
+    {\activityfigure{handouts/week-07/img/#1}{#2}{#3}}%
+    {\IfFileExists{../../handouts/week-07/img/#1}%
+      {\activityfigure{handouts/week-07/img/#1}{#2}{#3}}{}}}
+
+\setlist[enumerate]{leftmargin=*,itemsep=1.5pt,topsep=2pt}
+\setlist[itemize]{leftmargin=*,itemsep=1pt,topsep=2pt}
+
+\begin{document}
+\maketitle
+
+\begin{frame}{What you do}
+  \begin{columns}[T]
+    \begin{column}{0.57\textwidth}
+      You fix the problem that an issue describes, in GitHub's web editor.
+      Then you open a pull request that closes the issue when it merges. You
+      do all of it in the browser: you need no terminal and no copy of the
+      book on your laptop.
+
+      Your chapter's board in week 7's slides lists issues that have no pull
+      request. Start with one that a triage comment calls \textbf{small}.
+
+      Work in pairs. One partner works in the browser, and the other reads
+      this handout aloud.
+    \end{column}
+    \begin{column}{0.39\textwidth}
+      \begin{block}{The three Friday activities}
+        \small
+        \begin{tabular}{@{}ll@{}}
+          Triage an issue & easy\\
+          Review a pull request & medium\\
+          \textbf{Issue to pull request} & \textbf{hard}
+        \end{tabular}
+      \end{block}
+      \begin{alertblock}{Do not}
+        \small
+        \begin{itemize}
+          \item click \textbf{Merge pull request};
+          \item change a file in \texttt{notebooks/} or \texttt{images/}: a script makes the notebooks from the chapters;
+          \item put two fixes in one pull request.
+        \end{itemize}
+        The instructor merges, closes, and resolves conflicts.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{1 · Claim the issue}
+  \begin{enumerate}
+    \item Sign in to GitHub.
+    \item Open the issue
+      (\url{https://github.com/cuinfoscience/Web-Data-Science-Book/issues/}
+      and its number). Read it, and read its comments.
+    \item Write the comment \texttt{I'm taking this.} and click
+      \textbf{Comment}. Then no other pair starts the same fix.
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{2 · Open the chapter in the editor}
+  \begin{enumerate}
+    \item Open the book at the chapter:
+      \url{https://cuinfoscience.github.io/Web-Data-Science-Book/}
+    \item Click \textbf{Edit this page} ①, at the bottom of the right-hand
+      sidebar (Figure~\ref{fig:edit}). GitHub opens the chapter's source
+      file, \texttt{ch-NN-name.qmd}.
+    \item Click the pencil icon, \textbf{Edit this file}. If GitHub asks you
+      to \textbf{fork} the repository, accept. A fork is your own copy of the
+      book, and GitHub makes it for you. The steps after this are the same.
+  \end{enumerate}
+  \activityfigure[0.64\linewidth]{handouts/week-07/img/edit-this-page_annotated.pdf}%
+    {Screenshot of chapter 4 of the book's website. Marker 1 points to Edit
+     this page, at the bottom of the right-hand sidebar.}%
+    {A chapter of the book (here chapter 4). \textbf{Edit this page} ① is at
+     the bottom of the right-hand sidebar, above \textbf{Report an issue}.}%
+  \label{fig:edit}
+\end{frame}
+
+\begin{frame}{3 · Make one change}
+  \begin{enumerate}
+    \item Click in the editor and press \texttt{Ctrl+F} (\texttt{Cmd+F} on a
+      Mac). This opens the editor's own search bar ① (Figure~\ref{fig:search}).
+      Your browser's search cannot see the whole file. Search for words from
+      the section, such as its heading ②.
+  \end{enumerate}
+  \activityfigure[0.78\linewidth]{handouts/week-07/img/editor-search_annotated.pdf}%
+    {Screenshot of GitHub's web editor with its search bar open. Marker 1 is
+     on the search box, which holds "missing manual". Marker 2 is beside the
+     heading the search found.}%
+    {GitHub's web editor, with its own search bar open ①. The search for
+     \textit{missing manual} found the callout's heading ②.}%
+  \label{fig:search}
+  \begin{enumerate}[resume]
+    \item Make the change that the issue asks for. Change nothing else.
+    \item Keep the Markdown correct. Put an empty line above a heading
+      (\texttt{\#\#}) or a callout (\texttt{:::}). Write a link as
+      \breakcode{[text](https://...)}, with no space between \texttt{]} and
+      \texttt{(}.
+    \item Click \textbf{Preview} ① (Figure~\ref{fig:preview}). Compare the
+      old line ② with the new line ③. Then click \textbf{Commit changes…} ④.
+  \end{enumerate}
+  \activityfigure[0.78\linewidth]{handouts/week-07/img/preview-diff_annotated.pdf}%
+    {Screenshot of the editor's Preview tab after an edit. Marker 1 is on the
+     Preview tab. Marker 2 is on the old line, in red. Marker 3 is on the new
+     line, in green. Marker 4 is under the Commit changes button.}%
+    {The \textbf{Preview} tab ① after an edit. The old line ② is red, and
+     the new line ③ is green. \textbf{Commit changes…} ④ is at the top
+     right.}%
+  \label{fig:preview}
+\end{frame}
+
+\begin{frame}{4 · Commit to a new branch}
+  \begin{enumerate}
+    \item In \textbf{Commit message} ①, say what you changed and where, for
+      example \texttt{Ch. 5: say where requests stores redirect hops}.
+    \item Select \textbf{Create a new branch for this commit and start a pull
+      request} ② (Figure~\ref{fig:commit}). The dialog selects
+      \textit{Commit directly to the main branch} first: change it.
+      \texttt{main} refuses direct commits.
+    \item Click the green button ③. When a new branch is selected, the
+      button says \textbf{Propose changes}. (In a fork, GitHub makes the
+      branch for you, and the button always says \textbf{Propose changes}.)
+  \end{enumerate}
+  \activityfigure[0.66\linewidth]{handouts/week-07/img/commit-dialog_annotated.pdf}%
+    {Screenshot of the Commit changes dialog. Marker 1 is beside the commit
+     message. Marker 2 is beside the option Create a new branch for this
+     commit and start a pull request. Marker 3 is beside the green button.}%
+    {The \textbf{Commit changes} dialog: the commit message ①, the option
+     that makes a new branch and starts a pull request ②, and the green
+     button ③, which says \textbf{Propose changes} once that option is
+     selected.}%
+  \label{fig:commit}
+\end{frame}
+
+\begin{frame}{5 · Open the pull request}
+  \begin{enumerate}
+    \item GitHub shows \textbf{Comparing changes}: your branch and
+      \texttt{main}, with the difference between them. Make sure that only
+      your change shows. Click \textbf{Create pull request}.
+    \item Write a title that says what and where. Do not write
+      \texttt{Update ch-05-protocols.qmd}. Write \texttt{Ch. 5: say where
+      requests stores redirect hops}.
+    \item The description starts with the book's template. Replace each
+      \texttt{[bracketed hint]}:
+      \begin{itemize}
+        \item \texttt{Closes \#N}: the issue's number, for example
+          \texttt{Closes \#175}. GitHub closes the issue when the pull
+          request merges.
+        \item \textbf{Location}, \textbf{Problem}, \textbf{Why}, and
+          \textbf{Change}: the file and the heading, what was wrong, who it
+          affects, and what you changed.
+        \item \textbf{AI assistance}: \texttt{none}, or the tool and what it
+          did.
+        \item \textbf{Checks}: tick the first box. After the second box,
+          write \texttt{Edited in the browser, so notebooks not
+          regenerated.} Tick the third box when the Render check is green.
+      \end{itemize}
+    \item Click \textbf{Create pull request}.
+  \end{enumerate}
+  \handcapture{pr-template.png}{Screenshot of the Open a pull request form
+    with the book's template in the description box.}{The \textbf{Open a pull
+    request} form, with the book's template in the description, before
+    \textbf{Create pull request}.}
+\end{frame}
+
+\begin{frame}{6 · After you open it}
+  Then watch your pull request. If you see one of these, do what the
+  right-hand column says.
+
+  \smallskip
+  {\small
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.3\linewidth}%
+                  >{\raggedright\arraybackslash}p{0.66\linewidth}@{}}
+    \toprule
+    \textbf{You see} & \textbf{Do this}\\
+    \midrule
+    \textbf{Render} with a red \texttimes &
+      Click \textbf{Details}. Find the first \texttt{ERROR} line. A broken
+      cross-reference (\texttt{@sec-...}) or a code block that does not
+      close is the usual cause. Fix it on the same branch, as in the next
+      row.\\[3pt]
+    A review that asks for changes &
+      Open your pull request, and click \textbf{Files changed}. Click the
+      file's \textbf{$\cdots$} menu, then \textbf{Edit file}. Make the change, and
+      commit it to the same branch. Do not open a new pull request.\\[3pt]
+    \textbf{Notebook sync} with a red \texttimes &
+      Normal for a change made in the browser. The instructor regenerates the
+      notebooks after merging.\\[3pt]
+    \textit{This branch has conflicts that must be resolved} &
+      Leave it. The instructor resolves conflicts.\\
+    \bottomrule
+  \end{tabular}\par}
+
+  \handcapture{pr-edit-file.png}{Screenshot of the Files changed tab of a
+    pull request with the file's menu open on Edit file.}{\textbf{Files
+    changed} on your own pull request: the file's \textbf{$\cdots$} menu, open on
+    \textbf{Edit file}.}
+
+  \medskip
+  \textbf{Next.} Ask a pair in your chapter to review your pull request
+  (\breakcode{review-a-pull-request.pdf}), and review theirs.
+\end{frame}
+\end{document}

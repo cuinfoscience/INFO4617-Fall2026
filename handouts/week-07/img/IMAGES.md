@@ -1,29 +1,37 @@
 # Week 7 handouts: images
 
-The three Friday handouts (`../triage-an-issue.md`,
-`../review-a-pull-request.md`, `../issue-to-pull-request.md`) use the
-figures below.
+The three Friday handouts are LaTeX files built to PDF
+(`../triage-an-issue.tex`, `../review-a-pull-request.tex`,
+`../issue-to-pull-request.tex`; `make` in `handouts/`). They use the figures
+below.
 
 ## Annotated, from week 4's captures
 
-The instructor captured these four screenshots of GitHub's web editor for
-week 4 (`slides/week-04/img/handout_*.png`, September 2026). Each
+The instructor captured four screenshots of the book and of GitHub's web
+editor for week 4 (`slides/week-04/img/handout_*.png`, September 2026). Each
 `*_annotated.tex` file here draws numbered markers on one of them. `make
-figures` in `handouts/` builds the `*_annotated.pdf` and `*_annotated.png`
-files, and the handouts show the PNG.
+figures` in `handouts/` builds the `*_annotated.pdf` that the handouts print,
+and a `*_annotated.png` copy.
 
-| File | Source capture | Markers |
-|---|---|---|
-| `edit-this-page_annotated.png` | `handout_edit_this_page.png` | (1) Edit this page |
-| `editor-search_annotated.png` | `handout_editor_search.png` | (1) the editor's search bar, (2) the line it found |
-| `preview-diff_annotated.png` | `handout_preview_diff.png` | (1) Preview, (2) the old line, (3) the new line, (4) Commit changes… |
-| `commit-dialog_annotated.png` | `handout_commit_branch_choice.png` | (1) Commit message, (2) Create a new branch…, (3) the button that then says Propose changes |
+| File | Source capture | Markers | Handout |
+|---|---|---|---|
+| `book-page_annotated` | `handout_edit_this_page.png` | (1) Table of contents, (2) Report an issue | Triage, step 2 |
+| `diff-markdown_annotated` | `handout_preview_diff.png` | (1) the removed line, (2) the added line, (3) a link, (4) the empty line above a callout | Review, step 3 |
+| `edit-this-page_annotated` | `handout_edit_this_page.png` | (1) Edit this page | Issue to pull request, step 2 |
+| `editor-search_annotated` | `handout_editor_search.png` | (1) the editor's search bar, (2) the line it found | Issue to pull request, step 3 |
+| `preview-diff_annotated` | `handout_preview_diff.png` | (1) Preview, (2) the old line, (3) the new line, (4) Commit changes… | Issue to pull request, step 3 |
+| `commit-dialog_annotated` | `handout_commit_branch_choice.png` | (1) Commit message, (2) Create a new branch…, (3) the button that then says Propose changes | Issue to pull request, step 4 |
+
+GitHub's own pages were not captured automatically: this environment
+can't read github.com's robots.txt, and every issue on the textbook is a
+student's.
 
 ## To capture by hand
 
 These screens appear only when someone is signed in to GitHub, so they are
-hand captures. Each handout marks the place for one with an HTML comment,
-`<!-- Screenshot to add: img/NAME.png -->`.
+hand captures. Each handout calls `\handcapture{NAME.png}{...}{...}` where
+one belongs: the figure prints once `img/NAME.png` exists, with its caption
+and number, and is left out until then.
 
 | File | Handout | Screen and state |
 |---|---|---|
@@ -43,6 +51,9 @@ For each capture:
 2. Make the browser window about 1000 pixels wide (the slides' rule in
    `slides/common/AUTHORING.md`: 800×600 by default, up to 1024×768).
 3. Type text, capture, then cancel. Submit nothing.
-4. Save the PNG here with its file name. In the handout, replace the
-   comment with an image line and a caption that names what it shows, as in
-   `../issue-to-pull-request.md`.
+4. Save the PNG here under its file name, and run `make` in `handouts/`.
+   For numbered markers, add a `NAME_annotated.tex` like the ones above, run
+   `make figures`, and point the handout's `\handcapture` line at the
+   annotated PDF.
+5. Check the labels in the handout's steps against the capture: GitHub
+   renames buttons now and then.

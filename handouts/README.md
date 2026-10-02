@@ -1,9 +1,10 @@
 # Handouts
 
-Markdown handouts (`common/*.md`, `week-01/setup.md`, `week-04/rss-feeds.md`,
-and week 7's three Friday activities: `week-07/triage-an-issue.md`,
-`week-07/review-a-pull-request.md`, `week-07/issue-to-pull-request.md`) are
-read on GitHub as they are. Code handouts are written once in Quarto
+Markdown handouts (`common/*.md`, `week-01/setup.md`, `week-04/rss-feeds.md`)
+are read on GitHub as they are. Handouts with no code are written in LaTeX
+with `common/handout.cls` and built to a PDF only: week 7's three Friday
+activities, `week-07/triage-an-issue.tex`, `week-07/review-a-pull-request.tex`,
+and `week-07/issue-to-pull-request.tex`. Code handouts are written once in Quarto
 markdown and built two ways:
 
 - a **PDF** in the style of the slide frames (`common/handout.cls`: CU-gold
@@ -14,17 +15,18 @@ markdown and built two ways:
 | Source | Built from it |
 |---|---|
 | `week-06/oscars-cards-to-rows.qmd` | `week-06/oscars-cards-to-rows.pdf`, `week-06/oscars-cards-to-rows.ipynb` |
+| `week-07/*.tex` (three) | a PDF each, no notebook |
 
 ## Build
 
 ```
 cd handouts
-make            # every PDF and notebook (Quarto, pdfLaTeX, Python 3)
+make            # every PDF, and each .qmd's notebook (Quarto, pdfLaTeX, Python 3)
 make check      # rerun each handout's code against the live pages
 make figures    # rebuild annotated screenshots from img/*_annotated.tex
 ```
 
-Commit the `.qmd` together with the PDF and notebook built from it. On
+Commit the `.qmd` or `.tex` together with what is built from it. On
 every pull request that touches `handouts/`, GitHub rebuilds both
 (`.github/workflows/build-handouts.yml`) and fails if a committed notebook
 or PDF is out of date. `make check` fetches the real pages, so it runs on
