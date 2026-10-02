@@ -3,6 +3,11 @@
 **Status:** Scheduled. The first standup is week 7's Friday, October 2, as
 the instructor decided on 2026-09-25. Its review table is ready:
 [`2026-09-24-friday-code-review-table.md`](2026-09-24-friday-code-review-table.md).
+On October 1 the instructor changed the format: pairs by chapter, a 15-minute
+standup, then 35 minutes of pair work, with merges after class. Its
+run-of-show is
+[`2026-10-02-standup-run-of-show.md`](2026-10-02-standup-run-of-show.md),
+and week 7's Friday frames follow it in place of §4's whole-class review.
 The plan was proposed on 2026-09-24. It carries out the maintainer's decision
 that students' pull requests on the textbook merge after a code-review standup
 in class on a Friday (the textbook's
