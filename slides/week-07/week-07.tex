@@ -557,17 +557,19 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
 % =========================================================================
 
 \begin{frame}{Daily note questions}
-    % Fill in from this week's daily notes, one question per line, as in
-    % earlier weeks:
-    % \begin{itemize}\small
-    %     \item \textbf{Question?} --- Answer.
-    % \end{itemize}
+    \begin{itemize}\small
+        \item \textbf{Web scraping from Safari and Chrome?} --- The inspect tab should be present on all desktop web browser
+        \item \textbf{Past student projects?} --- Go poke around \url{github.com/cuinfoscience/}
+        \item \textbf{Why do some timestamp return and others don't?} --- Depends if Wayback blocks a request, mostly random!
+        \item \textbf{Why does this stuff break with lots of requests?} --- Wayback pretty rickety, would need to run it all myself
+        \item  \textbf{Best ways to get around 429 errors?} --- Slow down, try a different time of day, use a different network
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Find your chapter}
     \begin{columns}
         \begin{column}{0.6\textwidth}
-            \textbf{51} open pull requests and \textbf{53} open issues going back to August 28.
+            \textbf{51} open PRs and \textbf{53} issues going back to August 28.
 
             \medskip
 
@@ -627,35 +629,6 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
     \medskip
 
     {\small On the boards, \#15 $\to$ \#59? asks: does pull request \#59 fix issue \#15?}
-\end{frame}
-
-\begin{frame}{The standup}
-    \begin{columns}
-        \begin{column}{0.6\textwidth}
-            One minute per pair, in chapter order:
-
-            \medskip
-
-            \textbf{Done} --- what merged, closed, or got a review since last Friday.
-
-            \medskip
-
-            \textbf{Doing} --- your activity, and the numbers you take from your chapter's board.
-
-            \medskip
-
-            \textbf{Blocked} --- anything only I can answer.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Leave these to me}
-                \small
-                \begin{itemize}
-                    \item \textbf{Merge} and \textbf{Close}: I do both after class.
-                    \item \textit{This branch has conflicts}: I resolve conflicts.
-                \end{itemize}
-            \end{alertblock}
-        \end{column}
-    \end{columns}
 \end{frame}
 
 \begin{frame}{Chapter 2: Ethics}
@@ -862,6 +835,35 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
             \begin{itemize}\small
                 \item \#22 a command-line cheat sheet (an appendix)
             \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{The standup}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            One minute per pair, in chapter order:
+
+            \medskip
+
+            \textbf{Done} --- what merged, closed, or got a review since last Friday.
+
+            \medskip
+
+            \textbf{Doing} --- your activity, and the numbers you take from your chapter's board.
+
+            \medskip
+
+            \textbf{Blocked} --- anything only I can answer.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Leave these to me}
+                \small
+                \begin{itemize}
+                    \item \textbf{Merge} and \textbf{Close}: I do both after class.
+                    \item \textit{This branch has conflicts}: I resolve conflicts.
+                \end{itemize}
+            \end{alertblock}
         \end{column}
     \end{columns}
 \end{frame}
