@@ -1,0 +1,20 @@
+% The live chapter page: Edit this page, at the bottom of the right-hand sidebar.
+% The instructor's capture from week 4 (slides/week-04/img/handout_edit_this_page.png), with
+% numbered markers. Build with `make figures` in handouts/, which writes
+% edit-this-page_annotated.pdf and edit-this-page_annotated.png. Coordinates are pixels of
+% the 700 x 416 capture.
+\documentclass[border=0pt]{standalone}
+\makeatletter\def\input@path{{../../common/}{handouts/common/}}\makeatother
+\usepackage[scaled=0.92]{helvet}
+\usepackage{graphicx}
+\usepackage{handoutmarkers}
+\begin{document}
+\setlength{\unitlength}{0.0064286in}% 1 px of the 700-px capture; the figure is 4.5in wide
+\begin{tikzpicture}[x=\unitlength,y=-\unitlength,
+    every node/.append style={draw=white,line width=0.7pt}]
+  \node[anchor=north west,inner sep=0,draw=none] at (0,0)
+    {\includegraphics[width=700\unitlength]{../../../slides/week-04/img/handout_edit_this_page.png}};
+  \draw[black!25] (0,0) rectangle (700,416);
+  \node[marker] at (626,367) {1};                 % Edit this page
+\end{tikzpicture}
+\end{document}

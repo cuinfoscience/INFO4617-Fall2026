@@ -41,9 +41,9 @@
 
             \medskip
 
-            \dayband{Friday}{Code-review standup}
+            \dayband{Friday}{Backlog standup}
             \begin{itemize}\small
-                \item A standup, then pairs by chapter on the book's open pull requests and issues
+                \item A standup, then pairs by chapter on three activities: triage an issue, review a pull request, turn an issue into a pull request
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
@@ -553,8 +553,16 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
 \end{frame}
 
 % =========================================================================
-\section{Friday · Code-Review Standup}
+\section{Friday · Backlog Standup}
 % =========================================================================
+
+\begin{frame}{Daily note questions}
+    % Fill in from this week's daily notes, one question per line, as in
+    % earlier weeks:
+    % \begin{itemize}\small
+    %     \item \textbf{Question?} --- Answer.
+    % \end{itemize}
+\end{frame}
 
 \begin{frame}{Find your chapter}
     \begin{columns}
@@ -584,6 +592,43 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
     \end{columns}
 \end{frame}
 
+\begin{frame}{Three activities}
+    \begin{columns}[T]
+        \begin{column}{0.31\textwidth}
+            \begin{block}{Triage an issue}
+                \small \textbf{Easy.} Check an issue against the book. Already fixed? A duplicate? Still a problem? Leave one comment.
+
+                \medskip
+                \footnotesize \texttt{triage-an-issue.md}
+            \end{block}
+        \end{column}
+        \begin{column}{0.31\textwidth}
+            \begin{block}{Review a pull request}
+                \small \textbf{Medium.} Read the change and its checks. Comment on lines, then submit a review with a verdict.
+
+                \medskip
+                \footnotesize \texttt{review-a-pull-request.md}
+            \end{block}
+        \end{column}
+        \begin{column}{0.31\textwidth}
+            \begin{block}{Issue $\to$ pull request}
+                \small \textbf{Hard.} Claim an issue, fix it in GitHub's web editor, and open a pull request that closes it.
+
+                \medskip
+                \footnotesize \texttt{issue-to-pull-request.md}
+            \end{block}
+        \end{column}
+    \end{columns}
+
+    \bigskip
+
+    Each handout goes step by step, with screenshots. They are in \texttt{handouts/week-07/} in the course repository.
+
+    \medskip
+
+    {\small On the boards, \#15 $\to$ \#59? asks: does pull request \#59 fix issue \#15?}
+\end{frame}
+
 \begin{frame}{The standup}
     \begin{columns}
         \begin{column}{0.6\textwidth}
@@ -591,125 +636,23 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
 
             \medskip
 
-            \textbf{Done} --- what merged, closed, or got a verdict since last Friday.
+            \textbf{Done} --- what merged, closed, or got a review since last Friday.
 
             \medskip
 
-            \textbf{Doing} --- the pull requests and issues you're taking today, by number.
+            \textbf{Doing} --- your activity, and the numbers you take from your chapter's board.
 
             \medskip
 
-            \textbf{Blocked} --- a conflict, a failing check, or a question only I can answer.
+            \textbf{Blocked} --- anything only I can answer.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Four jobs}
-                \footnotesize
-                \begin{enumerate}
-                    \item Review, and give a verdict
-                    \item Unstick a pull request
-                    \item Turn an issue into a pull request
-                    \item Triage issues
-                \end{enumerate}
-            \end{block}
-            \begin{alertblock}{Blocked?}
-                \footnotesize It goes on the board, and I come to you.
-            \end{alertblock}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Review and verdict}
-    \begin{columns}
-        \begin{column}{0.6\textwidth}
-            \begin{enumerate}\small
-                \item Open the pull request, then \textbf{Files changed}. Run any code it adds.
-                \item Hover a line, click \textbf{+}, write a comment, and \textbf{Start a review}.
-                \item \textbf{Review changes}, top right: \textbf{Approve}, \textbf{Request changes}, or \textbf{Comment}.
-                \item In the summary, a verdict --- \textit{merge}, \textit{needs changes}, or \textit{close} --- and at most two must-fix points.
-            \end{enumerate}
-
-            \medskip
-
-            One partner submits the review and names the other with \texttt{@handle} in the summary.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{A good review}
-                \footnotesize
+            \begin{alertblock}{Leave these to me}
+                \small
                 \begin{itemize}
-                    \item Reads the Markdown: the checks miss a heading that lost the blank line above it
-                    \item Names the line, the claim, or the code
-                    \item Separates must-fix from nice-to-have
-                    \item Assumes good faith
-                    \item Ends with a verdict
+                    \item \textbf{Merge} and \textbf{Close}: I do both after class.
+                    \item \textit{This branch has conflicts}: I resolve conflicts.
                 \end{itemize}
-            \end{block}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Unsticking a pull request}
-    \begin{columns}
-        \begin{column}{0.6\textwidth}
-            \textbf{A conflict with \texttt{main}} (\#52, \#88, \#89, \#93, \#102). The author opens the pull request and clicks \textbf{Resolve conflicts}. Keep what both sides need, delete the markers, then \textbf{Mark as resolved} and \textbf{Commit merge}.
-
-            \medskip
-
-            \textbf{Two pull requests, one change} (\#88 and \#93; \#130 and \#188). Keep the clearer one. The other author reviews it.
-
-            \medskip
-
-            \textbf{Author not here?} Only the author can push to a pull request from a fork. Comment what conflicts, and where.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Never force-push}
-                \footnotesize It rewrites history other people already have.
-            \end{alertblock}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{From issue to pull request}
-    \begin{columns}
-        \begin{column}{0.6\textwidth}
-            \begin{enumerate}\small
-                \item Pick an issue with no pull request, and comment that you're taking it.
-                \item Open the chapter's \texttt{.qmd} on GitHub and click the pencil.
-                \item Make the one change the issue asks for.
-                \item \textbf{Commit changes}, then \textbf{Create a new branch for this commit and start a pull request}.
-                \item Fill in the template, and write \texttt{Fixes \#N} with the issue's number.
-            \end{enumerate}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Never commit to \texttt{main}}
-                \footnotesize \texttt{main} now refuses it. Two commits went straight in last week; they were reverted and come back as pull requests.
-            \end{alertblock}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Triage}
-    \begin{columns}
-        \begin{column}{0.6\textwidth}
-            One comment on each issue in your chapter:
-
-            \medskip
-
-            \textbf{Already has a fix?} Name the pull request: \texttt{See \#N}.
-
-            \medskip
-
-            \textbf{The same as another issue?} \texttt{Duplicate of \#N}.
-
-            \medskip
-
-            \textbf{Still open?} The section it's about, and a size: \textit{small} (a sentence), \textit{medium} (a paragraph or a cell), \textit{large} (a section).
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{Week 3's comments}
-                \footnotesize Claim, link, and sharpen still apply.
-            \end{block}
-            \begin{alertblock}{Don't close}
-                \footnotesize I close issues after class.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -717,22 +660,39 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
 
 \begin{frame}{Chapter 2: Ethics}
     \begin{columns}[T]
-        \begin{column}{0.55\textwidth}
-            \textbf{Pull requests}
+        \begin{column}{0.28\textwidth}
+            \textbf{Triage}
             \begin{itemize}\small
-                \item \#50 and \#79: Reddit's robots.txt, the same paragraph (\#43). Keep one.
-                \item \#54: links for the legal cases (\#18)
-                \item \#56: a Missing Manual link (\#17)
-                \item \#59: output for the User-Agent example (\#15)
-                \item \#63: comparing robots.txt files (\#28)
+                \item \#13, \#25, \#39: one problem?
+                \item \#15 $\to$ \#59?
+                \item \#17 $\to$ \#56?
+                \item \#18 $\to$ \#54?
+                \item \#28 $\to$ \#63?
+                \item \#43 $\to$ \#50, \#79?
             \end{itemize}
         \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{Issues with no pull request}
+        \begin{column}{0.38\textwidth}
+            \textbf{Review}
             \begin{itemize}\small
-                \item \#13, \#25, \#39: \texttt{RobotFileParser}, one cluster
-                \item \#23 formatting · \#24 Common Issues · \#26 the User-Agent · \#27 test cases
-                \item \#34 state privacy laws · \#40 replacement reminders · \#42 Step 5's \texttt{NameError} · \#44 an undefined variable · \#49 Windows
+                \item \#50 and \#79: the same paragraph. Keep one.
+                \item \#54 links for the legal cases
+                \item \#56 a Missing Manual link
+                \item \#59 the User-Agent example's output
+                \item \#63 comparing robots.txt files
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.29\textwidth}
+            \textbf{Issue $\to$ pull request}
+            \begin{itemize}\small
+                \item \#23 formatting
+                \item \#24 Common Issues
+                \item \#26 the User-Agent
+                \item \#27 test cases
+                \item \#34 state privacy laws
+                \item \#40 replacement reminders
+                \item \#42 Step 5's \texttt{NameError}
+                \item \#44 an undefined variable
+                \item \#49 Windows
             \end{itemize}
         \end{column}
     \end{columns}
@@ -740,20 +700,32 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
 
 \begin{frame}{Chapter 3: The post-API age}
     \begin{columns}[T]
-        \begin{column}{0.55\textwidth}
-            \textbf{Pull requests}
+        \begin{column}{0.28\textwidth}
+            \textbf{Triage}
             \begin{itemize}\small
-                \item \#62 edits only the generated notebook, which the next regeneration overwrites.
-                \item \#80: \texttt{probe()}'s mapping as a dictionary (\#60)
-                \item \#95: a link for A/B testing (\#68)
+                \item \#55 and \#67: both Step 5. One problem?
+                \item \#58: no title. Suggest one.
+                \item \#60 $\to$ \#80?
+                \item \#68 $\to$ \#95?
             \end{itemize}
         \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{Issues with no pull request}
+        \begin{column}{0.38\textwidth}
+            \textbf{Review}
             \begin{itemize}\small
-                \item \#55 Step 5 · \#57 Meta's 400, never shown · \#58 a small exercise
-                \item \#61 the User-Agent · \#66 \texttt{autopsy()} and an expired certificate · \#67 Step 5's gateway
-                \item \#69 the steps' wording · \#70 good and bad APIs · \#85 misconceptions
+                \item \#62 edits only the notebook
+                \item \#80 \texttt{probe()}'s mapping as a dictionary
+                \item \#95 a link for A/B testing
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.29\textwidth}
+            \textbf{Issue $\to$ pull request}
+            \begin{itemize}\small
+                \item \#57 Meta's 400, never shown
+                \item \#61 the User-Agent
+                \item \#66 \texttt{autopsy()} and an expired certificate
+                \item \#69 the steps' wording
+                \item \#70 good and bad APIs
+                \item \#85 misconceptions
             \end{itemize}
         \end{column}
     \end{columns}
@@ -761,22 +733,31 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
 
 \begin{frame}{Chapter 4: Data formats}
     \begin{columns}[T]
-        \begin{column}{0.55\textwidth}
-            \textbf{Pull requests}
+        \begin{column}{0.28\textwidth}
+            \textbf{Triage}
             \begin{itemize}\small
-                \item Conflict with \texttt{main}: \#88, \#89, \#93, \#102 (\#102 also edits chapter 6)
-                \item \#88 and \#93: the same User-Agent change. Keep one.
-                \item \#92 (\#90) and \#99: neighboring rows of the starter-feeds table
-                \item \#86: Step 5. Open-Meteo's robots.txt disallows every path; does the step say why an API client may still call it?
-                \item \#81 XML vs.\ JSON · \#82 a W3C link · \#98 JSON object order · \#100 JSON and Python types · \#101 Kubernetes formats
+                \item \#90 $\to$ \#92?
+                \item \#97: no title. Suggest one.
             \end{itemize}
         \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{Issues with no pull request}
+        \begin{column}{0.38\textwidth}
+            \textbf{Review}
+            \begin{itemize}\small
+                \item \#92 and \#99: neighboring rows of one table
+                \item \#81 XML vs.\ JSON
+                \item \#82 a W3C link
+                \item \#86 Step 5
+                \item \#98 JSON object order
+                \item \#100 JSON and Python types
+                \item \#101 Kubernetes formats
+                \item For me: \#88, \#89, \#93, \#102 conflict with \texttt{main}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.29\textwidth}
+            \textbf{Issue $\to$ pull request}
             \begin{itemize}\small
                 \item \#74 HTML as a format
                 \item \#83 \texttt{pubDate} as a date
-                \item \#97 more broken JSON
                 \item \#189 Matplotlib and nested JSON
             \end{itemize}
         \end{column}
@@ -785,21 +766,36 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
 
 \begin{frame}{Chapter 5: Protocols}
     \begin{columns}[T]
-        \begin{column}{0.55\textwidth}
-            \textbf{Pull requests}
+        \begin{column}{0.28\textwidth}
+            \textbf{Triage}
             \begin{itemize}\small
-                \item \#113 and \#127: the same exercise steps. Read them together.
-                \item \#106 (\#105), \#111, and \#112: Scapy and its privileges. \#194, the instructor's, replaces Scapy with terminal commands; read it first.
-                \item \#108 edits only the generated notebook.
-                \item \#104 a Missing Manual link · \#107 a DNS tip · \#109 a dash · \#116 \texttt{Retry-After} · \#118 \texttt{time.sleep()} · \#121 \texttt{dnspython} (\#190) · \#122 the redirect's destination · \#126 a timeout
+                \item \#105, \#110 $\to$ \#194?
+                \item \#175 $\to$ \#122?
+                \item \#190 $\to$ \#121?
+                \item \#115: no title. Suggest one.
             \end{itemize}
         \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{Issues with no pull request}
+        \begin{column}{0.38\textwidth}
+            \textbf{Review}
             \begin{itemize}\small
-                \item \#110 traceroute (see \#111, \#112, \#194)
-                \item \#114 building URLs · \#115 a gap · \#133 a DNS link
-                \item \#175 redirects (see \#122)
+                \item \#113 and \#127: the same exercise steps
+                \item \#104 a Missing Manual link
+                \item \#107 a DNS tip
+                \item \#108 edits only the notebook
+                \item \#109 a dash
+                \item \#116 \texttt{Retry-After}
+                \item \#118 \texttt{time.sleep()}
+                \item \#121 \texttt{dnspython}
+                \item \#122 the redirect's destination
+                \item \#126 a timeout
+                \item For me: \#106, \#111, \#112 edit Scapy, which \#194 removes
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.29\textwidth}
+            \textbf{Issue $\to$ pull request}
+            \begin{itemize}\small
+                \item \#114 building URLs
+                \item \#133 a DNS link
             \end{itemize}
         \end{column}
     \end{columns}
@@ -807,24 +803,38 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
 
 \begin{frame}{Chapter 6: Static pages}
     \begin{columns}[T]
-        \begin{column}{0.55\textwidth}
-            \textbf{Pull requests}
+        \begin{column}{0.28\textwidth}
+            \textbf{Triage}
             \begin{itemize}\small
-                \item \#130 and \#188: the same Wikipedia 403 fix in Strategy 3. Keep one.
-                \item \#131: defines \texttt{responsible\_get} (\#187)
-                \item \#173: the spectrum table and §6.8 (see \#186)
-                \item \#180 also regenerates two notebooks with last week's reverted changes; they need regenerating again.
-                \item \#182 edits only the generated notebook.
-                \item \#174 Further Reading · \#178 a Chapter 4 refresher · \#179 fetch Rotten Tomatoes first · \#181 IMDb's 202 · \#183 Strategy 2's table
-                \item \#171's head is \texttt{main}, so I'll close it. The caching tip (\#170) comes back as a new pull request.
+                \item \#186 $\to$ \#173?
+                \item \#187 $\to$ \#131?
             \end{itemize}
         \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{Issues with no pull request}
+        \begin{column}{0.38\textwidth}
+            \textbf{Review}
             \begin{itemize}\small
-                \item \#134 BeautifulSoup's methods · \#170 caching
-                \item \#172 \texttt{read\_html} and \texttt{colspan} · \#176 robots.txt with \texttt{HEADERS}
-                \item \#177 CSS selectors · \#184 data attributes · \#185 a check before parsing · \#186 §6.2's breakdown
+                \item \#130 and \#188: the same Wikipedia 403 fix. Keep one.
+                \item \#131 defines \texttt{responsible\_get}
+                \item \#173 the spectrum table and §6.8
+                \item \#174 Further Reading
+                \item \#178 a Chapter 4 refresher
+                \item \#179 fetch Rotten Tomatoes first
+                \item \#180 parsing cached HTML
+                \item \#181 IMDb's 202
+                \item \#182 edits only the notebook
+                \item \#183 Strategy 2's table
+                \item For me: \#171, whose head is \texttt{main}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.29\textwidth}
+            \textbf{Issue $\to$ pull request}
+            \begin{itemize}\small
+                \item \#134 BeautifulSoup's methods
+                \item \#172 \texttt{read\_html} and \texttt{colspan}
+                \item \#176 robots.txt with \texttt{HEADERS}
+                \item \#177 CSS selectors
+                \item \#184 data attributes
+                \item \#185 a check before parsing
             \end{itemize}
         \end{column}
     \end{columns}
@@ -832,20 +842,25 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
 
 \begin{frame}{Chapters 1, 7, 11, and the whole book}
     \begin{columns}[T]
-        \begin{column}{0.55\textwidth}
-            \textbf{Pull requests}
+        \begin{column}{0.28\textwidth}
+            \textbf{Triage}
             \begin{itemize}\small
-                \item \#52 (chapter 1): a pandas description. Conflicts with \texttt{main}.
-                \item \#191 and \#192 (chapter 7): both handle the Availability API's refusals. Read them together. On September 30 it answered 429 to every request, while \texttt{web.archive.org/web/DATE/URL} still redirected to the nearest capture.
-                \item \#78 (chapter 11): a Census link
+                \item \#19 and \#29: the same ask? (chapter 1)
+                \item \#64: one folder per chapter? A question for me.
             \end{itemize}
         \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{Issues with no pull request}
+        \begin{column}{0.38\textwidth}
+            \textbf{Review}
             \begin{itemize}\small
-                \item \#19, \#29 (chapter 1): GitHub and Jupyter walkthroughs
-                \item \#22 (an appendix): a command-line cheat sheet
-                \item \#64 (the whole book): GitHub's formatting
+                \item \#191 and \#192: the Availability API's 429s (chapter 7). Read them together.
+                \item \#78 a Census link (chapter 11)
+                \item For me: \#52 conflicts with \texttt{main} (chapter 1)
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.29\textwidth}
+            \textbf{Issue $\to$ pull request}
+            \begin{itemize}\small
+                \item \#22 a command-line cheat sheet (an appendix)
             \end{itemize}
         \end{column}
     \end{columns}
