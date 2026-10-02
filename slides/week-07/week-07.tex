@@ -468,9 +468,8 @@ stats = {"year": ts[:4], "num_links": len(soup.find_all("a")),
 
 \begin{frame}[fragile]{The whole history --- the CDX Server API}
     Availability finds \textit{one} snapshot; CDX enumerates \textit{all} of them. Two params filter server-side --- less data, less cleanup:
-    \begin{columns}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
+    
+\begin{lstlisting}[basicstyle=\normalsize\ttfamily]
 cdx = "https://web.archive.org/cdx/search/cdx"
 params = {"url": "facebook.com/terms",
           "output": "json",
@@ -483,13 +482,6 @@ df = pd.DataFrame(data[1:], columns=data[0])
 df["timestamp"] = pd.to_datetime(
     df["timestamp"], format="%Y%m%d%H%M%S")
 \end{lstlisting}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/cdx_response.png}\\
-            {\scriptsize Row 0 is the header; each later row is one distinct capture.}
-        \end{column}
-    \end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{Tracking a document over time}
