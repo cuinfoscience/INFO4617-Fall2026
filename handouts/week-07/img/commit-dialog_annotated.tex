@@ -1,0 +1,22 @@
+% The Commit changes dialog. Its default is to commit to main; choose a new branch.
+% The instructor's capture from week 4 (slides/week-04/img/handout_commit_branch_choice.png), with
+% numbered markers. Build with `make figures` in handouts/, which writes
+% commit-dialog_annotated.pdf and commit-dialog_annotated.png. Coordinates are pixels of
+% the 700 x 607 capture.
+\documentclass[border=0pt]{standalone}
+\makeatletter\def\input@path{{../../common/}{handouts/common/}}\makeatother
+\usepackage[scaled=0.92]{helvet}
+\usepackage{graphicx}
+\usepackage{handoutmarkers}
+\begin{document}
+\setlength{\unitlength}{0.0064286in}% 1 px of the 700-px capture; the figure is 4.5in wide
+\begin{tikzpicture}[x=\unitlength,y=-\unitlength,
+    every node/.append style={draw=white,line width=0.7pt}]
+  \node[anchor=north west,inner sep=0,draw=none] at (0,0)
+    {\includegraphics[width=700\unitlength]{../../../slides/week-04/img/handout_commit_branch_choice.png}};
+  \draw[black!25] (0,0) rectangle (700,607);
+  \node[marker] at (438,175) {1};                 % Commit message
+  \node[marker] at (398,501) {2};                 % Create a new branch ...
+  \node[marker] at (430,572) {3};                 % the button: Propose changes
+\end{tikzpicture}
+\end{document}

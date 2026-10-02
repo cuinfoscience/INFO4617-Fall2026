@@ -144,7 +144,7 @@
             When all three checks come up empty, you need a real browser.
 
             \bigskip
-            \texttt{pip install selenium}, then \texttt{driver = webdriver.Chrome()} opens a window. Every command you give \texttt{driver} happens in that window.
+            Selenium is already in \texttt{webdata}: \texttt{driver = webdriver.Chrome()} opens a window, and every command you give \texttt{driver} happens in that window.
 
             \bigskip
             You are not faking HTTP requests anymore. You are \textbf{automating a browser}, the same one a person would use.
@@ -217,7 +217,7 @@ Current browser version is 154.0.8037.57
             Microsoft, January 2020, built by engineers who had worked on Google's Puppeteer.
 
             \bigskip
-            It brings its own browsers: \texttt{pip install playwright}, then \texttt{playwright install chromium}. About 300\,MB of downloads.
+            It brings its own browsers. The library is in \texttt{webdata}; \texttt{playwright install chromium} downloads the browsers, about 300\,MB.
 
             \bigskip
             It waits for elements on its own, and it records a script while you click.
@@ -406,7 +406,7 @@ page.get_by_role("link",
     \centering\small
     \begin{tabular}{p{0.15\textwidth}p{0.37\textwidth}p{0.37\textwidth}}
         & \textbf{Selenium} & \textbf{Playwright} \tabularnewline \hline
-        \raggedright Install & \raggedright \texttt{pip install selenium} & \raggedright \texttt{pip install playwright}, then \texttt{playwright install} \tabularnewline[0.5em]
+        \raggedright Install & \raggedright In \texttt{webdata} (week 1) & \raggedright In \texttt{webdata}, then \texttt{playwright install chromium} \tabularnewline[0.5em]
         \raggedright Browsers & \raggedright Yours; Selenium Manager downloads Chrome for Testing if you have none & \raggedright Its own copies, pinned to each release \tabularnewline[0.5em]
         \raggedright Notebook & \raggedright Yes & \raggedright Only with the async API and \texttt{await} \tabularnewline[0.5em]
         \raggedright Waiting & \raggedright Explicit: \texttt{WebDriverWait} & \raggedright Automatic when you act on or read an element \tabularnewline[0.5em]
@@ -450,7 +450,7 @@ page.get_by_role("link",
             Read Textbook Ch.~8 before Wednesday.
 
             \medskip
-            Install Selenium before class: \texttt{pip install selenium}. Your first \texttt{webdriver.Chrome()} may download a driver, and Chrome too if you have none. Do it on a fast connection.
+            Made \texttt{webdata} before October 2? Do the setup handout's catch-up step, which adds Selenium. Then run \texttt{webdriver.Chrome()} once: it may download a driver, and Chrome too if you have none. Do it on a fast connection.
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{alertblock}{Wednesday lab}

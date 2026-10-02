@@ -1,0 +1,23 @@
+% The Preview tab after an edit: the old line in red, the new line in green.
+% The instructor's capture from week 4 (slides/week-04/img/handout_preview_diff.png), with
+% numbered markers. Build with `make figures` in handouts/, which writes
+% preview-diff_annotated.pdf and preview-diff_annotated.png. Coordinates are pixels of
+% the 700 x 378 capture.
+\documentclass[border=0pt]{standalone}
+\makeatletter\def\input@path{{../../common/}{handouts/common/}}\makeatother
+\usepackage[scaled=0.92]{helvet}
+\usepackage{graphicx}
+\usepackage{handoutmarkers}
+\begin{document}
+\setlength{\unitlength}{0.0064286in}% 1 px of the 700-px capture; the figure is 4.5in wide
+\begin{tikzpicture}[x=\unitlength,y=-\unitlength,
+    every node/.append style={draw=white,line width=0.7pt}]
+  \node[anchor=north west,inner sep=0,draw=none] at (0,0)
+    {\includegraphics[width=700\unitlength]{../../../slides/week-04/img/handout_preview_diff.png}};
+  \draw[black!25] (0,0) rectangle (700,378);
+  \node[marker] at (152,92) {1};                  % Preview
+  \node[marker] at (34,262) {2};                  % the old line
+  \node[marker] at (299,262) {3};                 % the new line
+  \node[marker] at (625,62) {4};                  % Commit changes...
+\end{tikzpicture}
+\end{document}

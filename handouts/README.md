@@ -1,7 +1,9 @@
 # Handouts
 
-Markdown handouts (`common/*.md`, `week-01/setup.md`, `week-04/rss-feeds.md`)
-are read on GitHub as they are. Code handouts are written once in Quarto
+Markdown handouts (`common/*.md`, `week-01/setup.md`, `week-04/rss-feeds.md`,
+and week 7's three Friday activities: `week-07/triage-an-issue.md`,
+`week-07/review-a-pull-request.md`, `week-07/issue-to-pull-request.md`) are
+read on GitHub as they are. Code handouts are written once in Quarto
 markdown and built two ways:
 
 - a **PDF** in the style of the slide frames (`common/handout.cls`: CU-gold

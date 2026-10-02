@@ -8,6 +8,11 @@ standup, then 35 minutes of pair work, with merges after class. Its
 run-of-show is
 [`2026-10-02-standup-run-of-show.md`](2026-10-02-standup-run-of-show.md),
 and week 7's Friday frames follow it in place of §4's whole-class review.
+On October 2 the instructor narrowed the pair work to three named activities
+for every Friday: triage an issue (easy), review a pull request (medium), and
+issue to pull request (hard). Each has a step-by-step handout in
+[`handouts/week-07/`](../../handouts/week-07/). Students don't resolve
+conflicts: the instructor does, after class.
 The plan was proposed on 2026-09-24. It carries out the maintainer's decision
 that students' pull requests on the textbook merge after a code-review standup
 in class on a Friday (the textbook's
