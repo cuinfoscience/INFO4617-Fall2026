@@ -16,9 +16,9 @@ screenshots, in [`handouts/week-07/`](../../handouts/week-07/):
 
 | Activity | Difficulty | Handout |
 |---|---|---|
-| Triage an issue | easy | `triage-an-issue.md` |
-| Review a pull request | medium | `review-a-pull-request.md` |
-| Issue to pull request | hard | `issue-to-pull-request.md` |
+| Triage an issue | easy | `triage-an-issue.pdf` |
+| Review a pull request | medium | `review-a-pull-request.pdf` |
+| Issue to pull request | hard | `issue-to-pull-request.pdf` |
 
 Students don't resolve conflicts, merge, or close anything: the instructor
 does all three after class.
@@ -57,10 +57,11 @@ textbook.
 5. **Fill in the daily note frame.** Friday starts with an empty "Daily note
    questions" frame. `check_daily_questions.py` flags it until it has
    questions.
-6. **Optional: capture the signed-in screens.** The handouts reuse week 4's
-   four web-editor screenshots, with numbered markers. Seven more screens
-   appear only to a signed-in user; `handouts/week-07/img/IMAGES.md` lists
-   them, and each handout marks the place for one with a comment.
+6. **Optional: capture the signed-in screens.** The handouts are PDFs, built
+   from LaTeX. Their figures are week 4's web-editor screenshots, with
+   numbered markers. Seven more screens appear only to a signed-in user;
+   `handouts/week-07/img/IMAGES.md` lists them. Save each one in that folder
+   under its name, and run `make` in `handouts/`: the handout prints it.
 
 ## In class (50 minutes)
 
