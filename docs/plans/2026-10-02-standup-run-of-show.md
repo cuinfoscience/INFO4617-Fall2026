@@ -5,7 +5,9 @@ The first Friday standup from the
 decided on October 1:
 
 - 20–30 students, paired by chapter;
-- a 15-minute standup, then 35 minutes of pair work;
+- a 15-minute standup, then 35 minutes of pair work (on October 2 the
+  instructor moved the standup frame after the chapter boards, so the
+  table below runs the pair work first);
 - pairs record everything on GitHub;
 - the instructor merges after class;
 - a rule blocks commits straight to `main`.
@@ -69,8 +71,8 @@ textbook.
 |---|---|---|
 | 0–4 | Daily note questions, Find your chapter | Students sit with the chapter of their newest open pull request or issue. Anyone with nothing open joins chapter 2 or 3. Balance the groups against the Pairs column, then pair up within each chapter. |
 | 4–6 | Three activities | Name the three activities and their handouts. Each pair picks one. |
-| 6–15 | The standup | One minute per pair, in chapter order: 2, 3, 4, 5, 6, then 1, 7, and 11. Each pair says Done, Doing (its activity and 2–4 numbers from its board), and Blocked. Write the Blocked items on the board. |
-| 15–48 | The chapter boards | Pairs work from the handouts. Leave the chapter boards up, cycling through them. Go to the Blocked items first. |
+| 6–35 | The chapter boards | Pairs work from the handouts. Leave the chapter boards up, cycling through them. Go to pairs with a raised hand first. |
+| 35–48 | The standup | One minute per pair, in chapter order: 2, 3, 4, 5, 6, then 1, 7, and 11. Each pair says Done, Doing (its activity and 2–4 numbers from its board), and Blocked. Write the Blocked items down for after class. |
 | 48–50 | After class | What happens next. |
 
 **Where to go first while pairs work:**
