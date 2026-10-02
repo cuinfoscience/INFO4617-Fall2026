@@ -18,16 +18,20 @@ class with an environment that does not work.
 ## 1 · Python with Anaconda
 
 Install Anaconda from [anaconda.com](https://www.anaconda.com/download). Then
-make a separate environment for this course:
+make a separate environment for this course. The first command is one long
+line:
 
 ```bash
-conda create -n webdata python=3.14
+conda create -n webdata --override-channels -c conda-forge python=3.14 notebook requests beautifulsoup4 pandas matplotlib seaborn gensim
 conda activate webdata
-pip install notebook requests beautifulsoup4 pandas matplotlib seaborn
 ```
 
-A new environment has no Jupyter in it, so `notebook` is on the install
-line. Run `conda activate webdata` each time you open a new terminal.
+The first command makes the environment and installs everything in it at
+once: Python, Jupyter (`notebook`), and the libraries the course uses most.
+They come from conda-forge, a community channel that builds packages for new
+versions of Python quickly. gensim, which week 7 uses, has no Python 3.14
+build that `pip` can install. Expect it to take a few minutes. Run
+`conda activate webdata` each time you open a new terminal.
 
 Use one environment for each project. The environment records the version of
 each library that your analysis used. This makes your results reproducible. It
@@ -153,7 +157,8 @@ application.
 
 **`jupyter: command not found`** (or "not recognized" on Windows) — Jupyter
 is not installed in the active environment. Run `conda activate webdata`,
-then `pip install notebook`, and start `jupyter notebook` again.
+then `conda install -c conda-forge notebook`, and start `jupyter notebook`
+again.
 
 **`ModuleNotFoundError` for a library that you installed** — your notebook
 probably uses a different kernel than the environment. In the notebook, run
