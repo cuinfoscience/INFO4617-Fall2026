@@ -35,6 +35,14 @@ every pull request that touches `handouts/`, GitHub rebuilds both
 or PDF is out of date. `make check` fetches the real pages, so it runs on
 your machine, not on GitHub.
 
+`make` also rebuilds a handout's PDF when an image in its `img/` folder
+changes: a figure the textbook's `sync` copied there again, or an
+`img/*_annotated.tex`, which it redraws first. The records (`shots.json`,
+`IMAGES.md`) rebuild nothing. A notebook doesn't follow its images: after
+one changes, rebuild it with `make -B week-NN/NAME.ipynb`. `make -B pdf`
+redraws the `_annotated.tex` figures too, and their PDFs change only in
+their dates, so restore them with `git checkout` rather than commit them.
+
 ## Writing a handout
 
 Copy the front matter of `week-06/oscars-cards-to-rows.qmd` (the `format`

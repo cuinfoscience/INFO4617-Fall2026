@@ -18,17 +18,27 @@ FIGTEX := $(wildcard week-*/img/*_annotated.tex)
 COMMON := common/handout.cls common/handoutmarkers.sty \
           common/handout-template.tex common/handout.lua
 
+# the images a handout in folder $(1) can show: each .png and .pdf in its img/
+# but an _annotated.png with an _annotated.pdf beside it, a raster copy for the
+# notebook. So a figure synced there again, or redrawn from its .tex, rebuilds
+# the handout, and the records (shots.json, IMAGES.md) rebuild nothing.
+images_in = $(filter-out $(addsuffix .png,$(basename $(wildcard $(1)img/*_annotated.pdf))),\
+              $(wildcard $(1)img/*.png $(1)img/*.pdf))
+
 .PHONY: all pdf notebooks figures check
 all: pdf notebooks
 pdf: $(PDF)
 notebooks: $(IPYNB)
 figures: $(FIGTEX:.tex=.pdf) $(FIGTEX:.tex=.png)
 
-%.pdf: %.qmd $(COMMON)
+# from here, $$ in a rule's prerequisites waits for the rule's stem, $$*
+.SECONDEXPANSION:
+
+%.pdf: %.qmd $(COMMON) $$(call images_in,$$(dir $$*))
 	cd $(dir $<) && $(QUARTO) render $(notdir $<) --to pdf
 
 # a handout written in LaTeX with handout.cls: a PDF, and no notebook
-%.pdf: %.tex common/handout.cls common/handoutmarkers.sty
+%.pdf: %.tex common/handout.cls common/handoutmarkers.sty $$(call images_in,$$(dir $$*))
 	cd $(dir $<) && latexmk -pdf -interaction=nonstopmode -halt-on-error $(notdir $<) \
 	  && latexmk -c $(notdir $<)
 
