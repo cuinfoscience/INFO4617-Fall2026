@@ -28,7 +28,7 @@
 
             \dayband{Monday}{Concepts \& notebook intro}
             \begin{itemize}\small
-                \item Three checks by hand; Selenium and Selenium Manager; Playwright scripts; AI agents that drive a browser
+                \item Three checks by hand; Selenium and Selenium Manager; Playwright scripts; AI agents that drive a browser; logging in as yourself, and what it costs
                 \item Close with a pair activity: do you need a browser?
             \end{itemize}
 
@@ -369,6 +369,94 @@ page.get_by_role("link",
 
             \medskip
             {\scriptsize Not legal advice.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Behind a login: the cheaper API}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Week~3's doors closed or got expensive: X's enterprise API at \$42{,}000 a month, Reddit at \$0.24 per 1{,}000 calls, CrowdTangle shut down in August 2024 (Ch.~3).
+
+            \bigskip
+            Your own account can often still see the posts. Selenium can log in as you and read what you can read: no API key, no bill.
+
+            \bigskip
+            \textbf{Cheaper in dollars. Not cheaper in risk}, to you and to the people in the data.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{block}{Chapter 8}
+                \footnotesize ``Legal risk concentrates precisely where Selenium is most tempting: automating logged-in accounts and ToS-restricted content.''
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Log in by hand, then automate}
+\begin{lstlisting}[basicstyle=\small\ttfamily]
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get("https://quotes.toscrape.com/login")
+input("Log in in the Chrome window, then press Enter here")
+
+driver.get("https://quotes.toscrape.com/")
+links = driver.find_elements(By.LINK_TEXT, "(Goodreads page)")
+print(len(links))   # 10: links shown only to logged-in users
+\end{lstlisting}
+    The sandbox's login takes any username and password. Logged out, the same page has none of those links.
+
+    \medskip
+    You type the password into Chrome, not the notebook: it never lands in a file, a commit, or an AI chat, and two-factor login works. Chrome keeps the session cookie, so every later \texttt{driver.get()} loads as you.
+\end{frame}
+
+\begin{frame}{What changes when you log in}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}\small
+            \textbf{You agreed to the Terms.} Meta's 2024 contract claims against Bright Data failed because Bright Data scraped public pages without logging in. Logged in, the Terms bind you, and most forbid automated collection. hiQ lost to LinkedIn on contract after agreeing to its Terms and getting a cease-and-desist (Ch.~2).
+
+            \medskip
+            \textbf{What you see isn't public.} Friends-only posts, private groups, messages. The people in them never agreed to be in your study: that is human-subjects research, and it needs IRB review.
+
+            \medskip
+            \textbf{Your account is you.} The platform can tie every request to you, and ban you. Selenium tells every site it is automated (\texttt{navigator.webdriver} is \texttt{true}). Don't hide it, and don't make fake accounts to get around a ban.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Passwords}
+                \footnotesize Never in a notebook, a repository, or a prompt. Never someone else's account.
+            \end{alertblock}
+
+            \medskip
+            {\scriptsize Not legal advice.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Would you log in to collect it?}
+    \begin{columns}[T]
+        \begin{column}{0.55\textwidth}\small
+            Hands up: \textbf{yes}, \textbf{yes, if\ldots}, or \textbf{no}?
+            \begin{enumerate}
+                \item Your own listening history, from your streaming account
+                \item Posts in a private Facebook group you belong to, for a class paper
+                \item Twenty new TikTok accounts posing as teenagers, to audit what it recommends
+                \item Articles from a news site you pay for, to build a dataset
+            \end{enumerate}
+
+            \medskip
+            For each: what would you need first?
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{block}{Routes that ask first}
+                \footnotesize
+                \begin{itemize}
+                    \item \textbf{Your own data}: most platforms export it; a data-donation study asks others for theirs
+                    \item \textbf{Researcher access}: Meta Content Library; the EU's DSA Article 40 (Ch.~3)
+                    \item \textbf{Consenting volunteers}: NYU's Ad Observatory studied ads with data volunteered by consenting users. Meta disabled its researchers' accounts in 2021 (Ch.~3)
+                    \item \textbf{Ask the site}
+                \end{itemize}
+            \end{block}
         \end{column}
     \end{columns}
 \end{frame}
