@@ -28,7 +28,7 @@
 
             \dayband{Monday}{Concepts \& notebook intro}
             \begin{itemize}\small
-                \item Three checks by hand; Selenium and Selenium Manager; Playwright scripts; AI agents that drive a browser; logging in as yourself, and what it costs
+                \item Three checks by hand; Selenium and Selenium Manager; headless browsers; Playwright scripts; AI agents that drive a browser; logging in as yourself, and what it costs
                 \item Close with a pair activity: do you need a browser?
             \end{itemize}
 
@@ -160,7 +160,7 @@
 \begin{frame}[fragile]{Selenium Manager}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            A small program inside the \texttt{selenium} package. \texttt{webdriver.Chrome()} runs it first.
+            A small program that comes with \texttt{selenium}; conda-forge installs it as \texttt{selenium-manager}. \texttt{webdriver.Chrome()} runs it first.
 
             \medskip
             It finds your Chrome, or downloads Chrome for Testing if you have none. It finds the matching driver, downloads it, and caches both in \texttt{\textasciitilde/.cache/selenium}.
@@ -194,6 +194,9 @@ Current browser version is 154.0.8037.57
             \textbf{Stray driver?} Delete it, or set \texttt{SE\_SKIP\_DRIVER\_IN\_PATH=true}
 
             \smallskip
+            \textbf{\texttt{Unable to obtain driver for chrome}?} Jupyter started without \texttt{webdata} active, or before you installed \texttt{selenium}. Restart Jupyter (not just the kernel) after \texttt{conda activate webdata}, or run the setup cell in the week~8 handout
+
+            \smallskip
             \textbf{Campus firewall?} Set \texttt{SE\_PROXY}, or run once off campus
 
             \smallskip
@@ -201,6 +204,62 @@ Current browser version is 154.0.8037.57
 
             \smallskip
             \textbf{Stuck cache?} Delete \texttt{\textasciitilde/.cache/selenium}
+\end{frame}
+
+\begin{frame}[fragile]{No window needed: headless mode}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            Headless Chrome is the same browser. It loads the page, runs its JavaScript, and builds the same DOM, but draws nothing on your screen.
+
+            \medskip
+            \textbf{Use it for} long runs in the background; computers with no screen, like a server or GitHub Actions (Ch.~14); several browsers at once.
+
+            \medskip
+            \textbf{Write it with a window first.} Watching is how you catch a click on the wrong button. Then add one line.
+        \end{column}
+        \begin{column}{0.46\textwidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+options = webdriver.ChromeOptions()
+options.add_argument("--headless=new")
+options.add_argument("--window-size=1280,800")
+
+driver = webdriver.Chrome(options=options)
+driver.get("https://quotes.toscrape.com/js/")
+quotes = driver.find_elements(By.CLASS_NAME,
+                              "quote")
+print(len(quotes))                   # 10
+driver.save_screenshot("check.png")  # look
+driver.quit()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Headless is not invisible}
+    \begin{columns}[T]
+        \begin{column}{0.58\textwidth}\small
+            \textbf{The site still sees automation.} Headless Chrome's User-Agent says \texttt{HeadlessChrome/154.0.0.0} where a window says \texttt{Chrome/154.0.0.0}. With a window or without, Selenium's browser reports \texttt{navigator.webdriver} as \texttt{true}.
+
+            \medskip
+            \textbf{Works with a window, not headless?} Some sites give headless browsers less, or nothing. Open your \texttt{save\_screenshot()}, set \texttt{-{}-window-size} (the default was 780 pixels wide), or go back to the window. Faking the User-Agent to pass as a person is week~5's spoofing.
+
+            \medskip
+            \textbf{It can't wait for you.} Nobody can type into a window that isn't there. To log in, use a window once, keep the session, then go headless (later today).
+        \end{column}
+        \begin{column}{0.36\textwidth}
+            \begin{alertblock}{\texttt{-{}-no-sandbox}?}
+                \footnotesize Only in a container that runs as \texttt{root}. On your laptop, leave Chrome's sandbox on: it walls each page's code off from your computer.
+            \end{alertblock}
+
+            \medskip
+            \begin{block}{Wednesday}
+                \footnotesize Lab item 4 times \texttt{requests}, a window, and headless.
+            \end{block}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{Playwright}
@@ -409,6 +468,9 @@ print(len(links))   # 10: links shown only to logged-in users
 
     \medskip
     You type the password into Chrome, not the notebook: it never lands in a file, a commit, or an AI chat, and two-factor login works. Chrome keeps the session cookie, so every later \texttt{driver.get()} loads as you.
+
+    \medskip
+    To keep the login after \texttt{driver.quit()}, even headless, give Chrome a profile folder outside your project (\texttt{-{}-user-data-dir}, Ch.~8). That folder now logs in as you: guard it like a password.
 \end{frame}
 
 \begin{frame}{What changes when you log in}
@@ -510,7 +572,7 @@ print(len(links))   # 10: links shown only to logged-in users
             Read Textbook Ch.~8 before Wednesday.
 
             \medskip
-            Made \texttt{webdata} before October 2? Do the setup handout's catch-up step, which adds Selenium. Then run \texttt{webdriver.Chrome()} once: it may download a driver, and Chrome too if you have none. Do it on a fast connection.
+            Everyone: start Chrome from a notebook once, with the handout \textit{Set up Selenium} (\texttt{handouts/week-08/selenium-setup.pdf}). The first start may download a driver, and Chrome too if you have none, so do it on a fast connection. Made \texttt{webdata} before October 2? The handout's step 1 adds Selenium first.
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{alertblock}{Wednesday lab}
@@ -778,6 +840,7 @@ finally:
         \item Wait on \textbf{conditions}, not a blind \texttt{time.sleep()}. Render with a browser, read with BeautifulSoup, and \texttt{driver.quit()} every time.
         \item Playwright scripts the same work from a terminal. It waits on its own and records while you click.
         \item Agents can drive the browser, but for research, have them write a script you can rerun. \texttt{robots.txt} and ToS still apply.
+        \item Headless runs the same browser with no window, and the site still sees automation. Logging in is cheaper than an API in dollars, not in risk: log in by hand, and keep passwords and profiles out of your code.
     \end{enumerate}
     \bigskip
 \end{frame}
