@@ -47,9 +47,17 @@ from a terminal (on Windows, the Anaconda Prompt). This is one long line:
 conda install -n webdata -c conda-forge gensim lxml dnspython selenium playwright-python pypdf pdfplumber praw spotipy atproto mastodon.py openai anthropic
 ```
 
-Type `y` when conda asks to proceed. If Jupyter is open, restart the kernel
-afterwards (**Kernel** → **Restart Kernel**), so the notebook can import the
-new libraries.
+Type `y` when conda asks to proceed. If your `webdata` was made with `pip`, as
+the first version of this page did, conda then prints thousands of lines that
+start with `ClobberError`: pip and conda both installed some of the same
+files. conda reports them and carries on. Let it finish; its last lines
+include `Executing transaction: done`.
+
+Then restart Jupyter itself, not just the kernel. In the terminal where
+Jupyter runs, press Ctrl+C twice. Run `conda activate webdata`, then start
+`jupyter notebook` again. Activating `webdata` tells Selenium where conda put
+its driver manager, and a running Jupyter keeps the settings it started with,
+so a kernel restart can import Selenium but can't start Chrome.
 
 Use one environment for each project. The environment records the version of
 each library that your analysis used. This makes your results reproducible. It

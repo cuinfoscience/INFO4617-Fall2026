@@ -194,7 +194,7 @@ Current browser version is 154.0.8037.57
             \textbf{Stray driver?} Delete it, or set \texttt{SE\_SKIP\_DRIVER\_IN\_PATH=true}
 
             \smallskip
-            \textbf{\texttt{Unable to obtain driver for chrome}?} Jupyter started without \texttt{webdata} active, or before you installed \texttt{selenium}. Restart Jupyter (not just the kernel) after \texttt{conda activate webdata}, or run the setup cell in the week~8 handout
+            \textbf{\texttt{Unable to obtain driver for chrome}?} Jupyter started without \texttt{webdata} active, or before you installed \texttt{selenium}. Restart Jupyter (not just the kernel) after \texttt{conda activate webdata}, or run step~1 of Ch.~8's ``Before the First Browser''
 
             \smallskip
             \textbf{Campus firewall?} Set \texttt{SE\_PROXY}, or run once off campus
@@ -572,7 +572,10 @@ print(len(links))   # 10: links shown only to logged-in users
             Read Textbook Ch.~8 before Wednesday.
 
             \medskip
-            Everyone: start Chrome from a notebook once, with the handout \textit{Set up Selenium} (\texttt{handouts/week-08/selenium-setup.pdf}). The first start may download a driver, and Chrome too if you have none, so do it on a fast connection. Made \texttt{webdata} before October 2? The handout's step 1 adds Selenium first.
+            Made \texttt{webdata} before October 2? Do the setup handout's catch-up step, which adds Selenium. Then close Jupyter, run \texttt{conda activate webdata}, and start Jupyter again.
+
+            \medskip
+            Everyone: work through Ch.~8's ``Before the First Browser'' once, to the first \texttt{webdriver.Chrome()}. It may download a driver, and Chrome too if you have none, so do it on a fast connection.
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{alertblock}{Wednesday lab}
