@@ -57,7 +57,10 @@ Then restart Jupyter itself, not just the kernel. In the terminal where
 Jupyter runs, press Ctrl+C twice. Run `conda activate webdata`, then start
 `jupyter notebook` again. Activating `webdata` tells Selenium where conda put
 its driver manager, and a running Jupyter keeps the settings it started with,
-so a kernel restart can import Selenium but can't start Chrome.
+so a kernel restart can import Selenium but can't start Chrome. To skip the
+restart, restart only the kernel and run step 1 of week 8's handout *Set up
+Selenium* (`handouts/week-08/selenium-setup.pdf`) in each notebook that uses
+Selenium: that cell finds the driver manager itself.
 
 Use one environment for each project. The environment records the version of
 each library that your analysis used. This makes your results reproducible. It

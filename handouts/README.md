@@ -1,11 +1,13 @@
 # Handouts
 
 Markdown handouts (`common/*.md`, `week-01/setup.md`, `week-04/rss-feeds.md`)
-are read on GitHub as they are. Handouts with no code are written in LaTeX
-with `common/handout.cls` and built to a PDF only: week 7's three Friday
-activities, `week-07/triage-an-issue.tex`, `week-07/review-a-pull-request.tex`,
-and `week-07/issue-to-pull-request.tex`. Code handouts are written once in Quarto
-markdown and built two ways:
+are read on GitHub as they are. Handouts that walk through screens are
+written in LaTeX with `common/handout.cls` and built to a PDF only: week 7's
+three Friday activities, `week-07/triage-an-issue.tex`,
+`week-07/review-a-pull-request.tex`, and `week-07/issue-to-pull-request.tex`,
+and week 8's `week-08/selenium-setup.tex`, whose code is chapter 8's and
+whose figures are screenshots of it running. Code handouts are written once
+in Quarto markdown and built two ways:
 
 - a **PDF** in the style of the slide frames (`common/handout.cls`: CU-gold
   frame bars, the decks' blocks and colors), with every output printed;
@@ -16,6 +18,7 @@ markdown and built two ways:
 |---|---|
 | `week-06/oscars-cards-to-rows.qmd` | `week-06/oscars-cards-to-rows.pdf`, `week-06/oscars-cards-to-rows.ipynb` |
 | `week-07/*.tex` (three) | a PDF each, no notebook |
+| `week-08/selenium-setup.tex` | `week-08/selenium-setup.pdf`, no notebook (the cells are chapter 8's) |
 
 ## Build
 
@@ -57,7 +60,11 @@ Outputs are typed in, not computed when you build: copy each one from a
 real run, then let `make check` confirm them. An annotated screenshot is a
 small TikZ file next to the image (`img/*_annotated.tex`, with the marker
 styles from `common/handoutmarkers.sty`); `make figures` turns it into a
-PDF for the handout and a PNG for the notebook.
+PDF for the handout and a PNG for the notebook. Screenshots taken with the
+textbook's `tools/shots` arrive with their markers drawn: its `sync`
+command copies `NAME.png`, `NAME_annotated.pdf`, and `NAME_annotated.png`,
+and records where each came from in `img/shots.json` (week 8). Retake or
+re-mark those in the textbook, then sync them again; don't edit the copies.
 
 The class also works on its own for hand-written LaTeX handouts; its header
 lists the commands (`frame`, `columns`, `block`, `\alert`, and the rest).

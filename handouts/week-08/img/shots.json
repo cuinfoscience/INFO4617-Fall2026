@@ -1,0 +1,170 @@
+{
+  "files": {
+    "check-paths.png": {
+      "also": [
+        "check-paths_annotated.png",
+        "check-paths_annotated.pdf"
+      ],
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-10-05T21:05:02+00:00",
+      "copied_from": "tools/shots/out/course/week08-handout-check-paths/20261005T210458Z.png",
+      "figure": "course/week08-handout-check-paths",
+      "final_url": "http://localhost:8888/notebooks/selenium-setup.ipynb",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "acc0cf3369a3c53c92e08c5110fe55b947cb56a22281bed252e06fd6a4f74abf",
+      "size": [
+        1584,
+        536
+      ],
+      "source_sha256": "acc0cf3369a3c53c92e08c5110fe55b947cb56a22281bed252e06fd6a4f74abf",
+      "synced": "2026-10-05T21:16:42+00:00",
+      "textbook_commit": "c1f94f775df50253cf68b8dcb022a137a0031b5c",
+      "url": "http://localhost:8888/notebooks/selenium-setup.ipynb",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        800,
+        600
+      ]
+    },
+    "first-chrome.png": {
+      "also": [
+        "first-chrome_annotated.png",
+        "first-chrome_annotated.pdf"
+      ],
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-10-05T21:05:12+00:00",
+      "copied_from": "tools/shots/out/course/week08-handout-first-chrome/20261005T210506Z.png",
+      "figure": "course/week08-handout-first-chrome",
+      "final_url": "http://localhost:8888/notebooks/selenium-setup.ipynb",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "c2a4c9adf50754e7b51002d5a21773b47780b2da737c54f6ba725aaf25782883",
+      "size": [
+        1600,
+        594
+      ],
+      "source_sha256": "c2a4c9adf50754e7b51002d5a21773b47780b2da737c54f6ba725aaf25782883",
+      "synced": "2026-10-05T21:16:43+00:00",
+      "textbook_commit": "c1f94f775df50253cf68b8dcb022a137a0031b5c",
+      "url": "http://localhost:8888/notebooks/selenium-setup.ipynb",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        800,
+        600
+      ]
+    },
+    "manager-log.png": {
+      "also": [
+        "manager-log_annotated.png",
+        "manager-log_annotated.pdf"
+      ],
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-10-05T21:03:02+00:00",
+      "copied_from": "tools/shots/out/course/week08-handout-manager-log/20261005T210250Z.png",
+      "figure": "course/week08-handout-manager-log",
+      "final_url": "http://localhost:8888/notebooks/selenium-setup.ipynb",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "c4b4f89abc990b0f2b56eed69a00a64373df0e25413e58f2df9b70d39f8d72d4",
+      "size": [
+        1584,
+        1364
+      ],
+      "source_sha256": "c4b4f89abc990b0f2b56eed69a00a64373df0e25413e58f2df9b70d39f8d72d4",
+      "synced": "2026-10-05T21:16:41+00:00",
+      "textbook_commit": "c1f94f775df50253cf68b8dcb022a137a0031b5c",
+      "url": "http://localhost:8888/notebooks/selenium-setup.ipynb",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        800,
+        900
+      ]
+    },
+    "no-manager.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-10-05T21:03:57+00:00",
+      "copied_from": "tools/shots/out/course/week08-handout-no-manager/20261005T210357Z.png",
+      "figure": "course/week08-handout-no-manager",
+      "final_url": "http://localhost:8888/notebooks/no-setup-cell.ipynb",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "76ede34a4c62f5d37c8f09148aa3b3a20234e52135d93aae5bbe0e6a5258e6ba",
+      "size": [
+        1432,
+        678
+      ],
+      "source_sha256": "76ede34a4c62f5d37c8f09148aa3b3a20234e52135d93aae5bbe0e6a5258e6ba",
+      "synced": "2026-10-05T21:16:44+00:00",
+      "textbook_commit": "c1f94f775df50253cf68b8dcb022a137a0031b5c",
+      "url": "http://localhost:8888/notebooks/no-setup-cell.ipynb",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        800,
+        600
+      ]
+    },
+    "selenium_browser.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headed on Xvfb, driven by Selenium 4.49.0)",
+      "by": "tools/shots",
+      "captured": "2026-10-05T21:05:49+00:00",
+      "copied_from": "tools/shots/out/course/week08-selenium-browser/20261005T210544Z.png",
+      "engine": {
+        "browser": "154.0.8037.92",
+        "chromedriver": "154.0.8037.92",
+        "name": "selenium",
+        "selenium": "4.49.0"
+      },
+      "figure": "course/week08-selenium-browser",
+      "final_url": "https://xkcd.com/",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "579920486bea263659fb4ede089a14133fc9345411a9e3e6e2d5a0c386e35aba",
+      "size": [
+        890,
+        576
+      ],
+      "source_sha256": "579920486bea263659fb4ede089a14133fc9345411a9e3e6e2d5a0c386e35aba",
+      "synced": "2026-10-05T21:16:44+00:00",
+      "textbook_commit": "c1f94f775df50253cf68b8dcb022a137a0031b5c",
+      "url": "https://xkcd.com/",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        800,
+        600
+      ]
+    },
+    "setup-cell.png": {
+      "also": [
+        "setup-cell_annotated.png",
+        "setup-cell_annotated.pdf"
+      ],
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-10-05T21:03:25+00:00",
+      "copied_from": "tools/shots/out/course/week08-handout-setup-cell/20261005T210321Z.png",
+      "figure": "course/week08-handout-setup-cell",
+      "final_url": "http://localhost:8888/notebooks/selenium-setup.ipynb",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "f20f9ae39c80927aec723fad543071f59f15c2a7295960b88a856615d11a4b4d",
+      "size": [
+        1584,
+        760
+      ],
+      "source_sha256": "f20f9ae39c80927aec723fad543071f59f15c2a7295960b88a856615d11a4b4d",
+      "synced": "2026-10-05T21:16:39+00:00",
+      "textbook_commit": "c1f94f775df50253cf68b8dcb022a137a0031b5c",
+      "url": "http://localhost:8888/notebooks/selenium-setup.ipynb",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        800,
+        600
+      ]
+    }
+  }
+}
