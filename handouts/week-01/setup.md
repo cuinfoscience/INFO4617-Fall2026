@@ -35,8 +35,8 @@ can install. Expect it to take a few minutes. Run `conda activate webdata`
 each time you open a new terminal.
 
 Only two later steps are not in this command. Week 8 downloads browsers for
-Playwright (`playwright install chromium`), and weeks 11 to 13 ask you for
-API keys.
+Playwright (`python -m playwright install chromium`), and weeks 11 to 13 ask
+you for API keys.
 
 ### Made `webdata` before October 2?
 

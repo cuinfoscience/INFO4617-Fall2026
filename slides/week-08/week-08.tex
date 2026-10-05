@@ -268,7 +268,7 @@ driver.quit()
             Built by Microsoft engineers who had worked on Google's Puppeteer.
 
             \bigskip
-            It brings its own browsers. The library is in \texttt{webdata}; \texttt{playwright install chromium} downloads the browsers, about 300\,MB.
+            It brings its own browsers. The library is in \texttt{webdata}; \texttt{python -m playwright install chromium} downloads the browsers, about 320\,MB. Type \texttt{python -m}: on conda-forge, two packages install a \texttt{playwright} command.
 
             \bigskip
             It waits for elements on its own, and it records a script while you click.
@@ -319,7 +319,7 @@ page.locator("div.quote").count()                        # 10
 \begin{frame}[fragile]{Record, then read}
     \begin{columns}[T]
         \begin{column}{0.42\textwidth}
-            \texttt{playwright codegen https://quotes.toscrape.com/}
+            \texttt{python -m playwright codegen} \texttt{https://quotes.toscrape.com/}
 
             \medskip
             Click in the browser. Each click becomes a line of Python:
@@ -527,7 +527,7 @@ print(len(links))   # 10: links shown only to logged-in users
     \centering\small
     \begin{tabular}{p{0.15\textwidth}p{0.37\textwidth}p{0.37\textwidth}}
         & \textbf{Selenium} & \textbf{Playwright} \tabularnewline \hline
-        \raggedright Install & \raggedright In \texttt{webdata} (week 1) & \raggedright In \texttt{webdata}, then \texttt{playwright install chromium} \tabularnewline[0.5em]
+        \raggedright Install & \raggedright In \texttt{webdata} (week 1) & \raggedright In \texttt{webdata}, then \texttt{python -m playwright install chromium} \tabularnewline[0.5em]
         \raggedright Browsers & \raggedright Yours; Selenium Manager downloads Chrome for Testing if you have none & \raggedright Its own copies, pinned to each release \tabularnewline[0.5em]
         \raggedright Notebook & \raggedright Yes & \raggedright Only with the async API and \texttt{await} \tabularnewline[0.5em]
         \raggedright Waiting & \raggedright Explicit: \texttt{WebDriverWait} & \raggedright Automatic when you act on or read an element \tabularnewline[0.5em]
@@ -792,7 +792,7 @@ finally:
     \begin{itemize}
         \item \textbf{Test the code against live sites.} xkcd, Wikipedia, and the Quotes to Scrape sandbox all drift. Run the notebook headless, report what broke, and fix the selector --- the chapter's own ``Fragility Problem.''
         \item \textbf{Test the Playwright scripts.} Run the chapter's scripts from a terminal on your own machine. Report the download size and anything that differed on Windows or macOS.
-        \item \textbf{Add the Firefox path.} Show Selenium Manager fetching \texttt{geckodriver}, and \texttt{playwright install firefox}, with what changed.
+        \item \textbf{Add the Firefox path.} Show Selenium Manager fetching \texttt{geckodriver}, and \texttt{python -m playwright install firefox}, with what changed.
         \item \textbf{Try an agent on the sandbox.} Have an AI agent write a scraper for quotes.toscrape.com. Compare its script with yours, and add what you learned to ``Letting an AI Agent Drive.''
         \item \textbf{Strengthen an exercise.} Add expected output or a starter cell so an Additional Exercise is self-checking.
         \item \textbf{Extend ``Further Reading.''} A public-interest study that turned to browser automation after an API closed.
