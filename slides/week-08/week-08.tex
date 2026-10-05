@@ -22,7 +22,7 @@
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Most of the modern web renders its data with JavaScript \textit{after} the HTML arrives. This week: check whether you need a browser, then drive one.
+            Most of the modern web renders its data with JavaScript \textit{after} the HTML arrives. This week: check whether you need a browser, then drive one from Jupyter.
 
             \bigskip
 
@@ -170,7 +170,8 @@
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
-            \includegraphics[width=0.8\textwidth]{img/meme_it_just_works.png}
+            \includegraphics[width=0.8\textwidth]{slides/week-08/img/office-space-manager.jpg}\\
+            {\footnotesize Yeaaah, could you go ahead and download that driver for me?}
         \end{column}
     \end{columns}
 \begin{lstlisting}
@@ -190,8 +191,6 @@ SessionNotCreatedException: session not created: This version of
 ChromeDriver only supports Chrome version 147
 Current browser version is 154.0.8037.57
 \end{lstlisting}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}\small
             \textbf{Stray driver?} Delete it, or set \texttt{SE\_SKIP\_DRIVER\_IN\_PATH=true}
 
             \smallskip
@@ -202,19 +201,12 @@ Current browser version is 154.0.8037.57
 
             \smallskip
             \textbf{Stuck cache?} Delete \texttt{\textasciitilde/.cache/selenium}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Set it in Python}
-                \footnotesize \texttt{os.environ["SE\_SKIP\_DRIVER\_IN\_PATH"] = "true"} before your first \texttt{webdriver.Chrome()}
-            \end{alertblock}
-        \end{column}
-    \end{columns}
 \end{frame}
 
 \begin{frame}{Playwright}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Microsoft, January 2020, built by engineers who had worked on Google's Puppeteer.
+            Built by Microsoft engineers who had worked on Google's Puppeteer.
 
             \bigskip
             It brings its own browsers. The library is in \texttt{webdata}; \texttt{playwright install chromium} downloads the browsers, about 300\,MB.
@@ -223,7 +215,7 @@ Current browser version is 154.0.8037.57
             It waits for elements on its own, and it records a script while you click.
 
             \bigskip
-            It runs best as a script from the terminal, not in a notebook.
+            It runs best as a script from the terminal or used by an AI agent, not in a notebook
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
@@ -263,27 +255,6 @@ page.locator("div.quote").count()                        # 10
 
     \medskip
     Selenium needs \texttt{WebDriverWait} for the same page. You will write it on Wednesday.
-\end{frame}
-
-\begin{frame}[fragile]{Why not in the notebook?}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Run that script in a Jupyter cell:
-\begin{lstlisting}
-Error: It looks like you are using
-Playwright Sync API inside the asyncio
-loop. Please use the Async API instead.
-\end{lstlisting}
-            Jupyter already runs an event loop. Playwright's simple sync API needs one of its own.
-
-            \medskip
-            The async API works in a notebook, with \texttt{await} in front of nearly every call. Forget one, and you get a placeholder instead of a result.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/meme_its_a_trap.png}
-        \end{column}
-    \end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{Record, then read}
@@ -328,7 +299,7 @@ page.get_by_role("link",
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{img/meme_captain_now.png}
+            \includegraphics[width=\textwidth]{slides/week-08/img/im-captain-now.png}
         \end{column}
     \end{columns}
 \end{frame}
@@ -436,7 +407,8 @@ page.get_by_role("link",
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{img/meme_is_this_dynamic.png}
+            \includegraphics[width=\textwidth]{slides/week-08/img/is-this-a-pigeon.jpg}\\
+            {\footnotesize Is this a dynamic website?}
         \end{column}
     \end{columns}
 \end{frame}
