@@ -109,13 +109,13 @@
       ]
     },
     "selenium_browser.png": {
-      "browser": "Google Chrome for Testing 154.0.8037.57 (headed on Xvfb, driven by Selenium 4.49.0)",
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headed on Xvfb, driven by Selenium 4.49.0)",
       "by": "tools/shots",
-      "captured": "2026-09-25T04:42:32+00:00",
-      "copied_from": "tools/shots/out/course/week08-selenium-browser/20260925T044228Z.png",
+      "captured": "2026-10-05T21:05:49+00:00",
+      "copied_from": "tools/shots/out/course/week08-selenium-browser/20261005T210544Z.png",
       "engine": {
-        "browser": "154.0.8037.57",
-        "chromedriver": "154.0.8037.57",
+        "browser": "154.0.8037.92",
+        "chromedriver": "154.0.8037.92",
         "name": "selenium",
         "selenium": "4.49.0"
       },
@@ -123,16 +123,16 @@
       "final_url": "https://xkcd.com/",
       "kind": "capture",
       "scale": 2,
-      "sha256": "f7e61c77ada6300d7ec68b9aa6ec56319b26ee90348bb3aac12fd815d1f44b2f",
+      "sha256": "579920486bea263659fb4ede089a14133fc9345411a9e3e6e2d5a0c386e35aba",
       "size": [
         890,
         576
       ],
-      "source_sha256": "f7e61c77ada6300d7ec68b9aa6ec56319b26ee90348bb3aac12fd815d1f44b2f",
-      "synced": "2026-09-25T13:38:36+00:00",
-      "textbook_commit": "4e442d6734083511114de33e1e2fd52a43e83fa2",
+      "source_sha256": "579920486bea263659fb4ede089a14133fc9345411a9e3e6e2d5a0c386e35aba",
+      "synced": "2026-10-05T21:16:44+00:00",
+      "textbook_commit": "c1f94f775df50253cf68b8dcb022a137a0031b5c",
       "url": "https://xkcd.com/",
-      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
       "window": [
         800,
         600

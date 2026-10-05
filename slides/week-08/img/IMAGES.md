@@ -89,8 +89,9 @@ capture dates.
   automated testing" bar (not the classic "controlled by automated test
   software" banner, which regular Chrome shows). It is the one screenshot
   that keeps that bar, because the bar is the point of the slide; every
-  other screenshot is taken without it (`AUTHORING.md`). (Selenium: a browser
-  you drive with code)
+  other screenshot is taken without it (`AUTHORING.md`). Week 8's handout
+  *Set up Selenium* prints the same file (`handouts/week-08/img/`). (Selenium:
+  a browser you drive with code)
   - Remade 2026-09-25 (`week08-selenium-browser`): the top left 445×288 CSS
     pixels of an 800×600 window, its tab, address bar, and the bar through
     "is only for automated testing.", above the top of xkcd (comic #3302,
@@ -98,6 +99,9 @@ capture dates.
     measures only xkcd's text; the bar's text, about 14 pixels, comes to
     about 18.5 in its 35% column. The 1,280-pixel version of 2026-09-22
     showed it at about 6.
+  - Retaken 2026-10-05 from the same recipe, so that the handout's figures
+    all show one version: Chrome for Testing 154.0.8037.92, above comic
+    #3306, "Accelerator Energies".
 - `playwright_home.png` -- playwright.dev/python, 2026-09-25: its menu bar
   and headline, "Playwright enables reliable web automation for testing,
   scripting, and AI agents." (Playwright)
@@ -163,7 +167,7 @@ Copied here by the textbook's `tools/shots/run sync`; `tools/shots/run synced` c
 | `js_off.png` | `course/week08-js-off` (tools/shots/out/course/week08-js-off/20260925T035503Z.png, textbook `4e442d6`) | 2026-09-25 | https://quotes.toscrape.com/js/ | tools/shots: Google Chrome for Testing 154.0.8037.57, 480×400 at 2× |
 | `playwright_home.png` | `course/week08-playwright-home` (tools/shots/out/course/week08-playwright-home/20260925T035617Z.png, textbook `4e442d6`) | 2026-09-25 | https://playwright.dev/python/ | tools/shots: Google Chrome for Testing 154.0.8037.57, 480×600 at 2× |
 | `requests_vs_browser.png` | `course/week08-requests-vs-browser` (tools/shots/out/course/week08-requests-vs-browser/20260925T035442Z.png, textbook `4e442d6`) | 2026-09-25 | https://quotes.toscrape.com/js/ | tools/shots: Google Chrome for Testing 154.0.8037.57, 480×350 at 2× |
-| `selenium_browser.png` | `course/week08-selenium-browser` (tools/shots/out/course/week08-selenium-browser/20260925T044228Z.png, textbook `4e442d6`) | 2026-09-25 | https://xkcd.com/ | tools/shots: Google Chrome for Testing 154.0.8037.57, 800×600 at 2×, webdriver.Chrome() under Selenium 4.49.0 (ChromeDriver 154.0.8037.57) |
+| `selenium_browser.png` | `course/week08-selenium-browser` (tools/shots/out/course/week08-selenium-browser/20261005T210544Z.png, textbook `c1f94f7`) | 2026-10-05 | https://xkcd.com/ | tools/shots: Google Chrome for Testing 154.0.8037.92, 800×600 at 2×, webdriver.Chrome() under Selenium 4.49.0 (ChromeDriver 154.0.8037.92) |
 <!-- shots:end -->
 
 ## Listed in `stubs.tsv`
