@@ -28,7 +28,7 @@
 
             \dayband{Monday}{Concepts \& notebook intro}
             \begin{itemize}\small
-                \item Three checks by hand; Selenium and Selenium Manager; Playwright scripts; AI agents that drive a browser
+                \item Three checks by hand; Selenium and Selenium Manager; headless browsers; Playwright scripts; AI agents that drive a browser; logging in as yourself, and what it costs
                 \item Close with a pair activity: do you need a browser?
             \end{itemize}
 
@@ -160,7 +160,7 @@
 \begin{frame}[fragile]{Selenium Manager}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            A small program inside the \texttt{selenium} package. \texttt{webdriver.Chrome()} runs it first.
+            A small program that comes with \texttt{selenium}; conda-forge installs it as \texttt{selenium-manager}. \texttt{webdriver.Chrome()} runs it first.
 
             \medskip
             It finds your Chrome, or downloads Chrome for Testing if you have none. It finds the matching driver, downloads it, and caches both in \texttt{\textasciitilde/.cache/selenium}.
@@ -194,6 +194,9 @@ Current browser version is 154.0.8037.57
             \textbf{Stray driver?} Delete it, or set \texttt{SE\_SKIP\_DRIVER\_IN\_PATH=true}
 
             \smallskip
+            \textbf{\texttt{Unable to obtain driver for chrome}?} Jupyter started without \texttt{webdata} active, or before you installed \texttt{selenium}. Restart Jupyter (not just the kernel) after \texttt{conda activate webdata}, or run step~1 of Ch.~8's ``Before the First Browser''
+
+            \smallskip
             \textbf{Campus firewall?} Set \texttt{SE\_PROXY}, or run once off campus
 
             \smallskip
@@ -201,6 +204,62 @@ Current browser version is 154.0.8037.57
 
             \smallskip
             \textbf{Stuck cache?} Delete \texttt{\textasciitilde/.cache/selenium}
+\end{frame}
+
+\begin{frame}[fragile]{No window needed: headless mode}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            Headless Chrome is the same browser. It loads the page, runs its JavaScript, and builds the same DOM, but draws nothing on your screen.
+
+            \medskip
+            \textbf{Use it for} long runs in the background; computers with no screen, like a server or GitHub Actions (Ch.~14); several browsers at once.
+
+            \medskip
+            \textbf{Write it with a window first.} Watching is how you catch a click on the wrong button. Then add one line.
+        \end{column}
+        \begin{column}{0.46\textwidth}
+\begin{lstlisting}[basicstyle=\scriptsize\ttfamily]
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+options = webdriver.ChromeOptions()
+options.add_argument("--headless=new")
+options.add_argument("--window-size=1280,800")
+
+driver = webdriver.Chrome(options=options)
+driver.get("https://quotes.toscrape.com/js/")
+quotes = driver.find_elements(By.CLASS_NAME,
+                              "quote")
+print(len(quotes))                   # 10
+driver.save_screenshot("check.png")  # look
+driver.quit()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Headless is not invisible}
+    \begin{columns}[T]
+        \begin{column}{0.58\textwidth}\small
+            \textbf{The site still sees automation.} Headless Chrome's User-Agent says \texttt{HeadlessChrome/154.0.0.0} where a window says \texttt{Chrome/154.0.0.0}. With a window or without, Selenium's browser reports \texttt{navigator.webdriver} as \texttt{true}.
+
+            \medskip
+            \textbf{Works with a window, not headless?} Some sites give headless browsers less, or nothing. Open your \texttt{save\_screenshot()}, set \texttt{-{}-window-size} (the default was 780 pixels wide), or go back to the window. Faking the User-Agent to pass as a person is week~5's spoofing.
+
+            \medskip
+            \textbf{It can't wait for you.} Nobody can type into a window that isn't there. To log in, use a window once, keep the session, then go headless (later today).
+        \end{column}
+        \begin{column}{0.36\textwidth}
+            \begin{alertblock}{\texttt{-{}-no-sandbox}?}
+                \footnotesize Only in a container that runs as \texttt{root}. On your laptop, leave Chrome's sandbox on: it walls each page's code off from your computer.
+            \end{alertblock}
+
+            \medskip
+            \begin{block}{Wednesday}
+                \footnotesize Lab item 4 times \texttt{requests}, a window, and headless.
+            \end{block}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{Playwright}
@@ -373,6 +432,97 @@ page.get_by_role("link",
     \end{columns}
 \end{frame}
 
+\begin{frame}{Behind a login: the cheaper API}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Week~3's doors closed or got expensive: X's enterprise API at \$42{,}000 a month, Reddit at \$0.24 per 1{,}000 calls, CrowdTangle shut down in August 2024 (Ch.~3).
+
+            \bigskip
+            Your own account can often still see the posts. Selenium can log in as you and read what you can read: no API key, no bill.
+
+            \bigskip
+            \textbf{Cheaper in dollars. Not cheaper in risk}, to you and to the people in the data.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{block}{Chapter 8}
+                \footnotesize ``Legal risk concentrates precisely where Selenium is most tempting: automating logged-in accounts and ToS-restricted content.''
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Log in by hand, then automate}
+\begin{lstlisting}[basicstyle=\small\ttfamily]
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get("https://quotes.toscrape.com/login")
+input("Log in in the Chrome window, then press Enter here")
+
+driver.get("https://quotes.toscrape.com/")
+links = driver.find_elements(By.LINK_TEXT, "(Goodreads page)")
+print(len(links))   # 10: links shown only to logged-in users
+\end{lstlisting}
+    The sandbox's login takes any username and password. Logged out, the same page has none of those links.
+
+    \medskip
+    You type the password into Chrome, not the notebook: it never lands in a file, a commit, or an AI chat, and two-factor login works. Chrome keeps the session cookie, so every later \texttt{driver.get()} loads as you.
+
+    \medskip
+    To keep the login after \texttt{driver.quit()}, even headless, give Chrome a profile folder outside your project (\texttt{-{}-user-data-dir}, Ch.~8). That folder now logs in as you: guard it like a password.
+\end{frame}
+
+\begin{frame}{What changes when you log in}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}\small
+            \textbf{You agreed to the Terms.} Meta's 2024 contract claims against Bright Data failed because Bright Data scraped public pages without logging in. Logged in, the Terms bind you, and most forbid automated collection. hiQ lost to LinkedIn on contract after agreeing to its Terms and getting a cease-and-desist (Ch.~2).
+
+            \medskip
+            \textbf{What you see isn't public.} Friends-only posts, private groups, messages. The people in them never agreed to be in your study: that is human-subjects research, and it needs IRB review.
+
+            \medskip
+            \textbf{Your account is you.} The platform can tie every request to you, and ban you. Selenium tells every site it is automated (\texttt{navigator.webdriver} is \texttt{true}). Don't hide it, and don't make fake accounts to get around a ban.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Passwords}
+                \footnotesize Never in a notebook, a repository, or a prompt. Never someone else's account.
+            \end{alertblock}
+
+            \medskip
+            {\scriptsize Not legal advice.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Would you log in to collect it?}
+    \begin{columns}[T]
+        \begin{column}{0.55\textwidth}\small
+            Hands up: \textbf{yes}, \textbf{yes, if\ldots}, or \textbf{no}?
+            \begin{enumerate}
+                \item Your own listening history, from your streaming account
+                \item Posts in a private Facebook group you belong to, for a class paper
+                \item Twenty new TikTok accounts posing as teenagers, to audit what it recommends
+                \item Articles from a news site you pay for, to build a dataset
+            \end{enumerate}
+
+            \medskip
+            For each: what would you need first?
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{block}{Routes that ask first}
+                \footnotesize
+                \begin{itemize}
+                    \item \textbf{Your own data}: most platforms export it; a data-donation study asks others for theirs
+                    \item \textbf{Researcher access}: Meta Content Library; the EU's DSA Article 40 (Ch.~3)
+                    \item \textbf{Consenting volunteers}: NYU's Ad Observatory studied ads with data volunteered by consenting users. Meta disabled its researchers' accounts in 2021 (Ch.~3)
+                    \item \textbf{Ask the site}
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}{Selenium or Playwright?}
     \centering\small
     \begin{tabular}{p{0.15\textwidth}p{0.37\textwidth}p{0.37\textwidth}}
@@ -422,7 +572,10 @@ page.get_by_role("link",
             Read Textbook Ch.~8 before Wednesday.
 
             \medskip
-            Made \texttt{webdata} before October 2? Do the setup handout's catch-up step, which adds Selenium. Then run \texttt{webdriver.Chrome()} once: it may download a driver, and Chrome too if you have none. Do it on a fast connection.
+            Made \texttt{webdata} before October 2? Do the setup handout's catch-up step, which adds Selenium. Then close Jupyter, run \texttt{conda activate webdata}, and start Jupyter again.
+
+            \medskip
+            Everyone: work through Ch.~8's ``Before the First Browser'' once, to the first \texttt{webdriver.Chrome()}. It may download a driver, and Chrome too if you have none, so do it on a fast connection.
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{alertblock}{Wednesday lab}
@@ -690,6 +843,7 @@ finally:
         \item Wait on \textbf{conditions}, not a blind \texttt{time.sleep()}. Render with a browser, read with BeautifulSoup, and \texttt{driver.quit()} every time.
         \item Playwright scripts the same work from a terminal. It waits on its own and records while you click.
         \item Agents can drive the browser, but for research, have them write a script you can rerun. \texttt{robots.txt} and ToS still apply.
+        \item Headless runs the same browser with no window, and the site still sees automation. Logging in is cheaper than an API in dollars, not in risk: log in by hand, and keep passwords and profiles out of your code.
     \end{enumerate}
     \bigskip
 \end{frame}
