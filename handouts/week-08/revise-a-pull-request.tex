@@ -62,7 +62,7 @@
         \small
         \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.46\linewidth}%
                         >{\raggedright\arraybackslash}p{0.46\linewidth}@{}}
-          A comment with a \textbf{suggestion} box & Step 2: \textbf{Commit suggestion}\\ \addlinespace[4pt]
+          A comment with a \textbf{suggestion} box & Step 2: \textbf{Apply suggestion}\\ \addlinespace[4pt]
           A comment that asks for a change in words & Step 3: \textbf{Edit file}\\ \addlinespace[4pt]
           The notice \textit{This branch has conflicts} & Step 4: \textbf{Resolve conflicts}
         \end{tabular}
@@ -100,30 +100,38 @@
   \end{enumerate}
 \end{frame}
 
-\begin{frame}{2 · A suggestion: Commit suggestion}
+\begin{frame}{2 · A suggestion: Apply suggestion}
   A reviewer who writes the exact new words puts them in a
   \textbf{suggestion} box. GitHub shows it as the old line in red and the
   new line in green, with a button under it.
   \begin{enumerate}
     \item Check the green line. It replaces the red line exactly as shown.
-    \item Click \textbf{Commit suggestion}. Write a commit message that says
-      what changed, for example \texttt{Ch. 5: fix the spelling of
-      Network}. Click \textbf{Commit changes}.
+    \item Click \textbf{Apply suggestion}. A box opens under the button.
+      Write a commit message that says what changed, for example
+      \texttt{Ch. 5: fix the spelling of Network}. Click \textbf{Commit
+      changes}.
     \item The comment now says the suggestion was committed, and the
       pull request shows one more commit.
   \end{enumerate}
   If a review has several suggestions, click \textbf{Add suggestion to
-  batch} on each one, then \textbf{Commit suggestions} once. That makes one
-  commit for all of them.
+  batch} on each one, then commit the batch once, from the button that
+  counts the suggestions in it. That makes one commit for all of them.
   \handcapture{pr-suggestion.png}{Screenshot of a review comment on pull
-    request 228 with a suggestion box: the old line with the typo Netwrok in
-    red, the new line with Network in green, and the Commit suggestion and
-    Add suggestion to batch buttons under it.}{A suggestion on \#228: the
-    old line in red, the new line in green, and \textbf{Commit suggestion}
-    under them.}
+    request 228: Typo, Netwrok should be Network. Under it, a box labeled
+    Suggested change shows line 703 with Netwrok in red and line 703 with
+    Network in green, and the buttons Apply suggestion and Add suggestion to
+    batch.}{A suggestion on \#228, captured in October 2026: the old line in
+    red, the new line in green, and \textbf{Apply suggestion} under them.}
 \end{frame}
 
 \begin{frame}{3 · A comment: Edit file on your branch}
+  A comment without a suggestion box says in words what to change.
+  \handcapture{pr-comment.png}{Screenshot of the Files changed tab of pull
+    request 228: the curl line, old in red and new in green, and under it a
+    comment that reads: Please give the flag's long form too, so readers can
+    search the manual for it: -v (--verbose).}{A comment on \#228's
+    \texttt{curl} line, in \textbf{Files changed}, captured in October
+    2026. It asks for a change in words, so you make it yourself.}
   \begin{enumerate}
     \item Click \textbf{Files changed}. Find the file, and click its
       \textbf{$\cdots$} menu at the right of the file's name. Click
@@ -154,8 +162,9 @@
   as your pull request after you opened it. GitHub can't choose between the
   two versions, so you do. Resolve it when a review asks you to.
   \begin{enumerate}
-    \item Click \textbf{Resolve conflicts}. GitHub opens an editor with
-      each conflict between three marker lines:
+    \item Click \textbf{Resolve conflicts}. GitHub opens an editor. At
+      the top, it counts the conflicts. Each conflict sits between three
+      marker lines:
   \end{enumerate}
 \begin{plain}
 <<<<<<< demo/week08-revise
@@ -165,25 +174,33 @@
 >>>>>>> demo/week08-base
 \end{plain}
   \begin{enumerate}[resume]
-    \item The first part is your branch's version; the second is the base's
-      (on your pull request, \texttt{main}'s). Write the one line that keeps
-      what each side meant. For \#228, the base added \texttt{-I}, and the
+    \item The first part is your branch's version, which GitHub calls the
+      \textit{current change}. The second is the base's (on your pull request,
+      \texttt{main}'s), the \textit{incoming change}. Above them, three
+      links each keep one side or both. Click \textbf{Accept both changes},
+      then edit the two lines into one line that keeps what each side
+      meant. For \#228, the base added \texttt{-I}, and the
       review asked for \texttt{-{}-verbose}:
 \begin{plain}
 - `curl` manual, for `-v` (`--verbose`) and `-I`: <https://curl.se/docs/manpage.html>
 \end{plain}
-    \item Delete the three marker lines (\texttt{<{}<{}<}, \texttt{===},
-      \texttt{>{}>{}>}). Then click \textbf{Mark as resolved}, and
-      \textbf{Commit merge}.
+    \item Check that no marker line (\texttt{<{}<{}<}, \texttt{===},
+      \texttt{>{}>{}>}) is left. \textbf{Mark as resolved}, at the top
+      right, stays gray until then. Click it, then \textbf{Commit merge}.
   \end{enumerate}
   If the button is gray and says the conflict is \textit{too complex to
   resolve in the web editor}, stop. Comment on your pull request that you
   need help with a conflict, and the instructor will resolve it.
   \handcapture{pr-conflict-editor.png}{Screenshot of GitHub's conflict editor
-    for pull request 228, with the three marker lines around the two versions
-    of the curl line, and the Mark as resolved button.}{GitHub's conflict
-    editor on \#228: the two versions of the line, between the marker
-    lines, and \textbf{Mark as resolved}.}
+    for pull request 228. At the top: 1 conflict, and a gray Mark as resolved
+    button. Lines 709 to 713 hold the conflict: the marker line for
+    demo/week08-revise, the current change, its curl line, a line of equals
+    signs, the base's curl line, and the marker line for demo/week08-base,
+    the incoming change. Above them are the links Accept current change,
+    Accept incoming change, and Accept both changes.}{GitHub's conflict
+    editor on \#228, captured in October 2026: the two versions of the line
+    between the marker lines, the three \textbf{Accept} links above them,
+    and \textbf{Mark as resolved}, gray until the conflict is resolved.}
 \end{frame}
 
 \begin{frame}{5 · Answer the review, and ask again}
@@ -226,7 +243,7 @@
     \toprule
     \textbf{You see} & \textbf{Do this}\\
     \midrule
-    \textbf{Commit suggestion} is gray, or the comment says
+    \textbf{Apply suggestion} is gray, or the comment says
     \textit{Outdated} &
       The line changed after the comment. Make the change with
       \textbf{Edit file} (step 3).\\[3pt]
