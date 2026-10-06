@@ -5,10 +5,10 @@ are read on GitHub as they are. Handouts that walk through screens are
 written in LaTeX with `common/handout.cls` and built to a PDF only: week 7's
 three Friday activities, `week-07/triage-an-issue.tex`,
 `week-07/review-a-pull-request.tex`, and `week-07/issue-to-pull-request.tex`.
-Week 8's *Set up Selenium for chapter 8* is a page, `week-08/README.md`, and
-the notebook it has students download and run, `week-08/selenium-setup.ipynb`
-(see "A notebook students run" below). Code handouts are written once in
-Quarto markdown and built two ways:
+Week 8's *Set up Selenium for chapter 8* is a page, `week-08/README.md`. It
+takes students to chapter 8's own notebook, whose first Selenium cells
+install and check everything (see "A setup page" below). Code handouts are
+written once in Quarto markdown and built two ways:
 
 - a **PDF** in the style of the slide frames (`common/handout.cls`: CU-gold
   frame bars, the decks' blocks and colors), with every output printed;
@@ -19,7 +19,7 @@ Quarto markdown and built two ways:
 |---|---|
 | `week-06/oscars-cards-to-rows.qmd` | `week-06/oscars-cards-to-rows.pdf`, `week-06/oscars-cards-to-rows.ipynb` |
 | `week-07/*.tex` (three) | a PDF each, no notebook |
-| `week-08/README.md` and `week-08/selenium-setup.ipynb` | nothing: students read the page on GitHub, then download and run the notebook |
+| `week-08/README.md` | nothing: students read the page on GitHub, then download and run chapter 8's notebook from the textbook |
 
 ## Build
 
@@ -44,45 +44,30 @@ one changes, rebuild it with `make -B week-NN/NAME.ipynb`. `make -B pdf`
 redraws the `_annotated.tex` figures too, and their PDFs change only in
 their dates, so restore them with `git checkout` rather than commit them.
 
-## A notebook students run
+## A setup page
 
-When the point of a handout is that students run code on their own
-computers, such as setting up software, write it as a notebook, not as a
-PDF of code to copy. Week 8 is the example: `week-08/selenium-setup.ipynb`,
-and the page that goes with it, `week-08/README.md`. Each step of the
-notebook is a markdown cell saying what it does, then a code cell that
-fixes what it can and ends with a line starting **OK** or **FIX**, saying
-what to do next.
+When students must install or check software before a lab, put the code in
+the chapter's own notebook, in the textbook, and write a page here that gets
+them to it. Don't make a PDF of code to copy, and don't make a second
+notebook that repeats the chapter's cells. Week 8 is the example:
+`week-08/README.md` takes students to chapter 8's notebook. That notebook's
+"Setting Up Selenium" installs Selenium and Selenium Manager in a cell of
+its own, then checks each step before Chrome opens.
 
-- **A notebook can't tell students how to open it.** Pair it with a page
-  that GitHub shows when they open the folder. Week 8's page takes a
-  student from Anaconda as installed to the notebook, in clicks:
-  - the words they'll meet;
-  - GitHub's **Download raw file** button;
-  - Jupyter from Anaconda Navigator, and finding the file in it;
-  - running cells;
-  - installing from a terminal, if the notebook can't;
-  - chapter 8's own notebook;
-  - a table of what to do when something goes wrong.
 - **Start where students are.** Assume Anaconda as installed, nothing
-  activated, and no terminal. Week 8's notebook installs Selenium in a cell
-  of its own, `%pip install selenium`, and explains it there. `%pip`
-  installs into whatever Python runs Jupyter, so the notebook works without
-  the course's `webdata` environment, and in `webdata` too.
-- **Say up front what won't work.** The first cell says what fails on a
-  fresh computer, and why, before the first step.
-- **Walk it as a student would.** Week 8's was tested in a real Jupyter in
-  a browser, with the clicks the page describes, in a Python with only
-  Jupyter. Then chapter 8's own notebook was run on the same Python, through
-  "Starting the Browser".
-- **Test the failures too.** Each FIX was tested by breaking that step on
-  purpose. For week 8, those were no network for `pip`, Selenium Manager's
-  downloads blocked, an old `chromedriver` on the `PATH`, and the browser
-  started with the earlier steps skipped.
-- **Commit it without outputs.** Edit it in Jupyter, then choose **Kernel →
-  Restart Kernel and Clear Outputs of All Cells** before you save, so the
-  file shows no one's paths. `make` doesn't build it, and CI doesn't check
-  it.
+  activated, and no terminal. Week 8's page covers:
+  - the words students will meet;
+  - GitHub's **Download raw file** button;
+  - opening Jupyter from Anaconda Navigator, and finding the file in it;
+  - running cells and restarting the kernel;
+  - what each setup cell prints when it works;
+  - installing from a terminal, if the notebook can't;
+  - a table of what to do when something goes wrong.
+- **Say up front what won't work.** The page's first paragraph says that
+  chapter 8's browser code won't run until Selenium is installed.
+- **Walk it as a student would.** Test the page's clicks in a real Jupyter
+  in a browser, in a Python that has only what a fresh Anaconda has. Then
+  run the chapter's cells there.
 
 ## Writing a handout
 
