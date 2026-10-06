@@ -4,10 +4,10 @@ Markdown handouts (`common/*.md`, `week-01/setup.md`, `week-04/rss-feeds.md`)
 are read on GitHub as they are. Handouts that walk through screens are
 written in LaTeX with `common/handout.cls` and built to a PDF only: week 7's
 three Friday activities, `week-07/triage-an-issue.tex`,
-`week-07/review-a-pull-request.tex`, and `week-07/issue-to-pull-request.tex`,
-and week 8's `week-08/selenium-setup.tex`, whose code is chapter 8's and
-whose figures are screenshots of it running. Code handouts are written once
-in Quarto markdown and built two ways:
+`week-07/review-a-pull-request.tex`, and `week-07/issue-to-pull-request.tex`.
+Week 8's *Set up Selenium*, `week-08/selenium-setup.ipynb`, is a notebook and
+nothing else (see "A notebook students run" below). Code handouts are written
+once in Quarto markdown and built two ways:
 
 - a **PDF** in the style of the slide frames (`common/handout.cls`: CU-gold
   frame bars, the decks' blocks and colors), with every output printed;
@@ -18,7 +18,7 @@ in Quarto markdown and built two ways:
 |---|---|
 | `week-06/oscars-cards-to-rows.qmd` | `week-06/oscars-cards-to-rows.pdf`, `week-06/oscars-cards-to-rows.ipynb` |
 | `week-07/*.tex` (three) | a PDF each, no notebook |
-| `week-08/selenium-setup.tex` | `week-08/selenium-setup.pdf`, no notebook (the cells are chapter 8's) |
+| `week-08/selenium-setup.ipynb` | nothing: students download and run the notebook itself |
 
 ## Build
 
@@ -42,6 +42,30 @@ changes: a figure the textbook's `sync` copied there again, or an
 one changes, rebuild it with `make -B week-NN/NAME.ipynb`. `make -B pdf`
 redraws the `_annotated.tex` figures too, and their PDFs change only in
 their dates, so restore them with `git checkout` rather than commit them.
+
+## A notebook students run
+
+When the point of a handout is that students run code on their own
+computers, such as setting up software, write it as a notebook, not as a
+PDF of code to copy. `week-08/selenium-setup.ipynb` is the example. Each
+step is a markdown cell saying what it does, then a code cell that fixes
+what it can and ends with a line starting **OK** or **FIX**, saying what to
+do next.
+
+- **Start where students are.** Test it in a Python that has only what a
+  fresh Anaconda has. Week 8's notebook installs Selenium itself, with
+  `%pip`, into whatever Python runs Jupyter, so it works without the
+  course's `webdata` environment, and in `webdata` too.
+- **Say up front what won't work.** The first cell says what fails on a
+  fresh computer, and why, before the first step.
+- **Test the failures too.** Each FIX was tested by breaking that step on
+  purpose. For week 8, those were no network for `pip`, Selenium Manager's
+  downloads blocked, an old `chromedriver` on the `PATH`, and the browser
+  started with the earlier steps skipped.
+- **Commit it without outputs.** Edit it in Jupyter, then choose **Kernel →
+  Restart Kernel and Clear Outputs of All Cells** before you save, so the
+  file shows no one's paths. `make` doesn't build it, and CI doesn't check
+  it.
 
 ## Writing a handout
 
