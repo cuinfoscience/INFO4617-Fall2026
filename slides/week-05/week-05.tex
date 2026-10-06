@@ -135,7 +135,7 @@
         \item What you see is the ``document object model'' --- the page \emph{after} JavaScript finished making it look nicer.
         \item ``View Source'' shows the original bytes --- if an element is in the Inspector but missing from \texttt{requests.get(url).text}, JavaScript put it there.
         \item \textbf{Hover} a node to highlight it on the page
-        \item Right-click a node for \textbf{Copy selector} / \textbf{Copy XPath} --- a working starting point for \texttt{soup.select()}, though often longer than it needs to be.
+        \item Right-click a node for \textbf{Copy selector}: a CSS selector to start a \texttt{soup.select()} from, though often longer than it needs to be. \textbf{Copy XPath} is for Selenium (Ch.~8) or \texttt{lxml}: \texttt{select()} can't read XPath.
         \item Edits here are local and temporary --- safe to delete a cookie banner and see the structure beneath.
     \end{itemize}
 
