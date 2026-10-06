@@ -4,7 +4,9 @@ Markdown handouts (`common/*.md`, `week-01/setup.md`, `week-04/rss-feeds.md`)
 are read on GitHub as they are. Handouts that walk through screens are
 written in LaTeX with `common/handout.cls` and built to a PDF only: week 7's
 three Friday activities, `week-07/triage-an-issue.tex`,
-`week-07/review-a-pull-request.tex`, and `week-07/issue-to-pull-request.tex`.
+`week-07/review-a-pull-request.tex`, and `week-07/issue-to-pull-request.tex`;
+and week 8's `week-08/revise-a-pull-request.tex`, which answers a review on
+the same pull request.
 Week 8's *Set up Selenium for chapter 8* is a page, `week-08/README.md`. It
 takes students to chapter 8's own notebook, whose first Selenium cells
 install and check everything (see "A setup page" below). Code handouts are
@@ -19,6 +21,7 @@ written once in Quarto markdown and built two ways:
 |---|---|
 | `week-06/oscars-cards-to-rows.qmd` | `week-06/oscars-cards-to-rows.pdf`, `week-06/oscars-cards-to-rows.ipynb` |
 | `week-07/*.tex` (three) | a PDF each, no notebook |
+| `week-08/revise-a-pull-request.tex` | a PDF, no notebook |
 | `week-08/README.md` | nothing: students read the page on GitHub, then download and run chapter 8's notebook from the textbook |
 
 ## Build
