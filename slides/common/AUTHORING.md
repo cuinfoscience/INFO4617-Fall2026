@@ -105,8 +105,7 @@ screenshot AAR, now in the textbook repo at
   takes space and says nothing about the page. Run Chrome with
   `--disable-infobars`: the textbook's `tools/shots` does, and fails a
   capture with an infobar. The one exception is a screenshot whose subject is
-  the bar itself, week 08's `selenium_browser.png`, on the slides and, as the
-  same file, in week 8's handout *Set up Selenium*.
+  the bar itself, week 08's `selenium_browser.png`, on the slides.
 
 **How much a screenshot shows** (decided 2026-09-24, P1-5; restated the same
 day as P0-1 of the

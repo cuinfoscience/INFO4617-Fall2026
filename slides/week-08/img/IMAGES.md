@@ -89,9 +89,8 @@ capture dates.
   automated testing" bar (not the classic "controlled by automated test
   software" banner, which regular Chrome shows). It is the one screenshot
   that keeps that bar, because the bar is the point of the slide; every
-  other screenshot is taken without it (`AUTHORING.md`). Week 8's handout
-  *Set up Selenium* prints the same file (`handouts/week-08/img/`). (Selenium:
-  a browser you drive with code)
+  other screenshot is taken without it (`AUTHORING.md`). (Selenium: a
+  browser you drive with code)
   - Remade 2026-09-25 (`week08-selenium-browser`): the top left 445×288 CSS
     pixels of an 800×600 window, its tab, address bar, and the bar through
     "is only for automated testing.", above the top of xkcd (comic #3302,
