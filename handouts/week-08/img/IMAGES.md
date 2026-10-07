@@ -4,6 +4,23 @@
 pull request in the browser. Every screen it shows is GitHub's, seen signed
 in, so every figure is a hand capture.
 
+## Captured
+
+The instructor captured these on 2026-10-06, signed in, in GitHub's dark
+theme, and saved them here without their metadata.
+
+| File | Handout | Shows |
+|---|---|---|
+| `pr-suggestion.png` | Step 2 | The suggestion on the "Netwrok" line, with **Apply suggestion** and **Add suggestion to batch** (763 px wide). |
+| `pr-comment.png` | Step 3 | The comment on the `curl` line in **Files changed**: "Please give the flag's long form too…". |
+| `pr-conflict-editor.png` | Step 4 | The conflict editor: **1 conflict**, the gray **Mark as resolved**, the three **Accept** links, and lines 709–713. |
+
+The captures corrected the handout's labels. GitHub's button is now
+**Apply suggestion**, which opens a commit box; it was **Commit
+suggestion**. The conflict editor adds **Accept current change**,
+**Accept incoming change**, and **Accept both changes** above each conflict,
+and keeps **Mark as resolved** gray until no marker line is left.
+
 ## To capture by hand
 
 Each figure shows textbook #228, the instructor's demonstration pull request
@@ -23,9 +40,7 @@ number, and is left out until then.
 
 | File | Handout | Screen and state |
 |---|---|---|
-| `pr-suggestion.png` | Step 2 | The **Conversation** tab of #228, at the comment on the "Netwrok" line: the suggestion's red and green lines, with **Commit suggestion** and **Add suggestion to batch** under them. Nothing clicked. |
 | `pr-edit-commit.png` | Step 3 | After **Files changed** → **⋯** → **Edit file** on `ch-05-protocols.qmd`, and an edit to the `curl` line: the **Commit changes** dialog, with a message typed and **Commit directly to the `demo/week08-revise` branch** selected. Cancel; commit nothing. |
-| `pr-conflict-editor.png` | Step 4 | After **Resolve conflicts**: GitHub's conflict editor, with the three marker lines around the two versions of the `curl` line, and **Mark as resolved** in view. Resolve nothing. |
 | `pr-rerequest.png` | Step 5 | The right-hand sidebar's **Reviewers** section, with the pointer on the circular arrows, **Re-request review**. On #228, the author is also the reviewer, so the arrows may not show. If they don't, capture this one from another pull request of your own after someone else has reviewed it. |
 
 For each capture:
