@@ -13,6 +13,11 @@ for every Friday: triage an issue (easy), review a pull request (medium), and
 issue to pull request (hard). Each has a step-by-step handout in
 [`handouts/week-07/`](../../handouts/week-07/). Students don't resolve
 conflicts: the instructor does, after class.
+For week 8's Friday, October 9, the class split into three groups: issue to
+pull request, pull request to merged, and a new Chapter 8 pull request. Its
+authors now resolve their own conflicts, and the textbook has chapter and
+status labels:
+[`2026-10-09-backlog-sprint-run-of-show.md`](2026-10-09-backlog-sprint-run-of-show.md).
 The plan was proposed on 2026-09-24. It carries out the maintainer's decision
 that students' pull requests on the textbook merge after a code-review standup
 in class on a Friday (the textbook's

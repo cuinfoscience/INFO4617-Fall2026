@@ -10,9 +10,10 @@ On a slide shown 1,920 pixels wide, text should reach 16 pixels
 (`slides/common/AUTHORING.md`). Five screenshots were remade on 2026-09-25
 to reach it: `requests_vs_browser.png`, `js_off.png`, `playwright_home.png`,
 `selenium_browser.png`, and `codegen.png`, whose text had come to about 6 to
-11 pixels. `network_json.png`, retaken on 2026-09-24, reaches 23. One still
-falls short and waits: `pr_review.png`, for a hand capture (the textbook's
-course recipe `pr-review`).
+11 pixels. `network_json.png`, retaken on 2026-09-24, reaches 23.
+`pr_review.png`, which fell short, left the deck on 2026-10-07 with its
+Friday frame; `pr_suggestion.png`, a hand capture from the week 8 handout,
+took its place (see "Removed" and "Copied from the week 8 handout").
 
 ## How the images were made
 
@@ -120,17 +121,6 @@ capture dates.
 - `xkcd_inspect.png` -- DevTools Elements panel after right-click > Inspect on
   xkcd's comic: the selected `<img>` with its `title` (hover joke) and `alt`
   attributes. (Read attributes, then act like a user)
-- `pr_review.png` -- the public "Files changed" view of textbook PR #129
-  (the Chapter 8 expansion this deck was built with). It shows the PR header,
-  Checks and Files-changed tabs, the file tree, and an image diff; GitHub
-  collapses the large `.qmd` diff for anonymous viewers. No student work is
-  shown. (Improving Chapter 8 together)
-  - Too small on its slide: 1,300 pixels across in a 35% column shows it at
-    45% of its size on screen. The retake is a hand capture, because a cloud
-    session reaches github.com only for its own repositories and a review
-    comment needs a signed-in account: the textbook's course recipe
-    `pr-review` gives the steps, and one image serves weeks 1, 8, and 13.
-
 To retake one of the 2026-09-22/23 images by hand, open the page in Chrome
 and screenshot it; the DevTools shots need the panel docked right at about
 1680x1000.
@@ -149,11 +139,32 @@ suggests a meme; swap in whatever lands better, keeping the filename.
 - `meme_is_this_dynamic.png` -- Closing activity (suggested: "Is this a
   pigeon?" relabeled "Is this a dynamic page?").
 
+## Copied from the week 8 handout
+
+- `pr_suggestion.png` -- a review suggestion on textbook PR #228, the
+  instructor's demonstration pull request: the comment "Typo: "Netwrok"
+  should be "Network"", the suggested change on line 703, and **Apply
+  suggestion**. (Answer your review)
+  - A byte-for-byte copy of `handouts/week-08/img/pr-suggestion.png`, which
+    the instructor captured on 2026-10-06, signed in, in GitHub's dark theme;
+    `handouts/week-08/img/IMAGES.md` records the capture. It shows the
+    instructor's account and no student's.
+  - 763×255 pixels at one image pixel per CSS pixel; its code is 12 pixels
+    (a 9-pixel ascender height, measured). The frame's 62% column shows it at
+    1.37 times its size, so the code comes to 16.4 pixels on a slide 1,920
+    pixels wide. A 60% column would show it at 15.9.
+
 ## Removed
 
 `infinite_scroll.png` (a gray placeholder diagram) was dropped: the
 infinite-scroll lab frame now points back to Monday's Network-tab check,
 which shows the same scroll page's JSON at a legible size.
+
+`pr_review.png` (Friday), the public "Files changed" view of textbook PR
+#129, was deleted with its `stubs.tsv` row on 2026-10-07, when the Friday
+section became the backlog sprint and no frame used it. It was too small on
+its slide anyway (1,300 pixels across in a 35% column). Week 7 dropped its
+copy the same way on 2026-10-02.
 
 ## Copied by tools/shots
 
@@ -191,5 +202,5 @@ between the two markers; the notes above are safe.
 | `meme_captain_now.png` | 1000x750 | Meme: Captain Phillips, "Look at me. I am the captain now." -- an AI agent taking the wheel of your browser |
 | `meme_is_this_dynamic.png` | 1000x750 | Meme: "Is this a pigeon?" relabeled "Is this a dynamic page?" -- closing activity, Do you need a browser? |
 | `xkcd_inspect.png` | 555x300 | Screenshot: Chrome DevTools Elements panel on xkcd.com with the comic img selected -- title (hover joke) and alt attributes |
-| `pr_review.png` | 1300x820 | Screenshot: GitHub "Files changed" view of a textbook pull request (Web-Data-Science-Book #129) |
+| `pr_suggestion.png` | 763x255 | Screenshot: a review suggestion on textbook PR #228 (the instructor's demonstration), with Apply suggestion, signed in, dark theme (2026-10-06) |
 <!-- stubs:end -->
