@@ -783,24 +783,32 @@ finally:
 % textbook's REST API on October 7, 2026 (rechecked October 8), paged to the end. The queries are in
 % docs/plans/2026-10-09-backlog-sprint-run-of-show.md. Recount before class.
 \begin{frame}{Since last Friday}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}\small 
             \textbf{19} of your pull requests merged, 18 of them on Monday night. \textbf{11} closed without merging.
+            \begin{itemize}
+                \item \textbf{If my PR wasn't merged, did I lose credit?} --- no penalty!
+            \end{itemize}
 
             \medskip
 
             \textbf{35} open pull requests got a review that lists the changes each one needs.
+            \begin{itemize}
+                \item \textbf{If my issue is still open, did I lose credit?} --- no penalty!
+            \end{itemize}
 
             \medskip
 
             On Wednesday, \textbf{48} issues got a comment: still a problem or not, how big a fix, and where to make it. \textbf{13} issues closed.
+            \begin{itemize}
+                \item \textbf{If I got a comment from you, did I lose credit?} --- no penalty!
+            \end{itemize}
 
             \medskip
 
             I did this with \textbf{Claude Code}, an AI coding agent. It checked each pull request and issue against the current chapter, and wrote the reviews and comments. Each one says so at the bottom.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Open on the textbook}
                 \small
                 \begin{tabular}{@{}lrr@{}}
                      & Oct.~2 & Oct.~8 \\
@@ -808,7 +816,6 @@ finally:
                     Your pull requests & 50 & 39 \\
                     Issues & 53 & 45 \\
                 \end{tabular}
-            \end{block}
         \end{column}
     \end{columns}
 \end{frame}
@@ -848,6 +855,58 @@ finally:
             \end{alertblock}
         \end{column}
     \end{columns}
+\end{frame}
+
+\begin{frame}{Two kinds of labels}
+    Every open issue and pull request on the textbook has one of each.
+
+    \medskip
+
+    \small
+    \textbf{An issue}\\
+    \texttt{needs triage} or \texttt{needs info} 
+    $\to$ \texttt{needs PR} $\to$ \texttt{has PR}
+
+    \medskip
+
+    \textbf{A pull request}\\
+    \texttt{needs review} $\to$ \texttt{changes requested} 
+    $\to$ \texttt{needs review} $\to$ \texttt{approved} $\to$ \textbf{merged}
+
+    \medskip
+    Each name starts with \texttt{status:}. When the work moves on, change the label.
+
+    \medskip
+
+    Find your chapter's open work: search the textbook's issues for \texttt{is:open label:ch-07}, with your chapter's number.
+\end{frame}
+
+\begin{frame}{Labels say what's next}
+    What each status means, who acts on it, and when to set it.
+
+    \medskip
+
+    {\small\setlength{\tabcolsep}{4pt}%
+    \begin{tabular}{@{}llll@{}}
+        \toprule
+        \texttt{status:} & It means & Who acts & Set it when you \\
+        \midrule
+        \texttt{needs triage} & Nobody has checked it yet & anyone & \\
+        \texttt{needs info} & A question waits for an answer & whoever filed it & \\
+        \texttt{needs PR} & Still a problem; no pull request yet & anyone & \\
+        \texttt{has PR} & A pull request works on it & that pull request's reviewer & open its pull request \\
+        \midrule
+        \texttt{needs review} & It waits for a reviewer & anyone but its author & open it, or push a revision \\
+        \texttt{changes requested} & A review asked for changes & its author & request changes \\
+        \texttt{approved} & It is ready to merge & me & approve it \\
+        \bottomrule
+    \end{tabular}}
+
+    \medskip
+
+    {\footnotesize Find them all on the \textbf{Textbook backlog} board, in the textbook's \textbf{Projects} tab. Click a label on its left to filter.
+
+    On the boards that follow, (small) is the fix's size; (conflict) means the author resolves one first; (new) means no review yet; (for \#15) means it works on issue \#15.}
 \end{frame}
 
 \begin{frame}{Three groups: pick one}
@@ -916,82 +975,6 @@ finally:
             \end{alertblock}
         \end{column}
     \end{columns}
-\end{frame}
-
-\begin{frame}{Two kinds of labels}
-    Every open issue and pull request on the textbook has one of each.
-
-    \medskip
-
-    \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
-            \begin{block}{Chapter: what it's about}
-                \footnotesize
-                \begin{tabular}{@{}l@{\hspace{0.5em}}l@{\hspace{1em}}l@{\hspace{0.5em}}l@{}}
-                    \texttt{ch-01} & Introduction & \texttt{ch-09} & PDFs \\
-                    \texttt{ch-02} & Ethics & \texttt{ch-10} & Wikipedia \\
-                    \texttt{ch-03} & The post-API age & \texttt{ch-11} & Government APIs \\
-                    \texttt{ch-04} & Data formats & \texttt{ch-12} & Platform APIs \\
-                    \texttt{ch-05} & Protocols & \texttt{ch-13} & AI APIs \\
-                    \texttt{ch-06} & Static pages & \texttt{ch-14} & Automation \\
-                    \texttt{ch-07} & Archived pages & \texttt{ch-15} & Research design \\
-                    \texttt{ch-08} & Dynamic pages & \texttt{whole book} & the rest \\
-                \end{tabular}
-
-                \medskip
-                \small Add your chapter's label to anything you open.
-            \end{block}
-        \end{column}
-        \begin{column}{0.44\textwidth}
-            \begin{block}{Status: what it needs next}
-                \small
-                \textbf{An issue}\\
-                \texttt{needs triage} or \texttt{needs info}\\
-                $\to$ \texttt{needs PR} $\to$ \texttt{has PR}
-
-                \medskip
-
-                \textbf{A pull request}\\
-                \texttt{needs review} $\to$ \texttt{changes requested}\\
-                $\to$ \texttt{needs review} $\to$ \texttt{approved} $\to$ merged
-
-                \medskip
-                Each name starts with \texttt{status:}. When the work moves on, change the label.
-            \end{block}
-        \end{column}
-    \end{columns}
-
-    \medskip
-
-    {\footnotesize Find your chapter's open work: search the textbook's issues for \texttt{is:open label:ch-07}, with your chapter's number.}
-\end{frame}
-
-\begin{frame}{Labels say what's next}
-    What each status means, who acts on it, and when to set it.
-
-    \medskip
-
-    {\small\setlength{\tabcolsep}{4pt}%
-    \begin{tabular}{@{}llll@{}}
-        \toprule
-        \texttt{status:} & It means & Who acts & Set it when you \\
-        \midrule
-        \texttt{needs triage} & Nobody has checked it yet & anyone & \\
-        \texttt{needs info} & A question waits for an answer & whoever filed it & \\
-        \texttt{needs PR} & Still a problem; no pull request yet & anyone & \\
-        \texttt{has PR} & A pull request works on it & that pull request's reviewer & open its pull request \\
-        \midrule
-        \texttt{needs review} & It waits for a reviewer & anyone but its author & open it, or push a revision \\
-        \texttt{changes requested} & A review asked for changes & its author & request changes \\
-        \texttt{approved} & It is ready to merge & me & approve it \\
-        \bottomrule
-    \end{tabular}}
-
-    \medskip
-
-    {\footnotesize Find them all on the \textbf{Textbook backlog} board, in the textbook's \textbf{Projects} tab. Click a label on its left to filter.
-
-    On the boards that follow, (small) is the fix's size; (conflict) means the author resolves one first; (new) means no review yet; (for \#15) means it works on issue \#15.}
 \end{frame}
 
 \begin{frame}{Turn an issue into a pull request}
@@ -1287,35 +1270,6 @@ finally:
 
     {\footnotesize Two are open already and need a review: \#238 \texttt{page\_source} is re-serialized HTML, and \#239 session cookies after a profile restart.}
 
-\end{frame}
-
-\begin{frame}{A good revision, and a good review}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \begin{block}{A strong PR}
-                \begin{itemize}\small
-                    \item One focused change, clearly titled
-                    \item Explains the problem it fixes
-                    \item Builds (\texttt{quarto render}) without errors
-                    \item Matches the book's voice and notation
-                    \item Discloses any AI assistance
-                \end{itemize}
-            \end{block}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{A strong review}
-                \begin{itemize}\small
-                    \item Runs / reads the change, not just skims
-                    \item Names specifics (line, claim, code)
-                    \item Separates ``must fix'' from ``nice to have''
-                    \item Is generous --- assume good faith
-                    \item Ends with a clear verdict
-                \end{itemize}
-            \end{block}
-        \end{column}
-    \end{columns}
-    \medskip
-    \centering\small Next week: \textbf{Extracting data from PDFs} --- when the data isn't on a web page at all.
 \end{frame}
 
 % =========================================================================
