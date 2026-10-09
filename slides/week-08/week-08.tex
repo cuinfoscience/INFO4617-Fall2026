@@ -765,6 +765,20 @@ finally:
 \section{Friday · Clearing the Backlog}
 % =========================================================================
 
+\begin{frame}{Daily note questions}\small
+    \begin{itemize}
+        \item \textbf{XHR part confusing} --- Need to click both the JS and XHR tabs to see the microservice API requests
+        \item \textbf{Ambiguous about whether to scrape} --- Make sure to have an ironclad research or public interest case
+        \item \textbf{Scraping a site after login} --- Low and slow like a human, random wait intervals, Selenium/Playwright, \textit{etc}.
+        \item \textbf{Scraping in background} --- we will cover best practices for automated scraping in last week
+        \item \textbf{Use other browsers besides Chrome?} --- Check section 8.3.6 in textbook
+        \item \textbf{Chrome browser history?} --- history should only stay in the driver browser, unless you log into the browser
+        \item \textbf{How to navigate sites?} --- sitemaps, use inspect and copy XPATH for buttons, otherwise simulate scrolling
+        \item \textbf{Screenshotting code in notebook?} --- theoretically could \texttt{driver.get('http://localhost:8888/')} 
+        \item \textbf{Why use headless?} --- prototype with UI and then offload to script/AI agent to run in background
+    \end{itemize}
+\end{frame}
+
 % The counts on the next two frames, and the boards after them, come from the
 % textbook's REST API on October 7, 2026 (rechecked October 8), paged to the end. The queries are in
 % docs/plans/2026-10-09-backlog-sprint-run-of-show.md. Recount before class.
@@ -904,8 +918,56 @@ finally:
     \end{columns}
 \end{frame}
 
+\begin{frame}{Two kinds of labels}
+    Every open issue and pull request on the textbook has one of each.
+
+    \medskip
+
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{block}{Chapter: what it's about}
+                \footnotesize
+                \begin{tabular}{@{}l@{\hspace{0.5em}}l@{\hspace{1em}}l@{\hspace{0.5em}}l@{}}
+                    \texttt{ch-01} & Introduction & \texttt{ch-09} & PDFs \\
+                    \texttt{ch-02} & Ethics & \texttt{ch-10} & Wikipedia \\
+                    \texttt{ch-03} & The post-API age & \texttt{ch-11} & Government APIs \\
+                    \texttt{ch-04} & Data formats & \texttt{ch-12} & Platform APIs \\
+                    \texttt{ch-05} & Protocols & \texttt{ch-13} & AI APIs \\
+                    \texttt{ch-06} & Static pages & \texttt{ch-14} & Automation \\
+                    \texttt{ch-07} & Archived pages & \texttt{ch-15} & Research design \\
+                    \texttt{ch-08} & Dynamic pages & \texttt{whole book} & the rest \\
+                \end{tabular}
+
+                \medskip
+                \small Add your chapter's label to anything you open.
+            \end{block}
+        \end{column}
+        \begin{column}{0.44\textwidth}
+            \begin{block}{Status: what it needs next}
+                \small
+                \textbf{An issue}\\
+                \texttt{needs triage} or \texttt{needs info}\\
+                $\to$ \texttt{needs PR} $\to$ \texttt{has PR}
+
+                \medskip
+
+                \textbf{A pull request}\\
+                \texttt{needs review} $\to$ \texttt{changes requested}\\
+                $\to$ \texttt{needs review} $\to$ \texttt{approved} $\to$ merged
+
+                \medskip
+                Each name starts with \texttt{status:}. When the work moves on, change the label.
+            \end{block}
+        \end{column}
+    \end{columns}
+
+    \medskip
+
+    {\footnotesize Find your chapter's open work: search the textbook's issues for \texttt{is:open label:ch-07}, with your chapter's number.}
+\end{frame}
+
 \begin{frame}{Labels say what's next}
-    Every open issue and pull request has a chapter label, \texttt{ch-01} to \texttt{ch-15} or \texttt{whole book}, and one status.
+    What each status means, who acts on it, and when to set it.
 
     \medskip
 
