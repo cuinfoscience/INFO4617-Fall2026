@@ -40,22 +40,28 @@
 \begin{document}
 \maketitle
 
-\begin{frame}{What you do}
+\begin{frame}{What you'll do}
   \begin{columns}[T]
     \begin{column}{0.57\textwidth}
-      A review of your pull request asks for changes. You make them on the
-      same pull request. A pull request follows its branch: each commit you
-      add to the branch shows in the pull request at once, next to the
-      comments it answers. A new pull request would lose that history, and
-      the reviewer would have to start again.
+      \setlength{\parskip}{4pt}%
+      Your pull request has a review, and the reviewer asked for changes.
+      That's a normal step on the way to merging, and it doesn't mean your
+      pull request was rejected.
 
-      You do all of it in the browser, with one of three tools. The table
-      on the right says which tool fits which kind of comment.
+      You make the changes on the same pull request. A pull request follows
+      its branch, so each commit you add to the branch shows up in the pull
+      request right away, next to the comment it answers. A new pull request
+      would lose that conversation, and your reviewer would have to start
+      over.
 
-      The example on each page is textbook pull request \#228, a
-      demonstration that the instructor set up. Its base is a copy of
-      \texttt{main} named \texttt{demo/week08-base}. On your pull request,
-      the base is \texttt{main}.
+      You'll do all of it in your browser, with three tools. The box on the
+      right matches each kind of comment to its tool.
+
+      The screenshots come from textbook pull request \#228, a practice pull
+      request that the instructor set up. Its base branch,
+      \texttt{demo/week08-base}, is a copy of \texttt{main}. So wherever a
+      screenshot says \texttt{demo/week08-base}, your pull request says
+      \texttt{main}.
     \end{column}
     \begin{column}{0.39\textwidth}
       \begin{block}{Which tool for which comment}
@@ -67,19 +73,23 @@
           The notice \textit{This branch has conflicts} & Step 4: \textbf{Resolve conflicts}
         \end{tabular}
       \end{block}
-      \begin{alertblock}{Do not}
+      \begin{alertblock}{Please don't}
         \small
         \begin{itemize}
-          \item open a new pull request, or close this one;
-          \item click \textbf{Merge pull request};
-          \item change a file in \texttt{notebooks/} or \texttt{images/};
-          \item make changes that the review did not ask for.
+          \item open a new pull request, or close this one: the conversation
+            lives here;
+          \item click \textbf{Merge pull request}: the instructor merges
+            after Friday's code review;
+          \item change a file in \texttt{notebooks/} or \texttt{images/}:
+            scripts make those;
+          \item fix things the review didn't ask about. Spotted another
+            problem? Save it for a new pull request.
         \end{itemize}
       \end{alertblock}
       \begin{exampleblock}{In class}
-        \small Work in pairs, on one partner's pull request. One partner
-        works in the browser, and the other reads this handout aloud. Then
-        change roles.
+        \small Work in pairs, on one partner's pull request. One of you
+        works in the browser while the other reads this handout aloud. Then
+        switch.
       \end{exampleblock}
     \end{column}
   \end{columns}
@@ -89,33 +99,43 @@
   \begin{enumerate}
     \item Sign in to GitHub, and open your pull request
       (\url{https://github.com/cuinfoscience/Web-Data-Science-Book/pulls}).
-    \item On the \textbf{Conversation} tab, read the review's summary, then
-      each comment under it. A comment on a line shows the line above it.
-    \item Make a list: one item for each change the review asks for, and
-      the tool from the table on page~1. \#228's review asks for two: fix a
-      typo (a suggestion), and add \texttt{-{}-verbose} to the
-      \texttt{curl} line (a comment). Its conflict is a third item.
-    \item If you don't understand a comment, or you disagree, reply in its
-      thread before you change anything. Say what you think, and why.
+      To list only yours, add \texttt{author:@me} to the search box above
+      the list.
+    \item On the \textbf{Conversation} tab, read the review's summary first,
+      then each comment under it. A comment on a line shows that line above
+      it. If GitHub hides part of a long conversation behind a link, click
+      it, so you don't miss a comment.
+    \item Make a list: one item for each change the review asks for, with
+      its tool from the box on page~1. \#228's review asks for two changes:
+      fix a typo (a suggestion), and add \texttt{-{}-verbose} to the
+      \texttt{curl} line (a comment). Its conflict makes a third.
+    \item If a comment doesn't make sense to you, or you disagree with it,
+      reply in its thread before you change anything. Say what you think,
+      and why. Questions and polite disagreement are a normal part of a
+      review.
   \end{enumerate}
 \end{frame}
 
 \begin{frame}{2 · A suggestion: Apply suggestion}
-  A reviewer who writes the exact new words puts them in a
-  \textbf{suggestion} box. GitHub shows it as the old line in red and the
-  new line in green, with a button under it.
+  When a reviewer writes out the exact new words, they put them in a
+  \textbf{suggestion} box: the old line in red, the new line in green, and a
+  button under them. You can accept it in a few clicks.
   \begin{enumerate}
-    \item Check the green line. It replaces the red line exactly as shown.
+    \item Read the green line first. Applying it replaces the red line
+      exactly as shown. If the green line isn't quite right, don't apply
+      it: make the change yourself with \textbf{Edit file} (step 3), and
+      say so in the thread.
     \item Click \textbf{Apply suggestion}. A box opens under the button.
       Write a commit message that says what changed, for example
-      \texttt{Ch. 5: fix the spelling of Network}. Click \textbf{Commit
-      changes}.
-    \item The comment now says the suggestion was committed, and the
-      pull request shows one more commit.
+      \texttt{Ch. 5: fix the spelling of Network}, and click
+      \textbf{Commit changes}.
+    \item The comment now says the suggestion was committed, and the pull
+      request shows one more commit. That's all: the change is already on
+      your branch, with nothing else to save.
   \end{enumerate}
-  If a review has several suggestions, click \textbf{Add suggestion to
-  batch} on each one, then commit the batch once, from the button that
-  counts the suggestions in it. That makes one commit for all of them.
+  Several suggestions? Click \textbf{Add suggestion to batch} on each one,
+  then commit them all at once from the button that counts them. You get
+  one commit instead of several.
   \handcapture{pr-suggestion.png}{Screenshot of a review comment on pull
     request 228: Typo, Netwrok should be Network. Under it, a box labeled
     Suggested change shows line 703 with Netwrok in red and line 703 with
@@ -125,7 +145,8 @@
 \end{frame}
 
 \begin{frame}{3 · A comment: Edit file on your branch}
-  A comment without a suggestion box says in words what to change.
+  A comment without a suggestion box tells you in words what to change, so
+  you make the change yourself.
   \handcapture{pr-comment.png}{Screenshot of the Files changed tab of pull
     request 228: the curl line, old in red and new in green, and under it a
     comment that reads: Please give the flag's long form too, so readers can
@@ -133,21 +154,24 @@
     \texttt{curl} line, in \textbf{Files changed}, captured in October
     2026. It asks for a change in words, so you make it yourself.}
   \begin{enumerate}
-    \item Click \textbf{Files changed}. Find the file, and click its
-      \textbf{$\cdots$} menu at the right of the file's name. Click
+    \item Click \textbf{Files changed}. Find the file, click its
+      \textbf{$\cdots$} menu at the right of the file's name, and click
       \textbf{Edit file}.
-    \item Check the top of the editor. It names your pull request's branch,
-      not \texttt{main}. (\#228's branch is
-      \texttt{demo/week08-revise}.) If it says \texttt{main}, or asks you
-      to fork the repository, you opened the file from the wrong page: go
-      back to your pull request's \textbf{Files changed}.
-    \item Press \texttt{Ctrl+F} (\texttt{Cmd+F} on a Mac) in the editor, and
+    \item Before you type anything, check the top of the editor. It should
+      name your pull request's branch, not \texttt{main}. (\#228's branch is
+      \texttt{demo/week08-revise}.) It's easy to land in the wrong copy of
+      the file here. If the editor says \texttt{main}, or asks you to fork
+      the repository, you opened the file from the book's page, not from
+      your pull request: close the editor and start again from your pull
+      request's \textbf{Files changed}.
+    \item Press \texttt{Ctrl+F} (\texttt{Cmd+F} on a Mac) in the editor to
       find the line. Make the change that the comment asks for, and nothing
-      else. Click \textbf{Preview}, and compare the red and green lines.
-    \item Click \textbf{Commit changes…}. Write a commit message, and keep
-      \textbf{Commit directly to the} \textit{your-branch} \textbf{branch}
-      selected. Do not create a new branch: a new branch would need a new
-      pull request. Click \textbf{Commit changes}.
+      else. Click \textbf{Preview} to compare the red and green lines.
+    \item Click \textbf{Commit changes…}, which opens a dialog. Write a
+      commit message, and leave \textbf{Commit directly to the}
+      \textit{your-branch} \textbf{branch} selected. Don't make a new
+      branch: a new branch would need a new pull request. Then click
+      \textbf{Commit changes} in the dialog.
   \end{enumerate}
   \handcapture{pr-edit-commit.png}{Screenshot of the Commit changes dialog
     after editing a file of pull request 228: a commit message, and the
@@ -157,13 +181,15 @@
 \end{frame}
 
 \begin{frame}{4 · A conflict: Resolve conflicts}
-  The bottom of the \textbf{Conversation} tab says \textit{This branch has
-  conflicts that must be resolved} when \texttt{main} changed the same lines
-  as your pull request after you opened it. GitHub can't choose between the
-  two versions, so you do. Resolve it when a review asks you to.
+  If \texttt{main} changed the same lines as your pull request after you
+  opened it, the bottom of the \textbf{Conversation} tab says \textit{This
+  branch has conflicts that must be resolved}. You didn't do anything
+  wrong: another change reached \texttt{main} first, and GitHub can't
+  choose between the two versions, so it asks you to. Resolve it when a
+  review asks you to.
   \begin{enumerate}
-    \item Click \textbf{Resolve conflicts}. GitHub opens an editor. At
-      the top, it counts the conflicts. Each conflict sits between three
+    \item Click \textbf{Resolve conflicts}. GitHub opens an editor and
+      counts the conflicts at the top. Each conflict sits between three
       marker lines:
   \end{enumerate}
 \begin{plain}
@@ -175,22 +201,27 @@
 \end{plain}
   \begin{enumerate}[resume]
     \item The first part is your branch's version, which GitHub calls the
-      \textit{current change}. The second is the base's (on your pull request,
-      \texttt{main}'s), the \textit{incoming change}. Above them, three
-      links each keep one side or both. Click \textbf{Accept both changes},
-      then edit the two lines into one line that keeps what each side
-      meant. For \#228, the base added \texttt{-I}, and the
-      review asked for \texttt{-{}-verbose}:
+      \textit{current change}. The second is the base's (on your pull
+      request, \texttt{main}'s), the \textit{incoming change}. If those
+      names seem backwards, remember that \textit{current} means yours. Above
+      the two parts, three links each keep one side or both. Click
+      \textbf{Accept both changes}, then edit the two lines into one line
+      that keeps what each side meant. For \#228, the base added
+      \texttt{-I}, and the review asked for \texttt{-{}-verbose}:
 \begin{plain}
 - `curl` manual, for `-v` (`--verbose`) and `-I`: <https://curl.se/docs/manpage.html>
 \end{plain}
     \item Check that no marker line (\texttt{<{}<{}<}, \texttt{===},
       \texttt{>{}>{}>}) is left. \textbf{Mark as resolved}, at the top
       right, stays gray until then. Click it, then \textbf{Commit merge}.
+      Your pull request gains a commit that merges the base into your
+      branch. That's expected.
   \end{enumerate}
   If the button is gray and says the conflict is \textit{too complex to
-  resolve in the web editor}, stop. Comment on your pull request that you
-  need help with a conflict, and the instructor will resolve it.
+  resolve in the web editor}, stop. The web editor can't handle every
+  conflict, and this one needs a different tool. Comment on your pull
+  request that you need help with a conflict, and the instructor will
+  resolve it.
   \handcapture{pr-conflict-editor.png}{Screenshot of GitHub's conflict editor
     for pull request 228. At the top: 1 conflict, and a gray Mark as resolved
     button. Lines 709 to 713 hold the conflict: the marker line for
@@ -207,17 +238,19 @@
   \begin{enumerate}
     \item Reply in each thread with what you did, for example
       \texttt{Done: added the long form.} Click \textbf{Resolve
-      conversation} under a thread when its change is made. Leave a thread
+      conversation} under a thread once its change is made. Leave a thread
       open if you disagreed and are waiting for an answer.
     \item In the right-hand sidebar, under \textbf{Reviewers}, click the
-      circular arrows beside the reviewer's name, \textbf{Re-request
-      review}. The reviewer gets a notice that your pull request is ready
-      again.
+      circular arrows beside your reviewer's name, \textbf{Re-request
+      review}. Your reviewer gets a notice that your pull request is ready
+      for another look. The pull request keeps saying \textit{Changes
+      requested} until they approve it, even after you've made every
+      change.
     \item Watch the checks at the bottom of the \textbf{Conversation} tab.
       They run again after each commit. A red \textbf{Notebook sync} is
-      normal for a change made in the browser. A red \textbf{Render} is
-      yours to fix: click \textbf{Details}, find the first \texttt{ERROR}
-      line, and fix it with step 3.
+      expected for a change made in the browser, and you don't need to fix
+      it. A red \textbf{Render} is yours to fix: click \textbf{Details},
+      find the first \texttt{ERROR} line, and fix it with step 3.
   \end{enumerate}
   \handcapture{pr-rerequest.png}{Screenshot of the Reviewers section of the
     pull request sidebar, with the pointer on the circular arrows button
@@ -226,49 +259,67 @@
 
   \begin{alertblock}{If your pull request came from your fork's main branch}
     \small
-    The pull request shows \textit{wants to merge into
-    cuinfoscience:main from your-name:main}. Then every commit you make on
-    your fork's \texttt{main} joins this pull request. Commit only the
-    review's changes there until it merges. Start your next change from a
+    You can tell because it says \textit{wants to merge into
+    cuinfoscience:main from your-name:main}. Every commit you make on your
+    fork's \texttt{main} joins this pull request, so commit only the
+    review's changes there until it merges, and start your next change on a
     new branch. If your fork offers \textbf{Sync fork}, click
     \textbf{Update branch}, never \textbf{Discard commits}: discarding
     deletes your pull request's commits.
   \end{alertblock}
 \end{frame}
 
-\begin{frame}{When something goes wrong}\relax
-  {\small
-  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.34\linewidth}%
-                  >{\raggedright\arraybackslash}p{0.62\linewidth}@{}}
-    \toprule
-    \textbf{You see} & \textbf{Do this}\\
-    \midrule
-    \textbf{Apply suggestion} is gray, or the comment says
-    \textit{Outdated} &
-      The line changed after the comment. Make the change with
-      \textbf{Edit file} (step 3).\\[3pt]
-    The editor names \texttt{main}, or GitHub asks to fork the repository &
-      You opened the file from the book, not from your pull request. Close
-      the editor without committing, and start step 3 from \textbf{Files
-      changed}.\\[3pt]
-    Your commit opened a new pull request &
-      You chose \textbf{Create a new branch}. Close the new pull request,
-      with a comment that names your first one. Make the change again on the
-      first pull request's branch.\\[3pt]
-    \textbf{Resolve conflicts} is gray &
-      The conflict is too complex for the web editor. Comment on your pull
-      request, and the instructor will resolve it.\\[3pt]
-    The checks say a workflow is \textit{awaiting approval} &
-      A pull request from a fork waits until the instructor approves its
-      checks. You need not do anything.\\[3pt]
-    You closed your pull request by mistake &
-      Click \textbf{Reopen pull request}, at the bottom of the
-      \textbf{Conversation} tab. Its branch and commits are still there.\\
-    \bottomrule
-  \end{tabular}\par}
+\begin{frame}{When something goes wrong}
+  Find what you see below. The arrow under it says what to do. Each of
+  these can be fixed, and none of them loses your work.
+  \begin{itemize}[itemsep=5pt,topsep=4pt]
+    \item \textbf{Apply suggestion} is gray, or the comment says
+      \textit{Outdated}.
+      \begin{itemize}[label=$\rightarrow$,topsep=1pt]
+        \item The line changed after the reviewer commented, so the
+          suggestion can't be applied. Make the change yourself with
+          \textbf{Edit file} (step 3).
+      \end{itemize}
+    \item The editor names \texttt{main}, or GitHub asks you to fork the
+      repository.
+      \begin{itemize}[label=$\rightarrow$,topsep=1pt]
+        \item You opened the file from the book, not from your pull
+          request. Close the editor without committing: nothing changes
+          until you commit. Start step 3 again from \textbf{Files changed}.
+      \end{itemize}
+    \item Your commit opened a new pull request.
+      \begin{itemize}[label=$\rightarrow$,topsep=1pt]
+        \item You chose \textbf{Create a new branch}. Close the new pull
+          request, with a comment that names your first one. Then make the
+          change again on the first pull request's branch.
+      \end{itemize}
+    \item \textbf{Resolve conflicts} is gray.
+      \begin{itemize}[label=$\rightarrow$,topsep=1pt]
+        \item The conflict is too complex for the web editor. Comment on
+          your pull request, and the instructor will resolve it.
+      \end{itemize}
+    \item Your pull request still says \textit{Changes requested} after
+      you've made every change.
+      \begin{itemize}[label=$\rightarrow$,topsep=1pt]
+        \item That label stays until your reviewer approves. Click
+          \textbf{Re-request review} (step 5), then give them time.
+      \end{itemize}
+    \item The checks say a workflow is \textit{awaiting approval}.
+      \begin{itemize}[label=$\rightarrow$,topsep=1pt]
+        \item Checks on a pull request from a fork wait until the
+          instructor approves them. You don't need to do anything.
+      \end{itemize}
+    \item You closed your pull request by mistake.
+      \begin{itemize}[label=$\rightarrow$,topsep=1pt]
+        \item Click \textbf{Reopen pull request}, at the bottom of the
+          \textbf{Conversation} tab. Its branch and commits are still
+          there.
+      \end{itemize}
+  \end{itemize}
 
   \medskip
-  \textbf{Next.} When the reviewer approves, the instructor merges your pull
-  request after the Friday code review. Answer any new comments the same way.
+  \textbf{What happens next.} When your reviewer approves, the instructor
+  merges your pull request after Friday's code review. If more comments
+  arrive before then, answer them the same way.
 \end{frame}
 \end{document}
