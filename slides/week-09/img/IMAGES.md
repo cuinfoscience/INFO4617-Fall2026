@@ -1,8 +1,8 @@
 # Images for `week-09`
 
-All six of the deck's images are real as of 2026-10-12. Two are copies made by
+All nine of the deck's images are real as of 2026-10-12. Six are copies made by
 the textbook's `tools/shots` (listed under "Copied by tools/shots" below); the
-other four are recorded here. Text in each reaches 16 pixels on a slide shown
+other three are recorded here. Text in each reaches 16 pixels on a slide shown
 1,920 pixels wide (`slides/common/AUTHORING.md`), at the width its frame shows
 it.
 
@@ -27,7 +27,7 @@ it.
 - `attendance_chart.png` -- members present at the roll call of each of the
   13 saved minutes (December 2000, 2018--2024), counted by hand (dark bars),
   beside what the slide's `extract_attendance()` returns (light bars).
-  (Case study --- council attendance)
+  (Case study 1: the obvious regex)
   - Drawn 2026-10-12 by `attendance_chart.py` (in this folder) with
     matplotlib 3.11.2 and pypdf 6.20.1:
     `python -I attendance_chart.py PATH/TO/data/ch-09 attendance_chart.png`,
@@ -41,12 +41,6 @@ it.
   - The slide's regex finds no "Present:" line in the seven meetings before
     2022, whose minutes say "were present" or "Those present were", and only
     5 of 9 names in the six after, because the list wraps onto a second line.
-- `extraction_pipeline.png` -- the five steps `PDFCorpusAnalyzer` runs on each
-  file. (Scale it --- a reusable corpus pipeline)
-  - Drawn with Graphviz 2.43.0 from `extraction_pipeline.dot`:
-    `dot -Tpng -Gdpi=150 extraction_pipeline.dot -o extraction_pipeline.png`.
-    Its smallest text, 13 points at 150 dpi, comes to 30 pixels in its
-    35% column.
 - `pr_suggestion.png` -- a review suggestion on textbook PR #228, the
   instructor's demonstration pull request, with **Apply suggestion**.
   (Improving Chapter 9 together)
@@ -62,7 +56,17 @@ it.
 deleted with its `stubs.tsv` row on 2026-10-12. Weeks 7 and 8 dropped theirs
 the same way; the Friday frame uses `pr_suggestion.png`.
 
+`extraction_pipeline.png` and its source, `extraction_pipeline.dot`, were
+deleted with their `stubs.tsv` row on 2026-10-12, when the "Scale it" frame was
+cut. Chapter 9 no longer builds a corpus pipeline; Wednesday's case studies use
+`open_comment.png` and `sales_use_tax.png` instead.
+
 ## Copied by tools/shots
+
+Widths of the copies, on a 1,920-pixel slide: `missing_totals_row.png`
+and `sales_use_tax.png` sit in 50% columns, 840 pixels, so their 16-pixel text
+(in an 800-pixel frame) comes to 16.8; `open_comment.png` in a 48% column, 16.1;
+`ocr_confidence.png` in a 46% column, where its 20-pixel figures come to 19.3.
 
 <!-- shots:begin: copies from the textbook's tools/shots, generated from shots.json; edits between these markers are replaced -->
 Copied here by the textbook's `tools/shots/run sync`; `tools/shots/run synced` checks them.
@@ -70,5 +74,9 @@ Copied here by the textbook's `tools/shots/run sync`; `tools/shots/run synced` c
 | File | Copy of | Captured | Source | How |
 |---|---|---|---|---|
 | `documentcloud.png` | `course/week09-documentcloud` (tools/shots/out/course/week09-documentcloud/20261012T180809Z.png, textbook `f5042a5`) | 2026-10-12 | https://www.documentcloud.org/home/ | tools/shots: Google Chrome for Testing 154.0.8037.92, 480×600 at 2× |
+| `missing_totals_row.png` | `ch-09/missing-totals-row` (images/ch-09/missing-totals-row.png, textbook `5b3caf2`) | 2026-10-06 | https://documents.bouldercolorado.gov/WebLink/ElectronicFile.aspx?docid=194397&dbid=0&repo=LF8PROD2 | Claude Code: rendered with pdfplumber 0.11.10; imported by tools/shots |
+| `ocr_confidence.png` | `ch-09/ocr-confidence` (images/ch-09/ocr-confidence.png, textbook `5b3caf2`) | 2026-10-06 | https://documents.bouldercolorado.gov/WebLink/ElectronicFile.aspx?docid=194397&dbid=0&repo=LF8PROD2 | Claude Code: rendered with pytesseract 0.3.13 with Tesseract 5.5.3; imported by tools/shots |
+| `open_comment.png` | `ch-09/open-comment` (images/ch-09/open-comment.png, textbook `1743581`) | 2026-10-12 | https://documents.bouldercolorado.gov/WebLink/Browse.aspx?id=194345&dbid=0&repo=LF8PROD2 | Claude Code: rendered with matplotlib 3.11.2 with pypdf 6.20.1; imported by tools/shots |
 | `pdf_drawing_instructions.png` | `ch-09/pdf-objects` (images/ch-09/pdf-objects.png, textbook `74a950a`) | 2026-10-06 | https://documents.bouldercolorado.gov/WebLink/ElectronicFile.aspx?docid=194397&dbid=0&repo=LF8PROD2 | Claude Code: rendered with pdfplumber 0.11.10; imported by tools/shots |
+| `sales_use_tax.png` | `ch-09/sales-use-tax` (images/ch-09/sales-use-tax.png, textbook `1743581`) | 2026-10-12 | https://documents.bouldercolorado.gov/WebLink/Browse.aspx?id=194345&dbid=0&repo=LF8PROD2 | Claude Code: rendered with matplotlib 3.11.2 with pdfplumber 0.11.10; imported by tools/shots |
 <!-- shots:end -->
