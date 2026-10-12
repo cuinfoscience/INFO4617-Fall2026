@@ -1,12 +1,74 @@
-# Image placeholders for `week-09`
+# Images for `week-09`
 
-These are auto-generated gray **placeholders** so the deck compiles. Replace each with the real asset described below (keep the same filename), then rebuild.
+All six of the deck's images are real as of 2026-10-12. Two are copies made by
+the textbook's `tools/shots` (listed under "Copied by tools/shots" below); the
+other four are recorded here. Text in each reaches 16 pixels on a slide shown
+1,920 pixels wide (`slides/common/AUTHORING.md`), at the width its frame shows
+it.
 
-| File | Size | Should show |
-|---|---|---|
-| `council_minutes_pdf.png` | 1100x820 | Screenshot: first page of a Boulder City Council signed meeting-minutes PDF, showing the "Present:" / "Absent:" attendance lines and ALL-CAPS section headings (CALL TO ORDER, PUBLIC COMMENT) |
-| `pdf_drawing_instructions.png` | 1200x780 | Diagram: a PDF page stored as low-level drawing instructions (place glyph at x,y; draw line; embed image) beside the logical paragraphs and table a human reads -- illustrating "reconstruction, not reading" |
-| `documentcloud.png` | 1200x780 | Screenshot: the DocumentCloud platform (ProPublica/IRE) showing an uploaded, annotated collection of government documents |
-| `attendance_chart.png` | 1200x680 | Chart: matplotlib bar chart of Boulder City Council attendance (members present) across meetings over time, the output of the case-study pipeline |
-| `extraction_pipeline.png` | 1200x760 | Diagram: the reusable PDF corpus pipeline -- discover files -> extract text -> clean/normalize whitespace -> regex fields -> pandas DataFrame |
-| `pr_review.png` | 1300x760 | Screenshot: a GitHub pull-request "Files changed" view with an inline review comment on ch-09-pdfs.qmd |
+## How the images were made
+
+- `council_minutes_pdf.png` -- page 1 of the City Council's signed minutes
+  for Thursday, December 5, 2024: the masthead, "MINUTES", the roll call
+  ("Council Members present:" and "Virtually present:"), and the first
+  motion's row. (The web's filing cabinets)
+  - A render of the textbook's saved copy,
+    `data/ch-09/council-minutes-2024-12-05.pdf` (hash in its
+    `manifest.csv`), made 2026-10-12 with Poppler's `pdftoppm` 24.02.0:
+    `pdftoppm -f 1 -l 1 -r 200 -x 153 -y 389 -W 1306 -H 861 -png
+    -singlefile`, which is PDF points 55--525 across and 140--450 down.
+  - The page names only council members, who are public officials; nothing
+    on it names a member of the public.
+  - Its text is 12 points. The frame's 40% column shows the 470-point crop
+    672 pixels wide, so the text comes to 17 pixels. A 35% column would show
+    it at 15.
+  - It is the same page as the chapter's precision-and-recall example: the
+    list of names wraps, and a member is listed as present virtually.
+- `attendance_chart.png` -- members present at the roll call of each of the
+  13 saved minutes (December 2000, 2018--2024), counted by hand (dark bars),
+  beside what the slide's `extract_attendance()` returns (light bars).
+  (Case study --- council attendance)
+  - Drawn 2026-10-12 by `attendance_chart.py` (in this folder) with
+    matplotlib 3.11.2 and pypdf 6.20.1:
+    `python -I attendance_chart.py PATH/TO/data/ch-09 attendance_chart.png`,
+    with `data/ch-09` from the textbook.
+  - By hand: the members listed at roll call on page 1, in the room or
+    online, with the presiding mayor; a member who arrived later is not
+    counted. 2000-12-05: 8; 2000-12-19: 7; 2018-12-04: 8; 2019-12-03: 9;
+    2020-12-01 and 2020-12-15: 8; 2021-12-14: 8; the six meetings from
+    2022-12-01 to 2024-12-19: 9. Votes recorded right after roll call (8:0,
+    9:0) agree.
+  - The slide's regex finds no "Present:" line in the seven meetings before
+    2022, whose minutes say "were present" or "Those present were", and only
+    5 of 9 names in the six after, because the list wraps onto a second line.
+- `extraction_pipeline.png` -- the five steps `PDFCorpusAnalyzer` runs on each
+  file. (Scale it --- a reusable corpus pipeline)
+  - Drawn with Graphviz 2.43.0 from `extraction_pipeline.dot`:
+    `dot -Tpng -Gdpi=150 extraction_pipeline.dot -o extraction_pipeline.png`.
+    Its smallest text, 13 points at 150 dpi, comes to 30 pixels in its
+    35% column.
+- `pr_suggestion.png` -- a review suggestion on textbook PR #228, the
+  instructor's demonstration pull request, with **Apply suggestion**.
+  (Improving Chapter 9 together)
+  - A byte-for-byte copy of `slides/week-08/img/pr_suggestion.png`, itself a
+    copy of `handouts/week-08/img/pr-suggestion.png`, which the instructor
+    captured on 2026-10-06, signed in; its `IMAGES.md` records the capture.
+  - Its code is 12 pixels, so the frame shows it in a 62% column, where the
+    code comes to 16.4 pixels.
+
+## Removed
+
+`pr_review.png`, a gray placeholder for a GitHub "Files changed" view, was
+deleted with its `stubs.tsv` row on 2026-10-12. Weeks 7 and 8 dropped theirs
+the same way; the Friday frame uses `pr_suggestion.png`.
+
+## Copied by tools/shots
+
+<!-- shots:begin: copies from the textbook's tools/shots, generated from shots.json; edits between these markers are replaced -->
+Copied here by the textbook's `tools/shots/run sync`; `tools/shots/run synced` checks them.
+
+| File | Copy of | Captured | Source | How |
+|---|---|---|---|---|
+| `documentcloud.png` | `course/week09-documentcloud` (tools/shots/out/course/week09-documentcloud/20261012T180809Z.png, textbook `f5042a5`) | 2026-10-12 | https://www.documentcloud.org/home/ | tools/shots: Google Chrome for Testing 154.0.8037.92, 480×600 at 2× |
+| `pdf_drawing_instructions.png` | `ch-09/pdf-objects` (images/ch-09/pdf-objects.png, textbook `74a950a`) | 2026-10-06 | https://documents.bouldercolorado.gov/WebLink/ElectronicFile.aspx?docid=194397&dbid=0&repo=LF8PROD2 | Claude Code: rendered with pdfplumber 0.11.10; imported by tools/shots |
+<!-- shots:end -->

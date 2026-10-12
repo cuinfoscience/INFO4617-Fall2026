@@ -1,0 +1,53 @@
+{
+  "files": {
+    "documentcloud.png": {
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-10-12T18:08:17+00:00",
+      "copied_from": "tools/shots/out/course/week09-documentcloud/20261012T180809Z.png",
+      "figure": "course/week09-documentcloud",
+      "final_url": "https://www.documentcloud.org/home/",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "e898388fb925b7e9d10241b90f19b105c0f7743adc4a8ccc6de8c42455d05e52",
+      "size": [
+        960,
+        900
+      ],
+      "source_sha256": "e898388fb925b7e9d10241b90f19b105c0f7743adc4a8ccc6de8c42455d05e52",
+      "synced": "2026-10-12T18:08:17+00:00",
+      "textbook_commit": "f5042a579c007e44584d7f9c9507a3d7f85b54fd",
+      "url": "https://www.documentcloud.org/home/",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        480,
+        600
+      ]
+    },
+    "pdf_drawing_instructions.png": {
+      "by": "Claude Code",
+      "captured": "2026-10-06",
+      "copied_from": "images/ch-09/pdf-objects.png",
+      "figure": "ch-09/pdf-objects",
+      "final_url": null,
+      "imported": "2026-10-06T13:12:39+00:00",
+      "kind": "render",
+      "method": "rendered with pdfplumber 0.11.10; imported by tools/shots",
+      "redacted": [],
+      "scale": 2,
+      "sha256": "caa37cf66799ed248f028ac845f6c8018aa98540139011c8be2979b48c3c79c0",
+      "size": [
+        1600,
+        721
+      ],
+      "source_sha256": "caa37cf66799ed248f028ac845f6c8018aa98540139011c8be2979b48c3c79c0",
+      "synced": "2026-10-12T18:06:31+00:00",
+      "textbook_commit": "74a950a8416814f32279f21096d89cd719d4473f",
+      "url": "https://documents.bouldercolorado.gov/WebLink/ElectronicFile.aspx?docid=194397&dbid=0&repo=LF8PROD2",
+      "window": [
+        800,
+        360
+      ]
+    }
+  }
+}
