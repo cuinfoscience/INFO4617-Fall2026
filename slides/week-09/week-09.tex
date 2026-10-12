@@ -35,7 +35,7 @@
 
     \dayband{Wednesday}{Notebook lab}
     \begin{itemize}\small
-        \item Work the Chapter 9 notebook: PyPDF, regex cleanup, Boulder City Council minutes
+        \item Work the Chapter 9 notebook: pypdf on the council minutes, pdfplumber on the revenue reports
     \end{itemize}
 
     \medskip
@@ -241,10 +241,12 @@ ocrmypdf scan.pdf searchable.pdf
 \begin{frame}{In the notebook}
     This week's companion notebook builds one skill at a time:
     \begin{itemize}
-        \item \textbf{PyPDF basics} --- open a file, read metadata, extract page-level text (and see how messy it is)
-        \item \textbf{Cleanup} --- normalize whitespace \textit{without} destroying line structure; use regex to impose fields
-        \item \textbf{Case study} --- Boulder City Council minutes: council attendance and public-comment counts
-        \item \textbf{Pipeline} --- a reusable class that processes a whole corpus of PDFs into a DataFrame
+        \item \textbf{pypdf} --- a page's text in the order it was drawn, and the repairs it needs
+        \item \textbf{pdfplumber} --- words and lines by where they sit on the page, and tables rebuilt from rules
+        \item \textbf{OCR} --- text from a scan, or from a picture of a table
+        \item \textbf{Checks} --- counts, sums, two tools, two documents, and a sample coded by hand
+        \item \textbf{Case study 1} --- council minutes with pypdf: attendance and who spoke at Open Comment
+        \item \textbf{Case study 2} --- revenue reports with pdfplumber: sales and use tax by year, 2017--2024
     \end{itemize}
 \end{frame}
 
@@ -252,20 +254,23 @@ ocrmypdf scan.pdf searchable.pdf
 \section{Wednesday · Notebook Lab}
 % =========================================================================
 
-\begin{frame}[fragile]{PyPDF basics --- open, inspect, extract}
-    \texttt{pypdf} gives you document metadata and page-level text. Start by looking at what actually comes out:
+% The code on these frames is the chapter's (ch-09-pdfs.qmd, textbook PR #258), shortened
+% where a frame needs it; every output shown was printed by running it on the book's
+% saved copies (data/ch-09/) on 2026-10-12.
+\begin{frame}[fragile]{pypdf: text in the order it was drawn}
 \begin{lstlisting}
 from pypdf import PdfReader
 
-reader = PdfReader("council_minutes_2024_01.pdf")
-print(len(reader.pages), "pages")
-print(reader.metadata)                 # title, author, creation date...
-
-page = reader.pages[0]
-text = page.extract_text()
-print(text[:500])   # expect mess: headers/footers mixed in, tables garbled,
-                    # line breaks that don't match paragraphs
+minutes_2024 = PdfReader(get_saved_copy("council-minutes-2024-12-05.pdf"))
+text = minutes_2024.pages[0].extract_text()
+# P age 1
+# CI
+# TY COUNCIL MEETING
+# ...
+# M
+# ayor Brockett called the meeting to order at 6:00 p.m.
 \end{lstlisting}
+    Every word is there, and some are broken. Word drew the ``M'' of ``Mayor'', jumped to another line, and came back: pypdf starts a new line at each jump. \texttt{clean\_page\_text()} in the notebook removes ``P age 1'' and rejoins a first letter to the rest of its word.
 \end{frame}
 
 \begin{frame}[fragile]{The one line that flattens the page}
@@ -289,115 +294,182 @@ clean = '\n'.join(ln for ln in lines if ln)
 
             \bigskip
 
-            Line structure is real information: section headings are recognizable \textbf{precisely because they sit alone on their own lines}.
+            Line structure is real information: a roll call's names, and each Open Comment entry, sit on lines of their own.
 
             \bigskip
 
-            Erase the newlines and no heading detector can ever find them.
+            Erase the newlines and no pattern can find where an entry starts.
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{A regex toolkit for PDF text}
-    Structured data hides inside a wall of characters; regex carves it out. Five patterns cover most government PDFs:
+\begin{frame}[fragile]{pdfplumber: words where they sit}
+    \begin{columns}[T]
+        \begin{column}{0.46\textwidth}
 \begin{lstlisting}
-dates    = re.findall(r'\d{1,2}/\d{1,2}/\d{2,4}', text)     # 1/15/2024, 12/03/23
-amounts  = re.findall(r'\$[\d,]+\.?\d*', text)              # $1,250.00, $3,400,000
-emails   = re.findall(r'[\w.+-]+@[\w-]+\.[\w.-]+', text)    # clerk@bouldercolorado.gov
+import pdfplumber
 
-# ALL-CAPS section headings on their own line (a literal space, NOT \s,
-# so one match can't swallow several consecutive heading lines):
-headings = re.findall(r'^[A-Z][A-Z0-9 .:&-]{5,}$', text, re.MULTILINE)
-# -> ['CALL TO ORDER', 'PUBLIC COMMENT', 'CONSENT AGENDA', 'ADJOURNMENT']
+with pdfplumber.open(report_2024) as report:
+    page = report.pages[1]
+    tables = page.find_tables()
+    rows = tables[0].extract()
+print(rows[-1][:2])
+# ['Use Tax Audit Revenue', None]
 \end{lstlisting}
-    Each pattern encodes an assumption (slash dates, a leading \texttt{\$}, uppercase headings). \textbf{Test across multiple pages and documents} before trusting a pipeline. New to regex? See \textit{Missing Manual} Ch.~18.
+            \small pdfplumber groups characters by \textbf{position}, so ``Mayor'' comes out whole. Its table finder rebuilds a grid from the page's rules. On the December 2024 summary page it stops one row short: the \textbf{total} has no vertical rules beside it, and nothing raises an error.
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/missing_totals_row.png}\\
+            {\scriptsize pdfplumber's table finder on the summary page: shaded where it found cells. The total, at the bottom, is left out.}
+        \end{column}
+    \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Case study --- council attendance}
+\begin{frame}[fragile]{No text layer: OCR}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+\begin{lstlisting}
+import pytesseract
+
+exhibit_3 = (PdfReader(report_2024)
+    .pages[14].images[0].image.convert("L"))
+ocr_text = pytesseract.image_to_string(
+    exhibit_3, config="--psm 6")
+# 2021 8,059,343 7,608.759 10,351,245 ...
+\end{lstlisting}
+            \small Exhibit 3 of the December 2024 report is a \textbf{picture} of a table. Tesseract reads it, and puts periods for commas in a few figures. The rows' sums catch every misread digit; Tesseract's confidence scores don't.
+        \end{column}
+        \begin{column}{0.46\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/ocr_confidence.png}\\
+            {\scriptsize Each word Tesseract read: blue if its confidence is 80 or more, red if less. Most red words are right.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Check every extraction}
+    Extraction fails without errors. Each of these caught a real problem in Chapter 9:
+    \begin{enumerate}\small
+        \item \textbf{Look at the page beside the output.}
+        \item \textbf{Count.} The summary table has nine rows of figures; the council has nine seats.
+        \item \textbf{Sums.} The five sources add up to \$171,006,200; the printed subtotal is \$171,006,199.
+        \item \textbf{Two tools agree.} pypdf's and pdfplumber's text give the same speaker counts.
+        \item \textbf{Two documents agree.} A year printed in two reports should match.
+        \item \textbf{A sample coded by hand.} Read some pages yourself, and measure the extraction against them.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Case study 1: the obvious regex}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-def extract_attendance(pdf_path):
-    text = PdfReader(pdf_path).pages[0].extract_text()
-    # names follow "Present:" up to "Absent:" or end of line
-    present = re.search(r'Present:\s*(.*?)\s*(?:Absent:|$)',
-                        text, re.IGNORECASE | re.MULTILINE)
-    absent  = re.search(r'Absent:\s*(.*)$',
-                        text, re.IGNORECASE | re.MULTILINE)
-    return {"present": split_names(present),
-            "absent":  split_names(absent)}
+present = re.search(r'Present:\s*(.*?)\s*(?:Absent:|$)',
+                    page_1, re.IGNORECASE | re.MULTILINE)
 \end{lstlisting}
+            Eleven December meetings, 2018--2024, read with pypdf. This pattern finds \textbf{nobody} in the five meetings before 2022, and \textbf{5 of 9} members after.
+
+            \medskip
+
+            The minutes recorded the roll call two ways:
+            \begin{itemize}\small
+                \item through 2020, a sentence: ``Council Members Brockett, \ldots{} and Young were present.'' The mayor isn't in it.
+                \item from 2021, a label and a list that wraps onto a second line, with a separate label for members online.
+            \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/attendance_chart.png}\\
-            {\scriptsize Members present at roll call in 13 saved minutes: counted by hand (dark), and found by this code (light).}
+            {\scriptsize Members present at roll call, with the two December 2000 scans: counted by hand (dark), and found by this regex (light).}
         \end{column}
     \end{columns}
-    \smallskip
-    {\small Be honest about limits: ``Absent: None'' becomes a phantom member named \texttt{None}; titles and separators vary. Treat output as a \textbf{first draft} --- spot-check and patch.}
 \end{frame}
 
-\begin{frame}[fragile]{Scale it --- a reusable corpus pipeline}
+\begin{frame}[fragile]{Case study 1: one function, both formats}
+\begin{lstlisting}
+def roll_call(page_1):
+    present = set()
+    mayor = re.search(r"Mayor (\w+) called the meeting to order", page_1)
+    if mayor:
+        present.add(mayor.group(1))
+    # 2018-2020: "Council Members Brockett, ... and Young were present"
+    sentence = re.search(r"Council Members ([A-Z][^:]*?)\s+were\s+present", page_1)
+    if sentence:
+        present |= split_names(sentence.group(1))
+    # 2021-2024: "Council Members present:", "Virtually present:", "Present virtually:"
+    ...   # each list, plus the next line while the list ends with a comma
+    return present
+\end{lstlisting}
+    \small It matches a hand count of all eleven meetings: 8 or 9 members at each roll call. A member who arrived late counts as absent, and one member is ``Swetlik'' in 2019 and ``Swetlick'' in 2020.
+\end{frame}
+
+\begin{frame}[fragile]{Case study 1: who spoke at Open Comment}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-        Wrap the workflow so one class processes a whole directory into a DataFrame:
+        \begin{column}{0.48\textwidth}
 \begin{lstlisting}
-class PDFCorpusAnalyzer:
-    def __init__(self, directory, cleanup_patterns=None):
-        self.files = sorted(f for f in os.listdir(directory)
-                            if f.lower().endswith(".pdf"))
-        self.cleanup_patterns = cleanup_patterns or []
-
-    def process_all(self, extract_fn):
-        rows = []
-        for f in self.files:
-            try:                       # one bad PDF won't kill the run
-                text = self.extract_text(f)
-                rows.append({**extract_fn(f, text), "file": f})
-            except Exception as e:
-                rows.append({"file": f, "error": str(e)})
-        return pd.DataFrame(rows)
+ENTRY_START = re.compile(
+    r"^[\dlJt](?: ?[\dlJt])? ?\.? +[A-Z]"
+    r"|^[A-Z]\S* .*?\b(?:s ?poke|"
+    r"signed up|withdrew)\b")
+DID_NOT_SPEAK = re.compile(
+    r"did not|withdr|not present"
+    r"|duplicate|moved to", re.I)
 \end{lstlisting}
+            \small An entry starts at a list number, as the 2018--19 scans' OCR misreads it (``l0'', ``J''), or at a name followed by ``spoke''. Four tries to get there. It counts; it never prints a name.
         \end{column}
-        \begin{column}{0.35\textwidth}
+        \begin{column}{0.48\textwidth}
             \centering
-            \includegraphics[width=.72\textwidth]{img/extraction_pipeline.png}\\
-            {\scriptsize Discover $\rightarrow$ extract $\rightarrow$ clean $\rightarrow$ regex fields $\rightarrow$ DataFrame.}
+            \includegraphics[width=\textwidth]{img/open_comment.png}\\
+            {\scriptsize Residents who spoke at Open Comment, December meetings 2018--2024. Lighter: listed, but didn't speak.}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{The limits of PyPDF}
-    PyPDF handles text-based PDFs well, but two common cases defeat it.
+\begin{frame}[fragile]{Case study 2: read the totals row by position}
+\begin{lstlisting}
+def row_words(page, label):
+    found = page.search(label)[0]        # where the label sits, in points
+    line = page.crop((0, found["top"] - 1, page.width, found["bottom"] + 1))
+    return [w["text"] for w in line.extract_words() if w["x0"] > found["x1"]]
 
-    \medskip
-    \textbf{Tables} --- PyPDF flattens them into a text stream, losing rows and columns. \texttt{pdfplumber} preserves the grid:
-\begin{lstlisting}
-import pdfplumber
-with pdfplumber.open("report.pdf") as pdf:
-    table = pdf.pages[0].extract_table()   # a list of row-lists (cells)
-    df = pd.DataFrame(table[1:], columns=table[0])
+row_words(page, "Total Sales and Use Tax")   # the 2018 report
+# ['$134,538,892', '$140,648,710', '$6,109,818', '4.54%']
 \end{lstlisting}
-    \textbf{Scanned PDFs} --- a scan has no text layer, so PyPDF returns empty or garbled output. You need \textbf{OCR}:
-\begin{lstlisting}
-# pytesseract + the Tesseract engine turn page images into text;
-# accuracy varies with scan quality. (camelot is another table option.)
-\end{lstlisting}
-    Know your tool's limits: reach for \texttt{pdfplumber}, \texttt{camelot}, or OCR when the layout demands it.
+    \small Seven year-end revenue reports. Find the summary page by its text: 2020's report opens with a letter restating earlier figures, so its summary is on page 3. Then skip the table finder, and read the one row you need by where it sits. Each report's own change column checks the two totals.
+\end{frame}
+
+\begin{frame}{Case study 2: one series from seven reports}
+    \begin{columns}[T]
+        \begin{column}{0.46\textwidth}
+            Six years are printed twice: in their own report, and as ``the year before'' in the next. Five agree to the dollar.
+
+            \medskip
+
+            \textbf{2018 doesn't.} The 2019 report gives it as \$38,959 less than the 2018 report did, and doesn't say why. Use each year's latest printing, and say so.
+
+            \medskip
+
+            Sales and use tax fell \textbf{4.76\%} in 2020, then rose \textbf{12.65\%} and \textbf{11.04\%}. In dollars of each year: not adjusted for inflation.
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/sales_use_tax.png}\\
+            {\scriptsize Total sales and use tax by year, read with pdfplumber, with the change from the year before.}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Work in pairs. Do these exercises from the notebook:
+            Work in pairs. Run both case studies in the notebook, then extend one:
             \begin{enumerate}\small
-                \item Find one element that occurs in 10 or more government PDFs. Extract it. Put the results in a DataFrame.
-                \item Compare the quality of PyPDF on three documents: a text report, a document with many tables, and a slide deck.
-                \item Extract a budget table with \texttt{pdfplumber}. Extract it again with \texttt{pypdf}. Make numeric columns from the result.
-                \item Select a term such as ``housing'' or ``police.'' Count it in one year of meeting minutes. Plot the spikes. Use the bag-of-words method from Ch.~7.
-                \item Compare \texttt{pdfplumber} and \texttt{pypdf} on the same PDF.
-                \item[6.] \textbf{5617}: measure the extraction quality for the PDFs of two cities. Write a memo about data quality. Use the categories of \textcite{gebru2021datasheets}
+                \item Run \texttt{roll\_call()} on the two December 2000 minutes. They are scans. What does the pattern miss? Fix it, and check against the page.
+                \item Count the votes in each meeting with the tally pattern (\texttt{Carried 9:0}). What share were unanimous?
+                \item Code one meeting's Open Comment list by hand. Compare your count with the function's.
+                \item Read the \textbf{Sales Tax} row from all seven reports with \texttt{row\_words()}. Plot it beside the total.
+                \item Read the 2023 summary table with \texttt{find\_tables()}. Which rows does it find? Compare with \texttt{row\_words()}.
+                \item[6.] \textbf{5617}: write a memo about the two datasets you built. Use the categories of \textcite{gebru2021datasheets}
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
@@ -484,10 +556,10 @@ with pdfplumber.open("report.pdf") as pdf:
 \begin{frame}{Key takeaways}
     \begin{enumerate}
         \item PDFs optimize \textbf{visual fidelity over structure} --- extraction is reconstruction, not reading.
-        \item \texttt{pypdf} gives page-level text \& metadata; expect messy output and plan to clean it.
+        \item \texttt{pypdf} gives text in the order it was drawn; expect breaks inside words and plan to clean them.
         \item Collapse spaces/tabs but \textbf{keep newlines} --- line structure is information; regex imposes the rest.
-        \item Abstract into a \textbf{pipeline} so one bad file doesn't kill a corpus run; test patterns across documents.
-        \item Know PyPDF's limits: \texttt{pdfplumber} for tables, OCR for scans. Imprecision is the price of scale.
+        \item \texttt{pdfplumber} keeps each word's position: find a label, then read its row. OCR is for pages with no text layer.
+        \item \textbf{Check every extraction} against a count by hand or a total the document prints --- across all its formats.
     \end{enumerate}
     \bigskip
 \end{frame}
