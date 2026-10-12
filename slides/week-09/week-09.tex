@@ -20,40 +20,32 @@
 
 % -------------------------------------------------------------------------
 \begin{frame}{This week at a glance}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            PDFs are the web's filing cabinets. This week we pry official records out of them and turn locked documents into data.
+    PDFs are the web's filing cabinets. This week we pry official records out of them and turn locked documents into data.
 
-            \bigskip
+    \bigskip
 
-            \dayband{Monday}{Concepts \& notebook intro}
-            \begin{itemize}\small
-                \item Why PDFs resist extraction; reconstruction vs.\ reading
-            \end{itemize}
+    \dayband{Monday}{Concepts \& notebook intro}
+    \begin{itemize}\small
+        \item Why PDFs resist extraction; reconstruction vs.\ reading
+    \end{itemize}
 
-            \medskip
+    \medskip
 
-            \dayband{Wednesday}{Notebook lab}
-            \begin{itemize}\small
-                \item Work the Chapter 9 notebook: PyPDF, regex cleanup, Boulder City Council minutes
-            \end{itemize}
+    \dayband{Wednesday}{Notebook lab}
+    \begin{itemize}\small
+        \item Work the Chapter 9 notebook: PyPDF, regex cleanup, Boulder City Council minutes
+    \end{itemize}
 
-            \medskip
+    \medskip
 
-            \dayband{Friday}{Textbook revisions}
-            \begin{itemize}\small
-                \item Propose \& peer-review pull requests improving Chapter 9
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{Companion notebook}
-                \footnotesize \texttt{ch-09-pdfs.ipynb}
-            \end{block}
-            \begin{alertblock}{Bring a laptop}
-                \footnotesize Wednesday is hands-on --- we extract and debug live.
-            \end{alertblock}
-        \end{column}
-    \end{columns}
+    \dayband{Friday}{Textbook revisions}
+    \begin{itemize}\small
+        \item Propose \& peer-review pull requests improving Chapter 9
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Course overview}\centering
+    \includegraphics[width=.67\textwidth]{slides/common/course-overview.png}
 \end{frame}
 
 % =========================================================================
@@ -131,12 +123,6 @@
         \item \textbf{Case study} --- Boulder City Council minutes: council attendance and public-comment counts
         \item \textbf{Pipeline} --- a reusable class that processes a whole corpus of PDFs into a DataFrame
     \end{itemize}
-
-    \bigskip
-
-    \begin{alertblock}{Connecting to Ch.~7 \& the post-API theme}
-        \footnotesize Once text is out, the \textbf{bag-of-words} preprocessing from the archives chapter (Ch.~7) sharpens topic tracking across many meetings. And PDF-only publishing \textit{is} the ``soft enclosure'' the post-API chapter warns about --- extraction is how we push back.
-    \end{alertblock}
 \end{frame}
 
 % =========================================================================
@@ -302,13 +288,6 @@ with pdfplumber.open("report.pdf") as pdf:
             \end{block}
         \end{column}
     \end{columns}
-\end{frame}
-
-\begin{frame}[standout]
-    PDFs are built for eyes, not for code.\\
-    Every extraction is an educated reconstruction ---\\
-    never perfect, often good enough.\\[1em]
-    {\large Imprecision is the price of scale ---\\ and scale is what turns documents into data.}
 \end{frame}
 
 % =========================================================================
