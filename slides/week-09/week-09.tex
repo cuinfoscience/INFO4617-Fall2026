@@ -29,6 +29,8 @@
             \dayband{Monday}{Concepts \& notebook intro}
             \begin{itemize}\small
                 \item Why PDFs resist extraction; reconstruction vs.\ reading
+                \item Text layers and OCR; getting text out by hand, from readers, office tools, and the command line
+                \item In class: the city's revenue report, by hand (20 minutes)
             \end{itemize}
 
             \medskip
@@ -50,7 +52,7 @@
                 \footnotesize \texttt{ch-09-pdfs.ipynb}
             \end{block}
             \begin{alertblock}{Bring a laptop}
-                \footnotesize Wednesday is hands-on --- we extract and debug live.
+                \footnotesize Monday and Wednesday are both hands-on --- bring a laptop both days.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -62,7 +64,7 @@
 
 \begin{frame}{The web's filing cabinets}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
+        \begin{column}{0.55\textwidth}
             PDFs are everywhere in institutional record-keeping: council minutes, bill texts, financial reports, court filings, academic papers, environmental impact assessments.
 
             \bigskip
@@ -73,17 +75,17 @@
 
             The records inside are \textit{readymade} data (\textcite{salganik2018bit}). Somebody made them for administration, not for research. With effort you can still use them to answer questions that their authors never expected.
         \end{column}
-        \begin{column}{0.35\textwidth}
+        \begin{column}{0.4\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/council_minutes_pdf.png}\\
-            {\scriptsize Boulder City Council minutes --- our target this week.}
+            {\scriptsize Boulder City Council minutes, December 5, 2024: the roll call on page 1.}
         \end{column}
     \end{columns}
 \end{frame}
 
 \begin{frame}{A computer never reads a PDF}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
+        \begin{column}{0.46\textwidth}
             When \textbf{you} read a PDF you see paragraphs, tables, headers, and page numbers.
 
             \bigskip
@@ -94,10 +96,96 @@
 
             So text extraction is \textbf{reconstruction, not reading} --- the computer must infer logical structure from spatial layout. The results will not be perfect, but they can be good enough to turn inaccessible records into analyzable datasets.
         \end{column}
-        \begin{column}{0.35\textwidth}
+        \begin{column}{0.5\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pdf_drawing_instructions.png}\\
-            {\scriptsize Glyphs at coordinates, not sentences --- structure is inferred.}
+            {\scriptsize Boulder's December 2024 revenue report, as pdfplumber sees it: each character placed on its own (blue boxes, two rows shown), and the table's lines are 290 thin rectangles (red).}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Words for getting text out}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{itemize}\small
+                \item \textbf{Text layer} --- the characters a PDF stores, each with a font and a position. Select it, search it, copy it.
+                \item \textbf{Born-digital PDF} --- saved from Word, Excel, or a web page. It has a text layer.
+                \item \textbf{Scanned (image-only) PDF} --- photographs of paper pages. No text layer: nothing to select.
+                \item \textbf{OCR}, optical character recognition --- software that recognizes letters in an image and writes them out as text. \textbf{Tesseract} is the free, open-source engine most tools use.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{itemize}\small
+                \item \textbf{Searchable PDF} --- the page image with an invisible OCR text layer on top. \texttt{ocrmypdf} makes one.
+                \item \textbf{Layout analysis} --- working out columns, reading order, headers, and footers from where text sits.
+                \item \textbf{Table extraction} --- rebuilding rows and columns from lines and positions. Tabula, \texttt{pdfplumber}, \texttt{camelot}.
+                \item \textbf{Handwriting recognition} (HTR) --- OCR for handwriting. Much less accurate than print.
+                \item \textbf{Document AI} --- a vision-language model reads the page image and writes text or a table. Fast and fluent, and it can invent what it can't read: check it against the page.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{First, by hand: readers and office tools}
+    Try this before you write code. One table, once, rarely needs Python.
+
+    \medskip
+
+    \begin{itemize}\small
+        \item \textbf{Is there text?} Drag across a line, or search with Ctrl+F (Cmd+F). If nothing highlights, it's a scan: go to OCR.
+        \item \textbf{Copy and paste} from any reader. Paragraphs come through. A table arrives as runs of text that you split into columns yourself.
+        \item \textbf{Adobe Acrobat Reader} (free): \textit{File $\to$ Save As Other $\to$ Text}. Export to Word or Excel needs a paid Acrobat subscription.
+        \item \textbf{Microsoft Word}: \textit{File $\to$ Open} a PDF, and Word converts it to an editable document. Best on PDFs that are mostly text.
+        \item \textbf{Microsoft Excel} (Microsoft 365, Windows): \textit{Data $\to$ Get Data $\to$ From File $\to$ From PDF} lists the tables it finds. Not in Excel for Mac.
+        \item \textbf{Google Drive}: right-click $\to$ \textit{Open with $\to$ Google Docs} runs OCR on a PDF or image of 2~MB or less. Tables and columns are usually lost.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{The command line, and free desktop tools}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+pdfinfo report.pdf         # pages, producer, dates
+pdffonts report.pdf        # no fonts: no text layer
+pdftotext -layout report.pdf report.txt
+pdftoppm -png -r 200 -f 15 -l 15 report.pdf page
+tesseract page-15.png page-15   # OCR one image
+ocrmypdf scan.pdf searchable.pdf
+\end{lstlisting}
+            \small In a notebook, start each line with \texttt{!}, as in Chapter 5.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \small
+            \texttt{pdfinfo}, \texttt{pdffonts}, \texttt{pdftotext}, and \texttt{pdftoppm} come with \textbf{Poppler}: \texttt{conda install -c conda-forge poppler}. \texttt{-layout} keeps columns lined up with spaces.
+
+            \medskip
+
+            \texttt{ocrmypdf} brings \texttt{tesseract} with it. Both are in \texttt{webdata}, from the week 9 setup update.
+
+            \medskip
+
+            \textbf{Tabula} is a free desktop app made for journalists: draw a box around a table, and save it as CSV.
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Online converters: weigh the upload}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Smallpdf, iLovePDF, Adobe's online converter, and Google Drive will all turn a PDF into Word, Excel, or text in your browser.
+
+            \medskip
+
+            Each one \textbf{sends your file to a company's server}. That is fine for a city's public revenue report. It is not fine for records with people's names, health or student information, or anything you promised to keep private.
+
+            \medskip
+
+            Read the size limits and the terms. Keep the original PDF, and write down which tool made which file: that is your provenance.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Whatever the tool}
+                \small Check its output against the page. Every route here drops, merges, or misreads something, and none of them says so.
+            \end{alertblock}
         \end{column}
     \end{columns}
 \end{frame}
@@ -119,6 +207,41 @@
             \centering
             \includegraphics[width=\textwidth]{img/documentcloud.png}\\
             {\scriptsize DocumentCloud: shared infrastructure for analyzing document dumps.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Answer key (from data/ch-09/revenue-report-2024-12.pdf, checked 2026-10-12):
+% the five 2024 sources sum to $171,006,200, but the printed subtotal is
+% $171,006,199 -- the city's figures are rounded, so a check needs a tolerance.
+% The subtotal's label wraps onto two lines. Page 15 (Exhibit 3) is a picture
+% of a table under a note: nothing on it can be selected; Google Docs' OCR
+% reads it. The 2023 column sums to $172,401,668, exactly the subtotal.
+\begin{frame}{In class: the city's revenue report, by hand (20 minutes)}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Work in pairs. Use no Python today.
+            \begin{enumerate}\small
+                \item Download Boulder's December 2024 revenue report from the textbook: \texttt{data/ch-09/revenue-report-2024-12.pdf}. (5 min)
+                \item Get the \textbf{Sales and Use Tax Summary} on page 2 into a spreadsheet. Use copy and paste. Then use one other tool from the last three slides. (8 min)
+                \item Clean it. Make one row per source, with the columns \texttt{source}, \texttt{2023}, and \texttt{2024}. Remove the \texttt{\$} signs and the commas. (4 min)
+                \item Check it. Add the five sources for 2024. Compare the sum with the row ``Total Sales \& Use Tax based on current economic activity.'' (3 min)
+            \end{enumerate}
+            \smallskip
+            {\small Fast? Try the same steps on page 15, Exhibit 3.}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{block}{Report back}
+                \small
+                \begin{itemize}
+                    \item Which route kept the rows and columns?
+                    \item What did you fix by hand?
+                    \item Did your sum match? If not, why not?
+                \end{itemize}
+            \end{block}
+            \begin{block}{The file}
+                \scriptsize \url{https://github.com/cuinfoscience/Web-Data-Science-Book/tree/main/data/ch-09}
+            \end{block}
         \end{column}
     \end{columns}
 \end{frame}
@@ -222,7 +345,7 @@ def extract_attendance(pdf_path):
         \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/attendance_chart.png}\\
-            {\scriptsize Counts across meetings become a trend --- scale reveals what one PDF can't.}
+            {\scriptsize Members present at roll call in 13 saved minutes: counted by hand (dark), and found by this code (light).}
         \end{column}
     \end{columns}
     \smallskip
@@ -253,7 +376,7 @@ class PDFCorpusAnalyzer:
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{img/extraction_pipeline.png}\\
+            \includegraphics[width=.72\textwidth]{img/extraction_pipeline.png}\\
             {\scriptsize Discover $\rightarrow$ extract $\rightarrow$ clean $\rightarrow$ regex fields $\rightarrow$ DataFrame.}
         \end{column}
     \end{columns}
@@ -315,13 +438,18 @@ with pdfplumber.open("report.pdf") as pdf:
 \section{Friday · Textbook Revisions}
 % =========================================================================
 
+% The screenshot's code is 12 CSS pixels; a 62% column brings it to 16 on a
+% slide shown 1,920 pixels wide (slides/common/AUTHORING.md), and 60% would not.
 \begin{frame}{Improving Chapter 9 together}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
+        \begin{column}{0.62\textwidth}
+            \includegraphics[width=\textwidth]{img/pr_suggestion.png}
+
+            \medskip
+
             Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-09-pdfs.qmd} and reviews a classmate's.
-
-            \bigskip
-
+        \end{column}
+        \begin{column}{0.33\textwidth}
             The workflow (from Week 1):
             \begin{enumerate}\small
                 \item Branch / fork the book repo
@@ -329,10 +457,6 @@ with pdfplumber.open("report.pdf") as pdf:
                 \item Open a PR describing \textit{what} and \textit{why}
                 \item Review two peers' PRs: kind, specific, actionable
             \end{enumerate}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
     \end{columns}
 \end{frame}

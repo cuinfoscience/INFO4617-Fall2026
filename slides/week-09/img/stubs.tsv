@@ -1,7 +1,7 @@
 # filename	WIDTHxHEIGHT	description of the real asset to drop in
-council_minutes_pdf.png	1100x820	Screenshot: first page of a Boulder City Council signed meeting-minutes PDF, showing the "Present:" / "Absent:" attendance lines and ALL-CAPS section headings (CALL TO ORDER, PUBLIC COMMENT)
-pdf_drawing_instructions.png	1200x780	Diagram: a PDF page stored as low-level drawing instructions (place glyph at x,y; draw line; embed image) beside the logical paragraphs and table a human reads -- illustrating "reconstruction, not reading"
-documentcloud.png	1200x780	Screenshot: the DocumentCloud platform (ProPublica/IRE) showing an uploaded, annotated collection of government documents
-attendance_chart.png	1200x680	Chart: matplotlib bar chart of Boulder City Council attendance (members present) across meetings over time, the output of the case-study pipeline
-extraction_pipeline.png	1200x760	Diagram: the reusable PDF corpus pipeline -- discover files -> extract text -> clean/normalize whitespace -> regex fields -> pandas DataFrame
-pr_review.png	1300x760	Screenshot: a GitHub pull-request "Files changed" view with an inline review comment on ch-09-pdfs.qmd
+council_minutes_pdf.png	1306x861	Render: page 1 of the City Council's signed minutes for December 5, 2024 (the textbook's data/ch-09 copy), from the masthead through the roll call and the first motion
+pdf_drawing_instructions.png	1600x721	Render (copy of textbook figure ch-09/pdf-objects): the December 2024 revenue report's summary table as pdfplumber sees it -- every rectangle outlined, the characters of two rows each boxed
+documentcloud.png	960x900	Screenshot (course recipe week09-documentcloud): the top of documentcloud.org/home/ at 480 pixels wide -- Upload. Analyze. Embed. and what the platform is for (2026-10-12)
+attendance_chart.png	1200x1000	Chart: members present at the roll call of each of the 13 saved council minutes, counted by hand, beside what the slide's extract_attendance() finds
+extraction_pipeline.png	527x733	Diagram (Graphviz, extraction_pipeline.dot): discover files -> extract text -> clean -> regex fields -> DataFrame
+pr_suggestion.png	763x255	Screenshot: a review suggestion on textbook PR #228 (the instructor's demonstration), with Apply suggestion, signed in, dark theme (2026-10-06); a copy of week 8's
