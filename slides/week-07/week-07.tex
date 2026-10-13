@@ -476,7 +476,9 @@ params = {"url": "facebook.com/terms",
           "fl": "timestamp,original,statuscode,length",
           "filter": "statuscode:200",  # only 200s
           "collapse": "digest"}        # drop repeats
-data = requests.get(cdx, params=params).json()
+headers = {"User-Agent": "WebDataScience/1.0 (your-email@colorado.edu)"}
+data = requests.get(cdx, params=params, headers=headers,
+                    timeout=60).json()
 
 df = pd.DataFrame(data[1:], columns=data[0])
 df["timestamp"] = pd.to_datetime(
