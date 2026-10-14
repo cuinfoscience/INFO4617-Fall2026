@@ -8,3 +8,9 @@ missing_totals_row.png	1600x726	Render (copy of textbook figure ch-09/missing-to
 ocr_confidence.png	1600x466	Render (copy of textbook figure ch-09/ocr-confidence): retail sales tax by month in Exhibit 3 of the December 2024 report (an image), each word Tesseract read boxed blue (confidence 80+) or red
 open_comment.png	1600x800	Chart (copy of textbook figure ch-09/open-comment): people who spoke at Open Comment in each of the 11 December minutes, 2018-2024, counted with pypdf
 sales_use_tax.png	1600x800	Chart (copy of textbook figure ch-09/sales-use-tax): total sales and use tax by year, 2017-2024, from the summary page of seven December revenue reports, read with pdfplumber
+pathway.png	1126x1276	Diagram (Graphviz, pathway.py): the four steps -- find it, ask for it, parse a born-digital PDF, OCR -- then check; an optional AI-parser branch
+pathway_find.png	684x180	Diagram (Graphviz, pathway.py): small pathway with step 1 highlighted
+pathway_text.png	684x180	Diagram (Graphviz, pathway.py): small pathway with step 3 highlighted
+pathway_ocr.png	684x180	Diagram (Graphviz, pathway.py): small pathway with step 4 highlighted
+pathway_ai.png	684x180	Diagram (Graphviz, pathway.py): small pathway with the AI-parser branch highlighted
+pathway_check.png	684x180	Diagram (Graphviz, pathway.py): small pathway with Check highlighted

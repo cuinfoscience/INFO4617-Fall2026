@@ -1,0 +1,15 @@
+digraph pathway_text {
+  graph [rankdir=LR, nodesep=0.12, ranksep=0.18, bgcolor="white", pad=0.05];
+  node [fontname="Helvetica", fontsize=15, shape=box, style="rounded,filled", fillcolor="#dbe7f3", color="#5b7fa6", fontcolor="#1a1a1a", margin="0.06,0.03", width=0.3, height=0.3];
+  edge [color="#777777", arrowsize=0.5];
+  find [label="1 Find"];
+  ask [label="2 Ask"];
+  text [label="3 Text\nlayer?", fillcolor="#1f4e79", fontcolor="white", color="#1f4e79"];
+  ocr [label="4 OCR"];
+  ai [label="AI\nparser", style="rounded,filled,dashed"];
+  check [label="Check"];
+  find -> ask -> text -> ocr -> check;
+  text -> check;
+  text -> ai [style=dashed]; ocr -> ai [style=dashed]; ai -> check [style=dashed];
+  { rank=same; ocr; ai; }
+}

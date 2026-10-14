@@ -1,8 +1,8 @@
 # Images for `week-09`
 
-All nine of the deck's images are real as of 2026-10-12. Six are copies made by
-the textbook's `tools/shots` (listed under "Copied by tools/shots" below); the
-other three are recorded here. Text in each reaches 16 pixels on a slide shown
+All fifteen of the deck's images are real as of 2026-10-14. Six are copies made
+by the textbook's `tools/shots` (listed under "Copied by tools/shots" below);
+the other nine are recorded here. Text in each reaches 16 pixels on a slide shown
 1,920 pixels wide (`slides/common/AUTHORING.md`), at the width its frame shows
 it.
 
@@ -41,6 +41,22 @@ it.
   - The slide's regex finds no "Present:" line in the seven meetings before
     2022, whose minutes say "were present" or "Those present were", and only
     5 of 9 names in the six after, because the list wraps onto a second line.
+- `pathway.png` -- the four steps, from easiest to hardest: find the data in a
+  form made for machines, ask for it (C.R.S. 24-72-203(3.5)), parse a
+  born-digital PDF, and OCR a page with no text layer; then check. An AI parser
+  is a dashed, optional branch. (Four steps, from easiest to hardest)
+  - Drawn 2026-10-14 with Graphviz 2.43.0 by `pathway.py` (in this folder),
+    which writes `pathway.dot` and runs `dot -Tpng -Gdpi=150`.
+  - Its text, 15 points at 150 dpi, is 31 pixels. The frame shows the image
+    0.82 of the text height tall, about 736 pixels wide, so the text comes to
+    20 pixels.
+- `pathway_find.png`, `pathway_text.png`, `pathway_ocr.png`, `pathway_ai.png`,
+  `pathway_check.png` -- small copies of the pathway, with one step filled
+  dark: the "you are here" marker on the first frame of each step, Monday and
+  Wednesday. The steps 1 and 2 frame uses `pathway_find.png`.
+  - Drawn by the same script, from `pathway_<step>.dot`.
+  - Their text, 31 pixels in a 684-pixel image, comes to 24 pixels or more in
+    the 32--34% columns and the 75%-of-44% column that show them.
 - `pr_suggestion.png` -- a review suggestion on textbook PR #228, the
   instructor's demonstration pull request, with **Apply suggestion**.
   (Improving Chapter 9 together)
