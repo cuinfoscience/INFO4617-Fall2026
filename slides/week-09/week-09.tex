@@ -328,7 +328,7 @@ tesseract page-15.png page-15 pdf  # searchable PDF
         \item \textbf{Step 3: text and tables} --- pypdf for a page's text, pdfplumber for words by position and tables rebuilt from rules
         \item \textbf{Step 4: OCR} --- text from a scan, or from a picture of a table
         \item \textbf{Check} --- counts, sums, two tools, two documents, and a sample coded by hand
-        \item \textbf{Case studies} --- council minutes with pypdf, and revenue reports with pdfplumber
+        \item \textbf{Case studies} --- attendance in council minutes with pypdf, and revenue reports with pdfplumber
         \item \textbf{Optional branch} --- AI parsers such as Docling, judged with the same checks
     \end{itemize}
 \end{frame}
@@ -443,11 +443,11 @@ clean = '\n'.join(kept)
 
             \bigskip
 
-            Line structure is real information: a roll call's names, and each Open Comment entry, sit on lines of their own.
+            Line structure is real information: a roll call's names, and each heading, sit on lines of their own.
 
             \bigskip
 
-            Erase the newlines and no pattern can find where an entry starts.
+            Erase the newlines and no pattern can find where a list starts or ends.
         \end{column}
     \end{columns}
 \end{frame}
@@ -534,7 +534,7 @@ ocr_text = pytesseract.image_to_string(
         \item \textbf{Look at the page beside the output.}
         \item \textbf{Count.} The summary table has nine rows of figures; the council has nine seats.
         \item \textbf{Sums.} The five sources add up to \$171,006,200; the printed subtotal is \$171,006,199.
-        \item \textbf{Two tools agree.} pypdf's and pdfplumber's text give the same speaker counts.
+        \item \textbf{Two tools agree.} pypdf's text and pdfplumber's table give the same 2024 figures.
         \item \textbf{Two documents agree.} A year printed in two reports should match.
         \item \textbf{A sample coded by hand.} Read some pages yourself, and measure the extraction against them.
     \end{enumerate}
@@ -548,12 +548,12 @@ ocr_text = pytesseract.image_to_string(
 \begin{frame}{The case studies, on the pathway}
     Both start at step 3: the chapter works from PDFs saved from the city's records portal.
     \begin{itemize}
-        \item \textbf{Council minutes, 2018--2024} (case study 1). From 2020, born-digital: step 3, with pypdf. 2018 and 2019 are \textbf{scans with a text layer}: step 3, but the scanner's OCR misread list numbers (``l0'', ``J''), so the pattern allows for them.
+        \item \textbf{Council minutes, 2018--2024} (case study 1). From 2020, born-digital: step 3, with pypdf. 2018 and 2019 are \textbf{scans with a text layer}: step 3, but test that text first --- the scanner's OCR read ``COUNCIL'' as ``COTJNCIL''.
         \item \textbf{Revenue reports} (case study 2). Born-digital, so step 3, with pdfplumber: read the totals row by position.
         \item \textbf{Exhibit 3}, the picture of a table on the last page of the December 2024 report: step 4, as on the OCR slide.
     \end{itemize}
     \medskip
-    Each case study ends at the last box: the counts match a hand count, and the totals match the reports' own change columns.
+    Each case study ends at the last box: the attendance counts match a hand count, and the totals match the reports' own change columns.
 \end{frame}
 
 \begin{frame}[fragile]{Case study 1: the obvious regex}
@@ -597,28 +597,6 @@ def roll_call(page_1):
     return present
 \end{lstlisting}
     \small It matches a hand count of all eleven meetings: 8 or 9 members at each roll call. A member who arrived late counts as absent, and one member is ``Swetlik'' in 2019 and ``Swetlick'' in 2020.
-\end{frame}
-
-\begin{frame}[fragile]{Case study 1: who spoke at Open Comment}
-    \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
-\begin{lstlisting}
-ENTRY_START = re.compile(
-    r"^[\dlJt](?: ?[\dlJt])? ?\.? +[A-Z]"
-    r"|^[A-Z]\S* .*?\b(?:s ?poke|"
-    r"signed up|withdrew)\b")
-DID_NOT_SPEAK = re.compile(
-    r"did not|withdr|not present"
-    r"|duplicate|moved to", re.I)
-\end{lstlisting}
-            \small An entry starts at a list number, as the 2018--19 scans' OCR misreads it (``l0'', ``J''), or at a name followed by ``spoke''. Four tries to get there. It counts; it never prints a name.
-        \end{column}
-        \begin{column}{0.48\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/open_comment.png}\\
-            {\scriptsize Residents who spoke at Open Comment, December meetings 2018--2024. Lighter: listed, but didn't speak.}
-        \end{column}
-    \end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{Case study 2: read the totals row by position}
@@ -694,7 +672,7 @@ row_words(page, "Total Sales and Use Tax")   # the 2018 report
             \begin{enumerate}\small
                 \item Run \texttt{roll\_call()} on the two December 2000 minutes. They are scans. What does the pattern miss? Fix it, and check against the page.
                 \item Count the votes in each meeting with the tally pattern (\texttt{Carried 9:0}). What share were unanimous?
-                \item Code one meeting's Open Comment list by hand. Compare your count with the function's.
+                \item Two members arrived after the roll call, in December 2018 and 2021. Find what the minutes say, and decide how to count them.
                 \item Read the \textbf{Sales Tax} row from all seven reports with \texttt{row\_words()}. Plot it beside the total.
                 \item Read the 2023 summary table with \texttt{find\_tables()}. Which rows does it find? Compare with \texttt{row\_words()}.
                 \item[6.] \textbf{5617}: write a memo about the two datasets you built. Use the categories of \textcite{gebru2021datasheets}

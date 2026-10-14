@@ -74,31 +74,6 @@
         233
       ]
     },
-    "open_comment.png": {
-      "by": "Claude Code",
-      "captured": "2026-10-12",
-      "copied_from": "images/ch-09/open-comment.png",
-      "figure": "ch-09/open-comment",
-      "final_url": null,
-      "imported": "2026-10-12T21:14:27+00:00",
-      "kind": "render",
-      "method": "rendered with matplotlib 3.11.2 with pypdf 6.20.1; imported by tools/shots",
-      "redacted": [],
-      "scale": 2,
-      "sha256": "3e1a38a6fff7ef1931c79008fca7173ab9368c180db6a8e8f086d14d15ddb6b5",
-      "size": [
-        1600,
-        800
-      ],
-      "source_sha256": "3e1a38a6fff7ef1931c79008fca7173ab9368c180db6a8e8f086d14d15ddb6b5",
-      "synced": "2026-10-12T21:15:50+00:00",
-      "textbook_commit": "17435818083457cc000db45e426d2a1af2a8fd4c",
-      "url": "https://documents.bouldercolorado.gov/WebLink/Browse.aspx?id=194345&dbid=0&repo=LF8PROD2",
-      "window": [
-        800,
-        400
-      ]
-    },
     "pdf_drawing_instructions.png": {
       "by": "Claude Code",
       "captured": "2026-10-06",

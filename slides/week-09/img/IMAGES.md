@@ -1,6 +1,6 @@
 # Images for `week-09`
 
-All fifteen of the deck's images are real as of 2026-10-14. Six are copies made
+All fourteen of the deck's images are real as of 2026-10-14. Five are copies made
 by the textbook's `tools/shots` (listed under "Copied by tools/shots" below);
 the other nine are recorded here. Text in each reaches 16 pixels on a slide shown
 1,920 pixels wide (`slides/common/AUTHORING.md`), at the width its frame shows
@@ -75,13 +75,17 @@ the same way; the Friday frame uses `pr_suggestion.png`.
 `extraction_pipeline.png` and its source, `extraction_pipeline.dot`, were
 deleted with their `stubs.tsv` row on 2026-10-12, when the "Scale it" frame was
 cut. Chapter 9 no longer builds a corpus pipeline; Wednesday's case studies use
-`open_comment.png` and `sales_use_tax.png` instead.
+`sales_use_tax.png` instead.
+
+`open_comment.png`, a copy of the textbook's `ch-09/open-comment` chart, was
+deleted with its `shots.json` entry and `stubs.tsv` row on 2026-10-14, when the
+chapter and the deck dropped the Open Comment count.
 
 ## Copied by tools/shots
 
 Widths of the copies, on a 1,920-pixel slide: `missing_totals_row.png`
 and `sales_use_tax.png` sit in 50% columns, 840 pixels, so their 16-pixel text
-(in an 800-pixel frame) comes to 16.8; `open_comment.png` in a 48% column, 16.1;
+(in an 800-pixel frame) comes to 16.8;
 `ocr_confidence.png` in a 46% column, where its 20-pixel figures come to 19.3.
 
 <!-- shots:begin: copies from the textbook's tools/shots, generated from shots.json; edits between these markers are replaced -->
@@ -92,7 +96,6 @@ Copied here by the textbook's `tools/shots/run sync`; `tools/shots/run synced` c
 | `documentcloud.png` | `course/week09-documentcloud` (tools/shots/out/course/week09-documentcloud/20261012T180809Z.png, textbook `f5042a5`) | 2026-10-12 | https://www.documentcloud.org/home/ | tools/shots: Google Chrome for Testing 154.0.8037.92, 480×600 at 2× |
 | `missing_totals_row.png` | `ch-09/missing-totals-row` (images/ch-09/missing-totals-row.png, textbook `5b3caf2`) | 2026-10-06 | https://documents.bouldercolorado.gov/WebLink/ElectronicFile.aspx?docid=194397&dbid=0&repo=LF8PROD2 | Claude Code: rendered with pdfplumber 0.11.10; imported by tools/shots |
 | `ocr_confidence.png` | `ch-09/ocr-confidence` (images/ch-09/ocr-confidence.png, textbook `5b3caf2`) | 2026-10-06 | https://documents.bouldercolorado.gov/WebLink/ElectronicFile.aspx?docid=194397&dbid=0&repo=LF8PROD2 | Claude Code: rendered with pytesseract 0.3.13 with Tesseract 5.5.3; imported by tools/shots |
-| `open_comment.png` | `ch-09/open-comment` (images/ch-09/open-comment.png, textbook `1743581`) | 2026-10-12 | https://documents.bouldercolorado.gov/WebLink/Browse.aspx?id=194345&dbid=0&repo=LF8PROD2 | Claude Code: rendered with matplotlib 3.11.2 with pypdf 6.20.1; imported by tools/shots |
 | `pdf_drawing_instructions.png` | `ch-09/pdf-objects` (images/ch-09/pdf-objects.png, textbook `74a950a`) | 2026-10-06 | https://documents.bouldercolorado.gov/WebLink/ElectronicFile.aspx?docid=194397&dbid=0&repo=LF8PROD2 | Claude Code: rendered with pdfplumber 0.11.10; imported by tools/shots |
 | `sales_use_tax.png` | `ch-09/sales-use-tax` (images/ch-09/sales-use-tax.png, textbook `1743581`) | 2026-10-12 | https://documents.bouldercolorado.gov/WebLink/Browse.aspx?id=194345&dbid=0&repo=LF8PROD2 | Claude Code: rendered with matplotlib 3.11.2 with pdfplumber 0.11.10; imported by tools/shots |
 <!-- shots:end -->
