@@ -108,7 +108,7 @@
         \end{column}
         \begin{column}{0.48\textwidth}
             \begin{itemize}\small
-                \item \textbf{Searchable PDF} --- the page image with an invisible OCR text layer on top. \texttt{ocrmypdf} makes one.
+                \item \textbf{Searchable PDF} --- the page image with an invisible OCR text layer on top. \texttt{tesseract} makes one from a page image.
                 \item \textbf{Layout analysis} --- working out columns, reading order, headers, and footers from where text sits.
                 \item \textbf{Table extraction} --- rebuilding rows and columns from lines and positions. Tabula, \texttt{pdfplumber}, \texttt{camelot}.
                 \item \textbf{Handwriting recognition} (HTR) --- OCR for handwriting. Much less accurate than print.
@@ -142,7 +142,7 @@ pdffonts report.pdf        # no fonts: no text layer
 pdftotext -layout report.pdf report.txt
 pdftoppm -png -r 200 -f 15 -l 15 report.pdf page
 tesseract page-15.png page-15   # OCR one image
-ocrmypdf scan.pdf searchable.pdf
+tesseract page-15.png page-15 pdf  # searchable PDF
 \end{lstlisting}
             \small In a notebook, start each line with \texttt{!}, as in Chapter 5.
         \end{column}
@@ -152,7 +152,7 @@ ocrmypdf scan.pdf searchable.pdf
 
             \medskip
 
-            \texttt{ocrmypdf} brings \texttt{tesseract} with it. Both are in \texttt{webdata}, from the week 9 setup update.
+            \texttt{tesseract} is in \texttt{webdata}, with \texttt{pytesseract}, which runs it from Python. OCRmyPDF, for a whole PDF, is optional: Chapter 9's appendix.
 
             \medskip
 
@@ -241,12 +241,14 @@ ocrmypdf scan.pdf searchable.pdf
 \begin{frame}{In the notebook}
     This week's companion notebook builds one skill at a time:
     \begin{itemize}
+        \item \textbf{Setup} --- install pypdf, pdfplumber, pytesseract, and Tesseract, once
         \item \textbf{pypdf} --- a page's text in the order it was drawn, and the repairs it needs
         \item \textbf{pdfplumber} --- words and lines by where they sit on the page, and tables rebuilt from rules
         \item \textbf{OCR} --- text from a scan, or from a picture of a table
         \item \textbf{Checks} --- counts, sums, two tools, two documents, and a sample coded by hand
         \item \textbf{Case study 1} --- council minutes with pypdf: attendance and who spoke at Open Comment
         \item \textbf{Case study 2} --- revenue reports with pdfplumber: sales and use tax by year, 2017--2024
+        \item \textbf{Document understanding} --- optional: AI parsers such as Docling, and Pandoc, judged with the same checks
     \end{itemize}
 \end{frame}
 
@@ -254,9 +256,33 @@ ocrmypdf scan.pdf searchable.pdf
 \section{Wednesday · Notebook Lab}
 % =========================================================================
 
-% The code on these frames is the chapter's (ch-09-pdfs.qmd, textbook PR #258), shortened
-% where a frame needs it; every output shown was printed by running it on the book's
-% saved copies (data/ch-09/) on 2026-10-12.
+% The code on these frames is the chapter's (ch-09-pdfs.qmd, textbook PRs #258 and #261),
+% shortened where a frame needs it; every output shown was printed by running it on the
+% book's saved copies (data/ch-09/), on 2026-10-12 and 2026-10-14.
+\begin{frame}[fragile]{Before the first cell: install once}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+\begin{lstlisting}
+%conda install -y -c conda-forge pypdf pdfplumber pytesseract tesseract
+\end{lstlisting}
+\begin{lstlisting}
+import pypdf, pdfplumber, pytesseract
+print(pypdf.__version__, pdfplumber.__version__)
+print(pytesseract.get_tesseract_version())
+# 6.20.1 0.11.10
+# 5.5.3
+\end{lstlisting}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \small A \texttt{webdata} made from today's setup page has all four. An older one, or Anaconda's \texttt{base}, needs the first cell; then restart the kernel.
+
+            \medskip
+
+            \texttt{pytesseract} is the Python library; \texttt{tesseract} is the OCR program it runs, and \texttt{pip} can't install it.
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}[fragile]{pypdf: text in the order it was drawn}
 \begin{lstlisting}
 from pypdf import PdfReader
@@ -285,8 +311,11 @@ re.sub(r'\s+', ' ', raw_text)
         Correct --- collapse spaces \& tabs, \textbf{keep} the line breaks:
 \begin{lstlisting}
 text = re.sub(r'[ \t]+', ' ', raw_text)
-lines = [ln.strip() for ln in text.split('\n')]
-clean = '\n'.join(ln for ln in lines if ln)
+kept = []
+for line in text.split('\n'):
+    if line.strip():         # skip empty lines
+        kept.append(line.strip())
+clean = '\n'.join(kept)
 \end{lstlisting}
         \end{column}
         \begin{column}{0.35\textwidth}
@@ -324,6 +353,19 @@ print(rows[-1][:2])
             {\scriptsize pdfplumber's table finder on the summary page: shaded where it found cells. The total, at the bottom, is left out.}
         \end{column}
     \end{columns}
+\end{frame}
+
+\begin{frame}{pdfplumber's table settings}
+    \texttt{find\_tables()} and \texttt{extract\_table()} take one dictionary of settings:
+    \begin{itemize}\small
+        \item \textbf{Strategies}: \texttt{"lines"} (rules and rectangle sides, the default), \texttt{"lines\_strict"}, \texttt{"text"} (words that line up), \texttt{"explicit"} (positions you give).
+        \item \textbf{\texttt{explicit\_vertical\_lines}}: the column edges yourself, as the chapter does to get the totals row back.
+        \item \textbf{Tolerances}, 3 points each: \texttt{snap} (merge near-parallel rules), \texttt{join} (join broken rules), \texttt{intersection} (where rules cross), \texttt{edge\_min\_length} (drop short marks).
+        \item \textbf{Text strategy}: \texttt{min\_words\_vertical} (3), \texttt{text\_x\_tolerance}.
+        \item \textbf{See it}: \texttt{page.to\_image().debug\_tablefinder(settings)}.
+    \end{itemize}
+    \medskip
+    \centering\small All of them, with defaults: \url{https://github.com/jsvine/pdfplumber\#table-extraction-settings}
 \end{frame}
 
 \begin{frame}[fragile]{No text layer: OCR}
@@ -429,8 +471,13 @@ DID_NOT_SPEAK = re.compile(
 \begin{lstlisting}
 def row_words(page, label):
     found = page.search(label)[0]        # where the label sits, in points
+    # a strip of the page, as tall as the label's line
     line = page.crop((0, found["top"] - 1, page.width, found["bottom"] + 1))
-    return [w["text"] for w in line.extract_words() if w["x0"] > found["x1"]]
+    words = []
+    for word in line.extract_words():
+        if word["x0"] > found["x1"]:     # right of the label
+            words.append(word["text"])
+    return words
 
 row_words(page, "Total Sales and Use Tax")   # the 2018 report
 # ['$134,538,892', '$140,648,710', '$6,109,818', '4.54%']
@@ -455,6 +502,31 @@ row_words(page, "Total Sales and Use Tax")   # the 2018 report
             \centering
             \includegraphics[width=\textwidth]{img/sales_use_tax.png}\\
             {\scriptsize Total sales and use tax by year, read with pdfplumber, with the change from the year before.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Document understanding: AI parsers, optional}
+    \begin{columns}[T]
+        \begin{column}{0.52\textwidth}
+            \begin{itemize}\small
+                \item \textbf{Text-layer converters}: MarkItDown. Fast; a scan gives it nothing.
+                \item \textbf{Pipelines}: layout + table + OCR models. Docling runs on a laptop.
+                \item \textbf{Vision-language models}: olmOCR, DeepSeek-OCR, Datalab's Chandra. Most need a GPU, or a hosted service that receives your file.
+                \item \textbf{Pandoc} converts the Markdown they write to HTML or Word. It can't read a PDF.
+            \end{itemize}
+            \medskip
+            \footnotesize None of these is in \texttt{webdata} or needed for the lab: Chapter 9, ``Document Understanding.''
+        \end{column}
+        \begin{column}{0.44\textwidth}
+            \small \textbf{Docling on Exhibit 3}, the picture of a table:
+            \begin{itemize}\small
+                \item 21 of 30 rows whole, and each adds up
+                \item 9 incomplete or merged; 2 under the wrong label
+                \item no error raised
+            \end{itemize}
+            \medskip
+            Same checks as ever: count, sums, labels, two tools.
         \end{column}
     \end{columns}
 \end{frame}

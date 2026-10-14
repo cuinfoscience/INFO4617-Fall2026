@@ -22,7 +22,7 @@ make a separate environment for this course. The first command is one long
 line:
 
 ```bash
-conda create -n webdata --override-channels -c conda-forge python=3.14 notebook requests beautifulsoup4 lxml pandas matplotlib seaborn gensim dnspython selenium playwright-python pypdf pdfplumber ocrmypdf pytesseract praw spotipy atproto mastodon.py openai anthropic
+conda create -n webdata --override-channels -c conda-forge python=3.14 notebook requests beautifulsoup4 lxml pandas matplotlib seaborn gensim dnspython selenium playwright-python pypdf pdfplumber pytesseract tesseract praw spotipy atproto mastodon.py openai anthropic
 conda activate webdata
 ```
 
@@ -32,7 +32,7 @@ import, from `requests` in week 1 to `openai` in week 13. They come from
 conda-forge, a community channel that builds packages for new versions of
 Python quickly. gensim, which week 7 uses, has no Python 3.14 build that `pip`
 can install. Tesseract, the program that reads text from scanned pages in week
-9, comes with `ocrmypdf`. Expect it to take a few minutes. Run `conda activate
+9, is the `tesseract` package; `pytesseract` runs it from Python. Expect it to take a few minutes. Run `conda activate
 webdata` each time you open a new terminal.
 
 Only two later steps are not in this command. Week 8 downloads browsers for
@@ -45,7 +45,7 @@ Earlier versions of this page installed fewer libraries. Add the rest once,
 from a terminal (on Windows, the Anaconda Prompt). This is one long line:
 
 ```bash
-conda install -n webdata -c conda-forge gensim lxml dnspython selenium playwright-python pypdf pdfplumber ocrmypdf pytesseract praw spotipy atproto mastodon.py openai anthropic
+conda install -n webdata -c conda-forge gensim lxml dnspython selenium playwright-python pypdf pdfplumber pytesseract tesseract praw spotipy atproto mastodon.py openai anthropic
 ```
 
 Type `y` when conda asks to proceed. If your `webdata` was made with `pip`, as
