@@ -1,0 +1,27 @@
+digraph pathway {
+  graph [rankdir=TB, nodesep=0.45, ranksep=0.32, fontname="Helvetica", bgcolor="white", pad=0.15];
+  node [fontname="Helvetica", fontsize=15, shape=box, style="rounded,filled", fillcolor="#dbe7f3", color="#5b7fa6", margin="0.14,0.08"];
+  edge [fontname="Helvetica", fontsize=14, color="#555555", arrowsize=0.7];
+
+  find [label="1  Find it\nopen-data portal,\nAPI, spreadsheet?"];
+  ask  [label="2  Ask for it\nC.R.S. 24-72-203(3.5):\nsortable records in\na sortable format"];
+  text [label="3  PDF only:\nis there a text layer?\nselect text, pdffonts", shape=box];
+  ocr  [label="4  No text layer:\nOCR\nTesseract"];
+  extract [label="Text and tables\npypdf, pdfplumber,\nregular expressions"];
+  check [label="Check every\nextraction\ncounts, sums, a sample", fillcolor="#e2f0d9", color="#6a9a4a"];
+  use  [label="Use it", fillcolor="#e2f0d9", color="#6a9a4a"];
+  ai   [label="Optional: AI parser\nDocling, MarkItDown", style="rounded,filled,dashed", fillcolor="#f2f2f2", color="#888888"];
+
+  find -> ask [label=" no"];
+  find -> use [label="yes "];
+  ask -> use [label="  you get the data"];
+  ask -> text [label="only a PDF"];
+  text -> extract [label=" yes"];
+  text -> ocr [label="no  "];
+  ocr -> extract [label="then the\nsame steps  "];
+  extract -> check;
+  text -> ai [style=dashed, color="#888888", fontcolor="#666666", label=" either way"];
+  ai -> check [style=dashed, color="#888888"];
+  { rank=same; use; ask; }
+  { rank=same; ocr; ai; }
+}

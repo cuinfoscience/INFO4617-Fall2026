@@ -27,7 +27,7 @@
     \dayband{Monday}{Concepts \& notebook intro}
     \begin{itemize}\small
         \item Why PDFs resist extraction; reconstruction vs.\ reading
-        \item Text layers and OCR; getting text out by hand, from readers, office tools, and the command line
+        \item Four steps: find the data, ask for it, parse a born-digital PDF, OCR a scan --- by hand first
         \item In class: the city's revenue report, by hand (20 minutes)
     \end{itemize}
 
@@ -35,7 +35,7 @@
 
     \dayband{Wednesday}{Notebook lab}
     \begin{itemize}\small
-        \item Work the Chapter 9 notebook: pypdf on the council minutes, pdfplumber on the revenue reports
+        \item Steps 3 and 4 in Python: pypdf on the council minutes, pdfplumber on the revenue reports, OCR on a picture of a table
     \end{itemize}
 
     \medskip
@@ -96,6 +96,29 @@
     \end{columns}
 \end{frame}
 
+\begin{frame}{Four steps, from easiest to hardest}
+    \begin{columns}[T]
+        \begin{column}{0.44\textwidth}
+            \centering
+            \includegraphics[height=0.82\textheight]{img/pathway.png}
+        \end{column}
+        \begin{column}{0.52\textwidth}
+            Take the first step that works.
+            \begin{enumerate}\small
+                \item \textbf{Find it} in a form made for machines: an open-data portal, an API, or a spreadsheet.
+                \item \textbf{Ask for it.} Colorado's open-records law says a record kept in a sortable format must be provided in that format (C.R.S. 24-72-203(3.5)).
+                \item \textbf{Parse the PDF.} Only a PDF, and no DOCX or XLSX? Check that it is born-digital, then find its text and tables.
+                \item \textbf{OCR.} No text layer? Run OCR, then do step 3's work on the text it gives you.
+            \end{enumerate}
+            \medskip
+            \small Whatever route the data takes, \textbf{check it} before you use it. An AI parser is an optional branch at steps 3 and 4.
+
+            \medskip
+            Today: every step by hand. Wednesday: steps 3 and 4 in Python.
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}{Getting text and data out of a PDF}
     \begin{columns}[T]
         \begin{column}{0.48\textwidth}
@@ -118,66 +141,26 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{First, by hand: readers and office tools}
-    Try this before you write code. One table, once, rarely needs Python.
-
-    \medskip
-
-    \begin{itemize}\small
-        \item \textbf{Is there text?} Drag across a line, or search with Ctrl+F (Cmd+F). If nothing highlights, it's a scan: go to OCR.
-        \item \textbf{Copy and paste} from any reader. Paragraphs come through. A table arrives as runs of text that you split into columns yourself.
-        \item \textbf{Adobe Acrobat Reader} (free): \textit{File $\to$ Save As Other $\to$ Text}. Export to Word or Excel needs a paid Acrobat subscription.
-        \item \textbf{Microsoft Word}: \textit{File $\to$ Open} a PDF, and Word converts it to an editable document. Best on PDFs that are mostly text.
-        \item \textbf{Microsoft Excel} (Microsoft 365, Windows): \textit{Data $\to$ Get Data $\to$ From File $\to$ From PDF} lists the tables it finds. Not in Excel for Mac.
-        \item \textbf{Google Drive}: right-click $\to$ \textit{Open with $\to$ Google Docs} runs OCR on a PDF or image of 2~MB or less. Tables and columns are usually lost.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{The command line, and free desktop tools}
+\begin{frame}{Steps 1 and 2: before you parse anything}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-pdfinfo report.pdf         # pages, producer, dates
-pdffonts report.pdf        # no fonts: no text layer
-pdftotext -layout report.pdf report.txt
-pdftoppm -png -r 200 -f 15 -l 15 report.pdf page
-tesseract page-15.png page-15   # OCR one image
-tesseract page-15.png page-15 pdf  # searchable PDF
-\end{lstlisting}
-            \small In a notebook, start each line with \texttt{!}, as in Chapter 5.
+        \begin{column}{0.64\textwidth}
+            \textbf{1. Look for the data in a form made for machines.}
+            \begin{itemize}\small
+                \item An \textbf{open-data portal}: a city's, a state's, or \texttt{data.gov}.
+                \item An \textbf{API} (weeks 10--13), which returns JSON instead of pages.
+                \item A \textbf{spreadsheet} or CSV posted beside the PDF, or the same report as \texttt{.xlsx} or \texttt{.docx}.
+            \end{itemize}
+
+            \medskip
+
+            \textbf{2. Ask for it.} Colorado's open-records law says that a record kept in a sortable format, such as a spreadsheet, must be provided in that format (C.R.S. 24-72-203(3.5)).
+
+            \medskip
+
+            \textbf{Only a PDF?} Go on to step 3.
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \small
-            \texttt{pdfinfo}, \texttt{pdffonts}, \texttt{pdftotext}, and \texttt{pdftoppm} come with \textbf{Poppler}: \texttt{conda install -c conda-forge poppler}. \texttt{-layout} keeps columns lined up with spaces.
-
-            \medskip
-
-            \texttt{tesseract} is in \texttt{webdata}, with \texttt{pytesseract}, which runs it from Python. OCRmyPDF, for a whole PDF, is optional: Chapter 9's appendix.
-
-            \medskip
-
-            \textbf{Tabula} is a free desktop app made for journalists: draw a box around a table, and save it as CSV.
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Online converters}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Smallpdf, iLovePDF, Adobe's online converter, and Google Drive will all turn a PDF into Word, Excel, or text in your browser.
-
-            \medskip
-
-            Each one \textbf{sends your file to a company's server}. That is fine for a city's public revenue report. It is not fine for records with people's names, health or student information, or anything you promised to keep private.
-
-            \medskip
-
-            Read the size limits and the terms. Keep the original PDF, and write down which tool made which file: that is your provenance.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Whatever the tool}
-                \small Check its output against the page. Every route here drops, merges, or misreads something, and none of them says so.
-            \end{alertblock}
+        \begin{column}{0.32\textwidth}
+            \includegraphics[width=\textwidth]{img/pathway_find.png}
         \end{column}
     \end{columns}
 \end{frame}
@@ -203,6 +186,81 @@ tesseract page-15.png page-15 pdf  # searchable PDF
     \end{columns}
 \end{frame}
 
+\begin{frame}{Step 3: is the PDF born-digital?}
+    \begin{columns}[T]
+        \begin{column}{0.64\textwidth}
+            A born-digital PDF has a \textbf{text layer}: the characters are in the file. Check before you choose a tool:
+            \begin{itemize}\small
+                \item \textbf{Select or search.} Drag across a line, or press Ctrl+F (Cmd+F). If nothing highlights, the page is a picture.
+                \item \textbf{Who made it?} Acrobat Reader's \textit{File $\to$ Properties} names the application: Word or Excel, or a scanner.
+                \item \textbf{Fonts.} \texttt{pdffonts report.pdf} lists none for a page that is only an image.
+                \item \textbf{Every page.} A report can mix both: text pages, and a page that is a picture of a table.
+            \end{itemize}
+            \medskip
+            \textbf{Yes:} get the text and tables out, by hand today and in Python on Wednesday. \textbf{No:} step 4.
+        \end{column}
+        \begin{column}{0.32\textwidth}
+            \includegraphics[width=\textwidth]{img/pathway_text.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 3 by hand: readers and office tools}
+    Try this before you write code. One table, once, rarely needs Python.
+
+    \medskip
+
+    \begin{itemize}\small
+        \item \textbf{Copy and paste} from any reader. Paragraphs come through. A table arrives as runs of text that you split into columns yourself (Excel: \textit{Data $\to$ Text to Columns}).
+        \item \textbf{Adobe Acrobat Reader} (free): \textit{File $\to$ Save As Other $\to$ Text}. Export to Word or Excel needs a paid Acrobat subscription.
+        \item \textbf{Microsoft Word}: \textit{File $\to$ Open} a PDF, and Word converts it to an editable document. Best on PDFs that are mostly text.
+        \item \textbf{Microsoft Excel} (Microsoft 365, Windows): \textit{Data $\to$ Get Data $\to$ From File $\to$ From PDF} lists the tables it finds. Not in Excel for Mac.
+        \item \textbf{Tabula}, a free desktop app made for journalists: draw a box around a table, and save it as CSV.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3 at the command line}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+pdfinfo report.pdf         # pages, producer, dates
+pdffonts report.pdf        # no fonts: no text layer
+pdftotext -layout report.pdf report.txt
+\end{lstlisting}
+            \small In a notebook, start each line with \texttt{!}, as in Chapter 5.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \small
+            \texttt{pdfinfo}, \texttt{pdffonts}, and \texttt{pdftotext} come with \textbf{Poppler}: \texttt{conda install -c conda-forge poppler}.
+
+            \medskip
+
+            \texttt{-layout} keeps columns lined up with spaces, which makes a table easier to split.
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 3 online: converters, and the upload}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Smallpdf, iLovePDF, Adobe's online converter, and Google Drive will all turn a PDF into Word, Excel, or text in your browser.
+
+            \medskip
+
+            Each one \textbf{sends your file to a company's server}. That is fine for a city's public revenue report. It is not fine for records with people's names, health or student information, or anything you promised to keep private.
+
+            \medskip
+
+            Read the size limits and the terms. Keep the original PDF, and write down which tool made which file: that is your provenance.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Whatever the tool}
+                \small Check its output against the page. Every route here drops, merges, or misreads something, and none of them says so.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 % Answer key (from data/ch-09/revenue-report-2024-12.pdf, checked 2026-10-12):
 % the five 2024 sources sum to $171,006,200, but the printed subtotal is
 % $171,006,199 -- the city's figures are rounded, so a check needs a tolerance.
@@ -215,12 +273,12 @@ tesseract page-15.png page-15 pdf  # searchable PDF
             Work in pairs. Use no Python today.
             \begin{enumerate}\small
                 \item Download Boulder's December 2024 revenue report from the textbook: \texttt{data/ch-09/revenue-report-2024-12.pdf}. (5 min)
-                \item Get the \textbf{Sales and Use Tax Summary} on page 2 into a spreadsheet. Use copy and paste. Then use one other tool from the last three slides. (8 min)
+                \item Get the \textbf{Sales and Use Tax Summary} on page 2 into a spreadsheet. Use copy and paste. Then use one other tool from step 3. (8 min)
                 \item Clean it. Make one row per source, with the columns \texttt{source}, \texttt{2023}, and \texttt{2024}. Remove the \texttt{\$} signs and the commas. (4 min)
                 \item Check it. Add the five sources for 2024. Compare the sum with the row ``Total Sales \& Use Tax based on current economic activity.'' (3 min)
             \end{enumerate}
             \smallskip
-            {\small Fast? Try the same steps on page 15, Exhibit 3.}
+            {\small Fast? Try the same steps on page 15, Exhibit 3. Nothing on it can be selected: that is step 4.}
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{block}{Report back}
@@ -238,17 +296,40 @@ tesseract page-15.png page-15 pdf  # searchable PDF
     \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]{Step 4: no text layer --- OCR, then the same steps}
+    \begin{columns}[T]
+        \begin{column}{0.64\textwidth}
+            \textbf{By hand.} Google Drive: right-click $\to$ \textit{Open with $\to$ Google Docs} runs OCR on a PDF or image of 2~MB or less. Tables and columns are usually lost.
+
+            \medskip
+
+            \textbf{At the command line}, one page at a time:
+\begin{lstlisting}
+pdftoppm -png -r 300 -f 15 -l 15 report.pdf page
+tesseract page-15.png page-15      # text
+tesseract page-15.png page-15 pdf  # searchable PDF
+\end{lstlisting}
+            \small Then do step 3's work on the text OCR gives you. OCR misreads characters (a period for a comma, ``l'' for 1), so the checks matter more here. An \textbf{AI parser} is an optional branch at steps 3 and 4; Wednesday shows one.
+        \end{column}
+        \begin{column}{0.32\textwidth}
+            \includegraphics[width=\textwidth]{img/pathway_ocr.png}
+
+            \medskip
+            \scriptsize \texttt{tesseract} and \texttt{pytesseract} are in \texttt{webdata}. OCRmyPDF, for a whole PDF, is optional: Chapter 9's appendix.
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}{In the notebook}
-    This week's companion notebook builds one skill at a time:
+    This week's companion notebook follows the same steps:
     \begin{itemize}
         \item \textbf{Setup} --- install pypdf, pdfplumber, pytesseract, and Tesseract, once
-        \item \textbf{pypdf} --- a page's text in the order it was drawn, and the repairs it needs
-        \item \textbf{pdfplumber} --- words and lines by where they sit on the page, and tables rebuilt from rules
-        \item \textbf{OCR} --- text from a scan, or from a picture of a table
-        \item \textbf{Checks} --- counts, sums, two tools, two documents, and a sample coded by hand
-        \item \textbf{Case study 1} --- council minutes with pypdf: attendance and who spoke at Open Comment
-        \item \textbf{Case study 2} --- revenue reports with pdfplumber: sales and use tax by year, 2017--2024
-        \item \textbf{Document understanding} --- optional: AI parsers such as Docling, and Pandoc, judged with the same checks
+        \item \textbf{Step 3: is there a text layer?} --- characters and images on every page
+        \item \textbf{Step 3: text and tables} --- pypdf for a page's text, pdfplumber for words by position and tables rebuilt from rules
+        \item \textbf{Step 4: OCR} --- text from a scan, or from a picture of a table
+        \item \textbf{Check} --- counts, sums, two tools, two documents, and a sample coded by hand
+        \item \textbf{Case studies} --- attendance in council minutes with pypdf, and revenue reports with pdfplumber
+        \item \textbf{Optional branch} --- AI parsers such as Docling, judged with the same checks
     \end{itemize}
 \end{frame}
 
@@ -288,6 +369,36 @@ print(pytesseract.get_tesseract_version())
             \medskip
 
             \texttt{pytesseract} is the Python library; \texttt{tesseract} is the OCR program it runs, and \texttt{pip} can't install it.
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3 in code: is there a text layer?}
+    \begin{columns}[T]
+        \begin{column}{0.62\textwidth}
+\begin{lstlisting}
+def page_profile(path):
+    reader = PdfReader(path)
+    characters = []
+    images = []
+    for page in reader.pages:
+        characters.append(len(page.extract_text()))
+        images.append(len(page.images))
+    return characters, images
+
+characters, images = page_profile(report_2024)
+print(characters)  # [1332, 2279, ..., 4624, 265]
+print(images)      # [1, 0, ..., 0, 1]
+\end{lstlisting}
+        \end{column}
+        \begin{column}{0.34\textwidth}
+            \includegraphics[width=\textwidth]{img/pathway_text.png}
+
+            \medskip
+            \small Text on every page of the December 2024 report: born-digital. But the last page has one image and 265 characters, the note beside a \textbf{picture} of a table: that page is step 4.
+
+            \medskip
+            One image per page and plenty of text, as in the 2018 minutes, is a \textbf{scan with a text layer}: test that text before you trust it.
         \end{column}
     \end{columns}
 \end{frame}
@@ -332,11 +443,11 @@ clean = '\n'.join(kept)
 
             \bigskip
 
-            Line structure is real information: a roll call's names, and each Open Comment entry, sit on lines of their own.
+            Line structure is real information: a roll call's names, and each heading, sit on lines of their own.
 
             \bigskip
 
-            Erase the newlines and no pattern can find where an entry starts.
+            Erase the newlines and no pattern can find where a list starts or ends.
         \end{column}
     \end{columns}
 \end{frame}
@@ -377,6 +488,22 @@ print(rows[-1][:2])
     \centering\small All of them, with defaults: \url{https://github.com/jsvine/pdfplumber\#table-extraction-settings}
 \end{frame}
 
+\begin{frame}{Step 4 in Python: OCR, then the same steps}
+    \begin{columns}[T]
+        \begin{column}{0.62\textwidth}
+            \begin{enumerate}\small
+                \item \textbf{Get the image.} pypdf hands you a page's picture: \texttt{page.images[0].image}.
+                \item \textbf{OCR it.} \texttt{pytesseract.image\_to\_string()} runs Tesseract and returns text.
+                \item \textbf{Same steps as step 3.} Split the text into lines, and read each row with a regular expression.
+                \item \textbf{Check harder.} Set aside the lines that don't parse, and add up each row: OCR's misread digits still look like numbers.
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.34\textwidth}
+            \includegraphics[width=\textwidth]{img/pathway_ocr.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}[fragile]{No text layer: OCR}
     \begin{columns}[T]
         \begin{column}{0.5\textwidth}
@@ -400,15 +527,33 @@ ocr_text = pytesseract.image_to_string(
 \end{frame}
 
 \begin{frame}{Check every extraction}
+    \begin{columns}[T]
+        \begin{column}{0.64\textwidth}
     Extraction fails without errors. Each of these caught a real problem in Chapter 9:
     \begin{enumerate}\small
         \item \textbf{Look at the page beside the output.}
         \item \textbf{Count.} The summary table has nine rows of figures; the council has nine seats.
         \item \textbf{Sums.} The five sources add up to \$171,006,200; the printed subtotal is \$171,006,199.
-        \item \textbf{Two tools agree.} pypdf's and pdfplumber's text give the same speaker counts.
+        \item \textbf{Two tools agree.} pypdf's text and pdfplumber's table give the same 2024 figures.
         \item \textbf{Two documents agree.} A year printed in two reports should match.
         \item \textbf{A sample coded by hand.} Read some pages yourself, and measure the extraction against them.
     \end{enumerate}
+        \end{column}
+        \begin{column}{0.32\textwidth}
+            \includegraphics[width=\textwidth]{img/pathway_check.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{The case studies, on the pathway}
+    Both start at step 3: the chapter works from PDFs saved from the city's records portal.
+    \begin{itemize}
+        \item \textbf{Council minutes, 2018--2024} (case study 1). From 2020, born-digital: step 3, with pypdf. 2018 and 2019 are \textbf{scans with a text layer}: step 3, but test that text first --- the scanner's OCR read ``COUNCIL'' as ``COTJNCIL''.
+        \item \textbf{Revenue reports} (case study 2). Born-digital, so step 3, with pdfplumber: read the totals row by position.
+        \item \textbf{Exhibit 3}, the picture of a table on the last page of the December 2024 report: step 4, as on the OCR slide.
+    \end{itemize}
+    \medskip
+    Each case study ends at the last box: the attendance counts match a hand count, and the totals match the reports' own change columns.
 \end{frame}
 
 \begin{frame}[fragile]{Case study 1: the obvious regex}
@@ -454,28 +599,6 @@ def roll_call(page_1):
     \small It matches a hand count of all eleven meetings: 8 or 9 members at each roll call. A member who arrived late counts as absent, and one member is ``Swetlik'' in 2019 and ``Swetlick'' in 2020.
 \end{frame}
 
-\begin{frame}[fragile]{Case study 1: who spoke at Open Comment}
-    \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
-\begin{lstlisting}
-ENTRY_START = re.compile(
-    r"^[\dlJt](?: ?[\dlJt])? ?\.? +[A-Z]"
-    r"|^[A-Z]\S* .*?\b(?:s ?poke|"
-    r"signed up|withdrew)\b")
-DID_NOT_SPEAK = re.compile(
-    r"did not|withdr|not present"
-    r"|duplicate|moved to", re.I)
-\end{lstlisting}
-            \small An entry starts at a list number, as the 2018--19 scans' OCR misreads it (``l0'', ``J''), or at a name followed by ``spoke''. Four tries to get there. It counts; it never prints a name.
-        \end{column}
-        \begin{column}{0.48\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/open_comment.png}\\
-            {\scriptsize Residents who spoke at Open Comment, December meetings 2018--2024. Lighter: listed, but didn't speak.}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 \begin{frame}[fragile]{Case study 2: read the totals row by position}
 \begin{lstlisting}
 def row_words(page, label):
@@ -515,7 +638,7 @@ row_words(page, "Total Sales and Use Tax")   # the 2018 report
     \end{columns}
 \end{frame}
 
-\begin{frame}{Document understanding: AI parsers, optional}
+\begin{frame}{The optional branch: AI parsers}
     \begin{columns}[T]
         \begin{column}{0.52\textwidth}
             \begin{itemize}\small
@@ -528,6 +651,8 @@ row_words(page, "Total Sales and Use Tax")   # the 2018 report
             \footnotesize None of these is in \texttt{webdata} or needed for the lab: Chapter 9, ``Document Understanding.''
         \end{column}
         \begin{column}{0.44\textwidth}
+            \includegraphics[width=0.75\textwidth]{img/pathway_ai.png}
+
             \small \textbf{Docling on Exhibit 3}, the picture of a table:
             \begin{itemize}\small
                 \item 21 of 30 rows whole, and each adds up
@@ -547,7 +672,7 @@ row_words(page, "Total Sales and Use Tax")   # the 2018 report
             \begin{enumerate}\small
                 \item Run \texttt{roll\_call()} on the two December 2000 minutes. They are scans. What does the pattern miss? Fix it, and check against the page.
                 \item Count the votes in each meeting with the tally pattern (\texttt{Carried 9:0}). What share were unanimous?
-                \item Code one meeting's Open Comment list by hand. Compare your count with the function's.
+                \item Two members arrived after the roll call, in December 2018 and 2021. Find what the minutes say, and decide how to count them.
                 \item Read the \textbf{Sales Tax} row from all seven reports with \texttt{row\_words()}. Plot it beside the total.
                 \item Read the 2023 summary table with \texttt{find\_tables()}. Which rows does it find? Compare with \texttt{row\_words()}.
                 \item[6.] \textbf{5617}: write a memo about the two datasets you built. Use the categories of \textcite{gebru2021datasheets}
@@ -636,6 +761,7 @@ row_words(page, "Total Sales and Use Tax")   # the 2018 report
 % =========================================================================
 \begin{frame}{Key takeaways}
     \begin{enumerate}
+        \item \textbf{Take the first step that works}: find the data in a form made for machines, ask for it, parse a born-digital PDF, and only then OCR.
         \item PDFs optimize \textbf{visual fidelity over structure} --- extraction is reconstruction, not reading.
         \item \texttt{pypdf} gives text in the order it was drawn; expect breaks inside words and plan to clean them.
         \item Collapse spaces/tabs but \textbf{keep newlines} --- line structure is information; regex imposes the rest.

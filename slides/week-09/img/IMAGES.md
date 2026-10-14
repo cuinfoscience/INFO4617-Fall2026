@@ -1,8 +1,8 @@
 # Images for `week-09`
 
-All nine of the deck's images are real as of 2026-10-12. Six are copies made by
-the textbook's `tools/shots` (listed under "Copied by tools/shots" below); the
-other three are recorded here. Text in each reaches 16 pixels on a slide shown
+All fourteen of the deck's images are real as of 2026-10-14. Five are copies made
+by the textbook's `tools/shots` (listed under "Copied by tools/shots" below);
+the other nine are recorded here. Text in each reaches 16 pixels on a slide shown
 1,920 pixels wide (`slides/common/AUTHORING.md`), at the width its frame shows
 it.
 
@@ -41,6 +41,22 @@ it.
   - The slide's regex finds no "Present:" line in the seven meetings before
     2022, whose minutes say "were present" or "Those present were", and only
     5 of 9 names in the six after, because the list wraps onto a second line.
+- `pathway.png` -- the four steps, from easiest to hardest: find the data in a
+  form made for machines, ask for it (C.R.S. 24-72-203(3.5)), parse a
+  born-digital PDF, and OCR a page with no text layer; then check. An AI parser
+  is a dashed, optional branch. (Four steps, from easiest to hardest)
+  - Drawn 2026-10-14 with Graphviz 2.43.0 by `pathway.py` (in this folder),
+    which writes `pathway.dot` and runs `dot -Tpng -Gdpi=150`.
+  - Its text, 15 points at 150 dpi, is 31 pixels. The frame shows the image
+    0.82 of the text height tall, about 736 pixels wide, so the text comes to
+    20 pixels.
+- `pathway_find.png`, `pathway_text.png`, `pathway_ocr.png`, `pathway_ai.png`,
+  `pathway_check.png` -- small copies of the pathway, with one step filled
+  dark: the "you are here" marker on the first frame of each step, Monday and
+  Wednesday. The steps 1 and 2 frame uses `pathway_find.png`.
+  - Drawn by the same script, from `pathway_<step>.dot`.
+  - Their text, 31 pixels in a 684-pixel image, comes to 24 pixels or more in
+    the 32--34% columns and the 75%-of-44% column that show them.
 - `pr_suggestion.png` -- a review suggestion on textbook PR #228, the
   instructor's demonstration pull request, with **Apply suggestion**.
   (Improving Chapter 9 together)
@@ -59,13 +75,17 @@ the same way; the Friday frame uses `pr_suggestion.png`.
 `extraction_pipeline.png` and its source, `extraction_pipeline.dot`, were
 deleted with their `stubs.tsv` row on 2026-10-12, when the "Scale it" frame was
 cut. Chapter 9 no longer builds a corpus pipeline; Wednesday's case studies use
-`open_comment.png` and `sales_use_tax.png` instead.
+`sales_use_tax.png` instead.
+
+`open_comment.png`, a copy of the textbook's `ch-09/open-comment` chart, was
+deleted with its `shots.json` entry and `stubs.tsv` row on 2026-10-14, when the
+chapter and the deck dropped the Open Comment count.
 
 ## Copied by tools/shots
 
 Widths of the copies, on a 1,920-pixel slide: `missing_totals_row.png`
 and `sales_use_tax.png` sit in 50% columns, 840 pixels, so their 16-pixel text
-(in an 800-pixel frame) comes to 16.8; `open_comment.png` in a 48% column, 16.1;
+(in an 800-pixel frame) comes to 16.8;
 `ocr_confidence.png` in a 46% column, where its 20-pixel figures come to 19.3.
 
 <!-- shots:begin: copies from the textbook's tools/shots, generated from shots.json; edits between these markers are replaced -->
@@ -76,7 +96,6 @@ Copied here by the textbook's `tools/shots/run sync`; `tools/shots/run synced` c
 | `documentcloud.png` | `course/week09-documentcloud` (tools/shots/out/course/week09-documentcloud/20261012T180809Z.png, textbook `f5042a5`) | 2026-10-12 | https://www.documentcloud.org/home/ | tools/shots: Google Chrome for Testing 154.0.8037.92, 480×600 at 2× |
 | `missing_totals_row.png` | `ch-09/missing-totals-row` (images/ch-09/missing-totals-row.png, textbook `5b3caf2`) | 2026-10-06 | https://documents.bouldercolorado.gov/WebLink/ElectronicFile.aspx?docid=194397&dbid=0&repo=LF8PROD2 | Claude Code: rendered with pdfplumber 0.11.10; imported by tools/shots |
 | `ocr_confidence.png` | `ch-09/ocr-confidence` (images/ch-09/ocr-confidence.png, textbook `5b3caf2`) | 2026-10-06 | https://documents.bouldercolorado.gov/WebLink/ElectronicFile.aspx?docid=194397&dbid=0&repo=LF8PROD2 | Claude Code: rendered with pytesseract 0.3.13 with Tesseract 5.5.3; imported by tools/shots |
-| `open_comment.png` | `ch-09/open-comment` (images/ch-09/open-comment.png, textbook `1743581`) | 2026-10-12 | https://documents.bouldercolorado.gov/WebLink/Browse.aspx?id=194345&dbid=0&repo=LF8PROD2 | Claude Code: rendered with matplotlib 3.11.2 with pypdf 6.20.1; imported by tools/shots |
 | `pdf_drawing_instructions.png` | `ch-09/pdf-objects` (images/ch-09/pdf-objects.png, textbook `74a950a`) | 2026-10-06 | https://documents.bouldercolorado.gov/WebLink/ElectronicFile.aspx?docid=194397&dbid=0&repo=LF8PROD2 | Claude Code: rendered with pdfplumber 0.11.10; imported by tools/shots |
 | `sales_use_tax.png` | `ch-09/sales-use-tax` (images/ch-09/sales-use-tax.png, textbook `1743581`) | 2026-10-12 | https://documents.bouldercolorado.gov/WebLink/Browse.aspx?id=194345&dbid=0&repo=LF8PROD2 | Claude Code: rendered with matplotlib 3.11.2 with pdfplumber 0.11.10; imported by tools/shots |
 <!-- shots:end -->
