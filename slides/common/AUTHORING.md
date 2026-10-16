@@ -20,7 +20,7 @@ recently — voice evolves forward, not backward.
 - `img/IMAGES.md` — where each image came from; `make_stubs.py` maintains only
   the table between its `<!-- stubs:… -->` markers
 
-## Deck structure (target 25–40 frames; density from one-topic-per-frame, not from packing)
+## Deck structure (usually 20–50 frames; density from one-topic-per-frame, not from packing)
 1. `\documentclass[9pt,aspectratio=169]{beamer}`, then the input-path line
    `\makeatletter\def\input@path{{../common/}}\makeatother`, then
    `\input{preamble}` (identical to week-06 — do **not** re-declare
@@ -31,11 +31,11 @@ recently — voice evolves forward, not backward.
    `\date{<dates>}`, then `\maketitle`.
 3. **"This week at a glance"** frame — the Monday/Wednesday/Friday roadmap using `\dayband{Day}{Topic}`, plus a companion-notebook block (`ch-NN-slug.ipynb`).
 4. `\section{Monday · Concepts}` — motivation + the chapter's core concepts,
-   grounded in its conceptual prose, one topic per frame. Shipped decks range
-   from 9 to 22 frames here (week-02: 17, week-03: 22, week-05: 9, week-06: 13)
-   depending on how many distinct concepts/strategies/cases the chapter's
-   material actually supports — let the chapter's own density decide the
-   count rather than aiming for a fixed number. Note cross-references the
+   grounded in its conceptual prose, one topic per frame. Let the chapter's
+   density decide the count; don't aim for a number. Recent decks have run
+   from a handful of Monday frames to more than twenty. (The 2026-10-16 AAR
+   dropped the ranges this step used to give: copied from last month's
+   decks, they went stale within weeks.) Note cross-references the
    chapter makes to other chapters, and back-reference (don't re-teach in
    depth) any skill an earlier week already covered in full.
 5. `\section{Wednesday · Notebook Lab}` — condensed **real code** from the
@@ -45,15 +45,23 @@ recently — voice evolves forward, not backward.
    - a **Show-and-Tell** prompt (bring a bug / interesting data / a research provocation — the instructor's recurring habit);
    - one `[standout]` frame with a memorable takeaway from the chapter.
 
-   Shipped decks range from 6 to 15 frames here (week-02: 12, week-03: 6,
-   week-05: 14, week-06: 12) — a chapter with more distinct strategies or
-   code patterns earns more frames; a chapter that's mostly one worked
-   example doesn't need padding to hit a number. If a chapter's Monday and
+   A chapter with more distinct strategies or code patterns earns more
+   frames; a chapter that's mostly one worked example doesn't need padding
+   to hit a number. If a chapter's Monday and
    Wednesday material is thin enough that splitting them reads as padding,
    merging into one `\section{Wednesday · Concepts \& Notebook}` is an
    established alternative (week-04) — the three-section Monday/Wednesday/
    Friday split is the default, not a hard requirement.
-6. `\section{Friday · Textbook Revisions}` — 3 frames: the PR + peer-review workflow (reuse week-06's), a **chapter-specific "revision menu"** (concrete targets pulled from *this* chapter's callouts / "Common Issues" / "Further Reading" / thin exercises), and "what makes a good PR / good review" (reuse week-06's). End the last frame with a one-line teaser of next week.
+6. `\section{Friday · <this week's activity>}` — Friday is the course's
+   workshop. By default it is textbook revisions, in three frames: the PR +
+   peer-review workflow (reuse week-06's), a **chapter-specific "revision
+   menu"** (concrete targets pulled from *this* chapter's callouts / "Common
+   Issues" / "Further Reading" / thin exercises), and "what makes a good PR /
+   good review" (reuse week-06's). Since week 07 Fridays have also been code
+   review standups, backlog sprints, notebook time, and the Final Project,
+   each planned in `docs/plans/` or with the instructor; build those from the
+   plan, not from this list. Whatever the activity, end the last frame with a
+   one-line teaser of next week.
 7. **"Key takeaways"** — 5 numbered points from the chapter, trimmed to short
    plain statements. No trailing reading-list line (see Citations, below).
 
@@ -246,8 +254,9 @@ choices** — week-05 shipped with none of the four present, and that was a
 gap the deck should have caught, not a deliberate simplification. Include
 each one where it applies:
 
-- **"Daily note questions" frames on Friday.** When the daily note produced
-  questions, answer them in one or two frames of stacked
+- **"Daily note questions" frames on the next class day** after the daily
+  note is collected (Friday in weeks 07–08; week 09 opened Wednesday with
+  it). When the daily note produced questions, answer them in one or two frames of stacked
   `\textbf{Question?} --- answer` one-liners — bold question, dash, short
   plain answer, `\medskip` between. No elaboration beyond the one line; if an
   answer needs more, it belongs in the chapter, not the FAQ frame. Unlike the
@@ -281,6 +290,14 @@ each one where it applies:
   from scratch. Re-explaining it every week it's used is not the standing
   rule; citing it briefly is.
 
+The two items with no natural owner, "Effort over perfection" and "Error
+flavors", lapsed in weeks 07 and 09 while the one with a checker held (2026-10-16
+AAR, P1-1). They stay standing rules, and
+`slides/common/check_deck_readiness.py` now reports a deck that lacks either
+one, along with any placeholder images it still includes. Like the
+Daily-note-questions check, it is a warning: a week with no lab submission can
+skip them.
+
 **Don't script the instructor's patter.** Cut sentences that perform the
 instructor's role — "tell me if a step fails," "you will use this for the rest
 of the semester," timing promises. Slides state content; the person at the
@@ -304,8 +321,9 @@ main content).
 
 - **Overleaf is the instructor's editor and it pushes to `main` without
   warning.** Always start from fresh `origin/main`; if a deck was touched in
-  the last few days, assume more edits may land mid-branch and rebase rather
-  than fight.
+  the last few days, assume more edits may land mid-branch. When they do,
+  merge `main` into your branch rather than rebasing (see `AGENTS.md`,
+  "Merging").
 - **Never rewrite a frame the instructor authored or reworked** — extend around
   it. If a shipped frame came back rewritten, that rewrite *is* the review
   comment: imitate it in the next deck instead of restoring the old shape.

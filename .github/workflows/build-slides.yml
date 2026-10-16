@@ -118,6 +118,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
       - name: Check Daily note questions frames (informational -- never fails the build)
         run: |
           python3 slides/common/check_daily_questions.py || true
+      - name: Check placeholders and standing course-operations items (informational -- never fails the build)
+        run: |
+          python3 -m pip install --quiet pillow
+          python3 slides/common/check_deck_readiness.py || true
