@@ -710,54 +710,27 @@ row_words(page, "Total Sales and Use Tax")   # the 2018 report
             \begin{itemize}\small
                 \item Grade, dates, and what we expect
                 \item Ideas, seeded by every chapter's \textit{Additional Exercises}
-                \item \textbf{Proposal due next Friday, October 23}
+                \item \textbf{Proposal due next Sunday, October 25}
             \end{itemize}
         \end{column}
     \end{columns}
 \end{frame}
 
-% Checkpoints are the chapter's printed outputs (ch-09-pdfs.qmd, textbook main
-% 91f1de5), run with pypdf 6.20.1, pdfplumber 0.11.10, and Tesseract 5.5.3.
-\begin{frame}{The rest of the notebook, with checkpoints}
-    \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
-            \small
-            \textbf{Step 4: OCR}
-            \begin{itemize}\footnotesize
-                \item Page 7 of the 2018 minutes: both lines of the motion, every word
-                \item Exhibit 3: \texttt{28 rows parsed; 2 set aside}
-                \item Sums: largest gap \texttt{2 dollars}
-            \end{itemize}
-            \textbf{Checking an extraction}
-            \begin{itemize}\footnotesize
-                \item \texttt{check\_summary()}: fixed table \texttt{[]}; default table, two problems
-                \item \texttt{figures that differ: []}; \texttt{OCR total matches the text: True}
-                \item Attendance on page 1: precision \texttt{1.0}, recall \texttt{0.56}
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.46\textwidth}
-            \small
-            \textbf{Case study 1: attendance}
-            \begin{itemize}\footnotesize
-                \item \texttt{11 meetings, 81 pages}
-                \item \texttt{meetings that differ: \{\}}
-            \end{itemize}
-            \textbf{Case study 2: revenue reports}
-            \begin{itemize}\footnotesize
-                \item 2020's summary is on \texttt{page 3}
-                \item \texttt{14 figures from 7 reports; every change column checks}
-                \item 2018 printed twice, \texttt{38959} apart; 2020: \texttt{-4.76}
-            \end{itemize}
-            \medskip
-            \footnotesize A different Tesseract version can change the OCR counts a little. The sums are what should hold.
-        \end{column}
-    \end{columns}
+\begin{frame}{Daily note questions}
+    \begin{itemize}
+        \item \textbf{Use this as a shortcut?} --- If you're assigned a silly task like reviewing/extracting data from documents, then automate it!
+        \item \textbf{Google PDF readers?} --- Build on top of same open standard but also includes document understanding tech
+        \item \textbf{Make PDFs more accessible with code?} --- The code in the textbook should be more trustworthy than code in the slides; submit fixes to either as PRs!
+        \item \textbf{Change the way we do labs?} --- Say more!
+        \item \textbf{Using AI tools for PDF parsing} --- Pain to install and setup and run
+        \item \textbf{Why PyPDF instead of PDFPlumber?} --- Tools make assumptions and will break unexpectedly
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Chapter 9 pull requests are still open}
-    No revision workshop this week, but pull requests on \texttt{ch-09-pdfs.qmd} are welcome until next Friday, with the usual review.
+    No revision workshop this week, but pull requests on \texttt{ch-09-pdfs.qmd} are welcome.
     \begin{itemize}\small
-        \item \textbf{Try the pathway on another city.} Run the chapter's checks on another city's minutes or budget, and report what breaks.
+        \item \textbf{Try the pathway on another city.} Run the chapter's checks on another city and report what breaks.
         \item \textbf{Make an exercise self-checking.} Add expected output or a starter cell to a Recommended Exercise.
         \item \textbf{Fix what you tripped on today.} An unclear step, a missing comment, an output that didn't match.
     \end{itemize}
@@ -773,19 +746,15 @@ row_words(page, "Total Sales and Use Tax")   # the 2018 report
         \toprule
         \textbf{Part} & \textbf{Due} & \textbf{Weight} \\
         \midrule
-        Proposal & Friday, October 23 & 5\% \\
-        Presentation, about 5 minutes plus questions & Final week, Nov.~30--Dec.~4 & 10\% \\
-        Repository and write-up & Monday, December 7 & 25\% \\
+        Proposal & Friday, October 25 & 5\% \\
+        5-min presentation & Week 16, Nov.~30--Dec.~4 & 10\% \\
+        Write-up & Monday, December 7 & 25\% \\
         \bottomrule
     \end{tabular}
     \end{center}
-
-    \medskip
-
-    \small Late work loses 1\% of its maximum value for each day after the deadline, unless you have an approved excuse.
 \end{frame}
 
-\begin{frame}{What we expect}
+\begin{frame}{What to expect}
     \begin{columns}[T]
         \begin{column}{0.48\textwidth}
             \textbf{The proposal} (next Friday)
@@ -793,6 +762,7 @@ row_words(page, "Total Sales and Use Tax")   # the 2018 report
                 \item \textbf{A research question}: what the data could answer, and who would care about the answer.
                 \item \textbf{Data source(s) and method}: the site, API, or documents, and whether you'll use an API, scraping, PDFs, or a mix.
                 \item \textbf{Ethics and feasibility}: terms of service, \texttt{robots.txt}, and personal data; and proof that you can get one record.
+                \item Details on assignment submission on Canvas: \url{https://canvas.colorado.edu/courses/143304/assignments/2852060}
             \end{itemize}
         \end{column}
         \begin{column}{0.48\textwidth}
@@ -841,26 +811,6 @@ row_words(page, "Total Sales and Use Tax")   # the 2018 report
         \item \textbf{Open or closed?} The same questions asked of Bluesky and Reddit: what each lets you see. \hfill \textit{Ch.~12, Open vs.\ closed}
         \item \textbf{Do language models code like people?} Two models and your own labels on the same texts. \hfill \textit{Ch.~13, Cross-model comparison}
     \end{itemize}
-\end{frame}
-
-\begin{frame}{Project ideas: Practice (Chapters 14--15)}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \begin{itemize}\small
-                \item \textbf{Watch something change.} A GitHub Actions workflow that saves air quality, prices, headlines, or earthquakes every day, and what the series shows. \hfill \textit{Ch.~14, Build a scraper; Government data collector}
-                \item \textbf{Combine three methods.} An API, a scraper, and a PDF on one question. \hfill \textit{Ch.~15, Multi-method design}
-            \end{itemize}
-            \medskip
-            \small Chapter 15's \textit{Research proposal} exercise has the six parts a proposal needs: motivation, data source, methods, expected results, implications, and limitations.
-        \end{column}
-        \begin{column}{0.36\textwidth}
-            \begin{alertblock}{Start collecting early}
-                \small A project that watches something over time needs weeks of data. Start the collector \textbf{before} the proposal is due, and say so in it.
-            \end{alertblock}
-        \end{column}
-    \end{columns}
-    \bigskip
-    \centering\small Next week: \textbf{APIs}, starting with Wikipedia --- and your proposal, due Friday.
 \end{frame}
 
 % =========================================================================
