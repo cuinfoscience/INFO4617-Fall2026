@@ -75,7 +75,7 @@ WEEKS = [
      "ch-09-pdfs", "ch-09-pdfs.qmd", None),
     (10, "APIs", 10, "Wikipedia APIs",
      "ch-10-wikipedia", "ch-10-wikipedia.qmd",
-     "Final Project proposal due Friday, October 23."),
+     "Final Project proposal due Sunday, October 25."),
     (11, "APIs", 11, "Government data APIs",
      "ch-11-government", "ch-11-government.qmd", None),
     (12, "APIs", 12, "Social & media platform APIs",
@@ -143,7 +143,7 @@ LAB_POINTS = 10
 REVISION_POINTS = 10
 # Points match the syllabus's split of the Final Project's 40%: 5 / 10 / 25.
 FINAL_PARTS = [
-    ("Final Project — Proposal", 5, date(2026, 10, 23),
+    ("Final Project — Proposal", 5, date(2026, 10, 25),
      "A research question; your data source(s) and method; and an ethics and "
      "feasibility check, with one record you retrieved. The assignment page is "
      "PROPOSAL_DESCRIPTION, below."),
@@ -386,7 +386,7 @@ def attendance_assignments():
 # ("What we expect") and week 10 slides name; keep them in step
 # (docs/course-facts.md, "What the proposal contains").
 PROPOSAL_DESCRIPTION = """\
-<p><strong>5 points (5% of your grade). Due Friday, October 23, at 11:59 p.m.</strong></p>
+<p><strong>5 points (5% of your grade). Due Sunday, October 25, at 11:59 p.m.</strong></p>
 
 <p>The Final Project is a portfolio piece that matches a web data source with a
 research design. The proposal is your plan for it. It is short, it can change,
@@ -711,7 +711,7 @@ def syllabus_html() -> str:
       <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;"><strong>Final Project</strong></td>
       <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;text-align:center;">40%</td>
       <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;">
-        Proposal (Oct 23, 5%), in-class presentation (final week, 10%), and the
+        Proposal (Oct 25, 5%), in-class presentation (final week, 10%), and the
         repository and write-up (Dec 7, 25%).</td>
     </tr>
   </table>
