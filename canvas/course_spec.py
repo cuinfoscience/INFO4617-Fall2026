@@ -141,14 +141,15 @@ GROUPS = [
 
 LAB_POINTS = 10
 REVISION_POINTS = 10
+# Points match the syllabus's split of the Final Project's 40%: 5 / 10 / 25.
 FINAL_PARTS = [
-    ("Final Project — Proposal", 20, date(2026, 10, 23),
+    ("Final Project — Proposal", 5, date(2026, 10, 23),
      "A short proposal naming your web data source, your research question, and "
      "the design that connects them. See the Week 10 and Week 16 materials."),
-    ("Final Project — Presentation", 30, LAST_DAY,
+    ("Final Project — Presentation", 10, LAST_DAY,
      "Present your project to the class during the final week. Bring your data, "
      "one or two visualizations that carry an argument, and what surprised you."),
-    ("Final Project — Repository & Write-up", 50, FINAL_DUE,
+    ("Final Project — Repository & Write-up", 25, FINAL_DUE,
      "Your project repository (code, data or collection scripts, and a README "
      "someone else could follow) plus the written analysis. Due during finals "
      "week; there is no final exam."),
