@@ -43,7 +43,7 @@ FIRST_DAY = date(2026, 8, 20)   # Thursday — so week 1 meets Friday only
 LAST_DAY = date(2026, 12, 4)    # Friday — follows a Monday schedule
 LABOR_DAY = date(2026, 9, 7)
 FALL_BREAK = (date(2026, 11, 23), date(2026, 11, 27))
-FINAL_DUE = date(2026, 12, 11)  # project repo + write-up, finals week
+FINAL_DUE = date(2026, 12, 7)   # project repo + write-up, Monday of finals week (syllabus)
 
 CU_GOLD = "#CFB87C"
 CU_DARK = "#565A5C"
@@ -600,8 +600,8 @@ def syllabus_html() -> str:
       <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;"><strong>Final Project</strong></td>
       <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;text-align:center;">40%</td>
       <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;">
-        Proposal (Oct 23), in-class presentation (final week), and the repository
-        and write-up (Dec 11).</td>
+        Proposal (Oct 23, 5%), in-class presentation (final week, 10%), and the
+        repository and write-up (Dec 7, 25%).</td>
     </tr>
   </table>
   <p>Attendance is required and carries its own weight. We cover technical
@@ -654,7 +654,7 @@ def syllabus_html() -> str:
   </table>
   <p style="color:{CU_DARK};font-size:0.9em;">No class Labor Day (Sep 7) or Fall
   Break (Nov 23&ndash;27). December 4 is the last day of class and follows a Monday
-  schedule. The Final Project repository and write-up are due Friday, December 11;
+  schedule. The Final Project repository and write-up are due Monday, December 7;
   there is no final exam.</p>
 
   <h3>University policies</h3>

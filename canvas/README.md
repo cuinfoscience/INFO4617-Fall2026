@@ -65,7 +65,7 @@ Use `--everything` if you'd rather bring it all over and prune by hand.
 | Step | Result |
 |---|---|
 | `settings` | Course name/code, term dates (Aug 20 – Dec 4, 2026), weighted grading on, home page = Modules |
-| `groups` | Notebook Labs **30%** (drops 2 lowest), Textbook Revisions **30%**, Final Project **40%** |
+| `groups` | Notebook Labs **30%** (drops 2 lowest), Textbook Revisions **15%**, Attendance **15%**, Final Project **40%** (proposal 5, presentation 10, repository and write-up 25 points), as in the syllabus |
 | `assignments` | 13 labs (due Wednesdays), 13 revisions (due Fridays), 3 final-project items — 29 total, all with due dates in `America/Denver` |
 | `modules` | One module per week (1–16, no 15) laid out Monday → Wednesday → Friday, with the chapter reading, slides, companion notebook, and that week's two assignments |
 | `syllabus` | Canvas syllabus page styled to match the PDF syllabus, including the 16-week schedule table |
