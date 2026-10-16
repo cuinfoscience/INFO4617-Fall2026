@@ -1,0 +1,384 @@
+{
+  "files": {
+    "api-response.png": {
+      "also": [
+        "api-response_annotated.png",
+        "api-response_annotated.pdf"
+      ],
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-10-16T05:19:09+00:00",
+      "copied_from": "images/ch-10/api-response.png",
+      "figure": "ch-10/api-response",
+      "final_url": "https://en.wikipedia.org/w/api.php?action=query&titles=University_of_Colorado_Boulder&prop=info&format=jsonfm",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "6a45c12b38c6419509329fe9c36c8b972cb5c25665b7098fbff7ba4642f949a5",
+      "size": [
+        1600,
+        1200
+      ],
+      "source_sha256": "6a45c12b38c6419509329fe9c36c8b972cb5c25665b7098fbff7ba4642f949a5",
+      "synced": "2026-10-16T05:31:03+00:00",
+      "textbook_commit": "9a22395c19c3350651e2ccece6f108f97a148fa0",
+      "url": "https://en.wikipedia.org/w/api.php?action=query&titles=University_of_Colorado_Boulder&prop=info&format=jsonfm",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        800,
+        600
+      ]
+    },
+    "article-categories.png": {
+      "also": [
+        "article-categories_annotated.png",
+        "article-categories_annotated.pdf"
+      ],
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-10-16T04:53:41+00:00",
+      "copied_from": "images/ch-10/article-categories.png",
+      "figure": "ch-10/article-categories",
+      "final_url": "https://en.wikipedia.org/wiki/University_of_Colorado_Boulder",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "d18213a114bf48687bc1bb4119c4fb37d8a7dbcc2f87cca5c71b7ecf5536c83f",
+      "size": [
+        1600,
+        384
+      ],
+      "source_sha256": "d18213a114bf48687bc1bb4119c4fb37d8a7dbcc2f87cca5c71b7ecf5536c83f",
+      "synced": "2026-10-16T05:31:04+00:00",
+      "textbook_commit": "9a22395c19c3350651e2ccece6f108f97a148fa0",
+      "url": "https://en.wikipedia.org/wiki/University_of_Colorado_Boulder",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        800,
+        700
+      ]
+    },
+    "article-references.png": {
+      "also": [
+        "article-references_annotated.png",
+        "article-references_annotated.pdf"
+      ],
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-10-16T04:40:34+00:00",
+      "copied_from": "images/ch-10/article-references.png",
+      "figure": "ch-10/article-references",
+      "final_url": "https://en.wikipedia.org/wiki/University_of_Colorado_Boulder",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "7336ceaed0fea8da3c6d04502d437b61d73024289f5078d41cdf948857ea1afd",
+      "size": [
+        1600,
+        1000
+      ],
+      "source_sha256": "7336ceaed0fea8da3c6d04502d437b61d73024289f5078d41cdf948857ea1afd",
+      "synced": "2026-10-16T05:31:04+00:00",
+      "textbook_commit": "9a22395c19c3350651e2ccece6f108f97a148fa0",
+      "url": "https://en.wikipedia.org/wiki/University_of_Colorado_Boulder",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        800,
+        700
+      ]
+    },
+    "article-tabs.png": {
+      "also": [
+        "article-tabs_annotated.png",
+        "article-tabs_annotated.pdf"
+      ],
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-10-16T04:53:05+00:00",
+      "copied_from": "images/ch-10/article-tabs.png",
+      "figure": "ch-10/article-tabs",
+      "final_url": "https://en.wikipedia.org/wiki/University_of_Colorado_Boulder",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "91c8af87719ea376ef39ade3331d2a98923cb84aba6d463cf3ffddb599a6f291",
+      "size": [
+        1600,
+        1080
+      ],
+      "source_sha256": "91c8af87719ea376ef39ade3331d2a98923cb84aba6d463cf3ffddb599a6f291",
+      "synced": "2026-10-16T05:31:03+00:00",
+      "textbook_commit": "9a22395c19c3350651e2ccece6f108f97a148fa0",
+      "url": "https://en.wikipedia.org/wiki/University_of_Colorado_Boulder",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        800,
+        860
+      ]
+    },
+    "cu-boulder-combined.png": {
+      "by": "Claude Code",
+      "captured": "2026-10-16",
+      "copied_from": "images/ch-10/cu-boulder-combined.png",
+      "figure": "ch-10/cu-boulder-combined",
+      "final_url": null,
+      "imported": "2026-10-16T05:18:36+00:00",
+      "kind": "render",
+      "method": "rendered with matplotlib 3.11.2 with requests 2.34.2; imported by tools/shots",
+      "redacted": [],
+      "scale": 2,
+      "sha256": "265420637fdf63c42ad639d8658b0f73962fe51029b5d2c6bc365cceba5ced7b",
+      "size": [
+        1600,
+        1000
+      ],
+      "source_sha256": "265420637fdf63c42ad639d8658b0f73962fe51029b5d2c6bc365cceba5ced7b",
+      "synced": "2026-10-16T05:31:05+00:00",
+      "textbook_commit": "9a22395c19c3350651e2ccece6f108f97a148fa0",
+      "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/Boulder%2C_Colorado/daily/20210101/20260930",
+      "window": [
+        800,
+        500
+      ]
+    },
+    "cu-daily-views.png": {
+      "by": "Claude Code",
+      "captured": "2026-10-16",
+      "copied_from": "images/ch-10/cu-daily-views.png",
+      "figure": "ch-10/cu-daily-views",
+      "final_url": null,
+      "imported": "2026-10-16T05:18:35+00:00",
+      "kind": "render",
+      "method": "rendered with matplotlib 3.11.2 with requests 2.34.2; imported by tools/shots",
+      "redacted": [],
+      "scale": 2,
+      "sha256": "dd5831c5c84cfd628d467811b5a6fe9f3010e8568d5e67147138de2c57427db6",
+      "size": [
+        1600,
+        800
+      ],
+      "source_sha256": "dd5831c5c84cfd628d467811b5a6fe9f3010e8568d5e67147138de2c57427db6",
+      "synced": "2026-10-16T05:31:05+00:00",
+      "textbook_commit": "9a22395c19c3350651e2ccece6f108f97a148fa0",
+      "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/University_of_Colorado_Boulder/daily/20210101/20260930",
+      "window": [
+        800,
+        400
+      ]
+    },
+    "cu-monthly-edits.png": {
+      "by": "Claude Code",
+      "captured": "2026-10-16",
+      "copied_from": "images/ch-10/cu-monthly-edits.png",
+      "figure": "ch-10/cu-monthly-edits",
+      "final_url": null,
+      "imported": "2026-10-16T05:18:35+00:00",
+      "kind": "render",
+      "method": "rendered with matplotlib 3.11.2 with requests 2.34.2; imported by tools/shots",
+      "redacted": [],
+      "scale": 2,
+      "sha256": "0194da0468fc1b2f5ec9a63ba5ad80b7a4ae9c6ba1c710b54cfd8f733ba169e9",
+      "size": [
+        1600,
+        800
+      ],
+      "source_sha256": "0194da0468fc1b2f5ec9a63ba5ad80b7a4ae9c6ba1c710b54cfd8f733ba169e9",
+      "synced": "2026-10-16T05:31:05+00:00",
+      "textbook_commit": "9a22395c19c3350651e2ccece6f108f97a148fa0",
+      "url": "https://en.wikipedia.org/w/api.php?action=query&titles=University_of_Colorado_Boulder&prop=revisions&rvlimit=max&rvstart=2026-09-30T23:59:59Z",
+      "window": [
+        800,
+        400
+      ]
+    },
+    "cu-views-by-agent.png": {
+      "by": "Claude Code",
+      "captured": "2026-10-16",
+      "copied_from": "images/ch-10/cu-views-by-agent.png",
+      "figure": "ch-10/cu-views-by-agent",
+      "final_url": null,
+      "imported": "2026-10-16T05:18:36+00:00",
+      "kind": "render",
+      "method": "rendered with matplotlib 3.11.2 with requests 2.34.2; imported by tools/shots",
+      "redacted": [],
+      "scale": 2,
+      "sha256": "6da414db87d9db14be63042076dcd4ccb1976a90a4039cdb2d15bfed2f1754fb",
+      "size": [
+        1600,
+        800
+      ],
+      "source_sha256": "6da414db87d9db14be63042076dcd4ccb1976a90a4039cdb2d15bfed2f1754fb",
+      "synced": "2026-10-16T05:31:05+00:00",
+      "textbook_commit": "9a22395c19c3350651e2ccece6f108f97a148fa0",
+      "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/University_of_Colorado_Boulder/monthly/20240101/20260930",
+      "window": [
+        800,
+        400
+      ]
+    },
+    "languages-menu.png": {
+      "also": [
+        "languages-menu_annotated.png",
+        "languages-menu_annotated.pdf"
+      ],
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-10-16T04:53:26+00:00",
+      "copied_from": "images/ch-10/languages-menu.png",
+      "figure": "ch-10/languages-menu",
+      "final_url": "https://en.wikipedia.org/wiki/University_of_Colorado_Boulder",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "7c576716e8246ad98e32fd044567945e59f784e95adee9f508380df1a31ad0f6",
+      "size": [
+        1600,
+        840
+      ],
+      "source_sha256": "7c576716e8246ad98e32fd044567945e59f784e95adee9f508380df1a31ad0f6",
+      "synced": "2026-10-16T05:31:04+00:00",
+      "textbook_commit": "9a22395c19c3350651e2ccece6f108f97a148fa0",
+      "url": "https://en.wikipedia.org/wiki/University_of_Colorado_Boulder",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        800,
+        860
+      ]
+    },
+    "pageviews-tool.png": {
+      "also": [
+        "pageviews-tool_annotated.png",
+        "pageviews-tool_annotated.pdf"
+      ],
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-10-16T05:18:49+00:00",
+      "copied_from": "images/ch-10/pageviews-tool.png",
+      "figure": "ch-10/pageviews-tool",
+      "final_url": "https://pageviews.wmcloud.org/pageviews?project=en.wikipedia.org&platform=all-access&agent=user&redirects=0&start=2026-07-01&end=2026-09-30&pages=University_of_Colorado_Boulder",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "a8185a5497d71bd56d7fe53727a799ac8265e276be1b1ea578e1387d4a35fd11",
+      "size": [
+        1600,
+        1200
+      ],
+      "source_sha256": "a8185a5497d71bd56d7fe53727a799ac8265e276be1b1ea578e1387d4a35fd11",
+      "synced": "2026-10-16T05:31:04+00:00",
+      "textbook_commit": "9a22395c19c3350651e2ccece6f108f97a148fa0",
+      "url": "https://pageviews.wmcloud.org/pageviews/?project=en.wikipedia.org&platform=all-access&agent=user&redirects=0&start=2026-07-01&end=2026-09-30&pages=University_of_Colorado_Boulder",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        800,
+        700
+      ]
+    },
+    "revision-history.png": {
+      "also": [
+        "revision-history_annotated.png",
+        "revision-history_annotated.pdf"
+      ],
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-10-16T04:54:25+00:00",
+      "copied_from": "images/ch-10/revision-history.png",
+      "figure": "ch-10/revision-history",
+      "final_url": "https://en.wikipedia.org/w/index.php?title=University_of_Colorado_Boulder&action=history",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "d387f4aab0cb5e41c42370f9580319ee7cc2226eece0a65da934d8f36e383b33",
+      "size": [
+        1600,
+        1200
+      ],
+      "source_sha256": "d387f4aab0cb5e41c42370f9580319ee7cc2226eece0a65da934d8f36e383b33",
+      "synced": "2026-10-16T05:31:04+00:00",
+      "textbook_commit": "9a22395c19c3350651e2ccece6f108f97a148fa0",
+      "url": "https://en.wikipedia.org/w/index.php?title=University_of_Colorado_Boulder&action=history",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        800,
+        760
+      ]
+    },
+    "talk-page.png": {
+      "also": [
+        "talk-page_annotated.png",
+        "talk-page_annotated.pdf"
+      ],
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-10-16T05:18:45+00:00",
+      "copied_from": "images/ch-10/talk-page.png",
+      "figure": "ch-10/talk-page",
+      "final_url": "https://en.wikipedia.org/wiki/Talk:University_of_Colorado_Boulder",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "761138319e3008b59c2357fe040a9c364288b7516f8e70aa735b91c5d7f1b8cc",
+      "size": [
+        1600,
+        1142
+      ],
+      "source_sha256": "761138319e3008b59c2357fe040a9c364288b7516f8e70aa735b91c5d7f1b8cc",
+      "synced": "2026-10-16T05:31:04+00:00",
+      "textbook_commit": "9a22395c19c3350651e2ccece6f108f97a148fa0",
+      "url": "https://en.wikipedia.org/wiki/Talk:University_of_Colorado_Boulder",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        800,
+        1100
+      ]
+    },
+    "user-contributions.png": {
+      "also": [
+        "user-contributions_annotated.png",
+        "user-contributions_annotated.pdf"
+      ],
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-10-16T04:55:02+00:00",
+      "copied_from": "images/ch-10/user-contributions.png",
+      "figure": "ch-10/user-contributions",
+      "final_url": "https://en.wikipedia.org/wiki/Special:Contributions/Jimbo_Wales",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "64165b9c6360125a4025d740e32a0c16b905692ff8e0088d6a521b71aa14c059",
+      "size": [
+        1600,
+        1200
+      ],
+      "source_sha256": "64165b9c6360125a4025d740e32a0c16b905692ff8e0088d6a521b71aa14c059",
+      "synced": "2026-10-16T05:31:05+00:00",
+      "textbook_commit": "9a22395c19c3350651e2ccece6f108f97a148fa0",
+      "url": "https://en.wikipedia.org/wiki/Special:Contributions/Jimbo_Wales",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        800,
+        760
+      ]
+    },
+    "what-links-here.png": {
+      "also": [
+        "what-links-here_annotated.png",
+        "what-links-here_annotated.pdf"
+      ],
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-10-16T04:54:34+00:00",
+      "copied_from": "images/ch-10/what-links-here.png",
+      "figure": "ch-10/what-links-here",
+      "final_url": "https://en.wikipedia.org/wiki/Special:WhatLinksHere/University_of_Colorado_Boulder",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "e97d3b7ee4505fa839eee7ef8bb8feab4c11aedfa236fccf3534ee6d908dad24",
+      "size": [
+        1600,
+        1200
+      ],
+      "source_sha256": "e97d3b7ee4505fa839eee7ef8bb8feab4c11aedfa236fccf3534ee6d908dad24",
+      "synced": "2026-10-16T05:31:04+00:00",
+      "textbook_commit": "9a22395c19c3350651e2ccece6f108f97a148fa0",
+      "url": "https://en.wikipedia.org/wiki/Special:WhatLinksHere/University_of_Colorado_Boulder",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        800,
+        1000
+      ]
+    }
+  }
+}
