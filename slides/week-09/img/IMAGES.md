@@ -1,8 +1,8 @@
 # Images for `week-09`
 
-All fourteen of the deck's images are real as of 2026-10-14. Five are copies made
+All thirteen of the deck's images are real as of 2026-10-16. Five are copies made
 by the textbook's `tools/shots` (listed under "Copied by tools/shots" below);
-the other nine are recorded here. Text in each reaches 16 pixels on a slide shown
+the other eight are recorded here. Text in each reaches 16 pixels on a slide shown
 1,920 pixels wide (`slides/common/AUTHORING.md`), at the width its frame shows
 it.
 
@@ -57,20 +57,11 @@ it.
   - Drawn by the same script, from `pathway_<step>.dot`.
   - Their text, 31 pixels in a 684-pixel image, comes to 24 pixels or more in
     the 32--34% columns and the 75%-of-44% column that show them.
-- `pr_suggestion.png` -- a review suggestion on textbook PR #228, the
-  instructor's demonstration pull request, with **Apply suggestion**.
-  (Improving Chapter 9 together)
-  - A byte-for-byte copy of `slides/week-08/img/pr_suggestion.png`, itself a
-    copy of `handouts/week-08/img/pr-suggestion.png`, which the instructor
-    captured on 2026-10-06, signed in; its `IMAGES.md` records the capture.
-  - Its code is 12 pixels, so the frame shows it in a 62% column, where the
-    code comes to 16.4 pixels.
-
 ## Removed
 
 `pr_review.png`, a gray placeholder for a GitHub "Files changed" view, was
 deleted with its `stubs.tsv` row on 2026-10-12. Weeks 7 and 8 dropped theirs
-the same way; the Friday frame uses `pr_suggestion.png`.
+the same way.
 
 `extraction_pipeline.png` and its source, `extraction_pipeline.dot`, were
 deleted with their `stubs.tsv` row on 2026-10-12, when the "Scale it" frame was
@@ -80,6 +71,10 @@ cut. Chapter 9 no longer builds a corpus pipeline; Wednesday's case studies use
 `open_comment.png`, a copy of the textbook's `ch-09/open-comment` chart, was
 deleted with its `shots.json` entry and `stubs.tsv` row on 2026-10-14, when the
 chapter and the deck dropped the Open Comment count.
+
+`pr_suggestion.png`, a copy of week 8's screenshot of a review suggestion, was
+deleted with its `stubs.tsv` row on 2026-10-16, when Friday's revision workshop
+gave way to finishing the notebook and the Final Project.
 
 ## Copied by tools/shots
 

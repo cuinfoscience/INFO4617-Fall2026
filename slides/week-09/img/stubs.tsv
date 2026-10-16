@@ -3,7 +3,6 @@ council_minutes_pdf.png	1306x861	Render: page 1 of the City Council's signed min
 pdf_drawing_instructions.png	1600x721	Render (copy of textbook figure ch-09/pdf-objects): the December 2024 revenue report's summary table as pdfplumber sees it -- every rectangle outlined, the characters of two rows each boxed
 documentcloud.png	960x900	Screenshot (course recipe week09-documentcloud): the top of documentcloud.org/home/ at 480 pixels wide -- Upload. Analyze. Embed. and what the platform is for (2026-10-12)
 attendance_chart.png	1200x1000	Chart: members present at the roll call of each of the 13 saved council minutes, counted by hand, beside what the slide's extract_attendance() finds
-pr_suggestion.png	763x255	Screenshot: a review suggestion on textbook PR #228 (the instructor's demonstration), with Apply suggestion, signed in, dark theme (2026-10-06); a copy of week 8's
 missing_totals_row.png	1600x726	Render (copy of textbook figure ch-09/missing-totals-row): pdfplumber's table finder on the December 2024 summary table, the cells it found shaded; the totals row, Total Sales and Use Tax, left white outside the table
 ocr_confidence.png	1600x466	Render (copy of textbook figure ch-09/ocr-confidence): retail sales tax by month in Exhibit 3 of the December 2024 report (an image), each word Tesseract read boxed blue (confidence 80+) or red
 sales_use_tax.png	1600x800	Chart (copy of textbook figure ch-09/sales-use-tax): total sales and use tax by year, 2017-2024, from the summary page of seven December revenue reports, read with pdfplumber

@@ -40,9 +40,9 @@
 
     \medskip
 
-    \dayband{Friday}{Textbook revisions}
+    \dayband{Friday}{Notebook \& Final Project}
     \begin{itemize}\small
-        \item Propose \& peer-review pull requests improving Chapter 9
+        \item Finish the notebook, from OCR on; then the Final Project: grade, dates, expectations, and ideas
     \end{itemize}
 \end{frame}
 
@@ -692,70 +692,175 @@ row_words(page, "Total Sales and Use Tax")   # the 2018 report
 \end{frame}
 
 % =========================================================================
-\section{Friday · Textbook Revisions}
+\section{Friday · Notebook \& Final Project}
 % =========================================================================
 
-% The screenshot's code is 12 CSS pixels; a 62% column brings it to 16 on a
-% slide shown 1,920 pixels wide (slides/common/AUTHORING.md), and 60% would not.
-\begin{frame}{Improving Chapter 9 together}
+\begin{frame}{Today}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
-            \includegraphics[width=\textwidth]{img/pr_suggestion.png}
-
-            \medskip
-
-            Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-09-pdfs.qmd} and reviews a classmate's.
+        \begin{column}{0.48\textwidth}
+            \dayband{First}{finish the notebook}
+            \begin{itemize}\small
+                \item Pick up where Wednesday stopped: \textbf{``When There Is No Text Layer: OCR''}
+                \item Work in pairs, through both case studies
+                \item Check your output against the checkpoints on the next slide
+            \end{itemize}
         \end{column}
-        \begin{column}{0.33\textwidth}
-            The workflow (from Week 1):
-            \begin{enumerate}\small
-                \item Branch / fork the book repo
-                \item Edit the chapter; commit with a clear message
-                \item Open a PR describing \textit{what} and \textit{why}
-                \item Review two peers' PRs: kind, specific, actionable
-            \end{enumerate}
+        \begin{column}{0.48\textwidth}
+            \dayband{Then}{the Final Project}
+            \begin{itemize}\small
+                \item Grade, dates, and what we expect
+                \item Ideas, seeded by every chapter's \textit{Additional Exercises}
+                \item \textbf{Proposal due next Friday, October 23}
+            \end{itemize}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{A revision menu for Chapter 9}
-    High-value targets --- pick one and scope it to a single PR:
-    \begin{itemize}
-        \item \textbf{Run it against real Boulder minutes.} The \texttt{\# Returns:} outputs and five regex patterns are \textit{illustrative}. Download actual signed minutes, report what the patterns catch and miss, and label sample output as representative.
-        \item \textbf{Add the chapter's first figures.} It is all code and prose today: a ``drawing-instructions vs.\ logical text'' diagram, a pipeline flowchart, or an annotated minutes screenshot would anchor Monday's core idea.
-        \item \textbf{Harden \texttt{extract\_attendance}.} The chapter itself flags ``Absent: None,'' title variants (``Council Member Smith''), and semicolon / line-break separators. Contribute handling \textbf{plus tests} for the formats you actually hit.
-        \item \textbf{Make an exercise self-checking.} Add expected output, a rubric, or a starter cell to the open-ended ``find and extract'' and ``topic tracking'' exercises.
-        \item \textbf{Deepen ``When PyPDF Is Not Enough.''} Turn the two-line \texttt{pdfplumber} / OCR sketches into a runnable table-extraction or Tesseract example tied to ``Further Reading.''
+% Checkpoints are the chapter's printed outputs (ch-09-pdfs.qmd, textbook main
+% 91f1de5), run with pypdf 6.20.1, pdfplumber 0.11.10, and Tesseract 5.5.3.
+\begin{frame}{The rest of the notebook, with checkpoints}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \small
+            \textbf{Step 4: OCR}
+            \begin{itemize}\footnotesize
+                \item Page 7 of the 2018 minutes: both lines of the motion, every word
+                \item Exhibit 3: \texttt{28 rows parsed; 2 set aside}
+                \item Sums: largest gap \texttt{2 dollars}
+            \end{itemize}
+            \textbf{Checking an extraction}
+            \begin{itemize}\footnotesize
+                \item \texttt{check\_summary()}: fixed table \texttt{[]}; default table, two problems
+                \item \texttt{figures that differ: []}; \texttt{OCR total matches the text: True}
+                \item Attendance on page 1: precision \texttt{1.0}, recall \texttt{0.56}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.46\textwidth}
+            \small
+            \textbf{Case study 1: attendance}
+            \begin{itemize}\footnotesize
+                \item \texttt{11 meetings, 81 pages}
+                \item \texttt{meetings that differ: \{\}}
+            \end{itemize}
+            \textbf{Case study 2: revenue reports}
+            \begin{itemize}\footnotesize
+                \item 2020's summary is on \texttt{page 3}
+                \item \texttt{14 figures from 7 reports; every change column checks}
+                \item 2018 printed twice, \texttt{38959} apart; 2020: \texttt{-4.76}
+            \end{itemize}
+            \medskip
+            \footnotesize A different Tesseract version can change the OCR counts a little. The sums are what should hold.
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Chapter 9 pull requests are still open}
+    No revision workshop this week, but pull requests on \texttt{ch-09-pdfs.qmd} are welcome until next Friday, with the usual review.
+    \begin{itemize}\small
+        \item \textbf{Try the pathway on another city.} Run the chapter's checks on another city's minutes or budget, and report what breaks.
+        \item \textbf{Make an exercise self-checking.} Add expected output or a starter cell to a Recommended Exercise.
+        \item \textbf{Fix what you tripped on today.} An unclear step, a missing comment, an output that didn't match.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{A good revision, and a good review}
+\begin{frame}{The Final Project: grade and dates}
+    A \textbf{portfolio piece} that matches a web data source with a research design. Individually, or in pairs with the instructor's permission. \textbf{40\%} of your grade.
+
+    \medskip
+
+    \begin{center}
+    \begin{tabular}{llr}
+        \toprule
+        \textbf{Part} & \textbf{Due} & \textbf{Weight} \\
+        \midrule
+        Proposal & Friday, October 23 & 5\% \\
+        Presentation, about 5 minutes plus questions & Final week, Nov.~30--Dec.~4 & 10\% \\
+        Repository and write-up & Monday, December 7 & 25\% \\
+        \bottomrule
+    \end{tabular}
+    \end{center}
+
+    \medskip
+
+    \small Late work loses 1\% of its maximum value for each day after the deadline, unless you have an approved excuse.
+\end{frame}
+
+\begin{frame}{What we expect}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \begin{block}{A strong PR}
-                \begin{itemize}\small
-                    \item One focused change, clearly titled
-                    \item Explains the problem it fixes
-                    \item Builds (\texttt{quarto render}) without errors
-                    \item Matches the book's voice and notation
-                    \item Discloses any AI assistance
-                \end{itemize}
-            \end{block}
+        \begin{column}{0.48\textwidth}
+            \textbf{The proposal} (next Friday)
+            \begin{itemize}\small
+                \item \textbf{A research question}: what the data could answer, and who would care about the answer.
+                \item \textbf{Data source(s) and method}: the site, API, or documents, and whether you'll use an API, scraping, PDFs, or a mix.
+                \item \textbf{Ethics and feasibility}: terms of service, \texttt{robots.txt}, and personal data; and proof that you can get one record.
+            \end{itemize}
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{A strong review}
-                \begin{itemize}\small
-                    \item Runs / reads the change, not just skims
-                    \item Names specifics (line, claim, code)
-                    \item Separates ``must fix'' from ``nice to have''
-                    \item Is generous --- assume good faith
-                    \item Ends with a clear verdict
-                \end{itemize}
-            \end{block}
+        \begin{column}{0.48\textwidth}
+            \textbf{The repository and write-up} (December 7)
+            \begin{itemize}\small
+                \item \textbf{Reproducible}: a GitHub repository whose notebook or scripts collect the data and rerun the analysis, with a README.
+                \item \textbf{A write-up} of about \textbf{2,000--3,000 words}, with figures.
+            \end{itemize}
+            \medskip
+            \textbf{The presentation} (final week)
+            \begin{itemize}\small
+                \item About \textbf{5 minutes} plus questions: the question, the data, one finding.
+            \end{itemize}
         \end{column}
     \end{columns}
-    \medskip
-    \centering\small Next week: a new module on \textbf{APIs} --- when data arrives as JSON and no parsing is required (starting with Wikipedia).
+\end{frame}
+
+\begin{frame}{Project ideas: Foundations (Chapters 2--5)}
+    Every chapter ends with \textit{Additional Exercises}. Grow one into a question:
+    \begin{itemize}\small
+        \item \textbf{Do sites say the same thing to people and to bots?} Compare 20 sites' terms of service with their \texttt{robots.txt}. \hfill \textit{Ch.~2, ToS audit; robots.txt audit}
+        \item \textbf{How has access to platform data changed since 2008?} A dated timeline of API changes, each classed as enclosure, exemption, or erosion. \hfill \textit{Ch.~3, Timeline}
+        \item \textbf{What did lost API access cost research?} Find published projects built on APIs, and test whether each could be redone today. \hfill \textit{Ch.~3, Public interest audit}
+        \item \textbf{How much of a web page is tracking?} Count and classify the requests that popular sites make. \hfill \textit{Ch.~5, Network tab analysis}
+        \item \textbf{How good is a 7-day forecast?} Save Open-Meteo's forecast for Boulder every day, and compare it with what happened. \hfill \textit{Ch.~4, Weather; Ch.~14}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Project ideas: Documents (Chapters 6--9)}
+    \begin{itemize}\small
+        \item \textbf{Do critics and the box office agree?} Reconcile two sites that describe the same films with unrelated HTML. \hfill \textit{Ch.~6, Reconcile two sites}
+        \item \textbf{How has a policy changed?} Track a university's privacy or AI policy through the Wayback Machine, and measure each revision. \hfill \textit{Ch.~7, Policy tracking; Document similarity}
+        \item \textbf{How well is local government's web preserved?} Captures, gaps, and page sizes for a city or agency site. \hfill \textit{Ch.~7, Government web archive}
+        \item \textbf{How much of the web needs a browser?} Classify the sites you use as static, partly dynamic, or fully dynamic. \hfill \textit{Ch.~8, Static vs.\ dynamic}
+        \item \textbf{What does a council talk about?} A year of minutes: when does ``housing'' or ``police'' spike, and why? \hfill \textit{Ch.~9, Topic tracking}
+        \item \textbf{Where does a city's money go?} A budget table across several years of PDFs, checked by its own totals. \hfill \textit{Ch.~9, Tables, not text}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Project ideas: APIs (Chapters 10--13)}
+    \begin{itemize}\small
+        \item \textbf{Who writes contested articles?} Editors and edit concentration on two rival Wikipedia articles. \hfill \textit{Ch.~10, Comparative revisions; Editor network}
+        \item \textbf{What drives attention?} A year of pageviews for related articles, with each spike matched to an event. \hfill \textit{Ch.~10, Event detection}
+        \item \textbf{Does money follow income?} Census income and FEC contributions across congressional districts. \hfill \textit{Ch.~11, Multi-source integration}
+        \item \textbf{Housing and rates in Colorado}: two FRED series, and the story between them. \hfill \textit{Ch.~11, FRED}
+        \item \textbf{Open or closed?} The same questions asked of Bluesky and Reddit: what each lets you see. \hfill \textit{Ch.~12, Open vs.\ closed}
+        \item \textbf{Do language models code like people?} Two models and your own labels on the same texts. \hfill \textit{Ch.~13, Cross-model comparison}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Project ideas: Practice (Chapters 14--15)}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \begin{itemize}\small
+                \item \textbf{Watch something change.} A GitHub Actions workflow that saves air quality, prices, headlines, or earthquakes every day, and what the series shows. \hfill \textit{Ch.~14, Build a scraper; Government data collector}
+                \item \textbf{Combine three methods.} An API, a scraper, and a PDF on one question. \hfill \textit{Ch.~15, Multi-method design}
+            \end{itemize}
+            \medskip
+            \small Chapter 15's \textit{Research proposal} exercise has the six parts a proposal needs: motivation, data source, methods, expected results, implications, and limitations.
+        \end{column}
+        \begin{column}{0.36\textwidth}
+            \begin{alertblock}{Start collecting early}
+                \small A project that watches something over time needs weeks of data. Start the collector \textbf{before} the proposal is due, and say so in it.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+    \bigskip
+    \centering\small Next week: \textbf{APIs}, starting with Wikipedia --- and your proposal, due Friday.
 \end{frame}
 
 % =========================================================================
