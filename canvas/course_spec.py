@@ -144,8 +144,9 @@ REVISION_POINTS = 10
 # Points match the syllabus's split of the Final Project's 40%: 5 / 10 / 25.
 FINAL_PARTS = [
     ("Final Project — Proposal", 5, date(2026, 10, 23),
-     "A short proposal naming your web data source, your research question, and "
-     "the design that connects them. See the Week 10 and Week 16 materials."),
+     "A research question; your data source(s) and method; and an ethics and "
+     "feasibility check, with one record you retrieved. The assignment page is "
+     "PROPOSAL_DESCRIPTION, below."),
     ("Final Project — Presentation", 10, LAST_DAY,
      "Present your project to the class during the final week. Bring your data, "
      "one or two visualizations that carry an argument, and what surprised you."),
@@ -381,6 +382,116 @@ def attendance_assignments():
     return out
 
 
+# The proposal's full assignment page. Its three parts are the ones the week 9
+# ("What we expect") and week 10 slides name; keep them in step
+# (docs/course-facts.md, "What the proposal contains").
+PROPOSAL_DESCRIPTION = """\
+<p><strong>5 points (5% of your grade). Due Friday, October 23, at 11:59 p.m.</strong></p>
+
+<p>The Final Project is a portfolio piece that matches a web data source with a
+research design. The proposal is your plan for it. It is short, it can change,
+and it has two jobs: to show that your question is worth answering, and to show
+that you can get the data to answer it.</p>
+
+<h3>What to submit</h3>
+<p>One document of about 1&ndash;2 pages (500&ndash;1,000 words, not counting the
+record you paste in part 3). Submit it as a PDF or Markdown file, as text in the
+box, or as a link to a README in your project's GitHub repository. Put your name
+at the top, and your partner's if you are working in a pair.</p>
+
+<h3>1. A research question (1.5 points)</h3>
+<ul>
+  <li><strong>A question, not a topic.</strong> Not &ldquo;Wikipedia&rdquo;, but
+  &ldquo;Which events send readers to articles about wildfires?&rdquo; Not
+  &ldquo;housing&rdquo;, but &ldquo;How often did Boulder's city council discuss
+  housing from 2020 to 2025, and what set off the busiest months?&rdquo;</li>
+  <li><strong>Who would care about the answer</strong>: a newsroom, a city
+  agency, a community group, researchers, or the platform's own users.</li>
+  <li><strong>What you expect to find</strong>, in a sentence or two, and what
+  would surprise you.</li>
+</ul>
+
+<h3>2. Data source(s) and method (1.5 points)</h3>
+<ul>
+  <li><strong>The exact source</strong>, with links: the API endpoint, the site's
+  pages, or the set of documents.</li>
+  <li><strong>How you will get it</strong>: an API, scraping static or dynamic
+  pages, PDFs, web archives, or a mix. Name the chapter(s) whose methods you will
+  use.</li>
+  <li><strong>The scope</strong>: which records, what time window, and roughly
+  how many. If you will collect over time, say how often and for how long, and
+  start the collector now; a series needs weeks of data.</li>
+  <li><strong>The analysis</strong>: the counts, comparisons, or charts that would
+  answer your question.</li>
+</ul>
+
+<h3>3. Ethics and feasibility (2 points)</h3>
+<ul>
+  <li><strong>Terms of service and <code>robots.txt</code></strong>: quote the
+  lines that apply to what you will collect, say whether your collection is
+  allowed, and say how you will stay within the limits (a User-Agent that
+  identifies you, pauses between requests, rate limits).</li>
+  <li><strong>Personal information</strong>: does the data include people's
+  names, usernames, photos, or other personal details? Say how you will handle
+  them: leave them out, aggregate, or anonymize.</li>
+  <li><strong>One record, retrieved</strong>: paste a request you actually ran
+  (the code or the URL) and what came back (the status code and the record, or a
+  screenshot of it). Name the fields you will use.</li>
+  <li><strong>The biggest risk</strong> to finishing, and your fallback: a smaller
+  scope, a second source, or a different time window.</li>
+</ul>
+
+<h3>How it is graded</h3>
+<table>
+  <thead><tr><th>Part</th><th>Points</th><th>Full credit</th></tr></thead>
+  <tbody>
+    <tr><td>Research question</td><td>1.5</td><td>A specific question, who would
+    care, and what you expect</td></tr>
+    <tr><td>Data source(s) and method</td><td>1.5</td><td>An exact source, a
+    method, a scope, and the analysis</td></tr>
+    <tr><td>Ethics and feasibility</td><td>2</td><td>The terms and
+    <code>robots.txt</code> checked, personal information addressed, one real
+    record, and a fallback</td></tr>
+  </tbody>
+</table>
+<p>A part that is there but thin earns partial credit. The proposal is graded on
+a careful, good-faith plan, not on getting everything right: you may change your
+question or source later, and you will get feedback to help.</p>
+
+<h3>Working in a pair</h3>
+<p>Pairs need the instructor's permission before the proposal is due; email to
+ask. Submit one proposal with both names, and say who will do what.</p>
+
+<h3>AI tools</h3>
+<p>As the syllabus says, you may use AI tools if you say where and how they
+shaped your proposal, and you must be able to explain your question, your
+source, and your method yourself.</p>
+
+<h3>Late work</h3>
+<p>Late work loses 1% of its maximum value for each day after the deadline,
+unless you have an approved excuse.</p>
+
+<h3>Where to start</h3>
+<ul>
+  <li><strong>Ideas</strong>: week 9's Friday slides grow every chapter's
+  <em>Additional Exercises</em> into project questions.</li>
+  <li><strong>The record in part 3</strong>: if your source has an API, week 10's
+  Wednesday notebook is your feasibility check: one request, one record, the
+  status code, and the fields.</li>
+  <li><strong>A fuller design</strong>: Chapter 15's <em>Research proposal</em>
+  exercise lists the six parts a full research proposal has.</li>
+  <li><strong>Office hours</strong>, for a question or source you are unsure of.</li>
+</ul>
+
+<h3>What comes next</h3>
+<p>A presentation of about five minutes plus questions in the final week,
+November 30&ndash;December 4 (10%), and the project repository with a write-up of
+about 2,000&ndash;3,000 words, due Monday, December 7 (25%).</p>
+"""
+
+DESCRIPTIONS = {"Final Project — Proposal": PROPOSAL_DESCRIPTION}
+
+
 def final_assignments():
     out = []
     for name, points, day, blurb in FINAL_PARTS:
@@ -390,7 +501,7 @@ def final_assignments():
             "points_possible": points,
             "due_at": due_at(day),
             "submission_types": ["online_upload", "online_text_entry", "online_url"],
-            "description": f"<p>{blurb}</p>",
+            "description": DESCRIPTIONS.get(name, f"<p>{blurb}</p>"),
         })
     return out
 
