@@ -340,13 +340,19 @@ for r in data["query"]["search"]:
 \section{Friday · Textbook Revisions}
 % =========================================================================
 
+% The screenshot's code is 12 CSS pixels; a 62% column brings it to 16 on a
+% slide shown 1,920 pixels wide (slides/common/AUTHORING.md), and 60% would not.
 \begin{frame}{Improving Chapter 10 together}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-10-wikipedia.qmd} and reviews a classmate's.
+        \begin{column}{0.62\textwidth}
+            \includegraphics[width=\textwidth]{img/pr_suggestion.png}\\
+            {\scriptsize A review suggestion on the instructor's demonstration pull request: the author can apply it with one click.}
 
             \medskip
 
+            Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-10-wikipedia.qmd} and reviews a classmate's.
+        \end{column}
+        \begin{column}{0.34\textwidth}
             The workflow (from Week 1):
             \begin{enumerate}\small
                 \item Branch / fork the book repo
@@ -356,12 +362,8 @@ for r in data["query"]["search"]:
             \end{enumerate}
 
             \begin{alertblock}{Also due today --- Fri, Oct 23}
-                \footnotesize Submit your \textbf{Final Project proposal} (5\%): a research question, your data source(s) and method, and an ethics \& feasibility check --- with one record you actually retrieved.
+                \footnotesize Your \textbf{Final Project proposal} (5\%): a research question, your data source(s) and method, and an ethics \& feasibility check --- with one record you actually retrieved.
             \end{alertblock}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/pr_review.png}
         \end{column}
     \end{columns}
 \end{frame}
