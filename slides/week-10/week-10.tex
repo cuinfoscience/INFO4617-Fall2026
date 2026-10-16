@@ -51,7 +51,7 @@
                 \footnotesize \texttt{ch-10-wikipedia.ipynb}
             \end{block}
             \begin{alertblock}{Due Friday, Oct 23}
-                \footnotesize \textbf{Final Project proposal} --- research question, data source(s), and your API / scraping plan.
+                \footnotesize \textbf{Final Project proposal} (5\%) --- a research question, your data source(s) and method, and an ethics \& feasibility check.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -164,6 +164,30 @@
             \end{block}
             \begin{alertblock}{Connecting to Ch.~2 (Ethics)}
                 \footnotesize Identify yourself: the Wikimedia \textbf{User-Agent policy} asks every client for a descriptive agent with contact info. Anonymous traffic gets throttled.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Your Final Project proposal, due Friday}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Three parts, worth \textbf{5\%} of your grade:
+            \begin{enumerate}\small
+                \item \textbf{A research question.} What the data could answer, and who would care about the answer. A question, not a topic: not ``Wikipedia,'' but ``Which events send readers to articles about wildfires?''
+                \item \textbf{Data source(s) and method.} The site, API, or documents, and how you'll get them: an API, scraping, PDFs, or a mix. Name the endpoint, page, or file.
+                \item \textbf{Ethics and feasibility.} The terms of service, \texttt{robots.txt}, and any personal data in it --- and proof that you can get \textbf{one record}: paste the request and what came back.
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.36\textwidth}
+            \begin{block}{This week makes step 3 easy}
+                \footnotesize If your source has an API, Wednesday's notebook is your feasibility check: one request, one record, the status code, and the fields you'll use.
+            \end{block}
+            \begin{block}{Stuck for an idea?}
+                \footnotesize Week 9's Friday slides grow every chapter's \textit{Additional Exercises} into project questions.
+            \end{block}
+            \begin{alertblock}{Collecting over time?}
+                \footnotesize Start the collector now, and say so in the proposal.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -332,12 +356,35 @@ for r in data["query"]["search"]:
             \end{enumerate}
 
             \begin{alertblock}{Also due today --- Fri, Oct 23}
-                \footnotesize Submit your \textbf{Final Project proposal}: a research question, your data source(s), and whether you will use an API, scraping, or both.
+                \footnotesize Submit your \textbf{Final Project proposal} (5\%): a research question, your data source(s) and method, and an ethics \& feasibility check --- with one record you actually retrieved.
             \end{alertblock}
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/pr_review.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Before you submit the proposal}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \begin{itemize}\small
+                \item[$\square$] Is the question one the data can answer --- and would anyone outside this class care?
+                \item[$\square$] Does it name the exact source: an endpoint, a site's pages, or a set of PDFs?
+                \item[$\square$] Did you retrieve \textbf{one real record}, and paste the request and the response?
+                \item[$\square$] Did you read the terms of service and \texttt{robots.txt}? Does the data include people's names or other personal information, and how will you handle it?
+                \item[$\square$] If the data changes over time, is your collector already running?
+                \item[$\square$] Working in a pair? Ask the instructor before you submit.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.36\textwidth}
+            \begin{block}{What comes next}
+                \footnotesize Presentation, about 5 minutes (10\%), in the final week, Nov.~30--Dec.~4. Repository and a 2,000--3,000-word write-up (25\%), due Monday, December 7.
+            \end{block}
+            \begin{block}{Late work}
+                \footnotesize Loses 1\% of its maximum value for each day after the deadline, unless you have an approved excuse.
+            \end{block}
         \end{column}
     \end{columns}
 \end{frame}
