@@ -34,6 +34,7 @@ Current contents:
 | File | What it is |
 |---|---|
 | `aar/2026-09-21-week-06-slides.md` | Slide-authoring contract vs. weeks 04–05; week-06 expansion |
+| `aar/2026-10-16-weeks-06-09.md` | Weeks 06–09: facts that drift between syllabus, Canvas, slides, and the textbook; Claude's standing rules with no file of their own; `AUTHORING.md` vs. the new Fridays. Follows up the 09-21 report. |
 | `plans/2026-09-24-friday-code-review.md` | A Friday code-review standup for students' textbook pull requests: preparation, the session, and what follows. Scheduled: the first standup is week 7's Friday, October 2, and that Friday's slides are built from its review table. |
 | `plans/2026-09-24-friday-code-review-table.md` | That plan's review table: the textbook's 39 open pull requests on 2026-09-24, by chapter, with their checks, conflicts, and overlaps. It's rebuilt the day before class. |
 | `plans/2026-10-02-standup-run-of-show.md` | Week 7's Friday: the backlog standup, its three activities and handouts, and the steps before and after class. |
