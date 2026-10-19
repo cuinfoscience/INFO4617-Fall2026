@@ -37,7 +37,7 @@
             \dayband{Wednesday}{Notebook lab}
             \begin{itemize}\small
                 \item MediaWiki API: revisions, pageviews, links, raw requests
-                \item Experiment with new format of live-coding
+                \item Experiment with new live-coding formats
             \end{itemize}
 
             \medskip
@@ -63,7 +63,14 @@
 % =========================================================================
 
 \begin{frame}{Daily note}
-    
+    \begin{itemize}\small 
+        \item \textbf{Example project ideas?} --- Check the ``Additional Exercises'' sections in each textbook chapters for inspiration
+        \item \textbf{Overly ambitious projects?} --- Expensive, long, or large data retrieval tasks (proof of concept first!); advanced modeling or stats (descriptive summaries fine!)
+        \item \textbf{How concrete of a RQ for final project?} --- Not a contract, ok to change before end of course. Graded on 3 elements in assignment
+        \item \textbf{Making Fridays more engaging?} --- Experiment with extending Wednesday lab live-coding into Fridays
+        \item \textbf{Final project overlap with class examples?} --- Definitely!
+        \item \textbf{Running Python at home?} --- Everyone is different, but I still prefer to prototype and debug inside notebooks before translating into production scripts/pipelines
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{From scraping to APIs}
@@ -71,15 +78,15 @@
 
     \bigskip
 
-    This week begins Part III: \textbf{API-based data access}. Instead of converting web content into data, we ask for the data publishers provide.
+    This week begins Part III. Instead of converting web content into data, we ask for the data publishers provide.
 
     \bigskip
 
-    The skills you build here --- reading documentation, constructing parameterized URLs, handling pagination, parsing nested JSON --- transfer to \textit{every} API in the rest of the course.
+    The skills you build here --- reading documentation, constructing parameterized URLs, handling pagination, parsing nested JSON --- transfer to every API in the rest of the course.
 
     \bigskip
 
-    We have been using the Wikipedia API throughout the course but now we will explore more of what we can do with it
+    Wikipedia API already showed up throughout the course but now we will explore more of what we can do with it
 \end{frame}
 
 \begin{frame}{What is an API?}
@@ -148,7 +155,6 @@
                 \item The \textbf{Action API} serves that same database as data. Wikipedia's own tools use it, and so do the bots that patrol edits and researchers counting what's there.
                 \item Every MediaWiki site has one, at \texttt{api.php}: learn it on Wikipedia, and it works on the others.
             \end{itemize}
-            {\footnotesize Documentation: \href{https://www.mediawiki.org/wiki/API:Action_API}{mediawiki.org/wiki/API:Action\_API}}
         \end{column}
         \begin{column}{0.54\textwidth}
             \begin{block}{A basic request}
@@ -162,6 +168,10 @@
                 \end{tabular}
             \end{block}
             \small The ``API call'' boxes on the tour that follows show only what changes: the \texttt{prop} or \texttt{list} after \texttt{action=query}.
+
+            \bigskip
+            
+            Documentation: \href{https://www.mediawiki.org/wiki/API:Action_API}{mediawiki.org/wiki/API:Action\_API}
         \end{column}
     \end{columns}
 \end{frame}
@@ -180,10 +190,6 @@
             \medskip
 
             The response is nested JSON you navigate \textbf{one level at a time}: \texttt{data["query"]["pages"][page\_id]}.
-
-            \begin{alertblock}{Connecting to Ch.~2 (Ethics)}
-                \footnotesize Identify yourself: a \textbf{User-Agent} with your contact information. Since 2026, Wikimedia gives an identified client 200 requests a minute, and an anonymous one 10.
-            \end{alertblock}
         \end{column}
         \begin{column}{0.5\textwidth}
             \centering
@@ -231,7 +237,7 @@
             \end{block}
 
             \medskip
-            {\footnotesize \textbf{For research:} Article length and last edit, across many articles: which topics Wikipedia covers in depth, and which it neglects.}
+            \textbf{For research:} Article length and last edit, across many articles: which topics Wikipedia covers in depth, and which it neglects.
         \end{column}
     \end{columns}
 \end{frame}
@@ -250,7 +256,7 @@
             \end{block}
 
             \medskip
-            {\footnotesize \textbf{For research:} Link networks: what a topic connects to, and how central it is, measured by the pages that point to it.}
+            \textbf{For research:} Link networks: what a topic connects to, and how central it is, measured by the pages that point to it.
         \end{column}
     \end{columns}
 \end{frame}
@@ -269,10 +275,7 @@
             \end{block}
 
             \medskip
-            {\footnotesize \textbf{For research:} Global attention: which topics exist in which languages, and where coverage is missing.}
-
-            \medskip
-            {\footnotesize How many editions carry a topic is a rough measure of global attention --- one that skews toward the Global North.}
+            \textbf{For research:} Global attention: which topics exist in which languages, and where coverage is missing.
         \end{column}
     \end{columns}
 \end{frame}
@@ -291,7 +294,7 @@
             \end{block}
 
             \medskip
-            {\footnotesize \textbf{For research:} Sourcing: which outlets Wikipedia relies on, and how many of its links still work or point to archives.}
+            \textbf{For research:} Sourcing: which outlets Wikipedia relies on, and how many of its links still work or point to archives.
         \end{column}
     \end{columns}
 \end{frame}
@@ -310,7 +313,7 @@
             \end{block}
 
             \medskip
-            {\footnotesize \textbf{For research:} Sampling frames: every article in a category, such as all U.S. flagship universities, to compare.}
+            \textbf{For research:} Sampling frames: every article in a category, such as all U.S. flagship universities, to compare.
         \end{column}
     \end{columns}
 \end{frame}
@@ -329,7 +332,7 @@
             \end{block}
 
             \medskip
-            {\footnotesize \textbf{For research:} Deliberation: how editors argue, and how disputes are settled.}
+            \textbf{For research:} Deliberation: how editors argue, and how disputes are settled.
         \end{column}
     \end{columns}
 \end{frame}
@@ -348,10 +351,7 @@
             \end{block}
 
             \medskip
-            {\footnotesize \textbf{For research:} Collaboration over time: who edits, how much, and how fast an article changes when news breaks.}
-
-            \medskip
-            {\footnotesize Usernames are public; many are pseudonyms.}
+            \textbf{For research:} Collaboration over time: who edits, how much, and how fast an article changes when news breaks.
         \end{column}
     \end{columns}
 \end{frame}
@@ -370,10 +370,7 @@
             \end{block}
 
             \medskip
-            {\footnotesize \textbf{For research:} Public attention: what people look up, and when; spikes follow news and events.}
-
-            \medskip
-            {\footnotesize A pageview is not a person, and the definition has changed. Wednesday shows how.}
+            \textbf{For research:} Public attention: what people look up, and when; spikes follow news and events.
         \end{column}
     \end{columns}
 \end{frame}
@@ -392,7 +389,7 @@
             \end{block}
 
             \medskip
-            {\footnotesize \textbf{For research:} Editors' careers: what else an article's editors work on, and the communities they form.}
+            \textbf{For research:} Editors' careers: what else an article's editors work on, and the communities they form.
         \end{column}
     \end{columns}
 \end{frame}
@@ -408,11 +405,8 @@
             \end{enumerate}
         \end{column}
         \begin{column}{0.36\textwidth}
-            \begin{block}{This week makes step 3 easy}
-                \footnotesize If your source has an API, Wednesday's notebook is your feasibility check: one request, one record, the status code, and the fields you'll use.
-            \end{block}
-            \begin{block}{Stuck for an idea?}
-                \footnotesize Week 9's Friday slides grow every chapter's \textit{Additional Exercises} into project questions.
+            \begin{block}{Need inspiration?}
+                \footnotesize Every chapter has \textit{Additional Exercises} that could make great project questions.
             \end{block}
             \begin{alertblock}{Collecting over time?}
                 \footnotesize Start the collector now, and say so in the proposal.
@@ -649,7 +643,7 @@ revisions = list(page.revisions(   # 0.11: api_chunk_size=500
 \end{frame}
 
 % =========================================================================
-\section{Friday · Notebook Lab \& Final Project}
+\section{Friday · Notebook Lab Continued}
 % =========================================================================
 
 \begin{frame}{Today}
