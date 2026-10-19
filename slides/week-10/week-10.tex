@@ -139,155 +139,56 @@
     Each one has an \textbf{API endpoint}. Anything you can see in the interface, you can count.
 \end{frame}
 
-\begin{frame}{The article}
+\begin{frame}{MediaWiki: the software behind Wikipedia}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
-            \includegraphics[width=\textwidth]{img/article-tabs_annotated.pdf}
+        \begin{column}{0.44\textwidth}
+            Wikipedia runs on \textbf{MediaWiki}, free and open-source wiki software. The same software runs Wiktionary, Wikidata, Wikimedia Commons, and thousands of other wikis.
+            \begin{itemize}\small
+                \item Every page you read is drawn from MediaWiki's database: the article's wikitext, its history, its links.
+                \item The \textbf{Action API} serves that same database as data. Wikipedia's own tools use it, and so do the bots that patrol edits and researchers counting what's there.
+                \item Every MediaWiki site has one, at \texttt{api.php}: learn it on Wikipedia, and it works on the others.
+            \end{itemize}
+            {\footnotesize Documentation: \href{https://www.mediawiki.org/wiki/API:Action_API}{mediawiki.org/wiki/API:Action\_API}}
         \end{column}
-        \begin{column}{0.38\textwidth}
-            \small Tabs lead to the Article (1), its Talk page (2), and every past version (3). The languages button (4) lists other editions. A \textbf{wikilink} (5) points to another article; the \textbf{infobox} (6) comes from a \textbf{template}.
-
-            \medskip
-            \begin{block}{The API call}
-                \footnotesize \texttt{action=query\&prop=info} --- the page's ID, length, and last edit
+        \begin{column}{0.54\textwidth}
+            \begin{block}{A basic request}
+                \footnotesize
+                \texttt{https://en.wikipedia.org/w/api.php}\\[0.3em]
+                \begin{tabular}{@{}ll@{}}
+                    \texttt{?action=query} & what to do \\
+                    \texttt{\&titles=University\_of\_Colorado\_Boulder} & which page \\
+                    \texttt{\&prop=info} & what about it \\
+                    \texttt{\&format=json} & in what form
+                \end{tabular}
             \end{block}
+            \small The ``API call'' boxes on the tour that follows show only what changes: the \texttt{prop} or \texttt{list} after \texttt{action=query}.
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{Wikilinks, and what links here}
+\begin{frame}{The anatomy of a request}
     \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
-            \includegraphics[width=\textwidth]{img/what-links-here_annotated.pdf}
-        \end{column}
-        \begin{column}{0.38\textwidth}
-            \small A wikilink is a citation of another article. \textbf{What links here} is the reverse map: every page that links to this one (1), with filters (2).
+        \begin{column}{0.46\textwidth}
+            Every Action API request is four parts:
+            \begin{enumerate}\small
+                \item a \textbf{base URL} --- \texttt{.../w/api.php}
+                \item an \texttt{\textbf{action}} --- what you want to do
+                \item \textbf{parameters} that narrow the request
+                \item a \texttt{\textbf{format}} --- \texttt{json}
+            \end{enumerate}
 
             \medskip
-            \begin{block}{The API call}
-                \footnotesize Links out: \texttt{prop=links}\\ Links in: \texttt{list=backlinks}
-            \end{block}
+
+            The response is nested JSON you navigate \textbf{one level at a time}: \texttt{data["query"]["pages"][page\_id]}.
+
+            \begin{alertblock}{Connecting to Ch.~2 (Ethics)}
+                \footnotesize Identify yourself: a \textbf{User-Agent} with your contact information. Since 2026, Wikimedia gives an identified client 200 requests a minute, and an anonymous one 10.
+            \end{alertblock}
         \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Interlanguage links}
-    \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
-            \includegraphics[width=\textwidth]{img/languages-menu_annotated.pdf}
-        \end{column}
-        \begin{column}{0.38\textwidth}
-            \small The same topic in other editions (2), searchable (1). Each edition is written by its own community --- they are not translations.
-
-            \medskip
-            \begin{block}{The API call}
-                \footnotesize \texttt{prop=langlinks}
-            \end{block}
-
-            \medskip
-            {\footnotesize How many editions carry a topic is a rough measure of global attention --- one that skews toward the Global North.}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{References}
-    \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
-            \includegraphics[width=\textwidth]{img/article-references_annotated.pdf}
-        \end{column}
-        \begin{column}{0.38\textwidth}
-            \small An article's claims rest on its references (1): numbered citations (2), many with an archived copy (Week 3).
-
-            \medskip
-            \begin{block}{The API call}
-                \footnotesize \texttt{prop=extlinks} --- every external link on the page
-            \end{block}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Categories and templates}
-    \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
-            \includegraphics[width=\textwidth]{img/article-categories_annotated.pdf}
-        \end{column}
-        \begin{column}{0.38\textwidth}
-            \small Categories (1) file the article with others like it. Like the infobox's template, they are kept by editors --- as consistent as the people who keep them.
-
-            \medskip
-            \begin{block}{The API call}
-                \footnotesize \texttt{prop=categories}\\ \texttt{prop=templates}
-            \end{block}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{The talk page}
-    \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
-            \includegraphics[width=\textwidth]{img/talk-page_annotated.pdf}
-        \end{column}
-        \begin{column}{0.38\textwidth}
-            \small Where editors discuss changes (1). Its banners (2) record the article's quality rating and the WikiProjects that look after it.
-
-            \medskip
-            \begin{block}{The API call}
-                \footnotesize Any of the same calls, for \texttt{titles=Talk:\ldots}
-            \end{block}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{The revision history}
-    \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
-            \includegraphics[width=\textwidth]{img/revision-history_annotated.pdf}
-        \end{column}
-        \begin{column}{0.38\textwidth}
-            \small Every edit ever made, one row each: when (1), by whom (2), how many bytes (3), and the editor's summary (4).
-
-            \medskip
-            \begin{block}{The API call}
-                \footnotesize \texttt{prop=revisions} --- with \texttt{rvstart} to fix the window
-            \end{block}
-
-            \medskip
-            {\footnotesize Usernames are public; many are pseudonyms.}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Pageviews}
-    \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
-            \includegraphics[width=\textwidth]{img/pageviews-tool_annotated.pdf}
-        \end{column}
-        \begin{column}{0.38\textwidth}
-            \small Wikipedia counts its readers and publishes the counts: daily views (1) and the period's total (2), here for July--September 2026.
-
-            \medskip
-            \begin{block}{The API call}
-                \footnotesize A second API (REST):\\ \texttt{/metrics/pageviews/per-article/\ldots}
-            \end{block}
-
-            \medskip
-            {\footnotesize A pageview is not a person, and the definition has changed. Wednesday shows how.}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{User pages and contributions}
-    \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
-            \includegraphics[width=\textwidth]{img/user-contributions_annotated.pdf}
-        \end{column}
-        \begin{column}{0.38\textwidth}
-            \small Editors have pages too. Jimbo Wales's contributions, across all of Wikipedia: when (1), which page (2), how many bytes (3), and the summary (4).
-
-            \medskip
-            \begin{block}{The API call}
-                \footnotesize \texttt{list=usercontribs}\\ (the user page itself: \texttt{titles=User:Jimbo\_Wales})
-            \end{block}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/api-response_annotated.pdf}\\
+            {\scriptsize The same request in a browser, with \texttt{format=jsonfm}: the page ID (1) is the key under \texttt{pages}, and \texttt{length} (2) is the article's size in bytes.}
         \end{column}
     \end{columns}
 \end{frame}
@@ -316,29 +217,182 @@
     \raggedright Every Action API request here starts\\ \texttt{https://en.wikipedia.org/w/api.php?action=query\&format=json}
 \end{frame}
 
-\begin{frame}{The anatomy of a request --- and what the notebook covers}
+\begin{frame}{The article}
     \begin{columns}[T]
-        \begin{column}{0.46\textwidth}
-            Every MediaWiki call is four parts:
-            \begin{enumerate}\small
-                \item a \textbf{base URL} --- \texttt{.../w/api.php}
-                \item an \texttt{\textbf{action}} --- what you want to do
-                \item \textbf{parameters} that narrow the request
-                \item a \texttt{\textbf{format}} --- \texttt{json}
-            \end{enumerate}
+        \begin{column}{0.58\textwidth}
+            \includegraphics[width=\textwidth]{img/article-tabs_annotated.pdf}
+        \end{column}
+        \begin{column}{0.38\textwidth}
+            \small Tabs lead to the Article (1), its Talk page (2), and every past version (3). The languages button (4) lists other editions. A \textbf{wikilink} (5) points to another article; the \textbf{infobox} (6) comes from a \textbf{template}.
 
             \medskip
+            \begin{block}{The API call}
+                \footnotesize \texttt{action=query\&prop=info} --- the page's ID, length, and last edit
+            \end{block}
 
-            The response is nested JSON you navigate \textbf{one level at a time}: \texttt{data["query"]["pages"][page\_id]}.
-
-            \begin{alertblock}{Connecting to Ch.~2 (Ethics)}
-                \footnotesize Identify yourself: a \textbf{User-Agent} with your contact information. Since 2026, Wikimedia gives an identified client 200 requests a minute, and an anonymous one 10.
-            \end{alertblock}
+            \medskip
+            {\footnotesize \textbf{For research:} Article length and last edit, across many articles: which topics Wikipedia covers in depth, and which it neglects.}
         \end{column}
-        \begin{column}{0.5\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/api-response_annotated.pdf}\\
-            {\scriptsize The same request in a browser, with \texttt{format=jsonfm}: the page ID (1) is the key under \texttt{pages}, and \texttt{length} (2) is the article's size in bytes.}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Wikilinks, and what links here}
+    \begin{columns}[T]
+        \begin{column}{0.58\textwidth}
+            \includegraphics[width=\textwidth]{img/what-links-here_annotated.pdf}
+        \end{column}
+        \begin{column}{0.38\textwidth}
+            \small A wikilink is a citation of another article. \textbf{What links here} is the reverse map: every page that links to this one (1), with filters (2).
+
+            \medskip
+            \begin{block}{The API call}
+                \footnotesize Links out: \texttt{prop=links}\\ Links in: \texttt{list=backlinks}
+            \end{block}
+
+            \medskip
+            {\footnotesize \textbf{For research:} Link networks: what a topic connects to, and how central it is, measured by the pages that point to it.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Interlanguage links}
+    \begin{columns}[T]
+        \begin{column}{0.58\textwidth}
+            \includegraphics[width=\textwidth]{img/languages-menu_annotated.pdf}
+        \end{column}
+        \begin{column}{0.38\textwidth}
+            \small The same topic in other editions (2), searchable (1). Each edition is written by its own community --- they are not translations.
+
+            \medskip
+            \begin{block}{The API call}
+                \footnotesize \texttt{prop=langlinks}
+            \end{block}
+
+            \medskip
+            {\footnotesize \textbf{For research:} Global attention: which topics exist in which languages, and where coverage is missing.}
+
+            \medskip
+            {\footnotesize How many editions carry a topic is a rough measure of global attention --- one that skews toward the Global North.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{References}
+    \begin{columns}[T]
+        \begin{column}{0.58\textwidth}
+            \includegraphics[width=\textwidth]{img/article-references_annotated.pdf}
+        \end{column}
+        \begin{column}{0.38\textwidth}
+            \small An article's claims rest on its references (1): numbered citations (2), many with an archived copy (Week 3).
+
+            \medskip
+            \begin{block}{The API call}
+                \footnotesize \texttt{prop=extlinks} --- every external link on the page
+            \end{block}
+
+            \medskip
+            {\footnotesize \textbf{For research:} Sourcing: which outlets Wikipedia relies on, and how many of its links still work or point to archives.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Categories and templates}
+    \begin{columns}[T]
+        \begin{column}{0.58\textwidth}
+            \includegraphics[width=\textwidth]{img/article-categories_annotated.pdf}
+        \end{column}
+        \begin{column}{0.38\textwidth}
+            \small Categories (1) file the article with others like it. Like the infobox's template, they are kept by editors --- as consistent as the people who keep them.
+
+            \medskip
+            \begin{block}{The API call}
+                \footnotesize \texttt{prop=categories}\\ \texttt{prop=templates}
+            \end{block}
+
+            \medskip
+            {\footnotesize \textbf{For research:} Sampling frames: every article in a category, such as all U.S. flagship universities, to compare.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{The talk page}
+    \begin{columns}[T]
+        \begin{column}{0.58\textwidth}
+            \includegraphics[width=\textwidth]{img/talk-page_annotated.pdf}
+        \end{column}
+        \begin{column}{0.38\textwidth}
+            \small Where editors discuss changes (1). Its banners (2) record the article's quality rating and the WikiProjects that look after it.
+
+            \medskip
+            \begin{block}{The API call}
+                \footnotesize Any of the same calls, for \texttt{titles=Talk:\ldots}
+            \end{block}
+
+            \medskip
+            {\footnotesize \textbf{For research:} Deliberation: how editors argue, and how disputes are settled.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{The revision history}
+    \begin{columns}[T]
+        \begin{column}{0.58\textwidth}
+            \includegraphics[width=\textwidth]{img/revision-history_annotated.pdf}
+        \end{column}
+        \begin{column}{0.38\textwidth}
+            \small Every edit ever made, one row each: when (1), by whom (2), how many bytes (3), and the editor's summary (4).
+
+            \medskip
+            \begin{block}{The API call}
+                \footnotesize \texttt{prop=revisions} --- with \texttt{rvstart} to fix the window
+            \end{block}
+
+            \medskip
+            {\footnotesize \textbf{For research:} Collaboration over time: who edits, how much, and how fast an article changes when news breaks.}
+
+            \medskip
+            {\footnotesize Usernames are public; many are pseudonyms.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Pageviews}
+    \begin{columns}[T]
+        \begin{column}{0.58\textwidth}
+            \includegraphics[width=\textwidth]{img/pageviews-tool_annotated.pdf}
+        \end{column}
+        \begin{column}{0.38\textwidth}
+            \small Wikipedia counts its readers and publishes the counts: daily views (1) and the period's total (2), here for July--September 2026.
+
+            \medskip
+            \begin{block}{The API call}
+                \footnotesize A second API (REST):\\ \texttt{/metrics/pageviews/per-article/\ldots}
+            \end{block}
+
+            \medskip
+            {\footnotesize \textbf{For research:} Public attention: what people look up, and when; spikes follow news and events.}
+
+            \medskip
+            {\footnotesize A pageview is not a person, and the definition has changed. Wednesday shows how.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{User pages and contributions}
+    \begin{columns}[T]
+        \begin{column}{0.58\textwidth}
+            \includegraphics[width=\textwidth]{img/user-contributions_annotated.pdf}
+        \end{column}
+        \begin{column}{0.38\textwidth}
+            \small Editors have pages too. Jimbo Wales's contributions, across all of Wikipedia: when (1), which page (2), how many bytes (3), and the summary (4).
+
+            \medskip
+            \begin{block}{The API call}
+                \footnotesize \texttt{list=usercontribs}\\ (the user page itself: \texttt{titles=User:Jimbo\_Wales})
+            \end{block}
+
+            \medskip
+            {\footnotesize \textbf{For research:} Editors' careers: what else an article's editors work on, and the communities they form.}
         \end{column}
     \end{columns}
 \end{frame}
@@ -522,7 +576,11 @@ backlinks = query_all({"list": "backlinks", "bltitle": title, "bllimit": "max"})
     \begin{columns}[T]
         \begin{column}{0.58\textwidth}
 \begin{lstlisting}
+%conda install -y -c conda-forge mwclient
+\end{lstlisting}
+\begin{lstlisting}
 import mwclient
+print(mwclient.__version__)    # 0.10.1 from conda-forge
 
 site = mwclient.Site("en.wikipedia.org",
     clients_useragent="WebDataScience/1.0 (your-email@colorado.edu)")
@@ -530,18 +588,18 @@ page = site.pages["University of Colorado Boulder"]
 
 print(len(list(page.categories())))
 print(len(list(page.langlinks())))
-revisions = list(page.revisions(
-    start="2026-09-30T23:59:59Z", api_chunk_size=500))
+revisions = list(page.revisions(   # 0.11: api_chunk_size=500
+    start="2026-09-30T23:59:59Z", limit=500))
 \end{lstlisting}
         \end{column}
         \begin{column}{0.38\textwidth}
-            Each line replaces one of our functions --- continuation included --- and mwclient backs off when the servers report lag. A \textbf{429} still stops it (version 0.11): wait, and run it again.
+            Each line replaces one of our functions --- continuation included --- and mwclient backs off when the servers report lag. A \textbf{429} still stops it: wait, and run it again.
 
             \medskip
             Two things stay raw: \textbf{pageviews} (mwclient speaks the Action API only), and any parameter the library doesn't expose.
 
             \medskip
-            {\footnotesize \href{https://mwclient.readthedocs.io/}{mwclient docs} · \texttt{pip install mwclient}}
+            {\footnotesize \href{https://mwclient.readthedocs.io/}{mwclient docs}}
         \end{column}
     \end{columns}
 \end{frame}
@@ -590,40 +648,72 @@ revisions = list(page.revisions(
     \end{columns}
 \end{frame}
 
-\begin{frame}[standout]
-    Scraping asks: \textit{how is this page built?}\\
-    An API asks: \textit{what does the documentation promise?}\\[1em]
-    {\large Learn one API by hand,\\ and you have learned them all.}
+% =========================================================================
+\section{Friday · Notebook Lab \& Final Project}
+% =========================================================================
+
+\begin{frame}{Today}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \dayband{First}{the notebook lab}
+            \begin{itemize}\small
+                \item Pick up Wednesday's notebook where you stopped
+                \item Work in pairs; the checkpoints are the chapter's printed outputs
+                \item No notebook or GitHub submission this week
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \dayband{Then}{proposal Q\&A}
+            \begin{itemize}\small
+                \item Bring your question and your source
+                \item \textbf{Proposal due Sunday, October 25}
+            \end{itemize}
+        \end{column}
+    \end{columns}
 \end{frame}
 
-% =========================================================================
-\section{Friday · Textbook Revisions}
-% =========================================================================
+% Copied from week 9's Friday ("The Final Project: grade and dates" and "What to
+% expect"), as edited in Overleaf; keep the two in step (docs/course-facts.md).
+\begin{frame}{The Final Project: grade and dates}
+    A \textbf{portfolio piece} that matches a web data source with a research design. Individually, or in pairs with the instructor's permission. \textbf{40\%} of your grade.
 
-% The screenshot's code is 12 CSS pixels; a 62% column brings it to 16 on a
-% slide shown 1,920 pixels wide (slides/common/AUTHORING.md), and 60% would not.
-\begin{frame}{Improving Chapter 10 together}
+    \medskip
+
+    \begin{center}
+    \begin{tabular}{llr}
+        \toprule
+        \textbf{Part} & \textbf{Due} & \textbf{Weight} \\
+        \midrule
+        Proposal & Sunday, October 25 & 5\% \\
+        5-min presentation & Week 16, Nov.~30--Dec.~4 & 10\% \\
+        Write-up & Monday, December 7 & 25\% \\
+        \bottomrule
+    \end{tabular}
+    \end{center}
+\end{frame}
+
+\begin{frame}{What to expect}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
-            \includegraphics[width=\textwidth]{img/pr_suggestion.png}\\
-            {\scriptsize A review suggestion on the instructor's demonstration pull request: the author can apply it with one click.}
-
-            \medskip
-
-            Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-10-wikipedia.qmd} and reviews a classmate's.
+        \begin{column}{0.48\textwidth}
+            \textbf{The proposal} (Sunday, October 25)
+            \begin{itemize}\small
+                \item \textbf{A research question}: what the data could answer, and who would care about the answer.
+                \item \textbf{Data source(s) and method}: the site, API, or documents, and whether you'll use an API, scraping, PDFs, or a mix.
+                \item \textbf{Ethics and feasibility}: terms of service, \texttt{robots.txt}, and personal data; and proof that you can get one record.
+                \item Details on assignment submission on Canvas: \url{https://canvas.colorado.edu/courses/143304/assignments/2852060}
+            \end{itemize}
         \end{column}
-        \begin{column}{0.34\textwidth}
-            The workflow (from Week 1):
-            \begin{enumerate}\small
-                \item Branch / fork the book repo
-                \item Edit the chapter; commit with a clear message
-                \item Open a PR describing \textit{what} and \textit{why}
-                \item Review two peers' PRs: kind, specific, actionable
-            \end{enumerate}
-
-            \begin{alertblock}{Due this Sunday, Oct 25}
-                \footnotesize Your \textbf{Final Project proposal} (5\%): a research question, your data source(s) and method, and an ethics \& feasibility check --- with one record you actually retrieved.
-            \end{alertblock}
+        \begin{column}{0.48\textwidth}
+            \textbf{The repository and write-up} (December 7)
+            \begin{itemize}\small
+                \item \textbf{Reproducible}: a GitHub repository whose notebook or scripts collect the data and rerun the analysis, with a README.
+                \item \textbf{A write-up} of about \textbf{2,000--3,000 words}, with figures.
+            \end{itemize}
+            \medskip
+            \textbf{The presentation} (final week)
+            \begin{itemize}\small
+                \item About \textbf{5 minutes} plus questions: the question, the data, one finding.
+            \end{itemize}
         \end{column}
     \end{columns}
 \end{frame}
@@ -639,6 +729,9 @@ revisions = list(page.revisions(
                 \item[$\square$] If the data changes over time, is your collector already running?
                 \item[$\square$] Working in a pair? Ask the instructor before you submit.
             \end{itemize}
+
+            \medskip
+            {\small The proposal is graded on a careful, good-faith plan, not on getting everything right: you may change your question or source later.}
         \end{column}
         \begin{column}{0.36\textwidth}
             \begin{block}{What comes next}
@@ -649,46 +742,6 @@ revisions = list(page.revisions(
             \end{block}
         \end{column}
     \end{columns}
-\end{frame}
-
-\begin{frame}{A revision menu for Chapter 10}
-    High-value targets --- pick one and scope it to a single PR:
-    \begin{itemize}
-        \item \textbf{Close a gap in ``Common Issues to Debug.''} Add a worked \textbf{missing-page} check (a bad title returns page ID \texttt{-1}), or a \texttt{urllib.parse.quote()} example for titles with parentheses / accents.
-        \item \textbf{Show the etiquette, don't just name it.} The chapter mentions \texttt{maxlag} but never demonstrates it --- add a small retry-on-\texttt{maxlag} example for bulk jobs.
-        \item \textbf{Add a figure.} A diagram of the request anatomy, or of the request $\rightarrow$ \texttt{continue} $\rightarrow$ request pagination loop, would anchor the two hardest ideas.
-        \item \textbf{Strengthen an exercise.} Exercises 1--5 have no expected output or starter cell --- add a rubric or a self-checking assertion.
-        \item \textbf{Deepen ``Social History.''} Turn the gender-gap discussion into a reproducible measurement (tie it to WikiProject Women in Red) using this chapter's helper functions.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{A good revision, and a good review}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \begin{block}{A strong PR}
-                \begin{itemize}\small
-                    \item One focused change, clearly titled
-                    \item Explains the problem it fixes
-                    \item Builds (\texttt{quarto render}) without errors
-                    \item Matches the book's voice and notation
-                    \item Discloses any AI assistance
-                \end{itemize}
-            \end{block}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{A strong review}
-                \begin{itemize}\small
-                    \item Runs / reads the change, not just skims
-                    \item Names specifics (line, claim, code)
-                    \item Separates ``must fix'' from ``nice to have''
-                    \item Is generous --- assume good faith
-                    \item Ends with a clear verdict
-                \end{itemize}
-            \end{block}
-        \end{column}
-    \end{columns}
-    \medskip
-    \centering\small Next week: \textbf{Government APIs} --- the Census, the Federal Reserve (FRED), and other public data services.
 \end{frame}
 
 % =========================================================================
@@ -702,6 +755,7 @@ revisions = list(page.revisions(
         \item Openness is a \textit{choice}, not a guarantee of completeness --- Wikipedia's data still inherits its volunteer community's biases.
     \end{enumerate}
     \bigskip
+    \centering\small Next week: \textbf{Government APIs} --- the Census, the Federal Reserve (FRED), and other public data services.
 \end{frame}
 
 \end{document}

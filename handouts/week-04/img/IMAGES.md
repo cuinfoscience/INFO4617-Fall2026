@@ -23,6 +23,6 @@ Copied here by the textbook's `tools/shots/run sync`; `tools/shots/run synced` c
 
 | File | Copy of | Captured | Source | How |
 |---|---|---|---|---|
-| `rss-feed-xml_annotated.png` | `ch-04/rss-feed-xml` (images/ch-04/rss-feed-xml_annotated.png, textbook `5e89cea`) | 2026-09-24 | https://feeds.bbci.co.uk/news/science_and_environment/rss.xml | tools/shots: Google Chrome for Testing 154.0.8037.57, 800×700 at 2× |
+| `rss-feed-xml_annotated.png` | `ch-04/rss-feed-xml` (images/ch-04/rss-feed-xml_annotated.png, textbook `f7ec6e6`) | 2026-10-19 | https://feeds.bbci.co.uk/news/science_and_environment/rss.xml | tools/shots: Google Chrome for Testing 154.0.8037.92, 800×700 at 2× |
 | `view-source-rss-link_annotated.png` | `ch-04/view-source-rss-link` (images/ch-04/view-source-rss-link_annotated.png, textbook `5e89cea`) | 2026-09-24 | view-source:https://www.pbs.org/newshour/ | tools/shots: Google Chrome for Testing 154.0.8037.57, 816×600 at 2× |
 <!-- shots:end -->

@@ -35,6 +35,6 @@ Copied here by the textbook's `tools/shots/run sync`; `tools/shots/run synced` c
 
 | File | Copy of | Captured | Source | How |
 |---|---|---|---|---|
-| `jupyter-cells_annotated.png` | `ch-01/jupyter-cells` (images/ch-01/jupyter-cells_annotated.png, textbook `3ec4346`) | 2026-09-24 | http://localhost:8888/notebooks/ch-01-introduction.ipynb | tools/shots: Google Chrome for Testing 154.0.8037.57, 800×600 at 2× |
-| `jupyter-new-menu_annotated.png` | `ch-01/jupyter-new-menu` (images/ch-01/jupyter-new-menu_annotated.png, textbook `3ec4346`) | 2026-09-24 | http://localhost:8888/tree | tools/shots: Google Chrome for Testing 154.0.8037.57, 824×600 at 2× |
+| `jupyter-cells_annotated.png` | `ch-01/jupyter-cells` (images/ch-01/jupyter-cells_annotated.png, textbook `f7ec6e6`) | 2026-10-19 | http://localhost:8888/notebooks/ch-01-introduction.ipynb | tools/shots: Google Chrome for Testing 154.0.8037.92, 800×600 at 2× |
+| `jupyter-new-menu_annotated.png` | `ch-01/jupyter-new-menu` (images/ch-01/jupyter-new-menu_annotated.png, textbook `f7ec6e6`) | 2026-10-19 | http://localhost:8888/tree | tools/shots: Google Chrome for Testing 154.0.8037.92, 824×600 at 2× |
 <!-- shots:end -->
