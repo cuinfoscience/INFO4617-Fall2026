@@ -91,7 +91,7 @@
       ],
       "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
       "by": "tools/shots",
-      "captured": "2026-10-16T04:53:05+00:00",
+      "captured": "2026-10-19T17:10:56+00:00",
       "copied_from": "images/ch-10/article-tabs.png",
       "figure": "ch-10/article-tabs",
       "final_url": "https://en.wikipedia.org/wiki/University_of_Colorado_Boulder",
@@ -103,7 +103,7 @@
         1080
       ],
       "source_sha256": "91c8af87719ea376ef39ade3331d2a98923cb84aba6d463cf3ffddb599a6f291",
-      "synced": "2026-10-16T05:31:03+00:00",
+      "synced": "2026-10-19T17:25:22+00:00",
       "textbook_commit": "9a22395c19c3350651e2ccece6f108f97a148fa0",
       "url": "https://en.wikipedia.org/wiki/University_of_Colorado_Boulder",
       "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",

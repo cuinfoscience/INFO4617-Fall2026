@@ -1,24 +1,24 @@
 {
   "files": {
     "rss-feed-xml_annotated.png": {
-      "browser": "Google Chrome for Testing 154.0.8037.57 (headless, Playwright 1.63.0)",
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
       "by": "tools/shots",
-      "captured": "2026-09-24T19:07:29+00:00",
+      "captured": "2026-10-19T17:22:20+00:00",
       "copied_from": "images/ch-04/rss-feed-xml_annotated.png",
       "figure": "ch-04/rss-feed-xml",
       "final_url": "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml",
       "kind": "capture",
       "scale": 2,
-      "sha256": "98252761f12c7e62a36da389674897209462edd60aa777262c2d06e8ddddcc9b",
+      "sha256": "9a63882d4418e4935c8efd69adb279f2fb4889c6674201eb96d4c1e2c11d6e64",
       "size": [
         1600,
         1200
       ],
-      "source_sha256": "98252761f12c7e62a36da389674897209462edd60aa777262c2d06e8ddddcc9b",
-      "synced": "2026-09-25T13:38:38+00:00",
-      "textbook_commit": "5e89cea5722f8dc591dbc3f961fe8de2d6d0d5e9",
+      "source_sha256": "9a63882d4418e4935c8efd69adb279f2fb4889c6674201eb96d4c1e2c11d6e64",
+      "synced": "2026-10-19T17:25:24+00:00",
+      "textbook_commit": "f7ec6e6d2f1fe2be5e578feaaf9bc3f044cd38b5",
       "url": "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml",
-      "user_agent": "Web Data Science/v1 brian.keegan@colorado.edu",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
       "window": [
         800,
         700
