@@ -23,7 +23,7 @@
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            We leave scraping behind and start asking servers for data \textit{on purpose} --- through a documented API.
+            We leave scraping behind and start asking servers for data through documented APIs.
 
             \bigskip
 
@@ -36,19 +36,20 @@
 
             \dayband{Wednesday}{Notebook lab}
             \begin{itemize}\small
-                \item Query the MediaWiki API: revisions, pageviews, links, raw requests
+                \item MediaWiki API: revisions, pageviews, links, raw requests
+                \item Experiment with new format of live-coding
             \end{itemize}
 
             \medskip
 
-            \dayband{Friday}{Textbook revisions \textbar Proposal due Sunday}
+            \dayband{Friday}{Continue notebook lab}
             \begin{itemize}\small
-                \item Pull requests improving Chapter 10 --- \textbf{and} your Final Project proposal
+                \item More notebook lab and final project proposal Q\&A
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Companion notebook}
-                \footnotesize \texttt{ch-10-wikipedia.ipynb}
+            \begin{block}{Skipping weekly submissions}
+                No lab notebook or GitHub submissions this week
             \end{block}
             \begin{alertblock}{Due Sunday, Oct 25}
                 \footnotesize \textbf{Final Project proposal} (5\%) --- a research question, your data source(s) and method, and an ethics \& feasibility check.
@@ -61,12 +62,16 @@
 \section{Monday · Concepts}
 % =========================================================================
 
+\begin{frame}{Daily note}
+    
+\end{frame}
+
 \begin{frame}{From scraping to APIs}
-    For six weeks we \textbf{reverse-engineered} pages built for human eyes --- inspecting HTML, guessing selectors, and cleaning up the mess.
+    For six weeks we \textbf{reverse-engineered} pages built for human eyes --- inspecting HTML, rickety archives, guessing selectors, and cleaning up PDFs.
 
     \bigskip
 
-    This week begins Part III: \textbf{API-based data access}. Instead of taking data a site never meant to hand us, we ask for it the way the operator intends.
+    This week begins Part III: \textbf{API-based data access}. Instead of converting web content into data, we ask for the data publishers provide.
 
     \bigskip
 
@@ -74,23 +79,27 @@
 
     \bigskip
 
-    You have already met one: in Week 1, the pageviews API counted the readers of Wikipedia's article on CU Boulder. This week, that article is our case.
+    We have been using the Wikipedia API throughout the course but now we will explore more of what we can do with it
 \end{frame}
 
 \begin{frame}{What is an API?}
-    An \textbf{API} (Application Programming Interface) is a \textbf{contract}. It specifies what you can request. It specifies which parameters you can send. It also specifies the format of the response.
+    An \textbf{API} (Application Programming Interface) is a \textbf{contract}. It specifies what you can request, which parameters you can send, and the format of the response.
 
     \bigskip
 
     \begin{itemize}
         \item Clean \textbf{JSON}, not cluttered HTML
-        \item \textbf{Stable endpoints}, not fragile CSS selectors
-        \item \textbf{Documentation} tells you exactly what exists
+        \item \textbf{Stable endpoints}, not fragile CSS selectors (mostly)
+        \item \textbf{Documentation} tells you exactly what exists and how to get it
     \end{itemize}
 
     \bigskip
 
-    The tradeoff: an API only exposes what its operator \textit{chooses} to. You cannot request a field that the API does not include. You cannot exceed the rate limits. You cannot rely on the API forever. The ``post-API age'' later in this module lists many APIs that operators restricted, repriced, or shut down.
+    The tradeoff: an API only exposes what its operator \textit{chooses} to. You cannot request a field that the API does not include, exceed the rate limits, or rely on the API forever. 
+
+    \bigskip
+    
+    The ``post-API age'' from Week 03 should land harder now: many APIs have been restricted, repriced, or shut down --- which is frustrating when you see how powerful they can be!
 \end{frame}
 
 \begin{frame}{Why Wikipedia, and why now}
@@ -100,16 +109,13 @@
 
             \medskip
 
-            That openness is under pressure from AI:
+            This openness is under pressure from AI:
             \begin{itemize}\small
-                \item \textbf{Crawlers.} Bots made about 35\% of pageviews but at least 65\% of the costliest traffic (Wikimedia, April 2025). Rate limits by identity followed in 2026.
+                \item \textbf{Crawlers.} Bots made about 35\% of pageviews but at least 65\% of the costliest traffic
                 \item \textbf{Readers.} With better bot detection, human pageviews for March--August 2025 came out about 8\% lower than a year before.
                 \item \textbf{Writing.} Editors clean up AI-written text, and a 2026 guideline bars using language models to write articles.
             \end{itemize}
 
-            \medskip
-
-            Our case: \textbf{University of Colorado Boulder}, beside \textbf{Boulder, Colorado}.
         \end{column}
         \begin{column}{0.56\textwidth}
             \centering
@@ -120,7 +126,7 @@
 \end{frame}
 
 \begin{frame}{A tour: what sits behind every article}
-    Most readers see the article and nothing else. Behind it, Wikipedia keeps its records in the open:
+    Like most users, you have probably never clicked any deeper into Wikipedia than an article. But Wikipedia keeps many important records publicly available:
     \begin{itemize}
         \item who changed what, and when --- the \textbf{revision history}
         \item what editors argued about --- the \textbf{talk page}
