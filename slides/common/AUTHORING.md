@@ -43,7 +43,11 @@ recently — voice evolves forward, not backward.
    ≤ ~12 lines; keep it runnable-looking and faithful), plus:
    - a frame listing the chapter's **Exercises** to work in pairs (mark any "graduate / INFO 5617" exercise with a bold `\textbf{5617}` label);
    - a **Show-and-Tell** prompt (bring a bug / interesting data / a research provocation — the instructor's recurring habit);
-   - one `[standout]` frame with a memorable takeaway from the chapter.
+
+   No `[standout]` frames. A one-line aphorism on a dark slide adds no
+   information and reads as filler; the instructor removed every one from
+   the decks on 2026-10-19. A point worth closing on goes in the Key
+   takeaways frame, said concretely.
 
    A chapter with more distinct strategies or code patterns earns more
    frames; a chapter that's mostly one worked example doesn't need padding
