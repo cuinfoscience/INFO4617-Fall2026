@@ -23,11 +23,11 @@ written once in Quarto markdown and built two ways:
 | `week-07/*.tex` (three) | a PDF each, no notebook |
 | `week-08/revise-a-pull-request.tex` | a PDF, no notebook |
 | `week-08/README.md` | nothing: students read the page on GitHub, then download and run chapter 8's notebook from the textbook |
-| `week-10/lab-10.ipynb`, `week-11/lab-11.ipynb` | nothing: lab notebooks, written as notebooks (see below) |
+| `week-10/lab-10.ipynb` | nothing: a lab notebook, written as a notebook (see below) |
 
 ## Lab notebooks
 
-From week 10, Wednesday's lab (and Friday's, when it runs over) is live coding: the instructor writes the code with the class, from a notebook whose Markdown cells narrate each step and whose code cells hold only comment prompts, in the style of a chapter's Recommended Exercises. Each lab is a 60–75 minute walk through the chapter's core ideas on its own case. Students don't turn it in.
+Week 10 pilots live coding for Wednesday's lab (and Friday's, when it runs over): the instructor writes the code with the class, from a notebook whose Markdown cells narrate each step and whose code cells hold only comment prompts, in the style of a chapter's Recommended Exercises. Each lab is a 60–75 minute walk through the chapter's core ideas on its own case. Students don't turn it in. If the pilot works, each later week gets one too.
 
 - `week-NN/lab-NN.ipynb` is the students' copy: prompts only.
 - `week-NN/lab-NN-key.ipynb` is the instructor's: every cell filled in and run against the live APIs, with the date in its first cell. It's public, so students can check their work after class.
