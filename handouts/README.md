@@ -23,7 +23,7 @@ written once in Quarto markdown and built two ways:
 | `week-07/*.tex` (three) | a PDF each, no notebook |
 | `week-08/revise-a-pull-request.tex` | a PDF, no notebook |
 | `week-08/README.md` | nothing: students read the page on GitHub, then download and run chapter 8's notebook from the textbook |
-| `week-10/lab-10.ipynb` | nothing: a lab notebook, written as a notebook (see below) |
+| `week-10/lab-10.ipynb`, `week-10/lab-10-key.ipynb` | nothing: a lab notebook and its key, written as notebooks (see below) |
 
 ## Lab notebooks
 
