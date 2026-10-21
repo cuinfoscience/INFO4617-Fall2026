@@ -234,7 +234,9 @@ def slides_url(week_number: int) -> str:
 
 
 def lab_items(week_number: int) -> list:
-    """Links to the week's lab notebook and its key, placed after the slides.
+    """Links to the week's lab notebook and its key, placed in Wednesday's lab
+    after the companion notebook (after the slides in week 1, which has no
+    Wednesday).
     Empty for a week with no lab on disk (labs/week-NN/lab-NN.ipynb), so a
     held lab stays out of Canvas until it's merged."""
     nn = f"{week_number:02d}"
@@ -559,7 +561,8 @@ def modules():
             "external_url": slides_url(wk),
             "new_tab": True,
         })
-        items.extend(lab_items(wk))
+        if wk not in TEACHING_WEEKS:
+            items.extend(lab_items(wk))
 
         if wk in TEACHING_WEEKS:
             items.append({"type": "SubHeader", "title": "Wednesday · Notebook Lab"})
@@ -569,6 +572,7 @@ def modules():
                 "external_url": notebook_url(slug),
                 "new_tab": True,
             })
+            items.extend(lab_items(wk))
             items.append({"type": "Assignment", "title": f"Week {wk} Lab — {topic}"})
             items.append({"type": "SubHeader", "title": "Friday · Textbook Revisions"})
             items.append({"type": "Assignment", "title": f"Week {wk} Revision — Chapter {ch}"})

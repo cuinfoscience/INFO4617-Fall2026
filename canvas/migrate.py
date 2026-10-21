@@ -19,7 +19,7 @@ Usage
     python migrate.py build                 # dry run: groups/assignments/modules/syllabus
     python migrate.py build --apply         # actually build
     python migrate.py all --apply           # copy, then build
-    python migrate.py labs                  # dry run: link each week's lab and key after its slides
+    python migrate.py labs                  # dry run: link each week's lab and key in its Wednesday lab
     python migrate.py labs --apply          # actually add those links
 
 Useful flags
@@ -511,8 +511,9 @@ def cmd_build(api: Canvas, args):
 # ---------------------------------------------------------------- entry
 
 def cmd_labs(api: Canvas, args):
-    """Add each week's lab and lab-key links after its slides, in modules that
-    already exist. `build` leaves existing modules alone, so this is how
+    """Add each week's lab and lab-key links after its companion notebook, in
+    Wednesday's lab, in modules that already exist (after the slides in a week
+    with no companion notebook, such as week 1). `build` leaves existing modules alone, so this is how
     links reach a module built before its week had a lab. Idempotent by title
     and by URL, so a module that already links the notebook under another
     title (week 10's "Live coding notebook") isn't given a second link."""
@@ -530,11 +531,12 @@ def cmd_labs(api: Canvas, args):
         items = api.get_all(f"/courses/{spec.NEW_COURSE_ID}/modules/{mid}/items")
         titles = {i["title"] for i in items}
         urls = {i.get("external_url") for i in items}
-        slides = [i for i in items if i["title"].startswith("Slides:")]
-        if not slides:
-            print(f"  week {wk}: module has no 'Slides:' item — skipped")
+        anchor = ([i for i in items if i["title"].startswith("Companion notebook:")]
+                  or [i for i in items if i["title"].startswith("Slides:")])
+        if not anchor:
+            print(f"  week {wk}: module has no 'Companion notebook:' or 'Slides:' item — skipped")
             continue
-        pos = slides[0]["position"]
+        pos = anchor[0]["position"]
         for item in labs:
             pos += 1
             if item["title"] in titles or item["external_url"] in urls:
