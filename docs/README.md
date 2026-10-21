@@ -45,6 +45,7 @@ Current contents:
 | `plans/2026-09-24-friday-code-review-table.md` | That plan's review table: the textbook's 39 open pull requests on 2026-09-24, by chapter, with their checks, conflicts, and overlaps. It's rebuilt the day before class. |
 | `plans/2026-10-02-standup-run-of-show.md` | Week 7's Friday: the backlog standup, its three activities and handouts, and the steps before and after class. |
 | `plans/2026-10-09-backlog-sprint-run-of-show.md` | Week 8's Friday: the backlog sprint in three groups; the textbook's chapter and status labels; how to make the "Textbook backlog" project; and the queries behind the slides' counts. |
+| `plans/2026-10-21-recommended-exercise-notebooks.md` | A recommendation, not yet built: standalone notebooks of each chapter's Recommended Exercises, generated from the chapter by the textbook's notebook script so they can't drift, and the questions to settle first. |
 
 Moved to the textbook repo's `docs/` (2026-09-24):
 

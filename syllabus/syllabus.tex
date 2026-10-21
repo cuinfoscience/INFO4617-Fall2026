@@ -189,13 +189,19 @@ The course is organized around an open-source textbook, the \href{\bookurl}{\tex
 \end{itemize}
 
 \subsection{Course Design}
-Class will meet three times per week on \meetingdays~from \starttime~to \endtime~in \classroom. The week follows a consistent rhythm:
+Class will meet three times per week on \meetingdays~from \starttime~to \endtime~in \classroom. Through week 9, the week followed this rhythm:
 \begin{description}[itemsep=2pt,labelsep=0.5em,leftmargin=1.5em]
-    \item[Monday] introduces a new concept and its companion notebook through lecture and live coding.
-    \item[Wednesday] is a hands-on Notebook Lab: you work through and share your implementation of the notebook exercises.
-    \item[Friday] is a Textbook Revision workshop: you propose revisions to the Web Data Science book as GitHub pull requests and review your classmates' proposals.
+    \item[Monday] introduced a new concept and its companion notebook through lecture and live coding.
+    \item[Wednesday] was a hands-on Notebook Lab: you worked through and shared your implementation of the notebook exercises.
+    \item[Friday] was a Textbook Revision workshop: you proposed revisions to the Web Data Science book as GitHub pull requests and reviewed your classmates' proposals.
 \end{description}
-Student performance is evaluated through participation in the Wednesday labs, the Friday textbook revisions, and a Final Project (see \textit{Evaluation} below). There is no midterm or final exam.
+From week 10 (October 19), at your request, Wednesday and Friday became one live-coding lab:
+\begin{description}[itemsep=2pt,labelsep=0.5em,leftmargin=1.5em]
+    \item[Monday] is a lecture on the week's concepts and textbook chapter.
+    \item[Wednesday and Friday] are one lab across both days. We write the chapter's code together in a lab notebook, with microsprints (a few minutes, alone or in pairs, ending in a result we share) and questions to discuss after each step. The lab sets up the chapter's Recommended Exercises without solving them.
+    \item[Friday] ends with a short textbook-revision block, often on something the lab turned up.
+\end{description}
+Student performance is evaluated through the lab exercises, the textbook revisions, attendance, and a Final Project (see \textit{Evaluation} below). There is no midterm or final exam.
 
 The class is organized into four modules that track the textbook: (1) \textit{Foundations} introduces the ethical and legal considerations of web data access, the ``post-API'' landscape, common file formats, and web protocols; (2) \textit{Documents} covers methods and tools for retrieving data from web pages and PDFs; (3) \textit{APIs} provides an overview of tools for accessing popular web APIs; and (4) \textit{Practice} covers automation, research design, and the Final Project. See Table~\ref{tab:course_outline} for the full outline.
 
@@ -241,9 +247,9 @@ Students are evaluated through three mechanisms. The class has no midterm or fin
 
     \begin{description}[itemsep=0pt,labelsep=0pt,leftmargin=1em]
 
-        \item[Notebook Labs]~(30\%). The Wednesday labs are where you build fluency with retrieving, reshaping, and analyzing web data. Each week you work through and share your implementation of the companion notebook. Labs are graded on participation and completion rather than perfection, and are meant to be collaborative. Your lowest two lab scores are dropped to accommodate illness, travel, and the occasional bad week.
+        \item[Notebook Labs]~(30\%). The Wednesday labs are where you build fluency with retrieving, reshaping, and analyzing web data. Each week you work through and share your implementation of the companion notebook. From week 10, the in-class lab is live coding and isn't turned in; instead, each week you complete and submit the Recommended Exercises in the chapter's companion notebook, due the Sunday after the lab. Labs are graded on participation and completion rather than perfection, and are meant to be collaborative. Your lowest two lab scores are dropped to accommodate illness, travel, and the occasional bad week.
 
-        \item[Textbook Revisions]~(15\%). The Friday workshops are dedicated to improving the open-source \textit{Web Data Science} book. Each week you propose revisions---clarifications, corrections, new examples, additional exercises, or better explanations---as pull requests to the book's GitHub repository, and you review your classmates' pull requests. Credit reflects both the substance of the revisions you propose and the quality of the peer reviews you provide. A running target for contributions and reviews across the semester will be posted to Canvas. In the absence of an approved excuse, late submissions will be docked 1\% of their maximum value for every day elapsed since the deadline.
+        \item[Textbook Revisions]~(15\%). The Friday workshops (from week 10, the last part of Friday's class) are dedicated to improving the open-source \textit{Web Data Science} book. Each week you propose revisions---clarifications, corrections, new examples, additional exercises, or better explanations---as pull requests to the book's GitHub repository, and you review your classmates' pull requests. Credit reflects both the substance of the revisions you propose and the quality of the peer reviews you provide. A running target for contributions and reviews across the semester will be posted to Canvas. In the absence of an approved excuse, late submissions will be docked 1\% of their maximum value for every day elapsed since the deadline.
 
         \item[Attendance]~(15\%). Attendance in class is required. We will be covering technical methods that are cumulative and require sustained effort. If there are personal, professional, medical, or other circumstances that will prevent your attendance, please notify me via e-mail and we can develop an accommodation plan together. There will be no opportunities to make up missed attendance. If you need to miss multiple classes, please make an effort to come to office hours so we can check in about course material and progress.
 
@@ -366,7 +372,7 @@ This is an outline of modules and topics, mapped to the chapters of the \href{\b
 
 \section{\textbf{Course Schedule}}
 
-The schedule will evolve throughout the semester, so please consult the schedule online at Canvas for the most up-to-date information. Unless noted otherwise, each week follows the same rhythm: \textbf{Monday} introduces the concept and notebook, \textbf{Wednesday} is a hands-on notebook lab, and \textbf{Friday} is a textbook-revision workshop.
+The schedule will evolve throughout the semester, so please consult the schedule online at Canvas for the most up-to-date information. Unless noted otherwise, each week follows the same rhythm. Through week 9, \textbf{Monday} introduced the concept and notebook, \textbf{Wednesday} was a hands-on notebook lab, and \textbf{Friday} was a textbook-revision workshop. From week 10, \textbf{Monday} is a lecture, and \textbf{Wednesday and Friday} are one live-coding lab, with a textbook-revision block at the end of Friday.
 
 \section{Week 1 -- Foundations: Introduction \& setup}
 \textcolor{CUGold}{\textbf{Friday, August 21}}\\
@@ -406,7 +412,7 @@ Accessing and parsing PDFs with \href{https://pypdf.readthedocs.io/}{\texttt{pyp
 
 \section{Week 10 -- APIs: Wikipedia}
 \textcolor{CUGold}{\textbf{October 19, 21 \& 23}}\\
-Retrieving data from Wikipedia's APIs. \textbf{Final Project proposal due Sunday, October 25.} Textbook: \bookch{ch-10-wikipedia}{Chapter 10 (Introduction to APIs: Wikipedia)}.
+Retrieving data from Wikipedia's APIs. \textit{From this week, Wednesday and Friday are one live-coding lab.} \textbf{Final Project proposal due Sunday, October 25.} Textbook: \bookch{ch-10-wikipedia}{Chapter 10 (Introduction to APIs: Wikipedia)}.
 
 \section{Week 11 -- APIs: Government data}
 \textcolor{CUGold}{\textbf{October 26, 28 \& 30}}\\

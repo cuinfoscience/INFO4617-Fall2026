@@ -1,6 +1,6 @@
 # Lab notebooks
 
-From week 10, Wednesday's lab is live coding: we write the code together, and the lab carries on into Friday when it runs over. Each week has one notebook, in a folder named for the week, as in `slides/` and `handouts/`. Its text explains each step, and its code cells hold only a comment that says what to write. Nothing is submitted.
+From week 10, Wednesday and Friday are one live-coding lab: we write the code together, and Friday picks up where Wednesday stopped, before the revision block. What you submit is the chapter's Recommended Exercises, in its companion notebook; the lab prepares you for them. Each week has one notebook, in a folder named for the week, as in `slides/` and `handouts/`. Its text explains each step, and its code cells hold only a comment that says what to write. Nothing is submitted.
 
 | Week | Your copy | Solutions |
 | --- | --- | --- |
@@ -26,4 +26,4 @@ From week 10, Wednesday's lab is live coding: we write the code together, and th
 
 ## For maintainers
 
-Each lab lives in `week-NN/`, as `lab-NN.ipynb` and `lab-NN-key.ipynb`. The lab notebooks are written directly as notebooks, not built from a `.qmd`, so nothing in `handouts/`'s `make` or workflow touches them. Requests in them are live, with no saved copies: the User-Agent and pacing are part of the lesson. Before committing a key, replace the email address you ran it with by `your-email@colorado.edu`, and check that no API key appears in its outputs. A lab is written in its week's sprint, alongside the chapter and slides, so it follows the chapter as it is that week. Week 10 is a pilot; if it works, each later week gets one too.
+[`AUTHORING.md`](AUTHORING.md) says how to write a lab. In short: each lab lives in `week-NN/`; the key is the source, and `tools/make_student_copy.py` makes the students' copy from it; `tools/run_key.py` runs the key against the live sites, puts the placeholder email back, and refuses to write it if an output holds an API key.
