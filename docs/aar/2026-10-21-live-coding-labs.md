@@ -263,4 +263,23 @@ The instructor asked for the AAR together with documentation of the labs' common
 - **P2-1.** `AGENTS.md`: the full 40-character SHA, and a check that a pull request is still open before pushing to its branch.
 - **P0-2 is not applied.** The checker and its workflow are a design in §6. They need writing and testing before the claim "CI for `labs/`" is true.
 
-Merged in this window after the report was drafted: #119 (the style rules), then the restyled labs for weeks 2, 3, 4, 6, 8 and 9 (#121, #123–#127). Weeks 1, 5, 7, 10 and 11 were still running when this was written.
+Merged in this window after the report was drafted:
+- #119, the style rules;
+- the restyled labs for weeks 2, 3, 4, 6, 8 and 9 (#121, #123–#127);
+- then weeks 5, 7, 10 and 1 (#129–#132).
+
+Week 11's restyle (#134) merges with this PR. It replaces #114, which stays unmerged.
+
+**A finding made after drafting (and fixed).** The week 1 agent found that the new style broke `run_key.py`'s retries. Without `raise_for_status()`, a 429 surfaces as a `JSONDecodeError` when a cell reads the refusal page as JSON, and the tool didn't count that as a rate limit. So weeks 1, 5 and 10 flagged Wikimedia cells after one try.
+
+#133 adds the case. Rerunning week 1's key with it from this machine got all 17 cells through, including the two that had been flagged; one cell was retried twice.
+
+This is §5.1's lesson again, from the other side: a style change in the labs needs a matching look at the tools that run them. P0-2's checker would be a natural place to test the two together.
+
+**Still to run from the instructor's laptop:**
+- week 1: 2 cells (or none, once #133's rerun is committed);
+- week 5: Steps 7 and 10;
+- week 7: 21 cells;
+- week 8: 1 cell, Playwright;
+- week 10: 16 cells;
+- week 11: 9 FRED cells, once FRED is back.
