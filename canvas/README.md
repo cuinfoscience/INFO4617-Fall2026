@@ -34,6 +34,8 @@ python migrate.py copy                 # preview the content migration
 python migrate.py copy --apply         # copy files + pages from the old course
 python migrate.py build                # preview groups/assignments/modules/syllabus
 python migrate.py build --apply        # build the new structure
+python migrate.py labs                 # preview: each week's lab and lab-key links, after its slides
+python migrate.py labs --apply         # add them to the modules that already exist
 ```
 
 Recommended order: `plan` to review the design, `inspect` to see what is actually
@@ -67,12 +69,21 @@ Use `--everything` if you'd rather bring it all over and prune by hand.
 | `settings` | Course name/code, term dates (Aug 20 – Dec 4, 2026), weighted grading on, home page = Modules |
 | `groups` | Notebook Labs **30%** (drops 2 lowest), Textbook Revisions **15%**, Attendance **15%**, Final Project **40%** (proposal 5, presentation 10, repository and write-up 25 points), as in the syllabus |
 | `assignments` | 13 labs (due Wednesdays), 13 revisions (due Fridays), 3 final-project items — 29 total, all with due dates in `America/Denver` |
-| `modules` | One module per week (1–16, no 15) laid out Monday → Wednesday → Friday, with the chapter reading, slides, companion notebook, and that week's two assignments |
+| `modules` | One module per week (1–16, no 15) laid out Monday → Wednesday → Friday, with the chapter reading, slides (followed by the week's lab and lab key, when `labs/week-NN/` has one), companion notebook, and that week's two assignments |
 | `syllabus` | Canvas syllabus page styled to match the PDF syllabus, including the 16-week schedule table |
 
 The calendar honors the CU Boulder Fall 2026 academic calendar: Week 1 meets
 Friday only, no class Labor Day (Sep 7) or Fall Break (Nov 23–27), and Dec 4 is
 the last day of class.
+
+## What `labs` does
+
+`build` leaves an existing module's items alone, so a lab added after its
+module was built needs `labs`. For every week with a lab on `main`
+(`labs/week-NN/lab-NN.ipynb`), it finds the week's module by name and adds two
+links right after its `Slides:` item: **Lab: lab-NN.ipynb** and **Lab key:
+lab-NN-key.ipynb**, both to the files on GitHub. A link already in the module
+(same title) isn't added again, and a held lab that isn't on disk gets no link.
 
 ## Safety notes
 

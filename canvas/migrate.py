@@ -19,6 +19,8 @@ Usage
     python migrate.py build                 # dry run: groups/assignments/modules/syllabus
     python migrate.py build --apply         # actually build
     python migrate.py all --apply           # copy, then build
+    python migrate.py labs                  # dry run: link each week's lab and key after its slides
+    python migrate.py labs --apply          # actually add those links
 
 Useful flags
 ------------
@@ -508,6 +510,41 @@ def cmd_build(api: Canvas, args):
 
 # ---------------------------------------------------------------- entry
 
+def cmd_labs(api: Canvas, args):
+    """Add each week's lab and lab-key links after its slides, in modules that
+    already exist. `build` leaves existing modules alone, so this is how
+    links reach a module built before its week had a lab. Idempotent by title."""
+    print("\n--- lab links ---")
+    existing = _index_by_name(api.get_all(f"/courses/{spec.NEW_COURSE_ID}/modules"))
+    for m in spec.modules():
+        wk = m["week"]
+        labs = spec.lab_items(wk)
+        if not labs:
+            continue
+        if m["name"] not in existing:
+            print(f"  week {wk}: no module named '{m['name']}' — skipped")
+            continue
+        mid = existing[m["name"]]["id"]
+        items = api.get_all(f"/courses/{spec.NEW_COURSE_ID}/modules/{mid}/items")
+        titles = {i["title"] for i in items}
+        slides = [i for i in items if i["title"].startswith("Slides:")]
+        if not slides:
+            print(f"  week {wk}: module has no 'Slides:' item — skipped")
+            continue
+        pos = slides[0]["position"]
+        for item in labs:
+            pos += 1
+            if item["title"] in titles:
+                print(f"  week {wk}: '{item['title']}' already there")
+                continue
+            api.write("POST", f"/courses/{spec.NEW_COURSE_ID}/modules/{mid}/items",
+                      {"module_item": {"title": item["title"], "type": "ExternalUrl",
+                                       "external_url": item["external_url"],
+                                       "new_tab": item["new_tab"], "position": pos,
+                                       "published": True}},
+                      label=f"week {wk}: {item['title']}")
+
+
 def cmd_plan(args):
     """Print the full target design. Makes no API calls and needs no token."""
     print(f"\n{'='*72}\nPLAN — what `build --apply` will create in course {spec.NEW_COURSE_ID}"
@@ -561,7 +598,7 @@ def cmd_plan(args):
 def main():
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("command", choices=["plan", "inspect", "copy", "build", "all"])
+    p.add_argument("command", choices=["plan", "inspect", "copy", "build", "labs", "all"])
     p.add_argument("--apply", action="store_true",
                    help="actually write to Canvas (default is a dry run)")
     p.add_argument("--host", default="canvas.colorado.edu")
@@ -606,6 +643,8 @@ def main():
             cmd_copy(api, args)
         elif args.command == "build":
             cmd_build(api, args)
+        elif args.command == "labs":
+            cmd_labs(api, args)
         elif args.command == "all":
             cmd_copy(api, args)
             cmd_build(api, args)

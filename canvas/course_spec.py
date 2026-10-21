@@ -10,6 +10,7 @@ Everything here is derived from `syllabus/syllabus.tex` and the weekly decks in
 """
 
 from datetime import date, datetime, time
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 # --------------------------------------------------------------------------
@@ -230,6 +231,22 @@ def notebook_url(slug: str) -> str:
 
 def slides_url(week_number: int) -> str:
     return f"{REPO_URL}/blob/main/slides/week-{week_number:02d}/week-{week_number:02d}.pdf"
+
+
+def lab_items(week_number: int) -> list:
+    """Links to the week's lab notebook and its key, placed after the slides.
+    Empty for a week with no lab on disk (labs/week-NN/lab-NN.ipynb), so a
+    held lab stays out of Canvas until it's merged."""
+    nn = f"{week_number:02d}"
+    if not (Path(__file__).resolve().parent.parent / "labs" / f"week-{nn}" / f"lab-{nn}.ipynb").exists():
+        return []
+    base = f"{REPO_URL}/blob/main/labs/week-{nn}"
+    return [
+        {"type": "ExternalUrl", "title": f"Lab: lab-{nn}.ipynb",
+         "external_url": f"{base}/lab-{nn}.ipynb", "new_tab": True},
+        {"type": "ExternalUrl", "title": f"Lab key: lab-{nn}-key.ipynb",
+         "external_url": f"{base}/lab-{nn}-key.ipynb", "new_tab": True},
+    ]
 
 
 # --------------------------------------------------------------------------
@@ -542,6 +559,7 @@ def modules():
             "external_url": slides_url(wk),
             "new_tab": True,
         })
+        items.extend(lab_items(wk))
 
         if wk in TEACHING_WEEKS:
             items.append({"type": "SubHeader", "title": "Wednesday · Notebook Lab"})
