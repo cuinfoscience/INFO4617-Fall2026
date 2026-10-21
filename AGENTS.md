@@ -66,7 +66,10 @@ from its companion notebook. Write or change a lab by
 [`labs/AUTHORING.md`](labs/AUTHORING.md): the key is the source, the
 students' copy is made from it by `labs/tools/make_student_copy.py`, and the
 key is run live with `labs/tools/run_key.py`. A lab sets up the Recommended
-Exercises but never solves them.
+Exercises but never solves them. Its code is typed live, so keep it short and
+straight-line: a function only when it's reused, never one inside another,
+and no error handling, which a Discuss question names as a limitation instead
+(AUTHORING's "Code style" and "Pagination").
 
 ## Checks before class
 

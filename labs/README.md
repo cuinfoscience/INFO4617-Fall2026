@@ -28,7 +28,7 @@ This term began the labs in week 10. The labs for weeks 1–9 are written for th
 - Read each step's text, then write the code in the cell under it as we write it together. The comment says what the cell should do.
 - After each step, a **💬 Discuss** box holds a few questions we'll talk over before moving on. Click it to open it; there's nothing to write down.
 - Put your own email address in the User-Agent in Step 0: every request you send carries it.
-- If a cell fails, read the error before running it again. A **429** means Wikimedia's rate limit: wait the number of seconds it gives, and run the cell again.
+- The code is short and plain on purpose: each cell does one thing, and it assumes every request works. There's no error handling, so when a request fails you'll see Python's own error. Read it before running the cell again. A **429** means the site's rate limit: wait the number of seconds it gives, and run the cell again. A Discuss box in each lab asks what else could break, and how the chapter guards against it.
 - Fell behind? Copy the cell from the key and keep going.
 
 ## Solutions
@@ -37,4 +37,4 @@ This term began the labs in week 10. The labs for weeks 1–9 are written for th
 
 ## For maintainers
 
-[`AUTHORING.md`](AUTHORING.md) says how to write a lab. In short: each lab lives in `week-NN/`; the key is the source, and `tools/make_student_copy.py` makes the students' copy from it; `tools/run_key.py` runs the key against the live sites, puts the placeholder email back, and refuses to write it if an output holds an API key. `tools/make_key_pdf.py` makes the key's PDF with pandoc; rerun it whenever the key changes.
+[`AUTHORING.md`](AUTHORING.md) says how to write a lab. Its code is short, imperative, and straight-line, with a function only when it's reused and never one inside another, and no error handling ("Code style"). In short: each lab lives in `week-NN/`; the key is the source, and `tools/make_student_copy.py` makes the students' copy from it; `tools/run_key.py` runs the key against the live sites, puts the placeholder email back, and refuses to write it if an output holds an API key. `tools/make_key_pdf.py` makes the key's PDF with pandoc; rerun it whenever the key changes.

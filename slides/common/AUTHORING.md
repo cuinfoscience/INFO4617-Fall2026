@@ -40,7 +40,8 @@ recently — voice evolves forward, not backward.
    depth) any skill an earlier week already covered in full.
 5. `\section{Wednesday · Notebook Lab}` (from week 10, `Wednesday · Live-Coding Lab`,
    opening with a frame that says where the week's lab notebook is, how to use it,
-   and where its key is; see week 10 and [`labs/AUTHORING.md`](../../labs/AUTHORING.md))
+   and where its key is; see week 10 and [`labs/AUTHORING.md`](../../labs/AUTHORING.md);
+   the lab's code is shorter and plainer than the chapter's, so say which these frames show)
    — condensed **real code** from the
    chapter as `[fragile]` frames with `lstlisting` (trim each snippet to
    ≤ ~12 lines; keep it runnable-looking and faithful), plus:
