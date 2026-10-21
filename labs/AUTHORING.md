@@ -19,6 +19,7 @@ Each lab lives in `labs/week-NN/`, where `NN` is the week, as in `slides/` and `
 |---|---|
 | `lab-NN-key.ipynb` | The source. Every cell filled in, and run against the live sites. The only file you edit. |
 | `lab-NN.ipynb` | The students' copy, made from the key by `tools/make_student_copy.py`. Never edit it by hand. |
+| `lab-NN-key.pdf` | The key as a PDF, made from it by `tools/make_key_pdf.py` (pandoc and LuaLaTeX). Never edit it by hand. There's no PDF of the students' copy. |
 
 The labs are written as notebooks, not built from a `.qmd`, so `handouts/`'s `make` and workflow leave them alone. Write the key however you like (by hand in JupyterLab, or with a script that calls `nbformat`), as long as the result follows this file.
 
@@ -143,7 +144,10 @@ From the repository's top folder, in the `webdata` environment:
 LAB_EMAIL=you@colorado.edu python labs/tools/run_key.py labs/week-NN/lab-NN-key.ipynb
 python labs/tools/make_student_copy.py labs/week-NN/lab-NN-key.ipynb
 python labs/tools/make_student_copy.py --check labs/week-NN/lab-NN-key.ipynb
+python labs/tools/make_key_pdf.py labs/week-NN/lab-NN-key.ipynb
 ```
+
+`make_key_pdf.py` needs pandoc, LuaLaTeX (TeX Live's `texlive-luatex`), and the DejaVu and Noto fonts. Rerun it whenever the key changes, so the PDF never shows an older key.
 
 Then check by reading:
 - The minutes in the step headings add up to about 85.
