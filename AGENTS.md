@@ -57,6 +57,17 @@ or code copied from a chapter, read `docs/course-facts.md` and change every
 copy in the same pull request. When a chapter changes, check the slides that
 copy it.
 
+## The week, and its lab
+
+From week 10, Monday is a lecture, and Wednesday and Friday are one
+live-coding lab, run from a notebook in `labs/week-NN/`; Friday ends with a
+textbook-revision block. Students submit the chapter's Recommended Exercises
+from its companion notebook. Write or change a lab by
+[`labs/AUTHORING.md`](labs/AUTHORING.md): the key is the source, the
+students' copy is made from it by `labs/tools/make_student_copy.py`, and the
+key is run live with `labs/tools/run_key.py`. A lab sets up the Recommended
+Exercises but never solves them.
+
 ## Checks before class
 
 From `slides/common/`:

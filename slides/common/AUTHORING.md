@@ -38,7 +38,10 @@ recently — voice evolves forward, not backward.
    decks, they went stale within weeks.) Note cross-references the
    chapter makes to other chapters, and back-reference (don't re-teach in
    depth) any skill an earlier week already covered in full.
-5. `\section{Wednesday · Notebook Lab}` — condensed **real code** from the
+5. `\section{Wednesday · Notebook Lab}` (from week 10, `Wednesday · Live-Coding Lab`,
+   opening with a frame that says where the week's lab notebook is, how to use it,
+   and where its key is; see week 10 and [`labs/AUTHORING.md`](../../labs/AUTHORING.md))
+   — condensed **real code** from the
    chapter as `[fragile]` frames with `lstlisting` (trim each snippet to
    ≤ ~12 lines; keep it runnable-looking and faithful), plus:
    - a frame listing the chapter's **Exercises** to work in pairs (mark any "graduate / INFO 5617" exercise with a bold `\textbf{5617}` label);

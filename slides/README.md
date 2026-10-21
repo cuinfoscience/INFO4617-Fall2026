@@ -4,9 +4,9 @@ Weekly lecture decks for INFO 4617 Web Data Science, one folder per teaching
 week. Each deck covers the full week on the course's Monday/Wednesday/Friday
 rhythm:
 
-- **Monday** — introduce the week's concept and its companion notebook
-- **Wednesday** — a hands-on notebook lab working the chapter's code and exercises
-- **Friday** — propose and peer-review revisions to the [Web Data Science textbook](https://github.com/cuinfoscience/Web-Data-Science-Book)
+- **Monday** — a lecture on the week's concept and chapter
+- **Wednesday and Friday** — from week 10, one live-coding lab across both days, in the week's lab notebook ([`labs/`](../labs/)); through week 9, Wednesday was a notebook lab on the chapter's code and exercises
+- **Friday** — ends with a textbook-revision block (through week 9, the whole of Friday): propose and peer-review revisions to the [Web Data Science textbook](https://github.com/cuinfoscience/Web-Data-Science-Book)
 
 Decks are grounded chapter-by-chapter in the textbook (and draw on the prior
 offering's slides). Week 1 is a shorter Friday-only intro. Weeks 15–16 have no
