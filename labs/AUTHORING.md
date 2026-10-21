@@ -1,6 +1,17 @@
 # Writing a lab notebook
 
-How to turn a chapter of [*Web Data Science*](https://github.com/cuinfoscience/Web-Data-Science-Book) into the week's live-coding lab. [`README.md`](README.md) is for students; this file is for whoever writes a lab, person or agent. It came from the instructor's answers on 2026-10-21, after week 10 piloted the format at students' request: they wanted to code with the instructor rather than work through the chapter's notebook alone.
+How to turn a chapter of [*Web Data Science*](https://github.com/cuinfoscience/Web-Data-Science-Book) into the week's live-coding lab. [`README.md`](README.md) is for students; this file is for whoever writes a lab, person or agent. It came from the instructor's answers on 2026-10-21, after week 10 piloted the format at students' request: they wanted to code with the instructor rather than work through the chapter's notebook alone. Its code style was rewritten after the instructor taught week 10 live; [`docs/aar/2026-10-21-live-coding-labs.md`](../docs/aar/2026-10-21-live-coding-labs.md) says why.
+
+## What a lab is for
+
+Students asked to code *with* the instructor rather than work through a chapter's notebook alone. A lab is the script for that session, so it serves the person typing at the front of the room and the 30 people typing along, in that order:
+
+- **Teach the chapter's core idea in about 85 minutes of typing,** on the chapter's own case, so the Recommended Exercises are within reach. Coverage is the chapter's job.
+- **Keep everyone typing.** Short, plain cells mean a student who falls behind can catch up from the key in seconds.
+- **Make room to think.** Microsprints and Discuss boxes are where students do and say something themselves. The code is short so that they have time.
+- **Run honestly.** Every request is live, and a failure is something to discuss, not to hide behind a wrapper.
+
+When a rule here conflicts with getting the key to run from a cloud machine, the classroom wins: flag the cell `not-run-live`, and leave the code plain. The first version of these conventions put the key's run first, with a retrying `get()` helper, `raise_for_status()` everywhere, and the chapter's helper functions copied whole. That code ran well from the cloud, but week 10's pagination step took more than 25 minutes to type in class, and every lab was rewritten the next day.
 
 ## The week
 
@@ -61,6 +72,14 @@ The code is typed live, in front of the class, so it has to be short and plain. 
 - **No error handling.** No `raise_for_status()`, `try`/`except`, retry loops, back-off, `timeout=` arguments, or status checks, unless the step is about them (chapter 3's refusals, chapter 5's status codes). The code assumes every request works. Acknowledge that as a limitation in a Discuss box instead: at least one per lab asks what would break here (a 429, a 403, a missing key, a changed page) and how the chapter guards against it.
 - **Pause in a loop.** A loop that sends requests sleeps a second between them (`time.sleep(1)`). That's politeness, not error handling, and it's one line.
 - **One way to do each thing:** f-strings to print, pandas to tabulate, `plt.subplots()` to plot, and nothing the chapter doesn't use.
+- **A `try` only where the failure is the point:** a step about errors (week 4's broken JSON), or a step whose subject is a request that never completes, where letting it stop the cell would also stop Friday's **Run All Above** (week 3's dead endpoint). Say why in the step's text.
+
+What the rewritten labs (weeks 2–4, 6, 8 and 9, on 2026-10-21) have in common, as a yardstick rather than a rule:
+- 10–12 steps and 20–30 code cells. The median code cell has 6 lines of code; few have more than 10.
+- One or two functions, each called three or more times, each written in the step after its lines were typed plainly: `get_daily()`, `read_infobox()`, `get_saved_copy()`.
+- `time.sleep(1)` in every loop that sends requests.
+- Zero to two `given` cells, for a whole pagination loop or a long list of URLs.
+- Three to six Discuss boxes that ask what would break here: a 429, a 403, a missing key, a page that changed.
 
 ### Pagination
 
@@ -145,15 +164,28 @@ The key's opening cell ends with the key note, one paragraph that starts `> **In
 - the textbook commit it follows;
 - any step that wasn't run, and why.
 
-`tools/make_student_copy.py` removes this paragraph from the students' copy.
+`tools/make_student_copy.py` removes this paragraph from the students' copy. Write it last, after `tools/run_key.py` finishes, from its report of which cells ran. Until then, leave the word `PLACEHOLDER` in its place, so that a note describing a run that hasn't happened can't slip through.
 
-Run the key with `tools/run_key.py`, which:
+Commit the key before you run it: a live run can take an hour, and a restarted machine takes uncommitted work with it. Then run it with `tools/run_key.py`, which:
 - runs it cell by cell from a scratch folder;
 - reruns a cell that hits a rate limit;
 - puts the placeholder email back afterwards;
 - refuses to write the notebook if an output holds an API key.
 
-A cell a site keeps refusing keeps its code, loses its outputs, and is tagged `not-run-live`; list those cells in the pull request so the instructor can run them before class. Microsprints are filled in and run like any other cell, on the case the key's microsprint names.
+A cell a site keeps refusing keeps its code, loses its outputs, and is tagged `not-run-live`; list those cells in the pull request so the instructor can run them before class. Give a refusing site about 30 minutes in all (`run_key.py --retries 2 --wait 60`), then accept the flags and move on. Sites rate-limit the course's cloud machine far more than a laptop on campus: on 2026-10-21 Wikimedia answered it with 429s for hours, the Wayback Machine refused it, and FRED was down for maintenance. The instructor's laptop is the better place to run flagged cells. Microsprints are filled in and run like any other cell, on the case the key's microsprint names.
+
+## How the pieces fit
+
+- **One source.** The key (`lab-NN-key.ipynb`) is the only file anyone edits. `tools/make_student_copy.py` makes the students' copy from each code cell's `lab` metadata, `tools/run_key.py` fills its outputs from the live sites, and `tools/make_key_pdf.py` makes its PDF. Change the key, then run all three.
+- **Where students find it.**
+  - `labs/README.md`'s table has a row per lab: the students' copy, the key, and the key's PDF.
+  - Canvas links the lab and its key in the week's Wednesday section: `python canvas/migrate.py labs` adds them to modules that already exist; see [`canvas/README.md`](../canvas/README.md).
+  - The week's slides name the lab in the at-a-glance frame and in Wednesday's first frame.
+- **One folder per week.** Labs never share files, so several can be written at once, each on its own branch and pull request, without conflicts. That's how eleven were written in a day.
+- **The machine.** The tools run in the `webdata` environment.
+  - `make_key_pdf.py` also needs pandoc and LuaLaTeX with its font loader: TeX Live's `texlive-luatex`, which the course's cloud machine had to install.
+  - Selenium and Playwright need a browser that matches the library's version.
+  - Week 2's key runs on Python 3.14, because `robots.txt` parsing changed in 3.14.5.
 
 ## Before the pull request
 
