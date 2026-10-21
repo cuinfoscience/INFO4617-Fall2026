@@ -81,8 +81,10 @@ def main():
                         client.execute_cell(cell, index)
                         break
                     except CellExecutionError as error:
-                        message = ANSI.sub("", str(error)).strip().splitlines()[-1][:200]
-                        if TRANSIENT.search(str(error)) and attempt < args.retries:
+                        # The error's type and message only: its traceback quotes the
+                        # cell's code, where "timeout=" would look like a timeout
+                        message = ANSI.sub("", f"{error.ename}: {error.evalue}")[:200]
+                        if TRANSIENT.search(message) and attempt < args.retries:
                             print(f"cell {index}: {message}; waiting {args.wait} s", flush=True)
                             time.sleep(args.wait)
                             continue
