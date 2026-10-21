@@ -1,9 +1,20 @@
 # Lab notebooks
 
-From week 10, Wednesday and Friday are one live-coding lab: we write the code together, and Friday picks up where Wednesday stopped, before the revision block. What you submit is the chapter's Recommended Exercises, in its companion notebook; the lab prepares you for them. Each week has one notebook, in a folder named for the week, as in `slides/` and `handouts/`. Its text explains each step, and its code cells hold only a comment that says what to write. Nothing is submitted.
+From week 10, Wednesday and Friday are one live-coding lab: we write the code together, and Friday picks up where Wednesday stopped, before the revision block. What you submit is the chapter's Recommended Exercises, in its companion notebook; the lab prepares you for them. Each week has one notebook, in a folder named for the week, as in `slides/` and `handouts/`. Its text explains each step, and its code cells hold only a comment that says what to write. The lab itself isn't submitted.
+
+This term began the labs in week 10. The labs for weeks 1–9 are written for the next time the course runs, and you're welcome to work through them.
 
 | Week | Your copy | Solutions |
 | --- | --- | --- |
+| 1 · Introduction to web data science | [`week-01/lab-01.ipynb`](week-01/lab-01.ipynb) | [`week-01/lab-01-key.ipynb`](week-01/lab-01-key.ipynb) |
+| 2 · Ethics, law, and responsible collection | [`week-02/lab-02.ipynb`](week-02/lab-02.ipynb) | [`week-02/lab-02-key.ipynb`](week-02/lab-02-key.ipynb) |
+| 3 · The post-API age | [`week-03/lab-03.ipynb`](week-03/lab-03.ipynb) | [`week-03/lab-03-key.ipynb`](week-03/lab-03-key.ipynb) |
+| 4 · Data formats: XML and JSON | [`week-04/lab-04.ipynb`](week-04/lab-04.ipynb) | [`week-04/lab-04-key.ipynb`](week-04/lab-04-key.ipynb) |
+| 5 · Web architecture and protocols | [`week-05/lab-05.ipynb`](week-05/lab-05.ipynb) | [`week-05/lab-05-key.ipynb`](week-05/lab-05-key.ipynb) |
+| 6 · Parsing static web pages | [`week-06/lab-06.ipynb`](week-06/lab-06.ipynb) | [`week-06/lab-06-key.ipynb`](week-06/lab-06-key.ipynb) |
+| 7 · Archived web pages and the Wayback Machine | [`week-07/lab-07.ipynb`](week-07/lab-07.ipynb) | [`week-07/lab-07-key.ipynb`](week-07/lab-07-key.ipynb) |
+| 8 · Dynamic web pages with Selenium | [`week-08/lab-08.ipynb`](week-08/lab-08.ipynb) | [`week-08/lab-08-key.ipynb`](week-08/lab-08-key.ipynb) |
+| 9 · Extracting data from PDFs | [`week-09/lab-09.ipynb`](week-09/lab-09.ipynb) | [`week-09/lab-09-key.ipynb`](week-09/lab-09-key.ipynb) |
 | 10 · Wikipedia's APIs | [`week-10/lab-10.ipynb`](week-10/lab-10.ipynb) | [`week-10/lab-10-key.ipynb`](week-10/lab-10-key.ipynb) |
 
 ## Get the notebook
