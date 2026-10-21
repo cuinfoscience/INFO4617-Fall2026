@@ -513,7 +513,9 @@ def cmd_build(api: Canvas, args):
 def cmd_labs(api: Canvas, args):
     """Add each week's lab and lab-key links after its slides, in modules that
     already exist. `build` leaves existing modules alone, so this is how
-    links reach a module built before its week had a lab. Idempotent by title."""
+    links reach a module built before its week had a lab. Idempotent by title
+    and by URL, so a module that already links the notebook under another
+    title (week 10's "Live coding notebook") isn't given a second link."""
     print("\n--- lab links ---")
     existing = _index_by_name(api.get_all(f"/courses/{spec.NEW_COURSE_ID}/modules"))
     for m in spec.modules():
@@ -527,6 +529,7 @@ def cmd_labs(api: Canvas, args):
         mid = existing[m["name"]]["id"]
         items = api.get_all(f"/courses/{spec.NEW_COURSE_ID}/modules/{mid}/items")
         titles = {i["title"] for i in items}
+        urls = {i.get("external_url") for i in items}
         slides = [i for i in items if i["title"].startswith("Slides:")]
         if not slides:
             print(f"  week {wk}: module has no 'Slides:' item — skipped")
@@ -534,15 +537,20 @@ def cmd_labs(api: Canvas, args):
         pos = slides[0]["position"]
         for item in labs:
             pos += 1
-            if item["title"] in titles:
+            if item["title"] in titles or item["external_url"] in urls:
                 print(f"  week {wk}: '{item['title']}' already there")
                 continue
-            api.write("POST", f"/courses/{spec.NEW_COURSE_ID}/modules/{mid}/items",
-                      {"module_item": {"title": item["title"], "type": "ExternalUrl",
-                                       "external_url": item["external_url"],
-                                       "new_tab": item["new_tab"], "position": pos,
-                                       "published": True}},
-                      label=f"week {wk}: {item['title']}")
+            made = api.write("POST", f"/courses/{spec.NEW_COURSE_ID}/modules/{mid}/items",
+                             {"module_item": {"title": item["title"], "type": "ExternalUrl",
+                                              "external_url": item["external_url"],
+                                              "new_tab": item["new_tab"], "position": pos,
+                                              "published": True}},
+                             label=f"week {wk}: {item['title']}")
+            # Canvas ignores `published` when it creates a module item, so
+            # publish it with a second request
+            api.write("PUT", f"/courses/{spec.NEW_COURSE_ID}/modules/{mid}/items/{made['id']}",
+                      {"module_item": {"published": True}},
+                      label=f"week {wk}: publish {item['title']}")
 
 
 def cmd_plan(args):

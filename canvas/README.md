@@ -82,8 +82,11 @@ the last day of class.
 module was built needs `labs`. For every week with a lab on `main`
 (`labs/week-NN/lab-NN.ipynb`), it finds the week's module by name and adds two
 links right after its `Slides:` item: **Lab: lab-NN.ipynb** and **Lab key:
-lab-NN-key.ipynb**, both to the files on GitHub. A link already in the module
-(same title) isn't added again, and a held lab that isn't on disk gets no link.
+lab-NN-key.ipynb**, both to the files on GitHub, and publishes them (Canvas
+creates a module item unpublished whatever the request says). A link already in
+the module, by title or by URL, isn't added again, and a held lab that isn't on
+disk gets no link. The URL check is what keeps week 10, which already links the
+lab as "Live coding notebook", from getting a second pair.
 
 ## Safety notes
 
