@@ -4,8 +4,8 @@
 
 Every code cell runs once, in order, in one kernel, from a scratch folder, so
 files a lab downloads stay out of the repository. A cell that fails with a
-rate limit or a dropped connection is rerun after a pause, up to --retries
-times. A cell that still fails keeps its code, loses its outputs, and is
+rate limit, a dropped connection, or a reply that isn't JSON (a refusal page
+read with .json()) is rerun after a pause, up to --retries times. A cell that still fails keeps its code, loses its outputs, and is
 tagged "not-run-live" and "skip-execution"; the run goes on, and the report at
 the end lists those cells for the pull request. Cells already tagged
 "skip-execution" (an optional step) are left alone.
@@ -29,8 +29,11 @@ from nbclient.exceptions import CellExecutionError
 
 PLACEHOLDER = "your-email@colorado.edu"
 ANSI = re.compile(r"\x1b\[[0-9;]*m")
+# Labs don't call raise_for_status(), so a rate limit usually surfaces when the
+# cell reads the refusal page as JSON: a JSONDecodeError, "Expecting value".
 TRANSIENT = re.compile(r"\b(429|502|503|504)\b|Too Many Requests|timed? ?out|ConnectionError|"
-                       r"RemoteDisconnected|Connection reset|Max retries exceeded")
+                       r"RemoteDisconnected|Connection reset|Max retries exceeded|"
+                       r"JSONDecodeError|Expecting value")
 
 
 def swap(nb, old, new):
