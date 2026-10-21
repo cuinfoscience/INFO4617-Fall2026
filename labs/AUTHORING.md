@@ -37,7 +37,7 @@ A lab is one notebook of numbered steps, in this order:
 Each step is, in order:
 
 1. **A Markdown cell**, headed `## Step N — <what we build> (M minutes)`. One short paragraph says what the step does and why, in the chapter's terms, and points to the chapter's section for more. Name the function, parameter, or idea the step turns on, and link its documentation the first time it appears.
-2. **A code cell** that holds the comment prompt and then the code. The prompt is one to four comment lines that say what to write, closely enough that a student can follow it without the instructor, but without giving the code away: `# Define get_revisions(title): loop until "continue" is gone`, not the loop itself.
+2. **A code cell** that holds the comment prompt and then the code. The prompt is one to four comment lines that say what to write, closely enough that a student can follow it without the instructor, but without giving the code away: `# Request page two: add data["continue"] to params, then request again`, not the code itself. See "Code style" below.
 3. **A microsprint**, after most steps (see below): a Markdown cell and a code cell.
 4. **A 💬 Discuss box** (see below). It goes last in the step, after the microsprint if there is one, so the class can discuss what the microsprint found.
 
@@ -50,6 +50,25 @@ Every code cell carries metadata saying what students see, which `tools/make_stu
 | `{"lab": {"prompt_lines": 3}}` | the first 3 lines (the prompt), then `# Your code here` |
 | `{"lab": {"prompt_lines": 1, "placeholder": ""}}` | the first line, then an empty line (for answers written as comments) |
 | `{"lab": {"given": true}}` | the whole cell: code students don't need to write, such as a long URL or a plotting style. Use it rarely. |
+
+### Code style
+
+The code is typed live, in front of the class, so it has to be short and plain. Week 10's pilot showed the cost of the opposite: its revisions step, a `continue` loop inside a function that called a helper function, took more than 25 minutes and had to be rewritten on the fly.
+
+- **Short, imperative cells.** A cell does one thing, in about 3–8 lines, in the order you'd say it aloud: build the parameters, send the request, read the JSON, print. Prompts are commands: `# Request page one with params and HEADERS; print its "continue"`.
+- **Straight-line first.** Write a step's code at the top level of its cell, with no function around it.
+- **A function only when it's reused,** and only in a step after the one that showed its parts as plain code, so the function gathers lines the class has already written. Never define a function inside another, and never have one helper call another: one function, flat.
+- **No error handling.** No `raise_for_status()`, `try`/`except`, retry loops, back-off, `timeout=` arguments, or status checks, unless the step is about them (chapter 3's refusals, chapter 5's status codes). The code assumes every request works. Acknowledge that as a limitation in a Discuss box instead: at least one per lab asks what would break here (a 429, a 403, a missing key, a changed page) and how the chapter guards against it.
+- **Pause in a loop.** A loop that sends requests sleeps a second between them (`time.sleep(1)`). That's politeness, not error handling, and it's one line.
+- **One way to do each thing:** f-strings to print, pandas to tabulate, `plt.subplots()` to plot, and nothing the chapter doesn't use.
+
+### Pagination
+
+When a chapter's API pages its results (a `continue` token, a cursor, a page number), teach it in three moves:
+
+1. **Two pages by hand.** Request page one and print its token; then request page two with the token added. Straight-line code, in one or two cells.
+2. **One batch, as a function, written live.** A short function that takes the title or query and returns one batch, up to the API's limit (500 revisions for the MediaWiki API): the lines from move 1, gathered.
+3. **The whole loop, given.** The function that follows the token to the end is already in the notebook (`{"lab": {"given": true}}`). The class reads it together, compares it with move 2, and uses it; nobody types it.
 
 ### Microsprints
 
@@ -105,7 +124,7 @@ The last cell, Markdown, headed `## Friday: from the lab to the textbook (15 min
 
 ## Following the chapter
 
-- **The chapter's case, the chapter's code.** Use the chapter's running example and copy its helper functions as they are, so that a student who reads the chapter later recognizes them. Where the lab must differ (the chapter has no case that fits 85 minutes, or its code would fail live), say why in the pull request. If the chapter's code is wrong, file it in the textbook repository too.
+- **The chapter's case, the chapter's code, flattened.** Use the chapter's running example and its code, but where the chapter wraps a step in a function, write the step's lines straight, and keep a function only as "Code style" allows. Keep the chapter's names for what you keep, so a student who reads the chapter later recognizes them. Where the lab must differ (the chapter has no case that fits 85 minutes, or its code would fail live), say why in the pull request. If the chapter's code is wrong, file it in the textbook repository too.
 - **Cover the Learning Objectives** at the top of the chapter. If one doesn't fit, say which in the pull request.
 - **Say where it comes from.** The key note names the textbook commit the lab follows (`git -C <book> rev-parse --short HEAD`), so a later chapter change can be checked against the lab.
 - **Earlier weeks, by number.** When a step or a question uses an earlier week's idea, name the week and the idea, and check it against that chapter. Don't reach forward to a chapter students haven't met, except in week 1.
@@ -115,8 +134,8 @@ The last cell, Markdown, headed `## Friday: from the lab to the textbook (15 min
 
 - **Every request is live,** with no saved copies: the User-Agent and pacing are part of the lesson. Fix the end of every time window at a past date, so a rerun gives the key's answer.
 - **The User-Agent:** the book's form, `WebDataScience/1.0 (your-email@colorado.edu)`, defined once in Step 0 and sent with every request. For Wikimedia, use chapter 10's full form, with the library and its version.
-- **Be polite:** pause between requests in a loop, and honor `Retry-After`. Week 10's `get()` helper does both.
-- **API keys** come from environment variables, never from the notebook. Step 0 reads them and stops with a clear message if one is missing.
+- **Be polite:** pause a second between requests in a loop. Don't code around rate limits; a 429 is something to discuss (see "Code style").
+- **API keys** come from environment variables, never from the notebook. Step 0 reads them with `os.environ["NAME"]`; a missing key raises a `KeyError` that names it, which is message enough.
 - **Privacy:** follow [`AGENTS.md`](../AGENTS.md), "Images and privacy". Don't print a private person's name in an output, and don't build a ranking of people the chapter doesn't build.
 
 ## The key
@@ -152,6 +171,7 @@ python labs/tools/make_key_pdf.py labs/week-NN/lab-NN-key.ipynb
 Then check by reading:
 - The minutes in the step headings add up to about 85.
 - Every step has a Discuss box, and most have a microsprint.
+- No cell has error handling, no function sits inside another, and every function is used more than once.
 - No microsprint answers a Recommended Exercise step.
 - Every "week N" in a question matches what that chapter teaches.
 - Every figure in the key's outputs reads at a glance, with a title and labeled axes.
