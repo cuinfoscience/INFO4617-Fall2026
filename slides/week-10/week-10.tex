@@ -34,17 +34,18 @@
 
             \medskip
 
-            \dayband{Wednesday}{Notebook lab}
+            \dayband{Wednesday}{Live-coding lab}
             \begin{itemize}\small
                 \item MediaWiki API: revisions, pageviews, links, raw requests
-                \item Experiment with new live-coding formats
+                \item We write the code together in \texttt{labs/lab-10.ipynb}
             \end{itemize}
 
             \medskip
 
-            \dayband{Friday}{Continue notebook lab}
+            \dayband{Friday}{Continue the lab}
             \begin{itemize}\small
-                \item More notebook lab and final project proposal Q\&A
+                \item Finish the lab; check it against \texttt{labs/lab-10-key.ipynb}
+                \item Final project proposal Q\&A
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
@@ -416,10 +417,43 @@
 \end{frame}
 
 % =========================================================================
-\section{Wednesday · Notebook Lab}
+\section{Wednesday · Live-Coding Lab}
 % =========================================================================
 
-% The code on these frames is the chapter's (ch-10-wikipedia.qmd, textbook PR #265),
+\begin{frame}{New this week: we live-code the lab together}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            \dayband{Find it}{\texttt{labs/} in the course repository}
+            \begin{enumerate}\small
+                \item Open the \href{https://github.com/cuinfoscience/INFO4617-Fall2026/tree/main/labs}{\textbf{labs} folder} of the course repository, \texttt{cuinfoscience/INFO4617-Fall2026}, on GitHub
+                \item Click \texttt{lab-10.ipynb}, then \textbf{Download raw file}, as with the companion notebooks
+                \item Save it in your course folder, and open it in JupyterLab in the \texttt{webdata} environment
+            \end{enumerate}
+
+            \medskip
+            \dayband{Use it}{fill in the cells as we go}
+            \begin{itemize}\small
+                \item Each step's text explains it; its code cell holds only a comment saying what to write
+                \item I write the code on screen, and you write it in your copy
+                \item Put \textbf{your} email in the User-Agent in Step 0
+                \item Eleven steps, about 75 minutes: today, and Friday if we run over
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{block}{Solutions}
+                \footnotesize \texttt{labs/lab-10-key.ipynb}: every cell filled in and run on October 20. Fall behind? Copy the cell from the key and keep going.
+            \end{block}
+            \begin{block}{Nothing to submit}
+                \footnotesize The lab is for practice in class. The next frames show the same code, for reference.
+            \end{block}
+            \begin{alertblock}{A 429 is not a bug}
+                \footnotesize It's Wikimedia's rate limit. The lab's \texttt{get()} waits the seconds it asks for, and tries again.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% The code on these frames is the chapter's (ch-10-wikipedia.qmd, textbook PRs #265 and #287),
 % shortened where a frame needs it. Its numbers and charts come from running it against
 % the live APIs on 2026-10-16, with every request ending 2026-09-30.
 \begin{frame}[fragile]{The four parts, then navigate the JSON}
@@ -427,7 +461,8 @@
 \begin{lstlisting}
 import requests
 url = "https://en.wikipedia.org/w/api.php"
-HEADERS = {"User-Agent": "WebDataScience/1.0 (your-email@colorado.edu)"}
+CLIENT = "WebDataScience/1.0 (your-email@colorado.edu)"   # name/version (contact)
+HEADERS = {"User-Agent": f"{CLIENT} python-requests/{requests.__version__}"}
 
 params = {"action": "query",                           # what to do
           "titles": "University of Colorado Boulder",  # about this page
@@ -577,7 +612,7 @@ import mwclient
 print(mwclient.__version__)    # 0.10.1 from conda-forge
 
 site = mwclient.Site("en.wikipedia.org",
-    clients_useragent="WebDataScience/1.0 (your-email@colorado.edu)")
+    clients_useragent=CLIENT)   # it adds mwclient/0.10.1
 page = site.pages["University of Colorado Boulder"]
 
 print(len(list(page.categories())))
@@ -613,10 +648,10 @@ revisions = list(page.revisions(   # 0.11: api_chunk_size=500
     \end{columns}
 \end{frame}
 
-\begin{frame}{Lab: work these, then show-and-tell}
+\begin{frame}{Finished the lab? Try these, then show-and-tell}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Work in pairs. Do these exercises from the chapter:
+            Work in pairs. Do these exercises from the chapter, reusing the lab's functions:
             \begin{enumerate}\small
                 \item Compare the revision histories of two related articles. Report the unique editors, the edits for each editor, and the monthly activity.
                 \item Get the daily pageviews of five articles. Report if the spikes occur together or separately.
@@ -643,16 +678,16 @@ revisions = list(page.revisions(   # 0.11: api_chunk_size=500
 \end{frame}
 
 % =========================================================================
-\section{Friday · Notebook Lab Continued}
+\section{Friday · Live-Coding Lab Continued}
 % =========================================================================
 
 \begin{frame}{Today}
     \begin{columns}[T]
         \begin{column}{0.48\textwidth}
-            \dayband{First}{the notebook lab}
+            \dayband{First}{finish the lab}
             \begin{itemize}\small
-                \item Pick up Wednesday's notebook where you stopped
-                \item Work in pairs; the checkpoints are the chapter's printed outputs
+                \item We pick up \texttt{labs/lab-10.ipynb} where we stopped on Wednesday
+                \item Check your outputs against \texttt{labs/lab-10-key.ipynb}
                 \item No notebook or GitHub submission this week
             \end{itemize}
         \end{column}

@@ -25,6 +25,7 @@ Project (40%). No exams. The lowest two lab scores are dropped.
 | [`syllabus/`](syllabus/) | LaTeX syllabus source and rendered `syllabus.pdf` |
 | [`slides/`](slides/) | Weekly lecture decks (one folder per teaching week) — see [`slides/README.md`](slides/README.md) |
 | [`handouts/`](handouts/) | Student-facing reference pages (see below) |
+| [`labs/`](labs/) | Wednesday's live-coding lab notebooks and their solutions, from week 10 — see [`labs/README.md`](labs/README.md) |
 | [`canvas/`](canvas/) | Canvas migration tooling — see [`canvas/README.md`](canvas/README.md) |
 
 ### Handouts

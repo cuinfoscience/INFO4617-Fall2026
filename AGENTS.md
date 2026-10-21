@@ -1,8 +1,8 @@
 # Working in this repository (for coding agents)
 
-This repo holds INFO 4617's slides (`slides/`), handouts (`handouts/`), the
-syllabus (`syllabus/`), the Canvas tooling (`canvas/`), and process documents
-(`docs/`). The textbook is a separate repository,
+This repo holds INFO 4617's slides (`slides/`), handouts (`handouts/`), lab
+notebooks (`labs/`), the syllabus (`syllabus/`), the Canvas tooling
+(`canvas/`), and process documents (`docs/`). The textbook is a separate repository,
 `cuinfoscience/Web-Data-Science-Book`; the slides copy its code and figures.
 How a deck is built is in `slides/common/AUTHORING.md`. This file is about how
 to work. It came out of the 2026-10-16 AAR
