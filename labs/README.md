@@ -34,7 +34,7 @@ This term began the labs in week 10. The labs for weeks 1–9 are written for th
 
 ## Solutions
 
-`week-NN/lab-NN-key.ipynb` is the same notebook with every cell filled in and run. Its first cell gives the date it was run, and its outputs show what yours should print. Open it on GitHub to read it, download it the same way, or read `lab-NN-key.pdf` beside it, the same key as a PDF for reading or printing without Jupyter. Live data changes, so a number that differs a little from the key may be a newer count, not a mistake.
+`week-NN/lab-NN-key.ipynb` is the same notebook with every cell filled in and run. Its first cell gives the date it was run, and its outputs show what yours should print. Open it on GitHub to read it, download it the same way, or read `lab-NN-key.pdf` beside it, the same key as a PDF for reading or printing without Jupyter. Live data changes, so a number that differs a little from the key may be a newer count, not a mistake. A few cells in some keys have code but no output: the site refused the machine the key was run on, and the key's first cell says which ones. The instructor runs them before class, and your run will fill them in.
 
 ## For maintainers
 
