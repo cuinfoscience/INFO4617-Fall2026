@@ -96,6 +96,9 @@ WEEKS = [
 # Week 1 is orientation (Friday only), week 15 is Fall Break, and week 16 runs a
 # project workshop and final presentations instead.
 TEACHING_WEEKS = [w for w in range(2, 15)]
+# Week 10 (the proposal week) has no lab or revision assignment in Canvas, by
+# the instructor's decision on 2026-10-23.
+NO_ASSIGNMENT_WEEKS = {10}
 
 # --------------------------------------------------------------------------
 # Assignment groups (weights come straight from the syllabus: 30/15/15/40)
@@ -141,17 +144,23 @@ GROUPS = [
 ]
 
 LAB_POINTS = 10
-REVISION_POINTS = 10
-# Points match the syllabus's split of the Final Project's 40%: 5 / 10 / 25.
+# Textbook Revisions are credit/no credit: 1 point for any issue, pull request,
+# or comment that lands on GitHub in a class repository (the book, this repo,
+# or the Missing Manual). Set in Canvas on 2026-10-23; docs/course-facts.md.
+REVISION_POINTS = 1
+# Canvas weights the assignments inside a group by their points, so these must
+# stay in the ratio 5 : 10 : 25 to give the syllabus's split of the Final
+# Project's 40%. The proposal's rubric (PROPOSAL_RUBRIC) is 10 criteria x 3
+# points = 30, so the other two parts are 60 and 150. Change all three together.
 FINAL_PARTS = [
-    ("Final Project — Proposal", 5, date(2026, 10, 25),
+    ("Final Project — Proposal", 30, date(2026, 10, 25),
      "A research question; your data source(s) and method; and an ethics and "
      "feasibility check, with one record you retrieved. The assignment page is "
      "PROPOSAL_DESCRIPTION, below."),
-    ("Final Project — Presentation", 10, LAST_DAY,
+    ("Final Project — Presentation", 60, LAST_DAY,
      "Present your project to the class during the final week. Bring your data, "
      "one or two visualizations that carry an argument, and what surprised you."),
-    ("Final Project — Repository & Write-up", 25, FINAL_DUE,
+    ("Final Project — Repository & Write-up", 150, FINAL_DUE,
      "Your project repository (code, data or collection scripts, and a README "
      "someone else could follow) plus the written analysis. Due during finals "
      "week; there is no final exam."),
@@ -260,7 +269,7 @@ def lab_assignments():
     out = []
     for wk in TEACHING_WEEKS:
         _, _, ch, topic, slug, chfile, _ = week_info(wk)
-        if lab_day(wk) is None:
+        if lab_day(wk) is None or wk in NO_ASSIGNMENT_WEEKS:
             continue
         out.append({
             "group": "Notebook Labs",
@@ -348,17 +357,109 @@ def _pull_request_description(ch, topic, chfile):
     )
 
 
+# Canvas titles that differ from the "Chapter N" pattern. build matches
+# assignments by name, so a title here must match Canvas exactly.
+REVISION_TITLES = {2: "First issue on Chapter 2"}
+
+
+# Weeks 11-14 of Textbook Revisions are project-portfolio checkpoints instead
+# of textbook pull requests: each student builds their Final Project repo on
+# their own GitHub account, one stage a week, ending close to the final
+# submission. Each is 2 points (two 1-point criteria, PORTFOLIO_RUBRICS).
+# Week 14's is due after Fall Break.
+PORTFOLIO_POINTS = 2
+_PORTFOLIO_INTRO = (
+    "<p>From week 11, the Friday revision block builds your Final Project as a "
+    "public portfolio: one GitHub repository on your own account that you "
+    "update each week. <strong>Submit the URL of your repository.</strong> It "
+    "is graded on what has been pushed by the deadline.</p>")
+_PORTFOLIO_DATA_NOTE = (
+    "<p>Commit your code and a small sample of your data. Leave the full raw "
+    "data out where its terms of service, its size, or personal information "
+    "make sharing it unwise, and say in the README what you left out and "
+    "why.</p>")
+PORTFOLIO_WEEKS = {
+    11: {"title": "Set up your project repo", "due": None, "html": (
+        "<h4>This week: set up the repository</h4><ul>"
+        "<li>A <strong>public repository</strong> on your own GitHub account, "
+        "with a descriptive name.</li>"
+        "<li><code>README.md</code> with a title, your name, a one-paragraph "
+        "summary of your research question, and placeholder sections: Data, "
+        "Methods, Findings, How to reproduce.</li>"
+        "<li><code>proposal.md</code>: your proposal, revised if you have had "
+        "feedback.</li>"
+        "<li>Placeholders for the rest: a notebook (<code>.ipynb</code>), a "
+        "<code>report.md</code> (or a note that your report will be a PDF), "
+        "and a <code>data/</code> folder.</li></ul>")},
+    12: {"title": "Collect and clean your data", "due": None, "html": (
+        "<h4>This week: collect and clean</h4><ul>"
+        "<li>Collection code that runs, makes polite requests (a User-Agent "
+        "that identifies you, pauses between requests), and saves the raw "
+        "data.</li>"
+        "<li>A cleaning step, with its code and output, that produces a tidy "
+        "dataset.</li>"
+        "<li>A small sample of the cleaned data in the repo, with a data "
+        "dictionary: each field and what it means.</li>"
+        "<li>The README's Data section: the source, when you collected it, how "
+        "many records, and what you kept out of the repo and why.</li></ul>")
+        + _PORTFOLIO_DATA_NOTE},
+    13: {"title": "Analyze your data", "due": None, "html": (
+        "<h4>This week: analyze</h4><ul>"
+        "<li>An analysis notebook that runs top to bottom, with its output "
+        "visible.</li>"
+        "<li>Results that answer at least part of your question: the counts or "
+        "comparisons your proposal named.</li>"
+        "<li>At least one figure saved in the repo, with a title, labeled axes, "
+        "and a one-sentence caption.</li>"
+        "<li>The README's Methods section and your preliminary Findings.</li>"
+        "</ul>")},
+    14: {"title": "Draft your write-up", "due": date(2026, 11, 29), "html": (
+        "<h4>This week: a draft close to final</h4><ul>"
+        "<li>A full draft of your written document (<code>report.md</code> or "
+        "<code>report.pdf</code>), with every section present, using your own "
+        "results and figures and citing your sources.</li>"
+        "<li>All four required files present and current: "
+        "<code>README.md</code>, <code>proposal.md</code>, your notebook, and "
+        "your report.</li>"
+        "<li>A README complete enough that someone else could reproduce the "
+        "project: setup, how to run it, and where the data came from.</li>"
+        "</ul><p>Due after Fall Break, on Sunday, November 29. Your final "
+        "presentation is in the following week, and the final repository and "
+        "write-up are due Monday, December 7.</p>")},
+}
+
+
+def revision_name(wk):
+    """The Canvas title of a week's Textbook Revisions assignment."""
+    _, _, ch, _, _, _, _ = week_info(wk)
+    if wk in PORTFOLIO_WEEKS:
+        return f"Week {wk} Portfolio — {PORTFOLIO_WEEKS[wk]['title']}"
+    return f"Week {wk} Revision — {REVISION_TITLES.get(wk, f'Chapter {ch}')}"
+
+
 def revision_assignments():
-    """One textbook-revision workshop per teaching week, met Friday and due that Sunday."""
+    """One textbook-revision workshop per teaching week, met Friday and due
+    that Sunday; weeks 11-14 are portfolio checkpoints (PORTFOLIO_WEEKS)."""
     out = []
     for wk in TEACHING_WEEKS:
         _, _, ch, topic, _, chfile, _ = week_info(wk)
-        if revision_day(wk) is None:
+        if revision_day(wk) is None or wk in NO_ASSIGNMENT_WEEKS:
+            continue
+        if wk in PORTFOLIO_WEEKS:
+            pw = PORTFOLIO_WEEKS[wk]
+            out.append({
+                "group": "Textbook Revisions",
+                "name": revision_name(wk),
+                "points_possible": PORTFOLIO_POINTS,
+                "due_at": due_at(pw["due"] or sunday_of(wk)),
+                "submission_types": ["online_url"],
+                "description": _PORTFOLIO_INTRO + pw["html"],
+            })
             continue
         describe = _comment_week_description if wk in COMMENT_WEEKS else _pull_request_description
         out.append({
             "group": "Textbook Revisions",
-            "name": f"Week {wk} Revision — Chapter {ch}",
+            "name": revision_name(wk),
             "points_possible": REVISION_POINTS,
             "due_at": due_at(sunday_of(wk)),
             # URL only: the deliverable is the issue, comment, or pull request itself
@@ -401,114 +502,286 @@ def attendance_assignments():
     return out
 
 
-# The proposal's full assignment page. Its three parts are the ones the week 9
-# ("What we expect") and week 10 slides name; keep them in step
-# (docs/course-facts.md, "What the proposal contains").
+# The proposal's full assignment page, as the instructor last edited it in
+# Canvas (copied 2026-10-23, with the part headings at 9 / 9 / 12 points to match
+# PROPOSAL_RUBRIC). Its three parts are the ones the week 9 ("What we expect")
+# and week 10 slides name; keep them in step (docs/course-facts.md, "What the
+# proposal contains").
 PROPOSAL_DESCRIPTION = """\
-<p><strong>5 points (5% of your grade). Due Sunday, October 25, at 11:59 p.m.</strong></p>
-
-<p>The Final Project is a portfolio piece that matches a web data source with a
-research design. The proposal is your plan for it. It is short, it can change,
-and it has two jobs: to show that your question is worth answering, and to show
-that you can get the data to answer it.</p>
-
-<h3>What to submit</h3>
-<p>One document of about 1&ndash;2 pages (500&ndash;1,000 words, not counting the
-record you paste in part 3). Submit it as a PDF or Markdown file, as text in the
-box, or as a link to a README in your project's GitHub repository. Put your name
-at the top, and your partner's if you are working in a pair.</p>
-
-<h3>1. A research question (1.5 points)</h3>
+<p>The Final Project is a portfolio piece that matches a web data source with a research design. The proposal is is short, it can change, and it has two jobs: to show that your question is worth answering and to show that you can get the data to answer it.</p>
+<h4>What to submit</h4>
+<p>One document of about 1&ndash;2 pages (500&ndash;1,000 words, not counting the record you paste in part 3). Submit it as a PDF file or as a link to a README in your project&rsquo;s GitHub repository to Canvas by Sunday, October 25. Put your name at the top, and your partner&rsquo;s if you are working in a pair.</p>
+<h4>1. A research question (9 points)</h4>
 <ul>
-  <li><strong>A question, not a topic.</strong> Not &ldquo;Wikipedia&rdquo;, but
-  &ldquo;Which events send readers to articles about wildfires?&rdquo; Not
-  &ldquo;housing&rdquo;, but &ldquo;How often did Boulder's city council discuss
-  housing from 2020 to 2025, and what set off the busiest months?&rdquo;</li>
-  <li><strong>Who would care about the answer</strong>: a newsroom, a city
-  agency, a community group, researchers, or the platform's own users.</li>
-  <li><strong>What you expect to find</strong>, in a sentence or two, and what
-  would surprise you.</li>
+<li><strong>A question, not a topic.</strong> Not &ldquo;Wikipedia&rdquo;, but &ldquo;Which events send readers to articles about wildfires?&rdquo; Not &ldquo;housing&rdquo;, but &ldquo;How often did Boulder&rsquo;s city council discuss housing from 2020 to 2025?&rdquo; Questions should be <em>empirical</em> (uses web data) and <em>falsifiable</em> (the answer could have many values).</li>
+<li><strong>Who would care about the answer</strong>: a newsroom, a city agency, a local politician, a lawyer, a community group, researchers, or the platform&rsquo;s own users.</li>
+<li><strong>What you expect to find</strong>, in a sentence or two, and what would surprise you.</li>
 </ul>
-
-<h3>2. Data source(s) and method (1.5 points)</h3>
+<h4>2. Data source(s) and method (9 points)</h4>
 <ul>
-  <li><strong>The exact source</strong>, with links: the API endpoint, the site's
-  pages, or the set of documents.</li>
-  <li><strong>How you will get it</strong>: an API, scraping static or dynamic
-  pages, PDFs, web archives, or a mix. Name the chapter(s) whose methods you will
-  use.</li>
-  <li><strong>The scope</strong>: which records, what time window, and roughly
-  how many. If you will collect over time, say how often and for how long, and
-  start the collector now; a series needs weeks of data.</li>
-  <li><strong>The analysis</strong>: the counts, comparisons, or charts that would
-  answer your question.</li>
+<li><strong>The exact source</strong>, with links: the URL for a website, the API endpoint, or a set of documents.</li>
+<li><strong>How you will get it</strong>: an API, scraping static or dynamic pages, PDFs, web archives, or a mix. Name the chapter(s) whose methods you will use.</li>
+<li><strong>The scope</strong>: which records, what time window, and roughly how many. If you will collect over time, say how often and for how long.</li>
+<li><strong>The analysis</strong>: the counts, comparisons, or charts that would answer your question.</li>
 </ul>
-
-<h3>3. Ethics and feasibility (2 points)</h3>
+<h4>3. Ethics and feasibility (12 points)</h4>
 <ul>
-  <li><strong>Terms of service and <code>robots.txt</code></strong>: quote the
-  lines that apply to what you will collect, say whether your collection is
-  allowed, and say how you will stay within the limits (a User-Agent that
-  identifies you, pauses between requests, rate limits).</li>
-  <li><strong>Personal information</strong>: does the data include people's
-  names, usernames, photos, or other personal details? Say how you will handle
-  them: leave them out, aggregate, or anonymize.</li>
-  <li><strong>One record, retrieved</strong>: paste a request you actually ran
-  (the code or the URL) and what came back (the status code and the record, or a
-  screenshot of it). Name the fields you will use.</li>
-  <li><strong>The biggest risk</strong> to finishing, and your fallback: a smaller
-  scope, a second source, or a different time window.</li>
+<li><strong>Terms of service and <code>robots.txt</code></strong>: what rules govern the data you will collect? Is your collection is allowed? Does it fall under a fair use or research exception? How you will stay within the limits (a User-Agent that identifies you, pauses between requests, rate limits)?</li>
+<li><strong>Personal information</strong>: does the data include people&rsquo;s names, usernames, photos, or other personal details? Say how you will handle them: leave them out, aggregate, or anonymize.</li>
+<li><strong>One record, retrieved</strong>: paste a request you actually ran (the code or the URL) and what came back (the status code and the record, or a screenshot of it). Name the fields you will use.</li>
+<li><strong>The biggest risk</strong> to finishing, and your fallback: a smaller scope, a second source, or a different time window.</li>
 </ul>
-
-<h3>How it is graded</h3>
-<table>
-  <thead><tr><th>Part</th><th>Points</th><th>Full credit</th></tr></thead>
-  <tbody>
-    <tr><td>Research question</td><td>1.5</td><td>A specific question, who would
-    care, and what you expect</td></tr>
-    <tr><td>Data source(s) and method</td><td>1.5</td><td>An exact source, a
-    method, a scope, and the analysis</td></tr>
-    <tr><td>Ethics and feasibility</td><td>2</td><td>The terms and
-    <code>robots.txt</code> checked, personal information addressed, one real
-    record, and a fallback</td></tr>
-  </tbody>
-</table>
-<p>A part that is there but thin earns partial credit. The proposal is graded on
-a careful, good-faith plan, not on getting everything right: you may change your
-question or source later, and you will get feedback to help.</p>
-
-<h3>Working in a pair</h3>
-<p>Pairs need the instructor's permission before the proposal is due; email to
-ask. Submit one proposal with both names, and say who will do what.</p>
-
-<h3>AI tools</h3>
-<p>As the syllabus says, you may use AI tools if you say where and how they
-shaped your proposal, and you must be able to explain your question, your
-source, and your method yourself.</p>
-
-<h3>Late work</h3>
-<p>Late work loses 1% of its maximum value for each day after the deadline,
-unless you have an approved excuse.</p>
-
-<h3>Where to start</h3>
+<h4>Working in a pair</h4>
+<p>Pairs need the instructor&rsquo;s permission before the proposal is due; email to ask. Submit proposals and final submissions individually, not as a team, and say who will do what.</p>
+<h4>AI tools</h4>
+<p>As the syllabus says, you may use AI tools if you say where and how they shaped your proposal, and you must be able to explain your question, your source, and your method yourself.</p>
+<h4>Late work</h4>
+<p>Late work loses 1% of its maximum value for each day after the deadline, unless you have an approved excuse.</p>
+<h4>Where to start</h4>
 <ul>
-  <li><strong>Ideas</strong>: week 9's Friday slides grow every chapter's
-  <em>Additional Exercises</em> into project questions.</li>
-  <li><strong>The record in part 3</strong>: if your source has an API, week 10's
-  Wednesday notebook is your feasibility check: one request, one record, the
-  status code, and the fields.</li>
-  <li><strong>A fuller design</strong>: Chapter 15's <em>Research proposal</em>
-  exercise lists the six parts a full research proposal has.</li>
-  <li><strong>Office hours</strong>, for a question or source you are unsure of.</li>
+<li>Every chapter&rsquo;s <em>Additional Exercises</em> are potential project questions.</li>
+<li>Chapter 15&rsquo;s <em>Research proposal</em> exercise lists the six parts a full research proposal has.</li>
+<li><strong>Office hours</strong>, for a question or source you are unsure of.</li>
 </ul>
-
-<h3>What comes next</h3>
-<p>A presentation of about five minutes plus questions in the final week,
-November 30&ndash;December 4 (10%), and the project repository with a write-up of
-about 2,000&ndash;3,000 words, due Monday, December 7 (25%).</p>
+<h4>What comes next</h4>
+<p>A presentation of about five minutes plus questions in the final week, November 30&ndash;December 4 (10%), and a write-up of about 2,000&ndash;3,000 words, due Monday, December 7 (25%).</p>
 """
 
-DESCRIPTIONS = {"Final Project — Proposal": PROPOSAL_DESCRIPTION}
+WRITEUP_DESCRIPTION = (
+    "<p>Your project repository (code, data or collection scripts, and a README "
+    "someone else could follow) plus the written analysis. Due during finals "
+    "week; there is no final exam.</p>"
+    "<h4>What the repository must contain</h4><ul>"
+    "<li><code>README.md</code>: what the project is, how to set it up and run "
+    "it, and where the data came from.</li>"
+    "<li><code>proposal.md</code>: your proposal.</li>"
+    "<li>At least one Jupyter notebook (<code>.ipynb</code>) that runs top to "
+    "bottom with its output visible.</li>"
+    "<li>Your written document, <code>report.md</code> or "
+    "<code>report.pdf</code>, of about 2,000&ndash;3,000 words.</li></ul>"
+    "<p>Submit the URL of your repository. It is graded with the rubric below on "
+    "what has been pushed by the deadline.</p>")
+
+DESCRIPTIONS = {"Final Project — Proposal": PROPOSAL_DESCRIPTION,
+                "Final Project — Repository & Write-up": WRITEUP_DESCRIPTION}
+# The proposal takes a PDF or a link to the project's README; Canvas has no
+# text-entry box for it.
+SUBMISSION_TYPES = {"Final Project — Proposal": ["online_upload", "online_url"]}
+
+# Rubrics attached in Canvas and used for grading. Each criterion is
+# (title, long description, [(level, points, description), ...]); a criterion
+# is worth its top level. migrate.py's `rubrics` step attaches a rubric to each
+# assignment listed that has none, and leaves the others alone. Grading rules a
+# rubric can't hold (a blank scaffold, late work) are in docs/grading.md.
+
+# The proposal: one criterion per bullet of PROPOSAL_DESCRIPTION, each 3 / 2 /
+# 1 / 0 with no half points, so parts 1-3 are worth 9 / 9 / 12. Attached
+# 2026-10-23.
+_PROPOSAL_LEVELS = (("Full", 3), ("Mostly", 2), ("Attempted", 1), ("Missing", 0))
+
+
+def _levels(levels, descriptions):
+    return [(name, pts, text) for (name, pts), text in zip(levels, descriptions)]
+
+
+PROPOSAL_RUBRIC = {
+    "assignments": ["Final Project — Proposal"],
+    "title": "Final Project Proposal (30 points)",
+    "criteria": [
+        ("1a. A question, not a topic", "Part 1: research question", _levels(_PROPOSAL_LEVELS, [
+            "A specific, empirical question web data can answer, whose answer could take many values.",
+            "A question, but one element is weak: too broad, yes/no only, or loosely tied to web data.",
+            "Vague or mostly a topic phrased as a question.",
+            "Only a topic, or no question."])),
+        ("1b. Who would care", "Part 1: research question", _levels(_PROPOSAL_LEVELS, [
+            "Names a specific audience (newsroom, agency, community group, researchers, users) and why the answer matters to them.",
+            "Names an audience but not why it matters, or the audience is general.",
+            "Gestures at an audience vaguely.",
+            "No audience."])),
+        ("1c. Expected finding", "Part 1: research question", _levels(_PROPOSAL_LEVELS, [
+            "States what they expect to find and what would surprise them.",
+            "Gives an expectation or a surprise, not both.",
+            "Expectation is vague or not tied to the question.",
+            "Neither."])),
+        ("2a. Source and how to get it", "Part 2: data and method", _levels(_PROPOSAL_LEVELS, [
+            "Exact source with links (URL, API endpoint, or document set) and the collection method (API, static or dynamic scraping, PDFs, web archives), naming the chapter(s).",
+            "Source and method given, but missing links or the chapter.",
+            "Source or method vague, or only one of the two given.",
+            "Neither given."])),
+        ("2b. Scope", "Part 2: data and method", _levels(_PROPOSAL_LEVELS, [
+            "Which records, what time window, and roughly how many; how often and for how long if collecting over time.",
+            "One of these elements is missing.",
+            "Scope only gestured at.",
+            "No scope."])),
+        ("2c. Analysis plan", "Part 2: data and method", _levels(_PROPOSAL_LEVELS, [
+            "The counts, comparisons, or charts that would answer the question.",
+            "Analysis named but loosely tied to the question.",
+            "Generic (e.g. 'analyze the data').",
+            "No analysis plan."])),
+        ("3a. Terms of service and robots.txt", "Part 3: ethics and feasibility", _levels(_PROPOSAL_LEVELS, [
+            "Names the governing rules (terms of service, robots.txt), whether collection is allowed or falls under a research/fair-use exception, and how they will stay within limits (identifying User-Agent, pauses, rate limits).",
+            "Covers the rules or the limits well, the other thinly.",
+            "Mentions rules or politeness only in passing.",
+            "Not discussed."])),
+        ("3b. Personal information", "Part 3: ethics and feasibility", _levels(_PROPOSAL_LEVELS, [
+            "Says whether the data includes names, usernames, photos, or other personal details and how they will handle them (leave out, aggregate, anonymize), or states there are none.",
+            "Identifies personal data but the handling plan is thin.",
+            "Raises the issue without a plan.",
+            "Not addressed."])),
+        ("3c. One record, retrieved", "Part 3: ethics and feasibility", _levels(_PROPOSAL_LEVELS, [
+            "A request actually run (code or URL), what came back (status code and the record, or a screenshot), and the fields they will use.",
+            "Request and result shown, but no fields named.",
+            "Request without a result, or a result without the request.",
+            "No retrieved record."])),
+        ("3d. Biggest risk and fallback", "Part 3: ethics and feasibility", _levels(_PROPOSAL_LEVELS, [
+            "Names the biggest risk to finishing and a concrete fallback (smaller scope, second source, different time window).",
+            "Risk and fallback given, but the fallback is vague.",
+            "Risk without a fallback, or a fallback without a risk.",
+            "Neither."])),
+    ],
+}
+
+# Notebook Labs: five elements, each 2 / 1 / 0, for 10 points. Attached
+# 2026-10-23 to weeks 11-14; weeks 2-9 were graded before it existed and have
+# no rubric in Canvas. Week 10's lab isn't in Canvas yet.
+LAB_RUBRIC = {
+    "assignments": [f"Week {wk} Lab — {week_info(wk)[3]}" for wk in (11, 12, 13, 14)],
+    "title": "Notebook Lab (10 points)",
+    "criteria": [
+        ("1. Valid notebook HTML", "Your completed companion notebook, exported to HTML.", [
+            ("Met", 2, "An HTML file of your notebook, in any layout."),
+            ("Not met", 0, "Missing or unreadable.")]),
+        ("2. Every required step attempted", "Recommended Exercises, Steps 1 to N-1.", [
+            ("Met", 2, "Every Recommended Exercises code step has your own code. Steps announced as optional count as done."),
+            ("Partly met", 1, "At least half of the required steps."),
+            ("Not met", 0, "Fewer than half, or the blank scaffold.")]),
+        ("3. Run, with output visible", "Run every cell before exporting.", [
+            ("Met", 2, "Your code cells are run and their output shows. Errors left visible still count."),
+            ("Partly met", 1, "Some cells with your code are unrun."),
+            ("Not met", 0, "No cell with your code was run.")]),
+        ("4. Interpretation in your own words", "The final step of the Recommended Exercises.", [
+            ("Met", 2, "The final step answered at about the requested length and about your own results, in the prompt cell, comments, a Markdown cell, or a print()."),
+            ("Partly met", 1, "Present but thin (one to three sentences), or generic."),
+            ("Not met", 0, "Missing, or the placeholder left as is.")]),
+        ("5. Each step does its task", "Judged on the steps you attempted.", [
+            ("Met", 2, "Each attempted step does what it asks, using your own choices where the step says to choose."),
+            ("Partly met", 1, "Some steps substitute something else, such as the chapter's own example."),
+            ("Not met", 0, "The code is unrelated to the steps.")]),
+    ],
+}
+
+# Portfolio checkpoints (weeks 11-14): two criteria a week, 1 point each,
+# met or not. Attached 2026-10-23.
+def _met(text):
+    return [("Met", 1, text), ("Not met", 0, "Missing, or only a placeholder.")]
+
+
+_PORTFOLIO_CRITERIA = {
+    11: [("1. Repository and README", "Set up the repository.", _met(
+            "A public repository on your own GitHub account, its URL submitted, "
+            "with a README.md giving a title, your name, a one-paragraph summary "
+            "of your question, and placeholder sections (Data, Methods, Findings, "
+            "How to reproduce).")),
+         ("2. Proposal and placeholders", "Set up the repository.", _met(
+            "proposal.md with your proposal, plus a notebook (.ipynb), a report "
+            "placeholder (report.md, or a note that it will be a PDF), and a data/ "
+            "folder."))],
+    12: [("1. Collection and cleaning code", "Collect and clean.", _met(
+            "Collection code that runs, makes polite requests (an identifying "
+            "User-Agent, pauses), and saves the raw data; a cleaning step, with "
+            "code and output, that produces a tidy dataset.")),
+         ("2. Data documented", "Collect and clean.", _met(
+            "A small sample of the cleaned data with a data dictionary, and the "
+            "README's Data section: source, when collected, how many records, and "
+            "what was kept out of the repo and why."))],
+    13: [("1. Analysis notebook", "Analyze.", _met(
+            "An analysis notebook that runs top to bottom with output visible, "
+            "with results that answer at least part of your question.")),
+         ("2. Figure and README", "Analyze.", _met(
+            "At least one figure saved in the repo with a title, labeled axes, "
+            "and a one-sentence caption, and the README's Methods section and "
+            "preliminary Findings."))],
+    14: [("1. Full draft report", "Draft your write-up.", _met(
+            "A full draft of report.md or report.pdf with every section present, "
+            "using your own results and figures and citing your sources.")),
+         ("2. Complete, reproducible repository", "Draft your write-up.", _met(
+            "README.md, proposal.md, your notebook, and your report all present "
+            "and current, with a README that lets someone else reproduce the "
+            "project: setup, how to run it, and where the data came from."))],
+}
+PORTFOLIO_RUBRICS = [
+    {"assignments": [revision_name(wk)],
+     "title": f"Week {wk} Portfolio ({PORTFOLIO_POINTS} points)",
+     "criteria": crit}
+    for wk, crit in _PORTFOLIO_CRITERIA.items()
+]
+
+
+# The final presentation (60 points) and repository and write-up (150 points):
+# each criterion is Full / Mostly / Attempted / Missing at about 100 / 67 / 33 /
+# 0 percent of its points, in whole points. Attached 2026-10-23.
+def _scaled(points, full):
+    return [("Full", points, full),
+            ("Mostly", round(points * 2 / 3), "Mostly there: one part is thin or missing."),
+            ("Attempted", round(points / 3), "Present, but thin or largely incomplete."),
+            ("Missing", 0, "Not addressed.")]
+
+
+PRESENTATION_RUBRIC = {
+    "assignments": ["Final Project — Presentation"],
+    "title": "Final Project Presentation (60 points)",
+    "criteria": [
+        ("1. Question and who cares", "About five minutes plus questions.", _scaled(10,
+            "A clear research question and why it matters to a named audience.")),
+        ("2. Data and method", "About five minutes plus questions.", _scaled(10,
+            "The source, how it was collected and cleaned, its scope, and the "
+            "ethics checks, in brief.")),
+        ("3. Findings that carry an argument", "About five minutes plus questions.", _scaled(15,
+            "One or two readable visualizations, each making a point that answers "
+            "the question.")),
+        ("4. Surprises and limitations", "About five minutes plus questions.", _scaled(10,
+            "What surprised you and what the data can't tell you.")),
+        ("5. Delivery", "About five minutes plus questions.", _scaled(10,
+            "About five minutes, a clear structure, and slides or a notebook "
+            "legible from the room.")),
+        ("6. Questions", "About five minutes plus questions.", _scaled(5,
+            "Answers questions about the data and method directly.")),
+    ],
+}
+
+WRITEUP_RUBRIC = {
+    "assignments": ["Final Project — Repository & Write-up"],
+    "title": "Final Project Repository & Write-up (150 points)",
+    "criteria": [
+        ("1. Required files", "The repository.", _scaled(10,
+            "README.md, proposal.md, at least one .ipynb notebook, and the report "
+            "(report.md or report.pdf), all present and current.")),
+        ("2. Reproducibility", "The repository.", _scaled(20,
+            "The README covers setup, how to run, and where the data came from; "
+            "the notebook runs top to bottom with output visible.")),
+        ("3. Collection and cleaning", "The repository.", _scaled(20,
+            "Polite collection code, a documented cleaning step, a data sample and "
+            "dictionary, and what was withheld from the repo and why.")),
+        ("4. Analysis", "The repository.", _scaled(25,
+            "Counts or comparisons that answer the question, and figures with "
+            "titles, labeled axes, and captions.")),
+        ("5. The written report", "The write-up.", _scaled(30,
+            "About 2,000-3,000 words covering the question and its audience, data "
+            "and methods, findings, limitations, and a conclusion.")),
+        ("6. Claims match the evidence", "The write-up.", _scaled(20,
+            "Every claim is backed by your own results, and the limits of the data "
+            "are stated.")),
+        ("7. Ethics", "The repository and write-up.", _scaled(15,
+            "Terms of service and robots.txt respected, personal information left "
+            "out, aggregated, or anonymized, and an identifying User-Agent.")),
+        ("8. Portfolio practice", "The repository.", _scaled(10,
+            "A clear layout, a commit history showing work through weeks 11-14, "
+            "and AI use disclosed.")),
+    ],
+}
+
+RUBRICS = ([PROPOSAL_RUBRIC, LAB_RUBRIC] + PORTFOLIO_RUBRICS
+           + [PRESENTATION_RUBRIC, WRITEUP_RUBRIC])
 
 
 def final_assignments():
@@ -519,7 +792,8 @@ def final_assignments():
             "name": name,
             "points_possible": points,
             "due_at": due_at(day),
-            "submission_types": ["online_upload", "online_text_entry", "online_url"],
+            "submission_types": SUBMISSION_TYPES.get(
+                name, ["online_upload", "online_text_entry", "online_url"]),
             "description": DESCRIPTIONS.get(name, f"<p>{blurb}</p>"),
         })
     return out
@@ -573,9 +847,12 @@ def modules():
                 "new_tab": True,
             })
             items.extend(lab_items(wk))
-            items.append({"type": "Assignment", "title": f"Week {wk} Lab — {topic}"})
-            items.append({"type": "SubHeader", "title": "Friday · Textbook Revisions"})
-            items.append({"type": "Assignment", "title": f"Week {wk} Revision — Chapter {ch}"})
+            if wk not in NO_ASSIGNMENT_WEEKS:
+                items.append({"type": "Assignment", "title": f"Week {wk} Lab — {topic}"})
+            items.append({"type": "SubHeader", "title": "Friday · Textbook Revisions"
+                          if wk not in PORTFOLIO_WEEKS else "Friday · Project portfolio"})
+            if wk not in NO_ASSIGNMENT_WEEKS:
+                items.append({"type": "Assignment", "title": revision_name(wk)})
         elif wk == 1:
             items.append({"type": "SubHeader", "title": "Friday · Welcome, setup & how this class works"})
             items.append({

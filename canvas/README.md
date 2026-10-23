@@ -46,7 +46,8 @@ in both courses, then `copy --apply`, then `build --apply`.
 | Flag | Effect |
 |---|---|
 | `--apply` | Actually write to Canvas (default: dry run) |
-| `--only groups,assignments,modules,syllabus,settings` | Limit what `build` touches |
+| `--only groups,assignments,rubrics,modules,syllabus,settings` | Limit what `build` touches |
+| `--overwrite` | `build`: also update assignments that already exist (by default they are reported, not changed) |
 | `--include-slides` | Upload each `slides/week-NN/week-NN.pdf` and link it in that week's module |
 | `--everything` | `copy`: bring over the **entire** old course, not just files/pages |
 | `--host` | Canvas host (default `canvas.colorado.edu`) |
@@ -67,8 +68,9 @@ Use `--everything` if you'd rather bring it all over and prune by hand.
 | Step | Result |
 |---|---|
 | `settings` | Course name/code, term dates (Aug 20 – Dec 4, 2026), weighted grading on, home page = Modules |
-| `groups` | Notebook Labs **30%** (drops 2 lowest), Textbook Revisions **15%**, Attendance **15%**, Final Project **40%** (proposal 5, presentation 10, repository and write-up 25 points), as in the syllabus |
-| `assignments` | 13 labs (due Wednesdays), 13 revisions (due Fridays), 3 final-project items — 29 total, all with due dates in `America/Denver` |
+| `groups` | Notebook Labs **30%** (drops 2 lowest), Textbook Revisions **15%**, Attendance **15%**, Final Project **40%** (proposal 30, presentation 60, repository and write-up 150 points), as in the syllabus. Canvas weights the assignments inside a group by their points, so the three parts keep the syllabus's 5 / 10 / 25 split only while their points stay in that ratio |
+| `assignments` | 12 labs (10 points each), 12 Textbook Revisions (weeks 2–9 at 1 point each, credit or no credit; weeks 11–14 are 2-point project-portfolio checkpoints; week 10 has neither a lab nor a revision), 3 final-project items, and 15 attendance entries; labs and revisions are due Sundays, in `America/Denver`. Creates the ones that are missing; an assignment that already exists is left as it is, and the dry run lists how it differs from the spec (points, due date, submission types), unless you pass `--overwrite` |
+| `rubrics` | Attaches each rubric in `RUBRICS` to the assignments it lists, for grading: the proposal's 10 criteria at 3 / 2 / 1 / 0 points (30 total), and the Notebook Lab rubric's 5 criteria at 2 / 1 / 0 (10 total) on weeks 11–14, a 2-point rubric on each week 11–14 portfolio checkpoint, and the presentation (60) and repository and write-up (150) rubrics. A rubric is created once and shared by its assignments. An assignment that already has a rubric is left alone |
 | `modules` | One module per week (1–16, no 15) laid out Monday → Wednesday → Friday, with the chapter reading, slides, companion notebook (followed by the week's lab and lab key, when `labs/week-NN/` has one), and that week's two assignments |
 | `syllabus` | Canvas syllabus page styled to match the PDF syllabus, including the 16-week schedule table |
 
@@ -92,9 +94,12 @@ lab as "Live coding notebook", from getting a second pair.
 
 ## Safety notes
 
-- **Idempotent by name.** Re-running updates existing groups/assignments rather
-  than creating duplicates. Existing modules are left alone rather than having
-  items appended twice.
+- **Idempotent by name.** Re-running updates existing groups rather than
+  creating duplicates. Existing assignments, rubrics, and modules are left
+  alone: the instructor edits Canvas directly and grades are posted against
+  it, so changing an assignment's points after grading would change students'
+  percentages. The dry run lists each assignment that has drifted from the
+  spec; `--overwrite` makes them match the spec again.
 - **Nothing is deleted.** Leftover assignment groups from the old design are
   reported so you can remove them in Canvas yourself.
 - Assignments are created **published**. If you'd rather stage them, change

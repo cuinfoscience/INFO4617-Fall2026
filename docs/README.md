@@ -40,6 +40,8 @@ Current contents:
 |---|---|
 | `aar/2026-09-21-week-06-slides.md` | Slide-authoring contract vs. weeks 04–05; week-06 expansion |
 | `course-facts.md` | Facts written in more than one file, with every place each one lives. Change them all in one pull request. |
+| `grading.md` | The grading rules set while grading weeks 2–9 (2026-10-23): Textbook Revisions credit, the Notebook Labs rubric (in Canvas from week 11), late work and comment wording, commendations, the portfolio checkpoints for weeks 11–14, and the three Final Project rubrics. |
+| `handoff-weeks-11-14.md` | Where things stand on 2026-10-23 for weeks 11–14 and the Final Project: the Canvas assignments and their rubrics, how to grade a week, and the open items. |
 | `aar/2026-10-16-weeks-06-09.md` | Weeks 06–09: facts that drift between syllabus, Canvas, slides, and the textbook; Claude's standing rules with no file of their own; `AUTHORING.md` vs. the new Fridays. Follows up the 09-21 report. |
 | `aar/2026-10-21-live-coding-labs.md` | The live-coding lab sprint (2026-10-19 to 10-22, #99–#135, with notes to 10-23 on #137's doc links and the reruns of weeks 5 and 10): conventions written for the key's run rather than the classroom, so every lab was rewritten after week 10 was taught; a restyle that broke `run_key.py`'s retries; no CI for `labs/`; agents waiting on refusing sites; a container restart. Lists the cells still to run from the instructor's laptop. Follows up the 10-16 report. |
 | `plans/2026-09-24-friday-code-review.md` | A Friday code-review standup for students' textbook pull requests: preparation, the session, and what follows. Scheduled: the first standup is week 7's Friday, October 2, and that Friday's slides are built from its review table. |

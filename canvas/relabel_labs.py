@@ -79,7 +79,7 @@ def main():
         wk = int(re.match(r"Week (\d+) Lab", a["name"]).group(1))
         want[("Lab", wk)] = a
     for a in spec.revision_assignments():
-        wk = int(re.match(r"Week (\d+) Revision", a["name"]).group(1))
+        wk = int(re.match(r"Week (\d+) (?:Revision|Portfolio)", a["name"]).group(1))
         want[("Revision", wk)] = a
 
     groups = {g["name"]: g for g in get_all(f"/courses/{CID}/assignment_groups")}
@@ -95,7 +95,9 @@ def main():
         kind = kind_of_gid.get(a["assignment_group_id"])
         if kind is None:
             continue
-        m = re.match(rf"^Week (\d+) {kind}\b", a["name"])
+        # Weeks 11-14 of Textbook Revisions are titled "Week N Portfolio — ..."
+        label = "(?:Revision|Portfolio)" if kind == "Revision" else kind
+        m = re.match(rf"^Week (\d+) {label}\b", a["name"])
         if not m:
             print(f"  !! unparsed name, left alone: {a['name']}")
             skipped += 1
