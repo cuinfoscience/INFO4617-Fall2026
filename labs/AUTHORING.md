@@ -92,7 +92,7 @@ A step's text links the two or three pages a student would open while typing its
 
   A library's front page or a whole manual isn't specific: point it at the section it means.
 - **Inline:** on the name, where the text first mentions it ("ask for [`prop=info`](…)"), never as a list of links. Step text and microsprints get them. Discuss boxes, "What did we learn?" and Friday's block keep only the links they need to make sense.
-- **Current:** link the stable or current docs of a library, not of a version the course doesn't install.
+- **Stable:** link a library's stable docs, not its development version or one the course doesn't install. On Read the Docs that's `/en/stable/`, where the site has one (requests and mwclient do; BeautifulSoup's mirror there doesn't).
 - **Checked:** every link opens, and every `#anchor` exists on its page, the textbook's included. Renaming a heading in the chapter breaks its anchor without a warning, so when a chapter's headings change, check the labs that link them.
 
 ### Pagination
