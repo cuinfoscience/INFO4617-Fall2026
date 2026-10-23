@@ -1,6 +1,6 @@
 # After-Action Report: INFO4617-Fall2026, the live-coding lab sprint (2026-10-19 → 2026-10-22)
 
-*Drafted 2026-10-21 and merged as #128; revised 2026-10-22 to cover #128–#135 and the measurements of all eleven restyled labs. The revision added §5.7, §5.8 and P1-3, and rewrote §7 and §9.*
+*Drafted 2026-10-21 and merged as #128; revised 2026-10-22 to cover #128–#135 and the measurements of all eleven restyled labs. The revision added §5.7, §5.8 and P1-3, and rewrote §7 and §9. Updated 2026-10-23 with the links added to every lab (#137), the reruns of weeks 5 and 10, and P2-2, which is applied.*
 
 ## 1. Summary
 
@@ -153,7 +153,7 @@ All were caught before merging, but only by reading every note against the outpu
 - week 5: Step 7's microsprint (2 cells);
 - week 10: 16 cells.
 
-The week 1 agent noticed it, and #133 added `JSONDecodeError` and "Expecting value" to the retry test. Rerun with the fix, week 1's key ran every cell (#135). Weeks 5 and 10 haven't been rerun. Their notes record refusals that lasted 12 and 30 minutes, so most of their flags are probably real. But a rerun with #133, like week 1's, may get some of those cells through.
+The week 1 agent noticed it, and #133 added `JSONDecodeError` and "Expecting value" to the retry test. Rerun with the fix, week 1's key ran every cell (#135). Weeks 5 and 10 were rerun with it on 2026-10-23, and neither improved (§9): every refused cell got its two retries, and Wikimedia refused the cloud machine through them. So their flags were real refusals, as their notes said. The fix gives a rate-limited cell its retries back. It can't get a machine past a site that refuses it for hours. That is P1-1's case for the laptop.
 
 **Root cause: missing.** Nothing tied a change to the labs' code to the tools that run it. The runner's test was written for the old style's errors. No one reread it when the style changed, and no check exercises it.
 
@@ -203,12 +203,13 @@ The week 1 agent noticed it, and #133 added `JSONDecodeError` and "Expecting val
     - `raise_for_status`, `try`, `timeout=`, or a retry adapter in code;
     - a function defined inside another;
     - a function called fewer than twice;
-    - a code cell over 12 lines.
+    - a code cell over 12 lines;
+    - a link in a key's markdown that no longer opens, or whose `#anchor` is gone. Renaming a chapter heading breaks its anchor without a warning, and #137 added 163 links, many to the textbook's subsections. Sites refuse CI machines too, so this one only warns.
 
   The workflow installs `nbformat` and runs it. AGENTS.md's merge rule then names it: "CI for `labs/` is `check-labs`."
 - **Why it works:** "merge once CI passes" becomes a real gate for labs. The checks that protect students (no keys, no real email, a student copy that matches its key) stop depending on someone remembering them. The style warnings show drift on the PR instead of in class.
 - **Owner:** maintainer review. The tool isn't written yet, so this is a design, untested.
-- **Status:** Proposed. Not built as of 2026-10-22.
+- **Status:** Proposed. Not built as of 2026-10-23; the link check was added to the design on that date.
 
 ### [P1-1] Bound every live run, and commit before it
 - **Target:** `labs/AUTHORING.md`, "The key", and `AGENTS.md`, "The week, and its lab".
@@ -241,7 +242,7 @@ The week 1 agent noticed it, and #133 added `JSONDecodeError` and "Expecting val
   > `tools/run_key.py` decides whether to retry a cell from the error the cell raises, and that depends on this style: with no `raise_for_status()`, a 429 usually surfaces at `.json()`, as a `JSONDecodeError`. A change to these rules that changes how a refused request fails needs the same change to its `TRANSIENT` pattern, in the same pull request.
 - **Why it works:** the runner gives a rate-limited cell its retries again. The sentence puts the dependency where the next person to change the style will read it, not only in the tool.
 - **Owner:** auto-applyable.
-- **Status:** Tool change applied 2026-10-21 (#133), and AUTHORING.md text applied 2026-10-22. Weeks 5 and 10 not yet rerun.
+- **Status:** Tool change applied 2026-10-21 (#133), and AUTHORING.md text applied 2026-10-22. Weeks 5 and 10 rerun with it on 2026-10-23: the retries ran, but no flagged cell cleared (§9).
 
 ### [P2-1] Two lines for merging
 - **Target:** `AGENTS.md`, "Merging" and "Branches and pull requests".
@@ -252,6 +253,17 @@ The week 1 agent noticed it, and #133 added `JSONDecodeError` and "Expecting val
 - **Why it works:** it prevents the stranded fix (#111 and #117) and the refused merges.
 - **Owner:** auto-applyable.
 - **Status:** Applied 2026-10-21 (#128).
+
+### [P2-2] Compare a rerun's flags with the key's before committing it
+- **Target:** `labs/AUTHORING.md`, "The key".
+- **Root cause:** missing (§9, the reruns of weeks 5 and 10).
+- **Medium:** definition text. P0-2's checker could print the comparison, but whether to keep the rerun is a judgment call.
+- **Evidence:** two reruns on 2026-10-23 that would each have replaced filled cells with flags. Week 5 would have gone from 2 flagged cells to 4. Both were caught only because the flagged cells were compared by hand.
+- **Change:** in "The key", after the paragraph on refusing sites, add:
+  > A rerun isn't better because it's newer. Before committing one, compare its `not-run-live` cells with the committed key's (`git show HEAD:<key>`). If it flags a cell the key had filled, keep the key, and run the flagged cells from a laptop.
+- **Why it works:** `run_key.py` writes over the key in place, so a rerun on a bad day looks like an ordinary update in `git status`. The comparison takes a minute, and it's the only way to see what a rerun lost.
+- **Owner:** auto-applyable.
+- **Status:** Applied 2026-10-23 (#138).
 
 ## 7. Strengths to sustain
 
@@ -286,8 +298,9 @@ The week 1 agent noticed it, and #133 added `JSONDecodeError` and "Expecting val
 | P1-2 | P1 | `labs/AUTHORING.md` | definition text | Write the key note last, from `run_key.py`'s report | auto-applyable | Applied 2026-10-21 (#128; the placeholder check waits on P0-2) | Key notes that misdescribe the run: 3 → 0 |
 | P1-3 | P1 | `labs/tools/run_key.py`, `labs/AUTHORING.md` | tool config, definition text | Retry a 429 that surfaces as a `JSONDecodeError`; tie the retry test to the style rules | auto-applyable | Tool applied 2026-10-21 (#133); text applied 2026-10-22 | Cells flagged after a single try on a rate limit: 20 → 0 |
 | P2-1 | P2 | `AGENTS.md` | definition text | Full 40-character SHA; check a PR is open before pushing to its branch | auto-applyable | Applied 2026-10-21 (#128) | Refused merges: 2 → 0; fixes merged twice: 1 → 0 |
+| P2-2 | P2 | `labs/AUTHORING.md`, "The key" | definition text | Before committing a rerun, compare its `not-run-live` cells with the key's | auto-applyable | Applied 2026-10-23 (#138) | Reruns committed that flag cells the key had filled: 0 (two caught by hand on 2026-10-23) |
 
-## 9. Resolution (updated 2026-10-22)
+## 9. Resolution (updated 2026-10-23)
 
 **Applied.**
 - **#128 (2026-10-21)** applied the definition-text revisions:
@@ -311,13 +324,40 @@ The week 1 agent noticed it, and #133 added `JSONDecodeError` and "Expecting val
 **On `main`.** Eleven restyled labs, each with a key, a students' copy and a key PDF. Week 11's first-wave key (#114) was closed unmerged.
 
 **Still to run from the instructor's laptop** (49 cells, each tagged `not-run-live` in its key):
-- week 5: both cells of Step 7's microsprint (Step 10 ran, but its outputs show 429s, so it's worth rerunning too);
+- week 5: both cells of Step 7's microsprint (Step 10 ran, but its outputs show 429s, so it's worth rerunning too), the same 2 as before the rerun below;
 - week 7: 21 cells (the Wayback Machine refused the cloud machine);
 - week 8: 1 cell, Step 10's Playwright run (no browser to match the library's version);
-- week 10: 16 cells (Wikimedia 429s);
+- week 10: 16 cells (Wikimedia 429s), the same 16 as before the rerun below;
 - week 11: 9 FRED cells, once FRED is back.
 
-Weeks 5 and 10 were flagged before #133 (§5.7). A rerun from the cloud machine with the fix costs about 30 minutes each, and may clear some of their cells before class, as it did for week 1. Week 1 has nothing left to run (#135).
+Week 1 has nothing left to run (#135).
+
+**The reruns of weeks 5 and 10 (2026-10-23).** Both keys were rerun from the cloud machine with #133's fix (`--retries 2 --wait 60`), one after the other, so that the two didn't share Wikimedia's rate limit. Every refused cell was retried twice, a minute apart, before it was flagged. Wikimedia still refused most requests, and it refused different ones from 2026-10-21's run:
+
+| Week | Flagged on 2026-10-21 | Flagged in the rerun | Ran in the rerun, not before | Ran before, not in the rerun |
+|---|---|---|---|---|
+| 5 | 2 | 4 | none | Step 6's request and Step 7's time series |
+| 10 | 16 | 15 | Step 3's two pages and one batch; one Step 8 request | Steps 5 and 6 (pageviews); another Step 8 request |
+
+In both, a refused request also stopped the cells that use its result, with a `NameError`. Week 10's Step 9 also met a 429 through mwclient, which raises an `HTTPError` of its own. Committing either rerun would have traded outputs the key had for outputs it didn't. Week 5 would have lost two cells' worth outright. So neither was committed, and the keys on `main` are the 2026-10-21 runs. Splicing week 10's four new cells into the older key would give it outputs from two days, so that was left alone too. The comparison that caught this was done by hand, which is P2-2.
+
+**After the report (2026-10-23).**
+- **#137 linked specific documentation in every lab** (208 links → 371). The links went into step and microsprint text only, on the name where the text first mentions it, with about two or three a step. They point at:
+  - library reference pages;
+  - the service's own API docs;
+  - the chapter's subsections;
+  - MDN and RFC 9309.
+
+  Generic links were pointed at the exact page or anchor they meant, and Read the Docs links moved to `/en/stable/`, wherever a site has one. `labs/AUTHORING.md` gained a "Links" rule: specific, inline, stable, checked.
+
+  Every link and anchor was checked. 22 needed a second look, and all were fine:
+  - unquoted ids on selenium.dev and docs.joinmastodon.org;
+  - GitHub, which this machine's proxy blocks, so the headings were checked in the raw READMEs instead;
+  - a Swagger route;
+  - a link with parentheses.
+
+  One existing link was wrong, not just generic. `wikimedia.org/api/rest_v1/` had come to redirect to an unrelated math API's sandbox, and it now points at the pageviews reference. The anchors are the new risk, and P0-2 now checks them.
+- **#136 and #137 merged on request.** #137's slide CI hung for 15 minutes on one job's TeX Live install, on a deck the PR didn't touch. The run was cancelled, the job was rerun, and it passed. That's one runner fault, not a pattern, so it gets no rule.
 
 **Open choices for the instructor**, which the report leaves alone:
 - week 3's 25-line microsprint answer: keep it, or cut the key's list to the five or more events the prompt asks for (§5.8);
