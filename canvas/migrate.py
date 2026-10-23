@@ -421,40 +421,55 @@ def build_assignments(api, args, group_ids):
     return made
 
 
+def _rubric_criteria(r):
+    """A spec rubric's criteria in Canvas's form-encoded shape."""
+    criteria = {}
+    for i, (title, long_description, levels) in enumerate(r["criteria"]):
+        criteria[str(i)] = {
+            "description": title, "long_description": long_description,
+            "points": max(pts for _, pts, _ in levels),
+            "ratings": {str(j): {"description": f"{name} ({pts})",
+                                 "long_description": text, "points": pts}
+                        for j, (name, pts, text) in enumerate(levels)},
+        }
+    return criteria
+
+
 def build_rubrics(api, args, assignment_ids):
-    """Attach each rubric in spec.RUBRICS to its assignment, for grading.
-    An assignment that already has a rubric is left alone, since changing a
-    rubric after grading has started would change students' scores."""
+    """Attach each rubric in spec.RUBRICS to the assignments it lists, for
+    grading: created once, on the first assignment that needs it, then
+    associated with the rest. An assignment that already has a rubric is left
+    alone, since changing a rubric after grading has started would change
+    students' scores."""
     print("\n--- rubrics ---")
+    association = {"association_type": "Assignment", "use_for_grading": True,
+                   "purpose": "grading", "hide_score_total": False}
     for r in spec.RUBRICS:
-        aid = assignment_ids.get(r["assignment"])
-        if aid is None or str(aid).startswith("<dry-run"):
-            print(f"    skip  {r['title']}: '{r['assignment']}' isn't in Canvas yet")
-            continue
-        live = api.get(f"/courses/{spec.NEW_COURSE_ID}/assignments/{aid}")
-        if live.get("rubric"):
-            total = sum(c["points"] for c in live["rubric"])
-            print(f"    keep  {r['title']}: the assignment already has a rubric "
-                  f"({len(live['rubric'])} criteria, {total:g} points)")
-            continue
-        criteria = {}
-        for i, (title, part, descriptions) in enumerate(r["criteria"]):
-            top = spec.RUBRIC_LEVELS[0][1]
-            criteria[str(i)] = {
-                "description": title, "long_description": part, "points": top,
-                "ratings": {str(j): {"description": f"{name} ({pts})",
-                                     "long_description": text, "points": pts}
-                            for j, ((name, pts), text)
-                            in enumerate(zip(spec.RUBRIC_LEVELS, descriptions))},
-            }
-        api.write("POST", f"/courses/{spec.NEW_COURSE_ID}/rubrics", {
-            "rubric": {"title": r["title"], "free_form_criterion_comments": False,
-                       "criteria": criteria},
-            "rubric_association": {"association_id": aid,
-                                   "association_type": "Assignment",
-                                   "use_for_grading": True, "purpose": "grading",
-                                   "hide_score_total": False},
-        }, label=f"rubric '{r['title']}' on {r['assignment']}")
+        rubric_id = None
+        for name in r["assignments"]:
+            aid = assignment_ids.get(name)
+            if aid is None or str(aid).startswith("<dry-run"):
+                print(f"    skip  {r['title']}: '{name}' isn't in Canvas yet")
+                continue
+            live = api.get(f"/courses/{spec.NEW_COURSE_ID}/assignments/{aid}")
+            if live.get("rubric"):
+                total = sum(c["points"] for c in live["rubric"])
+                print(f"    keep  {name}: already has a rubric "
+                      f"({len(live['rubric'])} criteria, {total:g} points)")
+                continue
+            if rubric_id is None:
+                res = api.write("POST", f"/courses/{spec.NEW_COURSE_ID}/rubrics", {
+                    "rubric": {"title": r["title"],
+                               "free_form_criterion_comments": False,
+                               "criteria": _rubric_criteria(r)},
+                    "rubric_association": {"association_id": aid, **association},
+                }, label=f"rubric '{r['title']}' on {name}")
+                rubric_id = (res.get("rubric") or {}).get("id") or res.get("id")
+            else:
+                api.write("POST", f"/courses/{spec.NEW_COURSE_ID}/rubric_associations", {
+                    "rubric_association": {"rubric_id": rubric_id,
+                                           "association_id": aid, **association},
+                }, label=f"attach '{r['title']}' to {name}")
 
 
 def _upload_file(api, course_id, local: Path, folder="course files/slides"):
@@ -656,10 +671,9 @@ def cmd_plan(args):
 
     print(f"\nRubrics ({len(spec.RUBRICS)})")
     for r in spec.RUBRICS:
-        total = len(r["criteria"]) * spec.RUBRIC_LEVELS[0][1]
-        print(f"  {r['title']} on {r['assignment']}: {len(r['criteria'])} criteria, "
-              f"{total} points, levels "
-              + " / ".join(f"{n} {p}" for n, p in spec.RUBRIC_LEVELS))
+        total = sum(max(p for _, p, _ in c[2]) for c in r["criteria"])
+        print(f"  {r['title']}: {len(r['criteria'])} criteria, {total} points, on "
+              + ", ".join(r["assignments"]))
 
     print(f"\nModules ({len(spec.modules())})")
     for m in spec.modules():

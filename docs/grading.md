@@ -33,15 +33,27 @@ before scoring.
 
 Students submit the chapter's companion notebook as HTML. Only its
 Recommended Exercises section is graded; the Additional Exercises are
-optional. Five elements, each 2 (met), 1 (partly met), or 0 (not met):
+optional.
 
-| Element | 2 points | 1 point | 0 points |
+From week 11 the labs are graded with the "Notebook Lab (10 points)" rubric
+attached in Canvas (`LAB_RUBRIC` in `canvas/course_spec.py`): five criteria,
+each Met 2, Partly met 1, or Not met 0.
+
+| Criterion | Met (2) | Partly met (1) | Not met (0) |
 |---|---|---|---|
-| Valid HTML | Any HTML file, in any layout: a fresh notebook, a hand-built page, or two files | | Unreadable |
-| Every required step attempted | Every code step has the student's own code | At least half the steps | Fewer than half |
-| Run, with output | Any student code at all; unrun cells and tracebacks cost nothing | | |
-| Interpretation in their own words | About the requested length and about their own results, wherever it is written: the prompt cell, comments, a new Markdown cell, or a `print()` | Present but thin (one to three sentences) or generic | Missing, or the placeholder left as is |
-| Each step does its task | Each attempted step does what it asks, with the student's own choices | Some steps substitute something else | Unrelated to the steps |
+| Valid notebook HTML | An HTML file of the notebook, in any layout | | Missing or unreadable |
+| Every required step attempted | Every code step has the student's own code; steps announced as optional count as done | At least half the steps | Fewer than half, or the blank scaffold |
+| Run, with output visible | The student's code cells are run and their output shows; errors left visible still count | Some cells with the student's code are unrun | None was run |
+| Interpretation in their own words | About the requested length and about their own results, in the prompt cell, comments, a Markdown cell, or a `print()` | Thin (one to three sentences) or generic | Missing, or the placeholder left as is |
+| Each step does its task | Each attempted step does what it asks, with the student's own choices | Some steps substitute something else, such as the chapter's own example | Unrelated to the steps |
+
+A blank scaffold and late work are applied by overriding the rubric's total, as
+below.
+
+Weeks 4–9 were graded before the rubric existed, with the same five elements
+but one difference: unrun code got full credit and a reminder comment. Weeks 2
+and 3 kept the instructor's own scores. None of weeks 2–9 has a rubric in
+Canvas.
 
 - **Optional steps**, done or not: week 5 Step 2; week 7 Steps 4 and 5. The
   instructor told students to skip them.
@@ -71,8 +83,7 @@ One-sentence comments, added where they apply:
 
 Hold a submission for the instructor, ungraded, when it looks produced by an
 AI agent (notes addressed to a reader, results quoted that no output shows) or
-when a setup failure stopped the work. Weeks 2 and 3 kept the instructor's own
-scores.
+when a setup failure stopped the work.
 
 ## Commendations
 
@@ -82,7 +93,7 @@ output are in the submission.
 
 ## Final Project: proposal (30 points)
 
-Graded with the rubric attached to the Canvas assignment, which is
-`PROPOSAL_RUBRIC` in `canvas/course_spec.py`: one criterion per bullet of the
+Graded with the "Final Project Proposal (30 points)" rubric attached to the
+Canvas assignment, which is `PROPOSAL_RUBRIC` in `canvas/course_spec.py`: one criterion per bullet of the
 assignment page, each Full 3, Mostly 2, Attempted 1, or Missing 0, with no
 half points. Parts 1–3 are worth 9, 9, and 12.

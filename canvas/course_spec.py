@@ -462,68 +462,109 @@ DESCRIPTIONS = {"Final Project — Proposal": PROPOSAL_DESCRIPTION}
 # text-entry box for it.
 SUBMISSION_TYPES = {"Final Project — Proposal": ["online_upload", "online_url"]}
 
-# The proposal's grading rubric, attached in Canvas on 2026-10-23 and used for
-# grading: one criterion per bullet of PROPOSAL_DESCRIPTION, each rated
-# 3 / 2 / 1 / 0 with no half points, so parts 1-3 are worth 9 / 9 / 12.
-# Each criterion is (title, part, [Full, Mostly, Attempted, Missing]).
-RUBRIC_LEVELS = (("Full", 3), ("Mostly", 2), ("Attempted", 1), ("Missing", 0))
+# Rubrics attached in Canvas and used for grading. Each criterion is
+# (title, long description, [(level, points, description), ...]); a criterion
+# is worth its top level. migrate.py's `rubrics` step attaches a rubric to each
+# assignment listed that has none, and leaves the others alone. Grading rules a
+# rubric can't hold (a blank scaffold, late work) are in docs/grading.md.
+
+# The proposal: one criterion per bullet of PROPOSAL_DESCRIPTION, each 3 / 2 /
+# 1 / 0 with no half points, so parts 1-3 are worth 9 / 9 / 12. Attached
+# 2026-10-23.
+_PROPOSAL_LEVELS = (("Full", 3), ("Mostly", 2), ("Attempted", 1), ("Missing", 0))
+
+
+def _levels(levels, descriptions):
+    return [(name, pts, text) for (name, pts), text in zip(levels, descriptions)]
+
+
 PROPOSAL_RUBRIC = {
-    "assignment": "Final Project — Proposal",
+    "assignments": ["Final Project — Proposal"],
     "title": "Final Project Proposal (30 points)",
     "criteria": [
-        ("1a. A question, not a topic", "Part 1: research question", [
+        ("1a. A question, not a topic", "Part 1: research question", _levels(_PROPOSAL_LEVELS, [
             "A specific, empirical question web data can answer, whose answer could take many values.",
             "A question, but one element is weak: too broad, yes/no only, or loosely tied to web data.",
             "Vague or mostly a topic phrased as a question.",
-            "Only a topic, or no question."]),
-        ("1b. Who would care", "Part 1: research question", [
+            "Only a topic, or no question."])),
+        ("1b. Who would care", "Part 1: research question", _levels(_PROPOSAL_LEVELS, [
             "Names a specific audience (newsroom, agency, community group, researchers, users) and why the answer matters to them.",
             "Names an audience but not why it matters, or the audience is general.",
             "Gestures at an audience vaguely.",
-            "No audience."]),
-        ("1c. Expected finding", "Part 1: research question", [
+            "No audience."])),
+        ("1c. Expected finding", "Part 1: research question", _levels(_PROPOSAL_LEVELS, [
             "States what they expect to find and what would surprise them.",
             "Gives an expectation or a surprise, not both.",
             "Expectation is vague or not tied to the question.",
-            "Neither."]),
-        ("2a. Source and how to get it", "Part 2: data and method", [
+            "Neither."])),
+        ("2a. Source and how to get it", "Part 2: data and method", _levels(_PROPOSAL_LEVELS, [
             "Exact source with links (URL, API endpoint, or document set) and the collection method (API, static or dynamic scraping, PDFs, web archives), naming the chapter(s).",
             "Source and method given, but missing links or the chapter.",
             "Source or method vague, or only one of the two given.",
-            "Neither given."]),
-        ("2b. Scope", "Part 2: data and method", [
+            "Neither given."])),
+        ("2b. Scope", "Part 2: data and method", _levels(_PROPOSAL_LEVELS, [
             "Which records, what time window, and roughly how many; how often and for how long if collecting over time.",
             "One of these elements is missing.",
             "Scope only gestured at.",
-            "No scope."]),
-        ("2c. Analysis plan", "Part 2: data and method", [
+            "No scope."])),
+        ("2c. Analysis plan", "Part 2: data and method", _levels(_PROPOSAL_LEVELS, [
             "The counts, comparisons, or charts that would answer the question.",
             "Analysis named but loosely tied to the question.",
             "Generic (e.g. 'analyze the data').",
-            "No analysis plan."]),
-        ("3a. Terms of service and robots.txt", "Part 3: ethics and feasibility", [
+            "No analysis plan."])),
+        ("3a. Terms of service and robots.txt", "Part 3: ethics and feasibility", _levels(_PROPOSAL_LEVELS, [
             "Names the governing rules (terms of service, robots.txt), whether collection is allowed or falls under a research/fair-use exception, and how they will stay within limits (identifying User-Agent, pauses, rate limits).",
             "Covers the rules or the limits well, the other thinly.",
             "Mentions rules or politeness only in passing.",
-            "Not discussed."]),
-        ("3b. Personal information", "Part 3: ethics and feasibility", [
+            "Not discussed."])),
+        ("3b. Personal information", "Part 3: ethics and feasibility", _levels(_PROPOSAL_LEVELS, [
             "Says whether the data includes names, usernames, photos, or other personal details and how they will handle them (leave out, aggregate, anonymize), or states there are none.",
             "Identifies personal data but the handling plan is thin.",
             "Raises the issue without a plan.",
-            "Not addressed."]),
-        ("3c. One record, retrieved", "Part 3: ethics and feasibility", [
+            "Not addressed."])),
+        ("3c. One record, retrieved", "Part 3: ethics and feasibility", _levels(_PROPOSAL_LEVELS, [
             "A request actually run (code or URL), what came back (status code and the record, or a screenshot), and the fields they will use.",
             "Request and result shown, but no fields named.",
             "Request without a result, or a result without the request.",
-            "No retrieved record."]),
-        ("3d. Biggest risk and fallback", "Part 3: ethics and feasibility", [
+            "No retrieved record."])),
+        ("3d. Biggest risk and fallback", "Part 3: ethics and feasibility", _levels(_PROPOSAL_LEVELS, [
             "Names the biggest risk to finishing and a concrete fallback (smaller scope, second source, different time window).",
             "Risk and fallback given, but the fallback is vague.",
             "Risk without a fallback, or a fallback without a risk.",
-            "Neither."]),
+            "Neither."])),
     ],
 }
-RUBRICS = [PROPOSAL_RUBRIC]
+
+# Notebook Labs: five elements, each 2 / 1 / 0, for 10 points. Attached
+# 2026-10-23 to weeks 11-14; weeks 2-9 were graded before it existed and have
+# no rubric in Canvas. Week 10's lab isn't in Canvas yet.
+LAB_RUBRIC = {
+    "assignments": [f"Week {wk} Lab — {week_info(wk)[3]}" for wk in (11, 12, 13, 14)],
+    "title": "Notebook Lab (10 points)",
+    "criteria": [
+        ("1. Valid notebook HTML", "Your completed companion notebook, exported to HTML.", [
+            ("Met", 2, "An HTML file of your notebook, in any layout."),
+            ("Not met", 0, "Missing or unreadable.")]),
+        ("2. Every required step attempted", "Recommended Exercises, Steps 1 to N-1.", [
+            ("Met", 2, "Every Recommended Exercises code step has your own code. Steps announced as optional count as done."),
+            ("Partly met", 1, "At least half of the required steps."),
+            ("Not met", 0, "Fewer than half, or the blank scaffold.")]),
+        ("3. Run, with output visible", "Run every cell before exporting.", [
+            ("Met", 2, "Your code cells are run and their output shows. Errors left visible still count."),
+            ("Partly met", 1, "Some cells with your code are unrun."),
+            ("Not met", 0, "No cell with your code was run.")]),
+        ("4. Interpretation in your own words", "The final step of the Recommended Exercises.", [
+            ("Met", 2, "The final step answered at about the requested length and about your own results, in the prompt cell, comments, a Markdown cell, or a print()."),
+            ("Partly met", 1, "Present but thin (one to three sentences), or generic."),
+            ("Not met", 0, "Missing, or the placeholder left as is.")]),
+        ("5. Each step does its task", "Judged on the steps you attempted.", [
+            ("Met", 2, "Each attempted step does what it asks, using your own choices where the step says to choose."),
+            ("Partly met", 1, "Some steps substitute something else, such as the chapter's own example."),
+            ("Not met", 0, "The code is unrelated to the steps.")]),
+    ],
+}
+
+RUBRICS = [PROPOSAL_RUBRIC, LAB_RUBRIC]
 
 
 def final_assignments():
