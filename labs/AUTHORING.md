@@ -81,6 +81,20 @@ What the rewritten labs (weeks 2–4, 6, 8 and 9, on 2026-10-21) have in common,
 - Zero to two `given` cells, for a whole pagination loop or a long list of URLs.
 - Three to six Discuss boxes that ask what would break here: a 429, a 403, a missing key, a page that changed.
 
+### Links
+
+A step's text links the two or three pages a student would open while typing its code. A microsprint links the one page its change needs, if any. Links already there count, so a step that has three has its share.
+- **Specific:** the exact page or anchor for what the step turns on:
+  - the function's reference page (`pandas.DataFrame.resample`);
+  - the endpoint's or parameter's page in the service's own docs (MediaWiki's `API:Revisions`);
+  - the chapter's subsection (`ch-10-wikipedia.html#getting-revisions`);
+  - an MDN or RFC page for an HTTP idea (status 429, `Retry-After`, RFC 9309 for `robots.txt`).
+
+  A library's front page or a whole manual isn't specific: point it at the section it means.
+- **Inline:** on the name, where the text first mentions it ("ask for [`prop=info`](…)"), never as a list of links. Step text and microsprints get them. Discuss boxes, "What did we learn?" and Friday's block keep only the links they need to make sense.
+- **Current:** link the stable or current docs of a library, not of a version the course doesn't install.
+- **Checked:** every link opens, and every `#anchor` exists on its page, the textbook's included. Renaming a heading in the chapter breaks its anchor without a warning, so when a chapter's headings change, check the labs that link them.
+
 ### Pagination
 
 When a chapter's API pages its results (a `continue` token, a cursor, a page number), teach it in three moves:
