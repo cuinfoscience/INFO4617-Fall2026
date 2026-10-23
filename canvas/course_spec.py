@@ -96,6 +96,9 @@ WEEKS = [
 # Week 1 is orientation (Friday only), week 15 is Fall Break, and week 16 runs a
 # project workshop and final presentations instead.
 TEACHING_WEEKS = [w for w in range(2, 15)]
+# Week 10 (the proposal week) has no lab or revision assignment in Canvas, by
+# the instructor's decision on 2026-10-23.
+NO_ASSIGNMENT_WEEKS = {10}
 
 # --------------------------------------------------------------------------
 # Assignment groups (weights come straight from the syllabus: 30/15/15/40)
@@ -266,7 +269,7 @@ def lab_assignments():
     out = []
     for wk in TEACHING_WEEKS:
         _, _, ch, topic, slug, chfile, _ = week_info(wk)
-        if lab_day(wk) is None:
+        if lab_day(wk) is None or wk in NO_ASSIGNMENT_WEEKS:
             continue
         out.append({
             "group": "Notebook Labs",
@@ -359,17 +362,104 @@ def _pull_request_description(ch, topic, chfile):
 REVISION_TITLES = {2: "First issue on Chapter 2"}
 
 
+# Weeks 11-14 of Textbook Revisions are project-portfolio checkpoints instead
+# of textbook pull requests: each student builds their Final Project repo on
+# their own GitHub account, one stage a week, ending close to the final
+# submission. Each is 2 points (two 1-point criteria, PORTFOLIO_RUBRICS).
+# Week 14's is due after Fall Break.
+PORTFOLIO_POINTS = 2
+_PORTFOLIO_INTRO = (
+    "<p>From week 11, the Friday revision block builds your Final Project as a "
+    "public portfolio: one GitHub repository on your own account that you "
+    "update each week. <strong>Submit the URL of your repository.</strong> It "
+    "is graded on what has been pushed by the deadline.</p>")
+_PORTFOLIO_DATA_NOTE = (
+    "<p>Commit your code and a small sample of your data. Leave the full raw "
+    "data out where its terms of service, its size, or personal information "
+    "make sharing it unwise, and say in the README what you left out and "
+    "why.</p>")
+PORTFOLIO_WEEKS = {
+    11: {"title": "Set up your project repo", "due": None, "html": (
+        "<h4>This week: set up the repository</h4><ul>"
+        "<li>A <strong>public repository</strong> on your own GitHub account, "
+        "with a descriptive name.</li>"
+        "<li><code>README.md</code> with a title, your name, a one-paragraph "
+        "summary of your research question, and placeholder sections: Data, "
+        "Methods, Findings, How to reproduce.</li>"
+        "<li><code>proposal.md</code>: your proposal, revised if you have had "
+        "feedback.</li>"
+        "<li>Placeholders for the rest: a notebook (<code>.ipynb</code>), a "
+        "<code>report.md</code> (or a note that your report will be a PDF), "
+        "and a <code>data/</code> folder.</li></ul>")},
+    12: {"title": "Collect and clean your data", "due": None, "html": (
+        "<h4>This week: collect and clean</h4><ul>"
+        "<li>Collection code that runs, makes polite requests (a User-Agent "
+        "that identifies you, pauses between requests), and saves the raw "
+        "data.</li>"
+        "<li>A cleaning step, with its code and output, that produces a tidy "
+        "dataset.</li>"
+        "<li>A small sample of the cleaned data in the repo, with a data "
+        "dictionary: each field and what it means.</li>"
+        "<li>The README's Data section: the source, when you collected it, how "
+        "many records, and what you kept out of the repo and why.</li></ul>")
+        + _PORTFOLIO_DATA_NOTE},
+    13: {"title": "Analyze your data", "due": None, "html": (
+        "<h4>This week: analyze</h4><ul>"
+        "<li>An analysis notebook that runs top to bottom, with its output "
+        "visible.</li>"
+        "<li>Results that answer at least part of your question: the counts or "
+        "comparisons your proposal named.</li>"
+        "<li>At least one figure saved in the repo, with a title, labeled axes, "
+        "and a one-sentence caption.</li>"
+        "<li>The README's Methods section and your preliminary Findings.</li>"
+        "</ul>")},
+    14: {"title": "Draft your write-up", "due": date(2026, 11, 29), "html": (
+        "<h4>This week: a draft close to final</h4><ul>"
+        "<li>A full draft of your written document (<code>report.md</code> or "
+        "<code>report.pdf</code>), with every section present, using your own "
+        "results and figures and citing your sources.</li>"
+        "<li>All four required files present and current: "
+        "<code>README.md</code>, <code>proposal.md</code>, your notebook, and "
+        "your report.</li>"
+        "<li>A README complete enough that someone else could reproduce the "
+        "project: setup, how to run it, and where the data came from.</li>"
+        "</ul><p>Due after Fall Break, on Sunday, November 29. Your final "
+        "presentation is in the following week, and the final repository and "
+        "write-up are due Monday, December 7.</p>")},
+}
+
+
+def revision_name(wk):
+    """The Canvas title of a week's Textbook Revisions assignment."""
+    _, _, ch, _, _, _, _ = week_info(wk)
+    if wk in PORTFOLIO_WEEKS:
+        return f"Week {wk} Portfolio — {PORTFOLIO_WEEKS[wk]['title']}"
+    return f"Week {wk} Revision — {REVISION_TITLES.get(wk, f'Chapter {ch}')}"
+
+
 def revision_assignments():
-    """One textbook-revision workshop per teaching week, met Friday and due that Sunday."""
+    """One textbook-revision workshop per teaching week, met Friday and due
+    that Sunday; weeks 11-14 are portfolio checkpoints (PORTFOLIO_WEEKS)."""
     out = []
     for wk in TEACHING_WEEKS:
         _, _, ch, topic, _, chfile, _ = week_info(wk)
-        if revision_day(wk) is None:
+        if revision_day(wk) is None or wk in NO_ASSIGNMENT_WEEKS:
+            continue
+        if wk in PORTFOLIO_WEEKS:
+            pw = PORTFOLIO_WEEKS[wk]
+            out.append({
+                "group": "Textbook Revisions",
+                "name": revision_name(wk),
+                "points_possible": PORTFOLIO_POINTS,
+                "due_at": due_at(pw["due"] or sunday_of(wk)),
+                "submission_types": ["online_url"],
+                "description": _PORTFOLIO_INTRO + pw["html"],
+            })
             continue
         describe = _comment_week_description if wk in COMMENT_WEEKS else _pull_request_description
         out.append({
             "group": "Textbook Revisions",
-            "name": f"Week {wk} Revision — {REVISION_TITLES.get(wk, f'Chapter {ch}')}",
+            "name": revision_name(wk),
             "points_possible": REVISION_POINTS,
             "due_at": due_at(sunday_of(wk)),
             # URL only: the deliverable is the issue, comment, or pull request itself
@@ -457,7 +547,23 @@ PROPOSAL_DESCRIPTION = """\
 <p>A presentation of about five minutes plus questions in the final week, November 30&ndash;December 4 (10%), and a write-up of about 2,000&ndash;3,000 words, due Monday, December 7 (25%).</p>
 """
 
-DESCRIPTIONS = {"Final Project — Proposal": PROPOSAL_DESCRIPTION}
+WRITEUP_DESCRIPTION = (
+    "<p>Your project repository (code, data or collection scripts, and a README "
+    "someone else could follow) plus the written analysis. Due during finals "
+    "week; there is no final exam.</p>"
+    "<h4>What the repository must contain</h4><ul>"
+    "<li><code>README.md</code>: what the project is, how to set it up and run "
+    "it, and where the data came from.</li>"
+    "<li><code>proposal.md</code>: your proposal.</li>"
+    "<li>At least one Jupyter notebook (<code>.ipynb</code>) that runs top to "
+    "bottom with its output visible.</li>"
+    "<li>Your written document, <code>report.md</code> or "
+    "<code>report.pdf</code>, of about 2,000&ndash;3,000 words.</li></ul>"
+    "<p>Submit the URL of your repository. It is graded with the rubric below on "
+    "what has been pushed by the deadline.</p>")
+
+DESCRIPTIONS = {"Final Project — Proposal": PROPOSAL_DESCRIPTION,
+                "Final Project — Repository & Write-up": WRITEUP_DESCRIPTION}
 # The proposal takes a PDF or a link to the project's README; Canvas has no
 # text-entry box for it.
 SUBMISSION_TYPES = {"Final Project — Proposal": ["online_upload", "online_url"]}
@@ -564,7 +670,118 @@ LAB_RUBRIC = {
     ],
 }
 
-RUBRICS = [PROPOSAL_RUBRIC, LAB_RUBRIC]
+# Portfolio checkpoints (weeks 11-14): two criteria a week, 1 point each,
+# met or not. Attached 2026-10-23.
+def _met(text):
+    return [("Met", 1, text), ("Not met", 0, "Missing, or only a placeholder.")]
+
+
+_PORTFOLIO_CRITERIA = {
+    11: [("1. Repository and README", "Set up the repository.", _met(
+            "A public repository on your own GitHub account, its URL submitted, "
+            "with a README.md giving a title, your name, a one-paragraph summary "
+            "of your question, and placeholder sections (Data, Methods, Findings, "
+            "How to reproduce).")),
+         ("2. Proposal and placeholders", "Set up the repository.", _met(
+            "proposal.md with your proposal, plus a notebook (.ipynb), a report "
+            "placeholder (report.md, or a note that it will be a PDF), and a data/ "
+            "folder."))],
+    12: [("1. Collection and cleaning code", "Collect and clean.", _met(
+            "Collection code that runs, makes polite requests (an identifying "
+            "User-Agent, pauses), and saves the raw data; a cleaning step, with "
+            "code and output, that produces a tidy dataset.")),
+         ("2. Data documented", "Collect and clean.", _met(
+            "A small sample of the cleaned data with a data dictionary, and the "
+            "README's Data section: source, when collected, how many records, and "
+            "what was kept out of the repo and why."))],
+    13: [("1. Analysis notebook", "Analyze.", _met(
+            "An analysis notebook that runs top to bottom with output visible, "
+            "with results that answer at least part of your question.")),
+         ("2. Figure and README", "Analyze.", _met(
+            "At least one figure saved in the repo with a title, labeled axes, "
+            "and a one-sentence caption, and the README's Methods section and "
+            "preliminary Findings."))],
+    14: [("1. Full draft report", "Draft your write-up.", _met(
+            "A full draft of report.md or report.pdf with every section present, "
+            "using your own results and figures and citing your sources.")),
+         ("2. Complete, reproducible repository", "Draft your write-up.", _met(
+            "README.md, proposal.md, your notebook, and your report all present "
+            "and current, with a README that lets someone else reproduce the "
+            "project: setup, how to run it, and where the data came from."))],
+}
+PORTFOLIO_RUBRICS = [
+    {"assignments": [revision_name(wk)],
+     "title": f"Week {wk} Portfolio ({PORTFOLIO_POINTS} points)",
+     "criteria": crit}
+    for wk, crit in _PORTFOLIO_CRITERIA.items()
+]
+
+
+# The final presentation (60 points) and repository and write-up (150 points):
+# each criterion is Full / Mostly / Attempted / Missing at about 100 / 67 / 33 /
+# 0 percent of its points, in whole points. Attached 2026-10-23.
+def _scaled(points, full):
+    return [("Full", points, full),
+            ("Mostly", round(points * 2 / 3), "Mostly there: one part is thin or missing."),
+            ("Attempted", round(points / 3), "Present, but thin or largely incomplete."),
+            ("Missing", 0, "Not addressed.")]
+
+
+PRESENTATION_RUBRIC = {
+    "assignments": ["Final Project — Presentation"],
+    "title": "Final Project Presentation (60 points)",
+    "criteria": [
+        ("1. Question and who cares", "About five minutes plus questions.", _scaled(10,
+            "A clear research question and why it matters to a named audience.")),
+        ("2. Data and method", "About five minutes plus questions.", _scaled(10,
+            "The source, how it was collected and cleaned, its scope, and the "
+            "ethics checks, in brief.")),
+        ("3. Findings that carry an argument", "About five minutes plus questions.", _scaled(15,
+            "One or two readable visualizations, each making a point that answers "
+            "the question.")),
+        ("4. Surprises and limitations", "About five minutes plus questions.", _scaled(10,
+            "What surprised you and what the data can't tell you.")),
+        ("5. Delivery", "About five minutes plus questions.", _scaled(10,
+            "About five minutes, a clear structure, and slides or a notebook "
+            "legible from the room.")),
+        ("6. Questions", "About five minutes plus questions.", _scaled(5,
+            "Answers questions about the data and method directly.")),
+    ],
+}
+
+WRITEUP_RUBRIC = {
+    "assignments": ["Final Project — Repository & Write-up"],
+    "title": "Final Project Repository & Write-up (150 points)",
+    "criteria": [
+        ("1. Required files", "The repository.", _scaled(10,
+            "README.md, proposal.md, at least one .ipynb notebook, and the report "
+            "(report.md or report.pdf), all present and current.")),
+        ("2. Reproducibility", "The repository.", _scaled(20,
+            "The README covers setup, how to run, and where the data came from; "
+            "the notebook runs top to bottom with output visible.")),
+        ("3. Collection and cleaning", "The repository.", _scaled(20,
+            "Polite collection code, a documented cleaning step, a data sample and "
+            "dictionary, and what was withheld from the repo and why.")),
+        ("4. Analysis", "The repository.", _scaled(25,
+            "Counts or comparisons that answer the question, and figures with "
+            "titles, labeled axes, and captions.")),
+        ("5. The written report", "The write-up.", _scaled(30,
+            "About 2,000-3,000 words covering the question and its audience, data "
+            "and methods, findings, limitations, and a conclusion.")),
+        ("6. Claims match the evidence", "The write-up.", _scaled(20,
+            "Every claim is backed by your own results, and the limits of the data "
+            "are stated.")),
+        ("7. Ethics", "The repository and write-up.", _scaled(15,
+            "Terms of service and robots.txt respected, personal information left "
+            "out, aggregated, or anonymized, and an identifying User-Agent.")),
+        ("8. Portfolio practice", "The repository.", _scaled(10,
+            "A clear layout, a commit history showing work through weeks 11-14, "
+            "and AI use disclosed.")),
+    ],
+}
+
+RUBRICS = ([PROPOSAL_RUBRIC, LAB_RUBRIC] + PORTFOLIO_RUBRICS
+           + [PRESENTATION_RUBRIC, WRITEUP_RUBRIC])
 
 
 def final_assignments():
@@ -630,9 +847,12 @@ def modules():
                 "new_tab": True,
             })
             items.extend(lab_items(wk))
-            items.append({"type": "Assignment", "title": f"Week {wk} Lab — {topic}"})
-            items.append({"type": "SubHeader", "title": "Friday · Textbook Revisions"})
-            items.append({"type": "Assignment", "title": f"Week {wk} Revision — Chapter {ch}"})
+            if wk not in NO_ASSIGNMENT_WEEKS:
+                items.append({"type": "Assignment", "title": f"Week {wk} Lab — {topic}"})
+            items.append({"type": "SubHeader", "title": "Friday · Textbook Revisions"
+                          if wk not in PORTFOLIO_WEEKS else "Friday · Project portfolio"})
+            if wk not in NO_ASSIGNMENT_WEEKS:
+                items.append({"type": "Assignment", "title": revision_name(wk)})
         elif wk == 1:
             items.append({"type": "SubHeader", "title": "Friday · Welcome, setup & how this class works"})
             items.append({

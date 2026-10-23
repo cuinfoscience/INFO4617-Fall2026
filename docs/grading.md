@@ -1,7 +1,8 @@
 # Grading rules, as applied in Canvas
 
-The rules the instructor set while grading weeks 2–9 on 2026-10-23, so later
-weeks are graded the same way. `course-facts.md` lists where each rule is also
+The rules the instructor set while grading weeks 2–9 on 2026-10-23, and the
+rubrics set up then for the rest of the semester, so later weeks are graded
+the same way. `course-facts.md` lists where each rule is also
 written; when a rule changes, change it here and there in the same pull
 request. Canvas comments are one sentence each; where a submission needs more
 than one, they're joined into one comment.
@@ -10,7 +11,10 @@ Nothing is posted to Canvas until the instructor has seen the scores and the
 comments and approved them. After posting, read every grade and comment back
 from Canvas to confirm it was saved.
 
-## Textbook Revisions (1 point a week)
+## Textbook Revisions, weeks 2–9 (1 point a week)
+
+Week 10 has no revision (or lab) assignment. Weeks 11–14 are portfolio
+checkpoints, below.
 
 Credit or no credit. A submission earns 1 when its URL points at an issue, a
 pull request, or a comment that the student made on GitHub. Any class
@@ -85,6 +89,25 @@ Hold a submission for the instructor, ungraded, when it looks produced by an
 AI agent (notes addressed to a reader, results quoted that no output shows) or
 when a setup failure stopped the work.
 
+## Portfolio checkpoints, weeks 11–14 (2 points a week)
+
+In weeks 11–14 the Textbook Revisions assignments build each student's Final
+Project as a public portfolio: one repository on the student's own GitHub
+account, updated weekly, graded on what is pushed by the deadline. Each has a
+rubric in Canvas (`PORTFOLIO_RUBRICS` in `canvas/course_spec.py`) with two
+criteria, each Met 1 or Not met 0:
+
+| Week, due | Criterion 1 | Criterion 2 |
+|---|---|---|
+| 11, Sun Nov 1: set up the repo | A public repo with a README (title, name, summary of the question, placeholder sections) | `proposal.md`, plus placeholders for the notebook, the report, and `data/` |
+| 12, Sun Nov 8: collect and clean | Collection code that runs politely and saves raw data, and a cleaning step that produces a tidy dataset | A data sample with a dictionary, and the README's Data section (source, date, count, what was kept out and why) |
+| 13, Sun Nov 15: analyze | A notebook that runs top to bottom with output, with results that answer part of the question | A figure with title, axes, and caption, and the README's Methods and preliminary Findings |
+| 14, Sun Nov 29: draft the write-up | A full draft of `report.md` or `report.pdf` using their own results, citing sources | All four required files current, and a README that lets someone reproduce the project |
+
+Repos hold code and a small sample of the data; the full raw data stays out
+where terms of service, size, or personal information make sharing unwise, and
+the README says so. There is no starter template.
+
 ## Commendations
 
 Particularly strong work gets a short comment naming what was strong, at most
@@ -97,3 +120,32 @@ Graded with the "Final Project Proposal (30 points)" rubric attached to the
 Canvas assignment, which is `PROPOSAL_RUBRIC` in `canvas/course_spec.py`: one criterion per bullet of the
 assignment page, each Full 3, Mostly 2, Attempted 1, or Missing 0, with no
 half points. Parts 1–3 are worth 9, 9, and 12.
+
+## Final Project: presentation (60 points) and repository and write-up (150 points)
+
+Both are graded with rubrics attached in Canvas (`PRESENTATION_RUBRIC` and
+`WRITEUP_RUBRIC`). Each criterion is Full, Mostly, Attempted, or Missing, at
+about 100, 67, 33, and 0 percent of its points, in whole points.
+
+| Presentation (about five minutes plus questions) | Points |
+|---|---|
+| Question and who cares | 10 |
+| Data and method | 10 |
+| Findings that carry an argument (one or two visualizations) | 15 |
+| Surprises and limitations | 10 |
+| Delivery | 10 |
+| Questions | 5 |
+
+| Repository and write-up | Points |
+|---|---|
+| Required files: `README.md`, `proposal.md`, at least one `.ipynb`, and `report.md` or `report.pdf` | 10 |
+| Reproducibility | 20 |
+| Collection and cleaning | 20 |
+| Analysis | 25 |
+| The written report (about 2,000–3,000 words) | 30 |
+| Claims match the evidence | 20 |
+| Ethics | 15 |
+| Portfolio practice (layout, commits through weeks 11–14, AI disclosure) | 10 |
+
+The proposal, presentation, and write-up are 30, 60, and 150 points, the
+ratio 5 : 10 : 25 that the syllabus's weights need.
