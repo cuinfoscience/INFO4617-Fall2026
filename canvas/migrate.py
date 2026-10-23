@@ -22,9 +22,15 @@ Usage
     python migrate.py labs                  # dry run: link each week's lab and key in its Wednesday lab
     python migrate.py labs --apply          # actually add those links
 
+`build` creates assignments that are missing and reports how the existing ones
+differ from the spec, but leaves them alone: the instructor edits Canvas
+directly and grades are posted against it. Pass --overwrite to make existing
+assignments match the spec again.
+
 Useful flags
 ------------
-    --only groups,assignments,modules,syllabus,settings   limit what `build` touches
+    --only groups,assignments,rubrics,modules,syllabus,settings   limit what `build` touches
+    --overwrite            build: also update assignments that already exist
     --include-slides       upload slides/week-NN/week-NN.pdf and link it in each module
     --host HOST            default canvas.colorado.edu
 """
@@ -354,6 +360,23 @@ def apply_group_rules(api, args, group_ids):
                   label=f"apply rule to {g['name']}: {g['rules'].strip()}")
 
 
+def _assignment_drift(a, live):
+    """Fields where Canvas no longer matches the spec. Descriptions aren't
+    compared: Canvas rewrites the HTML it stores, so they never match."""
+    from datetime import datetime
+    out = []
+    if float(a["points_possible"]) != float(live.get("points_possible") or 0):
+        out.append(f"points {live.get('points_possible')} vs spec {a['points_possible']}")
+    if a.get("due_at") and live.get("due_at"):
+        mine = datetime.fromisoformat(a["due_at"])
+        theirs = datetime.fromisoformat(live["due_at"].replace("Z", "+00:00"))
+        if abs((mine - theirs).total_seconds()) >= 60:
+            out.append(f"due {live['due_at']} vs spec {a['due_at']}")
+    if sorted(a["submission_types"]) != sorted(live.get("submission_types") or []):
+        out.append(f"submission types {live.get('submission_types')} vs spec {a['submission_types']}")
+    return out
+
+
 def build_assignments(api, args, group_ids):
     print("\n--- assignments ---")
     existing = _index_by_name(api.get_all(f"/courses/{spec.NEW_COURSE_ID}/assignments"))
@@ -378,18 +401,60 @@ def build_assignments(api, args, group_ids):
         if gid and not str(gid).startswith("<dry-run"):
             payload["assignment"]["assignment_group_id"] = gid
         if a["name"] in existing:
-            aid = existing[a["name"]]["id"]
-            api.write("PUT", f"/courses/{spec.NEW_COURSE_ID}/assignments/{aid}",
-                      payload, label=f"update · due {a['due_at'][:10]}")
+            live = existing[a["name"]]
+            aid = live["id"]
             made[a["name"]] = aid
+            drift = _assignment_drift(a, live)
+            if not args.overwrite:
+                if drift:
+                    print(f"    keep  {a['name']}: Canvas differs ({'; '.join(drift)})")
+                continue
+            api.write("PUT", f"/courses/{spec.NEW_COURSE_ID}/assignments/{aid}",
+                      payload, label=f"update · due {(a.get('due_at') or '')[:10]}")
         else:
             res = api.write("POST", f"/courses/{spec.NEW_COURSE_ID}/assignments",
-                            payload, label=f"{a['name']} · due {a['due_at'][:10]}")
+                            payload, label=f"{a['name']} · due {(a.get('due_at') or '')[:10]}")
             made[a["name"]] = res.get("id")
     print(f"  {len(spec.lab_assignments())} labs, "
           f"{len(spec.revision_assignments())} revisions, "
           f"{len(spec.final_assignments())} final-project items")
     return made
+
+
+def build_rubrics(api, args, assignment_ids):
+    """Attach each rubric in spec.RUBRICS to its assignment, for grading.
+    An assignment that already has a rubric is left alone, since changing a
+    rubric after grading has started would change students' scores."""
+    print("\n--- rubrics ---")
+    for r in spec.RUBRICS:
+        aid = assignment_ids.get(r["assignment"])
+        if aid is None or str(aid).startswith("<dry-run"):
+            print(f"    skip  {r['title']}: '{r['assignment']}' isn't in Canvas yet")
+            continue
+        live = api.get(f"/courses/{spec.NEW_COURSE_ID}/assignments/{aid}")
+        if live.get("rubric"):
+            total = sum(c["points"] for c in live["rubric"])
+            print(f"    keep  {r['title']}: the assignment already has a rubric "
+                  f"({len(live['rubric'])} criteria, {total:g} points)")
+            continue
+        criteria = {}
+        for i, (title, part, descriptions) in enumerate(r["criteria"]):
+            top = spec.RUBRIC_LEVELS[0][1]
+            criteria[str(i)] = {
+                "description": title, "long_description": part, "points": top,
+                "ratings": {str(j): {"description": f"{name} ({pts})",
+                                     "long_description": text, "points": pts}
+                            for j, ((name, pts), text)
+                            in enumerate(zip(spec.RUBRIC_LEVELS, descriptions))},
+            }
+        api.write("POST", f"/courses/{spec.NEW_COURSE_ID}/rubrics", {
+            "rubric": {"title": r["title"], "free_form_criterion_comments": False,
+                       "criteria": criteria},
+            "rubric_association": {"association_id": aid,
+                                   "association_type": "Assignment",
+                                   "use_for_grading": True, "purpose": "grading",
+                                   "hide_score_total": False},
+        }, label=f"rubric '{r['title']}' on {r['assignment']}")
 
 
 def _upload_file(api, course_id, local: Path, folder="course files/slides"):
@@ -502,6 +567,11 @@ def cmd_build(api: Canvas, args):
         else:
             assignment_ids = {k: v["id"] for k, v in _index_by_name(
                 api.get_all(f"/courses/{spec.NEW_COURSE_ID}/assignments")).items()}
+    if want("rubrics"):
+        if not assignment_ids:
+            assignment_ids = {k: v["id"] for k, v in _index_by_name(
+                api.get_all(f"/courses/{spec.NEW_COURSE_ID}/assignments")).items()}
+        build_rubrics(api, args, assignment_ids)
     if want("modules"):
         build_modules(api, args, assignment_ids)
     if want("syllabus"):
@@ -584,6 +654,13 @@ def cmd_plan(args):
             when = a["due_at"][:16].replace("T", " ")
             print(f"    {when}  {a['points_possible']:>3}pt  {a['name']}")
 
+    print(f"\nRubrics ({len(spec.RUBRICS)})")
+    for r in spec.RUBRICS:
+        total = len(r["criteria"]) * spec.RUBRIC_LEVELS[0][1]
+        print(f"  {r['title']} on {r['assignment']}: {len(r['criteria'])} criteria, "
+              f"{total} points, levels "
+              + " / ".join(f"{n} {p}" for n, p in spec.RUBRIC_LEVELS))
+
     print(f"\nModules ({len(spec.modules())})")
     for m in spec.modules():
         print(f"  {m['name']}")
@@ -615,7 +692,9 @@ def main():
     p.add_argument("--token-file", default=None,
                    help="file containing the API token (else $CANVAS_TOKEN)")
     p.add_argument("--only", default=None,
-                   help="build steps to run: settings,groups,assignments,modules,syllabus")
+                   help="build steps to run: settings,groups,assignments,rubrics,modules,syllabus")
+    p.add_argument("--overwrite", action="store_true",
+                   help="build: also update assignments that already exist in Canvas")
     p.add_argument("--include-slides", action="store_true",
                    help="upload each week's deck PDF and link it in the module")
     p.add_argument("--everything", action="store_true",

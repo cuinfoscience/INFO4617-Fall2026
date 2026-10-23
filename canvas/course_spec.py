@@ -141,17 +141,23 @@ GROUPS = [
 ]
 
 LAB_POINTS = 10
-REVISION_POINTS = 10
-# Points match the syllabus's split of the Final Project's 40%: 5 / 10 / 25.
+# Textbook Revisions are credit/no credit: 1 point for any issue, pull request,
+# or comment that lands on GitHub in a class repository (the book, this repo,
+# or the Missing Manual). Set in Canvas on 2026-10-23; docs/course-facts.md.
+REVISION_POINTS = 1
+# Canvas weights the assignments inside a group by their points, so these must
+# stay in the ratio 5 : 10 : 25 to give the syllabus's split of the Final
+# Project's 40%. The proposal's rubric (PROPOSAL_RUBRIC) is 10 criteria x 3
+# points = 30, so the other two parts are 60 and 150. Change all three together.
 FINAL_PARTS = [
-    ("Final Project — Proposal", 5, date(2026, 10, 25),
+    ("Final Project — Proposal", 30, date(2026, 10, 25),
      "A research question; your data source(s) and method; and an ethics and "
      "feasibility check, with one record you retrieved. The assignment page is "
      "PROPOSAL_DESCRIPTION, below."),
-    ("Final Project — Presentation", 10, LAST_DAY,
+    ("Final Project — Presentation", 60, LAST_DAY,
      "Present your project to the class during the final week. Bring your data, "
      "one or two visualizations that carry an argument, and what surprised you."),
-    ("Final Project — Repository & Write-up", 25, FINAL_DUE,
+    ("Final Project — Repository & Write-up", 150, FINAL_DUE,
      "Your project repository (code, data or collection scripts, and a README "
      "someone else could follow) plus the written analysis. Due during finals "
      "week; there is no final exam."),
@@ -348,6 +354,11 @@ def _pull_request_description(ch, topic, chfile):
     )
 
 
+# Canvas titles that differ from the "Chapter N" pattern. build matches
+# assignments by name, so a title here must match Canvas exactly.
+REVISION_TITLES = {2: "First issue on Chapter 2"}
+
+
 def revision_assignments():
     """One textbook-revision workshop per teaching week, met Friday and due that Sunday."""
     out = []
@@ -358,7 +369,7 @@ def revision_assignments():
         describe = _comment_week_description if wk in COMMENT_WEEKS else _pull_request_description
         out.append({
             "group": "Textbook Revisions",
-            "name": f"Week {wk} Revision — Chapter {ch}",
+            "name": f"Week {wk} Revision — {REVISION_TITLES.get(wk, f'Chapter {ch}')}",
             "points_possible": REVISION_POINTS,
             "due_at": due_at(sunday_of(wk)),
             # URL only: the deliverable is the issue, comment, or pull request itself
@@ -401,114 +412,118 @@ def attendance_assignments():
     return out
 
 
-# The proposal's full assignment page. Its three parts are the ones the week 9
-# ("What we expect") and week 10 slides name; keep them in step
-# (docs/course-facts.md, "What the proposal contains").
+# The proposal's full assignment page, as the instructor last edited it in
+# Canvas (copied 2026-10-23, with the part headings at 9 / 9 / 12 points to match
+# PROPOSAL_RUBRIC). Its three parts are the ones the week 9 ("What we expect")
+# and week 10 slides name; keep them in step (docs/course-facts.md, "What the
+# proposal contains").
 PROPOSAL_DESCRIPTION = """\
-<p><strong>5 points (5% of your grade). Due Sunday, October 25, at 11:59 p.m.</strong></p>
-
-<p>The Final Project is a portfolio piece that matches a web data source with a
-research design. The proposal is your plan for it. It is short, it can change,
-and it has two jobs: to show that your question is worth answering, and to show
-that you can get the data to answer it.</p>
-
-<h3>What to submit</h3>
-<p>One document of about 1&ndash;2 pages (500&ndash;1,000 words, not counting the
-record you paste in part 3). Submit it as a PDF or Markdown file, as text in the
-box, or as a link to a README in your project's GitHub repository. Put your name
-at the top, and your partner's if you are working in a pair.</p>
-
-<h3>1. A research question (1.5 points)</h3>
+<p>The Final Project is a portfolio piece that matches a web data source with a research design. The proposal is is short, it can change, and it has two jobs: to show that your question is worth answering and to show that you can get the data to answer it.</p>
+<h4>What to submit</h4>
+<p>One document of about 1&ndash;2 pages (500&ndash;1,000 words, not counting the record you paste in part 3). Submit it as a PDF file or as a link to a README in your project&rsquo;s GitHub repository to Canvas by Sunday, October 25. Put your name at the top, and your partner&rsquo;s if you are working in a pair.</p>
+<h4>1. A research question (9 points)</h4>
 <ul>
-  <li><strong>A question, not a topic.</strong> Not &ldquo;Wikipedia&rdquo;, but
-  &ldquo;Which events send readers to articles about wildfires?&rdquo; Not
-  &ldquo;housing&rdquo;, but &ldquo;How often did Boulder's city council discuss
-  housing from 2020 to 2025, and what set off the busiest months?&rdquo;</li>
-  <li><strong>Who would care about the answer</strong>: a newsroom, a city
-  agency, a community group, researchers, or the platform's own users.</li>
-  <li><strong>What you expect to find</strong>, in a sentence or two, and what
-  would surprise you.</li>
+<li><strong>A question, not a topic.</strong> Not &ldquo;Wikipedia&rdquo;, but &ldquo;Which events send readers to articles about wildfires?&rdquo; Not &ldquo;housing&rdquo;, but &ldquo;How often did Boulder&rsquo;s city council discuss housing from 2020 to 2025?&rdquo; Questions should be <em>empirical</em> (uses web data) and <em>falsifiable</em> (the answer could have many values).</li>
+<li><strong>Who would care about the answer</strong>: a newsroom, a city agency, a local politician, a lawyer, a community group, researchers, or the platform&rsquo;s own users.</li>
+<li><strong>What you expect to find</strong>, in a sentence or two, and what would surprise you.</li>
 </ul>
-
-<h3>2. Data source(s) and method (1.5 points)</h3>
+<h4>2. Data source(s) and method (9 points)</h4>
 <ul>
-  <li><strong>The exact source</strong>, with links: the API endpoint, the site's
-  pages, or the set of documents.</li>
-  <li><strong>How you will get it</strong>: an API, scraping static or dynamic
-  pages, PDFs, web archives, or a mix. Name the chapter(s) whose methods you will
-  use.</li>
-  <li><strong>The scope</strong>: which records, what time window, and roughly
-  how many. If you will collect over time, say how often and for how long, and
-  start the collector now; a series needs weeks of data.</li>
-  <li><strong>The analysis</strong>: the counts, comparisons, or charts that would
-  answer your question.</li>
+<li><strong>The exact source</strong>, with links: the URL for a website, the API endpoint, or a set of documents.</li>
+<li><strong>How you will get it</strong>: an API, scraping static or dynamic pages, PDFs, web archives, or a mix. Name the chapter(s) whose methods you will use.</li>
+<li><strong>The scope</strong>: which records, what time window, and roughly how many. If you will collect over time, say how often and for how long.</li>
+<li><strong>The analysis</strong>: the counts, comparisons, or charts that would answer your question.</li>
 </ul>
-
-<h3>3. Ethics and feasibility (2 points)</h3>
+<h4>3. Ethics and feasibility (12 points)</h4>
 <ul>
-  <li><strong>Terms of service and <code>robots.txt</code></strong>: quote the
-  lines that apply to what you will collect, say whether your collection is
-  allowed, and say how you will stay within the limits (a User-Agent that
-  identifies you, pauses between requests, rate limits).</li>
-  <li><strong>Personal information</strong>: does the data include people's
-  names, usernames, photos, or other personal details? Say how you will handle
-  them: leave them out, aggregate, or anonymize.</li>
-  <li><strong>One record, retrieved</strong>: paste a request you actually ran
-  (the code or the URL) and what came back (the status code and the record, or a
-  screenshot of it). Name the fields you will use.</li>
-  <li><strong>The biggest risk</strong> to finishing, and your fallback: a smaller
-  scope, a second source, or a different time window.</li>
+<li><strong>Terms of service and <code>robots.txt</code></strong>: what rules govern the data you will collect? Is your collection is allowed? Does it fall under a fair use or research exception? How you will stay within the limits (a User-Agent that identifies you, pauses between requests, rate limits)?</li>
+<li><strong>Personal information</strong>: does the data include people&rsquo;s names, usernames, photos, or other personal details? Say how you will handle them: leave them out, aggregate, or anonymize.</li>
+<li><strong>One record, retrieved</strong>: paste a request you actually ran (the code or the URL) and what came back (the status code and the record, or a screenshot of it). Name the fields you will use.</li>
+<li><strong>The biggest risk</strong> to finishing, and your fallback: a smaller scope, a second source, or a different time window.</li>
 </ul>
-
-<h3>How it is graded</h3>
-<table>
-  <thead><tr><th>Part</th><th>Points</th><th>Full credit</th></tr></thead>
-  <tbody>
-    <tr><td>Research question</td><td>1.5</td><td>A specific question, who would
-    care, and what you expect</td></tr>
-    <tr><td>Data source(s) and method</td><td>1.5</td><td>An exact source, a
-    method, a scope, and the analysis</td></tr>
-    <tr><td>Ethics and feasibility</td><td>2</td><td>The terms and
-    <code>robots.txt</code> checked, personal information addressed, one real
-    record, and a fallback</td></tr>
-  </tbody>
-</table>
-<p>A part that is there but thin earns partial credit. The proposal is graded on
-a careful, good-faith plan, not on getting everything right: you may change your
-question or source later, and you will get feedback to help.</p>
-
-<h3>Working in a pair</h3>
-<p>Pairs need the instructor's permission before the proposal is due; email to
-ask. Submit one proposal with both names, and say who will do what.</p>
-
-<h3>AI tools</h3>
-<p>As the syllabus says, you may use AI tools if you say where and how they
-shaped your proposal, and you must be able to explain your question, your
-source, and your method yourself.</p>
-
-<h3>Late work</h3>
-<p>Late work loses 1% of its maximum value for each day after the deadline,
-unless you have an approved excuse.</p>
-
-<h3>Where to start</h3>
+<h4>Working in a pair</h4>
+<p>Pairs need the instructor&rsquo;s permission before the proposal is due; email to ask. Submit proposals and final submissions individually, not as a team, and say who will do what.</p>
+<h4>AI tools</h4>
+<p>As the syllabus says, you may use AI tools if you say where and how they shaped your proposal, and you must be able to explain your question, your source, and your method yourself.</p>
+<h4>Late work</h4>
+<p>Late work loses 1% of its maximum value for each day after the deadline, unless you have an approved excuse.</p>
+<h4>Where to start</h4>
 <ul>
-  <li><strong>Ideas</strong>: week 9's Friday slides grow every chapter's
-  <em>Additional Exercises</em> into project questions.</li>
-  <li><strong>The record in part 3</strong>: if your source has an API, week 10's
-  Wednesday notebook is your feasibility check: one request, one record, the
-  status code, and the fields.</li>
-  <li><strong>A fuller design</strong>: Chapter 15's <em>Research proposal</em>
-  exercise lists the six parts a full research proposal has.</li>
-  <li><strong>Office hours</strong>, for a question or source you are unsure of.</li>
+<li>Every chapter&rsquo;s <em>Additional Exercises</em> are potential project questions.</li>
+<li>Chapter 15&rsquo;s <em>Research proposal</em> exercise lists the six parts a full research proposal has.</li>
+<li><strong>Office hours</strong>, for a question or source you are unsure of.</li>
 </ul>
-
-<h3>What comes next</h3>
-<p>A presentation of about five minutes plus questions in the final week,
-November 30&ndash;December 4 (10%), and the project repository with a write-up of
-about 2,000&ndash;3,000 words, due Monday, December 7 (25%).</p>
+<h4>What comes next</h4>
+<p>A presentation of about five minutes plus questions in the final week, November 30&ndash;December 4 (10%), and a write-up of about 2,000&ndash;3,000 words, due Monday, December 7 (25%).</p>
 """
 
 DESCRIPTIONS = {"Final Project — Proposal": PROPOSAL_DESCRIPTION}
+# The proposal takes a PDF or a link to the project's README; Canvas has no
+# text-entry box for it.
+SUBMISSION_TYPES = {"Final Project — Proposal": ["online_upload", "online_url"]}
+
+# The proposal's grading rubric, attached in Canvas on 2026-10-23 and used for
+# grading: one criterion per bullet of PROPOSAL_DESCRIPTION, each rated
+# 3 / 2 / 1 / 0 with no half points, so parts 1-3 are worth 9 / 9 / 12.
+# Each criterion is (title, part, [Full, Mostly, Attempted, Missing]).
+RUBRIC_LEVELS = (("Full", 3), ("Mostly", 2), ("Attempted", 1), ("Missing", 0))
+PROPOSAL_RUBRIC = {
+    "assignment": "Final Project — Proposal",
+    "title": "Final Project Proposal (30 points)",
+    "criteria": [
+        ("1a. A question, not a topic", "Part 1: research question", [
+            "A specific, empirical question web data can answer, whose answer could take many values.",
+            "A question, but one element is weak: too broad, yes/no only, or loosely tied to web data.",
+            "Vague or mostly a topic phrased as a question.",
+            "Only a topic, or no question."]),
+        ("1b. Who would care", "Part 1: research question", [
+            "Names a specific audience (newsroom, agency, community group, researchers, users) and why the answer matters to them.",
+            "Names an audience but not why it matters, or the audience is general.",
+            "Gestures at an audience vaguely.",
+            "No audience."]),
+        ("1c. Expected finding", "Part 1: research question", [
+            "States what they expect to find and what would surprise them.",
+            "Gives an expectation or a surprise, not both.",
+            "Expectation is vague or not tied to the question.",
+            "Neither."]),
+        ("2a. Source and how to get it", "Part 2: data and method", [
+            "Exact source with links (URL, API endpoint, or document set) and the collection method (API, static or dynamic scraping, PDFs, web archives), naming the chapter(s).",
+            "Source and method given, but missing links or the chapter.",
+            "Source or method vague, or only one of the two given.",
+            "Neither given."]),
+        ("2b. Scope", "Part 2: data and method", [
+            "Which records, what time window, and roughly how many; how often and for how long if collecting over time.",
+            "One of these elements is missing.",
+            "Scope only gestured at.",
+            "No scope."]),
+        ("2c. Analysis plan", "Part 2: data and method", [
+            "The counts, comparisons, or charts that would answer the question.",
+            "Analysis named but loosely tied to the question.",
+            "Generic (e.g. 'analyze the data').",
+            "No analysis plan."]),
+        ("3a. Terms of service and robots.txt", "Part 3: ethics and feasibility", [
+            "Names the governing rules (terms of service, robots.txt), whether collection is allowed or falls under a research/fair-use exception, and how they will stay within limits (identifying User-Agent, pauses, rate limits).",
+            "Covers the rules or the limits well, the other thinly.",
+            "Mentions rules or politeness only in passing.",
+            "Not discussed."]),
+        ("3b. Personal information", "Part 3: ethics and feasibility", [
+            "Says whether the data includes names, usernames, photos, or other personal details and how they will handle them (leave out, aggregate, anonymize), or states there are none.",
+            "Identifies personal data but the handling plan is thin.",
+            "Raises the issue without a plan.",
+            "Not addressed."]),
+        ("3c. One record, retrieved", "Part 3: ethics and feasibility", [
+            "A request actually run (code or URL), what came back (status code and the record, or a screenshot), and the fields they will use.",
+            "Request and result shown, but no fields named.",
+            "Request without a result, or a result without the request.",
+            "No retrieved record."]),
+        ("3d. Biggest risk and fallback", "Part 3: ethics and feasibility", [
+            "Names the biggest risk to finishing and a concrete fallback (smaller scope, second source, different time window).",
+            "Risk and fallback given, but the fallback is vague.",
+            "Risk without a fallback, or a fallback without a risk.",
+            "Neither."]),
+    ],
+}
+RUBRICS = [PROPOSAL_RUBRIC]
 
 
 def final_assignments():
@@ -519,7 +534,8 @@ def final_assignments():
             "name": name,
             "points_possible": points,
             "due_at": due_at(day),
-            "submission_types": ["online_upload", "online_text_entry", "online_url"],
+            "submission_types": SUBMISSION_TYPES.get(
+                name, ["online_upload", "online_text_entry", "online_url"]),
             "description": DESCRIPTIONS.get(name, f"<p>{blurb}</p>"),
         })
     return out
