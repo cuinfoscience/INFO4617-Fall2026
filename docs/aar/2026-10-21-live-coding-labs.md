@@ -1,6 +1,6 @@
 # After-Action Report: INFO4617-Fall2026, the live-coding lab sprint (2026-10-19 → 2026-10-22)
 
-*Drafted 2026-10-21 and merged as #128; revised 2026-10-22 to cover #128–#135 and the measurements of all eleven restyled labs. The revision added §5.7, §5.8 and P1-3, and rewrote §7 and §9. Updated 2026-10-23 with the links added to every lab (#137), the reruns of weeks 5 and 10, and P2-2.*
+*Drafted 2026-10-21 and merged as #128; revised 2026-10-22 to cover #128–#135 and the measurements of all eleven restyled labs. The revision added §5.7, §5.8 and P1-3, and rewrote §7 and §9. Updated 2026-10-23 with the links added to every lab (#137), the reruns of weeks 5 and 10, and P2-2, which is applied.*
 
 ## 1. Summary
 
@@ -263,7 +263,7 @@ The week 1 agent noticed it, and #133 added `JSONDecodeError` and "Expecting val
   > A rerun isn't better because it's newer. Before committing one, compare its `not-run-live` cells with the committed key's (`git show HEAD:<key>`). If it flags a cell the key had filled, keep the key, and run the flagged cells from a laptop.
 - **Why it works:** `run_key.py` writes over the key in place, so a rerun on a bad day looks like an ordinary update in `git status`. The comparison takes a minute, and it's the only way to see what a rerun lost.
 - **Owner:** auto-applyable.
-- **Status:** Proposed 2026-10-23.
+- **Status:** Applied 2026-10-23 (#138).
 
 ## 7. Strengths to sustain
 
@@ -298,7 +298,7 @@ The week 1 agent noticed it, and #133 added `JSONDecodeError` and "Expecting val
 | P1-2 | P1 | `labs/AUTHORING.md` | definition text | Write the key note last, from `run_key.py`'s report | auto-applyable | Applied 2026-10-21 (#128; the placeholder check waits on P0-2) | Key notes that misdescribe the run: 3 → 0 |
 | P1-3 | P1 | `labs/tools/run_key.py`, `labs/AUTHORING.md` | tool config, definition text | Retry a 429 that surfaces as a `JSONDecodeError`; tie the retry test to the style rules | auto-applyable | Tool applied 2026-10-21 (#133); text applied 2026-10-22 | Cells flagged after a single try on a rate limit: 20 → 0 |
 | P2-1 | P2 | `AGENTS.md` | definition text | Full 40-character SHA; check a PR is open before pushing to its branch | auto-applyable | Applied 2026-10-21 (#128) | Refused merges: 2 → 0; fixes merged twice: 1 → 0 |
-| P2-2 | P2 | `labs/AUTHORING.md`, "The key" | definition text | Before committing a rerun, compare its `not-run-live` cells with the key's | auto-applyable | Proposed 2026-10-23 | Reruns committed that flag cells the key had filled: 0 (two caught by hand on 2026-10-23) |
+| P2-2 | P2 | `labs/AUTHORING.md`, "The key" | definition text | Before committing a rerun, compare its `not-run-live` cells with the key's | auto-applyable | Applied 2026-10-23 (#138) | Reruns committed that flag cells the key had filled: 0 (two caught by hand on 2026-10-23) |
 
 ## 9. Resolution (updated 2026-10-23)
 

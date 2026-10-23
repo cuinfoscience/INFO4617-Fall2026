@@ -190,6 +190,8 @@ Commit the key before you run it: a live run can take an hour, and a restarted m
 
 A cell a site keeps refusing keeps its code, loses its outputs, and is tagged `not-run-live`; list those cells in the pull request so the instructor can run them before class. Give a refusing site about 30 minutes for the whole run, not for each cell: `run_key.py --retries 2 --wait 60` spends two minutes on a cell, so a site that refuses fifteen cells has had its half hour. Then accept the flags and move on. Sites rate-limit the course's cloud machine far more than a laptop on campus: on 2026-10-21 Wikimedia answered it with 429s for hours, the Wayback Machine refused it, and FRED was down for maintenance. The instructor's laptop is the better place to run flagged cells. Microsprints are filled in and run like any other cell, on the case the key's microsprint names.
 
+A rerun isn't better because it's newer. `run_key.py` writes over the key in place, so a rerun on a bad day looks like an ordinary update. Before committing one, compare its `not-run-live` cells with the committed key's (`git show HEAD:<key>`). If it flags a cell the key had filled, keep the key, and run the flagged cells from a laptop.
+
 ## How the pieces fit
 
 - **One source.** The key (`lab-NN-key.ipynb`) is the only file anyone edits. `tools/make_student_copy.py` makes the students' copy from each code cell's `lab` metadata, `tools/run_key.py` fills its outputs from the live sites, and `tools/make_key_pdf.py` makes its PDF. Change the key, then run all three.
