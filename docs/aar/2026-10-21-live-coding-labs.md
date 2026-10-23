@@ -1,24 +1,26 @@
-# After-Action Report: INFO4617-Fall2026, the live-coding lab sprint (2026-10-19 → 2026-10-21)
+# After-Action Report: INFO4617-Fall2026, the live-coding lab sprint (2026-10-19 → 2026-10-22)
+
+*Drafted 2026-10-21 and merged as #128; revised 2026-10-22 to cover #128–#135 and the measurements of all eleven restyled labs. The revision added §5.7, §5.8 and P1-3, and rewrote §7 and §9.*
 
 ## 1. Summary
 
-In three days the course replaced its Wednesday notebook lab with live coding, at students' request. It piloted the format with week 10, then wrote conventions for it (`labs/AUTHORING.md`, two tools, and a new weekly structure in the syllabus). Eleven agents then wrote a lab for every chapter from 1 to 11. After the instructor taught week 10's lab live, the code style was rewritten, and the labs with it. Twenty-eight pull requests opened in the window (#99–#126). Nothing was reverted, and the rules from the last AAR held (§2a).
+In four days the course replaced its Wednesday notebook lab with live coding, at students' request. It piloted the format with week 10, then wrote conventions for it (`labs/AUTHORING.md`, two tools, and a new weekly structure in the syllabus). Eleven agents then wrote a lab for every chapter from 1 to 11. After the instructor taught week 10's lab live, the code style was rewritten, and the labs with it. Thirty-seven pull requests opened in the window (#99–#135). Thirty-six merged; #114 was closed, replaced by #134. Nothing was reverted, and the rules from the last AAR held (§2a).
 
-The pattern that mattered most is that **the conventions were written for the key's run, not for the classroom.** The first lab conventions asked for code that survives a rate-limited cloud machine: a `get()` helper that honored `Retry-After`, `raise_for_status()` before every `.json()`, a retry rule on mwclient's session, and the chapter's helper functions copied "as they are". That code ran reliably from the cloud, but it was too long and too abstract to type in front of a class. Week 10's Step 3, a `continue` loop inside a function that called a helper, took more than 25 minutes and had to be refactored live. Every one of the eleven labs had been written to the old rules, so every one was rewritten the next day.
+The pattern that mattered most is that **the conventions were written for the key's run, not for the classroom.** The first lab conventions asked for code that survives a rate-limited cloud machine: a `get()` helper that honored `Retry-After`, `raise_for_status()` before every `.json()`, a retry rule on mwclient's session, and the chapter's helper functions copied "as they are". That code ran reliably from the cloud, but it was too long and too abstract to type in front of a class. Week 10's Step 3, a `continue` loop inside a function that called a helper, took more than 25 minutes and had to be refactored live. Every one of the eleven labs had been written to the old rules, so every one was rewritten the next day. The same lesson then came back from the other side: the new style changed how a refused request fails, and the tool that runs the keys no longer recognized it as a refusal (§5.7).
 
 The three highest-leverage revisions:
-1. **State the labs' goals and live-coding constraints at the top of `labs/AUTHORING.md`,** ahead of any mechanics, so the next rule written there is tested against the classroom first (P0-1). The code-style rules themselves are now in place (#119).
-2. **Check the labs mechanically.** There is no CI on `labs/`: of five requests to merge "once CI passes", none could be met as asked. A small checker and workflow would also catch style drift that prose can't (P0-2).
-3. **Make long agent runs restartable and bounded.** Agents waited without end on sites that refused them, and a container restart stopped six with their work uncommitted (P1-1, P1-2).
+1. **State the labs' goals and live-coding constraints at the top of `labs/AUTHORING.md`,** ahead of any mechanics, so the next rule written there is tested against the classroom first (P0-1, applied). The code-style rules themselves are now in place (#119).
+2. **Check the labs mechanically.** There is no CI on `labs/`: of the four requests to merge `labs/` or `canvas/` changes "once CI passes", none could be met as asked. A small checker and workflow would also catch the style drift that remains in two labs (§5.8) and test the tools against the style (P0-2, still proposed).
+3. **Make long agent runs restartable and bounded.** Agents waited without end on sites that refused them, and a container restart stopped six with their work uncommitted (P1-1, P1-2, both applied).
 
 ## 2. Scope reviewed
 
-- **Window:** 2026-10-19 (the merge of #97) to 2026-10-21 21:59 UTC: PRs #99–#126.
+- **Window:** 2026-10-19 (the merge of #97) to 2026-10-22 14:47 UTC (the merge of #135): PRs #99–#135. The first draft stopped at 2026-10-21 21:59 UTC and #126.
 - **Evidence:**
-  - **Git:** 60 commits on `main` (33 not merges), +20,395/−1,752 lines, and 11 files touched three or more times.
-  - **Pull requests:** 28 opened, read through the GitHub tools, because `gh` isn't signed in here: 21 merged, and 7 open on 2026-10-21.
+  - **Git:** 90 commits on `main` after #97's merge (48 not merges), +29,233/−7,012 lines summed over those 48 commits, and 17 files touched three or more times. The first draft counted 60 commits (33 not merges).
+  - **Pull requests:** 37 opened, read through the GitHub tools, because `gh` isn't signed in here: 36 merged, and #114 closed unmerged.
   - **CI:** the slides and handouts workflows ran only on PRs touching `slides/` or `handouts/`. No workflow covers `labs/` or `canvas/`.
-  - **Sessions:** 1 Claude Code session (this one), compacted 8 times, with 81 human turns. The transcript collector counted 19 "corrections", but 17 of them are agent-completion notices it misreads as user turns. The real steering is the instructor's 20 or so requests in this window, read directly. Tool errors: 46, in 4 repeated patterns.
+  - **Sessions:** 1 Claude Code session (this one), compacted at least nine times. At the first draft it had 81 human turns. The transcript collector counted 19 "corrections", but 17 of them are agent-completion notices it misreads as user turns. The real steering is the instructor's 20 or so requests up to the draft, and six after it, all read directly. Tool errors at the draft: 46, in 4 repeated patterns.
   - **Agents:** 23 subagent runs (11 in each wave, plus 6 restarts and 1 interrupted), seen through their final reports.
 - **Earlier AAR:** `docs/aar/2026-10-16-weeks-06-09.md`.
 - **Rigor:** standard. Course materials taught to a class of students, with a reviewing instructor, but no production users. Proposed tool checks are tested as far as noted.
@@ -33,7 +35,7 @@ The three highest-leverage revisions:
 
 | ID | Applied? | Did the pattern recur? | Verdict |
 |---|---|---|---|
-| P0-1 `AGENTS.md` rules | Yes (#94) | **Rules restated by the instructor:** 0. **Rebases and force-pushes:** 0. `main` moved under an open branch four times (#117, #120, #122, and an Overleaf push), and `main` was merged in each time (#116, #119). | Worked |
+| P0-1 `AGENTS.md` rules | Yes (#94) | **Rules restated by the instructor:** 0. **Rebases and force-pushes:** 0. `main` moved under an open branch five times (#117, #120, #122, an Overleaf push, and the restyled labs under #128), and `main` was merged in each time (#116, #119, #128). | Worked |
 | P0-2 `docs/course-facts.md` | Yes (#94) | **Second requests to fix a copy:** 0. The weekly-structure change reached the syllabus, README, AGENTS and the slide docs in one PR (#102). Its Canvas copies were listed as "not yet changed" rather than missed. | Worked |
 | P0-3 slide `AUTHORING.md` corrections | Yes (#94) | **Statements contradicted by the newest deck:** 0 found. The lab frame added to week 10 was written back into `AUTHORING.md` (#102, #119). | Worked |
 | P1-1, P1-2 deck checks | Yes (#94) | `check_deck_readiness.py week-10` passed. The slides CI ran the checks as information. | Worked |
@@ -75,7 +77,12 @@ The three highest-leverage revisions:
   - After teaching week 10 live, the instructor wrote: "The code style for the labs needs to be much more concise and imperative; error handling and status checking should be minimized and acknowledged as a limitation; writing multiple functions feels out of scope; the get page revisions with continue parameter took upwards of 25 minutes and required me to refactor on the fly."
   - A four-question AMA followed, then the rules (#119) and a second wave of eleven agents.
   - A container restart stopped six of them mid-run, with their rewrites written but not committed. Their worktrees survived and they were finished by new agents.
-- **Merges.** The instructor asked six times to merge once CI passed. Four of those covered only `labs/` or `canvas/` (#111, #103–#109, #112/#113/#115, #116), where no CI runs, and #118 was asked without the condition. Each time the agent explained, ran substitute checks, and merged.
+  - The instructor asked for the rewrites to be merged as they landed, and for this AAR. The restyled labs merged as #121 and #123–#127 (weeks 2, 3, 4, 6, 8 and 9), then #129–#132 (weeks 5, 7, 10 and 1). The AAR merged as #128, with the definition-text revisions it proposed.
+  - The week 1 agent found that the restyle broke `run_key.py`'s retries (§5.7). The fix, #133, merged with week 11's restyle, #134, on the instructor's "merge open PRs".
+- **Day 3 (2026-10-22).**
+  - On request, #114 (week 11's first-wave key, replaced by #134) was closed.
+  - Week 1's key was rerun with #133: all 17 code cells ran, including the two flagged the day before, and one cell was retried twice before it got through (#135, merged on request).
+- **Merges.** The instructor asked six times to merge once CI passed. Four of those covered only `labs/` or `canvas/` (#111, #103–#109, #112/#113/#115, #116), where no CI runs, and #118 was asked without the condition. Each time the agent explained, ran substitute checks, and merged. The two later requests ("merge open PRs", "merge 135") named no condition. The same substitute checks were run.
 - **Tool errors:**
   - 10 edits before the file was read;
   - 4 shell-quoting failures;
@@ -139,6 +146,27 @@ All were caught before merging, but only by reading every note against the outpu
 - **Short SHAs refused by the merge tool:** twice.
 - **Editing before reading:** ten times, each harmless and corrected at once.
 
+### 5.7 The style changed how a failure looks, and the runner kept the old idea of a refusal (severity: medium)
+
+**Observation.** `run_key.py` retries a cell when its error looks like a rate limit. Its test matched `429` or "Too Many Requests" in the exception's text. That held under the first conventions, where `raise_for_status()` turned a 429 into an `HTTPError` naming the status. #119 removed `raise_for_status()`. Now a refused request returns the site's refusal page, and the cell fails one line later, at `.json()`, with `JSONDecodeError: Expecting value`. That message names no status, so the runner flagged those cells after one try. Three keys were run between #119 and #133 and have Wikimedia cells flagged while the runner couldn't retry them:
+- week 1: 2 cells;
+- week 5: Step 7's microsprint (2 cells);
+- week 10: 16 cells.
+
+The week 1 agent noticed it, and #133 added `JSONDecodeError` and "Expecting value" to the retry test. Rerun with the fix, week 1's key ran every cell (#135). Weeks 5 and 10 haven't been rerun. Their notes record refusals that lasted 12 and 30 minutes, so most of their flags are probably real. But a rerun with #133, like week 1's, may get some of those cells through.
+
+**Root cause: missing.** Nothing tied a change to the labs' code to the tools that run it. The runner's test was written for the old style's errors. No one reread it when the style changed, and no check exercises it.
+
+**Why it matters next time.** This is §5.1 from the other side. There, the tools' needs shaped the classroom code. Here, the classroom code changed and the tools didn't follow. Any later style change, such as dropping `.json()` for `pd.read_json()` or adding `timeout=` back, can do the same.
+
+### 5.8 Residual drift that the prose rules didn't catch (severity: low)
+
+**Observation.** All eleven labs on `main` were measured on 2026-10-22 (§7). Two cells sit outside "Code style":
+- **Week 3, cell 24,** the key's answer to Step 4's 6-minute microsprint, has 25 lines. Most of them are a list of 13 dated events, where the prompt asks for five or more. Students are asked for less than the key shows, but anyone who falls behind and copies from the key gets the long version. The next-longest cells in any lab are 17 lines (week 6's Step 9 function, which gathers Step 8's lines) and 16 (week 10's given `get_revisions()`).
+- **Week 7's `preprocess_document()`** is defined in Step 11 and called from one place, in a loop over the ten versions. "A function only when it's reused" doesn't say whether a loop counts. The function was kept because the chapter's Recommended Exercise names it.
+
+**Root cause: ambiguous.** "About 3–8 lines" doesn't say whether a key's answer to an open-ended microsprint counts, and "reused" doesn't say whether a loop counts. Both are judgment calls, and so both belong to the instructor. Neither needs a new rule: one exception per rule across eleven labs is a good result. P0-2's warnings would put each on its pull request, where the call can be made before class.
+
 ## 6. Recommended revisions (Q4)
 
 ### [P0-1] Put the labs' goals, and who they serve, at the top of AUTHORING.md
@@ -158,7 +186,7 @@ All were caught before merging, but only by reading every note against the outpu
   > When a rule here conflicts with getting the key to run from a cloud machine, the classroom wins: flag the cell `not-run-live`, and leave the code plain.
 - **Why it works:** an agent reading the file meets the classroom's constraints before any mechanics. A future convention that would add code to make the key run, as `get()` did, now visibly conflicts with a stated goal.
 - **Owner:** maintainer review.
-- **Status:** Proposed.
+- **Status:** Applied 2026-10-21 (#128).
 
 ### [P0-2] Check every lab with a script, and run it in CI
 - **Target:** new `labs/tools/check_lab.py`, and new `.github/workflows/check-labs.yml`, on pull requests touching `labs/**`.
@@ -170,6 +198,7 @@ All were caught before merging, but only by reading every note against the outpu
   - fails if any notebook or PDF text contains an email address other than `your-email@colorado.edu`;
   - fails if a key note holds a placeholder (`PLACEHOLDER`, `to be written`);
   - fails if a cell is tagged `not-run-live` but the key note doesn't say "not run" or `not-run-live`;
+  - fails if `run_key.py`'s retry test doesn't match a sample of each way a refused request fails in the current style (an `HTTPError` naming 429, and a `JSONDecodeError` "Expecting value"). The samples sit beside the style rules, so changing one is a reminder to check the other (§5.7);
   - warns, without failing, using Python's `ast` so that comments don't count:
     - `raise_for_status`, `try`, `timeout=`, or a retry adapter in code;
     - a function defined inside another;
@@ -179,7 +208,7 @@ All were caught before merging, but only by reading every note against the outpu
   The workflow installs `nbformat` and runs it. AGENTS.md's merge rule then names it: "CI for `labs/` is `check-labs`."
 - **Why it works:** "merge once CI passes" becomes a real gate for labs. The checks that protect students (no keys, no real email, a student copy that matches its key) stop depending on someone remembering them. The style warnings show drift on the PR instead of in class.
 - **Owner:** maintainer review. The tool isn't written yet, so this is a design, untested.
-- **Status:** Proposed.
+- **Status:** Proposed. Not built as of 2026-10-22.
 
 ### [P1-1] Bound every live run, and commit before it
 - **Target:** `labs/AUTHORING.md`, "The key", and `AGENTS.md`, "The week, and its lab".
@@ -190,7 +219,7 @@ All were caught before merging, but only by reading every note against the outpu
   > Commit the key before you run it: a live run can take an hour, and a restart takes uncommitted work with it. Give a refusing site about 30 minutes in all (`run_key.py --retries 2 --wait 60`), then accept the `not-run-live` cells and move on. The instructor's laptop is a better place to run them than a cloud machine that sites rate-limit.
 - **Why it works:** it turns two judgment calls that agents made badly, how long to wait and when to save, into defaults. The second wave, given these two lines in its prompts, neither hung nor needed more than a restart.
 - **Owner:** auto-applyable.
-- **Status:** Proposed.
+- **Status:** Applied 2026-10-21 (#128).
 
 ### [P1-2] Write the key note last, from run_key's report
 - **Target:** `labs/AUTHORING.md`, "The key".
@@ -201,7 +230,18 @@ All were caught before merging, but only by reading every note against the outpu
   > Write it last: after `run_key.py` finishes, from its report of which cells ran. Until then, leave the word `PLACEHOLDER`, which `check_lab.py` refuses.
 - **Why it works:** the note describes what happened rather than what was planned.
 - **Owner:** auto-applyable.
-- **Status:** Proposed.
+- **Status:** Applied 2026-10-21 (#128); the placeholder check waits on P0-2.
+
+### [P1-3] Retry the refusals the new style produces, and say where the retry test lives
+- **Target:** `labs/tools/run_key.py`, its `TRANSIENT` pattern; `labs/AUTHORING.md`, "Code style" and "The key".
+- **Root cause:** missing (§5.7).
+- **Medium:** tool config, with one line of definition text pointing at it until P0-2 can test it.
+- **Evidence:** 20 cells, in weeks 1, 5 and 10, flagged after a single try. Week 1's two cells ran when rerun with the fix (#135).
+- **Change:** in `run_key.py`, add `JSONDecodeError` and "Expecting value" to `TRANSIENT`, with a comment saying why (#133). In AUTHORING.md, at the end of "Code style", add:
+  > `tools/run_key.py` decides whether to retry a cell from the error the cell raises, and that depends on this style: with no `raise_for_status()`, a 429 usually surfaces at `.json()`, as a `JSONDecodeError`. A change to these rules that changes how a refused request fails needs the same change to its `TRANSIENT` pattern, in the same pull request.
+- **Why it works:** the runner gives a rate-limited cell its retries again. The sentence puts the dependency where the next person to change the style will read it, not only in the tool.
+- **Owner:** auto-applyable.
+- **Status:** Tool change applied 2026-10-21 (#133), and AUTHORING.md text applied 2026-10-22. Weeks 5 and 10 not yet rerun.
 
 ### [P2-1] Two lines for merging
 - **Target:** `AGENTS.md`, "Merging" and "Branches and pull requests".
@@ -211,7 +251,7 @@ All were caught before merging, but only by reading every note against the outpu
   > Before pushing to an existing pull request's branch, check that the pull request is still open. If it was merged, start a new branch from `main` for the follow-up.
 - **Why it works:** it prevents the stranded fix (#111 and #117) and the refused merges.
 - **Owner:** auto-applyable.
-- **Status:** Proposed.
+- **Status:** Applied 2026-10-21 (#128).
 
 ## 7. Strengths to sustain
 
@@ -231,55 +271,57 @@ All were caught before merging, but only by reading every note against the outpu
   - chapter 11's FRED series doesn't exist;
   - chapter 9's outputs no longer reproduce.
 
-  One of them also found the `run_key.py` bug (#111).
-- **The second wave kept to the style.** In the five restyled labs pushed before the restart, the median code cell is six lines, and each lab has one or two functions, each reused. The only error handling left is in week 4's broken-JSON microsprint, where errors are the subject, and one comment in week 8's reflection.
-- **The last AAR's rules held,** across 28 PRs (§2a).
+  Agents also found two bugs in `run_key.py`: the `timeout=` misfire (#111) and the retries the restyle broke (#133).
+- **The second wave kept to the style.** All eleven labs on `main` were measured on 2026-10-22. Each has 8–13 steps, 5–6 microsprints, and 83–85 minutes of planned time. Each has 17–28 code cells, except week 9 with 42 short ones. The median code cell is 5–7 lines. In nine of the eleven, the longest cell the class types is 9–11 lines. Week 6's is a 17-line function that gathers Step 8's lines, and week 3's is in §5.8. A lab has zero to three functions; weeks 3 and 5 needed none. Only two `try` blocks are left, each where the failure is the step's subject: week 4's broken-JSON microsprint and week 3's dead endpoints. The two exceptions to the rules are in §5.8.
+- **Agents picked up where stopped ones left off.** After the restart, six new agents resumed from the old worktrees, committed first, and finished. None started over.
+- **The last AAR's rules held,** across 37 PRs (§2a).
 
 ## 8. Revision actions — tracking table
 
 | ID | Priority | Target | Medium | Change | Owner | Status | Evidence to check next time |
 |---|---|---|---|---|---|---|---|
-| P0-1 | P0 | `labs/AUTHORING.md` | definition text | "What a lab is for" first: who a lab serves, and the classroom over the cloud run | maintainer review | Applied 2026-10-21 (this PR) | Labs rewritten after being taught, for style: 11 → 0 |
-| P0-2 | P0 | `labs/tools/check_lab.py`, `.github/workflows/check-labs.yml` | tool config | Check keys, student copies, secrets, notes and style on every lab PR | maintainer review (untested design) | Proposed | Merge requests on `labs/` with no CI to wait for: 4 → 0 |
-| P1-1 | P1 | `labs/AUTHORING.md`, `AGENTS.md` | definition text | Commit before a live run; give a refusing site about 30 minutes | auto-applyable | Applied 2026-10-21 (this PR) | Agents stopped by hand while waiting: 3 → 0; uncommitted work at a restart: 6 → 0 |
-| P1-2 | P1 | `labs/AUTHORING.md` | definition text | Write the key note last, from `run_key.py`'s report | auto-applyable | Applied 2026-10-21 (this PR; the placeholder check waits on P0-2) | Key notes that misdescribe the run: 3 → 0 |
-| P2-1 | P2 | `AGENTS.md` | definition text | Full 40-character SHA; check a PR is open before pushing to its branch | auto-applyable | Applied 2026-10-21 (this PR) | Refused merges: 2 → 0; fixes merged twice: 1 → 0 |
+| P0-1 | P0 | `labs/AUTHORING.md` | definition text | "What a lab is for" first: who a lab serves, and the classroom over the cloud run | maintainer review | Applied 2026-10-21 (#128) | Labs rewritten after being taught, for style: 11 → 0 |
+| P0-2 | P0 | `labs/tools/check_lab.py`, `.github/workflows/check-labs.yml` | tool config | Check keys, student copies, secrets, notes, style, and `run_key.py`'s retry test on every lab PR | maintainer review (untested design) | Proposed | Merge requests on `labs/` with no CI to wait for: 4 → 0; style exceptions found in class rather than on the PR: 2 → 0 |
+| P1-1 | P1 | `labs/AUTHORING.md`, `AGENTS.md` | definition text | Commit before a live run; give a refusing site about 30 minutes | auto-applyable | Applied 2026-10-21 (#128) | Agents stopped by hand while waiting: 3 → 0; uncommitted work at a restart: 6 → 0 |
+| P1-2 | P1 | `labs/AUTHORING.md` | definition text | Write the key note last, from `run_key.py`'s report | auto-applyable | Applied 2026-10-21 (#128; the placeholder check waits on P0-2) | Key notes that misdescribe the run: 3 → 0 |
+| P1-3 | P1 | `labs/tools/run_key.py`, `labs/AUTHORING.md` | tool config, definition text | Retry a 429 that surfaces as a `JSONDecodeError`; tie the retry test to the style rules | auto-applyable | Tool applied 2026-10-21 (#133); text applied 2026-10-22 | Cells flagged after a single try on a rate limit: 20 → 0 |
+| P2-1 | P2 | `AGENTS.md` | definition text | Full 40-character SHA; check a PR is open before pushing to its branch | auto-applyable | Applied 2026-10-21 (#128) | Refused merges: 2 → 0; fixes merged twice: 1 → 0 |
 
-## 9. Resolution (2026-10-21)
+## 9. Resolution (updated 2026-10-22)
 
-The instructor asked for the AAR together with documentation of the labs' common style, goals and implementation. This PR applies the definition-text revisions:
+**Applied.**
+- **#128 (2026-10-21)** applied the definition-text revisions:
+  - **P0-1:** `labs/AUTHORING.md` opens with "What a lab is for".
+  - **P1-1 and P1-2:** in "The key", commit before a live run, give a refusing site about 30 minutes, run flagged cells from a laptop, and write the note last. `AGENTS.md` repeats the first two.
+  - **P2-1:** `AGENTS.md` asks for the full 40-character SHA, and a check that a pull request is still open before pushing to its branch.
+  - The instructor also asked for the labs' common style, goals and implementation to be documented. So AUTHORING.md gained:
+    - when a `try` is allowed;
+    - a yardstick measured on the restyled labs;
+    - a "How the pieces fit" section: one source, where students find a lab, one folder per week, and what the machine needs.
+- **#133 (2026-10-21)** applied P1-3's tool change.
+- **The 2026-10-22 revision** (this pull request):
+  - added §5.7, §5.8 and P1-3 to this report;
+  - added P1-3's sentence to AUTHORING.md;
+  - re-measured AUTHORING.md's yardstick on all eleven labs;
+  - in "The key", stated that the 30 minutes covers the whole run, not each cell;
+  - told students, in `labs/README.md`, why some cells in a key have no output.
 
-- **P0-1.** `labs/AUTHORING.md` opens with "What a lab is for": who a lab serves, in what order, and that the classroom wins over the key's run. It records the first conventions' mistake, so the next author meets the reason with the rule.
-- **Also asked for:** `labs/AUTHORING.md` gained more than P0-1.
-  - **"Code style":**
-    - when a `try` is allowed (a failure that is the step's subject, or that would stop Friday's Run All Above);
-    - the common shape of the rewritten labs, measured on weeks 2–4, 6, 8 and 9, as a yardstick rather than a rule.
-  - **"How the pieces fit" (new section):**
-    - the key as the one source;
-    - where students find a lab (the README table, Canvas through `migrate.py labs`, the slides);
-    - one folder per week;
-    - what the machine needs.
-- **P1-1, P1-2.** "The key": write the note last, from `run_key.py`'s report; commit before a live run; give a refusing site about 30 minutes; run flagged cells from a laptop. `AGENTS.md` repeats the two that agents need most.
-- **P2-1.** `AGENTS.md`: the full 40-character SHA, and a check that a pull request is still open before pushing to its branch.
-- **P0-2 is not applied.** The checker and its workflow are a design in §6. They need writing and testing before the claim "CI for `labs/`" is true.
+**Not applied.** P0-2, the checker and its workflow, is still a design. Until it exists, "merge once CI passes" can't be met for `labs/` or `canvas/`, and the substitute checks in §5.2 are run by hand.
 
-Merged in this window after the report was drafted:
-- #119, the style rules;
-- the restyled labs for weeks 2, 3, 4, 6, 8 and 9 (#121, #123–#127);
-- then weeks 5, 7, 10 and 1 (#129–#132).
+**On `main`.** Eleven restyled labs, each with a key, a students' copy and a key PDF. Week 11's first-wave key (#114) was closed unmerged.
 
-Week 11's restyle (#134) merges with this PR. It replaces #114, which stays unmerged.
-
-**A finding made after drafting (and fixed).** The week 1 agent found that the new style broke `run_key.py`'s retries. Without `raise_for_status()`, a 429 surfaces as a `JSONDecodeError` when a cell reads the refusal page as JSON, and the tool didn't count that as a rate limit. So weeks 1, 5 and 10 flagged Wikimedia cells after one try.
-
-#133 adds the case. Rerunning week 1's key with it from this machine got all 17 cells through, including the two that had been flagged; one cell was retried twice.
-
-This is §5.1's lesson again, from the other side: a style change in the labs needs a matching look at the tools that run them. P0-2's checker would be a natural place to test the two together.
-
-**Still to run from the instructor's laptop:**
-- week 1: 2 cells (or none, once #133's rerun is committed);
-- week 5: Steps 7 and 10;
-- week 7: 21 cells;
-- week 8: 1 cell, Playwright;
-- week 10: 16 cells;
+**Still to run from the instructor's laptop** (49 cells, each tagged `not-run-live` in its key):
+- week 5: both cells of Step 7's microsprint (Step 10 ran, but its outputs show 429s, so it's worth rerunning too);
+- week 7: 21 cells (the Wayback Machine refused the cloud machine);
+- week 8: 1 cell, Step 10's Playwright run (no browser to match the library's version);
+- week 10: 16 cells (Wikimedia 429s);
 - week 11: 9 FRED cells, once FRED is back.
+
+Weeks 5 and 10 were flagged before #133 (§5.7). A rerun from the cloud machine with the fix costs about 30 minutes each, and may clear some of their cells before class, as it did for week 1. Week 1 has nothing left to run (#135).
+
+**Open choices for the instructor**, which the report leaves alone:
+- week 3's 25-line microsprint answer: keep it, or cut the key's list to the five or more events the prompt asks for (§5.8);
+- week 7's `preprocess_document()`, called from one place: keep it for the Recommended Exercise that names it, or inline it (§5.8);
+- Canvas:
+  - `canvas/migrate.py labs --apply` hasn't been run from this session. #120 and #122, from another session, may already cover it.
+  - `canvas/course_spec.py` still describes a Wednesday notebook lab and a Friday revision workshop in its week modules and its `GROUPS` blurbs. `docs/course-facts.md` lists it as "Not yet changed", so it's known, not missed.

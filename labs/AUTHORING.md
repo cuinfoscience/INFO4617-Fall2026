@@ -74,9 +74,11 @@ The code is typed live, in front of the class, so it has to be short and plain. 
 - **One way to do each thing:** f-strings to print, pandas to tabulate, `plt.subplots()` to plot, and nothing the chapter doesn't use.
 - **A `try` only where the failure is the point:** a step about errors (week 4's broken JSON), or a step whose subject is a request that never completes, where letting it stop the cell would also stop Friday's **Run All Above** (week 3's dead endpoint). Say why in the step's text.
 
-What the rewritten labs (weeks 2–4, 6, 8 and 9, on 2026-10-21) have in common, as a yardstick rather than a rule:
-- 10–12 steps and 20–30 code cells. The median code cell has 6 lines of code; few have more than 10.
-- One or two functions, each called three or more times, each written in the step after its lines were typed plainly: `get_daily()`, `read_infobox()`, `get_saved_copy()`.
+`tools/run_key.py` decides whether to retry a cell from the error the cell raises, and that depends on this style: with no `raise_for_status()`, a 429 usually surfaces at `.json()`, as a `JSONDecodeError`. A change to these rules that changes how a refused request fails needs the same change to its `TRANSIENT` pattern, in the same pull request.
+
+What the eleven restyled labs (measured on 2026-10-22) have in common, as a yardstick rather than a rule:
+- 8–13 steps, 5–6 microsprints, and 83–85 minutes. 17–28 code cells, or more when they're short (week 9 has 42). The median code cell has 5–7 lines of code. Few have more than 10, and those few are a function gathering an earlier step's lines (week 6), a given cell (week 10's `get_revisions()`), or a key's long answer to an open-ended microsprint (week 3's, whose prompt asks for five or more events and whose key lists 13).
+- Zero to three functions, each written in the step after its lines were typed plainly: `get_daily_views()`, `read_infobox()`, `get_saved_copy()`. Most are called three or more times; week 7's `preprocess_document()` is called from one loop, and kept because the chapter's Recommended Exercise names it.
 - `time.sleep(1)` in every loop that sends requests.
 - Zero to two `given` cells, for a whole pagination loop or a long list of URLs.
 - Three to six Discuss boxes that ask what would break here: a 429, a 403, a missing key, a page that changed.
@@ -182,11 +184,11 @@ The key's opening cell ends with the key note, one paragraph that starts `> **In
 
 Commit the key before you run it: a live run can take an hour, and a restarted machine takes uncommitted work with it. Then run it with `tools/run_key.py`, which:
 - runs it cell by cell from a scratch folder;
-- reruns a cell that hits a rate limit;
+- reruns a cell that hits a rate limit, including a 429 that surfaces as a `JSONDecodeError` when the cell reads the refusal page with `.json()`;
 - puts the placeholder email back afterwards;
 - refuses to write the notebook if an output holds an API key.
 
-A cell a site keeps refusing keeps its code, loses its outputs, and is tagged `not-run-live`; list those cells in the pull request so the instructor can run them before class. Give a refusing site about 30 minutes in all (`run_key.py --retries 2 --wait 60`), then accept the flags and move on. Sites rate-limit the course's cloud machine far more than a laptop on campus: on 2026-10-21 Wikimedia answered it with 429s for hours, the Wayback Machine refused it, and FRED was down for maintenance. The instructor's laptop is the better place to run flagged cells. Microsprints are filled in and run like any other cell, on the case the key's microsprint names.
+A cell a site keeps refusing keeps its code, loses its outputs, and is tagged `not-run-live`; list those cells in the pull request so the instructor can run them before class. Give a refusing site about 30 minutes for the whole run, not for each cell: `run_key.py --retries 2 --wait 60` spends two minutes on a cell, so a site that refuses fifteen cells has had its half hour. Then accept the flags and move on. Sites rate-limit the course's cloud machine far more than a laptop on campus: on 2026-10-21 Wikimedia answered it with 429s for hours, the Wayback Machine refused it, and FRED was down for maintenance. The instructor's laptop is the better place to run flagged cells. Microsprints are filled in and run like any other cell, on the case the key's microsprint names.
 
 ## How the pieces fit
 
