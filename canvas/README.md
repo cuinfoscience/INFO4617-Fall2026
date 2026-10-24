@@ -96,8 +96,8 @@ lab as "Live coding notebook", from getting a second pair.
 
 `grading.ipynb` grades the recurring work from Canvas. It is one notebook,
 run top to bottom, with all of its code in its cells:
-- attendance, from a sign-in CSV (identikey and timestamp), at one point per
-  session held;
+- attendance, from the daily note's responses (the Google Form's CSV), at one
+  point per class held;
 - Textbook Revisions in weeks 2–9, by resolving each submitted GitHub link to
   its author;
 - the portfolio checkpoints in weeks 11–14, by checking each student's repo

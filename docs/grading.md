@@ -14,8 +14,32 @@ from Canvas to confirm it was saved.
 `canvas/grading.ipynb` applies these rules: it proposes scores and comments
 for a week, you review the table, and it posts and checks them. When a rule
 here changes, change the notebook's Setup cell too (`COMMENTS`,
-`OPTIONAL_STEPS`, `LATE_GRACE_HOURS`, and `LATE_CAP`), and the scoring cell it
-affects.
+`OPTIONAL_STEPS`, `LATE_GRACE_HOURS`, and `LATE_CAP`; for attendance,
+`LATE_CREDIT` and `LATE_DAYS` at the top of its section), and the scoring cell
+it affects.
+
+## Attendance (1 point per class held)
+
+Attendance is the daily note, a Google Form students fill in at the end of
+each class. It asks for the date (`Today is`) and a number announced in class.
+The notebook reads the form's CSV; the CSV stays out of the repository. This is
+how weeks 1–10 were graded in Canvas, and the notebook gives the same scores
+for all of them:
+
+- **One point per class held.** A class is held when it is a scheduled meeting
+  day and its number was given. A cancelled class drops out of the week's
+  points.
+- **The number is the presence check.** Each day's number is the answer most
+  of that day's responses give. A response with another number earns nothing.
+- **The day the form was sent decides the class.** A wrong `Today is`, such as
+  the wrong year, doesn't matter when the form was sent that day.
+- **Late notes earn nothing.** A late note is sent on a later day but gives an
+  earlier class's date and number.
+- **One response per student per class counts.**
+- **A response from an address other than `identikey@colorado.edu` counts once
+  it is matched to a student.** Students used personal and school addresses
+  for about one response in eight in weeks 1–10. The matches live in
+  `email_aliases.csv` in the grading folder, never in the repository.
 
 ## Textbook Revisions, weeks 2–9 (1 point a week)
 
