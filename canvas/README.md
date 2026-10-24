@@ -92,6 +92,34 @@ the module, by title or by URL, isn't added again, and a held lab that isn't on
 disk gets no link. The URL check is what keeps week 10, which already links the
 lab as "Live coding notebook", from getting a second pair.
 
+## Grading: `grading.ipynb`
+
+`grading.ipynb` grades the recurring work from Canvas. It is one notebook,
+run top to bottom, with all of its code in its cells:
+- attendance, from the daily note's responses (the Google Form's CSV), at one
+  point per class held;
+- Textbook Revisions in weeks 2–9, by resolving each submitted GitHub link to
+  its author;
+- the portfolio checkpoints in weeks 11–14, by checking each student's repo
+  as it stood at the deadline;
+- Notebook Labs, by checking each HTML upload against the companion notebook.
+
+The rules are the ones in `docs/grading.md`.
+
+Each section works in small steps, and each cell prints a summary of what it
+found. A section scores only the plain case, where there's nothing to decide,
+and saves those rows as a CSV. Every other case gets a cell of its own that
+prints it for you to decide and enter in Canvas: a late or incomplete lab, a
+link to someone else's issue, a note from a personal email, a class day with
+no notes. The last section posts one table, with no comments, only with
+`APPLY = True` and a typed confirmation of how many rows, then reads every
+score back. The notebook needs `CANVAS_TOKEN`;
+`GITHUB_TOKEN` is optional but raises GitHub's limit from 60 to 5,000
+requests an hour.
+
+Student data goes to `GRADING_DIR` (default `~/info4617-grading`), outside the
+repository. Clear the notebook's outputs before you commit it.
+
 ## Safety notes
 
 - **Idempotent by name.** Re-running updates existing groups rather than

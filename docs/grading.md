@@ -11,6 +11,37 @@ Nothing is posted to Canvas until the instructor has seen the scores and the
 comments and approved them. After posting, read every grade and comment back
 from Canvas to confirm it was saved.
 
+`canvas/grading.ipynb` scores only the plain case of each rule below: a
+submission that meets the assignment as written. It prints every other case
+for the instructor to decide, such as late work, a missing step, a second
+GitHub account, or a note from a personal email. Those rows are left out of
+the table it posts, and the instructor enters them in Canvas by hand. It
+posts scores (through the rubric where there is one) with no comments, and
+applies no penalty or exception itself. When a rule here changes, check the
+section's definition of the plain case and its cells that print exceptions.
+
+## Attendance (1 point per class held)
+
+Attendance is the daily note, a Google Form students fill in at the end of
+each class. It asks for the date (`Today is`) and a number announced in class.
+The notebook reads the form's CSV; the CSV stays out of the repository. This is
+how weeks 1–10 were graded in Canvas:
+
+- **One point per class held.** A class is held when it is a scheduled meeting
+  day and its number was given. A cancelled class drops out of the week's
+  points.
+- **The number is the presence check.** Each day's number is the answer most
+  of that day's responses give. A response with another number earns nothing.
+- **The day the form was sent decides the class.** A wrong `Today is`, such as
+  the wrong year, doesn't matter when the form was sent that day.
+- **Late notes earn nothing.** A late note is sent on a later day but gives an
+  earlier class's date and number.
+- **One response per student per class counts.**
+- **A response from an address other than `identikey@colorado.edu` counts once
+  the instructor matches it to a student.** Students used personal and school
+  addresses for about one response in eight in weeks 1–10. The notebook prints
+  these responses and doesn't match them.
+
 ## Textbook Revisions, weeks 2–9 (1 point a week)
 
 Week 10 has no revision (or lab) assignment. Weeks 11–14 are portfolio
