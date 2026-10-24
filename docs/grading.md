@@ -11,6 +11,11 @@ Nothing is posted to Canvas until the instructor has seen the scores and the
 comments and approved them. After posting, read every grade and comment back
 from Canvas to confirm it was saved.
 
+`canvas/grading.ipynb` applies these rules: it proposes scores and comments
+for a week, you review the table, and it posts and checks them. When a rule
+here changes, change `canvas/grading_lib.py` too (`COMMENTS`,
+`OPTIONAL_STEPS`, `LATE_GRACE_HOURS`, and `LATE_CAP`).
+
 ## Textbook Revisions, weeks 2–9 (1 point a week)
 
 Week 10 has no revision (or lab) assignment. Weeks 11–14 are portfolio

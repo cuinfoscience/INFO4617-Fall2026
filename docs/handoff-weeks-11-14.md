@@ -44,6 +44,10 @@ instructor publishes each week.
 
 ## Grading a week
 
+`canvas/grading.ipynb` does steps 1, 2, and 4 for attendance, Textbook
+Revisions, the portfolio checkpoints, and labs. Use it, and keep its outputs
+out of the repository.
+
 1. Download the submissions from Canvas, and keep the files in their own
    folder (they're untrusted; read them with `python -I`).
 2. Score them by `grading.md`.

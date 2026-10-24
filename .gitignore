@@ -24,3 +24,6 @@ canvas/.token
 canvas/*_token*
 canvas/canvas_key.json
 canvas/canvas_snapshot.json
+
+# Jupyter
+.ipynb_checkpoints/
