@@ -94,8 +94,8 @@ lab as "Live coding notebook", from getting a second pair.
 
 ## Grading: `grading.ipynb`
 
-`grading.ipynb` grades the recurring work from Canvas, with its logic in
-`grading_lib.py`:
+`grading.ipynb` grades the recurring work from Canvas. It is one notebook,
+run top to bottom, with all of its code in its cells:
 - attendance, from a sign-in CSV (identikey and timestamp), at one point per
   session held;
 - Textbook Revisions in weeks 2–9, by resolving each submitted GitHub link to
@@ -106,10 +106,10 @@ lab as "Live coding notebook", from getting a second pair.
 
 The rules are the ones in `docs/grading.md`.
 
-Each section proposes scores and comments, saves them as a CSV for you to
-review and edit, and posts only with `APPLY = True`. `post()` refuses rows
-still marked for review, asks you to confirm how many rows you're posting,
-and reads every one back afterwards. The notebook needs `CANVAS_TOKEN`;
+Each section proposes scores and comments and saves them as a CSV for you to
+review and edit. The last section posts one reviewed table, only with
+`APPLY = True` and a typed confirmation of how many rows. It refuses rows still
+marked for review, then reads every one back. The notebook needs `CANVAS_TOKEN`;
 `GITHUB_TOKEN` is optional but raises GitHub's limit from 60 to 5,000
 requests an hour.
 

@@ -13,8 +13,9 @@ from Canvas to confirm it was saved.
 
 `canvas/grading.ipynb` applies these rules: it proposes scores and comments
 for a week, you review the table, and it posts and checks them. When a rule
-here changes, change `canvas/grading_lib.py` too (`COMMENTS`,
-`OPTIONAL_STEPS`, `LATE_GRACE_HOURS`, and `LATE_CAP`).
+here changes, change the notebook's Setup cell too (`COMMENTS`,
+`OPTIONAL_STEPS`, `LATE_GRACE_HOURS`, and `LATE_CAP`), and the scoring cell it
+affects.
 
 ## Textbook Revisions, weeks 2–9 (1 point a week)
 
