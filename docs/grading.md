@@ -11,20 +11,21 @@ Nothing is posted to Canvas until the instructor has seen the scores and the
 comments and approved them. After posting, read every grade and comment back
 from Canvas to confirm it was saved.
 
-`canvas/grading.ipynb` applies these rules: it proposes scores and comments
-for a week, you review the table, and it posts and checks them. When a rule
-here changes, change the notebook's Setup cell too (`COMMENTS`,
-`OPTIONAL_STEPS`, `LATE_GRACE_HOURS`, and `LATE_CAP`; for attendance,
-`LATE_CREDIT` and `LATE_DAYS` at the top of its section), and the scoring cell
-it affects.
+`canvas/grading.ipynb` scores only the plain case of each rule below: a
+submission that meets the assignment as written. It prints every other case
+for the instructor to decide, such as late work, a missing step, a second
+GitHub account, or a note from a personal email. Those rows are left out of
+the table it posts, and the instructor enters them in Canvas by hand. It
+posts scores (through the rubric where there is one) with no comments, and
+applies no penalty or exception itself. When a rule here changes, check the
+section's definition of the plain case and its cells that print exceptions.
 
 ## Attendance (1 point per class held)
 
 Attendance is the daily note, a Google Form students fill in at the end of
 each class. It asks for the date (`Today is`) and a number announced in class.
 The notebook reads the form's CSV; the CSV stays out of the repository. This is
-how weeks 1–10 were graded in Canvas, and the notebook gives the same scores
-for all of them:
+how weeks 1–10 were graded in Canvas:
 
 - **One point per class held.** A class is held when it is a scheduled meeting
   day and its number was given. A cancelled class drops out of the week's
@@ -37,9 +38,9 @@ for all of them:
   earlier class's date and number.
 - **One response per student per class counts.**
 - **A response from an address other than `identikey@colorado.edu` counts once
-  it is matched to a student.** Students used personal and school addresses
-  for about one response in eight in weeks 1–10. The matches live in
-  `email_aliases.csv` in the grading folder, never in the repository.
+  the instructor matches it to a student.** Students used personal and school
+  addresses for about one response in eight in weeks 1–10. The notebook prints
+  these responses and doesn't match them.
 
 ## Textbook Revisions, weeks 2–9 (1 point a week)
 

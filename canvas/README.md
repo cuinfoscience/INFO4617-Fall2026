@@ -106,10 +106,14 @@ run top to bottom, with all of its code in its cells:
 
 The rules are the ones in `docs/grading.md`.
 
-Each section proposes scores and comments and saves them as a CSV for you to
-review and edit. The last section posts one reviewed table, only with
-`APPLY = True` and a typed confirmation of how many rows. It refuses rows still
-marked for review, then reads every one back. The notebook needs `CANVAS_TOKEN`;
+Each section works in small steps, and each cell prints a summary of what it
+found. A section scores only the plain case, where there's nothing to decide,
+and saves those rows as a CSV. Every other case gets a cell of its own that
+prints it for you to decide and enter in Canvas: a late or incomplete lab, a
+link to someone else's issue, a note from a personal email, a class day with
+no notes. The last section posts one table, with no comments, only with
+`APPLY = True` and a typed confirmation of how many rows, then reads every
+score back. The notebook needs `CANVAS_TOKEN`;
 `GITHUB_TOKEN` is optional but raises GitHub's limit from 60 to 5,000
 requests an hour.
 
