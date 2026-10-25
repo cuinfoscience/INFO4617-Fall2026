@@ -9,18 +9,19 @@ Course materials for **INFO 4617: Web Data Science**, University of Colorado Bou
 
 ## Weekly rhythm
 
-From week 10, at students' request:
+From week 11, at students' request, every class is live coding: one lab in three parts, one a day.
 
 | Day | Focus |
 | --- | --- |
-| **Monday** | Lecture: the week's concepts and textbook chapter |
-| **Wednesday** | Live-coding lab: we write the chapter's code together in the week's [lab notebook](labs/), with microsprints and discussion after each step |
-| **Friday** | The same lab, picked up where Wednesday stopped; then a 15-minute textbook-revision block |
+| **Monday** | Lab, part 1: we write the chapter's code together in the week's [lab notebook](labs/), with microsprints and discussion after each step |
+| **Wednesday** | Lab, part 2 |
+| **Friday** | Lab, part 3; then a 15-minute textbook-revision block |
 
 Students submit the chapter's **Recommended Exercises** from its companion
 notebook, due the Sunday after the lab. Through week 9, Wednesday was a
 notebook lab on the companion notebook and Friday a textbook-revision
-workshop.
+workshop. In week 10, Monday was a lecture, and the lab ran over Wednesday
+and Friday.
 
 Evaluation: Notebook Labs (30%) · Textbook Revisions (15%) · Attendance (15%) · Final
 Project (40%). No exams. The lowest two lab scores are dropped.
