@@ -22,163 +22,230 @@
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            We query the data the government is \textit{required} to publish --- and combine it into stories no single dataset can tell.
+            Four public APIs, each showing one idea that holds for every API. This week, every class is live coding, from one lab notebook in three parts.
 
             \bigskip
 
-            \dayband{Monday}{Concepts \& API keys}
+            \dayband{Monday}{Lab, part 1: the Census}
             \begin{itemize}\small
-                \item Why government data is open; managing keys like a professional
+                \item Keys, and \textit{what can I ask for?} --- the variable and geography catalogs
             \end{itemize}
 
             \medskip
 
-            \dayband{Wednesday}{Notebook lab}
+            \dayband{Wednesday}{Lab, part 2: FRED, then the EIA}
             \begin{itemize}\small
-                \item Query the Census, FRED, and FEC --- then join two of them
+                \item \textit{Let the server compute}, then \textit{let the server filter}
             \end{itemize}
 
             \medskip
 
-            \dayband{Friday}{Textbook revisions}
+            \dayband{Friday}{Lab, part 3: Congress.gov}
             \begin{itemize}\small
-                \item Propose \& peer-review pull requests improving Chapter 11
+                \item \textit{Follow the links}; join two APIs; then textbook revisions
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Companion notebook}
-                \footnotesize \texttt{ch-11-government.ipynb}
-            \end{block}
-            \begin{alertblock}{Get your keys now}
-                \footnotesize Three free keys --- \textbf{Census}, \textbf{FRED}, \textbf{FEC}. Approval is fast, but no code below runs without them.
+            \textbf{The lab}\\[2pt]
+            {\footnotesize \texttt{labs/week-11/lab-11.ipynb} in the course repository. Each part is added before its day.\par}
+            \medskip
+            \begin{alertblock}{Four keys, as environment variables}
+                \footnotesize \texttt{CENSUS\_KEY} today; \texttt{FRED\_KEY} and \texttt{EIA\_KEY} Wednesday; \texttt{DATAGOV\_KEY} Friday. Links are in the Canvas announcement and the lab's first cell.
             \end{alertblock}
+            \textbf{Due Sunday, Nov 1}\\[2pt]
+            {\footnotesize Chapter 11's \textbf{Recommended Exercises}, from its companion notebook.\par}
+            \medskip
         \end{column}
     \end{columns}
 \end{frame}
 
 % =========================================================================
-\section{Monday · Concepts}
+\section{Monday · Live-Coding Lab}
 % =========================================================================
+
+\begin{frame}{This week, every class is live coding}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            \dayband{Find it}{\texttt{labs/} in the course repository}
+            \begin{enumerate}\small
+                \item Open the \href{https://github.com/cuinfoscience/INFO4617-Fall2026/tree/main/labs}{\textbf{labs} folder} of \texttt{cuinfoscience/INFO4617-Fall2026} on GitHub
+                \item Open \texttt{week-11}, click \texttt{lab-11.ipynb}, then \textbf{Download raw file}
+                \item Open it in JupyterLab in the \texttt{webdata} environment, \textit{after} setting your keys
+            \end{enumerate}
+
+            \medskip
+            \dayband{Use it}{one part a day}
+            \begin{itemize}\small
+                \item I write the code on screen, and you write it in your copy
+                \item Put \textbf{your} email in the User-Agent in Step 0
+                \item Today: Part 1, Steps 0--6, about 50 minutes
+                \item Wednesday and Friday: download the new copy and start at that part's setup step
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Solutions}\\[2pt]
+            {\footnotesize \texttt{lab-11-key.ipynb}, beside it: every cell filled in and run. Fall behind? Copy the cell from the key and keep going.\par}
+            \medskip
+            \textbf{Nothing to submit}\\[2pt]
+            {\footnotesize The lab is practice. After each step, a \textbf{Discuss} box holds questions we'll talk over before the next.\par}
+            \medskip
+            \begin{alertblock}{Error flavors}
+                \footnotesize A missing key stops Step 0 \textit{on purpose}: set it and run again. A cell that fails with your key set is \textit{broken}: tell me, or open an issue.
+            \end{alertblock}
+            \textbf{No key yet?}\\[2pt]
+            {\footnotesize Follow along: the key shows every output. A Census key works only after you click the link in its email.\par}
+            \medskip
+        \end{column}
+    \end{columns}
+\end{frame}
 
 \begin{frame}{Public data by mandate}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             Government APIs exist because of democratic commitments to \textbf{transparency} --- not business strategy:
-            \begin{itemize}
+            \begin{itemize}\small
                 \item The \textbf{Census Bureau} is constitutionally mandated to count the population.
-                \item The \textbf{Federal Reserve} is required to publish economic data.
-                \item The \textbf{FEC} must disclose campaign-finance records.
-            \end{itemize}
-
-            \bigskip
-
-            They embody the \textbf{openness} value from Ch.~3, \textit{The Post-API Age}: public data, freely accessible by mandate rather than platform goodwill.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{Stable, but less polished}
-                \footnotesize Agencies don't pivot business models or get acquired --- so these APIs are unusually \textbf{stable}. The tradeoff: dense docs, cryptic variable names, unhelpful errors. Navigating that \textit{is} the skill.
-            \end{block}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{The challenge is navigation, not access}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            The Census API is free and well-maintained. The hard part is \textbf{finding the right variable} among thousands.
-            \begin{itemize}\small
-                \item Start at the \textbf{groups index}; search broad categories (housing, income, ``commut'').
-                \item Drill into a group's variables and read the labels --- population denominators differ.
-                \item Codes shift across survey years: \textit{learn to read them}, don't memorize them.
-                \item Always \textbf{sanity-check}: Boulder median income near \$70,000, not 7 or 70,000,000.
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/census_variable_anatomy.png}\\
-            {\scriptsize Read the code: group, index, \texttt{E}=estimate / \texttt{M}=margin of error.}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Manage your keys like a professional}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            A \textbf{key} identifies your app, tracks usage, and enforces rate limits. \textbf{Never hardcode one} --- share the notebook and the key goes with it.
-
-            \bigskip
-
-            Two safe patterns, both ending at the same variables:
-            \begin{itemize}\small
-                \item \textbf{Environment variables} --- \texttt{export CENSUS\_API\_KEY=...}, then \texttt{os.environ.get()}.
-                \item \textbf{A JSON config} --- \texttt{api\_keys.json}, added to \texttt{.gitignore} \textit{before your first commit}.
+                \item The \textbf{Federal Reserve} publishes the economic data it collects; FRED is the St.\ Louis Fed's service for it.
+                \item The \textbf{Energy Information Administration} was created in 1977, after the energy crises, to publish independent energy statistics.
+                \item The \textbf{Library of Congress} publishes Congress's legislative record at Congress.gov.
             \end{itemize}
 
             \medskip
 
-            Because both yield \texttt{census\_key} / \texttt{fred\_key} / \texttt{fec\_key}, downstream code is identical.
+            They embody the \textbf{openness} value from Ch.~3, \textit{The Post-API Age}: public data, freely accessible by mandate rather than platform goodwill.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/api_key_flow.png}
+            \begin{alertblock}{Stable, but less polished}
+                \footnotesize Agencies don't pivot business models or get acquired --- so these APIs are unusually \textbf{stable}. The tradeoff: dense docs, cryptic variable names, unhelpful errors. Navigating that \textit{is} the skill.
+            \end{alertblock}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{In the notebook}
-    This week's companion notebook works three agencies, then combines two:
-    \begin{itemize}
-        \item \textbf{Census} --- navigate the ACS catalog; housing age for Boulder; compare cities side by side.
-        \item \textbf{FRED} --- income time series; server-side transformations; Denver vs.\ national inflation.
-        \item \textbf{FEC} --- search a candidate; pull their campaign-finance totals.
-        \item \textbf{Integrate} --- join Census housing vintage with FRED mortgage rates in one figure.
-    \end{itemize}
+\begin{frame}{Four APIs, four ideas}
+    Week 10's Wikipedia taught \textbf{pagination}. Each API this week teaches one more idea you'll meet in every API:
+
+    \medskip
+    \begin{center}\small
+    \begin{tabular}{@{}lll@{}}
+        \toprule
+        \textbf{Day} & \textbf{API} & \textbf{The idea} \\
+        \midrule
+        Monday & Census Bureau & \textbf{Discovery}: ask the API what you can ask for \\
+        Wednesday & FRED & \textbf{Let the server compute}: transforms in the request \\
+        Wednesday & EIA & \textbf{Let the server filter}: facets narrow the data before it's sent \\
+        Friday & Congress.gov & \textbf{Follow the links}: records point to related records \\
+        \bottomrule
+    \end{tabular}
+    \end{center}
+
+    \medskip
+    And one idea across all four: a \textbf{key} says who you are, and it stays out of your notebook.
+\end{frame}
+
+\begin{frame}[fragile]{Keys stay out of the notebook}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            A \textbf{key} identifies you, counts your requests, and enforces rate limits. A key typed into a notebook travels with it: into a commit, a submission, a classmate's laptop.
+
+            \medskip
+            Set it in your shell \textit{before} starting Jupyter, then read it:
+\begin{lstlisting}
+# macOS/Linux:  export CENSUS_KEY="your-key"
+# Windows:      setx CENSUS_KEY "your-key"
+import os
+census_key = os.environ["CENSUS_KEY"]   # a missing key stops here
+\end{lstlisting}
+            \medskip
+            The User-Agent still says who sent each request: \texttt{WebDataScience/1.0 (your-email@colorado.edu)}.
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{The chapter's second way}\\[2pt]
+            {\footnotesize A JSON file, \texttt{api\_keys.json}, added to \texttt{.gitignore} \textit{before your first commit}. A key in git history stays there even after you delete the file.\par}
+            \medskip
+            \textbf{Names}\\[2pt]
+            {\footnotesize This course uses \texttt{CENSUS\_KEY}, \texttt{FRED\_KEY}, \texttt{EIA\_KEY}, and \texttt{DATAGOV\_KEY}. Chapter 11 is being revised to match this week.\par}
+            \medskip
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Discovery: two catalogs before any data}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \dayband{What}{the variable catalog}
+            \begin{itemize}\small
+                \item Variables come in \textbf{groups}: \texttt{B25034} is ``Year Structure Built''
+                \item \texttt{B25034\_002E}: group, line, and \texttt{E} for estimate (\texttt{M} is its margin of error)
+                \item \texttt{.../acs5/groups/B25034.json} is itself an API
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \dayband{Where}{the geography catalog}
+            \begin{itemize}\small
+                \item \texttt{.../acs5/geography.json} lists every level the dataset answers for
+                \item Each says what it \textbf{requires}: a \texttt{place} needs a \texttt{state}; a \texttt{tract} needs a \texttt{state} and a \texttt{county}
+                \item Places are \textbf{FIPS codes}, as strings: Colorado \texttt{08}, Boulder \texttt{07850}
+            \end{itemize}
+        \end{column}
+    \end{columns}
 
     \bigskip
-
-    \begin{alertblock}{Public interest (Ch.~3)}
-        \footnotesize Open data is a mandate, not a guarantee. Datasets get withdrawn and APIs deprecated; political pressure can shape what is collected and how. The \textbf{fragility} of public data infrastructure is itself a public-interest concern.
-    \end{alertblock}
+    \centering\small Codes change between survey years: learn to look them up, not to memorize them. Then \textbf{sanity-check} one value: Boulder's median household income is \$80,243 ($\pm$\$3,561), not 7 or 70 million.
 \end{frame}
 
-% =========================================================================
-\section{Wednesday · Notebook Lab}
-% =========================================================================
-
-\begin{frame}[fragile]{Load every key once --- and fail fast}
-    Read the keys at the top; stop immediately with a helpful message if one is missing:
-\begin{lstlisting}
-import os, requests, pandas as pd
-
-# Set each in your shell first -- never hardcode a key in a notebook:
-#   export CENSUS_API_KEY="your-key-here"
-census_key = os.environ.get("CENSUS_API_KEY")
-fred_key   = os.environ.get("FRED_API_KEY")
-fec_key    = os.environ.get("FEC_API_KEY")
-
-for name, key in [("CENSUS_API_KEY", census_key),
-                  ("FRED_API_KEY", fred_key), ("FEC_API_KEY", fec_key)]:
-    if not key:
-        raise ValueError(f"{name} not set -- get a free key first.")
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{Census --- from the catalog to a real place}
-    Geographies use FIPS codes, which are \textbf{strings} --- Colorado is \texttt{08}, Boulder is place \texttt{07850}. Keep the leading zeros:
+% The code on these frames is the lab's Part 1 (labs/week-11/lab-11-key.ipynb), run live on
+% 2026-10-25 against the 2018-2022 ACS five-year estimates.
+\begin{frame}[fragile]{Census --- from the catalogs to a real place}
+    Name the variables with \texttt{get}, the place with \texttt{for}, and what it requires with \texttt{in}:
 \begin{lstlisting}
 census_url = "https://api.census.gov/data/2022/acs/acs5"
+params = {"get": "NAME,B25034_001E,B25034_002E,B25034_003E",
+          "for": "place:07850",      # Boulder: a FIPS code, kept as a string
+          "in": "state:08",          # a place requires its state
+          "key": census_key}
+data = requests.get(census_url, params=params, headers=HEADERS).json()
 
-# Housing age for Boulder, CO -- browse groups at .../acs5/groups.html
-params = {
-    "get": "NAME,B25034_001E,B25034_002E,B25034_003E",
-    "for": "place:07850",     # FIPS are STRINGS -- do not strip 0s
-    "in":  "state:08",
-    "key": census_key,
-}
-data = requests.get(census_url, params=params).json()
 df = pd.DataFrame(data[1:], columns=data[0])   # row 0 is the header
+numeric_cols = [c for c in df.columns if c.startswith("B25034")]
+df[numeric_cols] = df[numeric_cols].apply(pd.to_numeric)   # values arrive as strings
 \end{lstlisting}
+    \small Boulder has 46,551 housing units; 68 were built in 2020 or later, 3,784 in the 2010s.
 \end{frame}
+
+\begin{frame}{When there's no estimate: \texttt{-666666666}}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            72 of Colorado's 482 places have no median-income estimate: too few households answered. The API doesn't leave the value out --- it sends a number that can't be an income.
+
+            \medskip
+            \begin{center}\footnotesize
+            \begin{tabular}{@{}lrr@{}}
+                \toprule
+                \textbf{Place} & \textbf{People} & \textbf{Median income} \\
+                \midrule
+                Boulder & 106,598 & 80,243 \\
+                Campo & 103 & \texttt{-666666666} \\
+                Bonanza & 11 & \texttt{-666666666} \\
+                Carbonate & 0 & \texttt{-666666666} \\
+                \bottomrule
+            \end{tabular}
+            \end{center}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{alertblock}{Average it as is}
+                \footnotesize The mean of that column is $-499{,}979{,}939$. Mask the codes first: \texttt{towns.mask(towns < 0)}.
+            \end{alertblock}
+            \textbf{What the codes mean}\\[2pt]
+            {\footnotesize The Census Bureau's notes on estimate and annotation values list each one; a margin of error of \texttt{-222222222} goes with it.\par}
+            \medskip
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% =========================================================================
+\section{Wednesday · Live-Coding Lab}
+% =========================================================================
 
 \begin{frame}[fragile]{FRED --- let the server do the math}
     \begin{columns}[T]
@@ -204,33 +271,6 @@ df = pd.DataFrame(obs)
             \centering
             \includegraphics[width=\textwidth]{img/fred_series_page.png}\\
             {\scriptsize Find series IDs on the FRED website, then copy them \textit{exactly}.}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{FEC --- money in politics in two steps}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-        Search by name to get a \texttt{candidate\_id}, then pull that candidate's financial totals:
-\begin{lstlisting}
-fec_url = "https://api.open.fec.gov/v1/candidates/search/"
-params = {"q": "Biden", "office": "P",   # P/S/H
-          "election_year": 2024,
-          "api_key": fec_key, "per_page": 5}
-for c in requests.get(fec_url,
-        params=params).json()["results"]:
-    print(c["name"], c["party_full"], c["candidate_id"])
-
-cid = "P80000722"       # a "P" id = presidential candidate
-url = f"https://api.open.fec.gov/v1/candidate/{cid}/totals/"
-tot = requests.get(url, params={"api_key": fec_key,
-                    "election_year": 2024}).json()
-\end{lstlisting}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/fec_candidate_search.png}\\
-            {\scriptsize IDs encode the office: \texttt{P}/\texttt{S}/\texttt{H} = candidate, \texttt{C} = committee.}
         \end{column}
     \end{columns}
 \end{frame}
@@ -264,34 +304,8 @@ df_rate = pd.DataFrame(rate["observations"])
     \end{columns}
 \end{frame}
 
-\begin{frame}{Lab: work these, then show-and-tell}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Work in pairs. Do these exercises from the chapter:
-            \begin{enumerate}\small
-                \item Get one Census variable group for 5 or more geographies. Make a visualization that compares them.
-                \item Plot two related FRED series for your area on the same axes. Explain what they show.
-                \item Get the FEC contributions for a local congressional race.
-                \item Combine data from two government APIs in one analysis.
-                \item Get one Census variable for all Colorado counties with \texttt{county:*}. Make a bar chart of the 20 highest values.
-                \item[6.] \textbf{5617}: read \textcite{lazer2020computational}. Link two APIs. Write a limitations section about measurement and coverage.
-            \end{enumerate}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{Show-and-Tell}
-                \footnotesize Bring one of these to class:
-                \begin{itemize}\footnotesize
-                    \item a bug that you could not solve
-                    \item a number that surprised you
-                    \item a question for a research design
-                \end{itemize}
-            \end{block}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 % =========================================================================
-\section{Friday · Textbook Revisions}
+\section{Friday · Live-Coding Lab}
 % =========================================================================
 
 \begin{frame}{Improving Chapter 11 together}
@@ -320,7 +334,7 @@ df_rate = pd.DataFrame(rate["observations"])
     High-value targets --- pick one and scope it to a single PR:
     \begin{itemize}
         \item \textbf{Test the code against live APIs.} Series IDs, endpoints, and election years drift; keys expire. Run the notebook, report what broke, and fix it.
-        \item \textbf{Close a gap in ``Common Issues to Debug.''} Add a worked \texttt{-666666666} sentinel-value example, or a rate-limit / retry snippet (FRED $\approx$120 req/min; FEC 1,000 req/hr).
+        \item \textbf{Close a gap in ``Common Issues to Debug.''} Add a worked \texttt{-666666666} sentinel-value example, or a rate-limit / retry snippet (FRED $\approx$120 req/min; api.data.gov 1,000 req/hr).
         \item \textbf{Add a figure.} An annotated variable-code diagram, or the key $\rightarrow$ request $\rightarrow$ JSON $\rightarrow$ DataFrame pipeline.
         \item \textbf{Strengthen a thin exercise.} The six exercises are open-ended --- add expected output, a rubric, or a starter cell so they self-check.
         \item \textbf{Extend ``Further Reading.''} A data-journalism example tied to the \textbf{Public Interest} callout --- a documented withdrawn dataset or deprecated API.
@@ -330,26 +344,26 @@ df_rate = pd.DataFrame(rate["observations"])
 \begin{frame}{A good revision, and a good review}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \begin{block}{A strong PR}
-                \begin{itemize}\small
+            \textbf{A strong PR}\\[2pt]
+            \begin{itemize}\small
                     \item One focused change, clearly titled
                     \item Explains the problem it fixes
                     \item Builds (\texttt{quarto render}) without errors
                     \item Matches the book's voice and notation
                     \item Discloses any AI assistance
                 \end{itemize}
-            \end{block}
+            \medskip
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{A strong review}
-                \begin{itemize}\small
+            \textbf{A strong review}\\[2pt]
+            \begin{itemize}\small
                     \item Runs / reads the change, not just skims
                     \item Names specifics (line, claim, code)
                     \item Separates ``must fix'' from ``nice to have''
                     \item Is generous --- assume good faith
                     \item Ends with a clear verdict
                 \end{itemize}
-            \end{block}
+            \medskip
         \end{column}
     \end{columns}
     \medskip
