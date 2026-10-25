@@ -6,7 +6,7 @@ How to turn a chapter of [*Web Data Science*](https://github.com/cuinfoscience/W
 
 Students asked to code *with* the instructor rather than work through a chapter's notebook alone. A lab is the script for that session, so it serves the person typing at the front of the room and the 30 people typing along, in that order:
 
-- **Teach the chapter's core idea in about 85 minutes of typing,** on the chapter's own case, so the Recommended Exercises are within reach. Coverage is the chapter's job.
+- **Teach the chapter's core idea in about 135 minutes of typing, over the week's three days,** on the chapter's own case, so the Recommended Exercises are within reach. Coverage is the chapter's job.
 - **Keep everyone typing.** Short, plain cells mean a student who falls behind can catch up from the key in seconds.
 - **Make room to think.** Microsprints and Discuss boxes are where students do and say something themselves. The code is short so that they have time.
 - **Run honestly.** Every request is live, and a failure is something to discuss, not to hide behind a wrapper.
@@ -15,8 +15,8 @@ When a rule here conflicts with getting the key to run from a cloud machine, the
 
 ## The week
 
-- **Monday** is a lecture: the week's concepts and its chapter, on the week's slides.
-- **Wednesday and Friday** are one lab across both days, about 85 minutes in all: Wednesday's 50, and Friday's first 35. The instructor writes the code on screen and students write it in their copy. Wherever Wednesday stops, Friday picks up.
+- **Monday, Wednesday and Friday** are one lab in three parts, one a day: about 135 minutes in all, Monday's 50, Wednesday's 50, and Friday's first 35. The instructor writes the code on screen and students write it in their copy. If a day ends mid-part, the next day finishes it first.
+- **Before week 11** the week was different. In week 10, Monday was a lecture, and the lab ran over Wednesday and Friday, about 85 minutes in all. The labs for weeks 1–10 are written to that two-day form.
 - **Friday's last 15 minutes** are the textbook-revision block (graded under Textbook Revisions, 15%).
 - **What students submit** is the chapter's **Recommended Exercises**, in the chapter's companion notebook, due the Sunday after the lab (graded under Notebook Labs, 30%). The lab itself isn't turned in.
 
@@ -36,10 +36,10 @@ The labs are written as notebooks, not built from a `.qmd`, so `handouts/`'s `ma
 
 ## What a lab is made of
 
-A lab is one notebook of numbered steps, in this order:
+A lab is one notebook in three parts, one for each day, of numbered steps, in this order:
 
-1. **The opening cell.** The title, `# Lab NN: <the chapter's title>`; a line linking the chapter; two or three sentences on what we'll build and on which case; a sentence saying what the 💬 Discuss boxes are; a **Before class** line (environment, keys, accounts); and one line for Friday: "On Friday, run every cell above where we stopped (**Run → Run All Above Selected Cell**)." No outline table: each step's heading gives its time. In the key only, this cell ends with the key note (see "The key").
-2. **Steps**, `## Step 0` to about `## Step 10`. Step 0 is setup.
+1. **The opening cell.** The title, `# Lab NN: <the chapter's title>`; a line linking the chapter; two or three sentences on what we'll build and on which case; a sentence saying what the 💬 Discuss boxes are; a **Before class** line (environment, keys, accounts); and one line for later days: "On Wednesday and Friday, run every cell above where we stopped (**Run → Run All Above Selected Cell**)." No outline table: each step's heading gives its time. In the key only, this cell ends with the key note (see "The key").
+2. **Three parts**, each headed `# Part N — <day>: <what we build>`, with steps numbered across the lab, `## Step 0` to about `## Step 15`. Each part opens with a short setup step that imports and reads the keys again, so a student who missed a day can start there. Step 0 is the first.
 3. **What did we learn?** The last numbered step: three or four reflection questions, answered as comments, plus the **Recommended Exercises ahead** list.
 4. **Friday's revision block**, a last Markdown cell.
 
@@ -52,7 +52,7 @@ Each step is, in order:
 3. **A microsprint**, after most steps (see below): a Markdown cell and a code cell.
 4. **A 💬 Discuss box** (see below). It goes last in the step, after the microsprint if there is one, so the class can discuss what the microsprint found.
 
-Minutes include the microsprint and the discussion. A lab's minutes add up to about 85.
+Minutes include the microsprint and the discussion. A lab's minutes add up to about 135: about 50 in Monday's part, 50 in Wednesday's, and 35 in Friday's.
 
 Every code cell carries metadata saying what students see, which `tools/make_student_copy.py` reads:
 
@@ -76,7 +76,7 @@ The code is typed live, in front of the class, so it has to be short and plain. 
 
 `tools/run_key.py` decides whether to retry a cell from the error the cell raises, and that depends on this style: with no `raise_for_status()`, a 429 usually surfaces at `.json()`, as a `JSONDecodeError`. A change to these rules that changes how a refused request fails needs the same change to its `TRANSIENT` pattern, in the same pull request.
 
-What the eleven restyled labs (measured on 2026-10-22) have in common, as a yardstick rather than a rule:
+What the eleven restyled labs (measured on 2026-10-22, all in the two-day, 85-minute form) have in common, as a yardstick rather than a rule:
 - 8–13 steps, 5–6 microsprints, and 83–85 minutes. 17–28 code cells, or more when they're short (week 9 has 42). The median code cell has 5–7 lines of code. Few have more than 10, and those few are a function gathering an earlier step's lines (week 6), a given cell (week 10's `get_revisions()`), or a key's long answer to an open-ended microsprint (week 3's, whose prompt asks for five or more events and whose key lists 13).
 - Zero to three functions, each written in the step after its lines were typed plainly: `get_daily_views()`, `read_infobox()`, `get_saved_copy()`. Most are called three or more times; week 7's `preprocess_document()` is called from one loop, and kept because the chapter's Recommended Exercise names it.
 - `time.sleep(1)` in every loop that sends requests.
@@ -107,7 +107,7 @@ When a chapter's API pages its results (a `continue` token, a cursor, a page num
 
 ### Microsprints
 
-A microsprint is a 3–8 minute task students do alone or in pairs, right after the step that taught what it needs. It ends in a **result the class can share and discuss**: a number, a plot, a short list, a one-sentence finding. Most steps after Step 0 have one; a lab has about five.
+A microsprint is a 3–8 minute task students do alone or in pairs, right after the step that taught what it needs. It ends in a **result the class can share and discuss**: a number, a plot, a short list, a one-sentence finding. Most steps after a setup step have one; a lab has about eight, two or three a part.
 
 ```markdown
 ### ⏱ Microsprint (5 minutes, alone or in pairs)
@@ -159,7 +159,7 @@ The last cell, Markdown, headed `## Friday: from the lab to the textbook (15 min
 
 ## Following the chapter
 
-- **The chapter's case, the chapter's code, flattened.** Use the chapter's running example and its code, but where the chapter wraps a step in a function, write the step's lines straight, and keep a function only as "Code style" allows. Keep the chapter's names for what you keep, so a student who reads the chapter later recognizes them. Where the lab must differ (the chapter has no case that fits 85 minutes, or its code would fail live), say why in the pull request. If the chapter's code is wrong, file it in the textbook repository too.
+- **The chapter's case, the chapter's code, flattened.** Use the chapter's running example and its code, but where the chapter wraps a step in a function, write the step's lines straight, and keep a function only as "Code style" allows. Keep the chapter's names for what you keep, so a student who reads the chapter later recognizes them. Where the lab must differ (the chapter has no case that fits the lab's minutes, or its code would fail live), say why in the pull request. If the chapter's code is wrong, file it in the textbook repository too.
 - **Cover the Learning Objectives** at the top of the chapter. If one doesn't fit, say which in the pull request.
 - **Say where it comes from.** The key note names the textbook commit the lab follows (`git -C <book> rev-parse --short HEAD`), so a later chapter change can be checked against the lab.
 - **Earlier weeks, by number.** When a step or a question uses an earlier week's idea, name the week and the idea, and check it against that chapter. Don't reach forward to a chapter students haven't met, except in week 1.
@@ -197,8 +197,8 @@ A rerun isn't better because it's newer. `run_key.py` writes over the key in pla
 - **One source.** The key (`lab-NN-key.ipynb`) is the only file anyone edits. `tools/make_student_copy.py` makes the students' copy from each code cell's `lab` metadata, `tools/run_key.py` fills its outputs from the live sites, and `tools/make_key_pdf.py` makes its PDF. Change the key, then run all three.
 - **Where students find it.**
   - `labs/README.md`'s table has a row per lab: the students' copy, the key, and the key's PDF.
-  - Canvas links the lab and its key in the week's Wednesday section: `python canvas/migrate.py labs` adds them to modules that already exist; see [`canvas/README.md`](../canvas/README.md).
-  - The week's slides name the lab in the at-a-glance frame and in Wednesday's first frame.
+  - Canvas links the lab and its key in the week's Wednesday section (from week 11 the lab starts on Monday, and `migrate.py` doesn't know that yet; see `docs/course-facts.md`): `python canvas/migrate.py labs` adds them to modules that already exist; see [`canvas/README.md`](../canvas/README.md).
+  - The week's slides name the lab in the at-a-glance frame and in each day's first frame.
 - **One folder per week.** Labs never share files, so several can be written at once, each on its own branch and pull request, without conflicts. That's how eleven were written in a day.
 - **The machine.** The tools run in the `webdata` environment.
   - `make_key_pdf.py` also needs pandoc and LuaLaTeX with its font loader: TeX Live's `texlive-luatex`, which the course's cloud machine had to install.
@@ -219,7 +219,7 @@ python labs/tools/make_key_pdf.py labs/week-NN/lab-NN-key.ipynb
 `make_key_pdf.py` needs pandoc, LuaLaTeX (TeX Live's `texlive-luatex`), and the DejaVu and Noto fonts. Rerun it whenever the key changes, so the PDF never shows an older key.
 
 Then check by reading:
-- The minutes in the step headings add up to about 85.
+- The minutes in the step headings add up to about 135, by part as "A step" says.
 - Every step has a Discuss box, and most have a microsprint.
 - No cell has error handling, no function sits inside another, and every function is used more than once.
 - No microsprint answers a Recommended Exercise step.
@@ -232,4 +232,4 @@ The pull request:
 - names the textbook commit;
 - adds the lab's row to [`README.md`](README.md)'s table.
 
-When a week's slides exist, their at-a-glance frame and Wednesday's first frame name the lab, as week 10's do. The instructor edits slides in Overleaf, so say in the pull request what the slides should say rather than editing them, unless asked.
+When a week's slides exist, their at-a-glance frame and each day's first frame name the lab. The instructor edits slides in Overleaf, so say in the pull request what the slides should say rather than editing them, unless asked.

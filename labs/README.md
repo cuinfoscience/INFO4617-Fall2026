@@ -1,6 +1,6 @@
 # Lab notebooks
 
-From week 10, Wednesday and Friday are one live-coding lab: we write the code together, and Friday picks up where Wednesday stopped, before the revision block. What you submit is the chapter's Recommended Exercises, in its companion notebook; the lab prepares you for them. Each week has one notebook, in a folder named for the week, as in `slides/` and `handouts/`. Its text explains each step, and its code cells hold only a comment that says what to write. The lab itself isn't submitted.
+From week 11, every class is live coding: Monday, Wednesday and Friday are one lab in three parts, one a day, and Friday ends with the revision block. (In week 10, Monday was a lecture, and the lab ran over Wednesday and Friday.) What you submit is the chapter's Recommended Exercises, in its companion notebook; the lab prepares you for them. Each week has one notebook, in a folder named for the week, as in `slides/` and `handouts/`. Its text explains each step, and its code cells hold only a comment that says what to write. The lab itself isn't submitted.
 
 This term began the labs in week 10. The labs for weeks 1–9 are written for the next time the course runs, and you're welcome to work through them.
 
