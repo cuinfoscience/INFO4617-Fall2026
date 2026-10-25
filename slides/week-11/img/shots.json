@@ -105,6 +105,31 @@
         800,
         600
       ]
+    },
+    "housing-boulder-longmont.png": {
+      "by": "Claude Code",
+      "captured": "2026-10-25",
+      "copied_from": "images/ch-11/housing-boulder-longmont.png",
+      "figure": "ch-11/housing-boulder-longmont",
+      "final_url": null,
+      "imported": "2026-10-25T15:29:32+00:00",
+      "kind": "render",
+      "method": "rendered with matplotlib 3.11.2 with requests 2.34.2; imported by tools/shots",
+      "redacted": [],
+      "scale": 2,
+      "sha256": "22f09ad98cda16ed1fc918c5fc4d55b433737698dc2434c3671c64f4654d2b50",
+      "size": [
+        1600,
+        900
+      ],
+      "source_sha256": "22f09ad98cda16ed1fc918c5fc4d55b433737698dc2434c3671c64f4654d2b50",
+      "synced": "2026-10-25T21:31:38+00:00",
+      "textbook_commit": "b036765c996ef42fcecfa350cfc4f02f02167854",
+      "url": "https://api.census.gov/data/2024/acs/acs5?get=NAME,B25034_002E,B25034_003E,B25034_004E,B25034_005E,B25034_006E,B25034_007E,B25034_008E,B25034_009E,B25034_010E,B25034_011E&for=place:07850,45970&in=state:08",
+      "window": [
+        800,
+        450
+      ]
     }
   }
 }
