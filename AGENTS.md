@@ -64,9 +64,10 @@ copy it.
 
 ## The week, and its lab
 
-From week 10, Monday is a lecture, and Wednesday and Friday are one
-live-coding lab, run from a notebook in `labs/week-NN/`; Friday ends with a
-textbook-revision block. Students submit the chapter's Recommended Exercises
+From week 11, Monday, Wednesday and Friday are one live-coding lab in three
+parts, one a day, run from a notebook in `labs/week-NN/`; Friday ends with a
+textbook-revision block. (In week 10, Monday was a lecture, and the lab ran
+over Wednesday and Friday.) Students submit the chapter's Recommended Exercises
 from its companion notebook. Write or change a lab by
 [`labs/AUTHORING.md`](labs/AUTHORING.md): the key is the source, the
 students' copy is made from it by `labs/tools/make_student_copy.py`, and the

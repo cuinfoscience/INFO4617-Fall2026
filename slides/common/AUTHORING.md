@@ -30,7 +30,10 @@ recently — voice evolves forward, not backward.
    `\author[Keegan]{\textbf{Brian C. Keegan, Ph.D.} \\ Associate Professor, Department of Information Science \\ University of Colorado Boulder}`,
    `\date{<dates>}`, then `\maketitle`.
 3. **"This week at a glance"** frame — the Monday/Wednesday/Friday roadmap using `\dayband{Day}{Topic}`, plus the lab or companion notebook as a bold lead-in and a line (an `alertblock` only if it must stand out; never a gray `block`; see "No gray blocks").
-4. `\section{Monday · Concepts}` — motivation + the chapter's core concepts,
+4. `\section{Monday · Concepts}` (from week 11, `Monday · Live-Coding Lab`: every
+   day is part of the week's lab, so the motivation and concepts go in each
+   day's opening frames, short, ahead of that day's code; see step 5)
+   — motivation + the chapter's core concepts,
    grounded in its conceptual prose, one topic per frame. Let the chapter's
    density decide the count; don't aim for a number. Recent decks have run
    from a handful of Monday frames to more than twenty. (The 2026-10-16 AAR
@@ -38,9 +41,11 @@ recently — voice evolves forward, not backward.
    decks, they went stale within weeks.) Note cross-references the
    chapter makes to other chapters, and back-reference (don't re-teach in
    depth) any skill an earlier week already covered in full.
-5. `\section{Wednesday · Notebook Lab}` (from week 10, `Wednesday · Live-Coding Lab`,
-   opening with a frame that says where the week's lab notebook is, how to use it,
-   and where its key is; see week 10 and [`labs/AUTHORING.md`](../../labs/AUTHORING.md);
+5. `\section{Wednesday · Notebook Lab}` (in week 10, `Wednesday · Live-Coding Lab`;
+   from week 11, every day's section is `<Day> · Live-Coding Lab`, for that day's
+   part of the lab. The first day's section opens with a frame that says where the
+   week's lab notebook is, how to use it, and where its key is; see week 10 and
+   [`labs/AUTHORING.md`](../../labs/AUTHORING.md);
    the lab's code is shorter and plainer than the chapter's, so say which these frames show)
    — condensed **real code** from the
    chapter as `[fragile]` frames with `lstlisting` (trim each snippet to
@@ -61,7 +66,9 @@ recently — voice evolves forward, not backward.
    established alternative (week-04) — the three-section Monday/Wednesday/
    Friday split is the default, not a hard requirement.
 6. `\section{Friday · <this week's activity>}` — Friday is the course's
-   workshop. By default it is textbook revisions, in three frames: the PR +
+   workshop. From week 10, it is the 15-minute revision block at the end of
+   Friday's part of the lab, so these frames are fewer and shorter. By
+   default it is textbook revisions, in three frames: the PR +
    peer-review workflow (reuse week-06's), a **chapter-specific "revision
    menu"** (concrete targets pulled from *this* chapter's callouts / "Common
    Issues" / "Further Reading" / thin exercises), and "what makes a good PR /
