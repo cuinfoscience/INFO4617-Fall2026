@@ -164,7 +164,7 @@ census_key = os.environ["CENSUS_KEY"]   # a missing key stops here
             {\footnotesize A JSON file, \texttt{api\_keys.json}, added to \texttt{.gitignore} \textit{before your first commit}. A key in git history stays there even after you delete the file.\par}
             \medskip
             \textbf{Names}\\[2pt]
-            {\footnotesize This course uses \texttt{CENSUS\_KEY}, \texttt{FRED\_KEY}, \texttt{EIA\_KEY}, and \texttt{DATAGOV\_KEY}. Chapter 11 is being revised to match this week.\par}
+            {\footnotesize This course uses \texttt{CENSUS\_KEY}, \texttt{FRED\_KEY}, \texttt{EIA\_KEY}, and \texttt{DATAGOV\_KEY}. Chapter 11 uses the same names.\par}
             \medskip
         \end{column}
     \end{columns}
@@ -191,32 +191,32 @@ census_key = os.environ["CENSUS_KEY"]   # a missing key stops here
     \end{columns}
 
     \bigskip
-    \centering\small Codes change between survey years: learn to look them up, not to memorize them. Then \textbf{sanity-check} one value: Boulder's median household income is \$80,243 ($\pm$\$3,561), not 7 or 70 million.
+    \centering\small Codes change between survey years: learn to look them up, not to memorize them. Then \textbf{sanity-check} one value: Boulder's median household income is \$87,493 ($\pm$\$6,221), not 7 or 70 million.
 \end{frame}
 
 % The code on these frames is the lab's Part 1 (labs/week-11/lab-11-key.ipynb), run live on
-% 2026-10-25 against the 2018-2022 ACS five-year estimates.
+% 2026-10-25 against the 2020-2024 ACS five-year estimates, following chapter 11 at textbook 1d22d06.
 \begin{frame}[fragile]{Census --- from the catalogs to a real place}
     Name the variables with \texttt{get}, the place with \texttt{for}, and what it requires with \texttt{in}:
 \begin{lstlisting}
-census_url = "https://api.census.gov/data/2022/acs/acs5"
+census_base = "https://api.census.gov/data/2024/acs/acs5"
 params = {"get": "NAME,B25034_001E,B25034_002E,B25034_003E",
           "for": "place:07850",      # Boulder: a FIPS code, kept as a string
           "in": "state:08",          # a place requires its state
           "key": census_key}
-data = requests.get(census_url, params=params, headers=HEADERS).json()
+data = requests.get(census_base, params=params, headers=HEADERS).json()
 
 df = pd.DataFrame(data[1:], columns=data[0])   # row 0 is the header
 numeric_cols = [c for c in df.columns if c.startswith("B25034")]
 df[numeric_cols] = df[numeric_cols].apply(pd.to_numeric)   # values arrive as strings
 \end{lstlisting}
-    \small Boulder has 46,551 housing units; 68 were built in 2020 or later, 3,784 in the 2010s.
+    \small Boulder has 47,465 housing units; 646 were built in 2020 or later, 3,836 in the 2010s.
 \end{frame}
 
 \begin{frame}{When there's no estimate: \texttt{-666666666}}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
-            72 of Colorado's 482 places have no median-income estimate: too few households answered. The API doesn't leave the value out --- it sends a number that can't be an income.
+            83 of Colorado's 482 places have no median-income estimate in 2020--2024: too few households answered. The API doesn't leave the value out --- it sends a number that can't be an income.
 
             \medskip
             \begin{center}\footnotesize
@@ -224,9 +224,9 @@ df[numeric_cols] = df[numeric_cols].apply(pd.to_numeric)   # values arrive as st
                 \toprule
                 \textbf{Place} & \textbf{People} & \textbf{Median income} \\
                 \midrule
-                Boulder & 106,598 & 80,243 \\
-                Campo & 103 & \texttt{-666666666} \\
-                Bonanza & 11 & \texttt{-666666666} \\
+                Boulder & 106,433 & 87,493 \\
+                Campo & 58 & 53,125 ($\pm$40,478) \\
+                Bonanza & 20 & \texttt{-666666666} \\
                 Carbonate & 0 & \texttt{-666666666} \\
                 \bottomrule
             \end{tabular}
@@ -234,7 +234,7 @@ df[numeric_cols] = df[numeric_cols].apply(pd.to_numeric)   # values arrive as st
         \end{column}
         \begin{column}{0.4\textwidth}
             \begin{alertblock}{Average it as is}
-                \footnotesize The mean of that column is $-499{,}979{,}939$. Mask the codes first: \texttt{towns.mask(towns < 0)}.
+                \footnotesize The mean of that column is $-333{,}298{,}178$. Mask the codes first: \texttt{towns.mask(towns < 0)}.
             \end{alertblock}
             \textbf{What the codes mean}\\[2pt]
             {\footnotesize The Census Bureau's notes on estimate and annotation values list each one; a margin of error of \texttt{-222222222} goes with it.\par}
