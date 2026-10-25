@@ -247,61 +247,248 @@ df[numeric_cols] = df[numeric_cols].apply(pd.to_numeric)   # values arrive as st
 \section{Wednesday · Live-Coding Lab}
 % =========================================================================
 
-\begin{frame}[fragile]{FRED --- let the server do the math}
+% The code on these frames is the lab's Part 2 (labs/week-11/lab-11-key.ipynb), run live on
+% 2026-10-25, following chapter 11 at textbook 8998974. Figures are synced from the chapter.
+\begin{frame}{Today: Part 2, FRED and then the EIA}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-        Ask FRED for a \textbf{transformation} and it returns the result --- here, year-over-year percent change:
-\begin{lstlisting}
-fred_url = ("https://api.stlouisfed.org"
-            "/fred/series/observations")
+        \begin{column}{0.56\textwidth}
+            Both of today's APIs do work \textit{before} they answer:
+            \begin{itemize}\small
+                \item \textbf{FRED} (Federal Reserve Economic Data, from the St.\ Louis Fed) \textbf{computes}: changes, percent changes, yearly averages
+                \item The \textbf{EIA} (U.S. Energy Information Administration) \textbf{filters}: one state, one sector, one column, one span of years
+            \end{itemize}
+            Asking the server, instead of downloading everything and doing it in pandas, is today's idea.
 
-params = {
-    "series_id": "CUURS49BSA0",  # Denver CPI
-    "api_key": fred_key,
-    "file_type": "json",
-    "units": "pc1",     # % change vs. 1yr ago
-    "observation_start": "2019-01-01",
-}
-obs = requests.get(fred_url,
-        params=params).json()["observations"]
-df = pd.DataFrame(obs)
-\end{lstlisting}
+            \medskip
+            \dayband{Use it}{Steps 7--14, about 50 minutes}
+            \begin{itemize}\small
+                \item Download the new \texttt{lab-11.ipynb}; start at \textbf{Step 7}, which imports and reads the keys again
+                \item Put \textbf{your} email in the User-Agent
+            \end{itemize}
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/fred_series_page.png}\\
-            {\scriptsize Find series IDs on the FRED website, then copy them \textit{exactly}.}
+        \begin{column}{0.4\textwidth}
+            \begin{alertblock}{Two keys today}
+                \footnotesize \texttt{FRED\_KEY} and \texttt{EIA\_KEY}, set \textit{before} you start Jupyter. Both APIs call the parameter \texttt{api\_key}; Monday's Census called it \texttt{key}.
+            \end{alertblock}
+            \textbf{No key yet?}\\[2pt]
+            {\footnotesize The EIA's arrives by email within minutes. Follow along from the key until it does.\par}
+            \medskip
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Combine two agencies --- and mind the sentinels}
+\begin{frame}[fragile]{FRED: find the series, then ask what it is}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-        The payoff is integration. But guard Census \textbf{sentinel values} --- suppressed cells return as \texttt{-666666666}, not null:
+        \begin{column}{0.5\textwidth}
+            Every one of FRED's 800,000 series has an \textbf{ID} (1), on its page. The \texttt{series} endpoint describes it; \texttt{series/observations} sends its values:
 \begin{lstlisting}
-def census_int(v):    # NEVER trust a bare int()
-    if v is None or str(v).startswith("-6666"):
-        return None
-    return int(v)
-
-housing = requests.get(census_url,
-             params=housing_params).json()
-counts = [census_int(housing[1][i])
-          for i in range(2, 8)]   # by decade
-
-# FRED: 30-yr mortgage rate = the economic "why"
-rate = requests.get(fred_url,
-          params=mortgage_params).json()
-df_rate = pd.DataFrame(rate["observations"])
+fred_base = "https://api.stlouisfed.org/fred"
+params = {"series_id": "MHICO08013A052NCEN",
+          "api_key": fred_key, "file_type": "json",
+          "observation_end": "2024-12-31"}
+data = requests.get(f"{fred_base}/series/observations",
+                    params=params, headers=HEADERS).json()
+income = pd.DataFrame(data["observations"])[["date", "value"]]
+income["value"] = pd.to_numeric(income["value"],
+                                errors="coerce")  # "." is missing
 \end{lstlisting}
+            \small 2024: \$103,293 (2) --- not the Census API's \$103,994. Different programs: name the one you cite.
         \end{column}
-        \begin{column}{0.35\textwidth}
+        \begin{column}{0.46\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{img/census_fred_panels.png}\\
-            {\scriptsize Census says \textit{what} the housing stock is; FRED says \textit{why}.}
+            \includegraphics[width=\textwidth]{img/fred-series_annotated.pdf}\\
+            {\scriptsize Boulder County's median household income on FRED, captured 2026-10-25 (chapter 11, figure 11.2).}
         \end{column}
     \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Let the server compute: \texttt{units}}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            Step 9 gathers Step 8's lines into \texttt{fred\_observations(series\_id, **params)}. Then the \textit{same series} twice more, one parameter changed:
+\begin{lstlisting}
+change = fred_observations("MHICO08013A052NCEN",
+            units="chg", observation_end="2024-12-31")
+growth = fred_observations("MHICO08013A052NCEN",
+            units="pch", observation_end="2024-12-31")
+\end{lstlisting}
+            \begin{center}\footnotesize
+            \begin{tabular}{@{}rrrr@{}}
+                \toprule
+                \textbf{Year} & \textbf{Dollars} & \textbf{Change} & \textbf{Percent change} \\
+                \midrule
+                2022 & 96,584 & 6,257 & 6.9 \\
+                2023 & 97,170 & 586 & 0.6 \\
+                2024 & 103,293 & 6,123 & 6.3 \\
+                \bottomrule
+            \end{tabular}
+            \end{center}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{What \texttt{units} can be}\\[2pt]
+            {\footnotesize
+            \begin{tabular}{@{}ll@{}}
+                \texttt{lin} & as published \\
+                \texttt{chg} & change \\
+                \texttt{ch1} & change from a year before \\
+                \texttt{pch} & percent change \\
+                \texttt{pc1} & percent change from a year before \\
+                \texttt{log} & natural logarithm \\
+            \end{tabular}\par}
+            \medskip
+            \textbf{Microsprint}\\[2pt]
+            {\footnotesize In which years did the income \textit{fall}? Six, from 2001 to 2020; the largest, \$3,003 in 2009.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Let the server compute: \texttt{frequency}, then \texttt{units}}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            One series, \texttt{CPIAUCNS} (the national Consumer Price Index, monthly), three requests:
+\begin{lstlisting}
+years = {"observation_start": "2015-01-01",
+         "observation_end": "2025-12-31"}
+monthly = fred_observations("CPIAUCNS", **years)
+annual = fred_observations("CPIAUCNS", frequency="a",
+            aggregation_method="avg", **years)
+inflation = fred_observations("CPIAUCNS", frequency="a",
+            aggregation_method="avg", units="pc1", **years)
+\end{lstlisting}
+            \small FRED lowers the frequency first, then applies the units: each year's mean of twelve months, then its percent change from the year before.
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Trust, but check once}\\[2pt]
+            {\footnotesize Microsprint: the same numbers from \texttt{monthly}, with \texttt{groupby()} and \texttt{pct\_change()}.\par}
+            \medskip
+            {\footnotesize
+            \begin{tabular}{@{}rrr@{}}
+                \toprule
+                \textbf{Year} & \textbf{FRED} & \textbf{pandas} \\
+                \midrule
+                2023 & 4.1 & 4.1 \\
+                2024 & 2.9 & 2.9 \\
+                2025 & 2.6 & 2.6 \\
+                \bottomrule
+            \end{tabular}\par}
+            \medskip
+            {\footnotesize Why can FRED give 2015's inflation, and pandas can't?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Denver against the nation}
+    \begin{columns}[T]
+        \begin{column}{0.36\textwidth}
+            The Bureau of Labor Statistics' CPI for the Denver area, \texttt{CUUSA433SA0}, is annual already: it needs only \texttt{units="pc1"}.
+\begin{lstlisting}
+denver = fred_observations(
+    "CUUSA433SA0", units="pc1", **years)
+cpi = denver.merge(inflation, on="date",
+    suffixes=("_denver", "_national"))
+\end{lstlisting}
+            \small Denver ran ahead from 2015 to 2020, and behind since 2024. Housing is the largest part of the CPI: what would you ask FRED next?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/cpi-denver-national.png}\\
+            {\scriptsize Drawn by the chapter's code from FRED, 2026-10-25 (chapter 11, figure 11.6). The dashed line is the Federal Reserve's 2\% target.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{EIA: routes that describe themselves}
+    \begin{columns}[T]
+        \begin{column}{0.54\textwidth}
+            The EIA's API is a tree of \textbf{routes}. Ask for one without \texttt{data/}, and it says what it holds:
+\begin{lstlisting}
+eia_base = "https://api.eia.gov/v2"
+meta = requests.get(f"{eia_base}/electricity/retail-sales/",
+                    params={"api_key": eia_key},
+                    headers=HEADERS).json()["response"]
+print([f["id"] for f in meta["facets"]])
+# ['stateid', 'sectorid']
+for column, about in meta["data"].items():
+    print(column, "|", about["units"])
+# price | cents per kilowatt-hour   ...and 3 more
+\end{lstlisting}
+            \small A \textbf{facet} filters the rows; a \textbf{data column} (1) is what each row holds. Monday's idea, \textit{what can I ask for?}, from a different API.
+        \end{column}
+        \begin{column}{0.42\textwidth}
+            \centering
+            \includegraphics[width=0.92\textwidth]{img/eia-browser_annotated.pdf}\\
+            {\scriptsize The EIA's API Dashboard, captured 2026-10-25 (chapter 11, figure 11.3): its menus (2) are those routes, and it writes the request (3).}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Let the server filter}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            Add \texttt{data/} to the route, and each parameter narrows the rows. The brackets are part of the names:
+\begin{lstlisting}
+params = {"frequency": "annual", "data[]": "price",
+          "facets[stateid][]": "CO",
+          "facets[sectorid][]": "RES",   # homes
+          "start": "2001", "end": "2025",
+          "sort[0][column]": "period",
+          "sort[0][direction]": "asc",
+          "api_key": eia_key}
+prices = requests.get(f"{eia_base}/electricity/retail-sales/data/",
+            params=params, headers=HEADERS).json()["response"]
+print("Rows:", prices["total"])   # Rows: 25
+\end{lstlisting}
+            \small 25 rows, from a route that holds every state and sector by month, quarter, and year. Colorado's homes paid 15.69 cents a kilowatt-hour in 2025.
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Microsprint}\\[2pt]
+            {\footnotesize Change one facet: a sector (\texttt{COM}, \texttt{IND}) or a state (\texttt{UT}, \texttt{NM}). Colorado's businesses paid 12.37 cents in 2025.\par}
+            \medskip
+            \textbf{Still strings}\\[2pt]
+            {\footnotesize Prices and \texttt{total} arrive as text, like the Census Bureau's numbers: \texttt{pd.to\_numeric()} before any math.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{What a filtered request can show}
+    \begin{columns}[T]
+        \begin{column}{0.36\textwidth}
+            The chapter asks the same API for Colorado's annual generation from five sources, plus the total: one facet, six values, one request.
+
+            \medskip
+            \small Coal made 76.7\% of the state's electricity in 2001 and 24.7\% in 2025. Wind grew from almost nothing to 30.0\%; 2024 was the first year coal wasn't the largest source.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/co-generation-mix.png}\\
+            {\scriptsize Drawn by the chapter's code from the EIA's API, 2026-10-25 (chapter 11, figure 11.7).}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Paging: \texttt{offset} and \texttt{length}, against Wikipedia's \texttt{continue}}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \dayband{EIA}{you keep count}
+            \begin{itemize}\small
+                \item At most 5,000 rows a request; \texttt{total} says how many match
+                \item Colorado's monthly generation, 2001--2025: 9,289 rows
+                \item Page two: \texttt{offset=5000}, the rows to skip
+                \item Stop when you have \texttt{total} rows --- the \texttt{"incomplete return"} warning comes with the last page too
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \dayband{Wikipedia}{the server keeps count}
+            \begin{itemize}\small
+                \item Week 10: each answer carried a \texttt{continue} token
+                \item You sent it back without knowing what it meant
+                \item Stop when there's no token
+            \end{itemize}
+        \end{column}
+    \end{columns}
+
+    \bigskip
+    \centering\small \textbf{Sort when you page}, so no row moves between pages. And \textbf{filter first}: a facet, a shorter span, or a lower frequency may fit the answer in one page.
 \end{frame}
 
 % =========================================================================

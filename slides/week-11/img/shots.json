@@ -1,0 +1,110 @@
+{
+  "files": {
+    "co-generation-mix.png": {
+      "by": "Claude Code, for Brian C. Keegan",
+      "captured": "2026-10-25",
+      "copied_from": "images/ch-11/co-generation-mix.png",
+      "figure": "ch-11/co-generation-mix",
+      "final_url": null,
+      "imported": "2026-10-25T20:39:14+00:00",
+      "kind": "render",
+      "method": "rendered with matplotlib 3.11.2 with requests 2.34.2; imported by tools/shots",
+      "redacted": [],
+      "scale": 2,
+      "sha256": "0592c91185789e3075dc16aee7958549e98d9be3a0c82105031ea19af27f701e",
+      "size": [
+        1600,
+        900
+      ],
+      "source_sha256": "0592c91185789e3075dc16aee7958549e98d9be3a0c82105031ea19af27f701e",
+      "synced": "2026-10-25T20:54:14+00:00",
+      "textbook_commit": "1a67599eb9d29b49eb5f1a65d9ee2aba75f2ec90",
+      "url": "https://api.eia.gov/v2/electricity/electric-power-operational-data/data/?frequency=annual&data[]=generation&facets[location][]=CO&facets[sectorid][]=99&start=2001&end=2025",
+      "window": [
+        800,
+        450
+      ]
+    },
+    "cpi-denver-national.png": {
+      "by": "Claude Code, for Brian C. Keegan",
+      "captured": "2026-10-25",
+      "copied_from": "images/ch-11/cpi-denver-national.png",
+      "figure": "ch-11/cpi-denver-national",
+      "final_url": null,
+      "imported": "2026-10-25T20:39:14+00:00",
+      "kind": "render",
+      "method": "rendered with matplotlib 3.11.2 with requests 2.34.2; imported by tools/shots",
+      "redacted": [],
+      "scale": 2,
+      "sha256": "86eb91fa986990fd63049cea25920ff8deb5a590c3ff8e6b702f013ec3a27a5b",
+      "size": [
+        1600,
+        800
+      ],
+      "source_sha256": "86eb91fa986990fd63049cea25920ff8deb5a590c3ff8e6b702f013ec3a27a5b",
+      "synced": "2026-10-25T20:54:14+00:00",
+      "textbook_commit": "1a67599eb9d29b49eb5f1a65d9ee2aba75f2ec90",
+      "url": "https://api.stlouisfed.org/fred/series/observations?series_id=CPIAUCNS&frequency=a&aggregation_method=avg&units=pc1&observation_start=2015-01-01&observation_end=2025-12-31",
+      "window": [
+        800,
+        400
+      ]
+    },
+    "eia-browser.png": {
+      "also": [
+        "eia-browser_annotated.png",
+        "eia-browser_annotated.pdf"
+      ],
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-10-25T15:29:00+00:00",
+      "copied_from": "images/ch-11/eia-browser.png",
+      "figure": "ch-11/eia-browser",
+      "final_url": "https://www.eia.gov/opendata/browser/electricity/retail-sales?frequency=annual&data=price;&facets=stateid;sectorid;&stateid=CO;&sectorid=RES;&sortColumn=period;&sortDirection=desc;",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "448d27e696c6caa9eaff37269b8c3bd1083450da712aff4f1f148c5fddb55394",
+      "size": [
+        1600,
+        1514
+      ],
+      "source_sha256": "448d27e696c6caa9eaff37269b8c3bd1083450da712aff4f1f148c5fddb55394",
+      "synced": "2026-10-25T20:54:14+00:00",
+      "textbook_commit": "b036765c996ef42fcecfa350cfc4f02f02167854",
+      "url": "https://www.eia.gov/opendata/browser/electricity/retail-sales?frequency=annual&data=price;&facets=stateid;sectorid;&stateid=CO;&sectorid=RES;&sortColumn=period;&sortDirection=desc;",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        800,
+        840
+      ]
+    },
+    "fred-series.png": {
+      "also": [
+        "fred-series_annotated.png",
+        "fred-series_annotated.pdf"
+      ],
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-10-25T15:23:24+00:00",
+      "copied_from": "images/ch-11/fred-series.png",
+      "figure": "ch-11/fred-series",
+      "final_url": "https://fred.stlouisfed.org/series/MHICO08013A052NCEN",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "5ca401a112fc1616fe5c25489167210ae328d20d0cfd04106deae3d140481731",
+      "size": [
+        1600,
+        604
+      ],
+      "source_sha256": "5ca401a112fc1616fe5c25489167210ae328d20d0cfd04106deae3d140481731",
+      "synced": "2026-10-25T20:54:13+00:00",
+      "textbook_commit": "b036765c996ef42fcecfa350cfc4f02f02167854",
+      "url": "https://fred.stlouisfed.org/series/MHICO08013A052NCEN",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        800,
+        600
+      ]
+    }
+  }
+}
