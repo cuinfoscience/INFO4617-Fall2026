@@ -29,7 +29,7 @@ recently — voice evolves forward, not backward.
 2. `\title[Week N · short]{{\Huge Full Title}}`, `\subtitle{Week N · <module> module · Textbook Chapter C}`,
    `\author[Keegan]{\textbf{Brian C. Keegan, Ph.D.} \\ Associate Professor, Department of Information Science \\ University of Colorado Boulder}`,
    `\date{<dates>}`, then `\maketitle`.
-3. **"This week at a glance"** frame — the Monday/Wednesday/Friday roadmap using `\dayband{Day}{Topic}`, plus a companion-notebook block (`ch-NN-slug.ipynb`).
+3. **"This week at a glance"** frame — the Monday/Wednesday/Friday roadmap using `\dayband{Day}{Topic}`, plus the lab or companion notebook as a bold lead-in and a line (an `alertblock` only if it must stand out; never a gray `block`; see "No gray blocks").
 4. `\section{Monday · Concepts}` — motivation + the chapter's core concepts,
    grounded in its conceptual prose, one topic per frame. Let the chapter's
    density decide the count; don't aim for a number. Recent decks have run
@@ -407,6 +407,7 @@ clean. Never leave a broken deck.
   STE's controlled dictionary has no words for this subject. Apply only its
   clarity rules there: keep sentences under 25 words, prefer active voice, and
   cut idioms a non-native reader would miss.
+- **No gray blocks.** The theme's gray `\begin{block}` is strongly penalized: the instructor doesn't want it in a deck. Put what it would hold in the column as plain text, a bold lead-in (`\textbf{Solutions}\\[2pt]`) followed by a line or a short list. If something must be boxed, use the gold `alertblock`, and keep it to the one point on the frame that needs it. (`exampleblock` is out for the same reason.) Decks before week 11 still have gray blocks; take them out when you edit a frame that holds one.
 - **Body text is black and white.** Never colorize prose — no
   `\textcolor{tab-blue}{\textbf{...}}` labels, no color-coded key terms, no
   colored block titles. Use `\textbf{}` and `\textit{}` for emphasis and let

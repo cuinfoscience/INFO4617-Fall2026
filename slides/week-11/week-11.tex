@@ -46,15 +46,15 @@
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{The lab}
-                \footnotesize \texttt{labs/week-11/lab-11.ipynb} in the course repository. Each part is added before its day.
-            \end{block}
+            \textbf{The lab}\\[2pt]
+            {\footnotesize \texttt{labs/week-11/lab-11.ipynb} in the course repository. Each part is added before its day.\par}
+            \medskip
             \begin{alertblock}{Four keys, as environment variables}
                 \footnotesize \texttt{CENSUS\_KEY} today; \texttt{FRED\_KEY} and \texttt{EIA\_KEY} Wednesday; \texttt{DATAGOV\_KEY} Friday. Links are in the Canvas announcement and the lab's first cell.
             \end{alertblock}
-            \begin{block}{Due Sunday, Nov 1}
-                \footnotesize Chapter 11's \textbf{Recommended Exercises}, from its companion notebook.
-            \end{block}
+            \textbf{Due Sunday, Nov 1}\\[2pt]
+            {\footnotesize Chapter 11's \textbf{Recommended Exercises}, from its companion notebook.\par}
+            \medskip
         \end{column}
     \end{columns}
 \end{frame}
@@ -83,18 +83,18 @@
             \end{itemize}
         \end{column}
         \begin{column}{0.4\textwidth}
-            \begin{block}{Solutions}
-                \footnotesize \texttt{lab-11-key.ipynb}, beside it: every cell filled in and run. Fall behind? Copy the cell from the key and keep going.
-            \end{block}
-            \begin{block}{Nothing to submit}
-                \footnotesize The lab is practice. After each step, a \textbf{Discuss} box holds questions we'll talk over before the next.
-            \end{block}
+            \textbf{Solutions}\\[2pt]
+            {\footnotesize \texttt{lab-11-key.ipynb}, beside it: every cell filled in and run. Fall behind? Copy the cell from the key and keep going.\par}
+            \medskip
+            \textbf{Nothing to submit}\\[2pt]
+            {\footnotesize The lab is practice. After each step, a \textbf{Discuss} box holds questions we'll talk over before the next.\par}
+            \medskip
             \begin{alertblock}{Error flavors}
                 \footnotesize A missing key stops Step 0 \textit{on purpose}: set it and run again. A cell that fails with your key set is \textit{broken}: tell me, or open an issue.
             \end{alertblock}
-            \begin{block}{No key yet?}
-                \footnotesize Follow along: the key shows every output. A Census key works only after you click the link in its email.
-            \end{block}
+            \textbf{No key yet?}\\[2pt]
+            {\footnotesize Follow along: the key shows every output. A Census key works only after you click the link in its email.\par}
+            \medskip
         \end{column}
     \end{columns}
 \end{frame}
@@ -115,9 +115,9 @@
             They embody the \textbf{openness} value from Ch.~3, \textit{The Post-API Age}: public data, freely accessible by mandate rather than platform goodwill.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Stable, but less polished}
+            \begin{alertblock}{Stable, but less polished}
                 \footnotesize Agencies don't pivot business models or get acquired --- so these APIs are unusually \textbf{stable}. The tradeoff: dense docs, cryptic variable names, unhelpful errors. Navigating that \textit{is} the skill.
-            \end{block}
+            \end{alertblock}
         \end{column}
     \end{columns}
 \end{frame}
@@ -160,12 +160,12 @@ census_key = os.environ["CENSUS_KEY"]   # a missing key stops here
             The User-Agent still says who sent each request: \texttt{WebDataScience/1.0 (your-email@colorado.edu)}.
         \end{column}
         \begin{column}{0.4\textwidth}
-            \begin{block}{The chapter's second way}
-                \footnotesize A JSON file, \texttt{api\_keys.json}, added to \texttt{.gitignore} \textit{before your first commit}. A key in git history stays there even after you delete the file.
-            \end{block}
-            \begin{block}{Names}
-                \footnotesize This course uses \texttt{CENSUS\_KEY}, \texttt{FRED\_KEY}, \texttt{EIA\_KEY}, and \texttt{DATAGOV\_KEY}. Chapter 11 is being revised to match this week.
-            \end{block}
+            \textbf{The chapter's second way}\\[2pt]
+            {\footnotesize A JSON file, \texttt{api\_keys.json}, added to \texttt{.gitignore} \textit{before your first commit}. A key in git history stays there even after you delete the file.\par}
+            \medskip
+            \textbf{Names}\\[2pt]
+            {\footnotesize This course uses \texttt{CENSUS\_KEY}, \texttt{FRED\_KEY}, \texttt{EIA\_KEY}, and \texttt{DATAGOV\_KEY}. Chapter 11 is being revised to match this week.\par}
+            \medskip
         \end{column}
     \end{columns}
 \end{frame}
@@ -236,9 +236,9 @@ df[numeric_cols] = df[numeric_cols].apply(pd.to_numeric)   # values arrive as st
             \begin{alertblock}{Average it as is}
                 \footnotesize The mean of that column is $-499{,}979{,}939$. Mask the codes first: \texttt{towns.mask(towns < 0)}.
             \end{alertblock}
-            \begin{block}{What the codes mean}
-                \footnotesize The Census Bureau's notes on estimate and annotation values list each one; a margin of error of \texttt{-222222222} goes with it.
-            \end{block}
+            \textbf{What the codes mean}\\[2pt]
+            {\footnotesize The Census Bureau's notes on estimate and annotation values list each one; a margin of error of \texttt{-222222222} goes with it.\par}
+            \medskip
         \end{column}
     \end{columns}
 \end{frame}
@@ -344,26 +344,26 @@ df_rate = pd.DataFrame(rate["observations"])
 \begin{frame}{A good revision, and a good review}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            \begin{block}{A strong PR}
-                \begin{itemize}\small
+            \textbf{A strong PR}\\[2pt]
+            \begin{itemize}\small
                     \item One focused change, clearly titled
                     \item Explains the problem it fixes
                     \item Builds (\texttt{quarto render}) without errors
                     \item Matches the book's voice and notation
                     \item Discloses any AI assistance
                 \end{itemize}
-            \end{block}
+            \medskip
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{A strong review}
-                \begin{itemize}\small
+            \textbf{A strong review}\\[2pt]
+            \begin{itemize}\small
                     \item Runs / reads the change, not just skims
                     \item Names specifics (line, claim, code)
                     \item Separates ``must fix'' from ``nice to have''
                     \item Is generous --- assume good faith
                     \item Ends with a clear verdict
                 \end{itemize}
-            \end{block}
+            \medskip
         \end{column}
     \end{columns}
     \medskip
