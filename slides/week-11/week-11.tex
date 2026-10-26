@@ -516,78 +516,189 @@ print("Rows:", prices["total"])   # Rows: 25
 \section{Friday · Live-Coding Lab}
 % =========================================================================
 
-\begin{frame}{Improving Chapter 11 together}
+% The code on these frames is the lab's Part 3 (labs/week-11/lab-11-key.ipynb), following
+% chapter 11 at textbook a9ecce1 (#292). Figures are synced from the chapter.
+\begin{frame}{Today: Part 3, Congress.gov and a join}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-11-government.qmd} and reviews a classmate's.
+        \begin{column}{0.56\textwidth}
+            \dayband{Lab}{Steps 15--20, about 35 minutes}
+            \begin{itemize}\small
+                \item \textbf{Congress.gov}, from the Library of Congress: a bill's record is mostly \textbf{links} to other records. Today's idea: \textit{follow the links}.
+                \item Then a \textbf{join}: the Census Bureau's incomes with the EIA's electricity bills, state by state
+                \item Download the new \texttt{lab-11.ipynb}; start at \textbf{Step 15}
+            \end{itemize}
 
-            \bigskip
-
-            The workflow (from Week 1):
-            \begin{enumerate}\small
-                \item Branch / fork the book repo
-                \item Edit the chapter; commit with a clear message
-                \item Open a PR describing \textit{what} and \textit{why}
-                \item Review two peers' PRs: kind, specific, actionable
-            \end{enumerate}
+            \medskip
+            \dayband{Then}{the textbook, 15 minutes}
+            \begin{itemize}\small
+                \item What the lab turned up in chapter 11, as a pull request
+            \end{itemize}
         \end{column}
-        \begin{column}{0.35\textwidth}
+        \begin{column}{0.4\textwidth}
+            \begin{alertblock}{Today's key goes in a header}
+                \footnotesize \texttt{DATAGOV\_KEY}, sent as \texttt{X-Api-Key}, which every api.data.gov service accepts. Congress.gov's links can then be sent as they arrive, and no URL you print holds the key.
+            \end{alertblock}
+            \textbf{Also today}\\[2pt]
+            {\footnotesize \texttt{CENSUS\_KEY} and \texttt{EIA\_KEY}, for the join.\par}
+            \medskip
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{A bill is mostly links}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+\begin{lstlisting}
+congress_headers = HEADERS.copy()
+congress_headers["X-Api-Key"] = datagov_key
+
+bill = requests.get(f"{congress_base}/bill/119/hr/7730",
+           params={"format": "json"},
+           headers=congress_headers).json()["bill"]
+for field, value in bill.items():
+    if isinstance(value, dict) and "url" in value:
+        print(field, value.get("count"), value["url"])
+# actions 18 .../bill/119/hr/7730/actions?format=json
+# cosponsors 6 .../bill/119/hr/7730/cosponsors?format=json
+# textVersions 5 .../bill/119/hr/7730/text?format=json
+\end{lstlisting}
+            \small Each link is a complete request: send it with the same headers. The code never builds an address.
+        \end{column}
+        \begin{column}{0.46\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{img/pr_review_ch11.png}
+            \includegraphics[width=\textwidth]{img/congress-bill_annotated.pdf}\\
+            {\scriptsize H.R. 7730 (1), its sponsor (2), and its tracker (3), on Congress.gov, October 2026 (chapter 11, figure 11.4).}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{A revision menu for Chapter 11}
-    High-value targets --- pick one and scope it to a single PR:
-    \begin{itemize}
-        \item \textbf{Test the code against live APIs.} Series IDs, endpoints, and election years drift; keys expire. Run the notebook, report what broke, and fix it.
-        \item \textbf{Close a gap in ``Common Issues to Debug.''} Add a worked \texttt{-666666666} sentinel-value example, or a rate-limit / retry snippet (FRED $\approx$120 req/min; api.data.gov 1,000 req/hr).
-        \item \textbf{Add a figure.} An annotated variable-code diagram, or the key $\rightarrow$ request $\rightarrow$ JSON $\rightarrow$ DataFrame pipeline.
-        \item \textbf{Strengthen a thin exercise.} The six exercises are open-ended --- add expected output, a rubric, or a starter cell so they self-check.
-        \item \textbf{Extend ``Further Reading.''} A data-journalism example tied to ``Social History and Public Interest'' --- a documented withdrawn dataset or deprecated API.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{A good revision, and a good review}
+\begin{frame}[fragile]{Follow the links}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \textbf{A strong PR}\\[2pt]
-            \begin{itemize}\small
-                    \item One focused change, clearly titled
-                    \item Explains the problem it fixes
-                    \item Builds (\texttt{quarto render}) without errors
-                    \item Matches the book's voice and notation
-                    \item Discloses any AI assistance
-                \end{itemize}
-            \medskip
+        \begin{column}{0.56\textwidth}
+\begin{lstlisting}
+actions = requests.get(bill["actions"]["url"],
+              params={"limit": 250},
+              headers=congress_headers).json()["actions"]
+
+milestones = ("Introduced in", "Passed/agreed to in",
+              "Became Public Law")
+shown = set()
+for action in reversed(actions):     # newest first
+    if (action["text"].startswith(milestones)
+            and action["text"] not in shown):
+        print(action["actionDate"], action["text"][:40])
+        shown.add(action["text"])
+# 2026-02-26 Introduced in House
+# 2026-09-16 Passed/agreed to in House: ...
+# 2026-09-28 Passed/agreed to in Senate: ...
+\end{lstlisting}
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \textbf{A strong review}\\[2pt]
+        \begin{column}{0.4\textwidth}
+            \textbf{The cosponsors' link}\\[2pt]
+            {\footnotesize Six cosponsors. One of the three original ones is Joe Neguse, Boulder's representative (CO-2).\par}
+            \medskip
+            \textbf{Recorded twice}\\[2pt]
+            {\footnotesize Some milestones appear twice, in the same words: print each once.\par}
+            \medskip
+            \textbf{Microsprint}\\[2pt]
+            {\footnotesize Follow \texttt{textVersions}: how many versions of the text, and what is the newest called?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Paging with \texttt{next}: the week's third way}
+    \begin{center}\small
+    \begin{tabular}{@{}llll@{}}
+        \toprule
+        \textbf{API} & \textbf{The response gives you} & \textbf{You send} & \textbf{Stop when} \\
+        \midrule
+        Wikipedia (week 10) & a \texttt{continue} token & the token, back & there's no token \\
+        EIA (Wednesday) & \texttt{total} & \texttt{offset}, which you count & you have \texttt{total} rows \\
+        Congress.gov (today) & \texttt{pagination.next}, a whole URL & the URL, as it is & there's no \texttt{next} \\
+        \bottomrule
+    \end{tabular}
+    \end{center}
+
+    \medskip
+    \small Step 18 takes Joe Neguse's sponsored legislation in three moves: two pages by hand, one page as a function you write, \texttt{bills\_on\_page()}, then the given loop, \texttt{sponsored\_bills()}.
+
+    \medskip
+    \textbf{Microsprint:} another member of Colorado's delegation. How many of their bills are still in committee?
+\end{frame}
+
+\begin{frame}{Following every link: how far the bills got}
+    \begin{columns}[T]
+        \begin{column}{0.36\textwidth}
+            The chapter follows the \texttt{actions} link of every bill Colorado's ten members sponsored in the 119th Congress: \textbf{353 requests}.
+
+            \medskip
+            \small 326 were only introduced; 25 passed one chamber; 1 passed both; 1 became law (H.R. 2316).
+
+            \medskip
+            \footnotesize A count of milestones isn't a measure of effectiveness: Volden and Wiseman weigh each bill by what it would change. And the chapter's \texttt{fromDateTime} asks only for what changed since the last run.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/colorado-bills-stages.png}\\
+            {\scriptsize Drawn by the chapter's code from Congress.gov's API, as of October 25, 2026 (chapter 11, figure 11.8).}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Two agencies, one identifier}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            The Census Bureau calls Colorado \texttt{08}; the EIA calls it \texttt{CO}. A \textbf{crosswalk} pairs the codes:
+\begin{lstlisting}
+states = states.merge(codes[["STATEFP", "STATE"]],
+            left_on="state", right_on="STATEFP", how="left")
+joined = states.merge(power, left_on="STATE",
+            right_on="stateid", how="outer", indicator=True)
+\end{lstlisting}
+            \small \textbf{Look at what didn't match:} Puerto Rico, on the Census side; ten regions and the U.S.\ total, on the EIA's. An inner join drops them without a word.
+
+            \medskip
+            \small Bills as a share of income: Mississippi and Alabama 3.3\%; Colorado 1.3\%, \$1,207 a year.
+        \end{column}
+        \begin{column}{0.46\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/state-electricity-bills.png}\\
+            {\scriptsize Drawn by the chapter's code from the Census Bureau's and the EIA's APIs, 2026-10-25 (chapter 11, figure 11.9).}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Friday: from the lab to the textbook (15 minutes)}
+    \begin{columns}[T]
+        \begin{column}{0.58\textwidth}
+            Look back at what the lab turned up in chapter 11, and propose one change as a \textbf{pull request}:
             \begin{itemize}\small
-                    \item Runs / reads the change, not just skims
-                    \item Names specifics (line, claim, code)
-                    \item Separates ``must fix'' from ``nice to have''
-                    \item Is generous --- assume good faith
-                    \item Ends with a clear verdict
-                \end{itemize}
+                \item \textbf{An output that has changed.} The chapter printed its outputs on October 25, while Congress was in session. Compare H.R. 7730's latest action, or a member's number of bills.
+                \item \textbf{A cell that broke.} A Congress.gov link sent without its key fails with a 403. Does ``Common Issues to Debug'' say so clearly enough?
+                \item \textbf{An entry to test.} ``More Government APIs for Colorado'' lists twelve more. Try one: is its entry right?
+                \item \textbf{A microsprint that would make a good exercise.} The text versions, or a member's bills still in committee.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.38\textwidth}
+            \textbf{How to propose one}\\[2pt]
+            {\footnotesize The course's \texttt{handouts/common/revision-framework.md} says what each kind of change needs to be accepted.\par}
+            \medskip
+            \textbf{A good review}\\[2pt]
+            {\footnotesize Run the change; name the line; separate ``must fix'' from ``nice to have''; end with a verdict.\par}
             \medskip
         \end{column}
     \end{columns}
-    \medskip
-    \centering\small Next week: \textbf{Social \& media platform APIs} --- OAuth, Mastodon, and Bluesky in the post-API age.
 \end{frame}
 
 % =========================================================================
 \begin{frame}{Key takeaways}
     \begin{enumerate}
-        \item Government APIs serve \textbf{transparency mandates} --- valuable, reliable, and unusually stable data.
-        \item The core skill is \textbf{navigating catalogs}, not memorizing codes that change every survey year.
-        \item \textbf{Guard your keys}: environment variables or a git-ignored config --- never hardcoded.
-        \item \textbf{Combine sources} for stories no single dataset tells: Census says \textit{what}, FRED says \textit{why}.
-        \item Mind the \textbf{institutional context} --- using open data well is a form of civic engagement.
+        \item Government APIs serve \textbf{public mandates}: the census, the Federal Reserve's data, the EIA's statistics, Congress's record.
+        \item Each carried one idea you'll meet again: \textbf{ask what you can ask for} (Census), \textbf{let the server compute} (FRED), \textbf{let the server filter} (EIA), \textbf{follow the links} (Congress.gov).
+        \item \textbf{Keys stay out of notebooks}: environment variables, and a header where the API allows one.
+        \item \textbf{Three ways to page}: a token, an offset, a next link. Know which one you're using, and when it stops.
+        \item \textbf{A join is only as good as its identifiers}: use a crosswalk, and look at the rows that didn't match.
     \end{enumerate}
-    \bigskip
 \end{frame}
 
 \end{document}
