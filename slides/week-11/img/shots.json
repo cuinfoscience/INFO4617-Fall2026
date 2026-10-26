@@ -57,27 +57,27 @@
       ],
       "browser": "a browser on macOS (not recorded)",
       "by": "Brian C. Keegan",
-      "captured": "2026-10-25",
+      "captured": "2026-10-26",
       "copied_from": "images/ch-11/congress-bill.png",
       "figure": "ch-11/congress-bill",
       "final_url": null,
-      "imported": "2026-10-25T20:24:57+00:00",
+      "imported": "2026-10-26T14:11:46+00:00",
       "kind": "capture",
       "method": "screenshot by hand in a browser on macOS (not recorded); imported by tools/shots",
       "redacted": [],
       "scale": 2,
-      "sha256": "c4905dbba3a7a17ca5deb4487a956dc76fc7b4c0fc533b0ee0b3f2cc2f779e51",
+      "sha256": "f0bf5dc52043bf933bfc755baba8482b060036c88f352207cb45c54da7c96d68",
       "size": [
-        1440,
-        658
+        1500,
+        868
       ],
-      "source_sha256": "c4905dbba3a7a17ca5deb4487a956dc76fc7b4c0fc533b0ee0b3f2cc2f779e51",
-      "synced": "2026-10-26T00:47:34+00:00",
-      "textbook_commit": "6391fe9d0ff2fc0619ce9cdf33f903b2326c8072",
+      "source_sha256": "f0bf5dc52043bf933bfc755baba8482b060036c88f352207cb45c54da7c96d68",
+      "synced": "2026-10-26T18:20:38+00:00",
+      "textbook_commit": "446c3665de8398b655db6d835e5e9a79b187a757",
       "url": "https://www.congress.gov/bill/119th-congress/house-bill/7730",
       "window": [
-        720,
-        329
+        1000,
+        434
       ]
     },
     "cpi-denver-national.png": {
