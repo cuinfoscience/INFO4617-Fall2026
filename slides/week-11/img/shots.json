@@ -25,6 +25,61 @@
         450
       ]
     },
+    "colorado-bills-stages.png": {
+      "by": "Claude Code, for Brian C. Keegan",
+      "captured": "2026-10-25",
+      "copied_from": "images/ch-11/colorado-bills-stages.png",
+      "figure": "ch-11/colorado-bills-stages",
+      "final_url": null,
+      "imported": "2026-10-25T22:55:22+00:00",
+      "kind": "render",
+      "method": "rendered with matplotlib 3.11.2 with requests 2.34.2; imported by tools/shots",
+      "redacted": [],
+      "scale": 2,
+      "sha256": "0f51b4653a5957bac78bd61fd3b672fa9883c6dcac4c4c8b23fef2bb406476b0",
+      "size": [
+        1600,
+        900
+      ],
+      "source_sha256": "0f51b4653a5957bac78bd61fd3b672fa9883c6dcac4c4c8b23fef2bb406476b0",
+      "synced": "2026-10-26T00:47:34+00:00",
+      "textbook_commit": "bf60d8e123020b665b65188eaccec63237531ce3",
+      "url": "https://api.congress.gov/v3/member/congress/119/CO?currentMember=true&format=json",
+      "window": [
+        800,
+        450
+      ]
+    },
+    "congress-bill.png": {
+      "also": [
+        "congress-bill_annotated.png",
+        "congress-bill_annotated.pdf"
+      ],
+      "browser": "a browser on macOS (not recorded)",
+      "by": "Brian C. Keegan",
+      "captured": "2026-10-25",
+      "copied_from": "images/ch-11/congress-bill.png",
+      "figure": "ch-11/congress-bill",
+      "final_url": null,
+      "imported": "2026-10-25T20:24:57+00:00",
+      "kind": "capture",
+      "method": "screenshot by hand in a browser on macOS (not recorded); imported by tools/shots",
+      "redacted": [],
+      "scale": 2,
+      "sha256": "c4905dbba3a7a17ca5deb4487a956dc76fc7b4c0fc533b0ee0b3f2cc2f779e51",
+      "size": [
+        1440,
+        658
+      ],
+      "source_sha256": "c4905dbba3a7a17ca5deb4487a956dc76fc7b4c0fc533b0ee0b3f2cc2f779e51",
+      "synced": "2026-10-26T00:47:34+00:00",
+      "textbook_commit": "6391fe9d0ff2fc0619ce9cdf33f903b2326c8072",
+      "url": "https://www.congress.gov/bill/119th-congress/house-bill/7730",
+      "window": [
+        720,
+        329
+      ]
+    },
     "cpi-denver-national.png": {
       "by": "Claude Code, for Brian C. Keegan",
       "captured": "2026-10-25",
@@ -126,6 +181,31 @@
       "synced": "2026-10-25T21:31:38+00:00",
       "textbook_commit": "b036765c996ef42fcecfa350cfc4f02f02167854",
       "url": "https://api.census.gov/data/2024/acs/acs5?get=NAME,B25034_002E,B25034_003E,B25034_004E,B25034_005E,B25034_006E,B25034_007E,B25034_008E,B25034_009E,B25034_010E,B25034_011E&for=place:07850,45970&in=state:08",
+      "window": [
+        800,
+        450
+      ]
+    },
+    "state-electricity-bills.png": {
+      "by": "Claude Code, for Brian C. Keegan",
+      "captured": "2026-10-25",
+      "copied_from": "images/ch-11/state-electricity-bills.png",
+      "figure": "ch-11/state-electricity-bills",
+      "final_url": null,
+      "imported": "2026-10-25T22:55:22+00:00",
+      "kind": "render",
+      "method": "rendered with matplotlib 3.11.2 with requests 2.34.2; imported by tools/shots",
+      "redacted": [],
+      "scale": 2,
+      "sha256": "97524074495000ec21967ba8c8b05a28023d90b03d92f6ee7420c57fb077142f",
+      "size": [
+        1600,
+        900
+      ],
+      "source_sha256": "97524074495000ec21967ba8c8b05a28023d90b03d92f6ee7420c57fb077142f",
+      "synced": "2026-10-26T00:47:35+00:00",
+      "textbook_commit": "bf60d8e123020b665b65188eaccec63237531ce3",
+      "url": "https://api.eia.gov/v2/electricity/retail-sales/data/?frequency=annual&data[]=revenue&data[]=customers&data[]=price&facets[sectorid][]=RES&start=2024&end=2024",
       "window": [
         800,
         450
