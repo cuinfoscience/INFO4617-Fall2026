@@ -22,7 +22,7 @@
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Four public APIs, each showing one idea that holds for every API. This week, every class is live coding, from one lab notebook in three parts.
+            Three public APIs, each showing one idea that holds for every API. This week, every class is live coding, from one lab notebook in three parts.
 
             \bigskip
 
@@ -33,24 +33,24 @@
 
             \medskip
 
-            \dayband{Wednesday}{Lab, part 2: FRED, then the EIA}
+            \dayband{Wednesday}{Lab, part 2: more of the Census, then FRED}
             \begin{itemize}\small
-                \item \textit{Let the server compute}, then \textit{let the server filter}
+                \item Margins of error and missing estimates; then \textit{let the server compute}
             \end{itemize}
 
             \medskip
 
-            \dayband{Friday}{Lab, part 3: Congress.gov}
+            \dayband{Friday}{Lab, part 3: more of FRED, then the EIA}
             \begin{itemize}\small
-                \item \textit{Follow the links}; join two APIs; then textbook revisions
+                \item \textit{Let the server filter}; then textbook revisions
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{The lab}\\[2pt]
             {\footnotesize \texttt{labs/week-11/lab-11.ipynb} in the course repository. Each part is added before its day.\par}
             \medskip
-            \begin{alertblock}{Four keys, as environment variables}
-                \footnotesize \texttt{CENSUS\_KEY} today; \texttt{FRED\_KEY} and \texttt{EIA\_KEY} Wednesday; \texttt{DATAGOV\_KEY} Friday. Links are in the Canvas announcement and the lab's first cell.
+            \begin{alertblock}{Three keys, as environment variables}
+                \footnotesize \texttt{CENSUS\_KEY} Monday and Wednesday; \texttt{FRED\_KEY} Wednesday and Friday; \texttt{EIA\_KEY} Friday. Links are in the Canvas announcement and the lab's first cell.
             \end{alertblock}
             \textbf{Due Sunday, Nov 1}\\[2pt]
             {\footnotesize Chapter 11's \textbf{Recommended Exercises}, from its companion notebook. Graded on good-faith attempt to complete rather than getting everything working.\par}
@@ -122,7 +122,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{Four APIs, four ideas}
+\begin{frame}{Three APIs, three ideas}
     Week 10's Wikipedia taught \textbf{pagination}. Each API this week teaches one more idea you'll meet in every API:
 
     \medskip
@@ -131,16 +131,17 @@
         \toprule
         \textbf{Day} & \textbf{API} & \textbf{The idea} \\
         \midrule
-        Monday & Census Bureau & \textbf{Discovery}: ask the API what you can ask for \\
-        Wednesday & FRED & \textbf{Let the server compute}: transforms in the request \\
-        Wednesday & EIA & \textbf{Let the server filter}: facets narrow the data before it's sent \\
-        Friday & Congress.gov & \textbf{Follow the links}: records point to related records \\
+        Monday, Wednesday & Census Bureau & \textbf{Discovery}: ask the API what you can ask for \\
+        Wednesday, Friday & FRED & \textbf{Let the server compute}: transforms in the request \\
+        Friday & EIA & \textbf{Let the server filter}: facets narrow the data before it's sent \\
+        \midrule
+        The chapter & Congress.gov & \textbf{Follow the links}: records point to related records \\
         \bottomrule
     \end{tabular}
     \end{center}
 
     \medskip
-    And one idea across all four: a \textbf{key} says who you are, and it stays out of your notebook.
+    And one idea across all of them: a \textbf{key} says who you are, and it stays out of your notebook.
 \end{frame}
 
 \begin{frame}[fragile]{Keys stay out of the notebook}
@@ -167,7 +168,7 @@ census_key = os.environ["CENSUS_KEY"]   # a missing key stops here
             {\footnotesize A JSON file, \texttt{api\_keys.json}, added to \texttt{.gitignore} \textit{before your first commit}. A key in git history stays there even after you delete the file.\par}
             \medskip
             \textbf{Names}\\[2pt]
-            {\footnotesize This course uses \texttt{CENSUS\_KEY}, \texttt{FRED\_KEY}, \texttt{EIA\_KEY}, and \texttt{DATAGOV\_KEY}. Chapter 11 uses the same names.\par}
+            {\footnotesize The lab uses \texttt{CENSUS\_KEY}, \texttt{FRED\_KEY}, and \texttt{EIA\_KEY}. Chapter 11 uses the same names, and \texttt{DATAGOV\_KEY} for Congress.gov.\par}
             \medskip
         \end{column}
     \end{columns}
@@ -216,28 +217,156 @@ df[numeric_cols] = df[numeric_cols].apply(pd.to_numeric)   # values arrive as st
     \small Boulder has 47,465 housing units; 646 were built in 2020 or later, 3,836 in the 2010s.
 \end{frame}
 
-\begin{frame}[fragile]{Two cities, ten decades}
+% =========================================================================
+\section{Wednesday · Live-Coding Lab}
+% =========================================================================
+
+% The code on these frames is the lab's Part 2 (labs/week-11/lab-11-key.ipynb), rebuilt after
+% Monday's class (#151) and run live on 2026-10-26, following chapter 11 at textbook 6f4cd3f.
+\begin{frame}{Today: Part 2, more of the Census, then FRED}
     \begin{columns}[T]
-        \begin{column}{0.36\textwidth}
-            Step 4 asks for all ten decades of \texttt{B25034}, labels them with Step 1's catalog, and puts the oldest at the left:
-\begin{lstlisting}
-housing_vars = [f"B25034_{line:03d}E"
-                for line in range(2, 12)]
-\end{lstlisting}
-            \small Boulder's biggest decade was the 1970s; Longmont has more units from every decade since the 1990s. The chart counts what still stands in 2020--2024.
+        \begin{column}{0.56\textwidth}
+            We finish what Monday started, then meet a second API:
+            \begin{itemize}\small
+                \item \textbf{The Census}: compare two places, read a \textbf{margin of error}, and find the places the survey couldn't measure
+                \item \textbf{FRED} (Federal Reserve Economic Data, from the St.\ Louis Fed) \textbf{computes} before it answers: changes and percent changes. Today's idea: \textit{let the server compute}
+            \end{itemize}
+
+            \medskip
+            \dayband{Use it}{Steps 4--9, about 47 minutes}
+            \begin{itemize}\small
+                \item Download the new \texttt{lab-11.ipynb}; start at \textbf{Step 4}, which imports and checks the keys again
+                \item Put \textbf{your} email in the User-Agent
+            \end{itemize}
         \end{column}
-        \begin{column}{0.6\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/housing-boulder-longmont.png}\\
-            {\scriptsize Drawn by the chapter's code from the Census Bureau's API, 2026-10-25 (chapter 11, figure 11.5).}
+        \begin{column}{0.4\textwidth}
+            \begin{alertblock}{Two keys today}
+                \footnotesize \texttt{CENSUS\_KEY} and \texttt{FRED\_KEY}. FRED calls the parameter \texttt{api\_key}; the Census Bureau calls it \texttt{key}.
+            \end{alertblock}
+            \textbf{No key yet?}\\[2pt]
+            {\footnotesize FRED's comes with a free account. Follow along from the key until you have it.\par}
+            \medskip
+            \textbf{Friday}\\[2pt]
+            {\footnotesize More of FRED, then the EIA. Congress.gov and the chapter's join of two agencies' data are there to read on your own.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{When there's no estimate: \texttt{-666666666}}
+\begin{frame}[fragile]{\texttt{KeyError}: Python can't see the key}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            Step 4 checks before it reads, and never prints the key:
+\begin{lstlisting}
+for name in ["CENSUS_KEY", "FRED_KEY"]:
+    print(name + ":",
+          "set" if name in os.environ else "MISSING")
+# CENSUS_KEY: set
+# FRED_KEY: set
+\end{lstlisting}
+            \medskip
+            Jupyter sees only the variables set \textbf{before it started}, in \textbf{the place it started from}. On Monday, \texttt{export} didn't reach it when:
+            \begin{itemize}\footnotesize
+                \item Jupyter was already running, or was started from another terminal
+                \item Jupyter was started from Anaconda Navigator, which, on a Mac, doesn't read \texttt{\textasciitilde/.zshrc}
+                \item on Windows, \texttt{setx} reaches only prompts opened after it
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \textbf{The dependable fix}\\[2pt]
+            {\footnotesize Store the key with the \texttt{webdata} environment, in a terminal (on Windows, the Anaconda Prompt); then quit Jupyter and start it again:\par}
+\begin{lstlisting}
+conda env config vars set FRED_KEY="your-key" -n webdata
+\end{lstlisting}
+            \medskip
+            \textbf{Can't restart now?}\\[2pt]
+            {\footnotesize The step's last cell asks for the key, and hides what you paste. It lasts until the kernel restarts:\par}
+\begin{lstlisting}
+from getpass import getpass
+fred_key = getpass("Paste your FRED key: ")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Two cities, ten decades}
+    \begin{columns}[T]
+        \begin{column}{0.44\textwidth}
+            Step 5 puts two places in one request, asks for all ten decades of \texttt{B25034}, and labels them from Monday's catalog:
+\begin{lstlisting}
+housing_vars = [f"B25034_{line:03d}E"
+                for line in range(2, 12)]
+params = {"get": "NAME," + ",".join(housing_vars),
+          "for": "place:07850,45970",
+          "in": "state:08", "key": census_key}
+
+housing_catalog = requests.get(
+    f"{census_base}/groups/B25034.json",
+    headers=HEADERS).json()["variables"]
+labels = {var: housing_catalog[var]["label"]
+              .split("!!")[-1] for var in housing_vars}
+\end{lstlisting}
+            \small Boulder's biggest decade was the 1970s; Longmont has more units from every decade since the 1990s.
+        \end{column}
+        \begin{column}{0.52\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/housing-boulder-longmont.png}\\
+            {\scriptsize Drawn by the chapter's code from the Census Bureau's API, 2026-10-25 (chapter 11, figure 11.5).}
+
+            \medskip
+            \raggedright
+            \textbf{Microsprint}\\[2pt]
+            {\footnotesize Counts don't compare cities of different sizes; shares do. Built in 2000 or later: Castle Rock 71\%, Fort Collins 37\%, Longmont 34\%, Lakewood 18\%, Boulder 18\%.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Check a number against its margin}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
-            83 of Colorado's 482 places have no median-income estimate in 2020--2024: too few households answered. The API doesn't leave the value out --- it sends a number that can't be an income.
+            Each estimate has a margin of error, the same name ending in \texttt{M}, at 90\% confidence. Step 6 asks for both:
+\begin{lstlisting}
+params = {"get": "NAME,B19013_001E,B19013_001M",
+          "for": "place:07850,45970",
+          "in": "state:08", "key": census_key}
+...
+incomes["low"] = incomes["B19013_001E"] - incomes["B19013_001M"]
+incomes["high"] = incomes["B19013_001E"] + incomes["B19013_001M"]
+\end{lstlisting}
+            \begin{center}\footnotesize
+            \begin{tabular}{@{}lrrrr@{}}
+                \toprule
+                \textbf{City} & \textbf{Estimate} & \textbf{Margin} & \textbf{Low} & \textbf{High} \\
+                \midrule
+                Boulder & 87,493 & 6,221 & 81,272 & 93,714 \\
+                Longmont & 90,671 & 2,975 & 87,696 & 93,646 \\
+                \bottomrule
+            \end{tabular}
+            \end{center}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{alertblock}{The ranges overlap}
+                \footnotesize From \$87,696 to \$93,646, both are possible. The survey can't say which city's households earn more.
+            \end{alertblock}
+            \textbf{Discuss}\\[2pt]
+            {\footnotesize Boulder's margin is twice Longmont's. What about the city could make its estimate less certain?\par}
+            \medskip
+            {\footnotesize Which checks like this one could a pipeline run on its own, every time it runs?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{When there's no estimate: \texttt{-666666666}}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            Step 7 asks for every place in Colorado, \texttt{for=place:*} with \texttt{in=state:08}, and looks before it trusts:
+\begin{lstlisting}
+places["income"].describe().round()
+# count          482.0
+# mean    -114723934.0
+# min     -666666666.0
+# max         250001.0
+\end{lstlisting}
+            \small 83 of the 482 places have no median-income estimate: too few households answered. The API doesn't leave the value out; it sends a number that can't be an income. (250,001 is a cap: ``\$250,000 or more''.)
 
             \medskip
             \begin{center}\footnotesize
@@ -255,45 +384,13 @@ housing_vars = [f"B25034_{line:03d}E"
         \end{column}
         \begin{column}{0.4\textwidth}
             \begin{alertblock}{Average it as is}
-                \footnotesize The mean of that column is $-333{,}298{,}178$. Mask the codes first: \texttt{towns.mask(towns < 0)}.
+                \footnotesize The mean of those four is $-333{,}298{,}178$. Mask the codes first, \texttt{towns.mask(towns < 0)}, and it's 70,309.
             \end{alertblock}
             \textbf{What the codes mean}\\[2pt]
             {\footnotesize The Census Bureau's notes on estimate and annotation values list each one; a margin of error of \texttt{-222222222} goes with it.\par}
             \medskip
-        \end{column}
-    \end{columns}
-\end{frame}
-
-% =========================================================================
-\section{Wednesday · Live-Coding Lab}
-% =========================================================================
-
-% The code on these frames is the lab's Part 2 (labs/week-11/lab-11-key.ipynb), run live on
-% 2026-10-25, following chapter 11 at textbook 8998974. Figures are synced from the chapter.
-\begin{frame}{Today: Part 2, FRED and then the EIA}
-    \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-            Both of today's APIs do work \textit{before} they answer:
-            \begin{itemize}\small
-                \item \textbf{FRED} (Federal Reserve Economic Data, from the St.\ Louis Fed) \textbf{computes}: changes, percent changes, yearly averages
-                \item The \textbf{EIA} (U.S. Energy Information Administration) \textbf{filters}: one state, one sector, one column, one span of years
-            \end{itemize}
-            Asking the server, instead of downloading everything and doing it in pandas, is today's idea.
-
-            \medskip
-            \dayband{Use it}{Steps 7--14, about 50 minutes}
-            \begin{itemize}\small
-                \item Download the new \texttt{lab-11.ipynb}; start at \textbf{Step 7}, which imports and reads the keys again
-                \item Put \textbf{your} email in the User-Agent
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.4\textwidth}
-            \begin{alertblock}{Two keys today}
-                \footnotesize \texttt{FRED\_KEY} and \texttt{EIA\_KEY}, set \textit{before} you start Jupyter. Both APIs call the parameter \texttt{api\_key}; Monday's Census called it \texttt{key}.
-            \end{alertblock}
-            \textbf{No key yet?}\\[2pt]
-            {\footnotesize The EIA's arrives by email within minutes. Follow along from the key until it does.\par}
-            \medskip
+            \textbf{Discuss}\\[2pt]
+            {\footnotesize Carbonate has no residents, yet it has a row. What does the Census count as a place?\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -359,6 +456,42 @@ growth = fred_observations("MHICO08013A052NCEN",
             \medskip
             \textbf{Microsprint}\\[2pt]
             {\footnotesize In which years did the income \textit{fall}? Six, from 2001 to 2020; the largest, \$3,003 in 2009.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% =========================================================================
+\section{Friday · Live-Coding Lab}
+% =========================================================================
+
+% The code on these frames is the lab's Part 3 (labs/week-11/lab-11-key.ipynb), rebuilt after
+% Monday's class (#151) and run live on 2026-10-26, following chapter 11 at textbook 6f4cd3f.
+% Figures are synced from the chapter.
+\begin{frame}{Today: Part 3, more of FRED, then the EIA}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            \dayband{Lab}{Steps 10--15, about 35 minutes}
+            \begin{itemize}\small
+                \item \textbf{FRED} computes one more thing: a lower \textbf{frequency}, and inflation from it; then Denver against the nation
+                \item The \textbf{EIA} (U.S. Energy Information Administration) \textbf{filters}: one state, one sector, one column, one span of years. Today's idea: \textit{let the server filter}
+                \item Download the new \texttt{lab-11.ipynb}; start at \textbf{Step 10}, which sets up again
+            \end{itemize}
+
+            \medskip
+            \dayband{Then}{the textbook, 15 minutes}
+            \begin{itemize}\small
+                \item What the lab turned up in chapter 11, as a pull request
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{alertblock}{Two keys today}
+                \footnotesize \texttt{FRED\_KEY} and \texttt{EIA\_KEY}. A \texttt{KeyError}? Wednesday's fix: \texttt{conda env config vars set}, then restart Jupyter.
+            \end{alertblock}
+            \textbf{No key yet?}\\[2pt]
+            {\footnotesize The EIA's arrives by email within minutes. Follow along from the key until it does.\par}
+            \medskip
+            \textbf{In the chapter, not the lab}\\[2pt]
+            {\footnotesize Congress.gov's links, paging with \texttt{offset} and \texttt{next}, and the join of the Census Bureau's incomes with the EIA's electricity bills.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -433,7 +566,7 @@ for column, about in meta["data"].items():
     print(column, "|", about["units"])
 # price | cents per kilowatt-hour   ...and 3 more
 \end{lstlisting}
-            \small A \textbf{facet} filters the rows; a \textbf{data column} (1) is what each row holds. Monday's idea, \textit{what can I ask for?}, from a different API.
+            \small A \textbf{facet} filters the rows; a \textbf{data column} (1) is what each row holds. Monday's idea, \textit{what can I ask for?}, from a different API: here the route describes itself, where the Census Bureau's catalog was \texttt{groups.json}.
         \end{column}
         \begin{column}{0.42\textwidth}
             \centering
@@ -467,6 +600,9 @@ print("Rows:", prices["total"])   # Rows: 25
             \medskip
             \textbf{Still strings}\\[2pt]
             {\footnotesize Prices and \texttt{total} arrive as text, like the Census Bureau's numbers: \texttt{pd.to\_numeric()} before any math.\par}
+            \medskip
+            \textbf{Filter before you page}\\[2pt]
+            {\footnotesize The EIA sends at most 5,000 rows a request. A facet, a shorter span, or a lower frequency may fit the answer in one; the chapter's ``Paging with \texttt{offset} and \texttt{length}'' covers the rest.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -487,196 +623,15 @@ print("Rows:", prices["total"])   # Rows: 25
     \end{columns}
 \end{frame}
 
-\begin{frame}{Paging: \texttt{offset} and \texttt{length}, against Wikipedia's \texttt{continue}}
-    \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
-            \dayband{EIA}{you keep count}
-            \begin{itemize}\small
-                \item At most 5,000 rows a request; \texttt{total} says how many match
-                \item Colorado's monthly generation, 2001--2025: 9,289 rows
-                \item Page two: \texttt{offset=5000}, the rows to skip
-                \item Stop when you have \texttt{total} rows --- the \texttt{"incomplete return"} warning comes with the last page too
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.48\textwidth}
-            \dayband{Wikipedia}{the server keeps count}
-            \begin{itemize}\small
-                \item Week 10: each answer carried a \texttt{continue} token
-                \item You sent it back without knowing what it meant
-                \item Stop when there's no token
-            \end{itemize}
-        \end{column}
-    \end{columns}
-
-    \bigskip
-    \centering\small \textbf{Sort when you page}, so no row moves between pages. And \textbf{filter first}: a facet, a shorter span, or a lower frequency may fit the answer in one page.
-\end{frame}
-
-% =========================================================================
-\section{Friday · Live-Coding Lab}
-% =========================================================================
-
-% The code on these frames is the lab's Part 3 (labs/week-11/lab-11-key.ipynb), following
-% chapter 11 at textbook a9ecce1 (#292). Figures are synced from the chapter.
-\begin{frame}{Today: Part 3, Congress.gov and a join}
-    \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-            \dayband{Lab}{Steps 15--20, about 35 minutes}
-            \begin{itemize}\small
-                \item \textbf{Congress.gov}, from the Library of Congress: a bill's record is mostly \textbf{links} to other records. Today's idea: \textit{follow the links}.
-                \item Then a \textbf{join}: the Census Bureau's incomes with the EIA's electricity bills, state by state
-                \item Download the new \texttt{lab-11.ipynb}; start at \textbf{Step 15}
-            \end{itemize}
-
-            \medskip
-            \dayband{Then}{the textbook, 15 minutes}
-            \begin{itemize}\small
-                \item What the lab turned up in chapter 11, as a pull request
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.4\textwidth}
-            \begin{alertblock}{Today's key goes in a header}
-                \footnotesize \texttt{DATAGOV\_KEY}, sent as \texttt{X-Api-Key}, which every api.data.gov service accepts. Congress.gov's links can then be sent as they arrive, and no URL you print holds the key.
-            \end{alertblock}
-            \textbf{Also today}\\[2pt]
-            {\footnotesize \texttt{CENSUS\_KEY} and \texttt{EIA\_KEY}, for the join.\par}
-            \medskip
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{A bill is mostly links}
-    \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
-\begin{lstlisting}
-congress_headers = HEADERS.copy()
-congress_headers["X-Api-Key"] = datagov_key
-
-bill = requests.get(f"{congress_base}/bill/119/hr/7730",
-           params={"format": "json"},
-           headers=congress_headers).json()["bill"]
-for field, value in bill.items():
-    if isinstance(value, dict) and "url" in value:
-        print(field, value.get("count"), value["url"])
-# actions 18 .../bill/119/hr/7730/actions?format=json
-# cosponsors 6 .../bill/119/hr/7730/cosponsors?format=json
-# textVersions 5 .../bill/119/hr/7730/text?format=json
-\end{lstlisting}
-            \small Each link is a complete request: send it with the same headers. The code never builds an address.
-        \end{column}
-        \begin{column}{0.46\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/congress-bill_annotated.pdf}\\
-            {\scriptsize H.R. 7730 (1), its sponsor (2), and its tracker (3), on Congress.gov, October 2026 (chapter 11, figure 11.4).}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Follow the links}
-    \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-\begin{lstlisting}
-actions = requests.get(bill["actions"]["url"],
-              params={"limit": 250},
-              headers=congress_headers).json()["actions"]
-
-milestones = ("Introduced in", "Passed/agreed to in",
-              "Became Public Law")
-shown = set()
-for action in reversed(actions):     # newest first
-    if (action["text"].startswith(milestones)
-            and action["text"] not in shown):
-        print(action["actionDate"], action["text"][:40])
-        shown.add(action["text"])
-# 2026-02-26 Introduced in House
-# 2026-09-16 Passed/agreed to in House: ...
-# 2026-09-28 Passed/agreed to in Senate: ...
-\end{lstlisting}
-        \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{The cosponsors' link}\\[2pt]
-            {\footnotesize Six cosponsors. One of the three original ones is Joe Neguse, Boulder's representative (CO-2).\par}
-            \medskip
-            \textbf{Recorded twice}\\[2pt]
-            {\footnotesize Some milestones appear twice, in the same words: print each once.\par}
-            \medskip
-            \textbf{Microsprint}\\[2pt]
-            {\footnotesize Follow \texttt{textVersions}: how many versions of the text, and what is the newest called?\par}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Paging with \texttt{next}: the week's third way}
-    \begin{center}\small
-    \begin{tabular}{@{}llll@{}}
-        \toprule
-        \textbf{API} & \textbf{The response gives you} & \textbf{You send} & \textbf{Stop when} \\
-        \midrule
-        Wikipedia (week 10) & a \texttt{continue} token & the token, back & there's no token \\
-        EIA (Wednesday) & \texttt{total} & \texttt{offset}, which you count & you have \texttt{total} rows \\
-        Congress.gov (today) & \texttt{pagination.next}, a whole URL & the URL, as it is & there's no \texttt{next} \\
-        \bottomrule
-    \end{tabular}
-    \end{center}
-
-    \medskip
-    \small Step 18 takes Joe Neguse's sponsored legislation in three moves: two pages by hand, one page as a function you write, \texttt{bills\_on\_page()}, then the given loop, \texttt{sponsored\_bills()}.
-
-    \medskip
-    \textbf{Microsprint:} another member of Colorado's delegation. How many of their bills are still in committee?
-\end{frame}
-
-\begin{frame}{Following every link: how far the bills got}
-    \begin{columns}[T]
-        \begin{column}{0.36\textwidth}
-            The chapter follows the \texttt{actions} link of every bill Colorado's ten members sponsored in the 119th Congress: \textbf{353 requests}.
-
-            \medskip
-            \small 326 were only introduced; 25 passed one chamber; 1 passed both; 1 became law (H.R. 2316).
-
-            \medskip
-            \footnotesize A count of milestones isn't a measure of effectiveness: Volden and Wiseman weigh each bill by what it would change. And the chapter's \texttt{fromDateTime} asks only for what changed since the last run.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/colorado-bills-stages.png}\\
-            {\scriptsize Drawn by the chapter's code from Congress.gov's API, as of October 25, 2026 (chapter 11, figure 11.8).}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Two agencies, one identifier}
-    \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
-            The Census Bureau calls Colorado \texttt{08}; the EIA calls it \texttt{CO}. A \textbf{crosswalk} pairs the codes:
-\begin{lstlisting}
-states = states.merge(codes[["STATEFP", "STATE"]],
-            left_on="state", right_on="STATEFP", how="left")
-joined = states.merge(power, left_on="STATE",
-            right_on="stateid", how="outer", indicator=True)
-\end{lstlisting}
-            \small \textbf{Look at what didn't match:} Puerto Rico, on the Census side; ten regions and the U.S.\ total, on the EIA's. An inner join drops them without a word.
-
-            \medskip
-            \small Bills as a share of income: Mississippi and Alabama 3.3\%; Colorado 1.3\%, \$1,207 a year.
-        \end{column}
-        \begin{column}{0.46\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/state-electricity-bills.png}\\
-            {\scriptsize Drawn by the chapter's code from the Census Bureau's and the EIA's APIs, 2026-10-25 (chapter 11, figure 11.9).}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 \begin{frame}{Friday: from the lab to the textbook (15 minutes)}
     \begin{columns}[T]
         \begin{column}{0.58\textwidth}
             Look back at what the lab turned up in chapter 11, and propose one change as a \textbf{pull request}:
             \begin{itemize}\small
-                \item \textbf{An output that has changed.} The chapter printed its outputs on October 25, while Congress was in session. Compare H.R. 7730's latest action, or a member's number of bills.
-                \item \textbf{A cell that broke.} A Congress.gov link sent without its key fails with a 403. Does ``Common Issues to Debug'' say so clearly enough?
-                \item \textbf{An entry to test.} ``More Government APIs for Colorado'' lists twelve more. Try one: is its entry right?
-                \item \textbf{A microsprint that would make a good exercise.} The text versions, or a member's bills still in committee.
+                \item \textbf{A cell that broke.} On Monday, \texttt{os.environ["CENSUS\_KEY"]} stopped with a \texttt{KeyError} for some of us after \texttt{export}. Does ``Setting Environment Variables'' say why, and what to do?
+                \item \textbf{A sentence that confused.} Which step needed the website beside the API to make sense? Does the chapter's tour do that for the Census table, and could it do more?
+                \item \textbf{An output that has changed.} The EIA's 2025 figures are preliminary. Compare Step 14's prices with the chapter's.
+                \item \textbf{A microsprint that would make a good exercise.} Searching \texttt{groups.json} for your own topic (Step 1), or two cities' margins (Step 6).
             \end{itemize}
         \end{column}
         \begin{column}{0.38\textwidth}
@@ -693,11 +648,11 @@ joined = states.merge(power, left_on="STATE",
 % =========================================================================
 \begin{frame}{Key takeaways}
     \begin{enumerate}
-        \item Government APIs serve \textbf{public mandates}: the census, the Federal Reserve's data, the EIA's statistics, Congress's record.
-        \item Each carried one idea you'll meet again: \textbf{ask what you can ask for} (Census), \textbf{let the server compute} (FRED), \textbf{let the server filter} (EIA), \textbf{follow the links} (Congress.gov).
-        \item \textbf{Keys stay out of notebooks}: environment variables, and a header where the API allows one.
-        \item \textbf{Three ways to page}: a token, an offset, a next link. Know which one you're using, and when it stops.
-        \item \textbf{A join is only as good as its identifiers}: use a crosswalk, and look at the rows that didn't match.
+        \item Government APIs serve \textbf{public mandates}: the census, the Federal Reserve's data, the EIA's statistics.
+        \item Each carried one idea you'll meet again: \textbf{ask what you can ask for} (Census), \textbf{let the server compute} (FRED), \textbf{let the server filter} (EIA).
+        \item \textbf{Start from the website}: find the number there, then ask the API for the same number, and check that they match.
+        \item \textbf{Read what isn't a number}: a margin of error, a code like \texttt{-666666666}, a cap at \$250,000, a \texttt{"."} for missing.
+        \item \textbf{Keys stay out of notebooks}: environment variables, checked with \texttt{set} or \texttt{MISSING}, never printed.
     \end{enumerate}
 \end{frame}
 
