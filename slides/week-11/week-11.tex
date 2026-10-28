@@ -22,7 +22,7 @@
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Three public APIs, each showing one idea that holds for every API. This week, every class is live coding, from one lab notebook in three parts.
+            Two public APIs, each showing one idea that holds for every API. This week, every class is live coding, from one lab notebook in three parts.
 
             \bigskip
 
@@ -33,24 +33,24 @@
 
             \medskip
 
-            \dayband{Wednesday}{Lab, part 2: more of the Census, then FRED}
+            \dayband{Wednesday}{Lab, part 2: more of the Census}
             \begin{itemize}\small
-                \item Margins of error and missing estimates; then \textit{let the server compute}
+                \item Comparing places, margins of error, and the places the survey couldn't measure
             \end{itemize}
 
             \medskip
 
-            \dayband{Friday}{Lab, part 3: more of FRED, then the EIA}
+            \dayband{Friday}{Lab, part 3: FRED}
             \begin{itemize}\small
-                \item \textit{Let the server filter}; then textbook revisions
+                \item \textit{Let the server compute}; then textbook revisions
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{The lab}\\[2pt]
             {\footnotesize \texttt{labs/week-11/lab-11.ipynb} in the course repository. Each part is added before its day.\par}
             \medskip
-            \begin{alertblock}{Three keys, as environment variables}
-                \footnotesize \texttt{CENSUS\_KEY} Monday and Wednesday; \texttt{FRED\_KEY} Wednesday and Friday; \texttt{EIA\_KEY} Friday. Links are in the Canvas announcement and the lab's first cell.
+            \begin{alertblock}{Two keys, kept out of the notebook}
+                \footnotesize \texttt{CENSUS\_KEY} Monday and Wednesday; \texttt{FRED\_KEY} Friday. Links are in the Canvas announcement and the lab's first cell.
             \end{alertblock}
             \textbf{Due Sunday, Nov 1}\\[2pt]
             {\footnotesize Chapter 11's \textbf{Recommended Exercises}, from its companion notebook. Graded on good-faith attempt to complete rather than getting everything working.\par}
@@ -122,7 +122,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{Three APIs, three ideas}
+\begin{frame}{Two APIs, two ideas}
     Week 10's Wikipedia taught \textbf{pagination}. Each API this week teaches one more idea you'll meet in every API:
 
     \medskip
@@ -132,10 +132,10 @@
         \textbf{Day} & \textbf{API} & \textbf{The idea} \\
         \midrule
         Monday, Wednesday & Census Bureau & \textbf{Discovery}: ask the API what you can ask for \\
-        Wednesday, Friday & FRED & \textbf{Let the server compute}: transforms in the request \\
-        Friday & EIA & \textbf{Let the server filter}: facets narrow the data before it's sent \\
+        Friday & FRED & \textbf{Let the server compute}: transforms in the request \\
         \midrule
-        The chapter & Congress.gov & \textbf{Follow the links}: records point to related records \\
+        On your own & EIA & \textbf{Let the server filter}: facets narrow the data before it's sent \\
+        On your own & Congress.gov & \textbf{Follow the links}: records point to related records \\
         \bottomrule
     \end{tabular}
     \end{center}
@@ -168,7 +168,7 @@ census_key = os.environ["CENSUS_KEY"]   # a missing key stops here
             {\footnotesize A JSON file, \texttt{api\_keys.json}, added to \texttt{.gitignore} \textit{before your first commit}. A key in git history stays there even after you delete the file.\par}
             \medskip
             \textbf{Names}\\[2pt]
-            {\footnotesize The lab uses \texttt{CENSUS\_KEY}, \texttt{FRED\_KEY}, and \texttt{EIA\_KEY}. Chapter 11 uses the same names, and \texttt{DATAGOV\_KEY} for Congress.gov.\par}
+            {\footnotesize The lab uses \texttt{CENSUS\_KEY} and \texttt{FRED\_KEY}. Chapter 11 uses the same names, and \texttt{EIA\_KEY} for the EIA.\par}
             \medskip
         \end{column}
     \end{columns}
@@ -221,69 +221,131 @@ df[numeric_cols] = df[numeric_cols].apply(pd.to_numeric)   # values arrive as st
 \section{Wednesday · Live-Coding Lab}
 % =========================================================================
 
-% The code on these frames is the lab's Part 2 (labs/week-11/lab-11-key.ipynb), rebuilt after
-% Monday's class (#151) and run live on 2026-10-26, following chapter 11 at textbook 6f4cd3f.
-\begin{frame}{Today: Part 2, more of the Census, then FRED}
+% The code on these frames is the lab's Part 2 (labs/week-11/lab-11-key.ipynb), rebuilt on
+% 2026-10-28 for two APIs and run live that day, following chapter 11 at textbook 6ea83ac.
+\begin{frame}{Today: Part 2, more of the Census}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
-            We finish what Monday started, then meet a second API:
+            We finish what Monday started, with the Census alone:
             \begin{itemize}\small
-                \item \textbf{The Census}: compare two places, read a \textbf{margin of error}, and find the places the survey couldn't measure
-                \item \textbf{FRED} (Federal Reserve Economic Data, from the St.\ Louis Fed) \textbf{computes} before it answers: changes and percent changes. Today's idea: \textit{let the server compute}
+                \item \textbf{Compare} two cities in one request, and draw them
+                \item Read a \textbf{margin of error} before saying two places differ
+                \item Find the places the survey \textbf{couldn't measure}, before they wreck an average
             \end{itemize}
 
             \medskip
-            \dayband{Use it}{Steps 4--9, about 47 minutes}
+            \dayband{Use it}{Steps 4--7, about 33 minutes}
             \begin{itemize}\small
-                \item Download the new \texttt{lab-11.ipynb}; start at \textbf{Step 4}, which imports and checks the keys again
+                \item Download the new \texttt{lab-11.ipynb}; start at \textbf{Step 4}, which imports and checks the key again
                 \item Put \textbf{your} email in the User-Agent
             \end{itemize}
         \end{column}
         \begin{column}{0.4\textwidth}
-            \begin{alertblock}{Two keys today}
-                \footnotesize \texttt{CENSUS\_KEY} and \texttt{FRED\_KEY}. FRED calls the parameter \texttt{api\_key}; the Census Bureau calls it \texttt{key}.
+            \begin{alertblock}{One key today}
+                \footnotesize \texttt{CENSUS\_KEY}. Still \texttt{MISSING}? The next three frames.
             \end{alertblock}
-            \textbf{No key yet?}\\[2pt]
-            {\footnotesize FRED's comes with a free account. Follow along from the key until you have it.\par}
-            \medskip
             \textbf{Friday}\\[2pt]
-            {\footnotesize More of FRED, then the EIA. Congress.gov and the chapter's join of two agencies' data are there to read on your own.\par}
+            {\footnotesize FRED, and \textit{let the server compute}. Get \texttt{FRED\_KEY} from a free FRED account before then.\par}
+            \medskip
+            \textbf{On your own}\\[2pt]
+            {\footnotesize The EIA and Congress.gov: Friday's last frames say where to start.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Treat an API key like a password}
+    \begin{alertblock}{Never paste a key into a notebook cell or a code file}
+        \footnotesize Whatever is in a cell is saved with the notebook, and goes wherever it goes: a commit, a submission, a screenshot, a classmate's laptop. There are three safe ways in; the first is the one to set up once.
+    \end{alertblock}
+    \medskip
+    \dayband{1}{An environment variable, set before Jupyter starts}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \textbf{Any system: with the \texttt{webdata} environment}\\[2pt]
+            {\footnotesize In a terminal (on Windows, the Anaconda Prompt):\par}
+\begin{lstlisting}
+conda env config vars set CENSUS_KEY="your-key" -n webdata
+\end{lstlisting}
+            {\footnotesize Then \textbf{close that terminal and open a new one}, and start Jupyter from it:\par}
+\begin{lstlisting}
+conda activate webdata
+jupyter lab
+\end{lstlisting}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \textbf{Or in your shell}\\[2pt]
+            {\footnotesize \textbf{Mac:} add \texttt{export CENSUS\_KEY="your-key"} to \texttt{\textasciitilde/.zshrc} (Linux: \texttt{\textasciitilde/.bashrc}). \textbf{Windows:} \texttt{setx CENSUS\_KEY "your-key"}.\par}
+            \medskip
+            {\footnotesize Either way, \textbf{close the terminal, open a new one}, and start Jupyter from the new one. A terminal reads its settings only when it opens, and Jupyter reads its variables only when it starts: a Jupyter already running must be quit and started again.\par}
+            \medskip
+            {\footnotesize In the notebook: \texttt{census\_key = os.environ["CENSUS\_KEY"]}\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Two more safe ways: a JSON file, or \texttt{getpass()}}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \dayband{2}{A JSON file beside the notebook}
+            \medskip
+
+            {\footnotesize \texttt{api\_keys.json}, in the notebook's folder, added to \texttt{.gitignore} \textbf{before your first commit}:\par}
+\begin{lstlisting}
+{"census": "your-key", "fred": "your-key"}
+\end{lstlisting}
+            {\footnotesize Then, in the notebook:\par}
+\begin{lstlisting}
+import json
+
+with open("api_keys.json") as f:
+    keys = json.load(f)
+census_key = keys["census"]
+\end{lstlisting}
+            {\footnotesize Never share the file, or the folder it's in.\par}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \dayband{3}{\texttt{getpass()}, when you can't restart}
+            \medskip
+
+            {\footnotesize Each setup step's given cell asks only if the key is missing, so \textbf{Run All} is safe:\par}
+\begin{lstlisting}
+from getpass import getpass
+if not os.environ.get("CENSUS_KEY"):
+    os.environ["CENSUS_KEY"] = getpass(
+        "CENSUS_KEY isn't set. Paste it here: ")
+\end{lstlisting}
+            \begin{enumerate}\footnotesize
+                \item Run it. A box opens under the cell (in VS Code, at the top of the window).
+                \item Paste your key and press \textbf{Enter}. Nothing shows, on purpose.
+                \item Run the next cell, which reads the key. It lasts until the kernel restarts.
+            \end{enumerate}
+            {\footnotesize Paste only into the box, never between the quotation marks.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{\texttt{KeyError}: Python can't see the key}
     \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
-            Step 4 checks before it reads, and never prints the key:
+        \begin{column}{0.5\textwidth}
+            Each setup step checks before it reads, and never prints the key:
 \begin{lstlisting}
-for name in ["CENSUS_KEY", "FRED_KEY"]:
-    print(name + ":",
-          "set" if name in os.environ else "MISSING")
+print("CENSUS_KEY:", "set" if "CENSUS_KEY" in os.environ
+                     else "MISSING")
 # CENSUS_KEY: set
-# FRED_KEY: set
 \end{lstlisting}
             \medskip
-            Jupyter sees only the variables set \textbf{before it started}, in \textbf{the place it started from}. On Monday, \texttt{export} didn't reach it when:
-            \begin{itemize}\footnotesize
-                \item Jupyter was already running, or was started from another terminal
-                \item Jupyter was started from Anaconda Navigator, which, on a Mac, doesn't read \texttt{\textasciitilde/.zshrc}
-                \item on Windows, \texttt{setx} reaches only prompts opened after it
-            \end{itemize}
+            \small Jupyter sees only the variables set \textbf{before it started}, in \textbf{the place it started from}. The chapter's ``When a Key Says \texttt{MISSING}'' lists the usual causes:
         \end{column}
-        \begin{column}{0.48\textwidth}
-            \textbf{The dependable fix}\\[2pt]
-            {\footnotesize Store the key with the \texttt{webdata} environment, in a terminal (on Windows, the Anaconda Prompt); then quit Jupyter and start it again:\par}
-\begin{lstlisting}
-conda env config vars set FRED_KEY="your-key" -n webdata
-\end{lstlisting}
+        \begin{column}{0.46\textwidth}
+            \begin{itemize}\footnotesize
+                \item Jupyter was already running, or started from somewhere else: Navigator (which, on a Mac, doesn't read \texttt{\textasciitilde/.zshrc}), another terminal, VS Code
+                \item \texttt{!export} in a notebook cell: its shell closes at once, and the key is now in the notebook
+                \item Windows has no \texttt{export}; \texttt{setx} reaches only prompts opened after it
+                \item \texttt{conda env config vars set}, without activating the environment again
+                \item A different name: \texttt{CENSUS\_KEY}, not \texttt{census\_key} or \texttt{CENSUS\_API\_KEY}
+            \end{itemize}
             \medskip
-            \textbf{Can't restart now?}\\[2pt]
-            {\footnotesize The step's last cell asks for the key, and hides what you paste. It lasts until the kernel restarts:\par}
-\begin{lstlisting}
-from getpass import getpass
-fred_key = getpass("Paste your FRED key: ")
-\end{lstlisting}
+            {\footnotesize \textbf{Stuck at \texttt{[*]}?} \texttt{getpass()} is waiting: look for its box, paste, press Enter.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -310,7 +372,7 @@ labels = {var: housing_catalog[var]["label"]
         \begin{column}{0.52\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/housing-boulder-longmont.png}\\
-            {\scriptsize Drawn by the chapter's code from the Census Bureau's API, 2026-10-25 (chapter 11, figure 11.5).}
+            {\scriptsize Drawn by the chapter's code from the Census Bureau's API, 2026-10-25 (chapter 11, figure 11.4).}
 
             \medskip
             \raggedright
@@ -395,6 +457,39 @@ places["income"].describe().round()
     \end{columns}
 \end{frame}
 
+% =========================================================================
+\section{Friday · Live-Coding Lab}
+% =========================================================================
+
+% The code on these frames is the lab's Part 3 (labs/week-11/lab-11-key.ipynb), rebuilt on
+% 2026-10-28 for two APIs and run live that day, following chapter 11 at textbook 6ea83ac.
+% Figures are synced from the chapter.
+\begin{frame}{Today: Part 3, FRED}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            \dayband{Lab}{Steps 8--13, about 35 minutes}
+            \begin{itemize}\small
+                \item \textbf{FRED} (Federal Reserve Economic Data, from the St.\ Louis Fed) \textbf{computes} before it answers: changes, percent changes, yearly averages. Today's idea: \textit{let the server compute}
+                \item Boulder County's income, then inflation, then Denver against the nation
+                \item Download the new \texttt{lab-11.ipynb}; start at \textbf{Step 8}, which sets up again
+            \end{itemize}
+
+            \medskip
+            \dayband{Then}{the textbook, 15 minutes}
+            \begin{itemize}\small
+                \item What the lab turned up in chapter 11, as a pull request
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{alertblock}{One key today}
+                \footnotesize \texttt{FRED\_KEY}, from a free FRED account. \texttt{MISSING}? Wednesday's three safe ways; \texttt{getpass()} works today.
+            \end{alertblock}
+            \textbf{Two parameter names}\\[2pt]
+            {\footnotesize The Census Bureau calls its key parameter \texttt{key}; FRED calls it \texttt{api\_key}.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}[fragile]{FRED: find the series, then ask what it is}
     \begin{columns}[T]
         \begin{column}{0.5\textwidth}
@@ -423,7 +518,7 @@ income["value"] = pd.to_numeric(income["value"],
 \begin{frame}[fragile]{Let the server compute: \texttt{units}}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
-            Step 9 gathers Step 8's lines into \texttt{fred\_observations(series\_id, **params)}. Then the \textit{same series} twice more, one parameter changed:
+            Step 10 gathers Step 9's lines into \texttt{fred\_observations(series\_id, **params)}. Then the \textit{same series} twice more, one parameter changed:
 \begin{lstlisting}
 change = fred_observations("MHICO08013A052NCEN",
             units="chg", observation_end="2024-12-31")
@@ -456,42 +551,6 @@ growth = fred_observations("MHICO08013A052NCEN",
             \medskip
             \textbf{Microsprint}\\[2pt]
             {\footnotesize In which years did the income \textit{fall}? Six, from 2001 to 2020; the largest, \$3,003 in 2009.\par}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-% =========================================================================
-\section{Friday · Live-Coding Lab}
-% =========================================================================
-
-% The code on these frames is the lab's Part 3 (labs/week-11/lab-11-key.ipynb), rebuilt after
-% Monday's class (#151) and run live on 2026-10-26, following chapter 11 at textbook 6f4cd3f.
-% Figures are synced from the chapter.
-\begin{frame}{Today: Part 3, more of FRED, then the EIA}
-    \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-            \dayband{Lab}{Steps 10--15, about 35 minutes}
-            \begin{itemize}\small
-                \item \textbf{FRED} computes one more thing: a lower \textbf{frequency}, and inflation from it; then Denver against the nation
-                \item The \textbf{EIA} (U.S. Energy Information Administration) \textbf{filters}: one state, one sector, one column, one span of years. Today's idea: \textit{let the server filter}
-                \item Download the new \texttt{lab-11.ipynb}; start at \textbf{Step 10}, which sets up again
-            \end{itemize}
-
-            \medskip
-            \dayband{Then}{the textbook, 15 minutes}
-            \begin{itemize}\small
-                \item What the lab turned up in chapter 11, as a pull request
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.4\textwidth}
-            \begin{alertblock}{Two keys today}
-                \footnotesize \texttt{FRED\_KEY} and \texttt{EIA\_KEY}. A \texttt{KeyError}? Wednesday's fix: \texttt{conda env config vars set}, then restart Jupyter.
-            \end{alertblock}
-            \textbf{No key yet?}\\[2pt]
-            {\footnotesize The EIA's arrives by email within minutes. Follow along from the key until it does.\par}
-            \medskip
-            \textbf{In the chapter, not the lab}\\[2pt]
-            {\footnotesize Congress.gov's links, paging with \texttt{offset} and \texttt{next}, and the join of the Census Bureau's incomes with the EIA's electricity bills.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -546,79 +605,34 @@ cpi = denver.merge(inflation, on="date",
         \begin{column}{0.6\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/cpi-denver-national.png}\\
-            {\scriptsize Drawn by the chapter's code from FRED, 2026-10-25 (chapter 11, figure 11.6). The dashed line is the Federal Reserve's 2\% target.}
+            {\scriptsize Drawn by the chapter's code from FRED, 2026-10-25 (chapter 11, figure 11.5). The dashed line is the Federal Reserve's 2\% target.}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{EIA: routes that describe themselves}
+\begin{frame}{On your own: the EIA and Congress.gov}
     \begin{columns}[T]
-        \begin{column}{0.54\textwidth}
-            The EIA's API is a tree of \textbf{routes}. Ask for one without \texttt{data/}, and it says what it holds:
-\begin{lstlisting}
-eia_base = "https://api.eia.gov/v2"
-meta = requests.get(f"{eia_base}/electricity/retail-sales/",
-                    params={"api_key": eia_key},
-                    headers=HEADERS).json()["response"]
-print([f["id"] for f in meta["facets"]])
-# ['stateid', 'sectorid']
-for column, about in meta["data"].items():
-    print(column, "|", about["units"])
-# price | cents per kilowatt-hour   ...and 3 more
-\end{lstlisting}
-            \small A \textbf{facet} filters the rows; a \textbf{data column} (1) is what each row holds. Monday's idea, \textit{what can I ask for?}, from a different API: here the route describes itself, where the Census Bureau's catalog was \texttt{groups.json}.
+        \begin{column}{0.5\textwidth}
+            \dayband{EIA}{let the server filter}
+            \begin{itemize}\small
+                \item The U.S. Energy Information Administration: prices, sales, and generation, by state, sector, and month
+                \item Chapter 11's ``EIA API v2'': routes that describe themselves, facets that filter, paging with \texttt{offset}
+                \item ``Combining Census and EIA Data'' joins Wednesday's incomes with the EIA's electricity bills, state by state
+                \item Key: \texttt{EIA\_KEY}, from the EIA by email
+            \end{itemize}
+
+            \medskip
+            \dayband{Congress.gov}{follow the links}
+            \begin{itemize}\small
+                \item The Library of Congress's bills, members, and votes: entry 8 of the chapter's ``More Government APIs for Colorado''
+                \item A bill's record links to its actions, cosponsors, and text; each link is a request you send as it is
+                \item Key: from api.data.gov, sent in the \texttt{X-Api-Key} header
+            \end{itemize}
         \end{column}
-        \begin{column}{0.42\textwidth}
+        \begin{column}{0.46\textwidth}
             \centering
             \includegraphics[width=0.92\textwidth]{img/eia-browser_annotated.pdf}\\
-            {\scriptsize The EIA's API Dashboard, captured 2026-10-25 (chapter 11, figure 11.3): its menus (2) are those routes, and it writes the request (3).}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Let the server filter}
-    \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-            Add \texttt{data/} to the route, and each parameter narrows the rows. The brackets are part of the names:
-\begin{lstlisting}
-params = {"frequency": "annual", "data[]": "price",
-          "facets[stateid][]": "CO",
-          "facets[sectorid][]": "RES",   # homes
-          "start": "2001", "end": "2025",
-          "sort[0][column]": "period",
-          "sort[0][direction]": "asc",
-          "api_key": eia_key}
-prices = requests.get(f"{eia_base}/electricity/retail-sales/data/",
-            params=params, headers=HEADERS).json()["response"]
-print("Rows:", prices["total"])   # Rows: 25
-\end{lstlisting}
-            \small 25 rows, from a route that holds every state and sector by month, quarter, and year. Colorado's homes paid 15.69 cents a kilowatt-hour in 2025.
-        \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{Microsprint}\\[2pt]
-            {\footnotesize Change one facet: a sector (\texttt{COM}, \texttt{IND}) or a state (\texttt{UT}, \texttt{NM}). Colorado's businesses paid 12.37 cents in 2025.\par}
-            \medskip
-            \textbf{Still strings}\\[2pt]
-            {\footnotesize Prices and \texttt{total} arrive as text, like the Census Bureau's numbers: \texttt{pd.to\_numeric()} before any math.\par}
-            \medskip
-            \textbf{Filter before you page}\\[2pt]
-            {\footnotesize The EIA sends at most 5,000 rows a request. A facet, a shorter span, or a lower frequency may fit the answer in one; the chapter's ``Paging with \texttt{offset} and \texttt{length}'' covers the rest.\par}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{What a filtered request can show}
-    \begin{columns}[T]
-        \begin{column}{0.36\textwidth}
-            The chapter asks the same API for Colorado's annual generation from five sources, plus the total: one facet, six values, one request.
-
-            \medskip
-            \small Coal made 76.7\% of the state's electricity in 2001 and 24.7\% in 2025. Wind grew from almost nothing to 30.0\%; 2024 was the first year coal wasn't the largest source.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/co-generation-mix.png}\\
-            {\scriptsize Drawn by the chapter's code from the EIA's API, 2026-10-25 (chapter 11, figure 11.7).}
+            {\scriptsize The EIA's API Dashboard, captured 2026-10-25 (chapter 11, figure 11.3): pick a data type (1) and facets (2), and it writes the request (3).}
         \end{column}
     \end{columns}
 \end{frame}
@@ -628,9 +642,10 @@ print("Rows:", prices["total"])   # Rows: 25
         \begin{column}{0.58\textwidth}
             Look back at what the lab turned up in chapter 11, and propose one change as a \textbf{pull request}:
             \begin{itemize}\small
-                \item \textbf{A cell that broke.} On Monday, \texttt{os.environ["CENSUS\_KEY"]} stopped with a \texttt{KeyError} for some of us after \texttt{export}. Does ``Setting Environment Variables'' say why, and what to do?
+                \item \textbf{A cell that broke.} On Monday, \texttt{os.environ["CENSUS\_KEY"]} stopped with a \texttt{KeyError} for some of us. Does ``When a Key Says \texttt{MISSING}'' name your cause, and say clearly enough how to use \texttt{getpass()}?
                 \item \textbf{A sentence that confused.} Which step needed the website beside the API to make sense? Does the chapter's tour do that for the Census table, and could it do more?
-                \item \textbf{An output that has changed.} The EIA's 2025 figures are preliminary. Compare Step 14's prices with the chapter's.
+                \item \textbf{An output that has changed.} FRED revises some series. Compare Steps 11 and 12 with the chapter's.
+                \item \textbf{A section the lab skipped.} Can you follow ``EIA API v2'' from the chapter alone?
                 \item \textbf{A microsprint that would make a good exercise.} Searching \texttt{groups.json} for your own topic (Step 1), or two cities' margins (Step 6).
             \end{itemize}
         \end{column}
@@ -648,11 +663,11 @@ print("Rows:", prices["total"])   # Rows: 25
 % =========================================================================
 \begin{frame}{Key takeaways}
     \begin{enumerate}
-        \item Government APIs serve \textbf{public mandates}: the census, the Federal Reserve's data, the EIA's statistics.
-        \item Each carried one idea you'll meet again: \textbf{ask what you can ask for} (Census), \textbf{let the server compute} (FRED), \textbf{let the server filter} (EIA).
+        \item Government APIs serve \textbf{public mandates}: the census, the Federal Reserve's data.
+        \item Each carried one idea you'll meet again: \textbf{ask what you can ask for} (Census), \textbf{let the server compute} (FRED).
         \item \textbf{Start from the website}: find the number there, then ask the API for the same number, and check that they match.
         \item \textbf{Read what isn't a number}: a margin of error, a code like \texttt{-666666666}, a cap at \$250,000, a \texttt{"."} for missing.
-        \item \textbf{Keys stay out of notebooks}: environment variables, checked with \texttt{set} or \texttt{MISSING}, never printed.
+        \item \textbf{Treat keys like passwords}: an environment variable, a JSON file kept out of git, or \texttt{getpass()}; never in a cell or a code file, and never printed.
     \end{enumerate}
 \end{frame}
 
