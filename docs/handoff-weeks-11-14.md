@@ -1,5 +1,35 @@
 # Hand-off: weeks 11–14 and the Final Project
 
+## Roadmap for weeks 12–14 (updated 2026-11-01)
+
+**Done:**
+- **Week 11.** It was taught as a three-part live-coding lab on the Census and FRED (#153, #154). Chapter 11 is on the textbook's `main` (#289–#297).
+- **The sprint's review.** It is [`aar/2026-11-01-weeks-10-11.md`](aar/2026-11-01-weeks-10-11.md). Its §6 revisions are proposed, not applied.
+
+**Each remaining week needs, in this order:**
+1. **The chapter.** A sprint in the textbook, audited against what chapters 10 and 11 now do (a tour from the website to the API, live outputs, sourced Social History, 5–7 Recommended Exercises steps), with its plan in the textbook's `docs/plans/`. The lab's scope is settled first (AAR P0-3).
+2. **The lab.** `labs/week-NN/`, three parts, written after the chapter merges (`labs/AUTHORING.md`), with steps for about half each part's minutes.
+3. **The deck.** Weeks 12–14 still have the old shape: Monday concepts, a Wednesday notebook lab, and a Friday for textbook revisions. Each needs:
+   - the three-part lab's frames;
+   - Friday's last 15 minutes as AAR P0-1 settles them;
+   - the week's portfolio checkpoint.
+4. **The checks.** `check_deck_readiness.py`, `check_daily_questions.py`, and `make_student_copy.py --check`, plus `check_lab.py` once it exists (AAR P0-2).
+
+| Week | Dates | Chapter | Portfolio checkpoint (due) | State on 2026-11-01 |
+|---|---|---|---|---|
+| 12 | Nov 2–6 | 12, social and media platform APIs | Collect and clean your data (Sun Nov 8) | The deck is the old shape (Reddit, Spotify, Bluesky, Mastodon; a Friday for revisions). There is no lab. The chapter hasn't been audited. **Monday is the next class.** |
+| 13 | Nov 9–13 | 13, AI and language-model APIs | Analyze your data (Sun Nov 15) | Old-shape deck; no lab |
+| 14 | Nov 16–20 | 14, automating data collection | Draft your write-up (Sun Nov 29, after Fall Break) | Old-shape deck; no lab |
+| — | Nov 23–27 | Fall Break | — | — |
+| Final | Nov 30–Dec 4 | — | Presentation; repository and write-up due Mon Dec 7 | — |
+
+**Still open from before:**
+- **Week 11's Daily-note-questions frame** is missing; that frame is the instructor's.
+- **Cells to run from the instructor's laptop:** 49, listed in `aar/2026-10-21-live-coding-labs.md`, §9.
+- **The syllabus edits** below, and publishing on Canvas.
+
+## As written on 2026-10-23
+
 Written 2026-10-23, at the end of the session that graded weeks 2–9 and set
 up Canvas for the rest of the semester. It's for the next agent or person who
 grades, publishes, or edits anything from week 11 on. The rules themselves are
