@@ -17,7 +17,7 @@ When a rule here conflicts with getting the key to run from a cloud machine, the
 
 - **Monday, Wednesday and Friday** are one lab in three parts, one a day: about 135 minutes in all, Monday's 50, Wednesday's 50, and Friday's first 35. The instructor writes the code on screen and students write it in their copy. If a day ends mid-part, the next day finishes it first.
 - **Before week 11** the week was different. In week 10, Monday was a lecture, and the lab ran over Wednesday and Friday, about 85 minutes in all. The labs for weeks 1–10 are written to that two-day form.
-- **Friday's last 15 minutes** are the textbook-revision block (graded under Textbook Revisions, 15%).
+- **Friday's last 15 minutes** were the textbook-revision block in weeks 2–10. In weeks 11–14 they are work on that week's project-portfolio checkpoint (`docs/course-facts.md`, "Weeks 10–14 of Textbook Revisions", says what each is and when it's due; decided 2026-11-02). The lab's last cell says which.
 - **What students submit** is the chapter's **Recommended Exercises**, in the chapter's companion notebook, due the Sunday after the lab (graded under Notebook Labs, 30%). The lab itself isn't turned in.
 
 So a lab teaches what the Recommended Exercises need, and stops short of doing them.
@@ -155,7 +155,7 @@ The last numbered step has three or four reflection questions about the whole la
 
 ### Friday's revision block
 
-The last cell, Markdown, headed `## Friday: from the lab to the textbook (15 minutes)`. Point at what the lab might have turned up: a cell that broke, a sentence in the chapter that confused, an output that has changed since the chapter was written, a microsprint that would make a good exercise. Link [`handouts/common/revision-framework.md`](../handouts/common/revision-framework.md) for how to propose one.
+In weeks 11–14 the last cell is instead `## Friday: your portfolio checkpoint (15 minutes)`, saying what that week's checkpoint asks and when it's due, from `docs/course-facts.md`. Before week 11, the last cell, Markdown, is headed `## Friday: from the lab to the textbook (15 minutes)`. Point at what the lab might have turned up: a cell that broke, a sentence in the chapter that confused, an output that has changed since the chapter was written, a microsprint that would make a good exercise. Link [`handouts/common/revision-framework.md`](../handouts/common/revision-framework.md) for how to propose one.
 
 ## Following the chapter
 

@@ -22,374 +22,297 @@
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Last week the data came from governments obligated to be open. This week it comes from private platforms that share it \textit{at their discretion} --- and can stop.
+            Last week the data came from governments obliged to publish it. This week it comes from platforms that share it \textit{at their discretion}, and can stop. We read what federal agencies post, every class live coding, from one lab notebook in three parts.
 
             \bigskip
 
-            \dayband{Monday}{Concepts \& notebook intro}
+            \dayband{Monday}{Lab, part 1: Bluesky}
             \begin{itemize}\small
-                \item OAuth2, four platforms, and the governance spectrum from proprietary to open
+                \item An open API with no key: who posts, and is it the agency?
             \end{itemize}
 
             \medskip
 
-            \dayband{Wednesday}{Notebook lab}
+            \dayband{Wednesday}{Lab, part 2: more of Bluesky}
             \begin{itemize}\small
-                \item Reddit, Spotify, Bluesky, and Mastodon --- authenticate, retrieve, analyze
+                \item More posts than one request returns, and an agency's rhythm
             \end{itemize}
 
             \medskip
 
-            \dayband{Friday}{Textbook revisions}
+            \dayband{Friday}{Lab, part 3: YouTube; then your project}
             \begin{itemize}\small
-                \item Propose \& peer-review pull requests improving Chapter 12
+                \item A keyed API for the same agencies' videos; 15 minutes on your portfolio checkpoint
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Companion notebook}
-                \footnotesize \texttt{ch-12-social.ipynb}
-            \end{block}
-            \begin{alertblock}{Bring a laptop}
-                \footnotesize Wednesday is hands-on --- register your own apps and pull live data.
+            \textbf{The lab}\\[2pt]
+            {\footnotesize \texttt{labs/week-12/lab-12.ipynb} in the course repository. Each part is added before its day.\par}
+            \medskip
+            \begin{alertblock}{One key, for Friday}
+                \footnotesize \texttt{YOUTUBE\_KEY}, a YouTube Data API key from a \textbf{personal} Google account. Set it as an environment variable, close the terminal, open a new one, and start Jupyter from there.
+            \end{alertblock}
+            \textbf{Due Sunday, Nov 8}\\[2pt]
+            {\footnotesize Chapter 12's \textbf{Recommended Exercises}, from its companion notebook, and portfolio checkpoint 2, \textit{Collect and clean your data}. Graded on good-faith attempt to complete rather than getting everything working.\par}
+            \medskip
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% =========================================================================
+\section{Monday · Live-Coding Lab}
+% =========================================================================
+
+\begin{frame}{This week, every class is live coding}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            \dayband{Find it}{\texttt{labs/} in the course repository}
+            \begin{enumerate}\small
+                \item Open the \href{https://github.com/cuinfoscience/INFO4617-Fall2026/tree/main/labs}{\textbf{labs} folder} of \texttt{cuinfoscience/INFO4617-Fall2026} on GitHub
+                \item Open \texttt{week-12}, click \texttt{lab-12.ipynb}, then \textbf{Download raw file}
+                \item Open it in JupyterLab in the \texttt{webdata} environment
+            \end{enumerate}
+
+            \medskip
+            \dayband{Use it}{one part a day}
+            \begin{itemize}\small
+                \item I write the code on screen, and you write it in your copy
+                \item Put \textbf{your} email in the User-Agent in Step 0
+                \item Today: Part 1, Steps 0--3; no key, no account
+                \item Wednesday and Friday: download the new copy and start at that part's setup step
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Solutions}\\[2pt]
+            {\footnotesize \texttt{lab-12-key.ipynb}, beside it: every cell filled in and run. Fall behind? Copy the cell from the key and keep going.\par}
+            \medskip
+            \textbf{Nothing to submit}\\[2pt]
+            {\footnotesize The lab is practice. After each step, a \textbf{Discuss} box holds questions we'll talk over before the next.\par}
+            \medskip
+            \begin{alertblock}{Error flavors}
+                \footnotesize A \texttt{KeyError} on a field means the answer wasn't what you expected: print it and look. A request that fails for everyone is \textit{broken}: tell me, or open an issue.
             \end{alertblock}
         \end{column}
     \end{columns}
 \end{frame}
 
-% =========================================================================
-\section{Monday · Concepts}
-% =========================================================================
-
-\begin{frame}{Platforms, data, and power}
+\begin{frame}{Platforms share at their discretion}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Social platforms mediate an enormous share of public discourse. Their APIs are a \textbf{different animal} from last week's government APIs (Ch.~11): those exist because of transparency mandates; these exist at the discretion of a private company.
-
-            \bigskip
-
-            So access can change overnight --- Reddit's 2023 pricing shift and Twitter's post-acquisition lockout are the cautionary cases.
-
-            \bigskip
-
-            We study four platforms spanning the spectrum from \textbf{proprietary} (Reddit, Spotify) to \textbf{open} (Bluesky, Mastodon) --- the enclosure-vs-openness tension from the post-API age (Ch.~2).
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/platform_spectrum.png}\\
-            {\scriptsize Proprietary to open: who controls access.}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{OAuth2: credentials for a scoped, revocable token}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Almost every platform API authenticates with \textbf{OAuth2}. The idea: don't send your password with each request --- exchange your app's credentials for a \textit{scoped}, \textit{revocable} token.
-
-            \bigskip
-
-            Two flows you should recognize:
-            \begin{itemize}
-                \item \textbf{Client credentials} --- authenticates the \textit{application}; grants read-only access to public data. Enough for research collection.
-                \item \textbf{Authorization code} --- additionally asks a \textit{user} to grant your app permission to act for them. Every ``Sign in with Google'' dialog.
+        \begin{column}{0.56\textwidth}
+            Government APIs exist because a law says the data is public. A platform's API exists because the company chooses to offer it, and it can choose again:
+            \begin{itemize}\small
+                \item \textbf{Reddit} closed self-service API access on November 11, 2025: a new app now needs Reddit's approval.
+                \item \textbf{Spotify} has required every new developer app's owner to have Premium since February 11, 2026, and removed top tracks, popularity, and follower counts.
+                \item \textbf{Bluesky} is built on an open protocol: its public API answers anyone, with no account or key.
             \end{itemize}
-
-            \medskip
-
-            Store client IDs and secrets in environment variables, \textbf{never} in the notebook.
+            \small Chapter 12 tells the Reddit and Spotify stories; the lab reads Bluesky, then YouTube.
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/oauth_flow.png}\\
-            {\scriptsize Bluesky app passwords and Mastodon tokens are the same delegated-credential idea, implemented more simply.}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Four platforms, four architectures}
-    The differences are not cosmetic --- they decide what data exists, on what terms, and how durable your access is:
-    \medskip
-
-    \centering
-    \footnotesize
-    \begin{tabular}{@{}lllll@{}}
-        \toprule
-        \textbf{Platform} & \textbf{Protocol} & \textbf{Auth} & \textbf{Rate limit} & \textbf{Data ownership}\\
-        \midrule
-        Reddit   & Proprietary REST & OAuth2                & 100 QPM            & Platform-controlled\\
-        Spotify  & Proprietary REST & OAuth2 / client creds & $\sim$180 RPM      & Platform-controlled\\
-        Bluesky  & AT Protocol \textit{(open)}  & App password  & Generous, per-PDS  & \textbf{User-portable}\\
-        Mastodon & ActivityPub \textit{(open)}  & OAuth2, per-instance & Varies      & Instance-governed\\
-        \bottomrule
-    \end{tabular}
-
-    \bigskip
-    \raggedright
-    Reddit and Spotify can \textit{unilaterally} rewrite their terms because they own both the platform \textbf{and} the protocol. Bluesky and Mastodon cannot --- their protocols are open standards anyone can implement. That is the architectural embodiment of \textbf{ownership} (Ch.~2).
-\end{frame}
-
-\begin{frame}{In the notebook}
-    One authentication-to-DataFrame pattern, four times over:
-    \begin{itemize}
-        \item \textbf{Reddit (PRAW)} --- subreddit metadata, submissions, comment trees, depth-vs-engagement
-        \item \textbf{Spotify (spotipy)} --- search, artist profiles, top-track popularity, user playlists
-        \item \textbf{Bluesky (atproto)} --- author feeds and the social graph (followers, following, mutuals)
-        \item \textbf{Mastodon (Mastodon.py)} --- public timelines, account search, and hashtags \textit{across} instances
-    \end{itemize}
-    Every one: \textbf{authenticate $\rightarrow$ request $\rightarrow$ parse nested JSON $\rightarrow$ DataFrame}.
-
-    \bigskip
-
-    \begin{alertblock}{Connecting to Ch.~2 (Ethics): social data is people data}
-        \footnotesize A person made every post, comment, and listening record. That person never expected a research dataset. Read the Terms of Service. Consider the IRB. Collect the \textit{minimum} data that you need. Do not collect private messages. Do not quote a post if a search engine can then identify its author.
-    \end{alertblock}
-\end{frame}
-
-% =========================================================================
-\section{Wednesday · Notebook Lab}
-% =========================================================================
-
-\begin{frame}[fragile]{Reddit via PRAW --- authenticate \& explore}
-    Client-only credentials put PRAW in read-only mode --- exactly what research collection needs:
-\begin{lstlisting}
-import praw
-
-reddit = praw.Reddit(
-    client_id="your_client_id",
-    client_secret="your_client_secret",
-    user_agent="WebDataScience/1.0 by u/your_username")
-print(reddit.read_only)               # True with app-only credentials
-
-subreddit = reddit.subreddit("news")
-print(f"Subscribers: {subreddit.subscribers:,}")
-for rule in subreddit.rules:          # PRAW returns Rule objects
-    print("-", rule.short_name)
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{Reddit --- comment trees \& the depth-decay pattern}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-sub = next(subreddit.hot(limit=1))
-sub.comments.replace_more(limit=0)  # flatten tree
-
-rows = [{"score": c.score,
-         "depth": c.depth,
-         "words": len(c.body.split())}
-        for c in sub.comments.list()]
-df = pd.DataFrame(rows)
-
-df.groupby("depth")["score"].mean()
-# decays sharply as nesting deepens
-\end{lstlisting}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/reddit_depth_decay.png}\\
-            {\scriptsize Depth 0 comments score highest.}
-
-            \medskip
-            \raggedright\footnotesize Not a measure of quality --- an artifact of interface design, where nested replies are progressively collapsed and harder to reach.
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Spotify via spotipy --- search \& artist profile}
-    The client-credentials flow reaches public catalog data --- artists, albums, tracks, user playlists:
-\begin{lstlisting}
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
-
-auth = SpotifyClientCredentials(client_id="...", client_secret="...")
-sp = spotipy.Spotify(auth_manager=auth)
-
-results = sp.search(q="Queen", type="artist", limit=1)
-artist = results["artists"]["items"][0]
-top = sp.artist_top_tracks(artist["id"])["tracks"]
-print(artist["name"], f'{artist["followers"]["total"]:,}',
-      [t["popularity"] for t in top[:5]])   # popularity is 0-100
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}{The audio features story --- enclosure in miniature}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            For a decade the API's signature research offering was \textbf{audio features} --- danceability, energy, valence, tempo for every track. Hundreds of studies mapped genres and modeled hits with them.
-
-            \bigskip
-
-            November 2024: cut off for all newly created apps. No stated research alternative --- just as generative AI made music data newly valuable.
-
-            \bigskip
-
-            The lasting lesson: those scores were never ground truth. They were Spotify's \textit{proprietary model} of what music \textit{is}. You always analyze the platform's model of the world as much as the world itself.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/spotify_enclosure.png}
-            \begin{alertblock}{A shrinking API}
-                \footnotesize New apps get \texttt{403 Forbidden} on audio features, recommendations, and related artists. It is not a bug in your code --- the access no longer exists.
+        \begin{column}{0.4\textwidth}
+            \begin{alertblock}{Social data is people data}
+                \footnotesize A person made almost every post. Read the terms of service; collect the minimum you need; don't quote a post if a search could find its author. This week we read \textbf{federal agencies}, and keep private people's posts and handles out of every output.
             \end{alertblock}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Bluesky via the AT Protocol --- open by design}
+% The code on these frames is the lab's Part 1 (labs/week-12/lab-12-key.ipynb), run live on
+% 2026-11-02 against Bluesky's public AppView. Chapter 12 at textbook baf0bc0 still uses atproto
+% with a login; the lab follows the chapter's planned revision.
+\begin{frame}[fragile]{From the website to the API: one agency's profile}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
+        \begin{column}{0.56\textwidth}
+            The National Weather Service at \href{https://bsky.app/profile/nws.noaa.gov}{bsky.app/profile/nws.noaa.gov}, and the same profile from the API:
 \begin{lstlisting}
-from atproto import Client
-
-client = Client()
-client.login("you.bsky.social",
-             "your-app-password")
-
-feed = client.app.bsky.feed.get_author_feed(
-    {"actor": "bsky.app", "limit": 50})
-
-posts = [{"text": i.post.record.text,
-          "likes": i.post.like_count,
-          "reply": i.post.record.reply is not None}
-         for i in feed.feed]
-df = pd.DataFrame(posts)
+bsky_base = "https://public.api.bsky.app/xrpc"
+profile = requests.get(
+    f"{bsky_base}/app.bsky.actor.getProfile",
+    params={"actor": "nws.noaa.gov"},
+    headers=HEADERS).json()
+print(profile["handle"], "|", profile["displayName"])
+print("followers:", profile["followersCount"],
+      "| posts:", profile["postsCount"])
+# nws.noaa.gov | National Weather Service
+# followers: 63020 | posts: 1394
 \end{lstlisting}
+            \small The method's name is part of the address. No key, no login: Bluesky's \textbf{AppView} answers reads for anyone.
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=0.92\textwidth]{img/bluesky_network.png}\\
-            {\scriptsize Social graph via \texttt{get\_followers} / \texttt{get\_follows}.}
-
+        \begin{column}{0.4\textwidth}
+            \textbf{Is it really the agency?}\\[2pt]
+            {\footnotesize Two proofs, both in the API's answer:\par}
+            \begin{itemize}\footnotesize
+                \item The \textbf{handle is a domain}, \texttt{nws.noaa.gov}: only whoever controls the domain can take it
+                \item A \textbf{blue check}: \texttt{"verification"} says Bluesky itself verified it
+            \end{itemize}
             \medskip
-            \raggedright\footnotesize An \textbf{app password} is a revocable delegated credential --- OAuth's principle, simpler. Identity and graph are portable across any AT-Protocol service.
+            {\footnotesize A search for ``National Park Service'' also finds ``Alt National Park Service'', with neither. Collect its posts as the agency's, and your study is wrong.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Mastodon via Mastodon.py --- federated, per-instance}
-    Each instance runs its own API --- there is no single endpoint for ``all of Mastodon.'' Statuses arrive as HTML, so strip tags before analysis:
+\begin{frame}[fragile]{Five agencies in one table}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
 \begin{lstlisting}
-from mastodon import Mastodon
-from bs4 import BeautifulSoup
-
-mastodon = Mastodon(access_token="user_cred.secret",
-                    api_base_url="https://mastodon.social")
-
-for toot in mastodon.timeline_public(limit=10):
-    text = BeautifulSoup(toot["content"], "html.parser").get_text()
-    print("@" + toot["account"]["username"], text[:80])
-
-tagged = mastodon.timeline_hashtag("datascience", limit=20)
+agencies = ["noaa.gov", "nws.noaa.gov",
+            "climate.noaa.gov", "noaacomms.noaa.gov",
+            "federalreserve.gov"]
+rows = []
+for handle in agencies:
+    p = requests.get(
+        f"{bsky_base}/app.bsky.actor.getProfile",
+        params={"actor": handle}, headers=HEADERS).json()
+    rows.append({"handle": p["handle"],
+                 "followers": p["followersCount"],
+                 "posts": p["postsCount"],
+                 "joined": p["createdAt"][:10]})
+accounts = pd.DataFrame(rows).sort_values(
+    "followers", ascending=False)
 \end{lstlisting}
-    Comprehensive collection means engaging \textit{many} instances --- each with its own rules, rate limits, and moderation norms.
+        \end{column}
+        \begin{column}{0.47\textwidth}
+            {\footnotesize
+            \begin{tabular}{@{}lrrr@{}}
+                \toprule
+                \textbf{Handle} & \textbf{Followers} & \textbf{Posts} & \textbf{Joined} \\
+                \midrule
+                nws.noaa.gov & 63,020 & 1,394 & 2025-01 \\
+                climate.noaa.gov & 46,966 & 93 & 2025-01 \\
+                noaa.gov & 41,937 & 150 & 2025-01 \\
+                federalreserve.gov & 8,405 & 1,029 & 2024-12 \\
+                noaacomms.noaa.gov & 5,620 & 117 & 2025-01 \\
+                \bottomrule
+            \end{tabular}\par}
+            \medskip
+            {\footnotesize These are the federal accounts with a \texttt{.gov} handle on November 2; four are NOAA's. NASA and the Census Bureau have none.\par}
+            \medskip
+            \textbf{Microsprint}\\[2pt]
+            {\footnotesize Not every official account has a domain: \texttt{librarycongress.bsky.social} and \texttt{stlouisfed.bsky.social} (FRED's home) are both verified instead.\par}
+        \end{column}
+    \end{columns}
 \end{frame}
 
-\begin{frame}{Lab: work these, then show-and-tell}
+\begin{frame}[fragile]{What an agency posted this week}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Register your own apps first. Then work in pairs on these exercises:
-            \begin{enumerate}\small
-                \item Compare two subreddits about one topic. Report the submissions, the engagement, and the moderation.
-                \item Analyze the full discography of one artist. Report the change in release frequency. Report the change in the popularity of the older albums.
-                \item Get a profile, a graph, and posts from Bluesky. Do the same for Reddit. Compare the difficulty and the detail.
-                \item Select two playlists that users made. Compare the distributions of their metadata.
-                \item Get 50 posts with \texttt{get\_author\_feed}. Calculate summary statistics. Report the limits of the AT Protocol.
-                \item[6.] \textbf{5617}: design a measurement plan for more than one platform. Compare a proprietary platform with a federated platform. Use \textcite{bruns2019after} and \textcite{davidson2023platform}
-            \end{enumerate}
+        \begin{column}{0.53\textwidth}
+\begin{lstlisting}
+params = {"actor": "nws.noaa.gov", "limit": 25,
+          "filter": "posts_no_replies"}
+feed = requests.get(
+    f"{bsky_base}/app.bsky.feed.getAuthorFeed",
+    params=params, headers=HEADERS).json()["feed"]
+posts = []
+for item in feed:
+    if "reason" in item:   # a repost
+        continue
+    post = item["post"]
+    posts.append({"time": post["indexedAt"][:16],
+                  "likes": post["likeCount"],
+                  "reposts": post["repostCount"],
+                  "text": post["record"]["text"][:70]})
+\end{lstlisting}
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{Show-and-Tell}
-                \footnotesize Bring one of these to class:
-                \begin{itemize}\footnotesize
-                    \item a bug that you could not solve
-                    \item data that you collected and find interesting
-                    \item a question for a research design
-                \end{itemize}
-            \end{block}
+        \begin{column}{0.44\textwidth}
+            \textbf{Most reposted, NWS}\\[2pt]
+            {\footnotesize
+            \begin{tabular}{@{}rl@{}}
+                \toprule
+                \textbf{Reposts} & \textbf{Post} \\
+                \midrule
+                80 & Daylight Saving Time ends \ldots \\
+                33 & Updated Extreme Rainfall \ldots \\
+                33 & Here's a more detailed look \ldots \\
+                \bottomrule
+            \end{tabular}\par}
+            \medskip
+            \textbf{Why skip reposts?}\\[2pt]
+            {\footnotesize A repost carries someone else's post, and they may be a private person. Skipping them keeps every handle in our table an agency's.\par}
+            \medskip
+            {\footnotesize The answer ends with a \texttt{cursor}. Wednesday: what is it for?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Before Friday: your YouTube key}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            \begin{enumerate}\small
+                \item Sign in to the \href{https://console.cloud.google.com/}{Google Cloud console} with a \textbf{personal} Google account, and create a project
+                \item In its \textbf{API Library}, enable \textbf{YouTube Data API v3}
+                \item Under \textbf{Credentials}, create an \textbf{API key}, and restrict it to the YouTube Data API v3
+                \item Store it with the \texttt{webdata} environment, in a terminal (on Windows, the Anaconda Prompt):
+            \end{enumerate}
+\begin{lstlisting}
+conda env config vars set YOUTUBE_KEY="your-key" -n webdata
+\end{lstlisting}
+            \small Then close that terminal, open a new one, run \texttt{conda activate webdata}, and start Jupyter from it.
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{alertblock}{It's a password}
+                \footnotesize Never paste the key into a notebook cell or a code file. If it leaks, delete it in the console and make a new one.
+            \end{alertblock}
+            \textbf{The quota}\\[2pt]
+            {\footnotesize 10,000 units a day; most reads cost 1 unit, and searches are capped at 100 a day (\href{https://developers.google.com/youtube/v3/getting-started}{Google's guide}). Friday's code reads channels and videos, not searches.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
 % =========================================================================
-\section{Friday · Textbook Revisions}
+\section{Wednesday · Live-Coding Lab}
 % =========================================================================
 
-\begin{frame}{Improving Chapter 12 together}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-12-social.qmd} and reviews a classmate's.
-
-            \bigskip
-
-            The workflow (from Week 1):
-            \begin{enumerate}\small
-                \item Branch / fork the book repo
-                \item Edit the chapter; commit with a clear message
-                \item Open a PR describing \textit{what} and \textit{why}
-                \item Review two peers' PRs: kind, specific, actionable
-            \end{enumerate}
-
-            \bigskip
-
-            \footnotesize This chapter drifts \textit{fast} --- endpoints and rate limits change --- so ``test it against the live API'' is unusually valuable here.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/pr_review.png}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{A revision menu for Chapter 12}
-    High-value targets --- pick one and scope it to a single PR:
+\begin{frame}{Today: Part 2, more of Bluesky}
     \begin{itemize}
-        \item \textbf{Test the code against live APIs.} Register an app, run the notebook, and report what broke: a Spotify \texttt{403}, a changed \texttt{atproto} method, a new rate limit. Fix it and note the date.
-        \item \textbf{Close a gap in ``Common Issues to Debug.''} Add a worked PRAW \texttt{OAuthException} fix, a Mastodon instance-block/rate-limit case, or the \texttt{403}-diagnosis flowchart.
-        \item \textbf{Add a figure.} An OAuth token-flow diagram, the governance-spectrum figure, or a clean comment depth-vs-score chart.
-        \item \textbf{Strengthen a thin exercise.} The Bluesky and playlist exercises need expected output, a rubric, or starter cells so they are self-checking.
-        \item \textbf{Refresh the comparison table \& ``Further Reading.''} Verify mid-2026 rate limits and endpoint availability; add a Fediverse-measurement paper tied to the \textbf{ownership} callout.
+        \item Follow the \texttt{cursor} to read more posts than one request returns, as Wikipedia's \texttt{continue} did in week 10
+        \item An agency's rhythm: when it posts, and which posts travel
+        \item Download the new \texttt{lab-12.ipynb}; start at Part 2's setup step
     \end{itemize}
+    \medskip
+    \small This part's frames are added before Wednesday's class, after chapter 12's revision.
 \end{frame}
 
-\begin{frame}{A good revision, and a good review}
+% =========================================================================
+\section{Friday · Live-Coding Lab}
+% =========================================================================
+
+\begin{frame}{Today: Part 3, YouTube's Data API}
+    \begin{itemize}
+        \item A keyed API: \texttt{YOUTUBE\_KEY}, read with week 11's safe ways
+        \item The same agencies' channels and videos, and the API's daily quota
+        \item Download the new \texttt{lab-12.ipynb}; start at Part 3's setup step
+    \end{itemize}
+    \medskip
+    \small This part's frames are added before Friday's class.
+\end{frame}
+
+\begin{frame}{Friday's last 15 minutes: portfolio checkpoint 2}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \begin{block}{A strong PR}
-                \begin{itemize}\small
-                    \item One focused change, clearly titled
-                    \item Explains the problem it fixes
-                    \item Builds (\texttt{quarto render}) without errors
-                    \item Matches the book's voice and notation
-                    \item Discloses any AI assistance
-                \end{itemize}
-            \end{block}
+        \begin{column}{0.56\textwidth}
+            \dayband{Due Sunday}{Collect and clean your data}
+            \begin{itemize}\small
+                \item \textbf{Collection code} that runs, makes polite requests (a User-Agent that identifies you, pauses between requests), and saves the raw data
+                \item \textbf{A cleaning step}, with its code and output, that produces a tidy dataset
+                \item \textbf{A small sample} of the cleaned data in your repository, with a data dictionary
+                \item \textbf{The README's Data section}: the source, when you collected it, how many records, and what you kept out of the repository and why
+            \end{itemize}
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{A strong review}
-                \begin{itemize}\small
-                    \item Runs / reads the change, not just skims
-                    \item Names specifics (line, claim, code)
-                    \item Separates ``must fix'' from ``nice to have''
-                    \item Is generous --- assume good faith
-                    \item Ends with a clear verdict
-                \end{itemize}
-            \end{block}
+        \begin{column}{0.4\textwidth}
+            \textbf{Use the 15 minutes}\\[2pt]
+            {\footnotesize Run your collection code once, here, where you can ask. A platform this week? Its terms of service decide what goes in your repository.\par}
+            \medskip
+            \textbf{Graded}\\[2pt]
+            {\footnotesize Two criteria, one point each, on what's pushed by Sunday night.\par}
         \end{column}
     \end{columns}
-    \medskip
-    \centering\small Next week: \textbf{AI \& Language-Model APIs} --- sending prompts to models as one more data pipeline.
 \end{frame}
 
 % =========================================================================
 \begin{frame}{Key takeaways}
     \begin{enumerate}
-        \item One pattern, every platform: \textbf{authenticate $\rightarrow$ request $\rightarrow$ parse nested JSON $\rightarrow$ DataFrame}.
-        \item OAuth2 trades credentials for a \textbf{scoped, revocable token}; client-credentials is enough for public research reads.
-        \item The real variable is \textbf{governance}, not code: who owns the data, on what terms, and what happens when the rules change.
-        \item Open protocols (AT, ActivityPub) make access an \textbf{architectural feature}; proprietary APIs make it a revocable business decision.
-        \item Access is conditional, costly, and fragile --- build across open \textbf{and} closed so no single closure ends your research.
+        \item A platform's API exists \textbf{at the platform's discretion}: Reddit and Spotify have closed much of theirs since 2024. Date what you collect, and say what access you had.
+        \item \textbf{Check who is posting} before you collect: a domain handle or a verified check, not a familiar name.
+        \item \textbf{Social data is people data}: read public institutions' accounts, and keep private people's posts and handles out of what you save and show.
+        \item \textbf{An open protocol} answers anyone; a \textbf{keyed API} counts what you use. Both still need a User-Agent.
     \end{enumerate}
-    \bigskip
 \end{frame}
 
 \end{document}

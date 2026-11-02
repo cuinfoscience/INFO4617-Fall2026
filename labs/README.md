@@ -17,6 +17,7 @@ This term began the labs in week 10. The labs for weeks 1–9 are written for th
 | 9 · Extracting data from PDFs | [`week-09/lab-09.ipynb`](week-09/lab-09.ipynb) | [`week-09/lab-09-key.ipynb`](week-09/lab-09-key.ipynb) · [PDF](week-09/lab-09-key.pdf) |
 | 10 · Wikipedia's APIs | [`week-10/lab-10.ipynb`](week-10/lab-10.ipynb) | [`week-10/lab-10-key.ipynb`](week-10/lab-10-key.ipynb) · [PDF](week-10/lab-10-key.pdf) |
 | 11 · Government data APIs | [`week-11/lab-11.ipynb`](week-11/lab-11.ipynb) | [`week-11/lab-11-key.ipynb`](week-11/lab-11-key.ipynb) · [PDF](week-11/lab-11-key.pdf) |
+| 12 · Social and media platform APIs | [`week-12/lab-12.ipynb`](week-12/lab-12.ipynb) | [`week-12/lab-12-key.ipynb`](week-12/lab-12-key.ipynb) · [PDF](week-12/lab-12-key.pdf) |
 
 ## Get the notebook
 
