@@ -116,6 +116,12 @@ One-sentence comments, added where they apply:
   credit this week, but remember that Step 1 asks you to find three new PDFs
   from a government source rather than reusing the chapter's own files."
 
+From week 11, a lab with missing steps, unrun code, errors, or a thin
+interpretation earns full credit, with a comment saying what to fix. An upload
+of the wrong notebook (the in-class lab notebook instead of the chapter's
+companion notebook) earns 0, with a comment inviting a resubmission. The
+instructor decided this on 2026-11-02.
+
 Hold a submission for the instructor, ungraded, when it looks produced by an
 AI agent (notes addressed to a reader, results quoted that no output shows) or
 when a setup failure stopped the work.
@@ -130,10 +136,17 @@ criteria, each Met 1 or Not met 0:
 
 | Week, due | Criterion 1 | Criterion 2 |
 |---|---|---|
-| 11, Sun Nov 1: set up the repo | A public repo with a README (title, name, summary of the question, placeholder sections) | `proposal.md`, plus placeholders for the notebook, the report, and `data/` |
+| 11, Sun Nov 1: set up the repo | A public repo with a README | A proposal document: `proposal.md`, or the proposal as a PDF |
 | 12, Sun Nov 8: collect and clean | Collection code that runs politely and saves raw data, and a cleaning step that produces a tidy dataset | A data sample with a dictionary, and the README's Data section (source, date, count, what was kept out and why) |
 | 13, Sun Nov 15: analyze | A notebook that runs top to bottom with output, with results that answer part of the question | A figure with title, axes, and caption, and the README's Methods and preliminary Findings |
 | 14, Sun Nov 29: draft the write-up | A full draft of `report.md` or `report.pdf` using their own results, citing sources | All four required files current, and a README that lets someone reproduce the project |
+
+Week 11 was graded on the README and the proposal alone, as the instructor
+decided on 2026-11-02; the Canvas rubric's longer wording (title, name, summary,
+placeholder sections, and placeholders for the notebook, report, and `data/`)
+was left as it was. A link submitted after the deadline, or one repository
+submitted by two students, is listed for the instructor: the repository is
+still graded as it stood at the deadline.
 
 Repos hold code and a small sample of the data; the full raw data stays out
 where terms of service, size, or personal information make sharing unwise, and
