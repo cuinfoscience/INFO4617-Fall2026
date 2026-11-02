@@ -65,8 +65,10 @@ copy it.
 ## The week, and its lab
 
 From week 11, Monday, Wednesday and Friday are one live-coding lab in three
-parts, one a day, run from a notebook in `labs/week-NN/`; Friday ends with a
-textbook-revision block. (In week 10, Monday was a lecture, and the lab ran
+parts, one a day, run from a notebook in `labs/week-NN/`. Friday's last 15
+minutes are, in weeks 11–14, work on that week's project-portfolio checkpoint
+(`docs/course-facts.md`, "Weeks 10–14 of Textbook Revisions", says what each
+is and when it's due; decided 2026-11-02). (In week 10, Monday was a lecture, and the lab ran
 over Wednesday and Friday.) Students submit the chapter's Recommended Exercises
 from its companion notebook. Write or change a lab by
 [`labs/AUTHORING.md`](labs/AUTHORING.md): the key is the source, the

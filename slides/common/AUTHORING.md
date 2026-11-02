@@ -66,7 +66,10 @@ recently — voice evolves forward, not backward.
    established alternative (week-04) — the three-section Monday/Wednesday/
    Friday split is the default, not a hard requirement.
 6. `\section{Friday · <this week's activity>}` — Friday is the course's
-   workshop. From week 10, it is the 15-minute revision block at the end of
+   workshop. In weeks 11–14 its 15 minutes are the week's project-portfolio
+   checkpoint (one frame: what it asks and when it's due, from
+   `docs/course-facts.md`; decided 2026-11-02). In week 10, it was the
+   15-minute revision block at the end of
    Friday's part of the lab, so these frames are fewer and shorter. By
    default it is textbook revisions, in three frames: the PR +
    peer-review workflow (reuse week-06's), a **chapter-specific "revision
