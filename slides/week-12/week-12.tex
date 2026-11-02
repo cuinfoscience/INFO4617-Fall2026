@@ -232,6 +232,30 @@ for item in feed:
     \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]{Before Friday: your YouTube key}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            \begin{enumerate}\small
+                \item Sign in to the \href{https://console.cloud.google.com/}{Google Cloud console} with a \textbf{personal} Google account, and create a project
+                \item In its \textbf{API Library}, enable \textbf{YouTube Data API v3}
+                \item Under \textbf{Credentials}, create an \textbf{API key}, and restrict it to the YouTube Data API v3
+                \item Store it with the \texttt{webdata} environment, in a terminal (on Windows, the Anaconda Prompt):
+            \end{enumerate}
+\begin{lstlisting}
+conda env config vars set YOUTUBE_KEY="your-key" -n webdata
+\end{lstlisting}
+            \small Then close that terminal, open a new one, run \texttt{conda activate webdata}, and start Jupyter from it.
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{alertblock}{It's a password}
+                \footnotesize Never paste the key into a notebook cell or a code file. If it leaks, delete it in the console and make a new one.
+            \end{alertblock}
+            \textbf{The quota}\\[2pt]
+            {\footnotesize 10,000 units a day; most reads cost 1 unit, and searches are capped at 100 a day (\href{https://developers.google.com/youtube/v3/getting-started}{Google's guide}). Friday's code reads channels and videos, not searches.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 % =========================================================================
 \section{Wednesday · Live-Coding Lab}
 % =========================================================================
@@ -279,6 +303,16 @@ for item in feed:
             {\footnotesize Two criteria, one point each, on what's pushed by Sunday night.\par}
         \end{column}
     \end{columns}
+\end{frame}
+
+% =========================================================================
+\begin{frame}{Key takeaways}
+    \begin{enumerate}
+        \item A platform's API exists \textbf{at the platform's discretion}: Reddit and Spotify have closed much of theirs since 2024. Date what you collect, and say what access you had.
+        \item \textbf{Check who is posting} before you collect: a domain handle or a verified check, not a familiar name.
+        \item \textbf{Social data is people data}: read public institutions' accounts, and keep private people's posts and handles out of what you save and show.
+        \item \textbf{An open protocol} answers anyone; a \textbf{keyed API} counts what you use. Both still need a User-Agent.
+    \end{enumerate}
 \end{frame}
 
 \end{document}
