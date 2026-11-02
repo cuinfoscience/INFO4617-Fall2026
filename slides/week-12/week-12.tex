@@ -260,28 +260,212 @@ conda env config vars set YOUTUBE_KEY="your-key" -n webdata
 \section{Wednesday · Live-Coding Lab}
 % =========================================================================
 
+% The code on these frames is the lab's Part 2 (labs/week-12/lab-12-key.ipynb), run live on
+% 2026-11-02, following chapter 12's rewrite (textbook branch claude/ch12-pr).
 \begin{frame}{Today: Part 2, more of Bluesky}
-    \begin{itemize}
-        \item Follow the \texttt{cursor} to read more posts than one request returns, as Wikipedia's \texttt{continue} did in week 10
-        \item An agency's rhythm: when it posts, and which posts travel
-        \item Download the new \texttt{lab-12.ipynb}; start at Part 2's setup step
-    \end{itemize}
-    \medskip
-    \small This part's frames are added before Wednesday's class, after chapter 12's revision.
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            One request returns at most 100 posts. Today:
+            \begin{itemize}\small
+                \item Follow the \texttt{cursor} for more, as week 10 followed Wikipedia's \texttt{continue}
+                \item An agency's rhythm: when it posts, in its own time zone
+                \item Which posts travel, and what a table like that can't tell you
+            \end{itemize}
+
+            \medskip
+            \dayband{Use it}{Steps 4--7}
+            \begin{itemize}\small
+                \item Download the new \texttt{lab-12.ipynb}; start at \textbf{Step 4}
+                \item Still no key, no account
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{alertblock}{Friday needs a key}
+                \footnotesize \texttt{YOUTUBE\_KEY}, from a personal Google account: Monday's ``Before Friday'' frame has the steps. Make it today.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{More than one page: the \texttt{cursor}}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+\begin{lstlisting}
+params = {"actor": "nws.noaa.gov", "limit": 100,
+          "filter": "posts_no_replies"}
+first = requests.get(
+    f"{bsky_base}/app.bsky.feed.getAuthorFeed",
+    params=params, headers=HEADERS).json()
+# 100 items, from 2026-10-31 back to 2026-10-02
+
+params["cursor"] = first["cursor"]
+second = requests.get(
+    f"{bsky_base}/app.bsky.feed.getAuthorFeed",
+    params=params, headers=HEADERS).json()
+# 100 items, from 2026-10-01 back to 2026-08-26
+\end{lstlisting}
+            \small Then a given loop: up to five pages, skipping reposts. It stopped at 495 posts, back to April 20, with a cursor still left.
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Three ways to page}\\[2pt]
+            {\footnotesize
+            \begin{tabular}{@{}ll@{}}
+                \toprule
+                \textbf{API} & \textbf{You send back} \\
+                \midrule
+                Wikipedia (wk 10) & \texttt{continue} \\
+                EIA (wk 11) & an \texttt{offset} you count \\
+                Bluesky & the \texttt{cursor} \\
+                \bottomrule
+            \end{tabular}\par}
+            \medskip
+            \textbf{When to stop}\\[2pt]
+            {\footnotesize At the end (no cursor), at a count, or at a date. Choose one, and say which when you write it up.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{When an agency posts}
+    \begin{columns}[T]
+        \begin{column}{0.4\textwidth}
+\begin{lstlisting}
+local = nws["created"].dt.tz_convert(
+    "America/New_York")
+by_day = (local.dt.day_name()
+          .value_counts().reindex(days))
+by_day.plot.bar(rot=0)
+\end{lstlisting}
+            \small Times arrive in UTC: convert to the agency's zone before counting by day or hour.
+
+            \medskip
+            \small The weather doesn't take weekends off; the agencies' staff mostly do. The Weather Service peaks on Friday, before the weekend's weather; the Fed posts Wednesday to Friday, and almost never on weekends.
+        \end{column}
+        \begin{column}{0.56\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/weekday-nws-fed.png}\\
+            {\scriptsize Drawn from the lab's Step 6 and its microsprint, run 2026-11-02 against Bluesky's public API.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{What travels}
+    \begin{columns}[T]
+        \begin{column}{0.52\textwidth}
+\begin{lstlisting}
+nws.groupby("embed")["reposts"].agg(
+    ["count", "median"]).sort_values(
+    "count", ascending=False)
+\end{lstlisting}
+            {\footnotesize
+            \begin{tabular}{@{}lrr@{}}
+                \toprule
+                \textbf{Embed} & \textbf{Posts} & \textbf{Median reposts} \\
+                \midrule
+                images & 412 & 19 \\
+                video & 59 & 23 \\
+                external (link card) & 13 & 14 \\
+                record with media & 5 & 23 \\
+                record (a quoted post) & 3 & 24 \\
+                none & 3 & 28 \\
+                \bottomrule
+            \end{tabular}\par}
+        \end{column}
+        \begin{column}{0.44\textwidth}
+            \textbf{Describe, don't explain}\\[2pt]
+            {\footnotesize 412 of 495 posts carry an image, so the other rows compare a handful of posts. And a post's reach depends on the weather it warns about far more than on its format.\par}
+            \medskip
+            \textbf{Discuss}\\[2pt]
+            {\footnotesize What would you need, beyond this table, to say a format \textit{causes} reposts? We left out the agency's replies: what could they tell you, and what would collecting them ask of you?\par}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 % =========================================================================
 \section{Friday · Live-Coding Lab}
 % =========================================================================
 
+% The code on these frames is the lab's Part 3 (labs/week-12/lab-12-key.ipynb), following chapter
+% 12's YouTube section. It was not run from the cloud machine, which has no YOUTUBE_KEY: these
+% frames show code, not outputs, until it is run with a key.
 \begin{frame}{Today: Part 3, YouTube's Data API}
-    \begin{itemize}
-        \item A keyed API: \texttt{YOUTUBE\_KEY}, read with week 11's safe ways
-        \item The same agencies' channels and videos, and the API's daily quota
-        \item Download the new \texttt{lab-12.ipynb}; start at Part 3's setup step
-    \end{itemize}
-    \medskip
-    \small This part's frames are added before Friday's class.
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            \dayband{Lab}{Steps 8--11}
+            \begin{itemize}\small
+                \item A keyed API: check \texttt{YOUTUBE\_KEY} before you read it
+                \item An agency's channel by its handle, and its newest videos' statistics
+                \item What it cost: every request counts against a daily quota
+                \item Download the new \texttt{lab-12.ipynb}; start at \textbf{Step 8}
+            \end{itemize}
+
+            \medskip
+            \dayband{Then}{your project, 15 minutes}
+            \begin{itemize}\small
+                \item Portfolio checkpoint 2, \textit{Collect and clean your data}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{alertblock}{\texttt{MISSING}?}
+                \footnotesize Quit Jupyter, open a new terminal, start it again. Can't restart? Step 8's given cell asks with \texttt{getpass()}: paste into the box, press Enter.
+            \end{alertblock}
+            \textbf{No key yet?}\\[2pt]
+            {\footnotesize Follow along from the key, and make one after class: Monday's ``Before Friday'' frame has the steps.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{A channel by its handle}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+\begin{lstlisting}
+yt_base = "https://www.googleapis.com/youtube/v3"
+params = {"part": "snippet,statistics,contentDetails",
+          "forHandle": "@NOAA", "key": youtube_key}
+channel = requests.get(f"{yt_base}/channels",
+    params=params, headers=HEADERS).json()["items"][0]
+print(channel["snippet"]["title"],
+      channel["statistics"]["subscriberCount"],
+      channel["statistics"]["videoCount"])
+uploads = channel["contentDetails"][
+    "relatedPlaylists"]["uploads"]
+\end{lstlisting}
+            \small \texttt{part} names the groups of fields you want back; \texttt{uploads} is the playlist of every video the channel has posted.
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Is it the agency's?}\\[2pt]
+            {\footnotesize Check that the agency's own website links to the channel. \texttt{@NOAA}, \texttt{@NOAAClimate}, \texttt{@federalreserve}, \texttt{@stlouisfed}, \texttt{@uscensusbureau}, and \texttt{@NASA} all have channels.\par}
+            \medskip
+            \textbf{Rounded}\\[2pt]
+            {\footnotesize YouTube rounds \texttt{subscriberCount} down to three significant figures, so a small change won't show.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{A channel's newest videos, and what they cost}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+\begin{lstlisting}
+params = {"part": "contentDetails",
+          "playlistId": uploads, "maxResults": 50,
+          "key": youtube_key}
+items = requests.get(f"{yt_base}/playlistItems",
+    params=params, headers=HEADERS).json()["items"]
+video_ids = []
+for item in items:
+    video_ids.append(item["contentDetails"]["videoId"])
+params = {"part": "snippet,statistics",
+          "id": ",".join(video_ids), "key": youtube_key}
+\end{lstlisting}
+            \small Then \texttt{videos.list}: views and likes for all 50, as strings; \texttt{int()} them, and \texttt{.get()} a \texttt{likeCount} an owner hid.
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{alertblock}{The quota}
+                \footnotesize 10,000 units a day; each request here costs 1. Two requests read 50 videos. Searches are capped separately, at 100 a day.
+            \end{alertblock}
+            \textbf{Discuss}\\[2pt]
+            {\footnotesize How many units would a year of NOAA's uploads cost? We set a hidden \texttt{likeCount} to 0: when is that wrong, and how would you count how often it happened?\par}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{Friday's last 15 minutes: portfolio checkpoint 2}
@@ -311,6 +495,7 @@ conda env config vars set YOUTUBE_KEY="your-key" -n webdata
         \item A platform's API exists \textbf{at the platform's discretion}: Reddit and Spotify have closed much of theirs since 2024. Date what you collect, and say what access you had.
         \item \textbf{Check who is posting} before you collect: a domain handle or a verified check, not a familiar name.
         \item \textbf{Social data is people data}: read public institutions' accounts, and keep private people's posts and handles out of what you save and show.
+        \item \textbf{Page deliberately}: send back the \texttt{cursor} or token you're given, and stop at the end, a count, or a date you chose.
         \item \textbf{An open protocol} answers anyone; a \textbf{keyed API} counts what you use. Both still need a User-Agent.
     \end{enumerate}
 \end{frame}
