@@ -118,6 +118,29 @@
 % The code on these frames is the lab's Part 1 (labs/week-12/lab-12-key.ipynb), run live on
 % 2026-11-02 against Bluesky's public AppView. Chapter 12 at textbook baf0bc0 still uses atproto
 % with a login; the lab follows the chapter's planned revision.
+% The tour figures are copies of chapter 12's (textbook images/ch-12/, via tools/shots sync);
+% captured signed out on 2026-11-02.
+\begin{frame}{Start from the page a person reads}
+    \begin{columns}[T]
+        \begin{column}{0.58\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/bsky-profile_annotated.pdf}\\
+            {\scriptsize The National Weather Service on \href{https://bsky.app/profile/nws.noaa.gov}{bsky.app}, captured 2026-11-02 (chapter 12, figure 12.1).}
+        \end{column}
+        \begin{column}{0.39\textwidth}
+            \textbf{Each marker is a field}\\[2pt]
+            \begin{enumerate}\footnotesize
+                \item The handle, a domain: \texttt{handle}
+                \item The blue check: \texttt{verification}
+                \item The counts: \texttt{followersCount}, \texttt{postsCount}
+                \item The posts, newest first: \texttt{getAuthorFeed}
+            \end{enumerate}
+            \medskip
+            {\footnotesize The page rounds to 63K followers and 1.3K posts. The API gives the exact counts.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}[fragile]{From the website to the API: one agency's profile}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
@@ -228,6 +251,29 @@ for item in feed:
             {\footnotesize A repost carries someone else's post, and they may be a private person. Skipping them keeps every handle in our table an agency's.\par}
             \medskip
             {\footnotesize The answer ends with a \texttt{cursor}. Wednesday: what is it for?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Friday's page: an agency's YouTube channel}
+    \begin{columns}[T]
+        \begin{column}{0.64\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/youtube-channel_annotated.pdf}\\
+            {\scriptsize NOAA's channel on \href{https://www.youtube.com/@NOAA}{youtube.com}, captured 2026-11-02 (chapter 12, figure 12.2).}
+        \end{column}
+        \begin{column}{0.33\textwidth}
+            \textbf{The same four questions}\\[2pt]
+            \begin{enumerate}\footnotesize
+                \item The name: \texttt{snippet.title}
+                \item The handle and counts: \texttt{subscriberCount}, \texttt{videoCount}
+                \item A link to \texttt{noaa.gov}
+                \item The videos: the \textbf{uploads} playlist
+            \end{enumerate}
+            \medskip
+            {\footnotesize Marker 3 proves nothing alone: anyone can link to any site. The proof runs the other way, from the agency's website to the channel.\par}
+            \medskip
+            {\footnotesize Unlike Bluesky, every one of these requests needs a key.\par}
         \end{column}
     \end{columns}
 \end{frame}

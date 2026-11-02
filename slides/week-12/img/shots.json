@@ -1,0 +1,60 @@
+{
+  "files": {
+    "bsky-profile.png": {
+      "also": [
+        "bsky-profile_annotated.png",
+        "bsky-profile_annotated.pdf"
+      ],
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-11-02T03:44:15+00:00",
+      "copied_from": "images/ch-12/bsky-profile.png",
+      "figure": "ch-12/bsky-profile",
+      "final_url": "https://bsky.app/profile/nws.noaa.gov",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "717930ef1401a1b5e5a79bdf3a574c92f42be44d8975b82cc16690264ac1f88f",
+      "size": [
+        1600,
+        780
+      ],
+      "source_sha256": "717930ef1401a1b5e5a79bdf3a574c92f42be44d8975b82cc16690264ac1f88f",
+      "synced": "2026-11-02T18:34:58+00:00",
+      "textbook_commit": "752ae13b98bc889215f86dcf55bcae3dc79609a5",
+      "url": "https://bsky.app/profile/nws.noaa.gov",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        800,
+        600
+      ]
+    },
+    "youtube-channel.png": {
+      "also": [
+        "youtube-channel_annotated.png",
+        "youtube-channel_annotated.pdf"
+      ],
+      "browser": "Google Chrome for Testing 154.0.8037.92 (headless, Playwright 1.63.0)",
+      "by": "tools/shots",
+      "captured": "2026-11-02T03:44:19+00:00",
+      "copied_from": "images/ch-12/youtube-channel.png",
+      "figure": "ch-12/youtube-channel",
+      "final_url": "https://www.youtube.com/@NOAA",
+      "kind": "capture",
+      "scale": 2,
+      "sha256": "d8099c72481d7af3babd7db1bac152c7477ed93292e24efdc7583ff121dad07d",
+      "size": [
+        1600,
+        756
+      ],
+      "source_sha256": "d8099c72481d7af3babd7db1bac152c7477ed93292e24efdc7583ff121dad07d",
+      "synced": "2026-11-02T18:34:58+00:00",
+      "textbook_commit": "752ae13b98bc889215f86dcf55bcae3dc79609a5",
+      "url": "https://www.youtube.com/@NOAA",
+      "user_agent": "WebDataScience/1.0 (brian.keegan@colorado.edu)",
+      "window": [
+        800,
+        600
+      ]
+    }
+  }
+}
