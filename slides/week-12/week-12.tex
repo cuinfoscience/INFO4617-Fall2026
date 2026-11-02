@@ -136,9 +136,9 @@
             \textbf{Each marker is a field}\\[2pt]
             \begin{enumerate}\footnotesize
                 \item The handle, a domain: \texttt{handle}
-                \item The blue check: \texttt{verification}
-                \item The counts: \texttt{followersCount}, \texttt{postsCount}
-                \item The posts, newest first: \texttt{getAuthorFeed}
+                \item The blue check: \href{https://docs.bsky.app/docs/api/app-bsky-actor-get-profile}{\texttt{verification}}
+                \item The counts: \href{https://docs.bsky.app/docs/api/app-bsky-actor-get-profile}{\texttt{followersCount}, \texttt{postsCount}}
+                \item The posts, newest first: \href{https://docs.bsky.app/docs/api/app-bsky-feed-get-author-feed}{\texttt{getAuthorFeed}}
             \end{enumerate}
             \medskip
             {\footnotesize The page rounds to 63K followers and 1.3K posts. The API gives the exact counts.\par}
@@ -162,7 +162,7 @@ print("followers:", profile["followersCount"],
 # nws.noaa.gov | National Weather Service
 # followers: 63020 | posts: 1394
 \end{lstlisting}
-            \small The method's name is part of the address. No key, no login: Bluesky's \textbf{AppView} answers reads for anyone.
+            \small The method's name is part of the address. No key, no login: Bluesky's \textbf{AppView} answers reads for anyone.\\[2pt]{\scriptsize\textbf{Docs:} \href{https://docs.bsky.app/docs/api/app-bsky-actor-get-profile}{\texttt{getProfile}}, which lists every field; every method: the \href{https://docs.bsky.app/docs/category/http-reference}{HTTP API reference}}
         \end{column}
         \begin{column}{0.4\textwidth}
             \textbf{Is it really the agency?}\\[2pt]
@@ -196,6 +196,7 @@ for handle in agencies:
 accounts = pd.DataFrame(rows).sort_values(
     "followers", ascending=False)
 \end{lstlisting}
+            {\scriptsize\textbf{Docs:} \href{https://docs.bsky.app/docs/api/app-bsky-actor-get-profile}{\texttt{getProfile}}; \href{https://docs.bsky.app/docs/api/app-bsky-actor-get-profiles}{\texttt{getProfiles}} takes up to 25 accounts in one request.}
         \end{column}
         \begin{column}{0.47\textwidth}
             {\footnotesize
@@ -238,6 +239,7 @@ for item in feed:
                   "reposts": post["repostCount"],
                   "text": post["record"]["text"][:70]})
 \end{lstlisting}
+            {\scriptsize\textbf{Docs:} \href{https://docs.bsky.app/docs/api/app-bsky-feed-get-author-feed}{\texttt{getAuthorFeed}}, with the values \texttt{filter} takes.}
         \end{column}
         \begin{column}{0.44\textwidth}
             \textbf{Most reposted, NWS}\\[2pt]
@@ -270,10 +272,10 @@ for item in feed:
         \begin{column}{0.33\textwidth}
             \textbf{The same four questions}\\[2pt]
             \begin{enumerate}\footnotesize
-                \item The name: \texttt{snippet.title}
-                \item The handle and counts: \texttt{subscriberCount}, \texttt{videoCount}
+                \item The name: \href{https://developers.google.com/youtube/v3/docs/channels}{\texttt{snippet.title}}
+                \item The handle and counts: \href{https://developers.google.com/youtube/v3/docs/channels}{\texttt{subscriberCount}, \texttt{videoCount}}
                 \item A link to \texttt{noaa.gov}
-                \item The videos: the \textbf{uploads} playlist
+                \item The videos: the \textbf{uploads} playlist, via \href{https://developers.google.com/youtube/v3/docs/playlistItems/list}{\texttt{playlistItems.list}}
             \end{enumerate}
             \medskip
             {\footnotesize Marker 3 proves nothing alone: anyone can link to any site. The proof runs the other way, from the agency's website to the channel.\par}
@@ -355,7 +357,7 @@ second = requests.get(
     params=params, headers=HEADERS).json()
 # 100 items, from 2026-10-01 back to 2026-08-26
 \end{lstlisting}
-            \small Then a given loop: up to five pages, skipping reposts. It stopped at 495 posts, back to April 20, with a cursor still left.
+            \small Then a given loop: up to five pages, skipping reposts. It stopped at 495 posts, back to April 20, with a cursor still left.\\[2pt]{\scriptsize\textbf{Docs:} \href{https://docs.bsky.app/docs/api/app-bsky-feed-get-author-feed}{\texttt{getAuthorFeed}}'s \texttt{cursor} and \texttt{limit}}
         \end{column}
         \begin{column}{0.4\textwidth}
             \textbf{Three ways to page}\\[2pt]
@@ -420,6 +422,8 @@ nws.groupby("embed")["reposts"].agg(
                 none & 3 & 28 \\
                 \bottomrule
             \end{tabular}\par}
+            \medskip
+            {\scriptsize\textbf{Docs:} Bluesky's \href{https://docs.bsky.app/docs/about-bluesky-content/posts}{Posts in-depth}, on each kind of embed.}
         \end{column}
         \begin{column}{0.44\textwidth}
             \textbf{Describe, don't explain}\\[2pt]
@@ -480,7 +484,7 @@ print(channel["snippet"]["title"],
 uploads = channel["contentDetails"][
     "relatedPlaylists"]["uploads"]
 \end{lstlisting}
-            \small \texttt{part} names the groups of fields you want back; \texttt{uploads} is the playlist of every video the channel has posted.
+            \small \texttt{part} names the groups of fields you want back; \texttt{uploads} is the playlist of every video the channel has posted.\\[2pt]{\scriptsize\textbf{Docs:} \href{https://developers.google.com/youtube/v3/docs/channels/list}{\texttt{channels.list}}; the \href{https://developers.google.com/youtube/v3/docs/channels}{channel resource}, field by field}
         \end{column}
         \begin{column}{0.4\textwidth}
             \textbf{Is it the agency's?}\\[2pt]
@@ -507,7 +511,7 @@ for item in items:
 params = {"part": "snippet,statistics",
           "id": ",".join(video_ids), "key": youtube_key}
 \end{lstlisting}
-            \small Then \texttt{videos.list}: views and likes for all 50, as strings; \texttt{int()} them, and \texttt{.get()} a \texttt{likeCount} an owner hid.
+            \small Then \texttt{videos.list}: views and likes for all 50, as strings; \texttt{int()} them, and \texttt{.get()} a \texttt{likeCount} an owner hid.\\[2pt]{\scriptsize\textbf{Docs:} \href{https://developers.google.com/youtube/v3/docs/playlistItems/list}{\texttt{playlistItems.list}}, \href{https://developers.google.com/youtube/v3/docs/videos/list}{\texttt{videos.list}}, \href{https://developers.google.com/youtube/v3/determine_quota_cost}{quota costs}}
         \end{column}
         \begin{column}{0.4\textwidth}
             \begin{alertblock}{The quota}
