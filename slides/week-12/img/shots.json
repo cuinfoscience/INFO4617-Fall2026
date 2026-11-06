@@ -55,6 +55,156 @@
         800,
         600
       ]
+    },
+    "yt-create-credentials.png": {
+      "also": [
+        "yt-create-credentials_annotated.png",
+        "yt-create-credentials_annotated.pdf"
+      ],
+      "browser": "Firefox",
+      "by": "Brian C. Keegan",
+      "captured": "2026-11-06",
+      "copied_from": "images/ch-12/yt-create-credentials.png",
+      "figure": "ch-12/yt-create-credentials",
+      "final_url": null,
+      "imported": "2026-11-06T17:27:06+00:00",
+      "kind": "capture",
+      "method": "screenshot by hand in Firefox; imported by tools/shots",
+      "redacted": [],
+      "scale": 1,
+      "sha256": "2a3cd87cea4f7a9fce2bf385bbed60b5a04137fec8ba8d1971196e2b08752e5e",
+      "size": [
+        528,
+        273
+      ],
+      "source_sha256": "2a3cd87cea4f7a9fce2bf385bbed60b5a04137fec8ba8d1971196e2b08752e5e",
+      "synced": "2026-11-06T17:28:54+00:00",
+      "textbook_commit": "53cfd165d67ceb785cd91e7acc47d88094bca620",
+      "url": "https://console.cloud.google.com/apis/api/youtube.googleapis.com/credentials",
+      "window": [
+        528,
+        273
+      ]
+    },
+    "yt-create-key-top.png": {
+      "also": [
+        "yt-create-key-top_annotated.png",
+        "yt-create-key-top_annotated.pdf"
+      ],
+      "browser": "Firefox",
+      "by": "Brian C. Keegan",
+      "captured": "2026-11-06",
+      "copied_from": "tools/shots/out/course/week12-yt-create-key/20261106T172842Z.png",
+      "figure": "course/week12-yt-create-key",
+      "final_url": null,
+      "imported": "2026-11-06T17:28:42+00:00",
+      "kind": "capture",
+      "method": "screenshot by hand in Firefox; imported by tools/shots",
+      "redacted": [],
+      "scale": 1,
+      "sha256": "1de1f0a480f983b32f62c685bf6a92b00f4386993399827d7d6e1f71f7a33100",
+      "size": [
+        583,
+        600
+      ],
+      "source_sha256": "1de1f0a480f983b32f62c685bf6a92b00f4386993399827d7d6e1f71f7a33100",
+      "synced": "2026-11-06T17:28:55+00:00",
+      "textbook_commit": "53cfd165d67ceb785cd91e7acc47d88094bca620",
+      "url": "https://console.cloud.google.com/apis/credentials",
+      "window": [
+        595,
+        921
+      ]
+    },
+    "yt-create-key.png": {
+      "also": [
+        "yt-create-key_annotated.png",
+        "yt-create-key_annotated.pdf"
+      ],
+      "browser": "Firefox",
+      "by": "Brian C. Keegan",
+      "captured": "2026-11-06",
+      "copied_from": "images/ch-12/yt-create-key.png",
+      "figure": "ch-12/yt-create-key",
+      "final_url": null,
+      "imported": "2026-11-06T17:27:18+00:00",
+      "kind": "capture",
+      "method": "screenshot by hand in Firefox; imported by tools/shots",
+      "redacted": [],
+      "scale": 1,
+      "sha256": "794a286a3a99331e9caf386c9993053acb53ce6fb567cbe0dccabc45f4f50191",
+      "size": [
+        583,
+        909
+      ],
+      "source_sha256": "794a286a3a99331e9caf386c9993053acb53ce6fb567cbe0dccabc45f4f50191",
+      "synced": "2026-11-06T17:28:54+00:00",
+      "textbook_commit": "53cfd165d67ceb785cd91e7acc47d88094bca620",
+      "url": "https://console.cloud.google.com/apis/credentials",
+      "window": [
+        595,
+        921
+      ]
+    },
+    "yt-enabled.png": {
+      "also": [
+        "yt-enabled_annotated.png",
+        "yt-enabled_annotated.pdf"
+      ],
+      "browser": "Firefox",
+      "by": "Brian C. Keegan",
+      "captured": "2026-11-06",
+      "copied_from": "images/ch-12/yt-enabled.png",
+      "figure": "ch-12/yt-enabled",
+      "final_url": null,
+      "imported": "2026-11-06T17:27:17+00:00",
+      "kind": "capture",
+      "method": "screenshot by hand in Firefox; imported by tools/shots",
+      "redacted": [],
+      "scale": 1,
+      "sha256": "50c7093f0593a7b5a78e5df125dee3c65b23eccdd0301741fe2a48e322dea72c",
+      "size": [
+        800,
+        371
+      ],
+      "source_sha256": "50c7093f0593a7b5a78e5df125dee3c65b23eccdd0301741fe2a48e322dea72c",
+      "synced": "2026-11-06T17:28:54+00:00",
+      "textbook_commit": "53cfd165d67ceb785cd91e7acc47d88094bca620",
+      "url": "https://console.cloud.google.com/apis/api/youtube.googleapis.com",
+      "window": [
+        801,
+        371
+      ]
+    },
+    "yt-library.png": {
+      "also": [
+        "yt-library_annotated.png",
+        "yt-library_annotated.pdf"
+      ],
+      "browser": "Firefox",
+      "by": "Brian C. Keegan",
+      "captured": "2026-11-06",
+      "copied_from": "images/ch-12/yt-library.png",
+      "figure": "ch-12/yt-library",
+      "final_url": null,
+      "imported": "2026-11-06T17:27:00+00:00",
+      "kind": "capture",
+      "method": "screenshot by hand in Firefox; imported by tools/shots",
+      "redacted": [],
+      "scale": 1,
+      "sha256": "46b72d18a54ea7dfee1590c17d05e211bec67e38b58c0fc266ab4b360a028a83",
+      "size": [
+        739,
+        313
+      ],
+      "source_sha256": "46b72d18a54ea7dfee1590c17d05e211bec67e38b58c0fc266ab4b360a028a83",
+      "synced": "2026-11-06T17:28:54+00:00",
+      "textbook_commit": "53cfd165d67ceb785cd91e7acc47d88094bca620",
+      "url": "https://console.cloud.google.com/apis/library/youtube.googleapis.com",
+      "window": [
+        739,
+        313
+      ]
     }
   }
 }
