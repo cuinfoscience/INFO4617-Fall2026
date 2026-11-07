@@ -18,7 +18,7 @@
 | Week | Dates | Chapter | Portfolio checkpoint (due) | State on 2026-11-01 |
 |---|---|---|---|---|
 | 12 | Nov 2–6 | 12, social and media platform APIs | Collect and clean your data (Sun Nov 8) | Planned 2026-11-02 (textbook `docs/plans/2026-11-02-ch12-social-platforms.md`, textbook #300): Bluesky Monday and Wednesday, YouTube Friday, with Reddit after Pushshift and Spotify in the chapter only. Lab Part 1 and Monday's frames built and run (#156). Next: chapter PR A (Bluesky), then Part 2 by Wednesday; PR B, then Part 3 by Friday. |
-| 13 | Nov 9–13 | 13, AI and language-model APIs | Analyze your data (Sun Nov 15) | Old-shape deck; no lab |
+| 13 | Nov 9–13 | 13, AI APIs as data tools | Analyze your data (Sun Nov 15) | Planned 2026-11-07 in an AMA (textbook `docs/plans/2026-11-07-ch13-ai-apis.md`): one pipeline on chapter 9's Boulder revenue reports, Datalab Monday, OpenRouter structured output Wednesday, OpenRouter embeddings with retrieval-as-JSON, MCP and a skill Friday; two keys, `DATALAB_KEY` and `OPENROUTER_KEY`, free tiers only. The lab (all three parts, run live) and the deck were built before Monday; the chapter rewrite is the textbook PR, which must merge before Wednesday, since Parts 2 and 3 read its `data/ch-13/`. |
 | 14 | Nov 16–20 | 14, automating data collection | Draft your write-up (Sun Nov 29, after Fall Break) | Old-shape deck; no lab |
 | — | Nov 23–27 | Fall Break | — | — |
 | Final | Nov 30–Dec 4 | — | Presentation; repository and write-up due Mon Dec 7 | — |
