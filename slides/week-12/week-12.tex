@@ -546,28 +546,8 @@ nws.groupby("embed")["reposts"].agg(
                     \item Below this: leave \textbf{Application restrictions} at \textbf{None}, since your laptop's IP address changes from network to network
                     \item Click \textbf{Create}
                 \end{itemize}
-            \end{enumerate}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Your YouTube key: copy it, and store it}
-    \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-            \begin{enumerate}\small\setcounter{enumi}{5}
                 \item \textbf{Copy the key}, and paste it only into the next step
-                \item Store it with the \texttt{webdata} environment, in a terminal (on Windows, the Anaconda Prompt):
             \end{enumerate}
-\begin{lstlisting}
-conda env config vars set YOUTUBE_KEY="your-key" -n webdata
-\end{lstlisting}
-            \small Then \textbf{quit Jupyter, close that terminal, open a new one}, run \texttt{conda activate webdata}, and start Jupyter from it. A terminal reads its variables when it opens.
-        \end{column}
-        \begin{column}{0.4\textwidth}
-            \begin{alertblock}{It's a password}
-                \footnotesize Never paste the key into a notebook cell, a code file, or a message. If it leaks, delete it on the Credentials page and make a new one.
-            \end{alertblock}
-            {\footnotesize Week 11's other safe ways work too: a JSON file kept out of git, or \texttt{getpass()}, which Step 8's given cell uses.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -599,7 +579,7 @@ uploads = channel["contentDetails"][
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{A channel's newest videos, and what they cost}
+\begin{frame}[fragile]{A channel's newest videos and rate limits}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
 \begin{lstlisting}
@@ -627,24 +607,25 @@ params = {"part": "snippet,statistics",
 \end{frame}
 
 \begin{frame}{Friday's last 15 minutes: portfolio checkpoint 2}
-    \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-            \dayband{Due Sunday}{Collect and clean your data}
-            \begin{itemize}\small
-                \item \textbf{Collection code} that runs, makes polite requests (a User-Agent that identifies you, pauses between requests), and saves the raw data
-                \item \textbf{A cleaning step}, with its code and output, that produces a tidy dataset
-                \item \textbf{A small sample} of the cleaned data in your repository, with a data dictionary
-                \item \textbf{The README's Data section}: the source, when you collected it, how many records, and what you kept out of the repository and why
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{Use the 15 minutes}\\[2pt]
-            {\footnotesize Run your collection code once, here, where you can ask. A platform this week? Its terms of service decide what goes in your repository.\par}
-            \medskip
-            \textbf{Graded}\\[2pt]
-            {\footnotesize Two criteria, one point each, on what's pushed by Sunday night.\par}
-        \end{column}
-    \end{columns}
+    \dayband{Due Sunday}{Collect and clean your data}
+
+    Add a collection script and preliminary data to your repo.
+
+    \medskip
+    
+    ``How do I add more files to my repository?'' 
+    \begin{itemize}
+        \item \url{https://docs.github.com/en/desktop/overview/getting-started-with-github-desktop}
+        \item \url{https://cuinfoscience.github.io/INFO-Missing-Manual/chapters/version-control.html}
+    \end{itemize}
+    
+    \begin{itemize}\small
+        \item \textbf{Collection code} that runs, makes polite requests (a User-Agent that identifies you, pauses between requests), and saves the raw data(\texttt{.py}) is fine
+        \item \textbf{A cleaning step}, with its code and output, that produces a tidy dataset
+        \item \textbf{A small sample} of the cleaned data in your repository, with a data dictionary
+        \item \textbf{Update README}: the source, when you collected it, how many records, and what you kept out of the repository and why
+        \item Code can be written as either notebook or CLI script 
+    \end{itemize}
 \end{frame}
 
 % =========================================================================
