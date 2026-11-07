@@ -24,6 +24,9 @@
 
 % -------------------------------------------------------------------------
 % The pipeline and the plan: textbook docs/plans/2026-11-07-ch13-ai-apis.md (branch claude/ch13-rewrite).
+% OUTPUTS: the code frames follow the lab key, labs/week-13/lab-13-key.ipynb at commit 5f9cd22
+% (branch claude/week-13-lab), and show its cells' printed outputs, run 2026-11-07/08 against
+% Datalab, OpenRouter and DeepWiki. Where a frame adds a figure from another run, its comment says so.
 \begin{frame}{This week at a glance}
     \begin{center}
     \begin{tikzpicture}[node distance=0.55cm, >=stealth]
@@ -135,13 +138,13 @@
     \end{columns}
 \end{frame}
 
-% Step 0's output: the lab's two print lines, run 2026-11-07 on the cloud machine (DATALAB_KEY=$DATALAB_API_KEY).
+% Step 0's output: the lab key's.
 \begin{frame}[fragile]{Step 0: two keys}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
             \begin{enumerate}\small
-                \item \textbf{Datalab}: sign up at \href{https://www.datalab.to/auth/sign_up}{datalab.to}. Copy a key from \href{https://www.datalab.to/app/keys}{API Keys}. The free allowance needs no card.
-                \item \textbf{OpenRouter}: sign up at \href{https://openrouter.ai}{openrouter.ai}. Create a key at \href{https://openrouter.ai/settings/keys}{Keys}. Models whose ID ends in \texttt{:free} cost nothing.
+                \item \textbf{Datalab}: sign up at \href{https://www.datalab.to/auth/sign_up}{datalab.to}. Copy a key from \href{https://www.datalab.to/app/keys}{API Keys}. The free plan includes a monthly allowance; this lab spends about 9 cents of it.
+                \item \textbf{OpenRouter}: sign up at \href{https://openrouter.ai}{openrouter.ai}. Create a key at \href{https://openrouter.ai/settings/keys}{Keys}. Models whose ID ends in \texttt{:free} cost nothing, up to a daily limit.
                 \item Store both with the \texttt{webdata} environment, in a terminal (on Windows, the Anaconda Prompt):
             \end{enumerate}
 \begin{lstlisting}
@@ -168,10 +171,7 @@ print("OPENROUTER_KEY:", "set"
     \end{columns}
 \end{frame}
 
-% Steps 1-2 follow the lab key (labs/week-13). The ticket's fields are from Datalab's API reference
-% (InitialResponse), not a printed ticket. The page count, cost and runtime are the saved result of
-% the 2026-11-07 live check's balanced-mode conversion of revenue-report-2024-12.pdf; no conversion
-% was run for these slides, to save the free allowance.
+% Steps 1-2: the lab key's code and outputs (its real ticket; no key appears in it).
 \begin{frame}[fragile]{Step 1: submit a document, get a ticket}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
@@ -181,27 +181,22 @@ book = ("https://raw.githubusercontent.com/cuinfoscience/"
         "Web-Data-Science-Book/main/data/ch-09/")
 data = {"file_url": book + "revenue-report-2024-12.pdf",
         "output_format": "markdown",
-        "mode": "balanced", "paginate": "true"}
+        "mode": "balanced", "paginate": "true",
+        "skip_cache": "true"}
 job = requests.post(f"{datalab_base}/convert", data=data,
     headers={"X-API-Key": datalab_key, **HEADERS}).json()
 print(job)
+# {'success': True, 'error': None,
+#  'request_id': '8TiORZqhcBr2wJgqyTs-gA',
+#  'request_check_url': 'https://www.datalab.to/api/v1/
+#      convert/8TiORZqhcBr2wJgqyTs-gA',
+#  'versions': None, 'checkpoint_reused': None}
 \end{lstlisting}
             \small The answer isn't the document. Converting takes seconds, so Datalab answers at once with a \textbf{ticket}: \texttt{request\_check\_url}, the address where the result will be.\\[2pt]{\scriptsize\textbf{Docs:} Datalab's \href{https://documentation.datalab.to/docs/recipes/conversion/conversion-api-overview}{Convert API}}
         \end{column}
         \begin{column}{0.4\textwidth}
-            \textbf{The ticket's fields}\\[2pt]
-            {\footnotesize
-            \begin{tabular}{@{}ll@{}}
-                \toprule
-                \textbf{Field} & \textbf{Holds} \\
-                \midrule
-                \texttt{success} & \texttt{True} if it was accepted \\
-                \texttt{error} & why not, if not \\
-                \texttt{request\_id} & the job's ID \\
-                \texttt{request\_check\_url} & where to ask \\
-                \bottomrule
-            \end{tabular}\par}
-            {\scriptsize From Datalab's API reference.\par}
+            \textbf{Why \texttt{skip\_cache}?}\\[2pt]
+            {\footnotesize Datalab keeps what it converts, and hands the kept copy back, free, when the same file comes again. \texttt{skip\_cache} makes it convert afresh, so the cost we see is the real one.\par}
             \medskip
             \textbf{An address, not a file}\\[2pt]
             {\footnotesize We send \texttt{file\_url}, the book's copy of week 9's PDF, so Datalab fetches it. A file only on your laptop goes as an upload instead.\par}
@@ -216,6 +211,7 @@ print(job)
 check = requests.get(job["request_check_url"],
     headers={"X-API-Key": datalab_key, **HEADERS}).json()
 print(check["status"])
+# processing
 
 # Given: ask every two seconds until it's done
 while check["status"] != "complete":
@@ -224,14 +220,15 @@ while check["status"] != "complete":
         headers={"X-API-Key": datalab_key,
                  **HEADERS}).json()
 print(check["page_count"], "pages,", check["total_cost"],
-      "cents,", round(check["runtime"], 1), "seconds")
-# 15 pages, 4.5 cents, 10.2 seconds
+      "cents,", round(check["runtime"], 1),
+      "seconds of processing")
+# 15 pages, 4.5 cents, 9.8 seconds of processing
 \end{lstlisting}
             \small \texttt{status} is \texttt{processing} until it's \texttt{complete}, as week 12's loop followed the \texttt{cursor} until there wasn't one.\\[2pt]{\scriptsize\textbf{Docs:} the \href{https://documentation.datalab.to/api-reference/convert-result-check}{result check}}
         \end{column}
         \begin{column}{0.4\textwidth}
             \textbf{What it cost}\\[2pt]
-            {\footnotesize Measured on November 7:\par}
+            {\footnotesize Measured on November 7, for the chapter:\par}
             \begin{itemize}\footnotesize
                 \item All seven year-end reports, \texttt{balanced}: 106 pages for 31.8 cents, 12--15 seconds each
                 \item This report in \texttt{lite} mode: 0.56 cents, with rougher tables
@@ -244,9 +241,9 @@ print(check["page_count"], "pages,", check["total_cost"],
     \end{columns}
 \end{frame}
 
-% Outputs on Steps 3-4: the book's saved Markdown (data/ch-13/ on the textbook's claude/ch13-rewrite
-% branch, made by the 2026-11-07 live check), split and checked with the lab's code, 2026-11-07.
-% Exhibit 3's note gives a staff phone and email: it is cut from the excerpt.
+% Steps 3-4: the lab key's outputs. The Exhibit 3 excerpt is the key's printout from the table's
+% first "|" (below the note, which gives a staff phone and email), with each line cut at JAN.
+% "17 of 30 exact" was checked on the book's saved Markdown of the same report (data/ch-13/).
 \begin{frame}[fragile]{Step 3: read the Markdown, page by page}
     \begin{columns}[T]
         \begin{column}{0.48\textwidth}
@@ -257,32 +254,32 @@ pages = re.split(r"\n*\{\d+\}-{10,}\n*",
 print(len(pages), "pages")
 # 15 pages
 print(pages[1][:1200])   # the summary
-print(pages[14][:1500])  # Exhibit 3
+
+exhibit = pages[14][pages[14].index("|"):]
+for line in exhibit.splitlines()[:10]:
+    print(line[:150])
 \end{lstlisting}
             \small With \texttt{paginate}, each page starts with a marker such as \texttt{\{14\}} and a line of dashes. Split on it, and drop the empty piece before the first.
 
             \medskip
             \begin{alertblock}{Never \texttt{pages[0]}}
-                \footnotesize The cover gives a staff member's email and phone. So does Exhibit 3's note: we cut it below.
+                \footnotesize The cover gives a staff member's email and phone. So does Exhibit 3's note, above its table: we print from the table's first \texttt{|}.
             \end{alertblock}
         \end{column}
         \begin{column}{0.49\textwidth}
             \textbf{Exhibit 3, a picture of a table, as Markdown}\\[2pt]
 \begin{lstlisting}[basicstyle=\ttfamily\scriptsize,language={},columns=flexible]
-## Exhibit 3: Sales and Use Tax by Month
-
-(the note: phone the city for "a screen
-readable version"; its number cut here)
-
-| REVENUE<br>CATEGORY      | YEAR | JAN
-|--------------------------|------|----------
-|                          |      |
-| <b>Retail Sales Tax</b>  | 2019 | 8,590,452
-|                          | 2020 | 7,761,028
-|                          | 2021 | 8,059,343
+| REVENUE<br>CATEGORY            | YEAR        | JAN
+|--------------------------------|-------------|------
+|                                |             |
+| <b>Retail Sales Tax</b>        | 2019        | 8,590,452
+|                                | 2020        | 7,761,028
+|                                | 2021        | 8,059,343
+|                                | 2022        | 9,592,143
+|                                | 2023        | 10,246,130
 ...
 \end{lstlisting}
-            {\footnotesize Week 9's pdfplumber stopped here: a picture has no text layer. Datalab read all 30 rows of figures.\par}
+            {\footnotesize The note beside this table asks readers to phone the city for ``a screen readable version''. Week 9's pdfplumber stopped here: a picture has no text layer. Datalab read all 30 rows of figures.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -464,42 +461,44 @@ response = requests.post(
     \end{columns}
 \end{frame}
 
-% Outputs on this frame and the next three: the lab's Steps 8-10 code run
-% 2026-11-07 22:01-22:07 UTC against OpenRouter on the book's saved Markdown. Every request was
-% answered by the first model in MODELS.
+% Steps 9-10 and What went wrong: the lab key's outputs. The non-determinism frame's right column
+% adds other runs of the same code on 2026-11-07, 22:01-22:07 UTC, against the same saved Markdown:
+% a first 2024 request answered total_prior 173908431, total_current 171006199, year 2025; two runs
+% of Step 10 matched 6 of 7 and 5 of 7. Every request in all runs was answered by the first model.
 \begin{frame}[fragile]{Step 9: the answer, and the check}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
 \begin{lstlisting}
 print(response["model"])
+print(response["usage"])
 answer = json.loads(
     response["choices"][0]["message"]["content"])
 print(answer)
 # nvidia/nemotron-3.5-super-vl:free
+# {'prompt_tokens': 1568, 'completion_tokens': 2466, ...
+#  'reasoning_tokens': 2413, ...}
 # {'month': 'December', 'year': 2025,
-#  'total_prior': 173908431, 'total_current': 171006199}
+#  'total_prior': 175517129, 'total_current': 173908431}
 
 prior, current = TRUTH["revenue-report-2024-12"]
 print("prior:  ", answer["total_prior"], prior,
       answer["total_prior"] == prior)
 print("current:", answer["total_current"], current,
       answer["total_current"] == current)
-# prior:   173908431 175517129 False
-# current: 171006199 173908431 False
+print(answer["year"], answer["month"])
+# prior:   175517129 175517129 True
+# current: 173908431 173908431 True
+# 2025 December
 \end{lstlisting}
         \end{column}
         \begin{column}{0.4\textwidth}
-            \textbf{Valid JSON, three fields wrong}\\[2pt]
-            {\footnotesize Our first request, on November 7:\par}
-            \begin{itemize}\footnotesize
-                \item \texttt{total\_prior} is 2024's total, not 2023's
-                \item \texttt{total\_current} is 2024's \textit{subtotal}, the row above: ``based on current economic activity''
-                \item 2025 is from ``received by the city through January 2025''
-            \end{itemize}
+            \textbf{Right totals, wrong year}\\[2pt]
+            {\footnotesize Both totals match week 9's. The report is 2024's, but the model said 2025, from ``received by the city through January 2025''.\par}
             \medskip
-            {\footnotesize \texttt{TRUTH} is week 9's pdfplumber figures for the last row. Without them, would you have noticed?\par}
+            {\footnotesize \texttt{TRUTH} is week 9's pdfplumber figures for the last row. Without them, would you have trusted the totals? Would you have noticed the year?\par}
             \medskip
-            {\footnotesize \texttt{usage}: 1,568 tokens in, 2,080 out, 2,027 of them \texttt{reasoning\_tokens}. Cost: 0.\par}
+            \textbf{\texttt{usage}}\\[2pt]
+            {\footnotesize 1,568 tokens in, 2,466 out, 2,413 of them \texttt{reasoning\_tokens}: the model ``thought'' for 2,400 tokens to copy two numbers. Cost: 0.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -512,34 +511,32 @@ for attempt in range(3):
     response = requests.post(
         f"{openrouter_base}/chat/completions",
         json=body, headers=...).json()
-    print(json.loads(
+    print(response["model"], json.loads(
         response["choices"][0]["message"]["content"]))
     time.sleep(2)
-# {'month': 'December', 'year': 2025, 'total_prior':
-#  175517129, 'total_current': 173908431}
-# {'month': 'December', 'year': 2025, 'total_prior':
-#  175517129, 'total_current': 173908431}
-# {'month': 'December', 'year': 2025, 'total_prior':
-#  175517129, 'total_current': 173908431}
+# nvidia/nemotron-3.5-super-vl:free {'month': 'December',
+#  'year': 2025, 'total_prior': 175517129,
+#  'total_current': 173908431}
+# nvidia/nemotron-3.5-super-vl:free {'month': 'December',
+#  'year': 2025, 'total_prior': 175517129,
+#  'total_current': 173908431}
+# nvidia/nemotron-3.5-super-vl:free {'month': 'December',
+#  'year': 2025, 'total_prior': 175517129,
+#  'total_current': 173908431}
 \end{lstlisting}
-            {\footnotesize Same body, same model, \texttt{temperature} 0, a minute later: both totals right, the year still wrong.\par}
+            {\footnotesize In the key's run: the same answer three times, the same as Step 8's.\par}
         \end{column}
         \begin{column}{0.4\textwidth}
-            \textbf{The 2024 report, six requests}\\[2pt]
-            {\footnotesize
-            \begin{tabular}{@{}lll@{}}
-                \toprule
-                \textbf{Request} & \textbf{Totals} & \textbf{Year} \\
-                \midrule
-                Step 8 & wrong & 2025 \\
-                Microsprint, 3 & right & 2025 \\
-                Step 10, twice & right & 2025 \\
-                \bottomrule
-            \end{tabular}\par}
-            {\scriptsize November 7, 22:01--22:07 UTC; every answer from the same free model.\par}
+            \textbf{Other runs, the same day}\\[2pt]
+            \begin{itemize}\footnotesize
+                \item The same 2024 request once got \textbf{both totals wrong}: 2024's total as 2023's, and the subtotal above it as 2024's
+                \item Step 10's seven reports: 6 of 7 right, then 5 of 7; the key's run, 4 of 7
+                \item The chapter's checks got the year as 2023, then 2024
+            \end{itemize}
+            {\scriptsize November 7; same code, same free model, \texttt{temperature} 0.\par}
             \medskip
             \textbf{Why?}\\[2pt]
-            {\footnotesize \texttt{temperature} 0 asks for the most likely answer, but shared hardware can change the arithmetic slightly, and 2,000 tokens of reasoning give a small change room to grow. Earlier that day, the chapter's checks got 2023, then 2024.\par}
+            {\footnotesize \texttt{temperature} 0 asks for the most likely answer, but shared hardware can change the arithmetic slightly, and 2,400 tokens of reasoning give a small change room to grow.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -556,43 +553,43 @@ for report, (prior, current) in TRUTH.items():
     summary = [page for page in pages
         if "Total Sales and Use Tax" in page][0]
     answer, model = extract_totals(summary)
-    rows.append({"report": report, **answer,
+    rows.append({"report": report, "model": model,
+        **answer,
         "prior_ok": answer["total_prior"] == prior,
         "current_ok":
             answer["total_current"] == current})
     time.sleep(2)
 results = pd.DataFrame(rows)
 \end{lstlisting}
-            {\footnotesize \texttt{extract\_totals(page)} is Step 8's request in a function: we send it seven times.\par}
+            {\footnotesize \texttt{extract\_totals(page)} is Step 8's request in a function: we send it seven times. One model answered all seven.\par}
         \end{column}
         \begin{column}{0.44\textwidth}
-            \textbf{Both totals right? Two runs}\\[2pt]
+            \textbf{Checked against week 9}\\[2pt]
             {\footnotesize
             \begin{tabular}{@{}llll@{}}
                 \toprule
-                \textbf{Report} & \textbf{Run 1} & \textbf{Run 2} & \textbf{Run 2 said} \\
+                \textbf{Report} & \textbf{Prior} & \textbf{Current} & \textbf{It said} \\
                 \midrule
                 2018 & right & \textbf{wrong} & December 2018 \\
                 2019 & \textbf{wrong} & \textbf{wrong} & January 2020 \\
-                2020 & right & right & January 2021 \\
+                2020 & \textbf{wrong} & \textbf{wrong} & January 2021 \\
                 2021-12 & right & right & December 2021 \\
                 2022-12 & right & right & December 2022 \\
                 2023-12 & right & right & December 2023 \\
                 2024-12 & right & right & December 2025 \\
-                \midrule
-                & 6 of 7 & 5 of 7 & \\
                 \bottomrule
             \end{tabular}\par}
-            {\scriptsize Two runs a few minutes apart, November 7.\par}
+            {\scriptsize The lab key's run. Both totals right: 4 of 7.\par}
             \medskip
-            {\footnotesize Every report covers through December of its own year. The month or the year is wrong in four of seven.\par}
+            {\footnotesize Every report covers through December of its own year. The month or the year is wrong in three of seven.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-% The two rows quoted are from pages[1] of the saved 2019 Markdown. Run 2's 2018 answer was
-% total_prior 140648710, total_current 139331838; 2019's (both runs) 141954650 and 139548151.
-\begin{frame}{What went wrong: one mistake, three times}
+% The two rows quoted are from the summary page of the saved 2019 Markdown. The key's wrong answers:
+% 2018 total_current 139331838 (the 2018 subtotal); 2019 141954650 / 139548151; 2020 135195413 /
+% 133478757 (2020's total and subtotal). The summary pages of 2018, 2019 and 2020 each hold both rows.
+\begin{frame}{What went wrong: one mistake, three reports}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
             The 2019 report's summary page, its last two rows:\\[2pt]
@@ -606,14 +603,14 @@ results = pd.DataFrame(rows)
                 \bottomrule
             \end{tabular}\par}
             \medskip
-            {\footnotesize The model's answer, both runs:\par}
+            {\footnotesize The model's answer:\par}
             {\footnotesize \texttt{total\_prior}: 141954650\quad\texttt{total\_current}: 139548151\par}
             \medskip
-            \small It took the report year's total for the year before, and the subtotal above it for the report year. 2018's second run, and Step 8's 2024 request, made the same move.
+            \small It took the subtotal above the last row as the report year's total, for 2018, 2019 and 2020. For 2019 and 2020 it also moved the report year's total into the year before.
         \end{column}
         \begin{column}{0.4\textwidth}
             \textbf{Not a missing row}\\[2pt]
-            {\footnotesize Both pages hold the whole table, the total row included. The model had the right figures in front of it.\par}
+            {\footnotesize All three pages hold the whole table, the total row included. The model had the right figures in front of it.\par}
             \medskip
             \textbf{Months and years}\\[2pt]
             {\footnotesize ``January'' and the next year come from ``received by the city through January 2019''.\par}
@@ -658,8 +655,8 @@ results = pd.DataFrame(rows)
     \end{columns}
 \end{frame}
 
-% Outputs on Friday's frames: the lab's Steps 11-13 code run
-% 2026-11-07 22:09-22:10 UTC against OpenRouter on the book's saved Markdown.
+% Friday's outputs: the lab key's. "Exhibit 3's page is 16,333 characters" and the 2022 question's
+% chunks (#1 without the total row, #2 with it) were checked on the book's saved Markdown.
 \begin{frame}[fragile]{Steps 11--12: chunks, and one embedding}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
@@ -723,14 +720,53 @@ print(chunks.nlargest(5, "score")[["id", "score"]])
     \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]{Step 13: search, then one report's best three}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+\begin{lstlisting}
+def search(question):
+    response = requests.post(
+        f"{openrouter_base}/embeddings",
+        json={"model": EMBEDDER, "input": [question]},
+        headers=...).json()
+    query = np.array(response["data"][0]["embedding"])
+    return vectors @ (query / np.linalg.norm(query))
+
+question = ("How much revenue did the state share "
+            "back from marijuana taxes?")
+chunks["score"] = search(question)
+top = chunks[chunks["report"] == "revenue-report-2024-12"
+             ].nlargest(3, "score")
+print(top["id"].tolist())
+# ['2024-12 p.9 #1', '2024-12 p.9 #2', '2024-12 p.11 #2']
+passages = "\n\n".join(f"{row.id}: {row.text}"
+                       for row in top.itertuples())
+\end{lstlisting}
+            {\footnotesize \texttt{search()} is Step 12's lines in a function, because we search more than once now.\par}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+\begin{lstlisting}
+# Given: an answer with its sources
+ANSWER_SCHEMA = {"type": "object",
+  "properties": {
+    "value": {"type": ["integer", "null"]},
+    "source_ids": {"type": "array",
+        "items": {"type": "string"}}},
+  "required": ["value", "source_ids"],
+  "additionalProperties": False}
+\end{lstlisting}
+            {\footnotesize \texttt{value} may be \textbf{null}: the model's way to say the passages don't print it. In the lab, each field has a description too.\par}
+            \medskip
+            \textbf{The instruction}\\[2pt]
+            {\footnotesize\itshape ``Give a figure only if a passage prints it; an estimate read from a chart doesn't count. If no passage prints it, answer null.''\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}[fragile]{Step 13: an answer with sources, or null}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
 \begin{lstlisting}
-top = chunks[chunks["report"] == "revenue-report-2024-12"
-             ].nlargest(3, "score")
-passages = "\n\n".join(f"{row.id}: {row.text}"
-                       for row in top.itertuples())
 body = {"models": MODELS, "temperature": 0,
   "messages": [
     {"role": "system", "content": ANSWER_INSTRUCTION},
@@ -747,14 +783,14 @@ print(response["model"], json.loads(
 # nvidia/nemotron-3.5-super-vl:free
 # {'value': 529220, 'source_ids': ['2024-12 p.9 #1']}
 \end{lstlisting}
-            {\footnotesize Given: \texttt{ANSWER\_SCHEMA}, whose \texttt{value} is \texttt{["integer", "null"]}, and \texttt{source\_ids}, a list. The instruction: a figure only if a passage prints it.\par}
+            {\footnotesize Wednesday's request, with passages in place of a page.\par}
         \end{column}
         \begin{column}{0.4\textwidth}
             \textbf{Check it}\\[2pt]
             {\footnotesize Week 9's pdfplumber finds \$529,220 printed on Chart 8, page 9: the source it gave.\par}
             \medskip
             \textbf{Microsprint: the beverage tax}\\[2pt]
-            {\footnotesize ``How much sugar-sweetened beverage tax did the city collect in December 2024?''\par}
+            {\footnotesize ``How much sugar-sweetened beverage tax did the city collect in December 2024?'' 2024's best three: \texttt{p.2 \#1}, \texttt{p.10 \#1}, \texttt{p.1 \#1}.\par}
             {\footnotesize \texttt{\{'value': None,\\\ 'source\_ids': ['2024-12 p.10 \#1']\}}\par}
             \medskip
             {\footnotesize Null is right: no page prints it, and \texttt{\textasciitilde\$285,000} was Datalab's estimate. But the schema said no sources with a null. Check those too.\par}
@@ -762,8 +798,8 @@ print(response["model"], json.loads(
     \end{columns}
 \end{frame}
 
-% Step 14's outputs: the lab's code, run 2026-11-07 22:10 UTC against DeepWiki's public
-% server (serverInfo DeepWiki 4.0.2), and the raw pdf/SKILL.md from github.com/anthropics/skills.
+% Step 14's outputs: the lab key's, from DeepWiki's public server and the raw pdf/SKILL.md in
+% anthropics/skills ("314 lines" counted on 2026-11-07).
 \begin{frame}[fragile]{Step 14: what tools a server offers, by MCP}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
@@ -775,7 +811,8 @@ hello = {"jsonrpc": "2.0", "id": 1, "method": "initialize",
   "params": {"protocolVersion": "2025-06-18",
     "capabilities": {},
     "clientInfo": {"name": "info4617", "version": "1.0"}}}
-requests.post(mcp, json=hello, headers=mcp_headers)
+print(requests.post(mcp, json=hello,
+                    headers=mcp_headers).text[:300])
 listing = requests.post(mcp, json={"jsonrpc": "2.0",
     "id": 2, "method": "tools/list"},
     headers=mcp_headers).text
@@ -789,11 +826,13 @@ for tool in json.loads(line[6:])["result"]["tools"]:
 \end{lstlisting}
         \end{column}
         \begin{column}{0.4\textwidth}
-            {\footnotesize The \textbf{Model Context Protocol} is a shared way for a server to say which tools it offers. DeepWiki's public server needs no key. It answers as a short event stream:\par}
+            {\footnotesize The \textbf{Model Context Protocol} is a shared way for a server to say which tools it offers. DeepWiki's public server needs no key. It answers \texttt{initialize} as a short event stream:\par}
 \begin{lstlisting}[basicstyle=\ttfamily\tiny,language={}]
 event: message
-data: {"jsonrpc":"2.0","id":2,
-  "result":{"tools":[...]}}
+data: {"jsonrpc":"2.0","id":1,"result":
+  {"protocolVersion":"2025-06-18", ...
+  "serverInfo":{"name":"DeepWiki",
+  "version":"4.0.2"}, ...
 \end{lstlisting}
             {\footnotesize Each tool's \texttt{inputSchema} is \textbf{JSON Schema}, Wednesday's language: \texttt{"question": \{"type": "string"\}}.\par}
             \medskip
@@ -819,14 +858,19 @@ print("\n".join(skill.splitlines()[:5]))
 #   or extracting text/tables from PDFs, ...
 # license: Complete terms in LICENSE.txt
 # ---
+print([line for line in skill.splitlines()
+       if line.startswith("### ")])
+# ['### pypdf - Basic Operations',
+#  '### pdfplumber - Text and Table Extraction',
+#  '### reportlab - Create PDFs', ...]
 \end{lstlisting}
-            {\footnotesize The description runs on to merging, splitting, forms and OCR; cut here.\par}
+            {\footnotesize The description runs on to merging, splitting, forms and OCR; cut here. Ten \texttt{\#\#\#} headings in all.\par}
         \end{column}
         \begin{column}{0.4\textwidth}
             \textbf{Front matter, then instructions}\\[2pt]
             {\footnotesize A \textbf{skill} is a folder of instructions. Its \texttt{name} and \texttt{description} tell a model when to read the rest: 314 lines of Markdown and code.\par}
             \medskip
-            {\footnotesize Its code uses \textbf{pypdf} and \textbf{pdfplumber}, week 9's tools.\par}
+            {\footnotesize Its headings name the tools it teaches: \textbf{pypdf} and \textbf{pdfplumber}, week 9's tools, then reportlab, pdftotext, qpdf, and more.\par}
             \medskip
             \textbf{Discuss}\\[2pt]
             {\footnotesize If a model followed this skill on Boulder's reports, which of week 9's checks would still be yours to run?\par}
