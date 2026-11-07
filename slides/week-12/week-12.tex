@@ -8,6 +8,9 @@
 % file directly from its own folder (no TEXINPUTS needed).
 \makeatletter\def\input@path{{../common/}}\makeatother
 \input{preamble}
+% A marker's number in running text, drawn like the screenshots' markers (handoutmarkers.sty)
+\providecolor{tab-blue}{HTML}{4E79A7}
+\newcommand{\circled}[1]{\tikz[baseline=(m.base)]\node[circle,fill=tab-blue,text=white,inner sep=0pt,minimum size=1.25em,font=\sffamily\bfseries\scriptsize](m){#1};}
 
 \title[Week 12 · Social APIs]{{\Huge Social \& Media Platform APIs}}
 \subtitle{Week 12 · APIs module · Textbook Chapter 12}
@@ -286,18 +289,21 @@ for item in feed:
 \end{frame}
 
 \begin{frame}[fragile]{Before Friday: your YouTube key}
+    \begin{center}
+        \small\textbf{\href{https://console.cloud.google.com/apis/library/youtube.googleapis.com}{\texttt{console.cloud.google.com/apis/library/youtube.googleapis.com}}}
+    \end{center}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
             \begin{enumerate}\small
-                \item Sign in to the \href{https://console.cloud.google.com/}{Google Cloud console} with a \textbf{personal} Google account, and create a project
-                \item In its \textbf{API Library}, enable \textbf{YouTube Data API v3}
-                \item Under \textbf{Credentials}, create an \textbf{API key}, and restrict it to the YouTube Data API v3
+                \item Open the link above, signed in with a \textbf{personal} Google account (make a project if it asks), and click \textbf{Enable}
+                \item On the \textbf{Credentials} tab: \textbf{Create credentials}, then \textbf{API key}, restricted to \textbf{YouTube Data API v3}
                 \item Store it with the \texttt{webdata} environment, in a terminal (on Windows, the Anaconda Prompt):
             \end{enumerate}
 \begin{lstlisting}
 conda env config vars set YOUTUBE_KEY="your-key" -n webdata
 \end{lstlisting}
-            \small Then close that terminal, open a new one, run \texttt{conda activate webdata}, and start Jupyter from it.
+            \small Then close that terminal, open a new one, run \texttt{conda activate webdata}, and start Jupyter from it.\\[2pt]
+            {\footnotesize Screenshots of every step: Friday's first frames, and the lab's ``Before Step 8''.\par}
         \end{column}
         \begin{column}{0.4\textwidth}
             \begin{alertblock}{It's a password}
@@ -464,7 +470,84 @@ nws.groupby("embed")["reposts"].agg(
                 \footnotesize Quit Jupyter, open a new terminal, start it again. Can't restart? Step 8's given cell asks with \texttt{getpass()}: paste into the box, press Enter.
             \end{alertblock}
             \textbf{No key yet?}\\[2pt]
-            {\footnotesize Follow along from the key, and make one after class: Monday's ``Before Friday'' frame has the steps.\par}
+            {\footnotesize The next five frames make one, step by step; the lab's ``Before Step 8'' has the same steps. Or follow along from the key, and make one after class.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% The key walkthrough: the instructor's screenshots of the Google Cloud console (Firefox,
+% 2026-11-06), copied from chapter 12 with tools/shots sync; yt-create-key-top is the course
+% recipe week12-yt-create-key, the chapter's dialog cut at OK so it is legible on a slide.
+\begin{frame}{Your YouTube key: start from this link}
+    \begin{center}
+        \small\textbf{\href{https://console.cloud.google.com/apis/library/youtube.googleapis.com}{\texttt{console.cloud.google.com/apis/library/youtube.googleapis.com}}}
+    \end{center}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/yt-library_annotated.pdf}\\
+            {\scriptsize The Google Cloud console, Firefox, 2026-11-06 (chapter 12, figure 12.3).}
+        \end{column}
+        \begin{column}{0.41\textwidth}
+            \begin{enumerate}\footnotesize
+                \item Sign in with a \textbf{personal} Google account. Asked to select a project? \textbf{New Project}, name it \texttt{info4617}, \textbf{Create}.
+                \item Check the page says \textbf{YouTube Data API v3} \circled{1}, and click \textbf{Enable} \circled{2}.
+            \end{enumerate}
+            {\footnotesize The console is built for companies that run many services; this link skips its menus.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Your YouTube key: open Credentials}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/yt-enabled_annotated.pdf}\\
+            {\scriptsize The Google Cloud console, Firefox, 2026-11-06 (chapter 12, figure 12.4).}
+        \end{column}
+        \begin{column}{0.37\textwidth}
+            \begin{enumerate}\footnotesize\setcounter{enumi}{2}
+                \item The page becomes \textbf{API/Service Details}: Status, \textbf{Enabled} \circled{1}. Click the \textbf{Credentials} tab \circled{2}.
+            \end{enumerate}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Your YouTube key: create an API key}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/yt-create-credentials_annotated.pdf}\\
+            {\scriptsize The Google Cloud console, Firefox, 2026-11-06 (chapter 12, figure 12.5).}
+        \end{column}
+        \begin{column}{0.47\textwidth}
+            \begin{enumerate}\footnotesize\setcounter{enumi}{3}
+                \item Click \textbf{Create credentials} \circled{1}, and choose \textbf{API key} \circled{2}.
+            \end{enumerate}
+            {\footnotesize Not \textbf{OAuth client ID}: that is for a program acting on a person's own YouTube account. Reading public channels needs only a key.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Your YouTube key: restrict it to YouTube}
+    \begin{columns}[T]
+        \begin{column}{0.45\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/yt-create-key-top_annotated.pdf}\\
+            {\scriptsize The top of the dialog, Firefox, 2026-11-06; chapter 12, figure 12.6, shows all of it.}
+        \end{column}
+        \begin{column}{0.52\textwidth}
+            \begin{enumerate}\footnotesize\setcounter{enumi}{4}
+                \item In \textbf{Create API key}:
+                \begin{itemize}\footnotesize
+                    \item Name the key \circled{1}
+                    \item Skip the blue \textbf{Service account required} note: it's about Gemini
+                    \item Open \textbf{Select API restrictions}, tick \textbf{YouTube Data API v3} \circled{2}, click \textbf{OK} \circled{3}
+                    \item Below this: leave \textbf{Application restrictions} at \textbf{None}, since your laptop's IP address changes from network to network
+                    \item Click \textbf{Create}
+                \end{itemize}
+                \item \textbf{Copy the key}, and paste it only into the next step
+            \end{enumerate}
         \end{column}
     \end{columns}
 \end{frame}
@@ -496,7 +579,7 @@ uploads = channel["contentDetails"][
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{A channel's newest videos, and what they cost}
+\begin{frame}[fragile]{A channel's newest videos and rate limits}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
 \begin{lstlisting}
@@ -524,24 +607,25 @@ params = {"part": "snippet,statistics",
 \end{frame}
 
 \begin{frame}{Friday's last 15 minutes: portfolio checkpoint 2}
-    \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-            \dayband{Due Sunday}{Collect and clean your data}
-            \begin{itemize}\small
-                \item \textbf{Collection code} that runs, makes polite requests (a User-Agent that identifies you, pauses between requests), and saves the raw data
-                \item \textbf{A cleaning step}, with its code and output, that produces a tidy dataset
-                \item \textbf{A small sample} of the cleaned data in your repository, with a data dictionary
-                \item \textbf{The README's Data section}: the source, when you collected it, how many records, and what you kept out of the repository and why
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{Use the 15 minutes}\\[2pt]
-            {\footnotesize Run your collection code once, here, where you can ask. A platform this week? Its terms of service decide what goes in your repository.\par}
-            \medskip
-            \textbf{Graded}\\[2pt]
-            {\footnotesize Two criteria, one point each, on what's pushed by Sunday night.\par}
-        \end{column}
-    \end{columns}
+    \dayband{Due Sunday}{Collect and clean your data}
+
+    Add a collection script and preliminary data to your repo.
+
+    \medskip
+    
+    ``How do I add more files to my repository?'' 
+    \begin{itemize}
+        \item \url{https://docs.github.com/en/desktop/overview/getting-started-with-github-desktop}
+        \item \url{https://cuinfoscience.github.io/INFO-Missing-Manual/chapters/version-control.html}
+    \end{itemize}
+    
+    \begin{itemize}\small
+        \item \textbf{Collection code} that runs, makes polite requests (a User-Agent that identifies you, pauses between requests), and saves the raw data(\texttt{.py}) is fine
+        \item \textbf{A cleaning step}, with its code and output, that produces a tidy dataset
+        \item \textbf{A small sample} of the cleaned data in your repository, with a data dictionary
+        \item \textbf{Update README}: the source, when you collected it, how many records, and what you kept out of the repository and why
+        \item Code can be written as either notebook or CLI script 
+    \end{itemize}
 \end{frame}
 
 % =========================================================================
