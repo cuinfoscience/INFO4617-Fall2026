@@ -33,7 +33,7 @@
         \node[stage] (pdf) {\textbf{A PDF}\\[-1pt]{\scriptsize week 9's reports}};
         \node[stage, right=of pdf] (md) {\textbf{Markdown}\\[-1pt]{\scriptsize Datalab · Mon}};
         \node[stage, right=of md] (json) {\textbf{JSON, checked}\\[-1pt]{\scriptsize OpenRouter · Wed}};
-        \node[stage, right=of json] (rag) {\textbf{An answer + sources}\\[-1pt]{\scriptsize embeddings · Fri}};
+        \node[stage, right=of json] (rag) {\textbf{An answer + sources}\\[-1pt]{\scriptsize search by meaning · Fri}};
         \draw[->, thick] (pdf) -- (md);
         \draw[->, thick] (md) -- (json);
         \draw[->, thick] (json) -- (rag);
@@ -41,20 +41,21 @@
     \end{center}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            One pipeline on Boulder's revenue reports from week 9, every class live coding, from one lab notebook in three parts. No chatbots: one request in, one JSON answer out, and every answer checked.
+            One pipeline on week 9's Boulder revenue reports, live-coded over three classes from one lab notebook. No chatbots: each request gets one JSON answer, and we check every answer.
 
             \medskip
             \dayband{Monday}{Lab, part 1: document understanding}
             \begin{itemize}\small
-                \item A PDF, picture of a table included, to Markdown; then week 9's sums
+                \item Turn a PDF, pictures of tables too, into Markdown; check it with week 9's sums
             \end{itemize}
             \dayband{Wednesday}{Lab, part 2: a model as a function}
             \begin{itemize}\small
-                \item One page in, JSON in our shape out, checked against week 9
+                \item Send one page; get back JSON with the fields we ask for; check it against week 9
             \end{itemize}
             \dayband{Friday}{Lab, part 3: search by meaning; then your project}
             \begin{itemize}\small
-                \item Embeddings, an answer with sources or null, MCP and skills; 15 minutes on checkpoint 3
+                \item Find passages; answer with sources, or null; see how tools are described to a model
+                \item 15 minutes on portfolio checkpoint 3
             \end{itemize}
         \end{column}
         \begin{column}{0.36\textwidth}
@@ -106,34 +107,34 @@
             {\footnotesize The lab is practice. After each step, a \textbf{Discuss} box holds questions we'll talk over before the next.\par}
             \medskip
             \begin{alertblock}{Error flavors}
-                \footnotesize A \texttt{429} from a free model means the shared pool is busy: wait, and send it again. A \texttt{KeyError} on \texttt{"choices"} means the answer was an error: print it and look. A request that fails for everyone is \textit{broken}: tell me, or open an issue.
+                \footnotesize A \texttt{429} (``too many requests'') from a free model means too many people are using it: wait, and send it again. A \texttt{KeyError} on \texttt{"choices"} means the API sent back an error, not an answer: print it and look. A request that fails for everyone is \textit{broken}: tell me, or open an issue.
             \end{alertblock}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{Models as functions, not chatbots}
+\begin{frame}{A model called like a function}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
-            A chatbot answers a person. This week a model answers a program: one request in, one answer out, in a shape we chose, and checked before we use it.
+            A chatbot answers a person. This week a model answers a program: one request, one answer, in a shape we choose. We check the answer before we use it.
 
             \medskip
             Three kinds of AI API, one a day:
             \begin{itemize}\small
                 \item \textbf{Document understanding}: a PDF in, Markdown out, pictures of tables included (Datalab)
-                \item \textbf{Structured output}: a page in, JSON in our schema out (OpenRouter)
+                \item \textbf{Structured output}: a page in, JSON with the fields we ask for out (OpenRouter)
                 \item \textbf{Embeddings}: text in, a list of numbers out, so we can search by meaning (OpenRouter)
             \end{itemize}
 
             \medskip
-            Why check every answer? A model's numbers look right whether or not they are.
+            Check every answer. You can't tell a model's wrong number from a right one by looking at it.
         \end{column}
         \begin{column}{0.4\textwidth}
             \begin{alertblock}{What you send, and to whom}
                 \footnotesize Every page we send goes to a company: Datalab, or OpenRouter and whoever runs the model. Boulder's reports are public records that name no private individuals. Send nothing you couldn't publish.
             \end{alertblock}
             \textbf{Page 1 stays unprinted}\\[2pt]
-            {\footnotesize Each report's cover gives a city staff member's email and phone. We never print page 1, as week 9 blacked it out.\par}
+            {\footnotesize Each report's cover gives a city staff member's email and phone. Week 9 blacked it out, and we never print it.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -145,13 +146,13 @@
             \begin{enumerate}\small
                 \item \textbf{Datalab}: sign up at \href{https://www.datalab.to/auth/sign_up}{datalab.to}. Copy a key from \href{https://www.datalab.to/app/keys}{API Keys}. The free plan includes a monthly allowance; this lab spends about 9 cents of it.
                 \item \textbf{OpenRouter}: sign up at \href{https://openrouter.ai}{openrouter.ai}. Create a key at \href{https://openrouter.ai/settings/keys}{Keys}. Models whose ID ends in \texttt{:free} cost nothing, up to a daily limit.
-                \item Store both with the \texttt{webdata} environment, in a terminal (on Windows, the Anaconda Prompt):
+                \item In a terminal (on Windows, the Anaconda Prompt), store both in the \texttt{webdata} environment:
             \end{enumerate}
 \begin{lstlisting}
 conda env config vars set DATALAB_KEY="your-key" -n webdata
 conda env config vars set OPENROUTER_KEY="your-key" -n webdata
 \end{lstlisting}
-            {\footnotesize Then close that terminal, open a new one, run \texttt{conda activate webdata}, and start Jupyter from it. Datalab's docs call its key \texttt{DATALAB\_API\_KEY}; we use the course's naming, as with \texttt{CENSUS\_KEY}.\par}
+            {\footnotesize Then close that terminal, open a new one, run \texttt{conda activate webdata}, and start Jupyter from it. Datalab's docs call its key \texttt{DATALAB\_API\_KEY}; we name it as we named \texttt{CENSUS\_KEY}.\par}
         \end{column}
         \begin{column}{0.4\textwidth}
 \begin{lstlisting}
@@ -165,7 +166,7 @@ print("OPENROUTER_KEY:", "set"
 # OPENROUTER_KEY: set
 \end{lstlisting}
             \begin{alertblock}{It's a password}
-                \footnotesize Never paste a key into a notebook cell or a code file. \texttt{MISSING}? Quit Jupyter and start it from a new terminal; or Step 0's given cell asks with \texttt{getpass()}.
+                \footnotesize Never paste a key into a notebook cell or a code file. \texttt{MISSING}? Quit Jupyter and start it from a new terminal. Or type the key into Step 0's \texttt{getpass()} box.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -192,14 +193,14 @@ print(job)
 #      convert/8TiORZqhcBr2wJgqyTs-gA',
 #  'versions': None, 'checkpoint_reused': None}
 \end{lstlisting}
-            \small The answer isn't the document. Converting takes seconds, so Datalab answers at once with a \textbf{ticket}: \texttt{request\_check\_url}, the address where the result will be.\\[2pt]{\scriptsize\textbf{Docs:} Datalab's \href{https://documentation.datalab.to/docs/recipes/conversion/conversion-api-overview}{Convert API}}
+            \small Converting takes seconds, so Datalab first answers with a \textbf{ticket}: \texttt{request\_check\_url}, the address where the result will appear.\\[2pt]{\scriptsize\textbf{Docs:} Datalab's \href{https://documentation.datalab.to/docs/recipes/conversion/conversion-api-overview}{Convert API}}
         \end{column}
         \begin{column}{0.4\textwidth}
             \textbf{Why \texttt{skip\_cache}?}\\[2pt]
-            {\footnotesize Datalab keeps what it converts, and hands the kept copy back, free, when the same file comes again. \texttt{skip\_cache} makes it convert afresh, so the cost we see is the real one.\par}
+            {\footnotesize Datalab keeps a copy of each file it converts. Send the same file again, and it returns that copy, free. \texttt{skip\_cache} makes it convert again, so we see the real cost.\par}
             \medskip
-            \textbf{An address, not a file}\\[2pt]
-            {\footnotesize We send \texttt{file\_url}, the book's copy of week 9's PDF, so Datalab fetches it. A file only on your laptop goes as an upload instead.\par}
+            \textbf{We send a link to the PDF}\\[2pt]
+            {\footnotesize \texttt{file\_url} points to the book's copy of week 9's PDF, and Datalab fetches it. A file only on your laptop goes as an upload instead.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -224,7 +225,7 @@ print(check["page_count"], "pages,", check["total_cost"],
       "seconds of processing")
 # 15 pages, 4.5 cents, 9.8 seconds of processing
 \end{lstlisting}
-            \small \texttt{status} is \texttt{processing} until it's \texttt{complete}, as week 12's loop followed the \texttt{cursor} until there wasn't one.\\[2pt]{\scriptsize\textbf{Docs:} the \href{https://documentation.datalab.to/api-reference/convert-result-check}{result check}}
+            \small \texttt{status} stays \texttt{processing} until it's \texttt{complete}. The loop asks until then, as week 12's loop followed the \texttt{cursor} until it ran out.\\[2pt]{\scriptsize\textbf{Docs:} the \href{https://documentation.datalab.to/api-reference/convert-result-check}{result check}}
         \end{column}
         \begin{column}{0.4\textwidth}
             \textbf{What it cost}\\[2pt]
@@ -259,11 +260,11 @@ exhibit = pages[14][pages[14].index("|"):]
 for line in exhibit.splitlines()[:10]:
     print(line[:150])
 \end{lstlisting}
-            \small With \texttt{paginate}, each page starts with a marker such as \texttt{\{14\}} and a line of dashes. Split on it, and drop the empty piece before the first.
+            \small With \texttt{paginate}, each page starts with a marker such as \texttt{\{14\}} and a line of dashes. Split on the markers, and drop the empty piece before the first one.
 
             \medskip
             \begin{alertblock}{Never \texttt{pages[0]}}
-                \footnotesize The cover gives a staff member's email and phone. So does Exhibit 3's note, above its table: we print from the table's first \texttt{|}.
+                \footnotesize The cover gives a staff member's email and phone. So does Exhibit 3's note, above its table. We print from the table's first \texttt{|}.
             \end{alertblock}
         \end{column}
         \begin{column}{0.49\textwidth}
@@ -279,14 +280,14 @@ for line in exhibit.splitlines()[:10]:
 |                                | 2023        | 10,246,130
 ...
 \end{lstlisting}
-            {\footnotesize The note beside this table asks readers to phone the city for ``a screen readable version''. Week 9's pdfplumber stopped here: a picture has no text layer. Datalab read all 30 rows of figures.\par}
+            {\footnotesize The note beside this table asks readers to phone the city for ``a screen readable version''. Week 9's pdfplumber stopped here: a picture has no text layer to read. Datalab read all 30 rows of figures.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
 % Chart 8's table and description: pages[8] of the saved 2024 Markdown, quoted as written.
 % The beverage chart: pages[9]. pdfplumber's text layer for page 10 has the chart's axis only (plan).
-\begin{frame}{What the model wrote}
+\begin{frame}{What Datalab read, and what its model wrote}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
             \textbf{Chart 8, page 9: a pie chart, figures printed on its slices}\\[2pt]
@@ -305,11 +306,11 @@ for line in exhibit.splitlines()[:10]:
             {\footnotesize Under the table, Datalab's description:\par}
             {\footnotesize\itshape ``The largest slice is Recreational Marijuana (3.86\% Base) at \$1,262,688, followed by Recreational Marijuana (3.5\% Additional + 5.0\% Excise) at \$1,341,007.''\par}
             \medskip
-            \small The table was \textbf{read}. The sentence was \textbf{written}, and its own figures contradict it.
+            \small Datalab \textbf{read} the table from the slices. Its model \textbf{wrote} the sentence, and the sentence ranks the slices wrongly.
         \end{column}
         \begin{column}{0.4\textwidth}
             \textbf{Page 10: a bar chart with no numbers}\\[2pt]
-            {\footnotesize The sugar-sweetened beverage chart prints bars and an axis, and no figures. Datalab wrote a table beside it anyway: 72 values, one per month for six years, each with a \texttt{\textasciitilde}.\par}
+            {\footnotesize The sugar-sweetened beverage chart prints bars and an axis, and no figures. Datalab wrote a table beside it anyway: 72 values, one per month for six years, each marked \texttt{\textasciitilde}, ``about''.\par}
             \medskip
             {\footnotesize December 2024: \texttt{\textasciitilde\$285,000}. That number appears nowhere in the PDF.\par}
             \medskip
@@ -336,14 +337,14 @@ for line in pages[14].splitlines():
 print(checked, "rows checked")
 # 30 rows checked
 \end{lstlisting}
-            \small Week 9's first check: a row's twelve months should add up to its total. Nothing printed, so no row missed by more than \$5.
+            \small Week 9's first check: a row's twelve months should add up to its total. Nothing printed, so no row was off by more than \$5.
         \end{column}
         \begin{column}{0.4\textwidth}
             \textbf{How close}\\[2pt]
             {\footnotesize 17 of the 30 rows add up exactly; the rest are within \$2, because the report rounds each figure to the dollar.\par}
             \medskip
             \textbf{Microsprint: 2018}\\[2pt]
-            {\footnotesize Its Exhibit 3 is a table of text: 15 pages, 4.5 cents, 28 rows checked, all exact.\par}
+            {\footnotesize The same steps on the 2018 report, whose Exhibit 3 is text, not a picture: 15 pages, 4.5 cents, 28 rows checked, all exact.\par}
             \medskip
             \textbf{What a sum can't catch}\\[2pt]
             {\footnotesize Week 9's Docling read 21 of these 30 rows whole, and put two of them beside the wrong label. Those rows passed the sums.\par}
@@ -360,10 +361,10 @@ print(checked, "rows checked")
 \begin{frame}{Today: Part 2, a model as a function}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
-            A language model, called like any other API: an instruction and one page in, JSON in a shape we define out. Then we check it against week 9.
+            We call a language model like any other API. We send an instruction and one page, and get back JSON in a shape we define. Then we check it against week 9.
             \begin{itemize}\small
                 \item Find the page with the summary table's last row
-                \item Ask for its totals as JSON, with a schema
+                \item Ask for its totals as JSON, with a \textbf{JSON Schema}: a description of the fields we want and their types
                 \item Check them against pdfplumber's figures; then do all seven reports
             \end{itemize}
 
@@ -371,15 +372,15 @@ print(checked, "rows checked")
             \dayband{Use it}{Steps 6--10}
             \begin{itemize}\small
                 \item Download the new \texttt{lab-13.ipynb}; start at \textbf{Step 6}
-                \item Only \texttt{OPENROUTER\_KEY}: we read the book's saved Markdown of all seven reports, made as on Monday
+                \item Only \texttt{OPENROUTER\_KEY} today: we read the book's saved Markdown of all seven reports, made as on Monday
             \end{itemize}
         \end{column}
         \begin{column}{0.4\textwidth}
             \begin{alertblock}{Free models are shared}
-                \footnotesize Models whose ID ends in \texttt{:free} cost nothing, and a whole class shares them. When one is busy it answers \texttt{429}. We send a list of \texttt{models}, and OpenRouter tries the next.
+                \footnotesize Models whose ID ends in \texttt{:free} cost nothing, and our whole class shares them. When one is busy, it answers \texttt{429}. We send a list of \texttt{models}, and OpenRouter tries the next one.
             \end{alertblock}
             \textbf{OpenRouter}\\[2pt]
-            {\footnotesize One kind of request, to models from many companies. It also adds one more company to the list of who sees your documents.\par}
+            {\footnotesize One kind of request reaches models from many companies. OpenRouter is also one more company that sees your documents.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -452,9 +453,9 @@ response = requests.post(
         \begin{column}{0.4\textwidth}
             \textbf{Each part of the body}\\[2pt]
             \begin{itemize}\footnotesize
-                \item \texttt{messages}: a \texttt{system} instruction and a \texttt{user} page. That's the whole conversation; we never add a third.
-                \item \texttt{response\_format}: answer in \texttt{SCHEMA}'s shape. \texttt{strict} says no other fields.
-                \item \texttt{temperature} 0: its most likely answer.
+                \item \texttt{messages}: a \texttt{system} instruction, then the \texttt{user} page. We never add a third message.
+                \item \texttt{response\_format}: structured output, an answer in \texttt{SCHEMA}'s shape. \texttt{strict}: no other fields.
+                \item \texttt{temperature}: how much randomness the model adds. 0 asks for the model's most likely answer.
                 \item \texttt{models}: if the first is busy, try the next. Embeddings get no list (Friday).
             \end{itemize}
         \end{column}
@@ -495,15 +496,15 @@ print(answer["year"], answer["month"])
             \textbf{Right totals, wrong year}\\[2pt]
             {\footnotesize Both totals match week 9's. The report is 2024's, but the model said 2025, from ``received by the city through January 2025''.\par}
             \medskip
-            {\footnotesize \texttt{TRUTH} is week 9's pdfplumber figures for the last row. Without them, would you have trusted the totals? Would you have noticed the year?\par}
+            {\footnotesize \texttt{TRUTH} is our \textbf{ground truth}, figures we trust: week 9's pdfplumber figures for the last row. Without them, would you have trusted the totals? Would you have noticed the year?\par}
             \medskip
             \textbf{\texttt{usage}}\\[2pt]
-            {\footnotesize 1,568 tokens in, 2,466 out, 2,413 of them \texttt{reasoning\_tokens}: the model ``thought'' for 2,400 tokens to copy two numbers. Cost: 0.\par}
+            {\footnotesize A \textbf{token} is a word or a piece of one. 1,568 tokens in, 2,466 out. 2,413 of them were \texttt{reasoning\_tokens}, notes the model writes to itself before it answers: it ``thought'' for 2,400 tokens to copy two numbers. Cost: 0.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{The same request, again: non-determinism}
+\begin{frame}[fragile]{Non-determinism: the same request, different answers}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
 \begin{lstlisting}
@@ -531,12 +532,12 @@ for attempt in range(3):
             \begin{itemize}\footnotesize
                 \item The same 2024 request once got \textbf{both totals wrong}: 2024's total as 2023's, and the subtotal above it as 2024's
                 \item Step 10's seven reports: 6 of 7 right, then 5 of 7; the key's run, 4 of 7
-                \item The chapter's checks got the year as 2023, then 2024
+                \item Runs for the chapter got the year as 2023, then 2024
             \end{itemize}
             {\scriptsize November 7; same code, same free model, \texttt{temperature} 0.\par}
             \medskip
-            \textbf{Why?}\\[2pt]
-            {\footnotesize \texttt{temperature} 0 asks for the most likely answer, but shared hardware can change the arithmetic slightly, and 2,400 tokens of reasoning give a small change room to grow.\par}
+            \textbf{Why answers change}\\[2pt]
+            {\footnotesize \texttt{temperature} 0 asks for the most likely answer. But shared hardware can change the arithmetic slightly, and 2,400 tokens of reasoning give that small change room to grow.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -561,7 +562,7 @@ for report, (prior, current) in TRUTH.items():
     time.sleep(2)
 results = pd.DataFrame(rows)
 \end{lstlisting}
-            {\footnotesize \texttt{extract\_totals(page)} is Step 8's request in a function: we send it seven times. One model answered all seven.\par}
+            {\footnotesize \texttt{extract\_totals(page)} is Step 8's request in a function, because we send it seven times. One model answered all seven.\par}
         \end{column}
         \begin{column}{0.44\textwidth}
             \textbf{Checked against week 9}\\[2pt]
@@ -606,13 +607,13 @@ results = pd.DataFrame(rows)
             {\footnotesize The model's answer:\par}
             {\footnotesize \texttt{total\_prior}: 141954650\quad\texttt{total\_current}: 139548151\par}
             \medskip
-            \small It took the subtotal above the last row as the report year's total, for 2018, 2019 and 2020. For 2019 and 2020 it also moved the report year's total into the year before.
+            \small For 2018, 2019 and 2020, it took the subtotal above the last row as the report year's total. For 2019 and 2020, it also moved the report year's total into the year before.
         \end{column}
         \begin{column}{0.4\textwidth}
-            \textbf{Not a missing row}\\[2pt]
+            \textbf{The total row was there}\\[2pt]
             {\footnotesize All three pages hold the whole table, the total row included. The model had the right figures in front of it.\par}
             \medskip
-            \textbf{Months and years}\\[2pt]
+            \textbf{The wrong month and year}\\[2pt]
             {\footnotesize ``January'' and the next year come from ``received by the city through January 2019''.\par}
             \medskip
             \textbf{Discuss}\\[2pt]
@@ -628,15 +629,15 @@ results = pd.DataFrame(rows)
 \begin{frame}{Today: Part 3, search by meaning, answer with sources}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
-            Seven reports make 243 passages. Which ones answer a question? Then a model answers from those passages only, as JSON with the IDs of its sources, or null.
+            Seven reports make 243 passages. Which ones answer a question? A model then answers from those passages only: JSON with the IDs of its sources, or null.
 
             \medskip
             \dayband{Lab}{Steps 11--15}
             \begin{itemize}\small
-                \item Cut the reports into chunks; embed them
-                \item Search by meaning, with cosine similarity
-                \item Answer with sources: retrieval-augmented generation, kept to a figure
-                \item How MCP and skills describe tools to a model
+                \item Cut the reports into \textbf{chunks}, pieces short enough to embed, and embed them
+                \item Search by meaning: \textbf{cosine similarity} scores how close two embeddings are
+                \item Answer one figure from the passages found: \textbf{retrieval-augmented generation} (RAG)
+                \item How tools are described to a model: the Model Context Protocol (MCP), and skills, folders of instructions
                 \item Download the new \texttt{lab-13.ipynb}; start at \textbf{Step 11}
             \end{itemize}
 
@@ -648,7 +649,7 @@ results = pd.DataFrame(rows)
         \end{column}
         \begin{column}{0.4\textwidth}
             \textbf{Embeddings}\\[2pt]
-            {\footnotesize An embedding model turns a text into a list of numbers, so that texts about the same thing are close together. A question becomes a list of numbers too; the closest passages are the ones to read.\par}
+            {\footnotesize An embedding model turns a text into a list of numbers, a \textbf{vector}, so that texts about the same thing are close together. A question becomes a vector too; the closest passages are the ones to read.\par}
             \medskip
             {\footnotesize Still only \texttt{OPENROUTER\_KEY}.\par}
         \end{column}
@@ -673,14 +674,14 @@ one = requests.post(f"{openrouter_base}/embeddings",
 print(len(one["data"][0]["embedding"]), "numbers")
 # 2048 numbers
 \end{lstlisting}
-            {\footnotesize Then a given loop embeds all 243, 20 to a request, and scales each vector to length 1: \texttt{(243, 2048)}.\\[2pt]}{\scriptsize\textbf{Docs:} OpenRouter's \href{https://openrouter.ai/docs/api/reference/embeddings}{embeddings endpoint}}
+            {\footnotesize Then a given loop embeds all 243, 20 to a request, and scales each vector to length 1. The result: \texttt{(243, 2048)}.\\[2pt]}{\scriptsize\textbf{Docs:} OpenRouter's \href{https://openrouter.ai/docs/api/reference/embeddings}{embeddings endpoint}}
         \end{column}
         \begin{column}{0.4\textwidth}
             \textbf{Why chunks?}\\[2pt]
             {\footnotesize The embedding model reads at most 4,096 tokens. Exhibit 3's page is 16,333 characters of padded table. A chunk's ID, such as \texttt{2024-12 p.9 \#1}, says where it came from: the report, the page, the piece.\par}
             \medskip
             \begin{alertblock}{One embedding model}
-                \footnotesize Vectors from two models live in different spaces and can't be compared. So \texttt{EMBEDDER} gets no fallback list, and a new model means embedding everything again.
+                \footnotesize Vectors from two different models don't line up, so they can't be compared. So \texttt{EMBEDDER} gets no fallback list, and a new model means embedding everything again.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -708,14 +709,14 @@ print(chunks.nlargest(5, "score")[["id", "score"]])
 \end{lstlisting}
         \end{column}
         \begin{column}{0.4\textwidth}
-            {\footnotesize For vectors of length 1, cosine similarity is the dot product, so \texttt{vectors @ query} scores all 243 at once.\par}
+            {\footnotesize For vectors of length 1, cosine similarity is the dot product: multiply matching numbers, then add. So \texttt{vectors @ query} scores all 243 at once.\par}
             \medskip
-            \textbf{Topics, not figures}\\[2pt]
-            {\footnotesize The marijuana page from five years, within 0.01 of each other, and not 2024's.\par}
+            \textbf{The same page, five years}\\[2pt]
+            {\footnotesize The top five are the marijuana page from five years, all within 0.01 of each other. 2024's isn't among them.\par}
             \medskip
             {\footnotesize ``Total sales and use tax in 2022'' found 2022's summary page first, but the half without the total row. The half with it came fourth.\par}
             \medskip
-            {\footnotesize So keep one report's chunks before scoring: a filter you can check.\par}
+            {\footnotesize So keep only one report's chunks before you rank them: a filter you can check.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -755,7 +756,7 @@ ANSWER_SCHEMA = {"type": "object",
   "required": ["value", "source_ids"],
   "additionalProperties": False}
 \end{lstlisting}
-            {\footnotesize \texttt{value} may be \textbf{null}: the model's way to say the passages don't print it. In the lab, each field has a description too.\par}
+            {\footnotesize \texttt{value} may be \textbf{null}: the model's way to say that no passage prints it. In the lab, each field has a description too.\par}
             \medskip
             \textbf{The instruction}\\[2pt]
             {\footnotesize\itshape ``Give a figure only if a passage prints it; an estimate read from a chart doesn't count. If no passage prints it, answer null.''\par}
@@ -793,7 +794,7 @@ print(response["model"], json.loads(
             {\footnotesize ``How much sugar-sweetened beverage tax did the city collect in December 2024?'' 2024's best three: \texttt{p.2 \#1}, \texttt{p.10 \#1}, \texttt{p.1 \#1}.\par}
             {\footnotesize \texttt{\{'value': None,\\\ 'source\_ids': ['2024-12 p.10 \#1']\}}\par}
             \medskip
-            {\footnotesize Null is right: no page prints it, and \texttt{\textasciitilde\$285,000} was Datalab's estimate. But the schema said no sources with a null. Check those too.\par}
+            {\footnotesize Null is right: no page prints it, and \texttt{\textasciitilde\$285,000} was Datalab's estimate. But the schema asked for no sources with a null, and it gave one. Check the sources too.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -826,7 +827,7 @@ for tool in json.loads(line[6:])["result"]["tools"]:
 \end{lstlisting}
         \end{column}
         \begin{column}{0.4\textwidth}
-            {\footnotesize The \textbf{Model Context Protocol} is a shared way for a server to say which tools it offers. DeepWiki's public server needs no key. It answers \texttt{initialize} as a short event stream:\par}
+            {\footnotesize The \textbf{Model Context Protocol} (MCP) is a shared way for a server to say which tools it offers. Each message is \textbf{JSON-RPC}: JSON that names a \texttt{method} to run, with an \texttt{id}. DeepWiki's public server needs no key. It answers \texttt{initialize} as a short event stream:\par}
 \begin{lstlisting}[basicstyle=\ttfamily\tiny,language={}]
 event: message
 data: {"jsonrpc":"2.0","id":1,"result":
@@ -864,11 +865,11 @@ print([line for line in skill.splitlines()
 #  '### pdfplumber - Text and Table Extraction',
 #  '### reportlab - Create PDFs', ...]
 \end{lstlisting}
-            {\footnotesize The description runs on to merging, splitting, forms and OCR; cut here. Ten \texttt{\#\#\#} headings in all.\par}
+            {\footnotesize The description goes on to merging, splitting, forms and OCR (reading text from images); we cut it here. Ten \texttt{\#\#\#} headings in all.\par}
         \end{column}
         \begin{column}{0.4\textwidth}
             \textbf{Front matter, then instructions}\\[2pt]
-            {\footnotesize A \textbf{skill} is a folder of instructions. Its \texttt{name} and \texttt{description} tell a model when to read the rest: 314 lines of Markdown and code.\par}
+            {\footnotesize A \textbf{skill} is a folder of instructions for a model; \texttt{SKILL.md} is its main file. The front matter, between the \texttt{-{}-{}-} lines, gives a \texttt{name} and \texttt{description}. They tell a model when to read the rest: 314 lines of Markdown and code.\par}
             \medskip
             {\footnotesize Its headings name the tools it teaches: \textbf{pypdf} and \textbf{pdfplumber}, week 9's tools, then reportlab, pdftotext, qpdf, and more.\par}
             \medskip
@@ -883,7 +884,7 @@ print([line for line in skill.splitlines()
         \begin{column}{0.5\textwidth}
             \textbf{Answer as comments}\\[2pt]
             \begin{itemize}\footnotesize
-                \item Which of Datalab's output would you publish, and which would you check first?
+                \item Which parts of Datalab's output would you publish, and which would you check first?
                 \item Which reports did the model get wrong: was it the model, or what we sent?
                 \item Why did embeddings find topics more easily than figures?
                 \item What would you check your own project's model outputs against?
@@ -928,9 +929,9 @@ print([line for line in skill.splitlines()
     \begin{enumerate}
         \item Call a model \textbf{as a function}: one request in, JSON in your schema out. No conversation.
         \item \textbf{Valid JSON can still be wrong.} Check it against something you trust: a sum, a second tool, a ground truth.
-        \item Document APIs \textbf{read} some things and \textbf{write} others. A chart's description is the model's, not the document's.
+        \item Document APIs \textbf{read} some things and \textbf{write} others. A model wrote the chart's description; the document didn't print it.
         \item The same request can give a different answer. \textbf{Record} the model, the date, and the raw response.
-        \item Embeddings find \textbf{topics}, not figures; an answer needs its \textbf{sources}, and null when there are none.
+        \item Embeddings find \textbf{topics}, not figures. An answer needs its \textbf{sources}, or null when there are none.
     \end{enumerate}
 \end{frame}
 
