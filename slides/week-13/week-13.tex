@@ -77,13 +77,8 @@
 
 % Placeholder: fill in from week 12's daily-note responses before class
 % (python3 ../common/check_daily_questions.py week-13).
-\begin{frame}{Daily note questions}
-    \begin{itemize}
-        \item \textbf{Question from the daily note?} --- Answer, in one line.
-    \end{itemize}
-\end{frame}
 
-\begin{frame}{This week, every class is live coding}
+\begin{frame}{This week}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
             \dayband{Find it}{\texttt{labs/} in the course repository}
@@ -119,7 +114,7 @@
 \begin{frame}{A model called like a function}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
-            A chatbot answers a person. This week a model answers a program: one request, one answer, in a shape we choose. We check the answer before we use it.
+            A chatbot answers a person. This week a model answers a program. We check the answer before we use it.
 
             \medskip
             Three kinds of AI API, one a day:
@@ -264,11 +259,6 @@ for line in exhibit.splitlines()[:10]:
     print(line[:150])
 \end{lstlisting}
             \small With \texttt{paginate}, each page starts with a marker such as \texttt{\{14\}} and a line of dashes. Split on the markers, and drop the empty piece before the first one.
-
-            \medskip
-            \begin{alertblock}{Never \texttt{pages[0]}}
-                \footnotesize The cover gives a staff member's email and phone. So does Exhibit 3's note, above its table. We print from the table's first \texttt{|}.
-            \end{alertblock}
         \end{column}
         \begin{column}{0.49\textwidth}
             \textbf{Exhibit 3, a picture of a table, as Markdown}\\[2pt]
