@@ -31,7 +31,8 @@ HEADER = r"""
 \RecustomVerbatimEnvironment{verbatim}{Verbatim}{breaklines,breakanywhere}
 \directlua{luaotfload.add_fallback("labfallback", {
   "file:NotoColorEmoji.ttf:mode=harf;", "file:NotoSansArabic-Regular.ttf:mode=harf;",
-  "file:NotoSans-Regular.ttf:mode=harf;", "file:DejaVuSans.ttf:mode=harf;"})}
+  "file:NotoSans-Regular.ttf:mode=harf;", "file:NotoSansSymbols-Regular.ttf:mode=harf;",
+  "file:DejaVuSans.ttf:mode=harf;"})}
 \setmainfont{DejaVu Serif}[RawFeature={fallback=labfallback}]
 \setsansfont{DejaVu Sans}[RawFeature={fallback=labfallback}]
 \setmonofont{DejaVu Sans Mono}[Scale=0.85, RawFeature={fallback=labfallback}]
