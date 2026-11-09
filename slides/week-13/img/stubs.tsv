@@ -1,1 +1,2 @@
 # filename	WIDTHxHEIGHT	description of the real asset to drop in
+lead-similarity.png	1680x1110	Chart: cosine similarity of each January 1 Wikipedia lead (Obama, Clinton, Trump, Biden, Harris), 2004-2026, to the article's current lead, drawn from labs/week-13/data/wikipedia/ as the lab key's Step 12 computes it
