@@ -23,25 +23,28 @@
 \maketitle
 
 % -------------------------------------------------------------------------
-% The pipeline and the plan: textbook docs/plans/2026-11-07-ch13-ai-apis.md (branch claude/ch13-rewrite).
-% OUTPUTS: the code frames follow the lab key, labs/week-13/lab-13-key.ipynb at commit 5f9cd22
-% (branch claude/week-13-lab), and show its cells' printed outputs, run 2026-11-07/08 against
-% Datalab, OpenRouter and DeepWiki. Where a frame adds a figure from another run, its comment says so.
+% The plan: textbook docs/plans/2026-11-07-ch13-ai-apis.md; Friday follows chapter 13 as merged to main
+% ("Embeddings and Retrieval", "Retrieval-Augmented Extraction", "Tools, MCP, and Skills").
+% OUTPUTS: the code frames follow the lab key, labs/week-13/lab-13-key.ipynb at commit d679ddb
+% (branch claude/week-13-wikipedia-lab), and show its cells' printed outputs, run 2026-11-09 against
+% Datalab, OpenRouter, Wikipedia's saved leads and the Census Data API. Where a frame adds a figure
+% from another run or from the chapter, its comment says so.
 \begin{frame}{This week at a glance}
     \begin{center}
-    \begin{tikzpicture}[node distance=0.55cm, >=stealth]
+    \begin{tikzpicture}[node distance=0.35cm, >=stealth, stage/.append style={text width=6.3em}]
         \node[stage] (pdf) {\textbf{A PDF}\\[-1pt]{\scriptsize week 9's reports}};
         \node[stage, right=of pdf] (md) {\textbf{Markdown}\\[-1pt]{\scriptsize Datalab · Mon}};
         \node[stage, right=of md] (json) {\textbf{JSON, checked}\\[-1pt]{\scriptsize OpenRouter · Wed}};
-        \node[stage, right=of json] (rag) {\textbf{An answer + sources}\\[-1pt]{\scriptsize search by meaning · Fri}};
+        \node[stage, right=0.8cm of json] (wiki) {\textbf{Embeddings}\\[-1pt]{\scriptsize Wikipedia · Fri}};
+        \node[stage, right=of wiki] (tool) {\textbf{A tool call, run}\\[-1pt]{\scriptsize Census API · Fri}};
         \draw[->, thick] (pdf) -- (md);
         \draw[->, thick] (md) -- (json);
-        \draw[->, thick] (json) -- (rag);
+        \draw[->, thick] (wiki) -- (tool);
     \end{tikzpicture}
     \end{center}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            One pipeline on week 9's Boulder revenue reports, live-coded over three classes from one lab notebook. No chatbots: each request gets one JSON answer, and we check every answer.
+            {\small Monday and Wednesday: one pipeline on week 9's Boulder revenue reports. Friday: Wikipedia, and week 11's Census API. No chatbots: each request gets one JSON answer, and we check every answer.\par}
 
             \medskip
             \dayband{Monday}{Lab, part 1: document understanding}
@@ -52,15 +55,15 @@
             \begin{itemize}\small
                 \item Send one page; get back JSON with the fields we ask for; check it against week 9
             \end{itemize}
-            \dayband{Friday}{Lab, part 3: search by meaning; then your project}
+            \dayband{Friday}{Lab, part 3: search by meaning, and tools}
             \begin{itemize}\small
-                \item Find passages; answer with sources, or null; see how tools are described to a model
+                \item Compare Wikipedia leads by meaning; run a Census call a model wrote
                 \item 15 minutes on portfolio checkpoint 3
             \end{itemize}
         \end{column}
         \begin{column}{0.36\textwidth}
-            \begin{alertblock}{Two free keys, before Monday}
-                \footnotesize \texttt{DATALAB\_KEY} from \href{https://www.datalab.to/auth/sign_up}{datalab.to}, and \texttt{OPENROUTER\_KEY} from \href{https://openrouter.ai/settings/keys}{openrouter.ai}. Set each as an environment variable, close the terminal, open a new one, and start Jupyter from there.
+            \begin{alertblock}{Keys: two new, and week 11's}
+                \footnotesize Before Monday: \texttt{DATALAB\_KEY} from \href{https://www.datalab.to/auth/sign_up}{datalab.to}, and \texttt{OPENROUTER\_KEY} from \href{https://openrouter.ai/settings/keys}{openrouter.ai}. Set each as an environment variable, close the terminal, open a new one, and start Jupyter from there. Friday also needs week 11's \texttt{CENSUS\_KEY}.
             \end{alertblock}
             \textbf{Due Sunday, Nov 15}\\[2pt]
             {\footnotesize Chapter 13's \textbf{Recommended Exercises}, from its companion notebook, and portfolio checkpoint 3, \textit{Analyze your data}. Graded on good-faith attempt to complete rather than getting everything working.\par}
@@ -188,9 +191,9 @@ job = requests.post(f"{datalab_base}/convert", data=data,
     headers={"X-API-Key": datalab_key, **HEADERS}).json()
 print(job)
 # {'success': True, 'error': None,
-#  'request_id': '8TiORZqhcBr2wJgqyTs-gA',
+#  'request_id': 'S8zq-0yiaN7zc1gmv3CUAg',
 #  'request_check_url': 'https://www.datalab.to/api/v1/
-#      convert/8TiORZqhcBr2wJgqyTs-gA',
+#      convert/S8zq-0yiaN7zc1gmv3CUAg',
 #  'versions': None, 'checkpoint_reused': None}
 \end{lstlisting}
             \small Converting takes seconds, so Datalab first answers with a \textbf{ticket}: \texttt{request\_check\_url}, the address where the result will appear.\\[2pt]{\scriptsize\textbf{Docs:} Datalab's \href{https://documentation.datalab.to/docs/recipes/conversion/conversion-api-overview}{Convert API}}
@@ -223,7 +226,7 @@ while check["status"] != "complete":
 print(check["page_count"], "pages,", check["total_cost"],
       "cents,", round(check["runtime"], 1),
       "seconds of processing")
-# 15 pages, 4.5 cents, 9.8 seconds of processing
+# 15 pages, 4.5 cents, 10.1 seconds of processing
 \end{lstlisting}
             \small \texttt{status} stays \texttt{processing} until it's \texttt{complete}. The loop asks until then, as week 12's loop followed the \texttt{cursor} until it ran out.\\[2pt]{\scriptsize\textbf{Docs:} the \href{https://documentation.datalab.to/api-reference/convert-result-check}{result check}}
         \end{column}
@@ -462,10 +465,12 @@ response = requests.post(
     \end{columns}
 \end{frame}
 
-% Steps 9-10 and What went wrong: the lab key's outputs. The non-determinism frame's right column
-% adds other runs of the same code on 2026-11-07, 22:01-22:07 UTC, against the same saved Markdown:
-% a first 2024 request answered total_prior 173908431, total_current 171006199, year 2025; two runs
-% of Step 10 matched 6 of 7 and 5 of 7. Every request in all runs was answered by the first model.
+% Steps 9-10 and What went wrong: the lab key's outputs (d679ddb). The non-determinism frame's right
+% column adds other runs of the same code against the same saved Markdown: on 2026-11-07, 22:01-22:07
+% UTC, a first 2024 request answered total_prior 173908431, total_current 171006199, year 2025, and two
+% runs of Step 10 matched 6 of 7 and 5 of 7 (that day's key run, commit 5f9cd22, matched 4); on
+% 2026-11-09 an earlier run of the key matched 5 of 7 with 2018 and 2019 wrong (the key's header cell).
+% Every request in all runs was answered by the first model.
 \begin{frame}[fragile]{Step 9: the answer, and the check}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
@@ -476,8 +481,8 @@ answer = json.loads(
     response["choices"][0]["message"]["content"])
 print(answer)
 # nvidia/nemotron-3.5-super-vl:free
-# {'prompt_tokens': 1568, 'completion_tokens': 2466, ...
-#  'reasoning_tokens': 2413, ...}
+# {'prompt_tokens': 1568, 'completion_tokens': 2438, ...
+#  'reasoning_tokens': 2385, ...}
 # {'month': 'December', 'year': 2025,
 #  'total_prior': 175517129, 'total_current': 173908431}
 
@@ -499,7 +504,7 @@ print(answer["year"], answer["month"])
             {\footnotesize \texttt{TRUTH} is our \textbf{ground truth}, figures we trust: week 9's pdfplumber figures for the last row. Without them, would you have trusted the totals? Would you have noticed the year?\par}
             \medskip
             \textbf{\texttt{usage}}\\[2pt]
-            {\footnotesize A \textbf{token} is a word or a piece of one. 1,568 tokens in, 2,466 out. 2,413 of them were \texttt{reasoning\_tokens}, notes the model writes to itself before it answers: it ``thought'' for 2,400 tokens to copy two numbers. Cost: 0.\par}
+            {\footnotesize A \textbf{token} is a word or a piece of one. 1,568 tokens in, 2,438 out. 2,385 of them were \texttt{reasoning\_tokens}, notes the model writes to itself before it answers: it ``thought'' for about 2,400 tokens to copy two numbers. Cost: 0.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -522,19 +527,19 @@ for attempt in range(3):
 #  'year': 2025, 'total_prior': 175517129,
 #  'total_current': 173908431}
 # nvidia/nemotron-3.5-super-vl:free {'month': 'December',
-#  'year': 2025, 'total_prior': 175517129,
+#  'year': 2024, 'total_prior': 175517129,
 #  'total_current': 173908431}
 \end{lstlisting}
-            {\footnotesize In the key's run: the same answer three times, the same as Step 8's.\par}
+            {\footnotesize In the key's run: the same totals three times, and two years. The third answer said 2024, the right year, from the same request.\par}
         \end{column}
         \begin{column}{0.4\textwidth}
-            \textbf{Other runs, the same day}\\[2pt]
+            \textbf{Other runs}\\[2pt]
             \begin{itemize}\footnotesize
-                \item The same 2024 request once got \textbf{both totals wrong}: 2024's total as 2023's, and the subtotal above it as 2024's
-                \item Step 10's seven reports: 6 of 7 right, then 5 of 7; the key's run, 4 of 7
+                \item On November 7, the same 2024 request once got \textbf{both totals wrong}: 2024's total as 2023's, and the subtotal above it as 2024's
+                \item Step 10's seven reports, both totals right: 4, 5 and 6 of 7 on November 7; 5 of 7 twice on November 9, with different reports wrong
                 \item Runs for the chapter got the year as 2023, then 2024
             \end{itemize}
-            {\scriptsize November 7; same code, same free model, \texttt{temperature} 0.\par}
+            {\scriptsize Same code, same free model, \texttt{temperature} 0.\par}
             \medskip
             \textbf{Why answers change}\\[2pt]
             {\footnotesize \texttt{temperature} 0 asks for the most likely answer. But shared hardware can change the arithmetic slightly, and 2,400 tokens of reasoning give that small change room to grow.\par}
@@ -571,26 +576,26 @@ results = pd.DataFrame(rows)
                 \toprule
                 \textbf{Report} & \textbf{Prior} & \textbf{Current} & \textbf{It said} \\
                 \midrule
-                2018 & right & \textbf{wrong} & December 2018 \\
+                2018 & right & right & December 2018 \\
                 2019 & \textbf{wrong} & \textbf{wrong} & January 2020 \\
-                2020 & \textbf{wrong} & \textbf{wrong} & January 2021 \\
+                2020 & \textbf{wrong} & \textbf{wrong} & December 2020 \\
                 2021-12 & right & right & December 2021 \\
                 2022-12 & right & right & December 2022 \\
                 2023-12 & right & right & December 2023 \\
                 2024-12 & right & right & December 2025 \\
                 \bottomrule
             \end{tabular}\par}
-            {\scriptsize The lab key's run. Both totals right: 4 of 7.\par}
+            {\scriptsize The lab key's run. Both totals right: 5 of 7.\par}
             \medskip
-            {\footnotesize Every report covers through December of its own year. The month or the year is wrong in three of seven.\par}
+            {\footnotesize Every report covers through December of its own year. The month or the year is wrong in two of seven: 2019's and 2024's.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-% The two rows quoted are from the summary page of the saved 2019 Markdown. The key's wrong answers:
-% 2018 total_current 139331838 (the 2018 subtotal); 2019 141954650 / 139548151; 2020 135195413 /
-% 133478757 (2020's total and subtotal). The summary pages of 2018, 2019 and 2020 each hold both rows.
-\begin{frame}{What went wrong: one mistake, three reports}
+% The two rows quoted are from the summary page of the saved 2019 Markdown. The key's wrong answers
+% (d679ddb): 2019 141954650 / 139548151; 2020 135195413 / 133478757 (2020's total and subtotal). The
+% summary pages of 2019 and 2020 each hold both rows. "through January 2020": the saved 2019 Markdown.
+\begin{frame}{What went wrong: one mistake, two reports}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
             The 2019 report's summary page, its last two rows:\\[2pt]
@@ -607,14 +612,14 @@ results = pd.DataFrame(rows)
             {\footnotesize The model's answer:\par}
             {\footnotesize \texttt{total\_prior}: 141954650\quad\texttt{total\_current}: 139548151\par}
             \medskip
-            \small For 2018, 2019 and 2020, it took the subtotal above the last row as the report year's total. For 2019 and 2020, it also moved the report year's total into the year before.
+            \small For 2019 and 2020, it took the subtotal above the last row as the report year's total, and moved the report year's total into the year before. In this run, 2018 came back right; in an earlier run the same day, it was one of the two wrong.
         \end{column}
         \begin{column}{0.4\textwidth}
             \textbf{The total row was there}\\[2pt]
-            {\footnotesize All three pages hold the whole table, the total row included. The model had the right figures in front of it.\par}
+            {\footnotesize Both pages hold the whole table, the total row included. The model had the right figures in front of it.\par}
             \medskip
             \textbf{The wrong month and year}\\[2pt]
-            {\footnotesize ``January'' and the next year come from ``received by the city through January 2019''.\par}
+            {\footnotesize The 2019 report's ``January 2020'' comes from its sentence ``received by the city through January 2020''. The 2024 report's 2025 comes from the same sentence.\par}
             \medskip
             \textbf{Discuss}\\[2pt]
             {\footnotesize A better model, a better instruction, or a better page: which would you try first, and how would you know it worked?\par}
@@ -626,147 +631,279 @@ results = pd.DataFrame(rows)
 \section{Friday · Live-Coding Lab}
 % =========================================================================
 
-\begin{frame}{Today: Part 3, search by meaning, answer with sources}
+\begin{frame}{Today: Part 3, search by meaning, and tools}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
-            Seven reports make 243 passages. Which ones answer a question? A model then answers from those passages only: JSON with the IDs of its sources, or null.
+            {\small On Wednesday the model read one page that we chose. With a hundred passages, we need a way to find the ones worth reading, and to say how far apart two of them are.\par}
 
             \medskip
-            \dayband{Lab}{Steps 11--15}
-            \begin{itemize}\small
-                \item Cut the reports into \textbf{chunks}, pieces short enough to embed, and embed them
-                \item Search by meaning: \textbf{cosine similarity} scores how close two embeddings are
-                \item Answer one figure from the passages found: \textbf{retrieval-augmented generation} (RAG)
-                \item How tools are described to a model: the Model Context Protocol (MCP), and skills, folders of instructions
-                \item Download the new \texttt{lab-13.ipynb}; start at \textbf{Step 11}
-            \end{itemize}
+            {\small An \textbf{embedding} turns a passage into a list of numbers, so that passages about the same thing get similar numbers. To an embedding, every year's marijuana page in Boulder's reports looks alike, whatever figures it prints. So today we use prose that editors keep rewriting: Wikipedia.\par}
 
             \medskip
-            \dayband{Then}{your project, 15 minutes}
+            \dayband{Lab}{Steps 11--15, in the new \texttt{lab-13.ipynb}}
             \begin{itemize}\small
-                \item Portfolio checkpoint 3, \textit{Analyze your data}
+                \item The \textbf{lead}, the paragraphs above an article's first heading, of five articles, on January 1 of each year from 2004 to 2026
+                \item How close each year's lead is to today's; an answer from the leads, with sources
+                \item A model writes one request to week 11's Census API, and our code runs it
+                \item Last 15 minutes: portfolio checkpoint 3
             \end{itemize}
         \end{column}
         \begin{column}{0.4\textwidth}
-            \textbf{Embeddings}\\[2pt]
-            {\footnotesize An embedding model turns a text into a list of numbers, a \textbf{vector}, so that texts about the same thing are close together. A question becomes a vector too; the closest passages are the ones to read.\par}
+            \begin{alertblock}{Two keys today}
+                \footnotesize \texttt{OPENROUTER\_KEY}, and week 11's \texttt{CENSUS\_KEY} for Step 14. If week 11's lab could read it, so can this one. \texttt{MISSING}? Run Step 11's given \texttt{getpass()} cell.
+            \end{alertblock}
+            \textbf{Five articles}\\[2pt]
+            {\footnotesize Barack Obama, Hillary Clinton, Donald Trump, Joe Biden and Kamala Harris. Every version of an article is kept in its history (week 10), so we can read each lead as it stood on New Year's Day.\par}
             \medskip
-            {\footnotesize Still only \texttt{OPENROUTER\_KEY}.\par}
+            {\footnotesize Chapter 13, ``Embeddings and Retrieval'', ``Retrieval-Augmented Extraction'', and ``Tools, MCP, and Skills''.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-% Friday's outputs: the lab key's. "Exhibit 3's page is 16,333 characters" and the 2022 question's
-% chunks (#1 without the total row, #2 with it) were checked on the book's saved Markdown.
-\begin{frame}[fragile]{Steps 11--12: chunks, and one embedding}
+% Step 11: the lab key's code and outputs (d679ddb).
+\begin{frame}[fragile]{Step 11: one old version, by hand}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
-            {\footnotesize Given: each page cut into chunks of at most about 2,500 characters, between lines, each with an ID.\par}
 \begin{lstlisting}
-# 243 chunks from 7 reports
+API = "https://en.wikipedia.org/w/api.php"
+params = {"action": "query", "titles": "Barack Obama",
+    "prop": "revisions", "rvprop": "ids|timestamp",
+    "rvlimit": 1, "rvstart": "2009-01-01T00:00:00Z",
+    "rvdir": "older", "format": "json"}
+data = requests.get(API, params=params,
+                    headers=HEADERS).json()
+page = list(data["query"]["pages"].values())[0]
+revision = page["revisions"][0]
+print(revision)
+# {'revid': 261157071, 'parentid': 261086351,
+#  'timestamp': '2008-12-31T20:44:09Z'}
 
+params = {"action": "parse", "oldid": revision["revid"],
+          "prop": "text", "section": 0,
+          "format": "json", "formatversion": 2}
+html = requests.get(API, params=params,
+    headers=HEADERS).json()["parse"]["text"]
+\end{lstlisting}
+            {\scriptsize\textbf{Docs:} the Action API's \href{https://www.mediawiki.org/wiki/API:Revisions}{revisions} and \href{https://www.mediawiki.org/wiki/API:Parsing_wikitext}{parse}\par}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Two requests}\\[2pt]
+            {\footnotesize The first finds the newest revision at or before midnight UTC, January 1, 2009: start at \texttt{rvstart}, walk back in time, and stop after one. That's the version a reader saw on New Year's Day. Its \texttt{revid} names it for good.\par}
+            \medskip
+            {\footnotesize The second, \texttt{action=parse}, returns that version as HTML. \texttt{section=0} asks for the lead alone.\par}
+            \medskip
+            \textbf{Why the lead?}\\[2pt]
+            {\footnotesize The embedding model reads at most 4,096 tokens of a text. On January 1, 2009, Obama's whole article was already 135,666 bytes of wikitext. The lead fits, and its job is to summarize the article.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% The printed paragraphs and the cleaned lead: the lab key's outputs. The saved leads are
+% labs/week-13/data/wikipedia/leads.csv, collected 2026-11-09 (its README: 429s for about 30 minutes).
+\begin{frame}[fragile]{Step 11: today's templates in a 2009 lead}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+\begin{lstlisting}
+soup = BeautifulSoup(html, "html.parser")
+for paragraph in soup.find_all("p"):
+    print(paragraph.get_text(" ", strip=True)[:150])
+# Template:Active editnotice Template:Redirect4 ...
+# Template:FixHTML
+# Barack Hussein Obama II ( Template:Pron-en ; born
+#   August 4, 1961) is an American politician and ...
+
+for tag in soup.select("table, .reference, .hatnote, "
+        ".shortdescription, style, "
+        "a.new[title^='Template:'], .error"):
+    tag.decompose()
+paragraphs = []
+for paragraph in soup.find_all("p"):
+    if paragraph.get_text(strip=True):
+        paragraphs.append(
+            paragraph.get_text(" ", strip=True))
+lead = re.sub(r" ([,.;:])", r"\1",
+              "\n\n".join(paragraphs))
+print(lead[:300])
+# Barack Hussein Obama II (; born August 4, 1961) is
+#   an American politician and the President-elect ...
+\end{lstlisting}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Leftovers}\\[2pt]
+            {\footnotesize Wikipedia keeps an old version's wikitext, not its HTML. So \texttt{parse} draws 2009's text with today's templates, and templates deleted since come back as links named \texttt{Template:}\ldots{} An embedding model would read them as part of the lead.\par}
+            \medskip
+            {\footnotesize \texttt{select()} finds them by CSS selector (week 5), with the tables, footnote marks and error messages, and \texttt{decompose()} deletes each. This is the chapter's \texttt{lead\_text()}.\par}
+            \medskip
+            \textbf{Then the saved leads}\\[2pt]
+            {\footnotesize A given cell loads all 116, collected and cleaned this way on November 9. Collecting them drew \texttt{429}s for about 30 minutes, at one request a second. Our 2009 lead matches the saved one: \texttt{True}.\par}
+            \medskip
+            {\footnotesize\textbf{Discuss:} what in a lead might come from today rather than from 2009, without looking broken?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Step 12: the lab key's code and outputs. The given embedding loop is summarized as its output.
+\begin{frame}[fragile]{Step 12: embed, and compare each year with today}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+\begin{lstlisting}
 EMBEDDER = "nvidia/nemotron-3-embed-1b:free"
 one = requests.post(f"{openrouter_base}/embeddings",
     json={"model": EMBEDDER,
-          "input": [chunks["text"][0]]},
+          "input": [leads["lead"][0]]},
     headers={"Authorization": f"Bearer {openrouter_key}",
              **HEADERS}).json()
 print(len(one["data"][0]["embedding"]), "numbers")
 # 2048 numbers
+
+# Given: embed all 116, 20 to a request, and scale
+# each vector to length 1
+# (116, 2048)
+
+today = {}
+for i, row in leads.iterrows():
+    if row["year"] == "current":
+        today[row["title"]] = vectors[i]
+leads["similarity"] = [vectors[i] @ today[title]
+    for i, title in enumerate(leads["title"])]
 \end{lstlisting}
-            {\footnotesize Then a given loop embeds all 243, 20 to a request, and scales each vector to length 1. The result: \texttt{(243, 2048)}.\\[2pt]}{\scriptsize\textbf{Docs:} OpenRouter's \href{https://openrouter.ai/docs/api/reference/embeddings}{embeddings endpoint}}
+            {\scriptsize\textbf{Docs:} OpenRouter's \href{https://openrouter.ai/docs/api/reference/embeddings}{embeddings endpoint}\par}
         \end{column}
         \begin{column}{0.4\textwidth}
-            \textbf{Why chunks?}\\[2pt]
-            {\footnotesize The embedding model reads at most 4,096 tokens. Exhibit 3's page is 16,333 characters of padded table. A chunk's ID, such as \texttt{2024-12 p.9 \#1}, says where it came from: the report, the page, the piece.\par}
+            \textbf{Vectors}\\[2pt]
+            {\footnotesize Each lead comes back as a \textbf{vector}, a list of 2,048 numbers. None of them means anything alone. What carries meaning is how two vectors compare.\par}
+            \medskip
+            \textbf{Cosine similarity}\\[2pt]
+            {\footnotesize It measures how nearly two vectors point the same way: 1 if exactly, less the further apart they point. For vectors of length 1, it's their \textbf{dot product}, \texttt{@}: multiply the two lists number by number, and add up.\par}
             \medskip
             \begin{alertblock}{One embedding model}
-                \footnotesize Vectors from two different models don't line up, so they can't be compared. So \texttt{EMBEDDER} gets no fallback list, and a new model means embedding everything again.
+                \footnotesize Two models turn the same text into different numbers, and their vectors can't be compared. So \texttt{EMBEDDER} gets no fallback list. If its daily limit stops you, a given cell loads the vectors saved on November 9, from the same model.
             \end{alertblock}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 12: cosine similarity, and what it finds}
+% img/lead-similarity.png: drawn from labs/week-13/data/wikipedia/lead-vectors.npy and
+% lead-vectors-rows.csv as the key's Step 12 computes it; its table matches the key's printout to 3 places.
+% See img/IMAGES.md. Chapter 13's @fig-lead-similarity is the same data.
+\begin{frame}[fragile]{Step 12: twenty-three years of leads}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-\begin{lstlisting}[columns=flexible]
-question = ("How much revenue did the state share "
-            "back from marijuana taxes?")
-response = requests.post(f"{openrouter_base}/embeddings",
-    json={"model": EMBEDDER, "input": [question]},
-    headers=...).json()
-query = np.array(response["data"][0]["embedding"])
-query = query / np.linalg.norm(query)
-chunks["score"] = vectors @ query
-print(chunks.nlargest(5, "score")[["id", "score"]])
-#                  id     score
-# 41      2019 p.8 #1  0.467471
-# 75      2020 p.9 #1  0.466428
-# 9       2018 p.9 #1  0.463676
-# 187  2023-12 p.9 #1  0.460978
-# 152  2022-12 p.9 #1  0.458975
+        \begin{column}{0.37\textwidth}
+\begin{lstlisting}
+table = leads[leads["year"]
+    != "current"].pivot(index="year",
+    columns="title", values="similarity")
+table.index = table.index.astype(int)
+fig, ax = plt.subplots(figsize=(8, 4.5))
+table.plot(ax=ax, marker="o")
 \end{lstlisting}
+            {\footnotesize Every line climbs toward 1: the closer a January is to today, the more of today's lead it already holds.\par}
+            \medskip
+            {\footnotesize The climbs come in steps, and most sit at an election. Trump's rises from 0.637 to 0.740 between 2016 and 2017, when his lead first called him president-elect. Harris's rises from 0.718 to 0.832 between 2020 and 2021.\par}
+            \medskip
+            {\footnotesize No line reaches 1, even in 2026. Clinton's comes closest, at 0.993.\par}
         \end{column}
-        \begin{column}{0.4\textwidth}
-            {\footnotesize For vectors of length 1, cosine similarity is the dot product: multiply matching numbers, then add. So \texttt{vectors @ query} scores all 243 at once.\par}
-            \medskip
-            \textbf{The same page, five years}\\[2pt]
-            {\footnotesize The top five are the marijuana page from five years, all within 0.01 of each other. 2024's isn't among them.\par}
-            \medskip
-            {\footnotesize ``Total sales and use tax in 2022'' found 2022's summary page first, but the half without the total row. The half with it came fourth.\par}
-            \medskip
-            {\footnotesize So keep only one report's chunks before you rank them: a filter you can check.\par}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/lead-similarity.png}\\
+            {\scriptsize Cosine similarity of each January 1 lead to the article's current lead. Drawn from the lab's saved vectors, as Step 12 computes it; the same data as chapter 13's ``Similarity Over Time''.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 13: search, then one report's best three}
+% The microsprint: the lab key's code and output. The pronunciation in each lead (IPA, which pdflatex
+% can't print) is cut to "...". Biden 2009 +0.109, Trump 2009 +0.129 (93 -> 353 words, leads.csv) and
+% Clinton 2025: the key's Step 15 answer and Discuss; Clinton's rewrite: chapter 13, "What Embeddings Find".
+\begin{frame}[fragile]{Microsprint: the biggest jump}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
 \begin{lstlisting}
-def search(question):
+title = "Kamala Harris"
+jumps = table[title].diff()
+year = jumps.idxmax()
+print(year, round(jumps.max(), 3))
+for y in [year - 1, year]:
+    print(y, leads[(leads["title"] == title)
+        & (leads["year"] == str(y))]["lead"].iloc[0][:400])
+# 2021 0.114
+# 2020 Kamala Devi Harris (...; born October 20, 1964)
+#   is an American lawyer and politician serving as
+#   the junior United States Senator from California
+#   since 2017. ...
+# 2021 Kamala Devi Harris (...; born October 20, 1964)
+#   is an American politician who is the vice
+#   president-elect of the United States and the
+#   junior United States senator from California. ...
+\end{lstlisting}
+            {\footnotesize \texttt{diff()} gives each year's change from the year before, and \texttt{idxmax()} the year of the biggest rise.\par}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{What a jump can tell you}\\[2pt]
+            {\footnotesize Harris's lead jumped most in 2021, when it first called her vice president-elect. Biden's jumped most in 2009 (+0.109), for the same reason.\par}
+            \medskip
+            \textbf{What it can't}\\[2pt]
+            {\footnotesize Trump's biggest jump (+0.129) came in 2009, with no new office: his lead grew from 93 words to 353. Clinton's went from 0.943 in 2024 to 0.992 in 2025, when editors rewrote her opening sentence.\par}
+            \medskip
+            {\footnotesize A similarity measures how far a lead's words moved toward today's. Why they moved is in the text, and in the edit summaries of week 10's revision histories.\par}
+            \medskip
+            {\footnotesize\textbf{Discuss:} which claims about how Wikipedia described these people can a similarity not support?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Step 13: the lab key's code (search() as written there, one line broken for width) and outputs.
+\begin{frame}[fragile]{Step 13: find three leads, then ask}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+\begin{lstlisting}
+def search(question, title):
     response = requests.post(
         f"{openrouter_base}/embeddings",
         json={"model": EMBEDDER, "input": [question]},
         headers=...).json()
     query = np.array(response["data"][0]["embedding"])
-    return vectors @ (query / np.linalg.norm(query))
+    leads["score"] = vectors @ (
+        query / np.linalg.norm(query))
+    return leads[leads["title"] == title
+                 ].nlargest(3, "score")
 
-question = ("How much revenue did the state share "
-            "back from marijuana taxes?")
-chunks["score"] = search(question)
-top = chunks[chunks["report"] == "revenue-report-2024-12"
-             ].nlargest(3, "score")
-print(top["id"].tolist())
-# ['2024-12 p.9 #1', '2024-12 p.9 #2', '2024-12 p.11 #2']
-passages = "\n\n".join(f"{row.id}: {row.text}"
+question = ("In which year did the article first say "
+    "Joe Biden is the 46th president of the "
+    "United States?")
+top = search(question, "Joe Biden")
+print(top[["id", "score"]])
+#                    id     score
+# 92     Joe Biden 2026  0.449356
+# 90     Joe Biden 2024  0.448661
+# 93  Joe Biden current  0.446402
+passages = "\n\n".join(f"{row.id}: {row.lead}"
                        for row in top.itertuples())
 \end{lstlisting}
-            {\footnotesize \texttt{search()} is Step 12's lines in a function, because we search more than once now.\par}
         \end{column}
         \begin{column}{0.4\textwidth}
+            {\footnotesize Finding the passages is \textbf{retrieval}. Writing an answer from them is generation. Together: \textbf{retrieval-augmented generation}, or RAG. A question is embedded like a lead, and the closest leads are the ones the model reads.\par}
+            \medskip
+            {\footnotesize \texttt{search()} keeps one article's best three, so a question about Biden can't be answered from Harris's article.\par}
 \begin{lstlisting}
 # Given: an answer with its sources
 ANSWER_SCHEMA = {"type": "object",
   "properties": {
-    "value": {"type": ["integer", "null"]},
+    "year": {"type": ["integer", "null"]},
     "source_ids": {"type": "array",
         "items": {"type": "string"}}},
-  "required": ["value", "source_ids"],
+  "required": ["year", "source_ids"],
   "additionalProperties": False}
 \end{lstlisting}
-            {\footnotesize \texttt{value} may be \textbf{null}: the model's way to say that no passage prints it. In the lab, each field has a description too.\par}
-            \medskip
-            \textbf{The instruction}\\[2pt]
-            {\footnotesize\itshape ``Give a figure only if a passage prints it; an estimate read from a chart doesn't count. If no passage prints it, answer null.''\par}
+            {\footnotesize \texttt{year} may be \textbf{null}, JSON's word for ``no value'': the model's way to say the passages don't state it. In the lab, each field has a description too.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 13: an answer with sources, or null}
+% The model's answer and the reading loop: the lab key's outputs, each lead trimmed to the sentence
+% about the 46th president (the pronunciation, in IPA, cut to "...").
+\begin{frame}[fragile]{Step 13: the answer, checked by reading}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.53\textwidth}
 \begin{lstlisting}
 body = {"models": MODELS, "temperature": 0,
   "messages": [
@@ -782,68 +919,231 @@ response = requests.post(
 print(response["model"], json.loads(
     response["choices"][0]["message"]["content"]))
 # nvidia/nemotron-3.5-super-vl:free
-# {'value': 529220, 'source_ids': ['2024-12 p.9 #1']}
+# {'year': 2024, 'source_ids': ['Joe Biden 2024']}
 \end{lstlisting}
-            {\footnotesize Wednesday's request, with passages in place of a page.\par}
+            {\footnotesize Wednesday's request, with a new instruction and schema, and three leads in place of a page.\par}
         \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{Check it}\\[2pt]
-            {\footnotesize Week 9's pdfplumber finds \$529,220 printed on Chart 8, page 9: the source it gave.\par}
+        \begin{column}{0.44\textwidth}
+            \textbf{Check it by reading}\\[2pt]
+\begin{lstlisting}
+for row in leads[(leads["title"] == "Joe Biden")
+        & (leads["year"] >= "2020")].itertuples():
+    print(row.id, "|", row.lead[:300], "\n")
+# Joe Biden 2021 | ... the president-elect of
+#   the United States. Biden defeated incumbent
+#   president Donald Trump in the 2020
+#   presidential election and will be
+#   inaugurated as the 46th president on
+#   January 20, 2021. ...
+# Joe Biden 2022 | ... who is the 46th and
+#   current president of the United States. ...
+\end{lstlisting}
+            {\footnotesize The model was right about the passages it got: 2024 is the earliest of 2026, 2024 and today. It's wrong about the question. 2022 and 2023 say the same, and they never reached the model.\par}
             \medskip
-            \textbf{Microsprint: the beverage tax}\\[2pt]
-            {\footnotesize ``How much sugar-sweetened beverage tax did the city collect in December 2024?'' 2024's best three: \texttt{p.2 \#1}, \texttt{p.10 \#1}, \texttt{p.1 \#1}.\par}
-            {\footnotesize \texttt{\{'value': None,\\\ 'source\_ids': ['2024-12 p.10 \#1']\}}\par}
-            \medskip
-            {\footnotesize Null is right: no page prints it, and \texttt{\textasciitilde\$285,000} was Datalab's estimate. But the schema asked for no sources with a null, and it gave one. Check the sources too.\par}
+            {\footnotesize Reading gives \textbf{2022}, the first January 1 on which he is the president. A ranking by similarity has no reason to favor the earliest year.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-% Step 14's outputs: the lab key's, from DeepWiki's public server and the raw pdf/SKILL.md in
-% anthropics/skills ("314 lines" counted on 2026-11-07).
-\begin{frame}[fragile]{Step 14: what tools a server offers, by MCP}
+% Harris: the lab key's microsprint output. "47th president" over all 116 leads: chapter 13,
+% "Retrieval-Augmented Extraction" (checked on leads.csv: Trump 2025, 2026, current). The text search
+% for "46th president" (2021, 2026, current): the key's Step 13 Discuss, checked on leads.csv.
+\begin{frame}[fragile]{Searching for the words, and a null}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \textbf{A text search}\\[2pt]
+            {\footnotesize The first tool you'd try is a search for the words, as week 9 searched a PDF's text layer. \texttt{leads["lead"].str.contains("46th president")} finds Biden's leads of 2021, 2026 and today.\par}
+            \medskip
+            {\footnotesize It misses 2022 to 2025, which call him ``the 46th and current president''. And its 2021 hit says he ``will be inaugurated as the 46th president''. Trump's 2025 lead says the same of the 47th.\par}
+            \medskip
+            {\footnotesize A search finds only the wording you thought to type, and it can't tell ``will be'' from ``is''. Embeddings found leads about the right subject, and missed the first year. The year came from reading.\par}
+        \end{column}
+        \begin{column}{0.47\textwidth}
+            \textbf{Microsprint: Harris, the 47th president?}\\[2pt]
+\begin{lstlisting}
+question = ("In which year did the article "
+    "first say Kamala Harris is the 47th "
+    "president of the United States?")
+top = search(question, "Kamala Harris")
+#                      id     score
+# 111  Kamala Harris 2023  0.426085
+# 110  Kamala Harris 2022  0.423550
+# 112  Kamala Harris 2024  0.423322
+# nvidia/nemotron-3.5-super-vl:free
+# {'year': None, 'source_ids': []}
+\end{lstlisting}
+            {\footnotesize Null is right: of all 116 leads, only Trump's from 2025 on contain ``47th president'' (chapter 13). But the model saw three of Harris's 22 leads. Its null says only that those three don't state it.\par}
+            \medskip
+            {\footnotesize\textbf{Discuss:} to answer a question about the \textit{first} time, what would you send the model instead of the best three?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Step 14: the lab key's code and outputs; the server and its recording: labs/week-13/data/census-mcp/
+% (README.md: run 2026-11-09 at the server's commit 5dcaa63, over stdio).
+\begin{frame}[fragile]{Step 14: tools, and the Census Bureau's MCP server}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            {\footnotesize A model can't fetch data: all it can do is write text. Ask one for Boulder County's median household income, and it answers from its training text, with no table or year you can trace.\par}
+            \medskip
+            {\footnotesize But a request is text. Tell a model which requests it may make, and it can write one for your program to send. Each such request is a \textbf{tool}: a name, a description, and its inputs, as a JSON Schema like Wednesday's.\par}
+            \medskip
+            {\footnotesize The \textbf{Model Context Protocol} (MCP) is a shared way for a server to say which tools it offers. A program sends the method \texttt{tools/list} as \textbf{JSON-RPC}, JSON that names a \texttt{method} to run, with an \texttt{id} the answer repeats.\par}
+            \medskip
+            {\scriptsize\textbf{Docs:} the \href{https://modelcontextprotocol.io/specification/2025-06-18/server/tools}{MCP specification}, tools; the Census Bureau's \href{https://github.com/uscensusbureau/us-census-bureau-data-api-mcp}{Data API MCP server}\par}
+        \end{column}
+        \begin{column}{0.47\textwidth}
+\begin{lstlisting}
+cmcp = ("https://raw.githubusercontent.com/"
+    "cuinfoscience/INFO4617-Fall2026/main/"
+    "labs/week-13/data/census-mcp/")
+tools = requests.get(cmcp + "tools.json",
+                     headers=HEADERS).json()
+for tool in tools:
+    print(tool["name"],
+          tool["inputSchema"]["required"])
+# fetch-aggregate-data ['dataset', 'year', 'get']
+# fetch-dataset-geography ['dataset']
+# list-datasets []
+# resolve-geography-fips ['geography_name']
+# search-data-tables []
+\end{lstlisting}
+            {\footnotesize The server runs on your own computer, with Docker or Node and a database it builds. So it was run once, on November 9, and its real tool list and one session were saved for us.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% The question, TOOL_INSTRUCTION and the call: the lab key's. "B19013_001E alone": the key's header
+% cell (a test the same day).
+\begin{frame}[fragile]{Step 14: the model writes one tool call}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
 \begin{lstlisting}
-mcp = "https://mcp.deepwiki.com/mcp"
-mcp_headers = {**HEADERS,
-    "Accept": "application/json, text/event-stream"}
-hello = {"jsonrpc": "2.0", "id": 1, "method": "initialize",
-  "params": {"protocolVersion": "2025-06-18",
-    "capabilities": {},
-    "clientInfo": {"name": "info4617", "version": "1.0"}}}
-print(requests.post(mcp, json=hello,
-                    headers=mcp_headers).text[:300])
-listing = requests.post(mcp, json={"jsonrpc": "2.0",
-    "id": 2, "method": "tools/list"},
-    headers=mcp_headers).text
-line = [l for l in listing.splitlines()
-        if l.startswith("data: ")][0]
-for tool in json.loads(line[6:])["result"]["tools"]:
-    print(tool["name"], tool["inputSchema"]["required"])
-# ask_wiki_question ['repoName', 'question']
-# read_wiki_contents ['repoName']
-# read_wiki_structure ['repoName']
+functions = [{"type": "function", "function": {
+    "name": tool["name"],
+    "description": tool["description"],
+    "parameters": tool["inputSchema"]}}
+    for tool in tools]
+body = {"models": MODELS, "temperature": 0,
+  "tools": functions, "tool_choice": "required",
+  "messages": [
+    {"role": "system", "content": TOOL_INSTRUCTION},
+    {"role": "user", "content": question}]}
+response = requests.post(
+    f"{openrouter_base}/chat/completions",
+    json=body, headers=...).json()
+call = response["choices"][0]["message"][
+    "tool_calls"][0]["function"]
+args = json.loads(call["arguments"])
+print(response["model"], call["name"], args)
+# nvidia/nemotron-3.5-super-vl:free fetch-aggregate-data
+# {'dataset': 'acs/acs5', 'year': 2024,
+#  'get': {'group': 'B19013'}, 'for': 'county:013',
+#  'in': 'state:08', 'descriptive': True}
 \end{lstlisting}
         \end{column}
         \begin{column}{0.4\textwidth}
-            {\footnotesize The \textbf{Model Context Protocol} (MCP) is a shared way for a server to say which tools it offers. Each message is \textbf{JSON-RPC}: JSON that names a \texttt{method} to run, with an \texttt{id}. DeepWiki's public server needs no key. It answers \texttt{initialize} as a short event stream:\par}
-\begin{lstlisting}[basicstyle=\ttfamily\tiny,language={}]
-event: message
-data: {"jsonrpc":"2.0","id":1,"result":
-  {"protocolVersion":"2025-06-18", ...
-  "serverInfo":{"name":"DeepWiki",
-  "version":"4.0.2"}, ...
-\end{lstlisting}
-            {\footnotesize Each tool's \texttt{inputSchema} is \textbf{JSON Schema}, Wednesday's language: \texttt{"question": \{"type": "string"\}}.\par}
+            \textbf{Week 11's question}\\[2pt]
+            {\footnotesize\itshape ``What was the median household income of Boulder County, Colorado (state FIPS 08, county FIPS 013), in the 2024 ACS 5-year estimates, table B19013?''\par}
+            \medskip
+            {\footnotesize Each tool's \texttt{inputSchema} becomes its \texttt{parameters}. \texttt{tool\_choice} \texttt{"required"} asks for a tool call and no text.\par}
+            \medskip
+            {\footnotesize The model chose \texttt{fetch-aggregate-data}, and asked for \texttt{group} B19013, the whole table. In a test the same day, it asked for \texttt{B19013\_001E} alone, without the margin of error.\par}
+            \medskip
+            {\footnotesize Nothing has gone to the Census Bureau yet. The call is a request the model wrote.\par}
             \medskip
             {\footnotesize\textbf{Discuss:} \texttt{inputSchema} and \texttt{response\_format}: which constrains what a model sends, and which what it returns?\par}
-            \medskip
-            {\scriptsize\textbf{Docs:} the \href{https://modelcontextprotocol.io/specification/2025-06-18/server/tools}{MCP specification}, tools\par}
         \end{column}
     \end{columns}
 \end{frame}
 
+% The lab key's code (url split over two lines for width) and outputs. The recorded server's answer:
+% session.json's last message, its "Source:" line (a URL) left out.
+\begin{frame}[fragile]{Step 14: run the call yourself}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+\begin{lstlisting}
+url = ("https://api.census.gov/data/"
+       f"{args['year']}/{args['dataset']}")
+if "group" in args["get"]:
+    get = f"group({args['get']['group']})"
+else:
+    get = ",".join(args["get"]["variables"])
+params = {"get": get, "for": args["for"],
+          "in": args["in"], "key": census_key}
+data = requests.get(url, params=params,
+                    headers=HEADERS).json()
+print(data)
+# [['B19013_001E', 'B19013_001EA', 'B19013_001M',
+#   'B19013_001MA', 'GEO_ID', 'NAME', 'state', 'county'],
+#  ['103994', None, '2268', None, '0500000US08013',
+#   'Boulder County, Colorado', '08', '013']]
+row = dict(zip(data[0], data[1]))
+print(row["B19013_001E"], row["B19013_001E"] == "103994",
+      row.get("B19013_001M"))
+# 103994 True 2268
+\end{lstlisting}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            {\footnotesize Our code does what the server would have done: it turns the model's arguments into week 11's request, and sends it with \texttt{census\_key}.\par}
+            \medskip
+            \begin{alertblock}{Print the data, never the URL}
+                \footnotesize The URL holds your key. The real server reports its URL with the key replaced by \texttt{REDACTED}.
+            \end{alertblock}
+            \textbf{The same answer, three ways}\\[2pt]
+            {\footnotesize \$103,994, with a margin of error of \$2,268: from this request, from week 11, and from the recorded server's own call:\par}
+\begin{lstlisting}[language={}]
+Response from acs/acs5:
+NAME: Boulder County, Colorado,
+  B19013_001E: 103994, B19013_001M: 2268,
+  state: 08, county: 013
+\end{lstlisting}
+            {\footnotesize Every figure came from the Census Bureau's API. The model chose the tool and filled in its arguments.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% The microsprint: the lab key's output. The 400 for a place without a state: the key's Discuss (week 11).
+\begin{frame}[fragile]{What your code still decides}
+    \begin{columns}[T]
+        \begin{column}{0.53\textwidth}
+            \textbf{Microsprint: ask by name}\\[2pt]
+\begin{lstlisting}
+body["messages"][1]["content"] = (
+    "What was the median household income of the "
+    "city of Boulder, Colorado, in the 2024 ACS "
+    "5-year estimates, table B19013?")
+response = requests.post(
+    f"{openrouter_base}/chat/completions",
+    json=body, headers=...).json()
+call = response["choices"][0]["message"][
+    "tool_calls"][0]["function"]
+print(response["model"], call["name"],
+      json.loads(call["arguments"]))
+# nvidia/nemotron-3.5-super-vl:free
+#   resolve-geography-fips
+# {'geography_name': 'Boulder city, Colorado',
+#  'summary_level': 'Place'}
+\end{lstlisting}
+            {\footnotesize Without the codes, the model chose \texttt{resolve-geography-fips}, to turn the name into codes. The real server answers it from its own database. Our code runs only \texttt{fetch-aggregate-data}, so it can't run this call.\par}
+        \end{column}
+        \begin{column}{0.44\textwidth}
+            \textbf{Which tools run}\\[2pt]
+            {\footnotesize A model can choose any tool it's shown. A program shown a call it can't run has to say so, and refuse or stop.\par}
+            \medskip
+            \textbf{Which arguments go out}\\[2pt]
+            {\footnotesize The model's arguments went into our request unchecked, and our cell quietly dropped one, \texttt{descriptive}. They decide what your code asks for, with your key.\par}
+            \medskip
+            \textbf{Whether the answer is right}\\[2pt]
+            {\footnotesize MCP fixes how a tool is described and called. We know \$103,994 is right because week 11 found it.\par}
+            \medskip
+            {\footnotesize\textbf{Discuss:} with week 11's place code for Boulder, 07850, what would you send instead? Who should check the arguments: the model, the schema, our code, or the Census API? (Week 11's API answered \texttt{400} to a place without a state.)\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% The skill: the lab key's output (d679ddb), the raw pdf/SKILL.md in anthropics/skills ("314 lines":
+% chapter 13, "Skills", counted on 2026-11-07).
 \begin{frame}[fragile]{Step 14: a skill is a Markdown file}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
@@ -869,7 +1169,7 @@ print([line for line in skill.splitlines()
         \end{column}
         \begin{column}{0.4\textwidth}
             \textbf{Front matter, then instructions}\\[2pt]
-            {\footnotesize A \textbf{skill} is a folder of instructions for a model; \texttt{SKILL.md} is its main file. The front matter, between the \texttt{-{}-{}-} lines, gives a \texttt{name} and \texttt{description}. They tell a model when to read the rest: 314 lines of Markdown and code.\par}
+            {\footnotesize A \textbf{skill} is a folder of instructions for a model, plainer still than a tool; \texttt{SKILL.md} is its main file. The front matter, between the \texttt{-{}-{}-} lines, gives a \texttt{name} and \texttt{description}. Like a tool's description, they tell a model when to read the rest: 314 lines of Markdown and code.\par}
             \medskip
             {\footnotesize Its headings name the tools it teaches: \textbf{pypdf} and \textbf{pdfplumber}, week 9's tools, then reportlab, pdftotext, qpdf, and more.\par}
             \medskip
@@ -879,14 +1179,15 @@ print([line for line in skill.splitlines()
     \end{columns}
 \end{frame}
 
+% Step 15's questions and the Recommended Exercises: the lab key's Step 15 (d679ddb).
 \begin{frame}{Step 15: what did we learn, and what's due}
     \begin{columns}[T]
         \begin{column}{0.5\textwidth}
             \textbf{Answer as comments}\\[2pt]
             \begin{itemize}\footnotesize
-                \item Which parts of Datalab's output would you publish, and which would you check first?
-                \item Which reports did the model get wrong: was it the model, or what we sent?
-                \item Why did embeddings find topics more easily than figures?
+                \item Datalab read a picture of a table and wrote descriptions of charts. Which of its output would you publish, and which would you check first?
+                \item Which reports did the model get wrong on Wednesday? Was the problem the model, or what we sent it?
+                \item Which of Step 12's jumps could you explain only by reading the leads? What can a similarity not tell you?
                 \item What would you check your own project's model outputs against?
             \end{itemize}
         \end{column}
@@ -895,12 +1196,13 @@ print([line for line in skill.splitlines()
             {\footnotesize\par From chapter 13's companion notebook, on a public PDF you choose, with no private individuals' names:\par}
             \begin{enumerate}\footnotesize
                 \item Convert it: Monday's Steps 1--3
-                \item Write a schema of your own, and extract
-                \item Check it: a sum, and a ground truth
-                \item Ask a question with sources, and one whose answer isn't there
-                \item Report the costs: pages, cents, requests
+                \item Write a schema of your own, with fields your document prints
+                \item Extract: Step 8's request, and \texttt{extract\_totals()} for more pages
+                \item Check it: a sum, and a ground truth you find
+                \item Retrieve and answer with sources; ask one question your document can't answer
+                \item Report the costs: pages, cents, tokens
             \end{enumerate}
-            {\footnotesize Graded on good-faith attempt to complete rather than getting everything working.\par}
+            {\footnotesize Our leads were short enough to embed whole. A document's pages may first need cutting into chunks, as the chapter shows. Graded on good-faith attempt to complete rather than getting everything working.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -927,11 +1229,11 @@ print([line for line in skill.splitlines()
 % =========================================================================
 \begin{frame}{Key takeaways}
     \begin{enumerate}
-        \item Call a model \textbf{as a function}: one request in, JSON in your schema out. No conversation.
+        \item Call a model \textbf{as a function}: one request in, JSON in your schema or one tool call out. Your code decides what runs.
         \item \textbf{Valid JSON can still be wrong.} Check it against something you trust: a sum, a second tool, a ground truth.
         \item Document APIs \textbf{read} some things and \textbf{write} others. A model wrote the chart's description; the document didn't print it.
         \item The same request can give a different answer. \textbf{Record} the model, the date, and the raw response.
-        \item Embeddings find \textbf{topics}, not figures. An answer needs its \textbf{sources}, or null when there are none.
+        \item Embeddings measure how alike two texts are. \textbf{Read} them to learn why they changed. An answer needs its \textbf{sources}, or null.
     \end{enumerate}
 \end{frame}
 
