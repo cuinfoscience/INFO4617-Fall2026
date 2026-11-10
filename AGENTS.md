@@ -74,10 +74,15 @@ from its companion notebook. Write or change a lab by
 [`labs/AUTHORING.md`](labs/AUTHORING.md): the key is the source, the
 students' copy is made from it by `labs/tools/make_student_copy.py`, and the
 key is run live with `labs/tools/run_key.py`. A lab sets up the Recommended
-Exercises but never solves them. Its code is typed live, so keep it short and
-straight-line: a function only when it's reused, never one inside another,
-and no error handling, which a Discuss question names as a limitation instead
-(AUTHORING's "Code style" and "Pagination"). The classroom comes before the
+Exercises but never solves them. Its code is typed live by students with
+little Python, so a typed cell is one to four plain lines: students type one
+case by hand, and the loop or function that repeats it is a given cell. The
+first request to each service prints what came back, and there is no error
+handling, which a Discuss question names as a limitation instead. Each part
+starts from saved checkpoints. Before the pull request, check every request
+against the provider's current documentation and try the likely mistypes live
+(AUTHORING's "Code style", "By hand, then given", "Checkpoints" and "Check it
+against the provider"; revised 2026-11-10). The classroom comes before the
 key's run: when a site refuses the cloud machine, flag the cell `not-run-live`
 rather than add code to get past it. Commit a key before a long live run, and
 give a refusing site about 30 minutes.
