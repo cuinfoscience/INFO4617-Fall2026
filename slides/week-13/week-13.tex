@@ -348,17 +348,23 @@ print(checked, "rows checked")
 \end{frame}
 
 % =========================================================================
-\section{Wednesday · Live-Coding Lab}
+\section{Wednesday}
 % =========================================================================
 
+\begin{frame}{I was so very very sick}\centering
+    \includegraphics[width=.67\textwidth]{slides/week-13/img/spongebob.png}
+\end{frame}
+
+\section{Friday}
 \begin{frame}{Today: Part 2, a model as a function}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
-            We call a language model like any other API. We send an instruction and one page, and get back JSON in a shape we define. Then we check it against week 9.
+            We will use OpenRouter to call a free language model through an API: we send an instruction and image file, and get back JSON.
             \begin{itemize}\small
                 \item Find the page with the summary table's last row
-                \item Ask for its totals as JSON, with a \textbf{JSON Schema}: a description of the fields we want and their types
-                \item Check them against pdfplumber's figures; then do all seven reports
+                \item Ask for its totals as JSON
+                \item This requires us to define the fields we want and their types
+                \item Check them against \texttt{pdfplumber}'s figures; then do all seven reports
             \end{itemize}
 
             \medskip
@@ -372,8 +378,6 @@ print(checked, "rows checked")
             \begin{alertblock}{Free models are shared}
                 \footnotesize Models whose ID ends in \texttt{:free} cost nothing, and our whole class shares them. When one is busy, it answers \texttt{429}. We send a list of \texttt{models}, and OpenRouter tries the next one.
             \end{alertblock}
-            \textbf{OpenRouter}\\[2pt]
-            {\footnotesize One kind of request reaches models from many companies. OpenRouter is also one more company that sees your documents.\par}
         \end{column}
     \end{columns}
 \end{frame}
