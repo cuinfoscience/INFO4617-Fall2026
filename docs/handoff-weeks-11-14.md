@@ -18,8 +18,8 @@
 | Week | Dates | Chapter | Portfolio checkpoint (due) | State on 2026-11-01 |
 |---|---|---|---|---|
 | 12 | Nov 2–6 | 12, social and media platform APIs | Collect and clean your data (Sun Nov 8) | Planned 2026-11-02 (textbook `docs/plans/2026-11-02-ch12-social-platforms.md`, textbook #300): Bluesky Monday and Wednesday, YouTube Friday, with Reddit after Pushshift and Spotify in the chapter only. Lab Part 1 and Monday's frames built and run (#156). Next: chapter PR A (Bluesky), then Part 2 by Wednesday; PR B, then Part 3 by Friday. |
-| 13 | Nov 9–13 | 13, AI APIs as data tools | Analyze your data (Sun Nov 15) | Planned 2026-11-07 in an AMA (textbook `docs/plans/2026-11-07-ch13-ai-apis.md`): one pipeline on chapter 9's Boulder revenue reports, Datalab Monday, OpenRouter structured output Wednesday, OpenRouter embeddings with retrieval-as-JSON, MCP and a skill Friday; two keys, `DATALAB_KEY` and `OPENROUTER_KEY`, free tiers only. The lab (all three parts, run live) and the deck were built before Monday; the chapter rewrite is the textbook PR, which must merge before Wednesday, since Parts 2 and 3 read its `data/ch-13/`. |
-| 14 | Nov 16–20 | 14, automating data collection | Draft your write-up (Sun Nov 29, after Fall Break) | Old-shape deck; no lab |
+| 13 | Nov 9–13 | 13, AI APIs as data tools | Analyze your data (Sun Nov 15) | Planned 2026-11-07 in an AMA (textbook `docs/plans/2026-11-07-ch13-ai-apis.md`): one pipeline on chapter 9's Boulder revenue reports, Datalab Monday, OpenRouter structured output Wednesday, OpenRouter embeddings with retrieval-as-JSON, MCP and a skill Friday; two keys, `DATALAB_KEY` and `OPENROUTER_KEY`, free tiers only. The lab (all three parts, run live) and the deck were built before Monday; the chapter rewrite is the textbook PR, which must merge before Wednesday, since Parts 2 and 3 read its `data/ch-13/`. Rescheduled 2026-11-12, after Wednesday Nov 11's class was cancelled (the instructor's decision): Part 2 on Friday Nov 13, whose last 15 minutes still go to the checkpoint, and Part 3 on Monday Nov 16; the lab is due Sun Nov 22, and the checkpoint stays on Nov 15. |
+| 14 | Nov 16–20 | 14, automating data collection | Draft your write-up (Sun Nov 29, after Fall Break) | Old-shape deck; no lab. From 2026-11-12, Monday Nov 16 runs week 13's Part 3, and automation runs Wednesday and Friday |
 | — | Nov 23–27 | Fall Break | — | — |
 | Final | Nov 30–Dec 4 | — | Presentation; repository and write-up due Mon Dec 7 | — |
 
@@ -47,7 +47,7 @@ instructor publishes each week.
 |---|---|---|---|---|
 | 2852043 | Week 11 Lab — Government data APIs | 10 | Sun Nov 1 | Notebook Lab |
 | 2852044 | Week 12 Lab — Social & media platform APIs | 10 | Sun Nov 8 | Notebook Lab |
-| 2852045 | Week 13 Lab — AI & language-model APIs | 10 | Sun Nov 15 | Notebook Lab |
+| 2852045 | Week 13 Lab — AI & language-model APIs | 10 | Sun Nov 22 (moved from Nov 15 on 2026-11-12; Canvas still to change) | Notebook Lab |
 | 2852046 | Week 14 Lab — Automating data collection | 10 | Sun Nov 22 | Notebook Lab |
 | 2852056 | Week 11 Portfolio — Set up your project repo | 2 | Sun Nov 1 | Week 11 Portfolio |
 | 2852057 | Week 12 Portfolio — Collect and clean your data | 2 | Sun Nov 8 | Week 12 Portfolio |

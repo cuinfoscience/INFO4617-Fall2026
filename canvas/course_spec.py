@@ -144,6 +144,11 @@ GROUPS = [
 ]
 
 LAB_POINTS = 10
+# Labs whose deadline isn't the Sunday that closes their week. Week 13's moved
+# to Sunday, Nov 22, when Wednesday Nov 11's class was cancelled and Part 3 of
+# its lab moved to Monday Nov 16 (the instructor's decision of 2026-11-12). Its
+# portfolio checkpoint stays on Nov 15.
+LAB_DUE = {13: date(2026, 11, 22)}
 # Textbook Revisions are credit/no credit: 1 point for any issue, pull request,
 # or comment that lands on GitHub in a class repository (the book, this repo,
 # or the Missing Manual). Set in Canvas on 2026-10-23; docs/course-facts.md.
@@ -265,7 +270,8 @@ def lab_items(week_number: int) -> list:
 # --------------------------------------------------------------------------
 
 def lab_assignments():
-    """One notebook lab per teaching week, met Wednesday and due that Sunday."""
+    """One notebook lab per teaching week, met Wednesday and due that Sunday,
+    unless LAB_DUE gives another day."""
     out = []
     for wk in TEACHING_WEEKS:
         _, _, ch, topic, slug, chfile, _ = week_info(wk)
@@ -275,7 +281,7 @@ def lab_assignments():
             "group": "Notebook Labs",
             "name": f"Week {wk} Lab — {topic}",
             "points_possible": LAB_POINTS,
-            "due_at": due_at(sunday_of(wk)),
+            "due_at": due_at(LAB_DUE.get(wk) or sunday_of(wk)),
             # HTML export only: the file shows code and output together,
             # and the upload widget refuses anything but .html
             "submission_types": ["online_upload"],
