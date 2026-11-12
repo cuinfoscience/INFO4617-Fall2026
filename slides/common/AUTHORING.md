@@ -47,9 +47,10 @@ recently — voice evolves forward, not backward.
    week's lab notebook is, how to use it, and where its key is; see week 10 and
    [`labs/AUTHORING.md`](../../labs/AUTHORING.md);
    the lab's code is shorter and plainer than the chapter's, so say which these frames show)
-   — condensed **real code** from the
-   chapter as `[fragile]` frames with `lstlisting` (trim each snippet to
-   ≤ ~12 lines; keep it runnable-looking and faithful), plus:
+   — **real code** from the
+   chapter or lab as `[fragile]` frames with `lstlisting`, **one block of about 8 lines or fewer
+   per frame**, each with its own narration (see "Layout and density" below;
+   keep the code runnable-looking and faithful), plus:
    - a frame listing the chapter's **Exercises** to work in pairs (mark any "graduate / INFO 5617" exercise with a bold `\textbf{5617}` label);
    - a **Show-and-Tell** prompt (bring a bug / interesting data / a research provocation — the instructor's recurring habit);
 
@@ -188,6 +189,51 @@ none in `stubs.tsv`, which lists what the deck includes.
 Chrome's XML viewer and View Source, crops, and markers. Read it before a
 capture, and add a note when a capture teaches you something the next person
 would otherwise find out again.
+
+## Layout and density (the instructor's strongest rules, 2026-11-12)
+
+The instructor rewrote this section after the week 13 deck put code in both
+columns of one frame and reprinted every cell's output as comments. Their
+words: the text and information density was "far, far too high", and code in
+both columns "can never happen again". These rules outrank everything else in
+this file, and a deck that breaks them is not ready, however correct its code.
+
+**Interpretability comes first.** A frame exists so the room can follow one
+step while the instructor narrates it. Prefer simple, narrated code that a
+student with little Python can read aloud over packing in as much code as
+fits. When in doubt, add a frame; never compress one.
+
+**One code block per frame.** Two `lstlisting` blocks on one frame are
+strongly penalized, whether side by side, stacked, or code plus its output.
+A cell too long for one frame becomes two frames, each with its own
+narration; cut a long dictionary or call with `...` and show the cut part on
+the next frame.
+
+**Narration on the left, code or image on the right.** Use
+`\begin{column}{0.37\textwidth}` for narration and
+`\begin{column}{0.6\textwidth}` for the code, image, or table. The only
+other layout is no columns: the code or image alone, with narration above or
+below it. **Never put code or an image on the left with narration on the
+right**; this needs the instructor's explicit permission.
+
+**Small budgets.** About 8 lines of code (wrap lines at about 58 characters)
+and about 40 words of narration per frame: two or three short statements, a
+question for the room, and, where it helps, a one-line `Docs:` link. A
+concept frame without code follows the same word budget.
+
+**No printed output on the slides.** The slides are not the source of truth.
+They are a scaffold into the notebook and the textbook: students run the cell
+to see what it prints. So no `# output` comments in a listing, no listing of
+a cell's output, and no figures quoted from a key's run in the narration.
+Ask instead what to look for ("Do both totals match? Is the year 2024?"). A
+figure the students will make themselves may appear on its own frame, as an
+image, when the class needs it to discuss. A comment inside code stays only
+when the code can't be read without it.
+
+**Plain narration.** Short declarative sentences and questions, in the
+course's voice; no headline-style labels stacked in a column, no
+"not X, but Y" reframes, no aphorisms. Run the trope check in "Voice and
+frame patterns" below before you finish.
 
 ## Voice and frame patterns (learned from the instructor's week-02 and week-03 rewrites)
 
@@ -399,10 +445,16 @@ clean. Never leave a broken deck.
   surrounding LaTeX, because the indentation prints inside the listing. (The
   instructor hit this once restructuring a frame in Overleaf and had to fix it
   in a follow-up commit; save him the round trip.)
-- Keep two-column `\begin{columns}[T]` layouts like week-06 for text+image or text+code.
-  Default the split to `\begin{column}{0.6\textwidth}` / `\begin{column}{0.35\textwidth}`
-  (left/right) unless a frame genuinely needs a different ratio — e.g. a three-column
-  comparison, or two columns that must stay visually symmetric.
+- Keep two-column `\begin{columns}[T]` layouts like week-06: narration on
+  the left, and the image or code on the right, never the reverse (see
+  "Layout and density"). A concept frame with an image splits
+  `0.6`/`0.35`; a code frame splits `0.37` narration / `0.6` code, so a
+  listing can hold lines of about 58 characters. A deck whose frames each
+  hold one short listing may set `\lstset{basicstyle=\ttfamily\footnotesize}`
+  after `\input{preamble}`, as week 13 does, so the code reads from the back
+  of the room.
+- One `lstlisting` per frame, about 8 lines, no `# output` comments. See
+  "Layout and density".
 - Use `\texttt{}` for inline code, package, and file names.
 - **Write procedures in Simplified Technical English (ASD-STE100).** Anything a
   student *executes* — lab exercises, in-class activities, setup steps, the
