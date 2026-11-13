@@ -7,7 +7,10 @@ name: Collect Boulder's hourly forecast (week 14)
 
 on:
   schedule:
-    - cron: "17 * * * *"
+    # Minute 23 of every hour, in UTC. Moved from minute 17 on 2026-11-13,
+    # after the schedule had not fired once in five hours, so GitHub would
+    # register it again.
+    - cron: "23 * * * *"
   workflow_dispatch:
 
 permissions:

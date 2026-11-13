@@ -1,7 +1,7 @@
 # Boulder's hourly forecast, collected every hour
 
 `forecasts.csv` is written by `.github/workflows/collect-boulder-forecast.yml`, which runs
-`labs/week-14/template/collector.py` here at minute 17 of every hour (UTC) until December 11, 2026.
+`labs/week-14/template/collector.py` here at minute 23 of every hour (UTC; minute 17 until 2026-11-13) until December 11, 2026.
 Each run appends one row per forecast hour from the National Weather Service's hourly forecast for
 Boulder, Colorado (`https://api.weather.gov/gridpoints/BOU/54,75/forecast/hourly`): about 156 rows.
 
