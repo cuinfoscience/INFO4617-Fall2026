@@ -68,7 +68,7 @@ recently — voice evolves forward, not backward.
    established alternative (week-04) — the three-section Monday/Wednesday/
    Friday split is the default, not a hard requirement.
 6. `\section{Friday · <this week's activity>}` (from week 10, `\section{Friday}`) — Friday is the course's
-   workshop. In weeks 11–14 its 15 minutes are the week's project-portfolio
+   workshop. In weeks 11–13 (and, in fall 2026, not week 14, which has none) its 15 minutes are the week's project-portfolio
    checkpoint (one frame: what it asks and when it's due, from
    `docs/course-facts.md`; decided 2026-11-02). In week 10, it was the
    15-minute revision block at the end of
