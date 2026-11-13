@@ -216,10 +216,55 @@ other layout is no columns: the code or image alone, with narration above or
 below it. **Never put code or an image on the left with narration on the
 right**; this needs the instructor's explicit permission.
 
-**Small budgets.** About 8 lines of code (wrap lines at about 58 characters)
+**Small budgets.** About 8 lines of code, plus its one-line comments, and at
+most about 12 printed lines in a listing (wrap lines at about 58 characters);
 and about 40 words of narration per frame: two or three short statements, a
 question for the room, and, where it helps, a one-line `Docs:` link. A
-concept frame without code follows the same word budget.
+concept frame without code follows the same word budget. When the code-shape
+rules below make a listing longer than that, split it across frames.
+
+**Code shaped for reading (instructor, 2026-11-13).** Visual
+interpretability for semi-technical novices demands clarity, space and
+narration, so a listing on a slide is laid out for reading aloud, not for
+saving lines:
+
+- **A one-line comment above each step.** A step is the line or few lines
+  that do one thing ("Send it, with the key in a header"; "Keep the rows
+  whose third cell is a year"). Plain words, no output in the comment, one
+  line each.
+- **No more than two chained methods.** `results.drop(columns="model").to_string()`
+  is the most; `c.strip().replace("<b>", "").replace(",", "")` is not.
+  Break a longer chain into named steps.
+- **One argument per line** when a call has more than two arguments or
+  doesn't fit on one line, with the closing parenthesis on its own line;
+  the same for a dictionary or list with more than two entries, one entry
+  per line. Name a long condition or a deep index in a variable first
+  (`is_obama = leads["title"] == "Barack Obama"`) rather than wrapping it.
+  For example, not
+
+  ```python
+  table = leads[leads["year"] != "current"].pivot(
+      index="year", columns="title", values="similarity")
+  ```
+
+  but
+
+  ```python
+  # The January 1 leads, without today's
+  past = leads[leads["year"] != "current"]
+  # A row per year, a column per article
+  table = past.pivot(
+      index="year",
+      columns="title",
+      values="similarity",
+  )
+  ```
+- **Same behavior as the lab key.** The slide may lay the key's code out
+  this way and give a step a name the key doesn't use, but it must do the
+  same thing and print the same things. Where the slide's shape and the
+  key's differ, say so in the frame's narration ("The notebook writes this
+  in one line") or, better, change the key's cell to match the next time
+  the lab is edited.
 
 **No printed output on the slides.** The slides are not the source of truth.
 They are a scaffold into the notebook and the textbook: students run the cell
@@ -453,8 +498,10 @@ clean. Never leave a broken deck.
   hold one short listing may set `\lstset{basicstyle=\ttfamily\footnotesize}`
   after `\input{preamble}`, as week 13 does, so the code reads from the back
   of the room.
-- One `lstlisting` per frame, about 8 lines, no `# output` comments. See
-  "Layout and density".
+- One `lstlisting` per frame, about 8 lines of code plus one-line comments,
+  at most two chained methods, one argument per line in long calls, no
+  `# output` comments. See "Layout and density" and its "Code shaped for
+  reading".
 - Use `\texttt{}` for inline code, package, and file names.
 - **Write procedures in Simplified Technical English (ASD-STE100).** Anything a
   student *executes* — lab exercises, in-class activities, setup steps, the

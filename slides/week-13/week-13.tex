@@ -31,6 +31,9 @@
 % to fit and sometimes cut with "...". They show no printed output: the slides lead into the
 % notebook, where students run each cell and see what it prints (instructor, 2026-11-12).
 % One code block a frame, narration on the left and code on the right: slides/common/AUTHORING.md.
+% Code shaped for reading (2026-11-13): a one-line comment above each step, at most two chained
+% methods, one argument per line in long calls. Where a slide names a step the key doesn't, it does
+% the same thing and prints the same things; its narration says when the notebook writes it otherwise.
 \begin{frame}{This week at a glance}
     \begin{center}
     \begin{tikzpicture}[node distance=0.35cm, >=stealth, stage/.append style={text width=6.3em}]
@@ -120,6 +123,7 @@
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# Store each key in the webdata environment
 conda env config vars set DATALAB_KEY="..." -n webdata
 conda env config vars set OPENROUTER_KEY="..." -n webdata
 \end{lstlisting}
@@ -134,37 +138,66 @@ conda env config vars set OPENROUTER_KEY="..." -n webdata
 
             \medskip
             Does yours say \texttt{MISSING}? Run the given \texttt{getpass()} cell under it.
+
+            \medskip
+            The notebook writes each check in one line.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-print("DATALAB_KEY:", "set"
-      if os.environ.get("DATALAB_KEY") else "MISSING")
-print("OPENROUTER_KEY:", "set"
-      if os.environ.get("OPENROUTER_KEY") else "MISSING")
+# Is the Datalab key set? Print "set" or "MISSING"
+found = os.environ.get("DATALAB_KEY")
+print("DATALAB_KEY:", "set" if found else "MISSING")
+# The same for the OpenRouter key
+found = os.environ.get("OPENROUTER_KEY")
+print("OPENROUTER_KEY:", "set" if found else "MISSING")
 \end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 1: submit a document}
+\begin{frame}[fragile]{Step 1: what to send}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            We send Datalab a link to week 9's 2024 report. Datalab fetches the PDF and starts reading it.
+            We send Datalab a link to week 9's 2024 report, not the file. Datalab fetches the PDF itself.
 
             \medskip
-            What comes back first is a ticket. Which field is it?
+            Which line asks for Markdown? Which asks for the cost of a fresh conversion?
 
             \medskip
             {\scriptsize\textbf{Docs:} Datalab's \href{https://documentation.datalab.to/docs/recipes/conversion/conversion-api-overview}{Convert API}\par}
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-data = {"file_url": book + "revenue-report-2024-12.pdf",
-        "output_format": "markdown",
-        "mode": "balanced", "paginate": "true",
-        "skip_cache": "true"}
-job = requests.post(f"{datalab_base}/convert", data=data,
-    headers={"X-API-Key": datalab_key, **HEADERS}).json()
+# A link to the PDF, and how to convert it
+data = {
+    "file_url": book + "revenue-report-2024-12.pdf",
+    "output_format": "markdown",
+    "mode": "balanced",
+    "paginate": "true",
+    "skip_cache": "true",
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: submit it}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Post it with your key in a header.
+
+            \medskip
+            What comes back first is a ticket. Which field is it?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it, with the key in a header
+job = requests.post(
+    f"{datalab_base}/convert",
+    data=data,
+    headers={"X-API-Key": datalab_key, **HEADERS},
+).json()
+# The ticket
 print(job)
 \end{lstlisting}
         \end{column}
@@ -181,8 +214,11 @@ print(job)
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-check = requests.get(job["request_check_url"],
-    headers={"X-API-Key": datalab_key, **HEADERS}).json()
+# Ask the ticket's address how the job is going
+check = requests.get(
+    job["request_check_url"],
+    headers={"X-API-Key": datalab_key, **HEADERS},
+).json()
 print(check["status"])
 \end{lstlisting}
         \end{column}
@@ -192,21 +228,22 @@ print(check["status"])
 \begin{frame}[fragile]{Step 2: wait for the result}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            This cell is given. It asks again every two seconds until the job is done. Then it prints the pages, the cost, and the time.
+            This cell is given. It asks again every two seconds until the job is done, then prints the pages and the cost.
 
             \medskip
             \textbf{Discuss:} what would this loop do if Datalab never finished?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# Ask again every two seconds while it's processing
 while check["status"] == "processing":
     time.sleep(2)
-    check = requests.get(job["request_check_url"],
-        headers={"X-API-Key": datalab_key,
-                 **HEADERS}).json()
+    check = requests.get(
+        job["request_check_url"],
+        headers={"X-API-Key": datalab_key, **HEADERS},
+    ).json()
+# Done: print the status
 print("status:", check["status"])
-print(check["page_count"], "pages,",
-      check["total_cost"], "cents")
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -222,9 +259,11 @@ print(check["page_count"], "pages,",
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# The whole report, as one string of Markdown
 markdown = check["markdown"]
-pages = re.split(r"\n*\{\d+\}-{10,}\n*",
-                 markdown)[1:]
+# Split it at each page marker; drop the empty first piece
+pages = re.split(r"\n*\{\d+\}-{10,}\n*", markdown)[1:]
+# How many pages, and the start of the summary page
 print(len(pages), "pages")
 print(pages[1][:1200])
 \end{lstlisting}
@@ -242,7 +281,10 @@ print(pages[1][:1200])
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-exhibit = pages[14][pages[14].index("|"):]
+# Page 15 (index 14), from the table's first "|"
+start = pages[14].index("|")
+exhibit = pages[14][start:]
+# The first 10 lines, each cut at 150 characters
 for line in exhibit.splitlines()[:10]:
     print(line[:150])
 \end{lstlisting}
@@ -284,17 +326,39 @@ for line in exhibit.splitlines()[:10]:
             Week 9's first check: a row's twelve months should add up to its total.
 
             \medskip
-            First, split each line of the table on \texttt{|}, and strip the bold tags and commas. A row we want starts with a year.
+            First, split each line on \texttt{|} and clean each cell. The notebook does the cleaning in one list comprehension.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 for line in pages[14].splitlines():
-    cells = [c.strip().replace("<b>", "")
-             .replace("</b>", "").replace(",", "")
-             for c in line.split("|")]
-    if len(cells) > 16 and re.fullmatch(r"20\d\d",
-                                         cells[2]):
-        ...
+    # Split the row at each "|", and clean each cell
+    cells = []
+    for c in line.split("|"):
+        c = c.strip().replace(",", "")
+        c = c.replace("<b>", "").replace("</b>", "")
+        cells.append(c)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: keep the rows with a year}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A row we want has more than 16 cells, and its third cell is a year.
+
+            \medskip
+            Why check the length first?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+for line in pages[14].splitlines():
+    ...  # split and clean, as on the last frame
+    # Keep a row with enough cells
+    if len(cells) > 16:
+        # ...whose third cell is a year
+        if re.fullmatch(r"20\d\d", cells[2]):
+            ...  # add up its months: next frame
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -312,11 +376,12 @@ for line in pages[14].splitlines():
 \begin{lstlisting}
 checked = 0
 for line in pages[14].splitlines():
-    ...
-        months = sum(int(c) for c in cells[3:15])
-        checked += 1
-        if abs(months - int(cells[15])) > 5:
-            print(cells[2], months, cells[15])
+    ...  # split, clean, and keep the year rows
+            # Add the months; compare with the total
+            months = sum(int(c) for c in cells[3:15])
+            checked += 1
+            if abs(months - int(cells[15])) > 5:
+                print(cells[2], months, cells[15])
 print(checked, "rows checked")
 \end{lstlisting}
         \end{column}
@@ -366,11 +431,15 @@ print(checked, "rows checked")
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-print("OPENROUTER_KEY:", "set"
-      if os.environ.get("OPENROUTER_KEY") else "MISSING")
+# Is the key set?
+found = os.environ.get("OPENROUTER_KEY")
+print("OPENROUTER_KEY:", "set" if found else "MISSING")
+# Where OpenRouter's API is, and the book's saved Markdown
 openrouter_base = "https://openrouter.ai/api/v1"
-saved = ("https://raw.githubusercontent.com/cuinfoscience/"
-         "Web-Data-Science-Book/main/data/ch-13/")
+saved = (
+    "https://raw.githubusercontent.com/cuinfoscience/"
+    "Web-Data-Science-Book/main/data/ch-13/"
+)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -386,11 +455,15 @@ saved = ("https://raw.githubusercontent.com/cuinfoscience/"
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# Read the 2024 report's saved Markdown
 report = saved + "revenue-report-2024-12.md"
 markdown = requests.get(report, headers=HEADERS).text
+# Split it into pages, as on Monday
 pages = re.split(r"\n*\{\d+\}-{10,}\n*", markdown)[1:]
-summary = [page for page in pages
-           if "Total Sales and Use Tax" in page][0]
+# The first page with the row we want
+matches = [page for page in pages
+           if "Total Sales and Use Tax" in page]
+summary = matches[0]
 print(summary[:1000])
 \end{lstlisting}
         \end{column}
@@ -407,14 +480,17 @@ print(summary[:1000])
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-SCHEMA = {"type": "object",
+# The answer's shape: four fields, each with a type
+SCHEMA = {
+    "type": "object",
     "properties": {
         "month": {"type": "string", "enum": MONTHS},
         "year": {"type": "integer"},
         "total_prior": {"type": "integer"},
-        "total_current": {"type": "integer"}},
-    "required": ["month", "year",
-                 "total_prior", "total_current"]}
+        "total_current": {"type": "integer"},
+    },
+    "required": [...],  # all four
+}
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -430,10 +506,30 @@ SCHEMA = {"type": "object",
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# The model's job, in plain words
 INSTRUCTION = (
     "You extract figures from one page of a City of "
     "Boulder revenue report. Copy numbers exactly as "
-    "printed, without $ or commas. Use only the page.")
+    "printed, without $ or commas. Use only the page."
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: three models}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The whole class shares these free models. If the first is busy, OpenRouter tries the next.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Three free models, tried in this order
+MODELS = [
+    "nvidia/nemotron-3.5-super-vl:free",
+    "google/gemma-4-31b-it:free",
+    "dots-studio/dots-3-note-preview:free",
+]
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -442,9 +538,6 @@ INSTRUCTION = (
 \begin{frame}[fragile]{Step 8: the request's body}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            \texttt{models}: three free models. If the first is busy, OpenRouter tries the next.
-
-            \medskip
             \texttt{temperature} 0 asks for the model's most likely answer.
 
             \medskip
@@ -452,13 +545,14 @@ INSTRUCTION = (
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-MODELS = ["nvidia/nemotron-3.5-super-vl:free",
-          "google/gemma-4-31b-it:free",
-          "dots-studio/dots-3-note-preview:free"]
-body = {"models": MODELS, "temperature": 0,
-        "messages": [...],
-        "response_format": {...},
-        "provider": {"require_parameters": True}}
+# What we send to the model
+body = {
+    "models": MODELS,
+    "temperature": 0,
+    "messages": [...],
+    "response_format": {...},
+    "provider": {"require_parameters": True},
+}
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -474,9 +568,11 @@ body = {"models": MODELS, "temperature": 0,
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# First our instruction, then the page
 "messages": [
     {"role": "system", "content": INSTRUCTION},
-    {"role": "user", "content": summary}],
+    {"role": "user", "content": summary},
+],
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -495,11 +591,17 @@ body = {"models": MODELS, "temperature": 0,
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# Answer in SCHEMA's shape, with no other fields
 "response_format": {
     "type": "json_schema",
-    "json_schema": {"name": "totals", "strict": True,
-                    "schema": SCHEMA}},
-"provider": {"require_parameters": True}
+    "json_schema": {
+        "name": "totals",
+        "strict": True,
+        "schema": SCHEMA,
+    },
+},
+# Only models that accept response_format
+"provider": {"require_parameters": True},
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -508,19 +610,39 @@ body = {"models": MODELS, "temperature": 0,
 \begin{frame}[fragile]{Step 8: send it}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Post the body with your key in the header.
-
-            \medskip
-            Print three things: any error, which model answered, and \texttt{usage}, the tokens in and out. Did the first model answer?
+            Post the body to the chat completions endpoint, with your key in the header.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# Post the body, with the key in a header
 response = requests.post(
-    f"{openrouter_base}/chat/completions", json=body,
-    headers={"Authorization": f"Bearer {openrouter_key}",
-             **HEADERS}).json()
+    f"{openrouter_base}/chat/completions",
+    json=body,
+    headers={
+        "Authorization": f"Bearer {openrouter_key}",
+        **HEADERS,
+    },
+).json()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: what came back}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Print three things: any error, which model answered, and \texttt{usage}, the tokens in and out.
+
+            \medskip
+            Did the first model answer?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Any error?
 print(response.get("error"))
+# Which model answered, and was it one of ours?
 print(response["model"], response["model"] in MODELS)
+# How many tokens in, and how many out
 print(response["usage"])
 \end{lstlisting}
         \end{column}
@@ -537,29 +659,58 @@ print(response["usage"])
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-answer = json.loads(
-    response["choices"][0]["message"]["content"])
+# The first choice's message holds the answer, as text
+content = response["choices"][0]["message"]["content"]
+# Turn that text into a dictionary
+answer = json.loads(content)
 print(answer)
 \end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 9: check it against week 9}
+\begin{frame}[fragile]{Step 9: check the prior year}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             \texttt{TRUTH}, given, holds week 9's pdfplumber figures for each report. That is our \textbf{ground truth}.
 
             \medskip
-            Do both totals match? Is the year 2024?
+            Does the model's total for 2023 match?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# Week 9's two totals for the 2024 report
 prior, current = TRUTH["revenue-report-2024-12"]
-print("prior:  ", answer["total_prior"], prior,
-      answer["total_prior"] == prior)
-print("current:", answer["total_current"], current,
-      answer["total_current"] == current)
+# The model's total, week 9's, and whether they match
+print(
+    "prior:  ",
+    answer["total_prior"],
+    prior,
+    answer["total_prior"] == prior,
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: check the report's year}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same for 2024's total. Then look at the year and month.
+
+            \medskip
+            Is the year 2024? Where on the page could another year come from?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The same for the report's own year
+print(
+    "current:",
+    answer["total_current"],
+    current,
+    answer["total_current"] == current,
+)
+# Is this 2024, and December?
 print(answer["year"], answer["month"])
 \end{lstlisting}
         \end{column}
@@ -576,13 +727,15 @@ print(answer["year"], answer["month"])
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# The same body, but only the third model in the list
 response = requests.post(
     f"{openrouter_base}/chat/completions",
     json={**body, "models": [MODELS[2]]},
-    headers={"Authorization": f"Bearer {openrouter_key}",
-             **HEADERS}).json()
-print(response["model"], json.loads(
-    response["choices"][0]["message"]["content"]))
+    headers=...,  # your key, as above
+).json()
+# Which model answered, and what it said
+content = response["choices"][0]["message"]["content"]
+print(response["model"], json.loads(content))
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -609,19 +762,45 @@ print(response["model"], json.loads(
             We will send Step 8's request seven times, once for each report. Only the page changes.
 
             \medskip
-            So put the request in a function that takes the page.
+            So the body goes in a function that takes the page.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 def extract_totals(page):
-    body = {"models": MODELS, "temperature": 0,
-            "messages": [..., {"role": "user",
-                               "content": page}], ...}
+    # Step 8's body, with this page as the user message
+    body = {
+        "models": MODELS,
+        "temperature": 0,
+        "messages": [
+            {"role": "system", "content": INSTRUCTION},
+            {"role": "user", "content": page},
+        ],
+        ...  # response_format and provider, as before
+    }
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: send, and return the answer}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The rest of the function sends the body and returns two things: the answer, and the model that gave it.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+def extract_totals(page):
+    ...  # the body, as on the last frame
+    # Send it, as in Step 8
     response = requests.post(
         f"{openrouter_base}/chat/completions",
-        json=body, headers=...).json()
-    content = response["choices"][0]["message"]["content"]
-    return json.loads(content), response["model"]
+        json=body,
+        headers=...,
+    ).json()
+    # The answer, and the model that gave it
+    message = response["choices"][0]["message"]
+    answer = json.loads(message["content"])
+    return answer, response["model"]
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -630,21 +809,22 @@ def extract_totals(page):
 \begin{frame}[fragile]{Step 10: seven reports}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            For each report, find its summary page and send it.
-
-            \medskip
-            \texttt{time.sleep(2)} spaces out the requests to a shared free model.
+            For each report, read its Markdown, find its summary page, and send it.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 rows = []
 for report, (prior, current) in TRUTH.items():
-    md = requests.get(saved + report + ".md",
-                      headers=HEADERS).text
+    # Read this report, and split it into pages
+    md = requests.get(
+        saved + report + ".md",
+        headers=HEADERS,
+    ).text
     pages = re.split(r"\n*\{\d+\}-{10,}\n*", md)[1:]
-    summary = [page for page in pages
-               if "Total Sales and Use Tax" in page][0]
-    answer, model = extract_totals(summary)
+    # Send its summary page to the model
+    matches = [page for page in pages
+               if "Total Sales and Use Tax" in page]
+    answer, model = extract_totals(matches[0])
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -656,16 +836,34 @@ for report, (prior, current) in TRUTH.items():
             Each row keeps the model's answer and whether each total matches week 9.
 
             \medskip
+            \texttt{time.sleep(2)} spaces out the requests to a shared free model.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+    # Keep the answer, and whether each total matches
+    rows.append({
+        "report": report,
+        "model": model,
+        **answer,
+        "prior_ok": answer["total_prior"] == prior,
+        "current_ok": answer["total_current"] == current,
+    })
+    time.sleep(2)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: the table}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
             Which reports came back wrong in your table? Are they the ones your neighbor got wrong?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-    rows.append({"report": report, "model": model,
-        **answer,
-        "prior_ok": answer["total_prior"] == prior,
-        "current_ok": answer["total_current"] == current})
-    time.sleep(2)
+# One row per report
 results = pd.DataFrame(rows)
+# Print it without the model column
 print(results.drop(columns="model").to_string())
 \end{lstlisting}
         \end{column}
@@ -705,9 +903,12 @@ print(results.drop(columns="model").to_string())
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-INSTRUCTION = (INSTRUCTION
+# Add the schema to the instruction, as text
+INSTRUCTION = (
+    INSTRUCTION
     + " Answer with JSON that fits this schema: "
-    + json.dumps(SCHEMA))
+    + json.dumps(SCHEMA)
+)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -766,7 +967,7 @@ INSTRUCTION = (INSTRUCTION
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 11: find one old version}
+\begin{frame}[fragile]{Step 11: ask for one old version}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             Which revision of Obama's article did a reader see on January 1, 2009? Start at that moment, walk back in time, and stop after one.
@@ -776,14 +977,67 @@ INSTRUCTION = (INSTRUCTION
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-params = {"action": "query", "titles": "Barack Obama",
-          "prop": "revisions", "rvprop": "ids|timestamp",
-          "rvlimit": 1, "rvstart": "2009-01-01T00:00:00Z",
-          "rvdir": "older", "format": "json"}
-data = requests.get(API, params=params,
-                    headers=HEADERS).json()
-page = list(data["query"]["pages"].values())[0]
+# One revision: the last one before 2009 began
+params = {
+    "action": "query",
+    "titles": "Barack Obama",
+    "prop": "revisions",
+    "rvprop": "ids|timestamp",
+    "rvlimit": 1,
+    "rvstart": "2009-01-01T00:00:00Z",
+    "rvdir": "older",
+    "format": "json",
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: find one old version}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Send it, then go down to the page and its one revision.
+
+            \medskip
+            What is the revision's timestamp? Why is it before midnight?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it
+data = requests.get(
+    API,
+    params=params,
+    headers=HEADERS,
+).json()
+# Go down to the page, then to its one revision
+found = data["query"]["pages"]
+page = list(found.values())[0]
 revision = page["revisions"][0]
+print(revision)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: ask for its lead}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{action=parse} returns a revision as HTML. \texttt{section=0} asks for the lead alone.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://www.mediawiki.org/wiki/API:Parsing_wikitext}{parse}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# That revision's lead (section 0), as HTML
+params = {
+    "action": "parse",
+    "oldid": revision["revid"],
+    "prop": "text",
+    "section": 0,
+    "format": "json",
+    "formatversion": 2,
+}
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -792,21 +1046,17 @@ revision = page["revisions"][0]
 \begin{frame}[fragile]{Step 11: get its lead as HTML}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            \texttt{action=parse} returns that revision as HTML. \texttt{section=0} asks for the lead alone.
-
-            \medskip
             Read the paragraphs. Does anything look out of place?
-
-            \medskip
-            {\scriptsize\textbf{Docs:} \href{https://www.mediawiki.org/wiki/API:Parsing_wikitext}{parse}\par}
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-params = {"action": "parse", "oldid": revision["revid"],
-          "prop": "text", "section": 0,
-          "format": "json", "formatversion": 2}
-html = requests.get(API, params=params,
-    headers=HEADERS).json()["parse"]["text"]
+# Send it; the HTML is under "parse", then "text"
+html = requests.get(
+    API,
+    params=params,
+    headers=HEADERS,
+).json()["parse"]["text"]
+# Parse it, and print the start of each paragraph
 soup = BeautifulSoup(html, "html.parser")
 for paragraph in soup.find_all("p"):
     print(paragraph.get_text(" ", strip=True)[:150])
@@ -815,24 +1065,48 @@ for paragraph in soup.find_all("p"):
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 11: clean it}
+\begin{frame}[fragile]{Step 11: delete the leftovers}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             Wikipedia draws an old version with today's templates. Deleted templates come back as stray links.
 
             \medskip
-            This given cell deletes them, with the tables, footnote marks and error messages, then joins the paragraphs.
+            This given cell finds them by CSS selector, with the tables, footnote marks and error messages, and deletes each.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-for tag in soup.select("table, .reference, .hatnote, "
-        ".shortdescription, style, "
-        "a.new[title^='Template:'], .error"):
+# Find the leftovers by CSS selector
+leftovers = soup.select(
+    "table, .reference, .hatnote, .shortdescription, "
+    "style, a.new[title^='Template:'], .error"
+)
+# Delete each one from the page
+for tag in leftovers:
     tag.decompose()
-paragraphs = [p.get_text(" ", strip=True)
-              for p in soup.find_all("p")
-              if p.get_text(strip=True)]
-lead = re.sub(r" ([,.;:])", r"\1", "\n\n".join(paragraphs))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: join the paragraphs}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Keep each paragraph that has text, and join them with blank lines.
+
+            \medskip
+            The notebook does the join and the clean-up in one line.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Keep the text of each paragraph that has any
+paragraphs = []
+for paragraph in soup.find_all("p"):
+    if paragraph.get_text(strip=True):
+        text = paragraph.get_text(" ", strip=True)
+        paragraphs.append(text)
+# Join them; drop the space before punctuation
+joined = "\n\n".join(paragraphs)
+lead = re.sub(r" ([,.;:])", r"\1", joined)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -848,9 +1122,11 @@ lead = re.sub(r" ([,.;:])", r"\1", "\n\n".join(paragraphs))
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-rows = leads[(leads["title"] == "Barack Obama")
-             & (leads["year"] == "2009")]
-saved_lead = rows["lead"].iloc[0]
+# The saved lead for Obama's article in 2009
+is_obama = leads["title"] == "Barack Obama"
+is_2009 = leads["year"] == "2009"
+saved_lead = leads[is_obama & is_2009]["lead"].iloc[0]
+# Is it the same as the one you just cleaned?
 print(lead == saved_lead)
 \end{lstlisting}
         \end{column}
@@ -868,11 +1144,16 @@ print(lead == saved_lead)
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 EMBEDDER = "nvidia/nemotron-3-embed-1b:free"
-one = requests.post(f"{openrouter_base}/embeddings",
-    json={"model": EMBEDDER,
-          "input": [leads["lead"][0]]},
-    headers={"Authorization": f"Bearer {openrouter_key}",
-             **HEADERS}).json()
+# Send the first lead to the embeddings endpoint
+one = requests.post(
+    f"{openrouter_base}/embeddings",
+    json={
+        "model": EMBEDDER,
+        "input": [leads["lead"][0]],
+    },
+    headers=...,  # your key, as on Friday
+).json()
+# How many numbers came back?
 print(len(one["data"][0]["embedding"]), "numbers")
 \end{lstlisting}
         \end{column}
@@ -898,20 +1179,38 @@ print(len(one["data"][0]["embedding"]), "numbers")
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             Keep each article's current vector. Then compare every lead with its own article's current lead.
-
-            \medskip
-            The current rows should print 1. Do they?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# Each article's current vector
 today = {}
 for i, row in leads.iterrows():
     if row["year"] == "current":
         today[row["title"]] = vectors[i]
-leads["similarity"] = [vectors[i] @ today[title]
-    for i, title in enumerate(leads["title"])]
-print(leads[leads["year"] == "current"][
-    ["title", "similarity"]])
+# Each lead against its own article's current lead
+leads["similarity"] = [
+    vectors[i] @ today[title]
+    for i, title in enumerate(leads["title"])
+]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: check the current rows}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A current lead compared with itself should give 1.
+
+            \medskip
+            Do all five?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The five current leads
+current = leads[leads["year"] == "current"]
+# Each one's similarity with itself
+print(current[["title", "similarity"]])
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -927,8 +1226,15 @@ print(leads[leads["year"] == "current"][
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-table = leads[leads["year"] != "current"].pivot(
-    index="year", columns="title", values="similarity")
+# The January 1 leads, without today's
+past = leads[leads["year"] != "current"]
+# A row per year, a column per article
+table = past.pivot(
+    index="year",
+    columns="title",
+    values="similarity",
+)
+# Years as numbers, so they sort in order
 table.index = table.index.astype(int)
 print(table.round(3))
 \end{lstlisting}
@@ -957,19 +1263,36 @@ print(table.round(3))
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             Pick an article. \texttt{diff()} gives each year's change, and \texttt{idxmax()} the year of the biggest rise.
-
-            \medskip
-            Read the lead before and after. Was it a new office, or a rewrite?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 title = "Kamala Harris"
+# Each year's change from the year before
 jumps = table[title].diff()
+# The year of the biggest rise, and the rise
 year = jumps.idxmax()
 print(year, round(jumps.max(), 3))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: read before and after}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Read the lead the year before, and the year of the jump.
+
+            \medskip
+            Was it a new office, or a rewrite?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# That year's lead, and the year before's
 for y in [year - 1, year]:
-    print(y, leads[(leads["title"] == title)
-        & (leads["year"] == str(y))]["lead"].iloc[0][:400])
+    is_title = leads["title"] == title
+    is_year = leads["year"] == str(y)
+    text = leads[is_title & is_year]["lead"].iloc[0]
+    print(y, text[:400])
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -985,14 +1308,18 @@ for y in [year - 1, year]:
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# A year (or null), and the IDs of its sources
 ANSWER_SCHEMA = {
     "type": "object",
     "properties": {
         "year": {"type": ["integer", "null"]},
-        "source_ids": {"type": "array",
-                       "items": {"type": "string"}}},
+        "source_ids": {
+            "type": "array",
+            "items": {"type": "string"},
+        },
+    },
     "required": ["year", "source_ids"],
-    "additionalProperties": False}
+}
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1009,10 +1336,14 @@ ANSWER_SCHEMA = {
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 def search(question, title):
+    # Embed the question, as Step 12 embedded a lead
     response = requests.post(
-        f"{openrouter_base}/embeddings", headers=...,
-        json={"model": EMBEDDER, "input": [question]}).json()
+        f"{openrouter_base}/embeddings",
+        json={"model": EMBEDDER, "input": [question]},
+        headers=...,
+    ).json()
     query = np.array(response["data"][0]["embedding"])
+    # Score every lead; keep this article's best three
     query = query / np.linalg.norm(query)
     leads["score"] = vectors @ query
     best = leads[leads["title"] == title]
@@ -1026,19 +1357,34 @@ def search(question, title):
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             Which three Biden leads score highest?
-
-            \medskip
-            Join them into \texttt{passages}, each headed by its ID, such as \texttt{Joe Biden 2022}.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-question = ("In which year did the article first say "
-            "Joe Biden is the 46th president of the "
-            "United States?")
+question = (
+    "In which year did the article first say "
+    "Joe Biden is the 46th president of the "
+    "United States?"
+)
+# The three Biden leads closest to the question
 top = search(question, "Joe Biden")
 print(top[["id", "score"]])
-passages = "\n\n".join(f"{row.id}: {row.lead}"
-                       for row in top.itertuples())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: the passages}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Join the three leads into \texttt{passages}, each headed by its ID, such as \texttt{Joe Biden 2022}.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Each lead headed by its ID, with blank lines between
+passages = "\n\n".join(
+    f"{row.id}: {row.lead}"
+    for row in top.itertuples()
+)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1047,21 +1393,41 @@ passages = "\n\n".join(f"{row.id}: {row.lead}"
 \begin{frame}[fragile]{Step 13: ask}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Friday's body, with the new instruction and schema. The user message holds the question and the passages.
+            Friday's body, with the new instruction and schema. The user message holds the question and the passages. The notebook builds it inside the body.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The question, then the three leads
+user = f"Question: {question}\n\n{passages}"
+body = {
+    "models": MODELS,
+    "temperature": 0,
+    "messages": [
+        {"role": "system", "content": ANSWER_INSTRUCTION},
+        {"role": "user", "content": user},
+    ],
+    ...  # response_format with ANSWER_SCHEMA; provider
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: the answer}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Send it as on Friday.
 
             \medskip
             Which year did it give, and which sources?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-body = {"models": MODELS, "temperature": 0,
-    "messages": [
-        {"role": "system", "content": ANSWER_INSTRUCTION},
-        {"role": "user", "content":
-            f"Question: {question}\n\n{passages}"}],
-    "response_format": {...}, "provider": {...}}
+# Send it as on Friday
 response = requests.post(...).json()
-print(response["model"], json.loads(...))
+# Which model answered, and its answer
+message = response["choices"][0]["message"]
+print(response["model"], json.loads(message["content"]))
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1077,8 +1443,11 @@ print(response["model"], json.loads(...))
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-for row in leads[(leads["title"] == "Joe Biden")
-                 & (leads["year"] >= "2020")].itertuples():
+# Biden's leads from 2020 on ("current" sorts after)
+is_biden = leads["title"] == "Joe Biden"
+recent = leads["year"] >= "2020"
+# The ID and the start of each
+for row in leads[is_biden & recent].itertuples():
     print(row.id, "|", row.lead[:300], "\n")
 \end{lstlisting}
         \end{column}
@@ -1110,8 +1479,12 @@ for row in leads[(leads["title"] == "Joe Biden")
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-tools = requests.get(cmcp + "tools.json",
-                     headers=HEADERS).json()
+# The server's tool list, saved on November 9
+tools = requests.get(
+    cmcp + "tools.json",
+    headers=HEADERS,
+).json()
+# Each tool's name, and the inputs it requires
 for tool in tools:
     print(tool["name"], tool["inputSchema"]["required"])
 \end{lstlisting}
@@ -1129,12 +1502,17 @@ for tool in tools:
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-body = {"models": MODELS, "temperature": 0,
-        "tools": functions, "tool_choice": "auto",
-        "messages": [
-            {"role": "system",
-             "content": TOOL_INSTRUCTION},
-            {"role": "user", "content": question}]}
+body = {
+    "models": MODELS,
+    "temperature": 0,
+    # The tools; the model may choose one
+    "tools": functions,
+    "tool_choice": "auto",
+    "messages": [
+        {"role": "system", "content": TOOL_INSTRUCTION},
+        {"role": "user", "content": question},
+    ],
+}
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1150,7 +1528,9 @@ body = {"models": MODELS, "temperature": 0,
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# Send it as on Friday
 response = requests.post(...).json()
+# The answer is a tool call: a name and arguments
 message = response["choices"][0]["message"]
 call = message["tool_calls"][0]["function"]
 print(response["model"], call["name"], call["arguments"])
@@ -1159,17 +1539,41 @@ print(response["model"], call["name"], call["arguments"])
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 14: turn the call into week 11's request}
+\begin{frame}[fragile]{Step 14: check the call}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The model only wrote the call. Our code runs it. This given cell checks the tool's name, then builds week 11's address from the arguments.
+            The model only wrote the call. Our code runs it.
+
+            \medskip
+            This given cell first reads the arguments, then checks the tool's name.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# The arguments, from JSON text to a dictionary
 args = json.loads(call["arguments"])
-print(call["name"], call["name"] == "fetch-aggregate-data")
-url = ("https://api.census.gov/data/"
-       f"{args['year']}/{args['dataset']}")
+# Is it the one tool our code runs?
+print(
+    call["name"],
+    call["name"] == "fetch-aggregate-data",
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 14: turn the call into week 11's request}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Then it builds week 11's address from the year and dataset, and the \texttt{get} parameter from the table or variables.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Week 11's address, from the year and dataset
+url = (
+    "https://api.census.gov/data/"
+    f"{args['year']}/{args['dataset']}"
+)
+# A whole table as group(...), or the variables
 if "group" in args["get"]:
     get = f"group({args['get']['group']})"
 else:
@@ -1179,20 +1583,41 @@ else:
     \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]{Step 14: the parameters}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The parameters week 11 sent, filled in from the model's arguments, with your Census key.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Week 11's parameters, with your key
+params = {
+    "get": get,
+    "for": args["for"],
+    "in": args["in"],
+    "key": census_key,
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}[fragile]{Step 14: run it}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Send it with your Census key. Print the data, never the URL: your key is in it.
+            Send it. Print the data, never the URL: your key is in it.
 
             \medskip
             Is the median income the same as week 11's?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-params = {"get": get, "for": args["for"],
-          "in": args["in"], "key": census_key}
-data = requests.get(url, params=params,
-                    headers=HEADERS).json()
+# Send it; print the data, never the URL
+data = requests.get(
+    url,
+    params=params,
+    headers=HEADERS,
+).json()
 print(data)
 \end{lstlisting}
         \end{column}
@@ -1227,12 +1652,17 @@ print(data)
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-skill = requests.get("https://raw.githubusercontent.com/"
-    "anthropics/skills/main/skills/pdf/SKILL.md",
-    headers=HEADERS).text
-print("\n".join(skill.splitlines()[:5]))
-print([line for line in skill.splitlines()
-       if line.startswith("### ")])
+# A public skill's main file, for PDFs
+skill = requests.get(
+    "https://raw.githubusercontent.com/anthropics/"
+    "skills/main/skills/pdf/SKILL.md",
+    headers=HEADERS,
+).text
+# Its front matter: the first five lines
+lines = skill.splitlines()
+print("\n".join(lines[:5]))
+# Its "### " headings: the tools it teaches
+print([line for line in lines if line.startswith("### ")])
 \end{lstlisting}
         \end{column}
     \end{columns}
