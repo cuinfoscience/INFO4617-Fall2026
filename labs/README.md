@@ -19,6 +19,7 @@ This term began the labs in week 10. The labs for weeks 1–9 are written for th
 | 11 · Government data APIs | [`week-11/lab-11.ipynb`](week-11/lab-11.ipynb) | [`week-11/lab-11-key.ipynb`](week-11/lab-11-key.ipynb) · [PDF](week-11/lab-11-key.pdf) |
 | 12 · Social and media platform APIs | [`week-12/lab-12.ipynb`](week-12/lab-12.ipynb) | [`week-12/lab-12-key.ipynb`](week-12/lab-12-key.ipynb) · [PDF](week-12/lab-12-key.pdf) |
 | 13 · AI APIs as data tools | [`week-13/lab-13.ipynb`](week-13/lab-13.ipynb) | [`week-13/lab-13-key.ipynb`](week-13/lab-13-key.ipynb) · [PDF](week-13/lab-13-key.pdf) |
+| 14 · Automating data collection (Wednesday and Friday; the template for your repository is [`week-14/boulder-forecast-template.zip`](week-14/boulder-forecast-template.zip), also on Canvas) | [`week-14/lab-14.ipynb`](week-14/lab-14.ipynb) | [`week-14/lab-14-key.ipynb`](week-14/lab-14-key.ipynb) · [PDF](week-14/lab-14-key.pdf) |
 
 ## Get the notebook
 
