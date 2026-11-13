@@ -30,7 +30,8 @@ recently — voice evolves forward, not backward.
    `\author[Keegan]{\textbf{Brian C. Keegan, Ph.D.} \\ Associate Professor, Department of Information Science \\ University of Colorado Boulder}`,
    `\date{<dates>}`, then `\maketitle`.
 3. **"This week at a glance"** frame — the Monday/Wednesday/Friday roadmap using `\dayband{Day}{Topic}`, plus the lab or companion notebook as a bold lead-in and a line (an `alertblock` only if it must stand out; never a gray `block`; see "No gray blocks").
-4. `\section{Monday · Concepts}` (from week 11, `Monday · Live-Coding Lab`: every
+4. `\section{Monday · Concepts}` (from week 10, plain `\section{Monday}`, and the same
+   for each day: the section names only the day, decided 2026-11-13. From week 11 every
    day is part of the week's lab, so the motivation and concepts go in each
    day's opening frames, short, ahead of that day's code; see step 5)
    — motivation + the chapter's core concepts,
@@ -41,8 +42,8 @@ recently — voice evolves forward, not backward.
    decks, they went stale within weeks.) Note cross-references the
    chapter makes to other chapters, and back-reference (don't re-teach in
    depth) any skill an earlier week already covered in full.
-5. `\section{Wednesday · Notebook Lab}` (in week 10, `Wednesday · Live-Coding Lab`;
-   from week 11, every day's section is `<Day> · Live-Coding Lab`, for that day's
+5. `\section{Wednesday · Notebook Lab}` (from week 10, `\section{Wednesday}`;
+   from week 11, every day's section is its day alone, for that day's
    part of the lab. The first day's section opens with a frame that says where the
    week's lab notebook is, how to use it, and where its key is; see week 10 and
    [`labs/AUTHORING.md`](../../labs/AUTHORING.md);
@@ -66,7 +67,7 @@ recently — voice evolves forward, not backward.
    merging into one `\section{Wednesday · Concepts \& Notebook}` is an
    established alternative (week-04) — the three-section Monday/Wednesday/
    Friday split is the default, not a hard requirement.
-6. `\section{Friday · <this week's activity>}` — Friday is the course's
+6. `\section{Friday · <this week's activity>}` (from week 10, `\section{Friday}`) — Friday is the course's
    workshop. In weeks 11–14 its 15 minutes are the week's project-portfolio
    checkpoint (one frame: what it asks and when it's due, from
    `docs/course-facts.md`; decided 2026-11-02). In week 10, it was the
