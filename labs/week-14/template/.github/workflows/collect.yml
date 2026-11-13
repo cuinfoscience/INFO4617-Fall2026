@@ -1,0 +1,41 @@
+# Run collector.py every hour on GitHub's computers, and commit the new rows.
+name: Collect Boulder's hourly forecast
+
+on:
+  schedule:
+    # Minute 17 of every hour, in UTC. GitHub may start a scheduled run some
+    # minutes late, and runs at minute 0 are the most often delayed.
+    - cron: "17 * * * *"
+  # Adds a "Run workflow" button on the Actions tab, to run it by hand.
+  workflow_dispatch:
+
+# The commit step pushes to this repository, so the workflow needs write access.
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get this repository's files
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install requests
+        run: pip install requests
+
+      - name: Collect the forecast
+        run: python collector.py
+
+      - name: Commit the new rows
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add forecasts.csv
+          git diff --staged --quiet || git commit -m "Forecast collected $(date -u +%Y-%m-%dT%H:%MZ)"
+          git pull --rebase
+          git push

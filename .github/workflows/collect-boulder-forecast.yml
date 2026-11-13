@@ -1,0 +1,51 @@
+# Week 14 (chapter 14): the course's own copy of the students' collector.
+# It runs labs/week-14/template/collector.py every hour, in labs/week-14/data/,
+# so the chapter, the lab and the slides have a long series to read. The
+# collector does nothing after December 11, 2026. Decided by the instructor on
+# 2026-11-13.
+name: Collect Boulder's hourly forecast (week 14)
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# One run at a time, so two runs never push at once.
+concurrency:
+  group: collect-boulder-forecast
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: labs/week-14/data
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install requests
+
+      # The template's collector names "your-email@colorado.edu"; the course's
+      # copy names the instructor, as the NWS asks.
+      - name: Collect the forecast
+        run: |
+          sed 's/your-email@colorado.edu/brian.keegan@colorado.edu/' ../template/collector.py > collector.py
+          python collector.py
+          rm collector.py
+
+      - name: Commit the new rows
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add forecasts.csv
+          git diff --staged --quiet || git commit -m "Week 14: Boulder forecast collected $(date -u +%Y-%m-%dT%H:%MZ)"
+          git pull --rebase
+          git push
