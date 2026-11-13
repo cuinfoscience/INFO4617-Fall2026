@@ -99,6 +99,13 @@ TEACHING_WEEKS = [w for w in range(2, 15)]
 # Week 10 (the proposal week) has no lab or revision assignment in Canvas, by
 # the instructor's decision on 2026-10-23.
 NO_ASSIGNMENT_WEEKS = {10}
+# From week 9, modules have no day headers ("Monday · Concepts", "Wednesday ·
+# Notebook Lab", "Friday · Textbook Revisions" or "Friday · Project portfolio"):
+# from week 10 the three days are one live-coding lab, so the headers no longer
+# described the days. Removed from the live course, and here, by the
+# instructor's decision on 2026-11-13. Week 16 keeps its Wednesday and Friday
+# headers, which name what happens on those days.
+NO_DAY_HEADERS_FROM = 9
 
 # --------------------------------------------------------------------------
 # Assignment groups (weights come straight from the syllabus: 30/15/15/40)
@@ -826,7 +833,10 @@ def modules():
             })
             continue
 
-        items = [{"type": "SubHeader", "title": f"Monday · Concepts — {topic}"}]
+        day_headers = wk < NO_DAY_HEADERS_FROM
+        items = []
+        if day_headers:
+            items.append({"type": "SubHeader", "title": f"Monday · Concepts — {topic}"})
         if note:
             items.append({"type": "SubHeader", "title": note})
         items.append({
@@ -845,7 +855,8 @@ def modules():
             items.extend(lab_items(wk))
 
         if wk in TEACHING_WEEKS:
-            items.append({"type": "SubHeader", "title": "Wednesday · Notebook Lab"})
+            if day_headers:
+                items.append({"type": "SubHeader", "title": "Wednesday · Notebook Lab"})
             items.append({
                 "type": "ExternalUrl",
                 "title": f"Companion notebook: {slug}.ipynb",
@@ -855,8 +866,9 @@ def modules():
             items.extend(lab_items(wk))
             if wk not in NO_ASSIGNMENT_WEEKS:
                 items.append({"type": "Assignment", "title": f"Week {wk} Lab — {topic}"})
-            items.append({"type": "SubHeader", "title": "Friday · Textbook Revisions"
-                          if wk not in PORTFOLIO_WEEKS else "Friday · Project portfolio"})
+            if day_headers:
+                items.append({"type": "SubHeader", "title": "Friday · Textbook Revisions"
+                              if wk not in PORTFOLIO_WEEKS else "Friday · Project portfolio"})
             if wk not in NO_ASSIGNMENT_WEEKS:
                 items.append({"type": "Assignment", "title": revision_name(wk)})
         elif wk == 1:
