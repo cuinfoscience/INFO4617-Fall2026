@@ -29,11 +29,15 @@
 %
 % Code frames follow the lab key, labs/week-14/lab-14-key.ipynb, and the template it prints,
 % labs/week-14/template/ (collector.py and .github/workflows/collect.yml), as written on
-% 2026-11-13 (week 14's lab branch), reflowed to fit and sometimes cut with "...". The template's
-% comments are left out of its listings. The two my_series frames show the address a student types
-% (the cell's comment), where the key reads the course's series. No frame shows printed output: the
-% slides lead into the notebook, where students run each cell (instructor, 2026-11-12).
+% 2026-11-13 (week 14's lab branch), reflowed to fit and sometimes cut with "...". Some of the
+% template's own comments are shortened into the listings' one-line comments. The two my_series
+% frames show the address a student types (the cell's comment), where the key reads the course's
+% series. No frame shows printed output: the slides lead into the notebook, where students run each
+% cell (instructor, 2026-11-12).
 % One code block a frame, narration on the left and code on the right: slides/common/AUTHORING.md.
+% Code shaped for reading (2026-11-13): a one-line comment above each step, at most two chained
+% methods, one argument per line in long calls. Where a slide names a step the key or the template
+% doesn't, it does the same thing and prints the same things; its narration says so.
 \begin{frame}{This week at a glance}
     \begin{center}
     \begin{tikzpicture}[node distance=0.35cm, >=stealth]
@@ -130,14 +134,35 @@
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# The two libraries we use
 import requests
 import pandas as pd
+# Name our program, and give your email
 HEADERS = {"User-Agent":
            "WebDataScience/1.0 (your-email@colorado.edu)"}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 0: two addresses}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same cell names two addresses. \texttt{nws\_base} is the NWS's API. \texttt{template} is where the course keeps \texttt{collector.py} and its workflow.
+
+            \medskip
+            Steps 3 and 4 print those two files from it.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The NWS's API
 nws_base = "https://api.weather.gov"
-template = ("https://raw.githubusercontent.com/"
-            "cuinfoscience/INFO4617-Fall2026/main/"
-            "labs/week-14/template/")
+# Where the course keeps this week's template
+template = (
+    "https://raw.githubusercontent.com/"
+    "cuinfoscience/INFO4617-Fall2026/main/"
+    "labs/week-14/template/"
+)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -153,6 +178,7 @@ template = ("https://raw.githubusercontent.com/"
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# Boulder: the latitude, then the longitude
 points_url = f"{nws_base}/points/40.015,-105.2705"
 \end{lstlisting}
         \end{column}
@@ -169,10 +195,16 @@ points_url = f"{nws_base}/points/40.015,-105.2705"
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-points_response = requests.get(points_url,
-                               headers=HEADERS)
-print(points_response.status_code,
-      points_response.headers["Content-Type"])
+# Send it, with our headers
+points_response = requests.get(
+    points_url,
+    headers=HEADERS,
+)
+# The status code, and the kind of data
+print(
+    points_response.status_code,
+    points_response.headers["Content-Type"],
+)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -188,7 +220,9 @@ print(points_response.status_code,
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# The answer, as a dictionary
 points = points_response.json()
+# Any error? None means no error
 print(points.get("detail"))
 \end{lstlisting}
         \end{column}
@@ -205,7 +239,9 @@ print(points.get("detail"))
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# The answer's keys
 print(points.keys())
+# The keys one level down, in "properties"
 print(points["properties"].keys())
 \end{lstlisting}
         \end{column}
@@ -222,8 +258,15 @@ print(points["properties"].keys())
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# The part of the answer about the square
 grid = points["properties"]
-print(grid["gridId"], grid["gridX"], grid["gridY"])
+# Its office, and the square's two numbers
+print(
+    grid["gridId"],
+    grid["gridX"],
+    grid["gridY"],
+)
+# The city nearest the square
 print(grid["relativeLocation"]["properties"]["city"])
 \end{lstlisting}
         \end{column}
@@ -240,6 +283,7 @@ print(grid["relativeLocation"]["properties"]["city"])
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# The address of the hourly forecast
 hourly_url = grid["forecastHourly"]
 print(hourly_url)
 \end{lstlisting}
@@ -257,12 +301,16 @@ print(hourly_url)
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# The longitude first, by mistake
 swapped_response = requests.get(
     f"{nws_base}/points/-105.2705,40.015",
-    headers=HEADERS)
+    headers=HEADERS,
+)
+# The answer, as a dictionary
 swapped = swapped_response.json()
-print(swapped_response.status_code,
-      swapped.get("detail"))
+# The status code, and the NWS's error
+print(swapped_response.status_code, swapped.get("detail"))
+# Which part of the request was wrong
 print(swapped.get("parameterErrors"))
 \end{lstlisting}
         \end{column}
@@ -279,10 +327,16 @@ print(swapped.get("parameterErrors"))
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-hourly_response = requests.get(hourly_url,
-                               headers=HEADERS)
-print(hourly_response.status_code,
-      hourly_response.headers["Content-Type"])
+# Send it, the same way
+hourly_response = requests.get(
+    hourly_url,
+    headers=HEADERS,
+)
+# The status code, and the kind of data
+print(
+    hourly_response.status_code,
+    hourly_response.headers["Content-Type"],
+)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -298,8 +352,11 @@ print(hourly_response.status_code,
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# The answer, as a dictionary
 hourly_json = hourly_response.json()
+# The part that holds the forecast
 hourly = hourly_json["properties"]
+# How many periods it holds
 print(len(hourly["periods"]), "periods")
 \end{lstlisting}
         \end{column}
@@ -316,6 +373,7 @@ print(len(hourly["periods"]), "periods")
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# The first period: one hour's forecast
 print(hourly["periods"][0])
 \end{lstlisting}
         \end{column}
@@ -335,7 +393,9 @@ print(hourly["periods"][0])
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# When forecasters last changed the forecast
 print("updated:  ", hourly["updateTime"])
+# When the NWS's server built this answer
 print("generated:", hourly["generatedAt"])
 \end{lstlisting}
         \end{column}
@@ -355,10 +415,16 @@ print("generated:", hourly["generatedAt"])
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-print("Last-Modified:",
-      hourly_response.headers["Last-Modified"])
-print("Cache-Control:",
-      hourly_response.headers["Cache-Control"])
+# When this answer was last changed
+print(
+    "Last-Modified:",
+    hourly_response.headers["Last-Modified"],
+)
+# How long a copy of it may be reused
+print(
+    "Cache-Control:",
+    hourly_response.headers["Cache-Control"],
+)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -374,8 +440,10 @@ print("Cache-Control:",
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# Each time, as one Python can subtract
 generated = pd.to_datetime(hourly["generatedAt"])
 updated = pd.to_datetime(hourly["updateTime"])
+# How old the forecast was when the answer was built
 print(generated - updated)
 \end{lstlisting}
         \end{column}
@@ -403,42 +471,168 @@ print(generated - updated)
             Each setting is written once, at the top, and changed in one place.
 
             \medskip
-            Which one stops the collector? Why would a collector need a last day?
+            Which line would you change to collect another city's forecast?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-URL = ("https://api.weather.gov/gridpoints/BOU/54,75/"
-       "forecast/hourly")
+# The hourly forecast for Boulder's grid square
+URL = (
+    "https://api.weather.gov/gridpoints/BOU/54,75/"
+    "forecast/hourly"
+)
+# Name our program, and give your email
 HEADERS = {"User-Agent":
            "WebDataScience/1.0 (your-email@colorado.edu)"}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{collector.py: the file, its columns, a last day}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{FIELDS} names each row's columns, in order. The \texttt{...} stands for four more.
+
+            \medskip
+            Which column would you add? From which field of a period?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Where the rows go
 FILE = "forecasts.csv"
-FIELDS = ["collected_at", "update_time", "start_time",
-          "temperature", "precip_chance", ...]
+# The columns each row has, in order
+FIELDS = [
+    "collected_at",
+    "update_time",
+    "start_time",
+    "temperature",
+    ...  # four more
+]
+# The last day to collect
 LAST_DAY = date(2026, 12, 11)
 \end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{collector.py: append, and write the header once}
+\begin{frame}[fragile]{collector.py: stop after the last day}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            \texttt{"a"} opens the file to add rows at its end. The header goes in only when the file is new.
+            After December 11, \texttt{main()} prints a line and stops before it asks.
+
+            \medskip
+            Why would a collector need a last day? Who would a forgotten one keep asking?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+def main():
+    # After the last day, stop before asking
+    if datetime.now(timezone.utc).date() > LAST_DAY:
+        print("Collection ended on", LAST_DAY)
+        return
+    ...
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{collector.py: fail where someone will see}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{raise\_for\_status()} stops the script with an error if the answer isn't 200.
+
+            \medskip
+            Our notebook cells never use it. Why does a script that runs alone need it?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://requests.readthedocs.io/en/stable/api/\#requests.Response.raise_for_status}{raise\_for\_status()}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+    # Ask, and give up after 30 seconds
+    response = requests.get(
+        URL,
+        headers=HEADERS,
+        timeout=30,
+    )
+    # Stop with an error if the answer isn't 200
+    response.raise_for_status()
+    # The part that holds the forecast
+    forecast = response.json()["properties"]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{collector.py: when we asked}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Every row will repeat when we asked and when the NWS last updated the forecast.
+
+            \medskip
+            Why keep those two on every row?
+
+            \medskip
+            \texttt{collector.py} gets \texttt{collected\_at} in one line.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+    # The time now, in UTC
+    now = datetime.now(timezone.utc)
+    # As text, to the second
+    collected_at = now.isoformat(timespec="seconds")
+    # When the NWS last updated the forecast
+    update_time = forecast["updateTime"]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{collector.py: append}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{"a"} opens the file to add rows at its end.
 
             \medskip
             What would \texttt{"w"} do to last week's rows?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+    # Is this the first run? Then there's no file yet
+    new_file = not os.path.exists(FILE)
+    # Open the file to add rows at its end
+    with open(
+        FILE,
+        "a",
+        newline="",
+        encoding="utf-8",
+    ) as f:
+        ...  # write the rows: the next two frames
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{collector.py: write the header once}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The header goes in only when the file is new.
+
+            \medskip
+            \texttt{new\_file} is set before \texttt{open()}. Why not after?
 
             \medskip
             {\scriptsize\textbf{Docs:} \href{https://docs.python.org/3/library/csv.html\#csv.DictWriter}{csv.DictWriter}\par}
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-    new_file = not os.path.exists(FILE)
-    with open(FILE, "a", newline="",
-              encoding="utf-8") as f:
+    with open(...) as f:
+        # A writer that turns a dictionary into a row
         writer = csv.DictWriter(f, fieldnames=FIELDS)
+        # The header, only in a new file
         if new_file:
             writer.writeheader()
+        # Then a row for each hour
         for period in forecast["periods"]:
             ...
 \end{lstlisting}
@@ -449,47 +643,22 @@ LAST_DAY = date(2026, 12, 11)
 \begin{frame}[fragile]{collector.py: one row per hour}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Each period becomes a row. Every row repeats when we asked and when the NWS last updated the forecast.
+            Each period becomes one row: a dictionary whose keys are the names in \texttt{FIELDS}.
 
             \medskip
-            Why keep those two on every row?
+            What would \texttt{writerow()} do with a key that isn't in \texttt{FIELDS}?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-    collected_at = datetime.now(timezone.utc).isoformat(
-        timespec="seconds")
-    update_time = forecast["updateTime"]
-    ...
+        for period in forecast["periods"]:
+            # One row per hour, as a dictionary
             writer.writerow({
                 "collected_at": collected_at,
                 "update_time": update_time,
-                "start_time": period["startTime"], ...})
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{collector.py: stop, and fail where someone will see}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            After December 11, \texttt{main()} stops before it asks. \texttt{raise\_for\_status()} stops the script with an error if the answer isn't 200.
-
-            \medskip
-            Our notebook cells never use it. Why does a script that runs alone need it?
-
-            \medskip
-            {\scriptsize\textbf{Docs:} \href{https://requests.readthedocs.io/en/stable/api/\#requests.Response.raise_for_status}{raise\_for\_status()}\par}
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-def main():
-    if datetime.now(timezone.utc).date() > LAST_DAY:
-        print("Collection ended on", LAST_DAY)
-        return
-    response = requests.get(URL, headers=HEADERS,
-                            timeout=30)
-    response.raise_for_status()
-    ...
+                "start_time": period["startTime"],
+                "temperature": period["temperature"],
+                ...  # four more fields
+            })
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -508,6 +677,7 @@ def main():
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# Run main() only when the file is run as a script
 if __name__ == "__main__":
     main()
 \end{lstlisting}
@@ -581,11 +751,15 @@ if __name__ == "__main__":
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[language={}]
+# The name on the Actions tab
 name: Collect Boulder's hourly forecast
 
+# When it runs:
 on:
+  # at minute 17 of every hour, in UTC
   schedule:
     - cron: "17 * * * *"
+  # and when you click "Run workflow"
   workflow_dispatch:
 \end{lstlisting}
         \end{column}
@@ -631,12 +805,15 @@ on:
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[language={}]
+# Let the workflow commit to this repository
 permissions:
   contents: write
 
+# One job, on a fresh Ubuntu machine
 jobs:
   collect:
     runs-on: ubuntu-latest
+    # Its steps: the next three frames
     steps:
       ...
 \end{lstlisting}
@@ -655,9 +832,11 @@ jobs:
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[language={}]
     steps:
+      # Copy the repository onto the empty machine
       - name: Get this repository's files
         uses: actions/checkout@v7
 
+      # Install Python, version 3.12
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
@@ -677,9 +856,11 @@ jobs:
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[language={}]
+      # Install the one library collector.py needs
       - name: Install requests
         run: pip install requests
 
+      # Then run our script
       - name: Collect the forecast
         run: python collector.py
 \end{lstlisting}
@@ -697,12 +878,16 @@ jobs:
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[language={}]
+      # Commit the CSV, if any rows changed
       - name: Commit the new rows
         run: |
+          # Sign the commit as GitHub's bot
           git config user.name "github-actions[bot]"
           git config user.email "..."
+          # Stage the CSV; commit only if it changed
           git add forecasts.csv
           git diff --staged --quiet || git commit -m "..."
+          # Take any newer commits, then push
           git pull --rebase
           git push
 \end{lstlisting}
@@ -770,8 +955,11 @@ jobs:
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-my_series = ("https://raw.githubusercontent.com/"
-             "<you>/boulder-forecast/main/forecasts.csv")
+# Your file's raw address, with your user name
+my_series = (
+    "https://raw.githubusercontent.com/"
+    "<you>/boulder-forecast/main/forecasts.csv"
+)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -787,8 +975,11 @@ my_series = ("https://raw.githubusercontent.com/"
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# Read the CSV straight from its address
 my_forecasts = pd.read_csv(my_series)
+# How many rows and columns
 print(my_forecasts.shape)
+# Its first rows
 my_forecasts.head()
 \end{lstlisting}
         \end{column}
@@ -835,18 +1026,40 @@ my_forecasts.head()
             This cell is given. Put your email in \texttt{HEADERS}, and run it.
 
             \medskip
+            \texttt{matplotlib} is new today. Step 9 draws a plot with it.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The libraries for Part 2
+import requests
+import pandas as pd
+import matplotlib.pyplot as plt
+# Name our program, and give your email
+HEADERS = {"User-Agent":
+           "WebDataScience/1.0 (your-email@colorado.edu)"}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: two addresses}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same cell names two addresses.
+
+            \medskip
             \texttt{series} is the course's file. A new run adds to it at minute 17 of every hour.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-import requests
-import pandas as pd
-import matplotlib.pyplot as plt
-HEADERS = {"User-Agent": "WebDataScience/1.0 (...)"}
+# The NWS's API
 nws_base = "https://api.weather.gov"
-series = ("https://raw.githubusercontent.com/"
-          "cuinfoscience/INFO4617-Fall2026/main/"
-          "labs/week-14/data/forecasts.csv")
+# The course's series, collected every hour
+series = (
+    "https://raw.githubusercontent.com/"
+    "cuinfoscience/INFO4617-Fall2026/main/"
+    "labs/week-14/data/forecasts.csv"
+)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -862,8 +1075,11 @@ series = ("https://raw.githubusercontent.com/"
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# Read the course's CSV
 forecasts = pd.read_csv(series)
+# How many rows and columns
 print(forecasts.shape)
+# Its last rows
 forecasts.tail()
 \end{lstlisting}
         \end{column}
@@ -880,7 +1096,9 @@ forecasts.tail()
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# How many runs: distinct collected_at times
 print(forecasts["collected_at"].nunique(), "runs")
+# How many forecasts: distinct update_time values
 print(forecasts["update_time"].nunique(), "forecasts")
 \end{lstlisting}
         \end{column}
@@ -894,11 +1112,21 @@ print(forecasts["update_time"].nunique(), "forecasts")
 
             \medskip
             Which forecasts lasted longest? What does that say about when forecasters update it?
+
+            \medskip
+            The notebook groups and counts in one line.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-per_forecast = (forecasts.groupby("update_time")
-    ["collected_at"].agg(["nunique", "min", "max"]))
+# The run times, grouped by forecast
+runs = forecasts.groupby("update_time")["collected_at"]
+# For each: how many runs, the first, and the last
+per_forecast = runs.agg([
+    "nunique",
+    "min",
+    "max",
+])
+# Print every row of the table
 print(per_forecast.to_string())
 \end{lstlisting}
         \end{column}
@@ -912,12 +1140,19 @@ print(per_forecast.to_string())
 
             \medskip
             Thirty collectors each ask 24 times a day. How many of their 720 requests bring something new?
+
+            \medskip
+            The notebook divides in one line.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-new_share = (forecasts["update_time"].nunique()
-             / forecasts["collected_at"].nunique())
+# How many forecasts, and how many runs
+n_forecasts = forecasts["update_time"].nunique()
+n_runs = forecasts["collected_at"].nunique()
+# The share of runs that brought a new forecast
+new_share = n_forecasts / n_runs
 print(round(new_share, 2))
+# The same share of 720 requests a day
 print(round(720 * new_share), "of 720 daily requests")
 \end{lstlisting}
         \end{column}
@@ -942,15 +1177,22 @@ print(round(720 * new_share), "of 720 daily requests")
 \begin{frame}[fragile]{Step 9: one hour, forecast again and again}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Every run forecasts the next six and a half days. So one hour is forecast again by every run before it comes.
+            Every run forecasts the next six and a half days. So each hour is forecast by many runs.
 
             \medskip
             Take noon on Wednesday, our first class. How many runs forecast it?
+
+            \medskip
+            The notebook picks these rows in one line.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-noon_rows = forecasts[forecasts["start_time"]
-                      == "2026-11-18T12:00:00-07:00"]
+# Noon on Wednesday, November 18, in Boulder's time
+noon = "2026-11-18T12:00:00-07:00"
+# True for each row that forecasts that hour
+is_noon = forecasts["start_time"] == noon
+# Keep those rows, and count them
+noon_rows = forecasts[is_noon]
 print(len(noon_rows))
 \end{lstlisting}
         \end{column}
@@ -960,20 +1202,46 @@ print(len(noon_rows))
 \begin{frame}[fragile]{Step 9: lead time}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            A row's \textbf{lead time} is how far ahead its run was: the hour's \texttt{start\_time} minus the run's \texttt{collected\_at}. This given cell plots the temperature against it.
+            A row's \textbf{lead time} is how far ahead its run was: the hour's \texttt{start\_time} minus the run's \texttt{collected\_at}.
+
+            \medskip
+            This cell is given. The notebook subtracts in one line, without naming \texttt{hour} and \texttt{run}.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Noon, and when each run asked, as times in UTC
+hour = pd.to_datetime(noon_rows["start_time"], utc=True)
+run = pd.to_datetime(noon_rows["collected_at"], utc=True)
+# Lead time: how far ahead each run was
+lead = hour - run
+# The same, in hours
+lead_hours = lead.dt.total_seconds() / 3600
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: plot it}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same given cell plots the forecast temperature against the lead time.
 
             \medskip
             Where does the line settle?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-lead = (pd.to_datetime(noon_rows["start_time"], utc=True)
-        - pd.to_datetime(noon_rows["collected_at"],
-                         utc=True))
-lead_hours = lead.dt.total_seconds() / 3600
+# One figure, wide and short
 fig, ax = plt.subplots(figsize=(8, 4))
-ax.plot(lead_hours, noon_rows["temperature"], marker=".")
+# Temperature against lead time, a dot per run
+ax.plot(
+    lead_hours,
+    noon_rows["temperature"],
+    marker=".",
+)
+# Furthest ahead on the left, nearest on the right
 ax.invert_xaxis()
+# Then a title, axis labels, and plt.show()
 ...
 \end{lstlisting}
         \end{column}
@@ -987,13 +1255,22 @@ ax.invert_xaxis()
 
             \medskip
             Which one was right? What else would you have to collect to know?
+
+            \medskip
+            The notebook writes the list of columns into each line.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-print(noon_rows[["collected_at", "temperature",
-                 "short_forecast"]].head(1))
-print(noon_rows[["collected_at", "temperature",
-                 "short_forecast"]].tail(1))
+# The three columns to show
+columns = [
+    "collected_at",
+    "temperature",
+    "short_forecast",
+]
+# The first run, furthest ahead
+print(noon_rows[columns].head(1))
+# The last run, nearest
+print(noon_rows[columns].tail(1))
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1006,14 +1283,22 @@ print(noon_rows[["collected_at", "temperature",
 
             \medskip
             How far apart were its lowest and highest forecasts? Is that more or less than noon's?
+
+            \medskip
+            The notebook picks the rows in one line.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-midnight_rows = forecasts[forecasts["start_time"]
-                          == "2026-11-19T00:00:00-07:00"]
+# Midnight's rows, picked as for noon, and how many
+midnight = "2026-11-19T00:00:00-07:00"
+is_midnight = forecasts["start_time"] == midnight
+midnight_rows = forecasts[is_midnight]
 print(len(midnight_rows))
-print(midnight_rows["temperature"].min(),
-      midnight_rows["temperature"].max())
+# Its lowest and highest forecast temperature
+print(
+    midnight_rows["temperature"].min(),
+    midnight_rows["temperature"].max(),
+)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1029,7 +1314,9 @@ print(midnight_rows["temperature"].min(),
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# The newest run's time
 newest = pd.to_datetime(forecasts["collected_at"]).max()
+# That time, and how long ago it was
 print(newest, pd.Timestamp.now(tz="UTC") - newest)
 \end{lstlisting}
         \end{column}
@@ -1043,13 +1330,21 @@ print(newest, pd.Timestamp.now(tz="UTC") - newest)
 
             \medskip
             Is it fresh? If not, where would you look first?
+
+            \medskip
+            The notebook reads the file and finds its newest run in one line.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-my_series = ("https://raw.githubusercontent.com/"
-             "<you>/boulder-forecast/main/forecasts.csv")
-my_newest = pd.to_datetime(
-    pd.read_csv(my_series)["collected_at"]).max()
+# Your raw address, as on Wednesday
+my_series = (
+    "https://raw.githubusercontent.com/"
+    "<you>/boulder-forecast/main/forecasts.csv"
+)
+# Read your file
+my_rows = pd.read_csv(my_series)
+# Its newest run, and how long ago it was
+my_newest = pd.to_datetime(my_rows["collected_at"]).max()
 print(my_newest, pd.Timestamp.now(tz="UTC") - my_newest)
 \end{lstlisting}
         \end{column}
@@ -1063,11 +1358,16 @@ print(my_newest, pd.Timestamp.now(tz="UTC") - my_newest)
 
             \medskip
             How long ago did the forecasters last change it? Where could this check run so that it warns you without your asking?
+
+            \medskip
+            The notebook prints this in one line.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-print(pd.Timestamp.now(tz="UTC")
-      - pd.to_datetime(forecasts["update_time"]).max())
+# When the forecasters last changed the forecast
+updated = pd.to_datetime(forecasts["update_time"]).max()
+# How long ago that was
+print(pd.Timestamp.now(tz="UTC") - updated)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1079,15 +1379,38 @@ print(pd.Timestamp.now(tz="UTC")
             This request is \textbf{designed to break}. A deliberate error needs no GitHub issue; only code that is broken by accident does.
 
             \medskip
-            What status code, and what \texttt{detail}?
+            Where is the typo?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-broken_url = (f"{nws_base}/gridpoints/BOU/54,75/"
-              "forecast/hourlyy")
-broken_response = requests.get(broken_url,
-                               headers=HEADERS)
+# The hourly forecast's address, mistyped
+broken_url = (
+    f"{nws_base}/gridpoints/BOU/54,75/"
+    "forecast/hourlyy"
+)
+# Send it
+broken_response = requests.get(
+    broken_url,
+    headers=HEADERS,
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: what came back}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Read the answer, and print its status code and \texttt{detail}.
+
+            \medskip
+            What status code? Does the \texttt{detail} say what was wrong?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The answer, as a dictionary
 broken = broken_response.json()
+# The status code, and the NWS's error
 print(broken_response.status_code, broken.get("detail"))
 \end{lstlisting}
         \end{column}
@@ -1135,17 +1458,44 @@ print(broken_response.status_code, broken.get("detail"))
             Ask for the hourly forecast with the grid numbers swapped, \texttt{75,54}.
 
             \medskip
-            What status code? Did anything tell you it wasn't Boulder?
+            Do you expect an error?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-swapped_grid_url = (f"{nws_base}/gridpoints/BOU/75,54/"
-                    "forecast/hourly")
-swapped_grid_response = requests.get(swapped_grid_url,
-                                     headers=HEADERS)
+# The grid numbers swapped
+swapped_grid_url = (
+    f"{nws_base}/gridpoints/BOU/75,54/"
+    "forecast/hourly"
+)
+# Send it
+swapped_grid_response = requests.get(
+    swapped_grid_url,
+    headers=HEADERS,
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: what came back}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Print the status code and the first hour's temperature.
+
+            \medskip
+            What status code? Did anything tell you it wasn't Boulder?
+
+            \medskip
+            The notebook prints the temperature without naming it first.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The part that holds the forecast
 swapped_grid = swapped_grid_response.json()["properties"]
-print(swapped_grid_response.status_code,
-      swapped_grid["periods"][0]["temperature"])
+# The first hour's temperature
+temperature = swapped_grid["periods"][0]["temperature"]
+# The status code, and that temperature
+print(swapped_grid_response.status_code, temperature)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1197,6 +1547,7 @@ print(swapped_grid_response.status_code,
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[language={},literate={~}{{\raisebox{-0.6ex}{\textasciitilde}}}1]
+# At minute 17 of every hour, run the collector
 17 * * * * cd ~/boulder-forecast && python3 collector.py
 \end{lstlisting}
             \medskip
