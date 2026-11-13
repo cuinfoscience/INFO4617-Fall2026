@@ -75,7 +75,7 @@
 \end{frame}
 
 % =========================================================================
-\section{Wednesday · Live-Coding Lab}
+\section{Wednesday}
 % =========================================================================
 
 % Placeholder: fill in from the daily-note responses before class
@@ -84,7 +84,7 @@
 \begin{frame}{One request is a snapshot}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Boulder's forecast changes every few hours. One request tells you what it said once.
+            Forecasters change Boulder's forecast a few times a day. On November 12, one forecast stood for 12 hours. One request tells you what it said once.
 
             \medskip
             To see it change, a program has to ask again and again, on a schedule.
@@ -936,7 +936,7 @@ jobs:
                 \item Click the \textbf{Code} tab. Find \texttt{forecasts.csv}, and the commit by \texttt{github-actions[bot]}. Click the file.
             \end{enumerate}
             \medskip
-            From now on it runs by itself, every hour, until December 11.
+            From now on it runs by itself, every hour, until December 11. GitHub can take hours to start a new schedule, so the first hourly run may come long after class.
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{Git scraping}\\[2pt]
@@ -1002,7 +1002,7 @@ my_forecasts.head()
 \end{frame}
 
 % =========================================================================
-\section{Friday · Live-Coding Lab}
+\section{Friday}
 % =========================================================================
 
 \begin{frame}{Today: Part 2, what the collector gathered}
@@ -1162,7 +1162,7 @@ print(round(720 * new_share), "of 720 daily requests")
 \begin{frame}{What a bot costs a server}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Step 8 counted how often the forecast changed. Our collector asks 24 times a day anyway.
+            Step 8 counted how often the forecast changed. Our collector asks 24 times a day anyway. On November 12, an hourly collector got the same forecast 12 times in a row.
 
             \medskip
             \texttt{Last-Modified} and \texttt{Cache-Control} say how new an answer is. Who pays for the requests that bring nothing new?
@@ -1354,10 +1354,10 @@ print(my_newest, pd.Timestamp.now(tz="UTC") - my_newest)
 \begin{frame}[fragile]{Step 10: is the forecast fresh?}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Rows can keep coming while \texttt{update\_time} stands still.
+            Rows can keep coming while \texttt{update\_time} stands still. Half a day without a change can be normal.
 
             \medskip
-            How long ago did the forecasters last change it? Where could this check run so that it warns you without your asking?
+            How long ago did the forecasters last change it? How old would you call stale? Where could this check run to warn you?
 
             \medskip
             The notebook prints this in one line.
