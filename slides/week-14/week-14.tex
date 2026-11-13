@@ -8,414 +8,1246 @@
 % file directly from its own folder (no TEXINPUTS needed).
 \makeatletter\def\input@path{{../common/}}\makeatother
 \input{preamble}
+% Larger code than the house default: a frame holds one short block (AUTHORING.md, "Code style")
+\lstset{basicstyle=\ttfamily\footnotesize}
+% A step of the week's pipeline, for the at-a-glance diagram
+\tikzset{stage/.style={draw=black!70,rounded corners=2pt,align=center,inner sep=4pt,font=\footnotesize,minimum height=2.6em,text width=6.3em}}
 
 \title[Week 14 · Automation]{{\Huge Automating Data Collection}}
 \subtitle{Week 14 · Practice module · Textbook Chapter 14}
 \author[Keegan]{\textbf{Brian C. Keegan, Ph.D.} \\ Associate Professor, Department of Information Science \\ University of Colorado Boulder}
-\date{November 16, 18 \& 20, 2026}
+\date{November 18 \& 20, 2026}
 
 \begin{document}
 
 \maketitle
 
 % -------------------------------------------------------------------------
+% Schedule: Monday, Nov 16 finishes week 13's lab (Part 3, in week 13's deck). Week 14's lab runs
+% Wednesday, Nov 18 (Part 1) and Friday, Nov 20 (Part 2, then 15 minutes on portfolio checkpoint 4).
+% The textbook's plan for chapter 14: docs/plans/2026-11-13-ch14-automation.md.
+%
+% Code frames follow the lab key, labs/week-14/lab-14-key.ipynb, and the template it prints,
+% labs/week-14/template/ (collector.py and .github/workflows/collect.yml), as written on
+% 2026-11-13 (week 14's lab branch), reflowed to fit and sometimes cut with "...". The template's
+% comments are left out of its listings. The two my_series frames show the address a student types
+% (the cell's comment), where the key reads the course's series. No frame shows printed output: the
+% slides lead into the notebook, where students run each cell (instructor, 2026-11-12).
+% One code block a frame, narration on the left and code on the right: slides/common/AUTHORING.md.
 \begin{frame}{This week at a glance}
+    \begin{center}
+    \begin{tikzpicture}[node distance=0.35cm, >=stealth]
+        \node[stage] (one) {\textbf{One request}\\[-1pt]{\scriptsize by hand · Wed}};
+        \node[stage, right=of one] (script) {\textbf{collector.py}\\[-1pt]{\scriptsize a script · Wed}};
+        \node[stage, right=of script] (actions) {\textbf{Every hour}\\[-1pt]{\scriptsize Actions · Wed}};
+        \node[stage, right=of actions] (csv) {\textbf{forecasts.csv}\\[-1pt]{\scriptsize read it · Fri}};
+        \node[stage, right=of csv] (fail) {\textbf{A red X}\\[-1pt]{\scriptsize break it · Fri}};
+        \draw[->, thick] (one) -- (script);
+        \draw[->, thick] (script) -- (actions);
+        \draw[->, thick] (actions) -- (csv);
+        \draw[->, thick] (csv) -- (fail);
+    \end{tikzpicture}
+    \end{center}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            We move scraping off your laptop and into the cloud --- code that collects data on a schedule, unattended.
-
-            \bigskip
-
-            \dayband{Monday}{Concepts \& notebook intro}
-            \begin{itemize}\small
-                \item From exploration to production; why a time series beats a snapshot
-            \end{itemize}
-
+            \dayband{Monday, Nov 16}{Week 13's lab, Part 3}\par
+            {\small Its frames are in week 13's deck.\par}
             \medskip
-
-            \dayband{Wednesday}{Notebook lab}
-            \begin{itemize}\small
-                \item Notebook $\rightarrow$ script $\rightarrow$ GitHub Actions: schedule it, monitor it, harden it
-            \end{itemize}
-
+            \dayband{Wednesday, Nov 18}{Part 1}\par
+            {\small One request by hand, then your own collector running in GitHub Actions.\par}
             \medskip
-
-            \dayband{Friday}{Textbook revisions}
-            \begin{itemize}\small
-                \item Propose \& peer-review pull requests improving Chapter 14
-            \end{itemize}
+            \dayband{Friday, Nov 20}{Part 2}\par
+            {\small What it gathered, failures and monitoring. Then 15 minutes on portfolio checkpoint 4.\par}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Companion notebook}
-                \footnotesize \texttt{ch-14-automation.ipynb}
-            \end{block}
-            \begin{alertblock}{Bring a laptop}
-                \footnotesize Wednesday you will push a workflow that runs itself.
-            \end{alertblock}
+            \textbf{Bring}\\[2pt]
+            {\footnotesize Your GitHub account, and \texttt{boulder-forecast-template.zip} from Canvas. No key.\par}
+            \medskip
+            \textbf{Due}\\[2pt]
+            {\footnotesize Sunday, Nov 22: chapter 14's Recommended Exercises.\par}
+            {\footnotesize Sunday, Nov 29: portfolio checkpoint 4.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
 % =========================================================================
-\section{Monday · Concepts}
+\section{Wednesday · Live-Coding Lab}
 % =========================================================================
 
-\begin{frame}{From exploration to production}
+% Placeholder: fill in from the daily-note responses before class
+% (python3 ../common/check_daily_questions.py week-14).
+
+\begin{frame}{One request is a snapshot}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Interactive notebooks are for \textbf{exploration}. Production data collection requires \textbf{automation}.
+            Boulder's forecast changes every few hours. One request tells you what it said once.
 
-            \bigskip
+            \medskip
+            To see it change, a program has to ask again and again, on a schedule.
 
-            The progression is a real development workflow:
-            \begin{enumerate}
-                \item \textbf{Notebook} --- where you develop and test
-                \item \textbf{Script} --- a standalone \texttt{.py} that runs with no interaction
-                \item \textbf{Scheduled pipeline} --- a script that runs itself, on the cloud, on a cadence
+            \medskip
+            What else from this semester would you want to watch change?
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{This week's source}\\[2pt]
+            {\footnotesize The National Weather Service's hourly forecast for Boulder. No key.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{This week's lab}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \dayband{Find it}{\texttt{labs/week-14} in the course repository}
+            \begin{enumerate}\small
+                \item Open \texttt{lab-14.ipynb} and click \textbf{Download raw file}.
+                \item Open it in JupyterLab, in the \texttt{webdata} environment.
+                \item Sign in to GitHub in your browser.
             \end{enumerate}
-
-            \bigskip
-
-            The logic is the \textit{same code you already wrote}; only the environment changes. These are your existing skills, moved into production.
+            \medskip
+            \dayband{Use it}{one part a day}
+            \begin{itemize}\small
+                \item I type the code. You type it in your copy.
+            \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/pipeline_diagram.png}\\
-            {\scriptsize Same code, three environments.}
+            \textbf{Fall behind?}\\[2pt]
+            {\footnotesize Copy the cell from \texttt{lab-14-key.ipynb}, beside it, and keep going.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{Automation: a snapshot vs.\ a time series}
+\begin{frame}[fragile]{Step 0: set up}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Many of the best research questions are \textbf{temporal}:
-            \begin{itemize}\small
-                \item How do Rotten Tomatoes scores evolve during a film's release?
-                \item How does a Spotify playlist shift with the seasons?
-                \item Which Wikipedia articles surge on a news event --- and how fast does attention decay?
-            \end{itemize}
-
-            \bigskip
-
-            A scraper that runs \textbf{once} gives a cross-sectional \textit{snapshot}. A scraper that runs \textbf{every six hours for three months} gives a \textbf{panel dataset} --- trends, cycles, and responses to events.
+        \begin{column}{0.37\textwidth}
+            This cell is given. Put your email in \texttt{HEADERS}, and run it.
 
             \medskip
+            The NWS asks for no key. It asks every program to name itself and give a contact. Why send your email if nobody checks?
 
-            The infrastructure is nearly free; the analytical payoff is large.
+            \medskip
+            {\scriptsize\textbf{Docs:} the NWS's \href{https://www.weather.gov/documentation/services-web-api}{API documentation}, Overview tab\par}
         \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/score_timeseries.png}\\
-            {\scriptsize The payoff of collecting the same thing, repeatedly.}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Automation raises the stakes}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            A manual scrape you run once makes a handful of requests. A scraper running \textbf{every hour, indefinitely}, accumulates a far larger footprint --- so the ethics of Chapter~2 scale up with it.
-
-            \bigskip
-
-            Automation is also how you build the \textbf{ownership} the post-API chapter describes: infrastructure that runs on \textit{your} terms and schedule, not on platform goodwill.
-
-            \bigskip
-
-            But ownership is \textbf{stewardship}: monitoring, maintaining, and updating scrapers is ongoing labor. Building your own data infrastructure means accepting responsibility for its upkeep.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{Threads we pull forward}
-                \footnotesize
-                \begin{itemize}\footnotesize
-                    \item \textbf{Ethics} --- a bigger footprint, the same politeness rules
-                    \item \textbf{Protocols} --- reuse retries \& backoff for flaky runs
-                    \item \textbf{Research design} --- a panel dataset you can actually analyze
-                \end{itemize}
-            \end{block}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{In the notebook}
-    Wednesday's companion notebook builds the pipeline one step at a time:
-    \begin{itemize}
-        \item \textbf{Step 1} --- convert a Rotten Tomatoes scraper from a notebook into a standalone script with headless Selenium
-        \item \textbf{Step 2} --- wrap it in a GitHub Actions workflow that runs every six hours
-        \item \textbf{Monitor} --- catch failures and ``silent successes''; harden the workflow
-        \item \textbf{Step 3} --- read the accumulated CSV back into pandas and plot the time series
-    \end{itemize}
-
-    \bigskip
-
-    \begin{alertblock}{Test locally first}
-        A \texttt{print()} you can run instantly beats debugging inside YAML, where every attempt is a commit, a push, and a wait for the runner. If it runs on your machine, it will very likely run in Actions.
-    \end{alertblock}
-\end{frame}
-
-% =========================================================================
-\section{Wednesday · Notebook Lab}
-% =========================================================================
-
-\begin{frame}[fragile]{Step 1 --- notebook to script}
-    \begin{columns}[T]
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# scraper.py -- a standalone script; no notebook
-import csv, os
+import requests
+import pandas as pd
+HEADERS = {"User-Agent":
+           "WebDataScience/1.0 (your-email@colorado.edu)"}
+nws_base = "https://api.weather.gov"
+template = ("https://raw.githubusercontent.com/"
+            "cuinfoscience/INFO4617-Fall2026/main/"
+            "labs/week-14/template/")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
 
-FIELDNAMES = ["timestamp", "url",
-              "critic_score", "audience_score"]
+\begin{frame}[fragile]{Step 1: where is Boulder?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The NWS forecasts for a grid of squares about 2.5 km on a side.
 
-def get_scores(url): ...   # Selenium (next slide)
-def save_scores(scores): ...  # append one CSV row
+            \medskip
+            \texttt{/points} takes a latitude, then a longitude, and names the square. West is negative. Which number is the latitude?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+points_url = f"{nws_base}/points/40.015,-105.2705"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
 
+\begin{frame}[fragile]{Step 1: send it}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Send it with \texttt{HEADERS}. Print the status code and the \texttt{Content-Type} header.
+
+            \medskip
+            Is the answer JSON? Which kind?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+points_response = requests.get(points_url,
+                               headers=HEADERS)
+print(points_response.status_code,
+      points_response.headers["Content-Type"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: any error?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            When something goes wrong, the NWS says what in \texttt{detail}. \texttt{None} means no error.
+
+            \medskip
+            Bluesky's errors had a \texttt{message}. Why read the error before the data?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+points = points_response.json()
+print(points.get("detail"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: one level at a time}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Print the answer's keys. Then print the keys of its \texttt{properties}.
+
+            \medskip
+            Which key looks like the address of an hourly forecast?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+print(points.keys())
+print(points["properties"].keys())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: the square}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Each square belongs to one of the NWS's forecast offices.
+
+            \medskip
+            Which office, which square, and which city did you get?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+grid = points["properties"]
+print(grid["gridId"], grid["gridX"], grid["gridY"])
+print(grid["relativeLocation"]["properties"]["city"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: the forecast's address}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{forecastHourly} is the address our collector will ask every hour.
+
+            \medskip
+            The documentation says a square can change. \texttt{collector.py} keeps only this address. What would it collect if the square changed?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+hourly_url = grid["forecastHourly"]
+print(hourly_url)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: the numbers swapped}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The likeliest slip is the order of the two numbers. Ask with the longitude first.
+
+            \medskip
+            What status code came back? What did the NWS say was wrong, in its own words?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+swapped_response = requests.get(
+    f"{nws_base}/points/-105.2705,40.015",
+    headers=HEADERS)
+swapped = swapped_response.json()
+print(swapped_response.status_code,
+      swapped.get("detail"))
+print(swapped.get("parameterErrors"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: the hourly forecast}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Ask \texttt{hourly\_url}, the same way.
+
+            \medskip
+            Is the status code the same as for \texttt{/points}?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+hourly_response = requests.get(hourly_url,
+                               headers=HEADERS)
+print(hourly_response.status_code,
+      hourly_response.headers["Content-Type"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: one period per hour}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Its \texttt{properties} hold a list of \texttt{periods}, one for each hour ahead.
+
+            \medskip
+            How many periods? How many days is that?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+hourly_json = hourly_response.json()
+hourly = hourly_json["properties"]
+print(len(hourly["periods"]), "periods")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: one hour's forecast}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Print the first period.
+
+            \medskip
+            Which of its fields would you save every hour? Which would you leave out?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+print(hourly["periods"][0])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: how new is it?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{updateTime}: when forecasters last changed the forecast.
+
+            \medskip
+            \texttt{generatedAt}: when the NWS's server built this answer.
+
+            \medskip
+            Which is older? By how much?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+print("updated:  ", hourly["updateTime"])
+print("generated:", hourly["generatedAt"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: what the headers say}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{Last-Modified} dates this answer. \texttt{Cache-Control} says how long a copy may be reused: \texttt{max-age} by your browser, \texttt{s-maxage} by the NWS's caches.
+
+            \medskip
+            Thirty of us just asked. How many times did the NWS build it?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} MDN's \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cache-Control}{Cache-Control}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+print("Last-Modified:",
+      hourly_response.headers["Last-Modified"])
+print("Cache-Control:",
+      hourly_response.headers["Cache-Control"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: how old is the forecast?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{pd.to\_datetime()} turns each time into one Python can subtract.
+
+            \medskip
+            How old was your forecast when the NWS built your answer? And your neighbor's?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+generated = pd.to_datetime(hourly["generatedAt"])
+updated = pd.to_datetime(hourly["updateTime"])
+print(generated - updated)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 3: from a notebook to a script}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \texttt{collector.py} is the cells above, saved as a script that a computer can run without us. A given cell prints it.
+
+            \medskip
+            Find our request in it. Then find four things a notebook didn't need.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{The four}\\[2pt]
+            {\footnotesize Constants. Append mode. \texttt{raise\_for\_status()}. The \texttt{\_\_main\_\_} guard.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{collector.py: constants at the top}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Each setting is written once, at the top, and changed in one place.
+
+            \medskip
+            Which one stops the collector? Why would a collector need a last day?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+URL = ("https://api.weather.gov/gridpoints/BOU/54,75/"
+       "forecast/hourly")
+HEADERS = {"User-Agent":
+           "WebDataScience/1.0 (your-email@colorado.edu)"}
+FILE = "forecasts.csv"
+FIELDS = ["collected_at", "update_time", "start_time",
+          "temperature", "precip_chance", ...]
+LAST_DAY = date(2026, 12, 11)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{collector.py: append, and write the header once}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{"a"} opens the file to add rows at its end. The header goes in only when the file is new.
+
+            \medskip
+            What would \texttt{"w"} do to last week's rows?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://docs.python.org/3/library/csv.html\#csv.DictWriter}{csv.DictWriter}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+    new_file = not os.path.exists(FILE)
+    with open(FILE, "a", newline="",
+              encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=FIELDS)
+        if new_file:
+            writer.writeheader()
+        for period in forecast["periods"]:
+            ...
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{collector.py: one row per hour}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Each period becomes a row. Every row repeats when we asked and when the NWS last updated the forecast.
+
+            \medskip
+            Why keep those two on every row?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+    collected_at = datetime.now(timezone.utc).isoformat(
+        timespec="seconds")
+    update_time = forecast["updateTime"]
+    ...
+            writer.writerow({
+                "collected_at": collected_at,
+                "update_time": update_time,
+                "start_time": period["startTime"], ...})
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{collector.py: stop, and fail where someone will see}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            After December 11, \texttt{main()} stops before it asks. \texttt{raise\_for\_status()} stops the script with an error if the answer isn't 200.
+
+            \medskip
+            Our notebook cells never use it. Why does a script that runs alone need it?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://requests.readthedocs.io/en/stable/api/\#requests.Response.raise_for_status}{raise\_for\_status()}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
 def main():
-    save_scores(get_scores(URL))
+    if datetime.now(timezone.utc).date() > LAST_DAY:
+        print("Collection ended on", LAST_DAY)
+        return
+    response = requests.get(URL, headers=HEADERS,
+                            timeout=30)
+    response.raise_for_status()
+    ...
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
 
-if __name__ == "__main__":   # the entry point
+\begin{frame}[fragile]{collector.py: run as a script}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The last two lines run \texttt{main()} only when the file is run as a script, as the workflow does with \texttt{python collector.py}.
+
+            \medskip
+            Where else in the file would you look for a bug?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://docs.python.org/3/library/__main__.html\#idiomatic-usage}{\texttt{\_\_main\_\_}}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+if __name__ == "__main__":
     main()
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.35\textwidth}
-            Three moves turn a notebook into production code:
-            \begin{itemize}\small
-                \item Wrap the work in a \texttt{main()} and guard it with \texttt{if \_\_name\_\_ == "\_\_main\_\_"} so it runs \textit{only} when executed directly.
-                \item Pin the schema in \texttt{FIELDNAMES} --- a fixed column order that stays stable across every run.
-                \item Open the CSV in \textbf{append} mode: each run adds one timestamped row.
-            \end{itemize}
-        \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Headless Selenium on a server}
+\begin{frame}{Step 4: your own repository}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-opts = Options()
-opts.add_argument("--headless")   # no window
-opts.add_argument("--no-sandbox") # req'd on CI
-opts.add_argument("--disable-dev-shm-usage")
-driver = webdriver.Chrome(options=opts)
-
-driver.get(url)
-WebDriverWait(driver, 10).until(  # let JS render
-  EC.presence_of_element_located(
-    (By.TAG_NAME,
-     "score-icon-critic-deprecated")))
-soup = BeautifulSoup(
-    driver.page_source, "html.parser")
-\end{lstlisting}
+            \begin{enumerate}\small
+                \item Unzip \texttt{boulder-forecast-template.zip}. It is in this week's Canvas module.
+                \item On GitHub, click \textbf{+} at the top right. Then click \textbf{New repository}.
+                \begin{itemize}\small
+                    \item Type the name \texttt{boulder-forecast}. Select \textbf{Public}.
+                    \item Turn on the README option. Click \textbf{Create repository}.
+                \end{itemize}
+            \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \texttt{--headless} runs Chrome with no window; \texttt{--no-sandbox} and \texttt{--disable-dev-shm-usage} are required on a GitHub Actions runner.
-
-            \medskip
-
-            Read \texttt{page\_source} \textit{after} \texttt{WebDriverWait} --- reading a JS-heavy page too early yields empty scores.
-
-            \medskip
-
-            The \texttt{-deprecated} element names are the site's own web components; the suffix warns they change often. When they do, fix it in dev tools, not here.
+            \textbf{Why a README?}\\[2pt]
+            {\footnotesize It gives the new repository its \texttt{main} branch.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 2 --- schedule it with GitHub Actions}
-    A YAML file in \texttt{.github/workflows/} runs your script on GitHub's cloud:
-\begin{lstlisting}
-# .github/workflows/scraper-action.yml
-name: Scrape Rotten Tomatoes Scores
+\begin{frame}{Step 4: upload two files}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \begin{enumerate}\small\setcounter{enumi}{2}
+                \item Click \textbf{Add file}, then \textbf{Upload files}. Drag in \texttt{collector.py} and \texttt{README.md}. Click \textbf{Commit changes}.
+                \item Click \texttt{collector.py}, then the pencil. In \texttt{HEADERS}, type your email address. Commit the change.
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{No \texttt{forecasts.csv}?}\\[2pt]
+            {\footnotesize The first run makes it.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 4: create the workflow}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \begin{enumerate}\small\setcounter{enumi}{4}
+                \item Click \textbf{Add file}, then \textbf{Create new file}.
+                \begin{itemize}\small
+                    \item Type the name \texttt{.github/workflows/collect.yml}. Each \texttt{/} makes a folder.
+                    \item Run the given cell under Step 4. Copy all that it prints into the big box.
+                    \item Commit the change.
+                \end{itemize}
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Why not upload it?}\\[2pt]
+            {\footnotesize Its folder's name starts with a dot. macOS hides it.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{collect.yml: when it runs}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A \textbf{workflow} is a file of steps. GitHub runs it on its own computers when something happens.
+
+            \medskip
+            Here, two things: a \texttt{schedule}, and a button, \texttt{workflow\_dispatch}. When will yours run first?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows\#schedule}{schedule}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[language={}]
+name: Collect Boulder's hourly forecast
+
 on:
   schedule:
-    - cron: "0 */6 * * *"     # every 6 hours (UTC)
-  workflow_dispatch:           # manual "Run workflow" button
+    - cron: "17 * * * *"
+  workflow_dispatch:
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Five fields, in UTC}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{cron} is the old Unix scheduler. Actions reads its five fields, in UTC unless told otherwise. A \texttt{*} means every value.
+
+            \medskip
+            Runs at minute 0 are delayed most often. Which Boulder hour is 13:30 UTC?
+
+            \medskip
+            {\scriptsize\textbf{Try one:} \href{https://crontab.guru}{crontab.guru}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            {\footnotesize
+            \begin{tabular}{@{}cccccl@{}}
+                \toprule
+                min & hour & day & month & weekday & \textbf{runs at} \\
+                \midrule
+                \texttt{17} & \texttt{*} & \texttt{*} & \texttt{*} & \texttt{*} & minute 17 of every hour \\
+                \texttt{0} & \texttt{*/6} & \texttt{*} & \texttt{*} & \texttt{*} & every six hours \\
+                \texttt{30} & \texttt{13} & \texttt{*} & \texttt{*} & \texttt{1-5} & 13:30, Monday to Friday \\
+                \bottomrule
+            \end{tabular}\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{collect.yml: permission to commit}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{contents: write} lets the workflow commit to your repository.
+
+            \medskip
+            Why does it need that? What else could it do with it?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax\#permissions}{permissions}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[language={}]
 permissions:
-  contents: write              # WITHOUT this, git push fails (403)
+  contents: write
+
 jobs:
-  scrape:
+  collect:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: {python-version: "3.11"}
-      - run: pip install -r requirements.txt
-      - uses: browser-actions/setup-chrome@v1   # matched ChromeDriver
-      - run: python scraper.py
-      - run: |                                  # commit new rows
-          git diff --staged --quiet || git commit -am "scores $(date -u)"
-          git pull --rebase origin main && git push
+      ...
 \end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{Scheduling with cron --- and a Python-free option}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Five fields: \texttt{minute hour day month weekday}. All times \textbf{UTC}.
-            \medskip
-
-            \begin{center}\small
-            \begin{tabular}{ll}
-                \toprule
-                Expression & Runs \\
-                \midrule
-                \texttt{0 */6 * * *}  & Every 6 hours \\
-                \texttt{0 12 * * 1-5} & Weekdays, noon \\
-                \texttt{30 8 * * *}   & Daily, 8:30 AM \\
-                \texttt{0 0 1 * *}    & First of month \\
-                \texttt{0 0 * * 0}    & Sundays, midnight \\
-                \bottomrule
-            \end{tabular}
-            \end{center}
-            \smallskip
-            {\footnotesize Not every scraper needs Python --- \texttt{curl} a JSON API straight from YAML:}
-\begin{lstlisting}
-- run: |
-    D=$(date -u -d yesterday +%Y/%m/%d)
-    curl -s ".../pageviews/top/en/$D" \
-      -o data/top.json   # no Python
-\end{lstlisting}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/crontab_guru.png}\\
-            {\scriptsize \texttt{crontab.guru} translates an expression into plain English. Bookmark it.}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Fail loudly: monitor \& harden}
+\begin{frame}[fragile]{collect.yml: a fresh computer each time}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            The dangerous failure is the \textbf{silent success}. The run reports no error, but the CSV row is empty. The site changed and the code raised no exception. Add a validation step to find this failure. Then stop the run cleanly:
-\begin{lstlisting}
-def main():
-    try:
-        save_scores(get_scores(URL))
-    except Exception as e:
-        print(f"failed: {e}", file=sys.stderr)
-        sys.exit(1)   # mark the step FAILED
-\end{lstlisting}
-\begin{lstlisting}
-- name: Validate results     # in the workflow
-  run: tail -1 scores.csv | grep -q ",," \
-    && { echo "empty!"; exit 1; } || true
-\end{lstlisting}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/actions_run_log.png}\\
-            {\scriptsize The Actions tab: green is not enough --- read the log.}
+        \begin{column}{0.37\textwidth}
+            Each run starts on an empty Ubuntu machine. First it copies your repository's files. Then it installs Python.
 
             \medskip
-            {\footnotesize Harden further: \texttt{timeout-minutes} kills a hung job, a \texttt{concurrency} group stops overlaps, pip caching speeds runs, and retry-with-backoff (Ch.~Protocols) rides out transient 503s.}
+            What would be missing if a step were left out?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[language={}]
+    steps:
+      - name: Get this repository's files
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{Lab: work these, then show-and-tell}
+\begin{frame}[fragile]{collect.yml: run the collector}
     \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            These two steps are what you would type in a terminal.
+
+            \medskip
+            Step names show in the run's log. Which step will you open when a run fails?
+        \end{column}
         \begin{column}{0.6\textwidth}
-            Work in pairs. Do these exercises from the notebook:
-            \begin{enumerate}\small
-                \item Build a scraper that runs in GitHub Actions. Deploy it. Run it for 3 or more days. Then analyze the data.
-                \item Convert an earlier project into a \texttt{.py} script with no interface. Run the script from the terminal.
-                \item Design a check that monitors the output. Use the file size, the row count, or the age of the data.
-                \item Select a government source such as Open-Meteo or USGS. Collect data for one week. Make a visualization of the change.
-                \item Write \texttt{check\_freshness.py}. The script must give a warning if the newest row is more than 24 hours old.
-                \item[6.] \textbf{5617}: run a collector for 2 or more weeks. Then write a report about the infrastructure. Use \textcite{wilson2017good} as a model
+\begin{lstlisting}[language={}]
+      - name: Install requests
+        run: pip install requests
+
+      - name: Collect the forecast
+        run: python collector.py
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{collect.yml: commit the new rows}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The last step commits \texttt{forecasts.csv} as \texttt{github-actions[bot]}, if any rows changed.
+
+            \medskip
+            If the collector fails, this step is skipped. What does your file look like then?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[language={}]
+      - name: Commit the new rows
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "..."
+          git add forecasts.csv
+          git diff --staged --quiet || git commit -m "..."
+          git pull --rebase
+          git push
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% img/run-workflow.png: a placeholder until someone captures the real page (img/IMAGES.md).
+\begin{frame}{Step 5: start the first run}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A scheduled run can start late. Start the first one by hand.
+            \begin{enumerate}\small\setcounter{enumi}{5}
+                \item Click the \textbf{Actions} tab. If GitHub asks, enable workflows. Click \textbf{Collect Boulder's hourly forecast}. Click \textbf{Run workflow}, then the green \textbf{Run workflow}.
             \end{enumerate}
         \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/run-workflow.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 5: read the log}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \begin{enumerate}\small\setcounter{enumi}{6}
+                \item Refresh the page until the run shows. Click the run, then the job \texttt{collect}. Click \textbf{Collect the forecast} to open that step.
+            \end{enumerate}
+            \medskip
+            How many hours did it save? Which \texttt{updateTime}?
+        \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Show-and-Tell}
-                \footnotesize Bring one of these to class:
-                \begin{itemize}\footnotesize
-                    \item a bug that you could not solve
-                    \item data that you collected and find interesting
-                    \item a question for a research design
-                \end{itemize}
-            \end{block}
+            \textbf{A green check}\\[2pt]
+            {\footnotesize Every step worked.\par}
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://docs.github.com/en/actions/how-tos/monitor-workflows/use-workflow-run-logs}{workflow run logs}\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 5: see the commit}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \begin{enumerate}\small\setcounter{enumi}{7}
+                \item Click the \textbf{Code} tab. Find \texttt{forecasts.csv}, and the commit by \texttt{github-actions[bot]}. Click the file.
+            \end{enumerate}
+            \medskip
+            From now on it runs by itself, every hour, until December 11.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Git scraping}\\[2pt]
+            {\footnotesize Each run kept as a commit, as newsrooms do. What can the history show that the file can't?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: your raw address}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            GitHub serves each file of a public repository at a \textbf{raw} address: the file alone, without GitHub's page.
+
+            \medskip
+            Put your user name in place of \texttt{<you>}.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+my_series = ("https://raw.githubusercontent.com/"
+             "<you>/boulder-forecast/main/forecasts.csv")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: read what your collector saved}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{pd.read\_csv()} reads from an address too. The raw copy can be five minutes behind.
+
+            \medskip
+            Which columns would differ from your neighbor's file?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+my_forecasts = pd.read_csv(my_series)
+print(my_forecasts.shape)
+my_forecasts.head()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Before Friday}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Open your \textbf{Actions} tab once. Each run is a line, with a green check or a red X.
+
+            \medskip
+            How many runs do you expect by Friday's class?
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Friday}\\[2pt]
+            {\footnotesize Part 2 starts at Step 7, with its own setup. Today's cells don't need to have run.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
 % =========================================================================
-\section{Friday · Textbook Revisions}
+\section{Friday · Live-Coding Lab}
 % =========================================================================
 
-\begin{frame}{Improving Chapter 14 together}
+\begin{frame}{Today: Part 2, what the collector gathered}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-14-automation.qmd} and reviews a classmate's.
+            The course has run the same \texttt{collector.py} every hour since November 13.
 
-            \bigskip
+            \medskip
+            Today we count how often the forecast changed and follow one hour as it came closer. Then we break a run on purpose.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Start at Step 7}\\[2pt]
+            {\footnotesize Download the new \texttt{lab-14.ipynb}. Missed Wednesday? Start here.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
 
-            The workflow (from Week 1):
+\begin{frame}[fragile]{Step 7: set up again}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            This cell is given. Put your email in \texttt{HEADERS}, and run it.
+
+            \medskip
+            \texttt{series} is the course's file. A new run adds to it at minute 17 of every hour.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+import requests
+import pandas as pd
+import matplotlib.pyplot as plt
+HEADERS = {"User-Agent": "WebDataScience/1.0 (...)"}
+nws_base = "https://api.weather.gov"
+series = ("https://raw.githubusercontent.com/"
+          "cuinfoscience/INFO4617-Fall2026/main/"
+          "labs/week-14/data/forecasts.csv")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: the course's series}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Read it, and look at its last rows.
+
+            \medskip
+            What can this file tell you that a live request can't? What can't it tell you?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+forecasts = pd.read_csv(series)
+print(forecasts.shape)
+forecasts.tail()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: runs, and forecasts}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Each run is one \texttt{collected\_at}. Each forecast the NWS issued is one \texttt{update\_time}.
+
+            \medskip
+            If the forecast changed every hour, the two counts would match. Do they?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+print(forecasts["collected_at"].nunique(), "runs")
+print(forecasts["update_time"].nunique(), "forecasts")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: each forecast, and its runs}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            This cell is given. For each forecast, it counts the runs that collected it, and finds the first and last.
+
+            \medskip
+            Which forecasts lasted longest? What does that say about when forecasters update it?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+per_forecast = (forecasts.groupby("update_time")
+    ["collected_at"].agg(["nunique", "min", "max"]))
+print(per_forecast.to_string())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: the share that was new}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Divide forecasts by runs: the share of runs that brought a forecast no earlier run had.
+
+            \medskip
+            Thirty collectors each ask 24 times a day. How many of their 720 requests bring something new?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+new_share = (forecasts["update_time"].nunique()
+             / forecasts["collected_at"].nunique())
+print(round(new_share, 2))
+print(round(720 * new_share), "of 720 daily requests")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{What a bot costs a server}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Step 8 counted how often the forecast changed. Our collector asks 24 times a day anyway.
+
+            \medskip
+            \texttt{Last-Modified} and \texttt{Cache-Control} say how new an answer is. Who pays for the requests that bring nothing new?
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Ask less?}\\[2pt]
+            {\footnotesize What would a collector need to know to ask less often and miss nothing?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: one hour, forecast again and again}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Every run forecasts the next six and a half days. So one hour is forecast again by every run before it comes.
+
+            \medskip
+            Take noon on Wednesday, our first class. How many runs forecast it?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+noon_rows = forecasts[forecasts["start_time"]
+                      == "2026-11-18T12:00:00-07:00"]
+print(len(noon_rows))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: lead time}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A row's \textbf{lead time} is how far ahead its run was: the hour's \texttt{start\_time} minus the run's \texttt{collected\_at}. This given cell plots the temperature against it.
+
+            \medskip
+            Where does the line settle?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+lead = (pd.to_datetime(noon_rows["start_time"], utc=True)
+        - pd.to_datetime(noon_rows["collected_at"],
+                         utc=True))
+lead_hours = lead.dt.total_seconds() / 3600
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.plot(lead_hours, noon_rows["temperature"], marker=".")
+ax.invert_xaxis()
+...
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: furthest ahead, and nearest}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Print the first row and the last: the furthest ahead and the nearest.
+
+            \medskip
+            Which one was right? What else would you have to collect to know?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+print(noon_rows[["collected_at", "temperature",
+                 "short_forecast"]].head(1))
+print(noon_rows[["collected_at", "temperature",
+                 "short_forecast"]].tail(1))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: midnight}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Do the same for midnight that night.
+
+            \medskip
+            How far apart were its lowest and highest forecasts? Is that more or less than noon's?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+midnight_rows = forecasts[forecasts["start_time"]
+                          == "2026-11-19T00:00:00-07:00"]
+print(len(midnight_rows))
+print(midnight_rows["temperature"].min(),
+      midnight_rows["temperature"].max())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: is it still running?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A collector that stops doesn't say so. Its file just stops growing.
+
+            \medskip
+            A \textbf{freshness check} asks how old the newest row is. Under about an hour and a half is fresh. Is the course's?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+newest = pd.to_datetime(forecasts["collected_at"]).max()
+print(newest, pd.Timestamp.now(tz="UTC") - newest)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: is yours?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Check your own file the same way, from Wednesday's raw address.
+
+            \medskip
+            Is it fresh? If not, where would you look first?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+my_series = ("https://raw.githubusercontent.com/"
+             "<you>/boulder-forecast/main/forecasts.csv")
+my_newest = pd.to_datetime(
+    pd.read_csv(my_series)["collected_at"]).max()
+print(my_newest, pd.Timestamp.now(tz="UTC") - my_newest)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: is the forecast fresh?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Rows can keep coming while \texttt{update\_time} stands still.
+
+            \medskip
+            How long ago did the forecasters last change it? Where could this check run so that it warns you without your asking?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+print(pd.Timestamp.now(tz="UTC")
+      - pd.to_datetime(forecasts["update_time"]).max())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: a mistyped address}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            This request is \textbf{designed to break}. A deliberate error needs no GitHub issue; only code that is broken by accident does.
+
+            \medskip
+            What status code, and what \texttt{detail}?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+broken_url = (f"{nws_base}/gridpoints/BOU/54,75/"
+              "forecast/hourlyy")
+broken_response = requests.get(broken_url,
+                               headers=HEADERS)
+broken = broken_response.json()
+print(broken_response.status_code, broken.get("detail"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% img/failed-run.png: a placeholder until someone captures the real page (img/IMAGES.md).
+\begin{frame}{Step 11: break your collector}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
             \begin{enumerate}\small
-                \item Branch / fork the book repo
-                \item Edit the chapter; commit with a clear message
-                \item Open a PR describing \textit{what} and \textit{why}
-                \item Review two peers' PRs: kind, specific, actionable
+                \item Edit \texttt{collector.py}. In \texttt{URL}, change \texttt{hourly} to \texttt{hourlyy}. Commit the change.
+                \item Run the workflow. Open the run with the red X, then its job.
             \end{enumerate}
+            \medskip
+            Which line of the log names the error? Was the commit step run?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/failed-run.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 11: fix it}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \begin{enumerate}\small\setcounter{enumi}{2}
+                \item Change \texttt{hourlyy} back to \texttt{hourly}. Commit the change. Run the workflow again, and wait for the green check.
+            \end{enumerate}
+            \medskip
+            A red X is a loud failure: GitHub can email whoever made the workflow. Did you get an email?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://docs.github.com/en/actions/concepts/workflows-and-actions/notifications-for-workflow-runs}{notifications for workflow runs}\par}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: not every mistype fails}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Ask for the hourly forecast with the grid numbers swapped, \texttt{75,54}.
+
+            \medskip
+            What status code? Did anything tell you it wasn't Boulder?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+swapped_grid_url = (f"{nws_base}/gridpoints/BOU/75,54/"
+                    "forecast/hourly")
+swapped_grid_response = requests.get(swapped_grid_url,
+                                     headers=HEADERS)
+swapped_grid = swapped_grid_response.json()["properties"]
+print(swapped_grid_response.status_code,
+      swapped_grid["periods"][0]["temperature"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Quiet failures}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Some failures leave no red X. A square near Aurora answers 200. A forecast can stop changing. GitHub pauses a public repository's schedule after 60 days without activity.
+
+            \medskip
+            Which would you rather find a month from now: a gap, or a month of Aurora's forecasts?
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{img/pr_review.png}
+            \includegraphics[width=.9\textwidth]{slides/week-02/img/this-is-fine.jpg}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{A revision menu for Chapter 14}
-    High-value targets --- pick one and scope it to a single PR:
-    \begin{itemize}
-        \item \textbf{Run the workflow live.} Fork the repo, trigger the Action, and report what broke --- selector drift on the \texttt{-deprecated} elements, or a ChromeDriver mismatch. Document the fix (this is the chapter's own fragility warning).
-        \item \textbf{Deepen ``Common Issues to Debug.''} Add a worked YAML-indentation failure, a \texttt{git pull --rebase} conflict walkthrough, or a \texttt{webdriver-manager} recipe for local driver drift.
-        \item \textbf{Add a figure.} An annotated Actions run-log screenshot, the notebook$\rightarrow$script$\rightarrow$pipeline diagram, or a \texttt{crontab.guru} capture would each help.
-        \item \textbf{Make an exercise turnkey.} Ship a starter \texttt{requirements.txt} + workflow template and expected output so Exercises 1 and 4 are self-checking.
-        \item \textbf{Extend ``Further Reading.''} A public-interest collector (air-quality network, transit tracker) tied to the ownership callout.
-    \end{itemize}
-\end{frame}
+% Free tiers checked on 2026-11-13 on each provider's own pages; sources in img/IMAGES.md ("Sources for
+% the hosted-scheduler table").
+\begin{frame}{Other places to run a schedule}
+    Actions is one of several hosted schedulers. Each free tier has its own limit. Which of these could run our collector every hour, for free?
 
-\begin{frame}{A good revision, and a good review}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \begin{block}{A strong PR}
-                \begin{itemize}\small
-                    \item One focused change, clearly titled
-                    \item Explains the problem it fixes
-                    \item Builds (\texttt{quarto render}) without errors
-                    \item Matches the book's voice and notation
-                    \item Discloses any AI assistance
-                \end{itemize}
-            \end{block}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{A strong review}
-                \begin{itemize}\small
-                    \item Runs / reads the change, not just skims
-                    \item Names specifics (line, claim, code)
-                    \item Separates ``must fix'' from ``nice to have''
-                    \item Is generous --- assume good faith
-                    \item Ends with a clear verdict
-                \end{itemize}
-            \end{block}
-        \end{column}
-    \end{columns}
     \medskip
-    \centering\small Last deck of the semester --- Weeks 15--16 turn everything you've built into \textbf{research design} and your Final Project presentation (see the syllabus).
+    {\footnotesize\renewcommand{\arraystretch}{1.25}
+    \begin{tabular}{@{}lll@{}}
+        \toprule
+        \textbf{Service} & \textbf{What runs} & \textbf{Free tier, read on Nov 13, 2026} \\
+        \midrule
+        GitHub Actions (ours) & A workflow's steps & Free in public repositories; every 5 minutes at most \\
+        GitLab scheduled pipelines & A CI/CD pipeline & 400 compute minutes a month; 24 runs a day \\
+        PythonAnywhere scheduled tasks & A Python script & None on free accounts made since January 2026 \\
+        Cloudflare Workers Cron Triggers & A Worker, in JavaScript or Python & 5 cron triggers; 10 ms of CPU a run \\
+        Google Cloud Scheduler & A call to a URL you give it & 3 jobs a month per billing account \\
+        Val Town & A val, in TypeScript & Every 15 minutes at most \\
+        \bottomrule
+    \end{tabular}\par}
+\end{frame}
+
+\begin{frame}[fragile]{cron on your own computer}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{crontab -e} opens your computer's schedule. This line runs the collector at minute 17, in your computer's time zone.
+
+            \medskip
+            It runs only while the computer is awake. What happens when your laptop sleeps?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[language={},literate={~}{{\raisebox{-0.6ex}{\textasciitilde}}}1]
+17 * * * * cd ~/boulder-forecast && python3 collector.py
+\end{lstlisting}
+            \medskip
+            {\footnotesize Wrong Python? Give the full path that \texttt{which python3} prints in \texttt{webdata}.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 12: what did we learn?}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Answer in the notebook, as comments.
+            \begin{itemize}\small
+                \item How often should a collector ask?
+                \item How far did noon's forecast move?
+                \item Name a failure with a red X, and one without.
+                \item What should your README say about when you collected?
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Due Sunday, Nov 22}\\[2pt]
+            {\footnotesize Chapter 14's Recommended Exercises, from its companion notebook. Graded on a good-faith attempt.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Checkpoint 4's criteria: canvas/course_spec.py (PORTFOLIO_WEEKS and _PORTFOLIO_CRITERIA, week 14);
+% due date: docs/course-facts.md.
+\begin{frame}{Friday's last 15 minutes: portfolio checkpoint 4}
+    \dayband{Due Sunday, Nov 29}{Draft your write-up}
+
+    \medskip
+    \begin{itemize}\small
+        \item \textbf{A full draft} of \texttt{report.md} or \texttt{report.pdf}: every section, your own results and figures, your sources cited
+        \item \textbf{All four files}, present and current: \texttt{README.md}, \texttt{proposal.md}, your notebook, and your report
+        \item \textbf{A README} that lets someone else reproduce the project: setup, how to run it, where the data came from
+    \end{itemize}
+
+    \medskip
+    Work on your README's \textbf{How to reproduce} now: when you sent your requests, and from what code. Next: final presentations, after Fall Break.
 \end{frame}
 
 % =========================================================================
 \begin{frame}{Key takeaways}
     \begin{enumerate}
-        \item Production collection is a progression: \textbf{notebook $\rightarrow$ script $\rightarrow$ scheduled pipeline} --- the same code, moved into production.
-        \item Run once for a \textbf{snapshot}; run on a schedule for a \textbf{time series} (a panel dataset you can actually analyze).
-        \item GitHub Actions gives free cloud scheduling; set \texttt{permissions: contents: write} or \texttt{git push} 403s, and remember cron is \textbf{UTC}.
-        \item \textbf{Fail loudly}: validate output to catch silent successes, wrap scrapes in try/except, and harden with timeouts, concurrency, and backoff.
-        \item Automation is not ``set and forget'' --- owning your data infrastructure means committing to its \textbf{stewardship}.
+        \item One request is a \textbf{snapshot}. A series needs a program on a schedule.
+        \item A collector \textbf{appends}, and records when it asked.
+        \item \textbf{Count} what changed before deciding how often to ask.
+        \item A red X is a \textbf{loud} failure. Check freshness for the quiet ones.
+        \item Write a \textbf{last day} into every collector.
     \end{enumerate}
-    \bigskip
 \end{frame}
 
 \end{document}
