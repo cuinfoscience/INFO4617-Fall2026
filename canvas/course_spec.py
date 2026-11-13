@@ -98,7 +98,10 @@ WEEKS = [
 TEACHING_WEEKS = [w for w in range(2, 15)]
 # Week 10 (the proposal week) has no lab or revision assignment in Canvas, by
 # the instructor's decision on 2026-10-23.
-NO_ASSIGNMENT_WEEKS = {10}
+# Week 14 (fall 2026) has neither: the instructor deleted its lab and its
+# portfolio checkpoint in Canvas, and said so in week 13's check-in frame
+# (2026-11-13). Class still runs the automation lab on Nov 18 and 20.
+NO_ASSIGNMENT_WEEKS = {10, 14}
 # From week 9, modules have no day headers ("Monday · Concepts", "Wednesday ·
 # Notebook Lab", "Friday · Textbook Revisions" or "Friday · Project portfolio"):
 # from week 10 the three days are one live-coding lab, so the headers no longer
@@ -151,11 +154,12 @@ GROUPS = [
 ]
 
 LAB_POINTS = 10
-# Labs whose deadline isn't the Sunday that closes their week. Week 13's moved
-# to Sunday, Nov 22, when Wednesday Nov 11's class was cancelled and Part 3 of
-# its lab moved to Monday Nov 16 (the instructor's decision of 2026-11-12). Its
-# portfolio checkpoint stays on Nov 15.
-LAB_DUE = {13: date(2026, 11, 22)}
+# Labs whose deadline isn't the Sunday that closes their week. Week 13's is
+# Wednesday, Nov 18, at 11:59 p.m.: Wednesday Nov 11's class was cancelled and
+# Part 3 of its lab moved to Monday Nov 16. The instructor first moved it to
+# Sunday, Nov 22 (2026-11-12), then to Nov 18 (week 13's check-in frame and
+# Canvas, 2026-11-13). Its portfolio checkpoint stays on Nov 15.
+LAB_DUE = {13: date(2026, 11, 18)}
 # Textbook Revisions are credit/no credit: 1 point for any issue, pull request,
 # or comment that lands on GitHub in a class repository (the book, this repo,
 # or the Missing Manual). Set in Canvas on 2026-10-23; docs/course-facts.md.
@@ -169,9 +173,12 @@ FINAL_PARTS = [
      "A research question; your data source(s) and method; and an ethics and "
      "feasibility check, with one record you retrieved. The assignment page is "
      "PROPOSAL_DESCRIPTION, below."),
-    ("Final Project — Presentation", 60, LAST_DAY,
-     "Present your project to the class during the final week. Bring your data, "
-     "one or two visualizations that carry an argument, and what surprised you."),
+    # Slides due Sunday, Nov 29 (week 13's check-in frame and Canvas, 2026-11-13);
+    # presented in the final week.
+    ("Final Project — Presentation", 60, date(2026, 11, 29),
+     "Submit at least four slides to the class deck by Sunday, November 29: "
+     "motivation, data, result, and discussion. Present them to the class in "
+     "the final week, November 30 to December 4."),
     ("Final Project — Repository & Write-up", 150, FINAL_DUE,
      "Your project repository (code, data or collection scripts, and a README "
      "someone else could follow) plus the written analysis. Due during finals "
@@ -452,7 +459,8 @@ def revision_name(wk):
 
 def revision_assignments():
     """One textbook-revision workshop per teaching week, met Friday and due
-    that Sunday; weeks 11-14 are portfolio checkpoints (PORTFOLIO_WEEKS)."""
+    that Sunday; weeks 11-13 are portfolio checkpoints (PORTFOLIO_WEEKS; week 14's
+    entry stays, but NO_ASSIGNMENT_WEEKS skips it)."""
     out = []
     for wk in TEACHING_WEEKS:
         _, _, ch, topic, _, chfile, _ = week_info(wk)
@@ -658,7 +666,7 @@ PROPOSAL_RUBRIC = {
 # 2026-10-23 to weeks 11-14; weeks 2-9 were graded before it existed and have
 # no rubric in Canvas. Week 10's lab isn't in Canvas yet.
 LAB_RUBRIC = {
-    "assignments": [f"Week {wk} Lab — {week_info(wk)[3]}" for wk in (11, 12, 13, 14)],
+    "assignments": [f"Week {wk} Lab — {week_info(wk)[3]}" for wk in (11, 12, 13)],
     "title": "Notebook Lab (10 points)",
     "criteria": [
         ("1. Valid notebook HTML", "Your completed companion notebook, exported to HTML.", [
@@ -727,6 +735,7 @@ PORTFOLIO_RUBRICS = [
      "title": f"Week {wk} Portfolio ({PORTFOLIO_POINTS} points)",
      "criteria": crit}
     for wk, crit in _PORTFOLIO_CRITERIA.items()
+    if wk not in NO_ASSIGNMENT_WEEKS
 ]
 
 
@@ -1028,7 +1037,8 @@ def syllabus_html() -> str:
       <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;"><strong>Final Project</strong></td>
       <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;text-align:center;">40%</td>
       <td style="padding:6px 10px;border-bottom:1px solid #E8E4D9;">
-        Proposal (Oct 25, 5%), in-class presentation (final week, 10%), and the
+        Proposal (Oct 25, 5%), presentation (slides Nov 29, presented in the
+        final week, 10%), and the
         repository and write-up (Dec 7, 25%).</td>
     </tr>
   </table>

@@ -98,9 +98,10 @@ Canvas.
 - **Late work:** 24 hours' grace, then 1 point for every started day since the
   deadline, at most 5. Comment: "This lab was submitted N days late, past the
   24-hour grace period, so N points were deducted." Add "(the late penalty is
-  capped at 5 points)" past five days. Week 13's lab is due Sunday, Nov 22,
-  not Nov 15 (the instructor's decision of 2026-11-12, after Wednesday Nov 11's
-  class was cancelled), so count its lateness from Nov 22.
+  capped at 5 points)" past five days. Week 13's lab is due Wednesday, Nov 18,
+  at 11:59 p.m., not Nov 15 (the instructor moved it after Wednesday Nov 11's
+  class was cancelled: to Nov 22 on 2026-11-12, then to Nov 18 on 2026-11-13),
+  so count its lateness from Nov 18. Week 14 has no graded lab.
 - **No submission** earns 0, with no comment.
 
 One-sentence comments, added where they apply:
@@ -128,9 +129,9 @@ Hold a submission for the instructor, ungraded, when it looks produced by an
 AI agent (notes addressed to a reader, results quoted that no output shows) or
 when a setup failure stopped the work.
 
-## Portfolio checkpoints, weeks 11–14 (2 points a week)
+## Portfolio checkpoints, weeks 11–13 (2 points a week)
 
-In weeks 11–14 the Textbook Revisions assignments build each student's Final
+In weeks 11–13 the Textbook Revisions assignments build each student's Final
 Project as a public portfolio: one repository on the student's own GitHub
 account, updated weekly, graded on what is pushed by the deadline. Each has a
 rubric in Canvas (`PORTFOLIO_RUBRICS` in `canvas/course_spec.py`) with two
@@ -141,7 +142,9 @@ criteria, each Met 1 or Not met 0:
 | 11, Sun Nov 1: set up the repo | A public repo with a README | A proposal document: `proposal.md`, or the proposal as a PDF |
 | 12, Sun Nov 8: collect and clean | Collection code that runs politely and saves raw data, and a cleaning step that produces a tidy dataset | A data sample with a dictionary, and the README's Data section (source, date, count, what was kept out and why) |
 | 13, Sun Nov 15: analyze | A notebook that runs top to bottom with output, with results that answer part of the question | A figure with title, axes, and caption, and the README's Methods and preliminary Findings |
-| 14, Sun Nov 29: draft the write-up | A full draft of `report.md` or `report.pdf` using their own results, citing sources | All four required files current, and a README that lets someone reproduce the project |
+
+Week 14's checkpoint (draft the write-up, Nov 29) was deleted from Canvas with
+week 14's lab on 2026-11-13, so there is nothing to grade for week 14.
 
 Week 11 was graded on the README and the proposal alone, as the instructor
 decided on 2026-11-02; the Canvas rubric's longer wording (title, name, summary,
