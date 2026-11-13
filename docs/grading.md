@@ -98,7 +98,9 @@ Canvas.
 - **Late work:** 24 hours' grace, then 1 point for every started day since the
   deadline, at most 5. Comment: "This lab was submitted N days late, past the
   24-hour grace period, so N points were deducted." Add "(the late penalty is
-  capped at 5 points)" past five days.
+  capped at 5 points)" past five days. Week 13's lab is due Sunday, Nov 22,
+  not Nov 15 (the instructor's decision of 2026-11-12, after Wednesday Nov 11's
+  class was cancelled), so count its lateness from Nov 22.
 - **No submission** earns 0, with no comment.
 
 One-sentence comments, added where they apply:
