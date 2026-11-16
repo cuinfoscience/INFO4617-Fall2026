@@ -8,6 +8,8 @@
 % file directly from its own folder (no TEXINPUTS needed).
 \makeatletter\def\input@path{{../common/}}\makeatother
 \input{preamble}
+% Larger code than the house default: a frame holds one short block (AUTHORING.md, "Code style")
+\lstset{basicstyle=\ttfamily\footnotesize}
 
 \title[Week 11 · Government APIs]{{\Huge Government Data APIs}}
 \subtitle{Week 11 · APIs module · Textbook Chapter 11}
@@ -19,6 +21,9 @@
 \maketitle
 
 % -------------------------------------------------------------------------
+% Rebuilt on 2026-11-16 from the lab key (labs/week-11/lab-11-key.ipynb, rebuilt 2026-11-10 and revised
+% 2026-11-16), one frame per cell, by docs/plans/2026-11-16-incremental-style-revisions.md. The lab, and
+% so the code on these frames, follows chapter 11 at textbook commit 3036573.
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
@@ -28,26 +33,26 @@
 
             \dayband{Monday}{Lab, part 1: the Census}
             \begin{itemize}\small
-                \item Keys, and \textit{what can I ask for?} --- the variable and geography catalogs
+                \item Keys, and \textit{what can I ask for?} From a table on the website to the same number from the API
             \end{itemize}
 
             \medskip
 
             \dayband{Wednesday}{Lab, part 2: more of the Census}
             \begin{itemize}\small
-                \item Comparing places, margins of error, and the places the survey couldn't measure
+                \item Many places at once, margins of error, and the places the survey couldn't measure
             \end{itemize}
 
             \medskip
 
             \dayband{Friday}{Lab, part 3: FRED}
             \begin{itemize}\small
-                \item \textit{Let the server compute}; then textbook revisions
+                \item \textit{Let the server compute}; then your portfolio checkpoint
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{The lab}\\[2pt]
-            {\footnotesize \texttt{labs/week-11/lab-11.ipynb} in the course repository. Each part is added before its day.\par}
+            {\footnotesize \texttt{labs/week-11/lab-11.ipynb} in the course repository, and its key, \texttt{lab-11-key.ipynb}.\par}
             \medskip
             \begin{alertblock}{Two keys, kept out of the notebook}
                 \footnotesize \texttt{CENSUS\_KEY} Monday and Wednesday; \texttt{FRED\_KEY} Friday. Links are in the Canvas announcement and the lab's first cell.
@@ -78,7 +83,7 @@
             \begin{itemize}\small
                 \item I write the code on screen, and you write it in your copy
                 \item Put \textbf{your} email in the User-Agent in Step 0
-                \item Today: Part 1, Steps 0--6, about 50 minutes
+                \item Today: Part 1, Steps 0--4, about 50 minutes
                 \item Wednesday and Friday: download the new copy and start at that part's setup step
             \end{itemize}
         \end{column}
@@ -90,11 +95,8 @@
             {\footnotesize The lab is practice. After each step, a \textbf{Discuss} box holds questions we'll talk over before the next.\par}
             \medskip
             \begin{alertblock}{Error flavors}
-                \footnotesize A missing key stops Step 0 \textit{on purpose}: set it and run again. A cell that fails with your key set is \textit{broken}: tell me, or open an issue.
+                \footnotesize A missing key stops Step 0 \textit{on purpose}: set it and run again. Step 4 breaks requests \textit{on purpose}. A cell that fails with your key set is \textit{broken}: tell me, or open an issue.
             \end{alertblock}
-            \textbf{No key yet?}\\[2pt]
-            {\footnotesize Follow along: the key shows every output. A Census key works only after you click the link in its email.\par}
-            \medskip
         \end{column}
     \end{columns}
 \end{frame}
@@ -135,7 +137,6 @@
         Friday & FRED & \textbf{Let the server compute}: transforms in the request \\
         \midrule
         On your own & EIA & \textbf{Let the server filter}: facets narrow the data before it's sent \\
-        On your own & Congress.gov & \textbf{Follow the links}: records point to related records \\
         \bottomrule
     \end{tabular}
     \end{center}
@@ -144,199 +145,139 @@
     And one idea across all of them: a \textbf{key} says who you are, and it stays out of your notebook.
 \end{frame}
 
-\begin{frame}[fragile]{Keys stay out of the notebook}
+\begin{frame}{Keys stay out of the notebook}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-            A \textbf{key} identifies you, counts your requests, and enforces rate limits. A key typed into a notebook travels with it: into a commit, a submission, a classmate's laptop.
+        \begin{column}{0.6\textwidth}
+            A \textbf{key} identifies you, counts your requests, and enforces rate limits.
 
             \medskip
-            Store it with the \texttt{webdata} environment, once, in a terminal (on Windows, the Anaconda Prompt); then restart Jupyter and read it:
-\begin{lstlisting}
-conda env config vars set CENSUS_KEY="your-key" -n webdata
+            A key typed into a notebook travels with it: into a commit, a submission, a screenshot, a classmate's laptop.
 
-import os
-census_key = os.environ["CENSUS_KEY"]   # a missing key stops here
-\end{lstlisting}
             \medskip
-            The User-Agent still says who sent each request: \texttt{WebDataScience/1.0 (your-email@colorado.edu)}.
+            So treat it like a password. Never paste it into a cell or a code file, and never print it.
         \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{Or in your shell}\\[2pt]
-            {\footnotesize \texttt{export CENSUS\_KEY="your-key"} in \texttt{\textasciitilde/.zshrc} or \texttt{\textasciitilde/.bashrc}; \texttt{setx} on Windows. Chapter 11's ``Setting Environment Variables'' shows both ways.\par}
-            \medskip
-            \textbf{Or a file}\\[2pt]
-            {\footnotesize A JSON file, \texttt{api\_keys.json}, added to \texttt{.gitignore} \textit{before your first commit}. A key in git history stays there even after you delete the file.\par}
+        \begin{column}{0.35\textwidth}
+            \textbf{Three safe ways in}\\[2pt]
+            {\footnotesize An environment variable, set once (next frame). A JSON file kept out of git. \texttt{getpass()}, when you can't restart.\par}
             \medskip
             \textbf{Names}\\[2pt]
             {\footnotesize The lab uses \texttt{CENSUS\_KEY} and \texttt{FRED\_KEY}. Chapter 11 uses the same names, and \texttt{EIA\_KEY} for the EIA.\par}
-            \medskip
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{Discovery: two catalogs before any data}
+\begin{frame}[fragile]{Before class: store your key}
     \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
-            \dayband{What}{the variable catalog}
-            \begin{itemize}\small
-                \item Variables come in \textbf{groups}: \texttt{B25034} is ``Year Structure Built''
-                \item \texttt{B25034\_002E}: group, line, and \texttt{E} for estimate (\texttt{M} is its margin of error)
-                \item \texttt{.../acs5/groups/B25034.json} is itself an API
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.48\textwidth}
-            \dayband{Where}{the geography catalog}
-            \begin{itemize}\small
-                \item \texttt{.../acs5/geography.json} lists every level the dataset answers for
-                \item Each says what it \textbf{requires}: a \texttt{place} needs a \texttt{state}; a \texttt{tract} needs a \texttt{state} and a \texttt{county}
-                \item Places are \textbf{FIPS codes}, as strings: Colorado \texttt{08}, Boulder \texttt{07850}
-            \end{itemize}
-        \end{column}
-    \end{columns}
-
-    \bigskip
-    \centering\small Codes change between survey years: learn to look them up, not to memorize them. Then \textbf{sanity-check} one value: Boulder's median household income is \$87,493 ($\pm$\$6,221), not 7 or 70 million.
-\end{frame}
-
-% The code on these frames is the lab's Part 1 (labs/week-11/lab-11-key.ipynb), run live on
-% 2026-10-25 against the 2020-2024 ACS five-year estimates, following chapter 11 at textbook 1d22d06.
-\begin{frame}[fragile]{Census --- from the catalogs to a real place}
-    Name the variables with \texttt{get}, the place with \texttt{for}, and what it requires with \texttt{in}:
-\begin{lstlisting}
-census_base = "https://api.census.gov/data/2024/acs/acs5"
-params = {"get": "NAME,B25034_001E,B25034_002E,B25034_003E",
-          "for": "place:07850",      # Boulder: a FIPS code, kept as a string
-          "in": "state:08",          # a place requires its state
-          "key": census_key}
-data = requests.get(census_base, params=params, headers=HEADERS).json()
-
-df = pd.DataFrame(data[1:], columns=data[0])   # row 0 is the header
-numeric_cols = [c for c in df.columns if c.startswith("B25034")]
-df[numeric_cols] = df[numeric_cols].apply(pd.to_numeric)   # values arrive as strings
-\end{lstlisting}
-    \small Boulder has 47,465 housing units; 646 were built in 2020 or later, 3,836 in the 2010s.
-\end{frame}
-
-% =========================================================================
-\section{Wednesday}
-% =========================================================================
-
-% The code on these frames is the lab's Part 2 (labs/week-11/lab-11-key.ipynb), rebuilt on
-% 2026-10-28 for two APIs and run live that day, following chapter 11 at textbook 6ea83ac.
-\begin{frame}{Today: Part 2, more of the Census}
-    \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-            We finish what Monday started, with the Census alone:
-            \begin{itemize}\small
-                \item \textbf{Compare} two cities in one request, and draw them
-                \item Read a \textbf{margin of error} before saying two places differ
-                \item Find the places the survey \textbf{couldn't measure}, before they wreck an average
-            \end{itemize}
+        \begin{column}{0.37\textwidth}
+            Open a terminal. On Windows, open the Anaconda Prompt. Store the key with the \texttt{webdata} environment.
 
             \medskip
-            \dayband{Use it}{Steps 4--7, about 33 minutes}
-            \begin{itemize}\small
-                \item Download the new \texttt{lab-11.ipynb}; start at \textbf{Step 4}, which imports and checks the key again
-                \item Put \textbf{your} email in the User-Agent
-            \end{itemize}
+            Then quit Jupyter. Restarting the kernel isn't enough: Jupyter reads its variables only when it starts.
         \end{column}
-        \begin{column}{0.4\textwidth}
-            \begin{alertblock}{One key today}
-                \footnotesize \texttt{CENSUS\_KEY}. Still \texttt{MISSING}? The next three frames.
-            \end{alertblock}
-            \textbf{Friday}\\[2pt]
-            {\footnotesize FRED, and \textit{let the server compute}. Get \texttt{FRED\_KEY} from a free FRED account before then.\par}
-            \medskip
-            \textbf{On your own}\\[2pt]
-            {\footnotesize The EIA and Congress.gov: Friday's last frames say where to start.\par}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Treat an API key like a password}
-    \begin{alertblock}{Never paste a key into a notebook cell or a code file}
-        \footnotesize Whatever is in a cell is saved with the notebook, and goes wherever it goes: a commit, a submission, a screenshot, a classmate's laptop. There are three safe ways in; the first is the one to set up once.
-    \end{alertblock}
-    \medskip
-    \dayband{1}{An environment variable, set before Jupyter starts}
-    \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
-            \textbf{Any system: with the \texttt{webdata} environment}\\[2pt]
-            {\footnotesize In a terminal (on Windows, the Anaconda Prompt):\par}
-\begin{lstlisting}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[language=bash]
+# Once, in a terminal
 conda env config vars set CENSUS_KEY="your-key" -n webdata
-\end{lstlisting}
-            {\footnotesize Then \textbf{close that terminal and open a new one}, and start Jupyter from it:\par}
-\begin{lstlisting}
+# Close it, open a new one, and start Jupyter there
 conda activate webdata
 jupyter lab
 \end{lstlisting}
-        \end{column}
-        \begin{column}{0.48\textwidth}
-            \textbf{Or in your shell}\\[2pt]
-            {\footnotesize \textbf{Mac:} add \texttt{export CENSUS\_KEY="your-key"} to \texttt{\textasciitilde/.zshrc} (Linux: \texttt{\textasciitilde/.bashrc}). \textbf{Windows:} \texttt{setx CENSUS\_KEY "your-key"}.\par}
-            \medskip
-            {\footnotesize Either way, \textbf{close the terminal, open a new one}, and start Jupyter from the new one. A terminal reads its settings only when it opens, and Jupyter reads its variables only when it starts: a Jupyter already running must be quit (\textbf{File $\rightarrow$ Shut Down}) and started again. Restarting the kernel isn't enough.\par}
-            \medskip
-            {\footnotesize In the notebook: \texttt{census\_key = os.environ["CENSUS\_KEY"]}\par}
+            {\scriptsize Or in your shell: \texttt{export CENSUS\_KEY="your-key"} in \texttt{\textasciitilde/.zshrc} or \texttt{\textasciitilde/.bashrc}; \texttt{setx} on Windows. Chapter 11's ``Setting Environment Variables'' shows both.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Two more safe ways: a JSON file, or \texttt{getpass()}}
+\begin{frame}[fragile]{Or: a JSON file kept out of git}
     \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
-            \dayband{2}{A JSON file beside the notebook}
-            \medskip
+        \begin{column}{0.37\textwidth}
+            Put \texttt{api\_keys.json} in the notebook's folder. Add it to \texttt{.gitignore} \textbf{before your first commit}.
 
-            {\footnotesize \texttt{api\_keys.json}, in the notebook's folder, added to \texttt{.gitignore} \textbf{before your first commit}:\par}
+            \medskip
+            A key in git history stays there, even after you delete the file.
+        \end{column}
+        \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-{"census": "your-key", "fred": "your-key"}
-\end{lstlisting}
-            {\footnotesize Then, in the notebook:\par}
-\begin{lstlisting}
+# api_keys.json holds:
+# {"census": "your-key", "fred": "your-key"}
 import json
 
+# Read the file, then the key
 with open("api_keys.json") as f:
     keys = json.load(f)
 census_key = keys["census"]
 \end{lstlisting}
-            {\footnotesize Never share the file, or the folder it's in.\par}
-        \end{column}
-        \begin{column}{0.48\textwidth}
-            \dayband{3}{\texttt{getpass()}, when you can't restart}
-            \medskip
-
-            {\footnotesize Each setup step's given cell asks only if the key is missing, so \textbf{Run All} is safe:\par}
-\begin{lstlisting}
-from getpass import getpass
-if not os.environ.get("CENSUS_KEY"):
-    os.environ["CENSUS_KEY"] = getpass(
-        "CENSUS_KEY isn't set. Paste it here: ")
-\end{lstlisting}
-            \begin{enumerate}\footnotesize
-                \item Run it. A box opens under the cell (in VS Code, at the top of the window).
-                \item Paste your key and press \textbf{Enter}. Nothing shows, on purpose.
-                \item Run the next cell, which reads the key. It lasts until the kernel restarts.
-            \end{enumerate}
-            {\footnotesize Paste only into the box, never between the quotation marks.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{KeyError}: Python can't see the key}
+% The code on Monday's frames is the lab's Part 1 (labs/week-11/lab-11-key.ipynb), Steps 0-4.
+\begin{frame}{Step 0: set up}
     \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
-            Each setup step checks before it reads, and never prints the key:
-\begin{lstlisting}
-print("CENSUS_KEY:", "set" if "CENSUS_KEY" in os.environ
-                     else "MISSING")
-# CENSUS_KEY: set
-\end{lstlisting}
+        \begin{column}{0.6\textwidth}
+            Step 0's first two cells are given. Put your email in \texttt{HEADERS}, then run both.
+
             \medskip
-            \small Jupyter sees only the variables set \textbf{before it started}, in \textbf{the place it started from}. The chapter's ``When a Key Says \texttt{MISSING}'' lists the usual causes:
+            The check prints \texttt{set} or \texttt{MISSING}. It never prints the key.
+
+            \medskip
+            \texttt{MISSING}? Quit Jupyter and start it from a new terminal, or use the second cell.
         \end{column}
-        \begin{column}{0.46\textwidth}
+        \begin{column}{0.35\textwidth}
+            \textbf{The User-Agent}\\[2pt]
+            {\footnotesize Still says who sent each request, as in week 10: \texttt{WebDataScience/1.0 (your-email@colorado.edu)}.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 0: a missing key}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            This given cell asks only if the key is missing. Run it. A box opens under the cell.
+
+            \medskip
+            Paste your key and press \textbf{Enter}. Nothing shows, on purpose. Paste only into the box, never between the quotation marks.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+from getpass import getpass
+
+# Only if the check said MISSING
+if not os.environ.get("CENSUS_KEY"):
+    # Ask in a box, and keep it until the kernel stops
+    os.environ["CENSUS_KEY"] = getpass(
+        "CENSUS_KEY isn't set. Paste it here: "
+    )
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 0: read the key}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Square brackets: a missing key stops here, with a \texttt{KeyError} that names it.
+
+            \medskip
+            Why read it into a name, and never print it?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Read the key from the environment
+census_key = os.environ["CENSUS_KEY"]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{\texttt{KeyError}: Python can't see the key}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Jupyter sees only the variables set \textbf{before it started}, in \textbf{the place it started from}.
+
+            \medskip
+            Chapter 11's ``When a Key Says \texttt{MISSING}'' lists the usual causes.
+        \end{column}
+        \begin{column}{0.6\textwidth}
             \begin{itemize}\footnotesize
                 \item Jupyter was already running, or started from somewhere else: Navigator (which, on a Mac, doesn't read \texttt{\textasciitilde/.zshrc}), another terminal, VS Code
                 \item \texttt{!export} in a notebook cell: its shell closes at once, and the key is now in the notebook
@@ -350,109 +291,973 @@ print("CENSUS_KEY:", "set" if "CENSUS_KEY" in os.environ
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Two cities, ten decades}
+\begin{frame}{Discovery: two catalogs before any data}
     \begin{columns}[T]
-        \begin{column}{0.44\textwidth}
-            Step 5 puts two places in one request, asks for all ten decades of \texttt{B25034}, and labels them from Monday's catalog:
-\begin{lstlisting}
-housing_vars = [f"B25034_{line:03d}E"
-                for line in range(2, 12)]
-params = {"get": "NAME," + ",".join(housing_vars),
-          "for": "place:07850,45970",
-          "in": "state:08", "key": census_key}
-
-housing_catalog = requests.get(
-    f"{census_base}/groups/B25034.json",
-    headers=HEADERS).json()["variables"]
-labels = {var: housing_catalog[var]["label"]
-              .split("!!")[-1] for var in housing_vars}
-\end{lstlisting}
-            \small Boulder's biggest decade was the 1970s; Longmont has more units from every decade since the 1990s.
+        \begin{column}{0.48\textwidth}
+            \dayband{What}{the variable catalog}
+            \begin{itemize}\small
+                \item Variables come in \textbf{groups}: the website's \textit{table} \texttt{B19013} is the API's \textit{group}
+                \item \texttt{B19013\_001E}: group, line, and \texttt{E} for estimate (\texttt{M} is its margin of error)
+                \item \texttt{.../acs5/groups.json} is itself an API
+            \end{itemize}
         \end{column}
-        \begin{column}{0.52\textwidth}
+        \begin{column}{0.48\textwidth}
+            \dayband{Where}{the geography catalog}
+            \begin{itemize}\small
+                \item \texttt{.../acs5/geography.json} lists every level the dataset answers for
+                \item Each says what it \textbf{requires}: a \texttt{place} needs a \texttt{state}; a \texttt{tract} needs a \texttt{state} and a \texttt{county}
+                \item Places are \textbf{FIPS codes}, as strings: Colorado \texttt{08}, Boulder \texttt{07850}
+            \end{itemize}
+        \end{column}
+    \end{columns}
+
+    \bigskip
+    \centering\small Codes change between survey years: learn to look them up, not to memorize them. Then check one value against the website.
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: which survey?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            On data.census.gov, table \textbf{B19013} gives Boulder County's median household income, from the American Community Survey (ACS).
+
+            \medskip
+            The API's address names the year and the survey.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The ACS 5-year estimates for 2020-2024
+census_base = "https://api.census.gov/data/2024/acs/acs5"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: ask for the catalog}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The API calls a table a \textbf{group}, and lists every group in \texttt{groups.json}. It needs no key.
+
+            \medskip
+            Our first request: look before you read. What status? What do the first 200 characters say?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The catalog of groups
+groups_response = requests.get(
+    census_base + "/groups.json",
+    headers=HEADERS,
+)
+# Look before you read
+print(
+    groups_response.status_code,
+    groups_response.text[:200],
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: one level down}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Read the JSON one level at a time.
+
+            \medskip
+            How many keys? What is the one key called?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The JSON, and its keys
+catalog = groups_response.json()
+catalog.keys()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: a table of groups}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Each group is a name and a description.
+
+            \medskip
+            How many groups are there? Could you scroll through them?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One row per group
+groups = pd.DataFrame(catalog["groups"])
+# Keep its name and its description
+groups = groups[["name", "description"]]
+print(len(groups), "groups")
+groups.head(3)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: search the descriptions}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Search for the website's words. \texttt{case=False} ignores capitals.
+
+            \medskip
+            Is \texttt{B19013} there? What are its lettered siblings?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://pandas.pydata.org/docs/reference/api/pandas.Series.str.contains.html}{\texttt{str.contains()}}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# True where the description has the words
+match = groups["description"].str.contains(
+    "median household income",
+    case=False,
+)
+# The groups that match, sorted by name
+groups[match].sort_values("name")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: the search, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell names the search: a \textbf{function}. It runs on whatever words you give it.
+
+            \medskip
+            \textbf{Microsprint:} \texttt{find\_groups("your words")}. Share your words, how many groups matched, and the one you'd use.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: the search, for any words
+def find_groups(words):
+    match = groups["description"].str.contains(
+        words,
+        case=False,
+        regex=False,
+    )
+    return groups[match].sort_values("name")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: a group's variables}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A group lists its \textbf{variables}, the columns of the website's table.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://api.census.gov/data/2024/acs/acs5/groups/B19013.html}{\texttt{B19013}, as a page}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The group's own catalog
+b19013_response = requests.get(
+    census_base + "/groups/B19013.json",
+    headers=HEADERS,
+)
+# Down one level: what keys?
+b19013 = b19013_response.json()
+b19013.keys()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: the variables' names}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A name is the group, a line, and a letter: \texttt{E} for the estimate, \texttt{M} for its margin of error.
+
+            \medskip
+            How many names? Which two are not the group's?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The variables, by name
+group_vars = b19013["variables"]
+sorted(group_vars)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: one variable}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            What does the catalog say about line 1's estimate?
+
+            \medskip
+            Find its label and its universe. Who is counted?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# What the catalog says about one variable
+group_vars["B19013_001E"]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: every estimate, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given function asks for a group's catalog, as you just did, then prints each estimate and its label.
+
+            \medskip
+            \textbf{Microsprint:} \texttt{show\_estimates("B25034")}, Year Structure Built. Which line counts homes built in the 1970s?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: each estimate in a group, with its label
+def show_estimates(group):
+    ...
+    variables = response.json()["variables"]
+    for name in sorted(variables):
+        # An estimate ends in E; NAME is a place's name
+        if name.endswith("E") and name != "NAME":
+            print(name, "|", variables[name]["label"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: the smallest request}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{get} names the variables, \texttt{for} the place, and \texttt{key} you. Colorado is state \texttt{08}.
+
+            \medskip
+            Start small: Colorado's name, and nothing else.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} the API's \href{https://api.census.gov/data/2024/acs/acs5/examples.html}{example queries}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Only the name, for Colorado alone
+state_params = {
+    "get": "NAME",
+    "for": "state:08",
+    "key": census_key,
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: what came back?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            How many rows do you expect? What does the first row hold?
+
+            \medskip
+            Which column did we not ask for?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it, with the key in the parameters
+state_response = requests.get(
+    census_base,
+    params=state_params,
+    headers=HEADERS,
+)
+# Look before you read
+print(
+    state_response.status_code,
+    state_response.text[:200],
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: Boulder County, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Now the website's number. Boulder County is county \texttt{013}, \textit{in} Colorado.
+
+            \medskip
+            The keys are in quotes: \texttt{for} and \texttt{in} are words Python keeps for itself.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: the name, the estimate, and its margin
+county_params = {
+    "get": "NAME,B19013_001E,B19013_001M",
+    "for": "county:013",
+    "in": "state:08",
+    "key": census_key,
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: send it}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same two lines, with \texttt{county\_params}.
+
+            \medskip
+            Do the estimate and its margin match the website's table?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it
+county_response = requests.get(
+    census_base,
+    params=county_params,
+    headers=HEADERS,
+)
+# Look before you read
+print(
+    county_response.status_code,
+    county_response.text[:200],
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: a list of lists}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The answer is a list of lists. Row 0 holds the column names; the rest, the places.
+
+            \medskip
+            Is the income a number, or a string?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The JSON: one list per row
+county_rows = county_response.json()
+county_rows
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: rows to a table}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{county\_rows[1:]} is every row after row 0.
+
+            \medskip
+            The notebook writes this call on one line.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Row 0 names the columns; the rest are places
+county = pd.DataFrame(
+    county_rows[1:],
+    columns=county_rows[0],
+)
+county
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: strings to numbers}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Every value came as a string. Turn the two numbers into numbers.
+
+            \medskip
+            Why must \texttt{08} and \texttt{013} stay strings?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The estimate, as a number
+county["B19013_001E"] = pd.to_numeric(
+    county["B19013_001E"]
+)
+# Its margin of error, as a number
+county["B19013_001M"] = pd.to_numeric(
+    county["B19013_001M"]
+)
+county
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: a city, without \texttt{in}}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The city of Boulder is place \texttt{07850}. This given dictionary leaves out \texttt{in}.
+
+            \medskip
+            What do you think the API will say?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: the city of Boulder, without "in"
+city_params = {
+    "get": "NAME,B19013_001E,B19013_001M",
+    "for": "place:07850",
+    "key": census_key,
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: when the API says no}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            What status? What reason does the text give?
+
+            \medskip
+            Place codes are numbered within each state.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} MDN's \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/400}{400 Bad Request}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it
+city_response = requests.get(
+    census_base,
+    params=city_params,
+    headers=HEADERS,
+)
+# Look before you read
+print(
+    city_response.status_code,
+    city_response.text[:200],
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: the two lines, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given function holds the two lines you just typed.
+
+            \medskip
+            Find them in it.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: send params, and print what came back
+def look(params):
+    response = requests.get(
+        census_base,
+        params=params,
+        headers=HEADERS,
+    )
+    print(response.status_code, response.text[:200])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: add \texttt{in}}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Add one key to the dictionary, and look again.
+
+            \medskip
+            What changed in the answer?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The city sits inside Colorado
+city_params["in"] = "state:08"
+look(city_params)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: a state, a county, a city}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell asks for the same two variables at three levels. Only \texttt{for} and \texttt{in} change.
+
+            \medskip
+            Which place's margin do you expect to be widest?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: three places, one dictionary each
+geographies = [
+    {"for": "state:08"},
+    {"for": "county:013", "in": "state:08"},
+    {"for": "place:07850", "in": "state:08"},
+]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: one request a place, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{.update()} adds one dictionary's keys to another. The loop pauses a second between requests.
+
+            \medskip
+            Then a table of the three.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+three = []
+for geography in geographies:
+    # The variables and the key, as before
+    geo_params = {...}
+    # Add this place's "for" and "in"
+    geo_params.update(geography)
+    # Send it, as before; keep row 1's first 3 values
+    geo_response = requests.get(...)
+    geo_rows = geo_response.json()
+    three.append(geo_rows[1][:3])
+    time.sleep(1)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: break it on purpose}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell makes \texttt{try\_params}, a fresh copy of Step 3's. Make one mistake, and look.
+
+            \medskip
+            Share the mistake, the status, and the first words of the text. Which mistake still gets a 200?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One mistake, then look at what came back
+try_params["for"] = "county:13"
+look(try_params)
+
+# Or one of these:
+# try_params["get"] = "NAME,B19013_01E"
+# try_params["get"] = "NAME, B19013_001E"
+# try_params["key"] = "census_key"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% =========================================================================
+\section{Wednesday}
+% =========================================================================
+
+% The code on Wednesday's frames is the lab's Part 2 (labs/week-11/lab-11-key.ipynb), Steps 5-8.
+\begin{frame}{Today: Part 2, more of the Census}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            We finish what Monday started, with the Census alone:
+            \begin{itemize}\small
+                \item \textbf{Compare} places in one request, and draw them
+                \item Read a \textbf{margin of error} before saying two places differ
+                \item Find the places the survey \textbf{couldn't measure}, before they wreck an average
+            \end{itemize}
+
+            \medskip
+            \dayband{Use it}{Steps 5--8, about 50 minutes}
+            \begin{itemize}\small
+                \item Download the new \texttt{lab-11.ipynb}; start at \textbf{Step 5}
+                \item Its two cells are given: put \textbf{your} email in \texttt{HEADERS}, and run both
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{alertblock}{One key today}
+                \footnotesize \texttt{CENSUS\_KEY}. Still \texttt{MISSING}? Monday's Step 0 frames, or the second cell's \texttt{getpass()}.
+            \end{alertblock}
+            \textbf{Friday}\\[2pt]
+            {\footnotesize FRED, and \textit{let the server compute}. Get \texttt{FRED\_KEY} from a free FRED account before then.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: Monday's cells, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given function gathers Monday's cells. \texttt{def} names the lines; \texttt{return} hands back the result.
+
+            \medskip
+            Which of Monday's cells can you find in it?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+def census_get(params):
+    # Send it, and print the status
+    response = requests.get(...)
+    print("status", response.status_code)
+    # Rows to a table, as on Monday
+    rows = response.json()
+    table = pd.DataFrame(rows[1:], columns=rows[0])
+    # Each variable's column (it starts with B)
+    for column in table.columns:
+        if column.startswith("B"):
+            table[column] = pd.to_numeric(table[column])
+    return table
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: two places in one request}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same cell gives Monday's income for the city of Boulder.
+
+            \medskip
+            Put several codes in \texttt{for}, with commas: Boulder and Longmont.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: income and margin, for the city of Boulder
+pair_params = {
+    "get": "NAME,B19013_001E,B19013_001M",
+    "for": "place:07850",
+    "in": "state:08",
+    "key": census_key,
+}
+# Two places: Boulder and Longmont
+pair_params["for"] = "place:07850,45970"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: a row a place}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            How many rows? Which city's margin is wider?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One request, a row for each place
+incomes = census_get(pair_params)
+incomes
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: ten decades, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Ten variables of \texttt{B25034}, Year Structure Built. A \textbf{list comprehension} writes the ten codes; \texttt{line:03d} pads \texttt{2} to \texttt{002}.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: the codes B25034_002E to B25034_011E
+housing_vars = [
+    f"B25034_{line:03d}E" for line in range(2, 12)
+]
+# Monday's catalog, for this group
+b25034_response = requests.get(
+    census_base + "/groups/B25034.json",
+    headers=HEADERS,
+)
+b25034 = b25034_response.json()["variables"]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: a label for each code}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same given cell keeps each label's last part, after its last \texttt{!!}.
+
+            \medskip
+            Which code is ``Built 1970 to 1979''?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Each code's label, after its last "!!"
+labels = {
+    var: b25034[var]["label"].split("!!")[-1]
+    for var in housing_vars
+}
+labels
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: two cities, ten decades, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            One request asks for the ten, for both cities.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: the ten, for Boulder and Longmont
+housing_params = {
+    "get": "NAME," + ",".join(housing_vars),
+    "for": "place:07850,45970",
+    "in": "state:08",
+    "key": census_key,
+}
+df_compare = census_get(housing_params)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: a row a decade, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{.T} turns the table: a row a decade, a column a city.
+
+            \medskip
+            The notebook writes these steps on one line.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# A row per city, named, with the ten counts
+by_city = df_compare.set_index("NAME")
+counts = by_city[housing_vars]
+# Labels for the codes; then turn the table
+housing = counts.rename(columns=labels).T
+housing
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 6: the chapter's figure 11.4}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell draws the table. Your plot should look like this one.
+
+            \medskip
+            Boulder capped building permits in 1976. What would you need to know to say that was the reason?
+        \end{column}
+        \begin{column}{0.6\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/housing-boulder-longmont.png}\\
             {\scriptsize Drawn by the chapter's code from the Census Bureau's API, 2026-10-25 (chapter 11, figure 11.4).}
-
-            \medskip
-            \raggedright
-            \textbf{Microsprint}\\[2pt]
-            {\footnotesize Counts don't compare cities of different sizes; shares do. Built in 2000 or later: Castle Rock 71\%, Fort Collins 37\%, Longmont 34\%, Lakewood 18\%, Boulder 18\%.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Check a number against its margin}
+\begin{frame}[fragile]{Microsprint: counts, or shares?}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-            Each estimate has a margin of error, the same name ending in \texttt{M}, at 90\% confidence. Step 6 asks for both:
-\begin{lstlisting}
-params = {"get": "NAME,B19013_001E,B19013_001M",
-          "for": "place:07850,45970",
-          "in": "state:08", "key": census_key}
-...
-incomes["low"] = incomes["B19013_001E"] - incomes["B19013_001M"]
-incomes["high"] = incomes["B19013_001E"] + incomes["B19013_001M"]
-\end{lstlisting}
-            \begin{center}\footnotesize
-            \begin{tabular}{@{}lrrrr@{}}
-                \toprule
-                \textbf{City} & \textbf{Estimate} & \textbf{Margin} & \textbf{Low} & \textbf{High} \\
-                \midrule
-                Boulder & 87,493 & 6,221 & 81,272 & 93,714 \\
-                Longmont & 90,671 & 2,975 & 87,696 & 93,646 \\
-                \bottomrule
-            \end{tabular}
-            \end{center}
-        \end{column}
-        \begin{column}{0.4\textwidth}
-            \begin{alertblock}{The ranges overlap}
-                \footnotesize From \$87,696 to \$93,646, both are possible. The survey can't say which city's households earn more.
-            \end{alertblock}
-            \textbf{Discuss}\\[2pt]
-            {\footnotesize Boulder's margin is twice Longmont's. What about the city could make its estimate less certain?\par}
+        \begin{column}{0.37\textwidth}
+            A given cell asks for five places' housing units: all of them, and those built since 2000.
+
             \medskip
-            {\footnotesize Which checks like this one could a pipeline run on its own, every time it runs?\par}
+            Cities differ in size, so counts don't compare fairly. Which place has the largest share? The smallest?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Microsprint: built since 2000, as a share
+five["share"] = five["since_2000"] / five["B25034_001E"]
+five[["NAME", "share"]]
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{When there's no estimate: \texttt{-666666666}}
+\begin{frame}[fragile]{Step 7: is the difference real?}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-            Step 7 asks for every place in Colorado, \texttt{for=place:*} with \texttt{in=state:08}, and looks before it trusts:
-\begin{lstlisting}
-places["income"].describe().round()
-# count          482.0
-# mean    -114723934.0
-# min     -666666666.0
-# max         250001.0
-\end{lstlisting}
-            \small 83 of the 482 places have no median-income estimate: too few households answered. The API doesn't leave the value out; it sends a number that can't be an income. (250,001 is a cap: ``\$250,000 or more''.)
+        \begin{column}{0.37\textwidth}
+            Longmont's estimate is higher than Boulder's. But each is an estimate, with a margin of error at 90\% confidence.
 
             \medskip
-            \begin{center}\footnotesize
-            \begin{tabular}{@{}lrr@{}}
-                \toprule
-                \textbf{Place} & \textbf{People} & \textbf{Median income} \\
-                \midrule
-                Boulder & 106,433 & 87,493 \\
-                Campo & 58 & 53,125 ($\pm$40,478) \\
-                Bonanza & 20 & \texttt{-666666666} \\
-                Carbonate & 0 & \texttt{-666666666} \\
-                \bottomrule
-            \end{tabular}
-            \end{center}
+            First, the difference.
         \end{column}
-        \begin{column}{0.4\textwidth}
-            \begin{alertblock}{Average it as is}
-                \footnotesize The mean of those four is $-333{,}298{,}178$. Mask the codes first, \texttt{towns.mask(towns < 0)}, and it's 70,309.
-            \end{alertblock}
-            \textbf{What the codes mean}\\[2pt]
-            {\footnotesize The Census Bureau's notes on estimate and annotation values list each one; a margin of error of \texttt{-222222222} goes with it.\par}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Each city's estimate
+estimates = incomes["B19013_001E"]
+# Longmont's (row 1) minus Boulder's (row 0)
+difference = estimates[1] - estimates[0]
+print(difference)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: the difference's own margin}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Don't judge by whether the two ranges overlap. Square the margins, add them, and take the square root.
+
             \medskip
-            \textbf{Discuss}\\[2pt]
-            {\footnotesize Carbonate has no residents, yet it has a row. What does the Census count as a place?\par}
+            Is the difference larger than its margin?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} the \href{https://www.census.gov/content/dam/Census/library/publications/2020/acs/acs_general_handbook_2020_ch07.pdf}{ACS handbook, chapter 7}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Each city's margin of error
+margins = incomes["B19013_001M"]
+# Square the two margins, and add them
+squares = margins[0] ** 2 + margins[1] ** 2
+# The square root: the difference's margin
+margin_of_difference = squares ** 0.5
+print(round(margin_of_difference))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: rent, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A new group: median gross rent, \texttt{B25064}, with its margin, for the city of Boulder.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: median gross rent and its margin
+rent_params = {
+    "get": "NAME,B25064_001E,B25064_001M",
+    "for": "place:07850",
+    "in": "state:08",
+    "key": census_key,
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: two places you can read whole}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Boulder, and Branson town. Read both rows.
+
+            \medskip
+            Which rent can't be a rent? Which margin can't be a margin?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} the Bureau's \href{https://www.census.gov/data/developers/data-sets/acs-1year/notes-on-acs-estimate-and-annotation-values.html}{notes on estimate values}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Two places: Boulder and Branson town
+rent_params["for"] = "place:07850,08345"
+two_places = census_get(rent_params)
+two_places
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: every place}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A \textbf{wildcard}, \texttt{place:*}, asks for every place in Colorado: cities, towns, and census-designated places.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Every place in Colorado
+rent_params["for"] = "place:*"
+places = census_get(rent_params)
+print(len(places), "places")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: look before you trust}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Look at the min and the max. Could a rent be that?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://pandas.pydata.org/docs/reference/api/pandas.Series.describe.html}{\texttt{describe()}}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Count, mean, min, quartiles, max, rounded
+places["B25064_001E"].describe().round()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: count the code}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            How many of Colorado's places have no estimate?
+
+            \medskip
+            The notebook prints the sum without naming it.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# True where the rent is the code
+no_estimate = places["B25064_001E"] == -666666666
+# How many are True?
+count = no_estimate.sum()
+print(count, "of", len(places), "places have no estimate")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: mask the codes}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{mask()} turns each code into \texttt{NaN}, a missing value.
+
+            \medskip
+            How did the mean and the median move?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://pandas.pydata.org/docs/reference/api/pandas.Series.mask.html}{\texttt{mask()}}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The codes become NaN
+places["rent"] = places["B25064_001E"].mask(no_estimate)
+# Look again
+places["rent"].describe().round()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: the highest rents}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell draws the ten as bars, each with its margin of error.
+
+            \medskip
+            Which of the ten could you rank with confidence?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Highest rent first
+by_rent = places.sort_values("rent", ascending=False)
+# The first ten, with each margin
+top = by_rent.head(10)
+top[["NAME", "rent", "B25064_001M"]]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: a code in the margin}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The margin column has a code of its own. Look it up in the Bureau's notes.
+
+            \medskip
+            Share how many places, their rent, and what the code says about it.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Microsprint: True where the margin is that code
+capped = places["B25064_001M"] == -333333333
+places[capped]
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
@@ -461,28 +1266,23 @@ places["income"].describe().round()
 \section{Friday}
 % =========================================================================
 
-% The code on these frames is the lab's Part 3 (labs/week-11/lab-11-key.ipynb), rebuilt on
-% 2026-10-28 for two APIs and run live that day, following chapter 11 at textbook 6ea83ac.
+% The code on Friday's frames is the lab's Part 3 (labs/week-11/lab-11-key.ipynb), Steps 9-14.
 % Figures are synced from the chapter.
 \begin{frame}{Today: Part 3, FRED}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
-            \dayband{Lab}{Steps 8--13, about 35 minutes}
+            \dayband{Lab}{Steps 9--14, about 35 minutes}
             \begin{itemize}\small
-                \item \textbf{FRED} (Federal Reserve Economic Data, from the St.\ Louis Fed) \textbf{computes} before it answers: changes, percent changes, yearly averages. Today's idea: \textit{let the server compute}
-                \item Boulder County's income, then inflation, then Denver against the nation
-                \item Download the new \texttt{lab-11.ipynb}; start at \textbf{Step 8}, which sets up again
+                \item \textbf{FRED} (Federal Reserve Economic Data, from the St.\ Louis Fed) \textbf{computes} before it answers: changes, percent changes, averages. Today's idea: \textit{let the server compute}
+                \item Download the new \texttt{lab-11.ipynb}; start at \textbf{Step 9}. Put your email in \texttt{HEADERS}, and run its cells
             \end{itemize}
 
             \medskip
-            \dayband{Then}{the textbook, 15 minutes}
-            \begin{itemize}\small
-                \item What the lab turned up in chapter 11, as a pull request
-            \end{itemize}
+            \dayband{Then}{your portfolio checkpoint, 15 minutes}
         \end{column}
         \begin{column}{0.4\textwidth}
             \begin{alertblock}{One key today}
-                \footnotesize \texttt{FRED\_KEY}, from a free FRED account. \texttt{MISSING}? Wednesday's three safe ways; \texttt{getpass()} works today.
+                \footnotesize \texttt{FRED\_KEY}, from a free FRED account. \texttt{MISSING}? Monday's Step 0 frames; \texttt{getpass()} works today.
             \end{alertblock}
             \textbf{Two parameter names}\\[2pt]
             {\footnotesize The Census Bureau calls its key parameter \texttt{key}; FRED calls it \texttt{api\_key}.\par}
@@ -490,24 +1290,15 @@ places["income"].describe().round()
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{FRED: find the series, then ask what it is}
+\begin{frame}{Step 10: a series has an ID}
     \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
-            Every one of FRED's 800,000 series has an \textbf{ID} (1), on its page. The \texttt{series} endpoint describes it; \texttt{series/observations} sends its values:
-\begin{lstlisting}
-fred_base = "https://api.stlouisfed.org/fred"
-params = {"series_id": "MHICO08013A052NCEN",
-          "api_key": fred_key, "file_type": "json",
-          "observation_end": "2024-12-31"}
-data = requests.get(f"{fred_base}/series/observations",
-                    params=params, headers=HEADERS).json()
-income = pd.DataFrame(data["observations"])[["date", "value"]]
-income["value"] = pd.to_numeric(income["value"],
-                                errors="coerce")  # "." is missing
-\end{lstlisting}
-            \small 2024: \$103,293 (2) --- not the Census API's \$103,994. Different programs: name the one you cite.
+        \begin{column}{0.37\textwidth}
+            Every series has an \textbf{ID} (1), on its page. Boulder County's median household income is \texttt{MHICO08013A052NCEN}.
+
+            \medskip
+            What do the letters and numbers in it stand for?
         \end{column}
-        \begin{column}{0.46\textwidth}
+        \begin{column}{0.6\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/fred-series_annotated.pdf}\\
             {\scriptsize Boulder County's median household income on FRED, captured 2026-10-25 (chapter 11, figure 11.2).}
@@ -515,92 +1306,516 @@ income["value"] = pd.to_numeric(income["value"],
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Let the server compute: \texttt{units}}
+\begin{frame}[fragile]{Step 10: which series?}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-            Step 10 gathers Step 9's lines into \texttt{fred\_observations(series\_id, **params)}. Then the \textit{same series} twice more, one parameter changed:
-\begin{lstlisting}
-change = fred_observations("MHICO08013A052NCEN",
-            units="chg", observation_end="2024-12-31")
-growth = fred_observations("MHICO08013A052NCEN",
-            units="pch", observation_end="2024-12-31")
-\end{lstlisting}
-            \begin{center}\footnotesize
-            \begin{tabular}{@{}rrrr@{}}
-                \toprule
-                \textbf{Year} & \textbf{Dollars} & \textbf{Change} & \textbf{Percent change} \\
-                \midrule
-                2022 & 96,584 & 6,257 & 6.9 \\
-                2023 & 97,170 & 586 & 0.6 \\
-                2024 & 103,293 & 6,123 & 6.3 \\
-                \bottomrule
-            \end{tabular}
-            \end{center}
+        \begin{column}{0.37\textwidth}
+            FRED's address, then a given dictionary: the series, your key, and JSON. Without \texttt{file\_type}, FRED answers in XML.
         \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{What \texttt{units} can be}\\[2pt]
-            {\footnotesize
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+fred_base = "https://api.stlouisfed.org/fred"
+# Given: which series, your key, and JSON
+series_params = {
+    "series_id": "MHICO08013A052NCEN",
+    "api_key": fred_key,
+    "file_type": "json",
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: ask what it is}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The \texttt{series} endpoint describes a series, without its values.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://fred.stlouisfed.org/docs/api/fred/series.html}{\texttt{fred/series}}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The series endpoint
+series_url = fred_base + "/series"
+series_response = requests.get(
+    series_url,
+    params=series_params,
+    headers=HEADERS,
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: look before you read}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            FRED reports a mistake as JSON, with an \texttt{error\_message}. \texttt{.get()} gives \texttt{None} when there's none.
+
+            \medskip
+            Did it work?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The JSON, then its error message, if any
+series_json = series_response.json()
+print(
+    series_response.status_code,
+    series_json.get("error_message"),
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: what it is}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            How often is it measured? In what units?
+
+            \medskip
+            The notebook prints these on one line.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The one series in "seriess"
+about = series_json["seriess"][0]
+# Its title, how often, and in what units
+print(
+    about["title"],
+    "|",
+    about["frequency"],
+    "|",
+    about["units"],
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: one year first}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{observation\_start} and \texttt{observation\_end} set a window. This given one holds a single year, 2024.
+
+            \medskip
+            How many observations should come back?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: the same series, for one year
+year_params = {
+    "series_id": "MHICO08013A052NCEN",
+    "api_key": fred_key,
+    "file_type": "json",
+    "observation_start": "2024-01-01",
+    "observation_end": "2024-12-31",
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: ask for its values}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{series/observations} sends a series' values.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://fred.stlouisfed.org/docs/api/fred/series_observations.html}{\texttt{series/observations}}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The observations endpoint
+obs_url = fred_base + "/series/observations"
+year_response = requests.get(
+    obs_url,
+    params=year_params,
+    headers=HEADERS,
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: one observation}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            What is its date? Is its value a number, or a string?
+
+            \medskip
+            Is it Monday's ACS number? Why not?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Down one level: the observations
+year_json = year_response.json()
+year_json["observations"]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: the whole series, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            No \texttt{observation\_start}: FRED starts at the series' first year. A fixed end means a rerun gets the same answer.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: every year, up to a fixed end
+income_params = {
+    "series_id": "MHICO08013A052NCEN",
+    "api_key": fred_key,
+    "file_type": "json",
+    "observation_end": "2024-12-31",
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: send it}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same request, with \texttt{income\_params}.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Every year's observation
+income_response = requests.get(
+    obs_url,
+    params=income_params,
+    headers=HEADERS,
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: a table of years}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The observations are a list of dictionaries, so they make a table in one step.
+
+            \medskip
+            What is \texttt{"."}?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+income_json = income_response.json()
+# One row per observation
+income = pd.DataFrame(income_json["observations"])
+# Keep the date and the value
+income = income[["date", "value"]]
+income.head(8)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: strings to numbers and dates}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{errors="coerce"} turns \texttt{"."} into \texttt{NaN}.
+
+            \medskip
+            Note the last three years' dollars. Step 11 starts from them.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# "." becomes NaN
+income["value"] = pd.to_numeric(
+    income["value"],
+    errors="coerce",
+)
+income["date"] = pd.to_datetime(income["date"])
+income.tail(3)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: Step 10's lines, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The chapter's function. \texttt{**params} collects any other parameter you name, such as \texttt{units="chg"}, and sends it along.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+def fred_observations(series_id, **params):
+    # Add the series, your key, and JSON
+    params.update(
+        series_id=series_id,
+        api_key=fred_key,
+        file_type="json",
+    )
+    # Then Step 10's request, table and conversion
+    ...
+    return df
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: let the server compute}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{units="chg"}: the change from the observation before.
+
+            \medskip
+            Predict 2023's and 2024's changes from Step 10's dollars, then run it. What does 2022 get?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://fred.stlouisfed.org/docs/api/fred/series_observations.html\#units}{\texttt{units}}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The change, for 2022 to 2024
+recent_change = fred_observations(
+    "MHICO08013A052NCEN",
+    units="chg",
+    observation_start="2022-01-01",
+    observation_end="2024-12-31",
+)
+recent_change
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: the whole series, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell asks for every year as a change, and again as \texttt{"pch"}, the percent change. A table, \texttt{views}, puts both beside the dollars.
+
+            \medskip
+            Why is 1993's change \texttt{NaN}?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: every year's change
+change = fred_observations(
+    "MHICO08013A052NCEN",
+    units="chg",
+    observation_end="2024-12-31",
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{What \texttt{units} can be}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The server applies these before it sends. The values you get are no longer the series as published.
+
+            \medskip
+            When is it worth asking the server for what you could compute yourself?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \begin{center}\small
             \begin{tabular}{@{}ll@{}}
-                \texttt{lin} & as published \\
+                \toprule
+                \texttt{units} & \textbf{What comes back} \\
+                \midrule
+                \texttt{lin} & as published (the default) \\
                 \texttt{chg} & change \\
                 \texttt{ch1} & change from a year before \\
                 \texttt{pch} & percent change \\
                 \texttt{pc1} & percent change from a year before \\
                 \texttt{log} & natural logarithm \\
-            \end{tabular}\par}
-            \medskip
-            \textbf{Microsprint}\\[2pt]
-            {\footnotesize In which years did the income \textit{fall}? Six, from 2001 to 2020; the largest, \$3,003 in 2009.\par}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Let the server compute: \texttt{frequency}, then \texttt{units}}
-    \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-            One series, \texttt{CPIAUCNS} (the national Consumer Price Index, monthly), three requests:
-\begin{lstlisting}
-years = {"observation_start": "2015-01-01",
-         "observation_end": "2025-12-31"}
-monthly = fred_observations("CPIAUCNS", **years)
-annual = fred_observations("CPIAUCNS", frequency="a",
-            aggregation_method="avg", **years)
-inflation = fred_observations("CPIAUCNS", frequency="a",
-            aggregation_method="avg", units="pc1", **years)
-\end{lstlisting}
-            \small FRED lowers the frequency first, then applies the units: each year's mean of twelve months, then its percent change from the year before.
-        \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{Trust, but check once}\\[2pt]
-            {\footnotesize Microsprint: the same numbers from \texttt{monthly}, with \texttt{groupby()} and \texttt{pct\_change()}.\par}
-            \medskip
-            {\footnotesize
-            \begin{tabular}{@{}rrr@{}}
-                \toprule
-                \textbf{Year} & \textbf{FRED} & \textbf{pandas} \\
-                \midrule
-                2023 & 4.1 & 4.1 \\
-                2024 & 2.9 & 2.9 \\
-                2025 & 2.6 & 2.6 \\
                 \bottomrule
-            \end{tabular}\par}
-            \medskip
-            {\footnotesize Why can FRED give 2015's inflation, and pandas can't?\par}
+            \end{tabular}
+            \end{center}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Denver against the nation}
+\begin{frame}[fragile]{Microsprint: the years it fell}
     \begin{columns}[T]
-        \begin{column}{0.36\textwidth}
-            The Bureau of Labor Statistics' CPI for the Denver area, \texttt{CUUSA433SA0}, is annual already: it needs only \texttt{units="pc1"}.
+        \begin{column}{0.37\textwidth}
+            In which years did Boulder County's median household income \textit{fall}?
+
+            \medskip
+            Share how many years, which ones, and the largest fall in dollars.
+        \end{column}
+        \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-denver = fred_observations(
-    "CUUSA433SA0", units="pc1", **years)
-cpi = denver.merge(inflation, on="date",
-    suffixes=("_denver", "_national"))
+# Microsprint: True where the change is below zero
+fell = views["change"] < 0
+views[fell].round(1)
 \end{lstlisting}
-            \small Denver ran ahead from 2015 to 2020, and behind since 2024. Housing is the largest part of the CPI: what would you ask FRED next?
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: three months you can check}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{CPIAUCNS} is the national Consumer Price Index (CPI). It is measured monthly.
+
+            \medskip
+            How many rows should January to March bring?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The CPI, January to March 2024
+q1_months = fred_observations(
+    "CPIAUCNS",
+    observation_start="2024-01-01",
+    observation_end="2024-03-31",
+)
+q1_months
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: one quarter}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{frequency="q"} asks for quarters; \texttt{"avg"} averages each quarter's months.
+
+            \medskip
+            One row. Is it the mean of the three? Check it with a calculator.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://fred.stlouisfed.org/docs/api/fred/series_observations.html\#frequency}{\texttt{frequency}}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The same months, averaged into one quarter
+q1 = fred_observations(
+    "CPIAUCNS",
+    frequency="q",
+    aggregation_method="avg",
+    observation_start="2024-01-01",
+    observation_end="2024-03-31",
+)
+q1
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: eleven years of months}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell sets the window: \texttt{start} is 2015-01-01, and \texttt{end} is 2025-12-31.
+
+            \medskip
+            How many months should that be?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Every month in the window
+monthly = fred_observations(
+    "CPIAUCNS",
+    observation_start=start,
+    observation_end=end,
+)
+print(len(monthly), "months")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: a missing month}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Look for a gap before you trust a yearly average.
+
+            \medskip
+            Which month is missing? Why might it be?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# True where a month has no value
+missing = monthly["value"].isna()
+monthly[missing]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: a year's average}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same request, with \texttt{frequency="a"}: each year's mean of its months.
+
+            \medskip
+            How many months is 2025's mean of?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Each year's average of its months
+annual = fred_observations(
+    "CPIAUCNS",
+    frequency="a",
+    aggregation_method="avg",
+    observation_start=start,
+    observation_end=end,
+)
+annual.tail(3)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: inflation, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Add \texttt{units="pc1"}: the percent change from a year before, each year's inflation.
+
+            \medskip
+            FRED lowers the frequency first, then applies the units.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: the yearly average, as inflation
+inflation = fred_observations(
+    "CPIAUCNS",
+    frequency="a",
+    aggregation_method="avg",
+    units="pc1",
+    observation_start=start,
+    observation_end=end,
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: trust, but check once}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Compute each year's mean from \texttt{monthly}, and compare it with FRED's.
+
+            \medskip
+            Share your 2024 and 2025 means, and how many months each averages. The notebook writes this in three lines.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Microsprint: the months, grouped by year
+years = monthly["date"].dt.year
+by_year = monthly.groupby(years)["value"]
+# Each year's mean, and how many months it has
+means = by_year.mean().round(1)
+print(means.tail(3))
+print(by_year.count().tail(3))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 13: Denver against the nation}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell asks for the Denver area's CPI, \texttt{CUUSA433SA0}, with \texttt{units="pc1"}. It is annual already.
+
+            \medskip
+            In which years did Denver's prices rise faster than the nation's?
         \end{column}
         \begin{column}{0.6\textwidth}
             \centering
@@ -610,54 +1825,57 @@ cpi = denver.merge(inflation, on="date",
     \end{columns}
 \end{frame}
 
-\begin{frame}{On your own: the EIA and Congress.gov}
+\begin{frame}{Step 14: what did we learn?}
     \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
-            \dayband{EIA}{let the server filter}
-            \begin{itemize}\small
-                \item The U.S. Energy Information Administration: prices, sales, and generation, by state, sector, and month
-                \item Chapter 11's ``EIA API v2'': routes that describe themselves, facets that filter, paging with \texttt{offset}
-                \item ``Combining Census and EIA Data'' joins Wednesday's incomes with the EIA's electricity bills, state by state
-                \item Key: \texttt{EIA\_KEY}, from the EIA by email
-            \end{itemize}
+        \begin{column}{0.37\textwidth}
+            Answer Step 14's four questions as comments in the notebook.
 
             \medskip
-            \dayband{Congress.gov}{follow the links}
-            \begin{itemize}\small
-                \item The Library of Congress's bills, members, and votes: entry 8 of the chapter's ``More Government APIs for Colorado''
-                \item A bill's record links to its actions, cosponsors, and text; each link is a request you send as it is
-                \item Key: from api.data.gov, sent in the \texttt{X-Api-Key} header
-            \end{itemize}
+            Its list says which lab step prepares each Recommended Exercise.
         \end{column}
-        \begin{column}{0.46\textwidth}
+        \begin{column}{0.6\textwidth}
+            \textbf{Recommended Exercises, due Sunday}\\[2pt]
+            {\footnotesize In chapter 11's companion notebook. Graded on good-faith attempt to complete rather than getting everything working.\par}
+            \medskip
+            \textbf{On your own: the EIA}\\[2pt]
+            {\footnotesize The chapter's third API, in ``EIA API v2'': routes that describe themselves, facets that filter, paging with \texttt{offset}. Its key is \texttt{EIA\_KEY}.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{On your own: let the server filter}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The U.S. Energy Information Administration: prices, sales, and generation, by state, sector, and month.
+
+            \medskip
+            ``Combining Census and EIA Data'' joins Census incomes with the EIA's electricity bills, state by state.
+        \end{column}
+        \begin{column}{0.6\textwidth}
             \centering
-            \includegraphics[width=0.92\textwidth]{img/eia-browser_annotated.pdf}\\
+            \includegraphics[width=0.72\textwidth]{img/eia-browser_annotated.pdf}\\
             {\scriptsize The EIA's API Dashboard, captured 2026-10-25 (chapter 11, figure 11.3): pick a data type (1) and facets (2), and it writes the request (3).}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{Friday: from the lab to the textbook (15 minutes)}
-    \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
-            Look back at what the lab turned up in chapter 11, and propose one change as a \textbf{pull request}:
-            \begin{itemize}\small
-                \item \textbf{A cell that broke.} On Monday, \texttt{os.environ["CENSUS\_KEY"]} stopped with a \texttt{KeyError} for some of us. Does ``When a Key Says \texttt{MISSING}'' name your cause, and say clearly enough how to use \texttt{getpass()}?
-                \item \textbf{A sentence that confused.} Which step needed the website beside the API to make sense? Does the chapter's tour do that for the Census table, and could it do more?
-                \item \textbf{An output that has changed.} FRED revises some series. Compare Steps 11 and 12 with the chapter's.
-                \item \textbf{A section the lab skipped.} Can you follow ``EIA API v2'' from the chapter alone?
-                \item \textbf{A microsprint that would make a good exercise.} Searching \texttt{groups.json} for your own topic (Step 1), or two cities' margins (Step 6).
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.38\textwidth}
-            \textbf{How to propose one}\\[2pt]
-            {\footnotesize The course's \texttt{handouts/common/revision-framework.md} says what each kind of change needs to be accepted.\par}
-            \medskip
-            \textbf{A good review}\\[2pt]
-            {\footnotesize Run the change; name the line; separate ``must fix'' from ``nice to have''; end with a verdict.\par}
-            \medskip
-        \end{column}
-    \end{columns}
+\begin{frame}{Week 11 Portfolio --- Set up your project repo}
+    Due Sunday, Nov 1
+
+    \bigskip
+
+    \begin{itemize}\small
+        \item A \textbf{public repository} on your own GitHub account, with a descriptive name
+        \item \texttt{README.md}: a title, your name, a one-paragraph summary of your research question, and placeholder sections (Data, Methods, Findings, How to reproduce)
+        \item \texttt{proposal.md}: your proposal, revised if you've had feedback
+        \item Placeholders for the rest: a notebook (\texttt{.ipynb}), a \texttt{report.md} (or a note that your report will be a PDF), and a \texttt{data/} folder
+    \end{itemize}
+
+    \medskip
+    Make the repository and push its first commit, here, where you can ask. If your project uses an API key, it stays in an environment variable, never in the repository.
+
+    \medskip
+    {\small \textbf{Next week:} social platforms' APIs, Bluesky and YouTube.\par}
 \end{frame}
 
 % =========================================================================
@@ -665,8 +1883,8 @@ cpi = denver.merge(inflation, on="date",
     \begin{enumerate}
         \item Government APIs serve \textbf{public mandates}: the census, the Federal Reserve's data.
         \item Each carried one idea you'll meet again: \textbf{ask what you can ask for} (Census), \textbf{let the server compute} (FRED).
-        \item \textbf{Start from the website}: find the number there, then ask the API for the same number, and check that they match.
-        \item \textbf{Read what isn't a number}: a margin of error, a code like \texttt{-666666666}, a cap at \$250,000, a \texttt{"."} for missing.
+        \item \textbf{Start from the website, and start small}: one place, one year, or three months you can check, before the whole table.
+        \item \textbf{Read what isn't a number}: a margin of error, a code like \texttt{-666666666}, a cap at \$3,500, a \texttt{"."} for missing.
         \item \textbf{Treat keys like passwords}: an environment variable, a JSON file kept out of git, or \texttt{getpass()}; never in a cell or a code file, and never printed.
     \end{enumerate}
 \end{frame}
