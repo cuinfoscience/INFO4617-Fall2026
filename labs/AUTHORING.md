@@ -84,6 +84,7 @@ The code is typed live, in front of the class, by students some of whom are unsu
 
 Every idea a lab teaches is typed once, on one case, in small cells. What repeats it is given.
 
+0. **One minimal call first.** Before a step commits to a full analysis pipeline, it shows a single, simple call to the new service, on the smallest input that shows the idea, and prints what came back. The input should be one students can predict: three short sentences, two alike and one not, before 116 Wikipedia leads (week 13, Step 12); one revision of one article before the saved table of every year. Students see what the call returns, and check that it behaves as promised, on an input they can read in full, before the pipeline hides it inside a loop. A failure on the small call is cheap to read; the same failure in the twentieth batch of a given loop isn't. Added 2026-11-16, at the instructor's request, when week 13's Part 3 was rebuilt.
 1. **One case by hand.** One profile, one county, one page of results, one row's sum: built, sent, looked at and read in typed cells.
 2. **The repetition, given.** The loop over five accounts, the function that follows a cursor to the end, the table and its plot are already in the notebook (`{"lab": {"given": true}}`). The class reads the cell together, finds in it the lines they just typed, and runs it.
 3. **One change, typed.** Where it helps, students then change one value and run the given cell again: another handle, another year, `units` set to `"chg"`.

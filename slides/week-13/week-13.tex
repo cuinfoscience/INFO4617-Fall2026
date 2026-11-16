@@ -54,11 +54,11 @@
             \dayband{Wednesday, Nov 11}{No class}
             \dayband{Friday, Nov 13}{Part 2: a model returns JSON}
             {\small Then 15 minutes on portfolio checkpoint 3.\par}
-            \dayband{Monday, Nov 16}{Part 3: embeddings, and one tool call}
+            \dayband{Monday, Nov 16}{Part 3: embeddings, one small step at a time}
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{Keys}\\[2pt]
-            {\footnotesize \texttt{DATALAB\_KEY} and \texttt{OPENROUTER\_KEY}. Part 3 also uses week 11's \texttt{CENSUS\_KEY}.\par}
+            {\footnotesize \texttt{DATALAB\_KEY} and \texttt{OPENROUTER\_KEY}. Part 3's optional last step also uses week 11's \texttt{CENSUS\_KEY}.\par}
             \medskip
             \textbf{Due}\\[2pt]
             {\footnotesize Sunday, Nov 15: portfolio checkpoint 3.\par}
@@ -989,7 +989,7 @@ INSTRUCTION = (
 \section{Monday, Nov 16}
 % =========================================================================
 
-\begin{frame}{Today: Part 3, search by meaning, and tools}
+\begin{frame}{Today: Part 3, search by meaning}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             On Friday the model read one page that we chose. With a hundred passages, how do we find the ones worth reading?
@@ -999,7 +999,7 @@ INSTRUCTION = (
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{Start at Step 11}\\[2pt]
-            {\footnotesize Download the new \texttt{lab-13.ipynb}. Today uses \texttt{OPENROUTER\_KEY} and week 11's \texttt{CENSUS\_KEY}.\par}
+            {\footnotesize Download the new \texttt{lab-13.ipynb}. Today uses \texttt{OPENROUTER\_KEY}. The optional last step also uses week 11's \texttt{CENSUS\_KEY}.\par}
             \medskip
             \textbf{Five articles}\\[2pt]
             {\footnotesize Obama, Hillary Clinton, Trump, Biden and Harris, on January 1 of each year, 2004--2026.\par}
@@ -1013,7 +1013,7 @@ INSTRUCTION = (
             Step 11's first two cells are given. Put your email in \texttt{HEADERS}, then run both.
 
             \medskip
-            Both keys should say \texttt{set}. If one says \texttt{MISSING}, the second cell asks for it.
+            Your key should say \texttt{set}. If it says \texttt{MISSING}, the second cell asks for it.
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{The lead}\\[2pt]
@@ -1146,10 +1146,7 @@ for tag in leftovers:
 \begin{frame}[fragile]{Step 11: join the paragraphs}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Keep each paragraph that has text, and join them with blank lines.
-
-            \medskip
-            The notebook does the join and the clean-up in one line.
+            Another given cell keeps each paragraph that has text, and joins them with blank lines.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -1188,28 +1185,69 @@ print(lead == saved_lead)
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 12: embed one lead}
+\begin{frame}[fragile]{Step 12: three short sentences}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Send one lead to the embeddings endpoint. It comes back as a \textbf{vector}, a list of numbers.
+            Before 116 leads, one small request. Two of these sentences say the same thing. The third is about something else.
 
             \medskip
-            How many numbers? No single one means anything. What matters is how two vectors compare.
+            Which two should come out closest?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 EMBEDDER = "nvidia/nemotron-3-embed-1b:free"
-# Send the first lead to the embeddings endpoint
-one = requests.post(
+# Two say the same thing; one doesn't.
+# A long string can go on over two lines.
+sentences = [
+    "Barack Obama was the 44th president "
+    "of the United States.",
+    "Obama served as the 44th U.S. president.",
+    "Boulder is a city at the foot of "
+    "the Rocky Mountains.",
+]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: one small request}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Send all three to the embeddings endpoint in one request. Each comes back as a \textbf{vector}, a list of numbers.
+
+            \medskip
+            How many numbers in each? No single one means anything.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# All three sentences in one request
+small = requests.post(
     f"{openrouter_base}/embeddings",
-    json={
-        "model": EMBEDDER,
-        "input": [leads["lead"][0]],
-    },
-    headers=...,  # your key, as on Friday
+    json={"model": EMBEDDER, "input": sentences},
+    headers=openrouter_headers,
 ).json()
-# How many numbers came back?
-print(len(one["data"][0]["embedding"]), "numbers")
+# How many vectors, and how many numbers in each?
+print(len(small["data"]), "vectors")
+print(len(small["data"][0]["embedding"]), "numbers")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: how close are they?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell scales each vector to length 1. Then \texttt{@}, the dot product, is their \textbf{cosine similarity}: 1 if they point the same way.
+
+            \medskip
+            Which pair is closer? By how much?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Sentences 0 and 1: the same idea
+print("0 and 1:", round(three[0] @ three[1], 3))
+# Sentences 0 and 2: different ideas
+print("0 and 2:", round(three[0] @ three[2], 3))
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1218,14 +1256,14 @@ print(len(one["data"][0]["embedding"]), "numbers")
 \begin{frame}{Step 12: embed them all}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            A given cell embeds every lead, 20 to a request, and scales each vector to length 1.
+            A given cell does what you just did, for every lead: 116 texts, 20 to a request, each vector scaled to length 1.
 
             \medskip
-            It uses one model and no fallback list: two models' vectors can't be compared. If the model's daily limit stops you, the next given cell loads the vectors saved on November 9.
+            If the model's daily limit stops it, the next given cell loads the vectors saved on November 9.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \textbf{Cosine similarity}\\[2pt]
-            {\footnotesize How nearly two vectors point the same way: 1 if exactly. For vectors of length 1, it is their dot product, \texttt{@}.\par}
+            \textbf{One model}\\[2pt]
+            {\footnotesize Two models' vectors can't be compared, so there is no fallback list.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -1233,7 +1271,7 @@ print(len(one["data"][0]["embedding"]), "numbers")
 \begin{frame}[fragile]{Step 12: compare each lead with today's}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Keep each article's current vector. Then compare every lead with its own article's current lead.
+            This cell is given. It keeps each article's current vector, then compares every lead with its own article's current lead.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -1353,178 +1391,42 @@ for y in [year - 1, year]:
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 13: the shape of an answer with sources}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Now ask a question, and require the model to name its sources.
-
-            \medskip
-            This schema is given. \texttt{year} may be \texttt{null}: no passage says it.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# A year (or null), and the IDs of its sources
-ANSWER_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "year": {"type": ["integer", "null"]},
-        "source_ids": {
-            "type": "array",
-            "items": {"type": "string"},
-        },
-    },
-    "required": ["year", "source_ids"],
-}
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 13: search by meaning}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Embed the question as Step 12 embedded a lead. Score every lead against it, and keep that article's best three.
-
-            \medskip
-            This is \textbf{retrieval}: find the passages before you ask.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-def search(question, title):
-    # Embed the question, as Step 12 embedded a lead
-    response = requests.post(
-        f"{openrouter_base}/embeddings",
-        json={"model": EMBEDDER, "input": [question]},
-        headers=...,
-    ).json()
-    query = np.array(response["data"][0]["embedding"])
-    # Score every lead; keep this article's best three
-    query = query / np.linalg.norm(query)
-    leads["score"] = vectors @ query
-    best = leads[leads["title"] == title]
-    return best.nlargest(3, "score")
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 13: find three leads}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Which three Biden leads score highest?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-question = (
-    "In which year did the article first say "
-    "Joe Biden is the 46th president of the "
-    "United States?"
-)
-# The three Biden leads closest to the question
-top = search(question, "Joe Biden")
-print(top[["id", "score"]])
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 13: the passages}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Join the three leads into \texttt{passages}, each headed by its ID, such as \texttt{Joe Biden 2022}.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# Each lead headed by its ID, with blank lines between
-passages = "\n\n".join(
-    f"{row.id}: {row.lead}"
-    for row in top.itertuples()
-)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 13: ask}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Friday's body, with the new instruction and schema. The user message holds the question and the passages. The notebook builds it inside the body.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# The question, then the three leads
-user = f"Question: {question}\n\n{passages}"
-body = {
-    "models": MODELS,
-    "temperature": 0,
-    "messages": [
-        {"role": "system", "content": ANSWER_INSTRUCTION},
-        {"role": "user", "content": user},
-    ],
-    ...  # response_format with ANSWER_SCHEMA; provider
-}
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 13: the answer}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Send it as on Friday.
-
-            \medskip
-            Which year did it give, and which sources?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# Send it as on Friday
-response = requests.post(...).json()
-# Which model answered, and its answer
-message = response["choices"][0]["message"]
-print(response["model"], json.loads(message["content"]))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 13: check it by reading}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Print the start of each Biden lead from 2020 on.
-
-            \medskip
-            In which year's lead is he the 46th president, not about to become it? Does that match the model's year?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# Biden's leads from 2020 on ("current" sorts after)
-is_biden = leads["title"] == "Joe Biden"
-recent = leads["year"] >= "2020"
-# The ID and the start of each
-for row in leads[is_biden & recent].itertuples():
-    print(row.id, "|", row.lead[:300], "\n")
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Microsprint: a question with no answer}
+\begin{frame}{Step 13: what did we learn?}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Ask the same about Kamala Harris as the 47th president.
-
-            \medskip
-            No lead says it. Did the model answer \texttt{null}, or did it name a year?
+            Answer in the notebook, as comments.
+            \begin{itemize}\small
+                \item Which of Datalab's output would you publish?
+                \item Which reports did the model get wrong, and why?
+                \item Which jump could you explain only by reading?
+                \item What did three sentences let you check first?
+                \item What will you check your project's model outputs against?
+            \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \textbf{Why null matters}\\[2pt]
-            {\footnotesize An answer you can check needs its sources, or an honest \texttt{null}.\par}
+            \textbf{Due Wednesday, Nov 18}\\[2pt]
+            {\footnotesize Chapter 13's Recommended Exercises, from its companion notebook: how alike two Wikipedia articles, or two PDFs, you choose are. Graded on a good-faith attempt.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 14: a tool list}
+% The tools step is optional (instructor, 2026-11-16): do it if there's time.
+\begin{frame}{Optional, if time: Step 14, tools}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            A model can't fetch data, but it can write a request. The Census Bureau's MCP server tells a model which requests it may make of week 11's API.
+
+            \medskip
+            Its first given cell asks for week 11's \texttt{CENSUS\_KEY}.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Optional}\\[2pt]
+            {\footnotesize In class if there's time, or on your own.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 14 (optional): a tool list}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             A model can't fetch data. It can only write a request. An \textbf{MCP server} tells a program which requests it may write.
@@ -1547,7 +1449,7 @@ for tool in tools:
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 14: offer the model the tools}
+\begin{frame}[fragile]{Step 14 (optional): offer the model the tools}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             A given cell puts each tool in OpenRouter's form, \texttt{functions}, and sets week 11's question.
@@ -1573,7 +1475,7 @@ body = {
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 14: the model writes one tool call}
+\begin{frame}[fragile]{Step 14 (optional): the model writes one tool call}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             The model answers with a tool call: a tool's name and its arguments.
@@ -1594,7 +1496,7 @@ print(response["model"], call["name"], call["arguments"])
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 14: check the call}
+\begin{frame}[fragile]{Step 14 (optional): check the call}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             The model only wrote the call. Our code runs it.
@@ -1616,7 +1518,7 @@ print(
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 14: turn the call into week 11's request}
+\begin{frame}[fragile]{Step 14 (optional): turn the call into week 11's request}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             Then it builds week 11's address from the year and dataset, and the \texttt{get} parameter from the table or variables.
@@ -1638,7 +1540,7 @@ else:
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 14: the parameters}
+\begin{frame}[fragile]{Step 14 (optional): the parameters}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             The parameters week 11 sent, filled in from the model's arguments, with your Census key.
@@ -1657,7 +1559,7 @@ params = {
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 14: run it}
+\begin{frame}[fragile]{Step 14 (optional): run it}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             Send it. Print the data, never the URL: your key is in it.
@@ -1679,7 +1581,7 @@ print(data)
     \end{columns}
 \end{frame}
 
-\begin{frame}{What your code still decides}
+\begin{frame}{Step 14 (optional): what your code still decides}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             \textbf{Which tools run.} A model can pick any tool it is shown. Our code runs only one.
@@ -1697,7 +1599,7 @@ print(data)
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 14: a skill is a Markdown file}
+\begin{frame}[fragile]{Step 14 (optional): a skill is a Markdown file}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             A \textbf{skill} is a file of instructions for a model. Its front matter gives a name and a description, which tell a model when to read the rest.
@@ -1719,24 +1621,6 @@ print("\n".join(lines[:5]))
 # Its "### " headings: the tools it teaches
 print([line for line in lines if line.startswith("### ")])
 \end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Step 15: what did we learn?}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Answer in the notebook, as comments.
-            \begin{itemize}\small
-                \item Which of Datalab's output would you publish?
-                \item Which reports did the model get wrong, and why?
-                \item Which jump could you explain only by reading?
-                \item What will you check your project's model outputs against?
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \textbf{Due Wednesday, Nov 18}\\[2pt]
-            {\footnotesize Chapter 13's Recommended Exercises, from its companion notebook: how alike two Wikipedia articles, or two PDFs, you choose are. Graded on a good-faith attempt.\par}
         \end{column}
     \end{columns}
 \end{frame}
