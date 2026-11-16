@@ -1,6 +1,6 @@
 # Proposal: bringing weeks 1–13 to the incremental style
 
-**Status:** a proposal, nothing applied. Written on 2026-11-16 at the instructor's request: "use the revised AUTHORING.md with more incremental coding style to propose revisions to previous slides and labs, working backwards from week 13". Every week's lab key and deck was read against:
+**Status:** a proposal, approved 2026-11-16 (#196); being applied a week at a time (see Decisions). Written on 2026-11-16 at the instructor's request: "use the revised AUTHORING.md with more incremental coding style to propose revisions to previous slides and labs, working backwards from week 13". Every week's lab key and deck was read against:
 - `labs/AUTHORING.md`, including the new rule 0 of "By hand, then given", **one minimal call first**;
 - `slides/common/AUTHORING.md`, "Layout and density" and "Code shaped for reading".
 
@@ -52,12 +52,13 @@ These are revisions for the course's **next offering**. Weeks 1–9 were written
 - **Weeks 1–3 have never been taught as labs.** Their decks point at the companion notebooks, so their deck work is mostly new frames. The instructor last edited every code frame in decks 2 and 3, so changes there need sign-off.
 - **For weeks 2–3, a Monday lecture and a two-part lab** (week 10's form) may suit better than three parts, since their Mondays are law and policy.
 
-## Decisions for the instructor
+## Decisions (instructor, 2026-11-16)
 
-- **Order:** start with item 1 (the three decks), or with whichever week comes first next term?
-- **Week 1's calendar:** Friday only, or Wednesday and Friday? It decides whether its lab is one part or two.
-- **Weeks 2–3:** three-part labs, or a Monday lecture plus a two-part lab?
-- **Live runs:** several proposals need a laptop run (Wikipedia, the Internet Archive, browsers, YouTube with a key). Who runs them, and when?
+- **Order and form:** working backwards from week 13, three weeks at a time, one agent and one pull request per week. The first three are week 13 (Parts 1–2), week 12 and week 11.
+- **Priority within a week:** small, interpretable minimal examples first, before the week's main workflow (rule 0 of "By hand, then given"). Then the cell splits and given cells, then the deck.
+- **Week 1** met on Friday only this semester, so its lab is one part.
+- **Weeks 1–4** may stay lecture-heavy in the slides rather than lab-heavy. That's fine for the decks, so weeks 2–3 needn't be three-part labs.
+- **Laptop runs:** the instructor will make them later. They're collected in issue #197, and each week's PR lists its new `not-run-live` cells there.
 
 ---
 
