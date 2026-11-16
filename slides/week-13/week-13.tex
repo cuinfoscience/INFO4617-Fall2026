@@ -1007,19 +1007,58 @@ INSTRUCTION = (
     \end{columns}
 \end{frame}
 
-\begin{frame}{Step 11: set up}
-    \begin{columns}[T]
+\begin{frame}{What is a lead on Wikipedia?}
+    \begin{columns}
         \begin{column}{0.6\textwidth}
-            Step 11's first two cells are given. Put your email in \texttt{HEADERS}, then run both.
+            
+            An encyclopedia article should be a summary of knowledge about a topic.
 
             \medskip
-            Your key should say \texttt{set}. If it says \texttt{MISSING}, the second cell asks for it.
+
+            The lead paragraph on Wikipedia should be a summary of that summary
+
+            \medskip
+            
+            Some leads can be long and detailed, others might be just a few sentences
+
+            \medskip
+
+            We are using leads rather than full article content because (free) embedding models have limited windows
         \end{column}
         \begin{column}{0.35\textwidth}
-            \textbf{The lead}\\[2pt]
-            {\footnotesize The paragraphs above an article's first heading. Its job is to summarize the article.\par}
+        \includegraphics[width=\textwidth]{slides/week-13/img/obama-wiki-lead.png}
         \end{column}
     \end{columns}
+\end{frame}
+
+\begin{frame}{What is a text embedding?}
+
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            A word, sentence, or document embedding is a machine learning method for representing text as a numerical vector
+
+            \medskip
+
+            The vector is typically hundreds or thousands of elements long and the individual values or positions are not interpretable
+
+            \medskip
+
+            The ``position'' of the text in this high-dimensional space is inferred from text patterns observed in other training data
+
+            \medskip
+
+            The position encodes \textit{semantic} information: text that is close to other text in an embedding is more similar to each other
+
+            \medskip
+
+            These embeddings are not neutral and encode interesting and troubling biases from training data
+        \end{column}
+        \begin{column}{0.35\textwidth}\centering
+            \includegraphics[width=\textwidth]{slides/week-13/img/embedding-gender-biases.png}\\ \footnotesize
+            $x$-axis is male-female bias and $y$-axis is gender neutrality. From: Boulukbasi, et al. (2016)
+        \end{column}
+    \end{columns}
+    
 \end{frame}
 
 \begin{frame}[fragile]{Step 11: ask for one old version}
