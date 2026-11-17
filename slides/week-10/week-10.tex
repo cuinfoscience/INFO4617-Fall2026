@@ -1375,7 +1375,7 @@ print(monthly_views.corr(edits_since_2021))
             Step 12's cells are given. Put your email in \texttt{CLIENT}, then run them.
 
             \medskip
-            They load two saved tables: Monday's edits, for Step 16, and Wednesday's daily views, for Step 13. Missed a day? Start here.
+            They load Monday's table of edits, which Step 16 checks a client library against. Missed a day? Start here.
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{Saved on 2026-11-10}\\[2pt]
@@ -1448,16 +1448,19 @@ print(september)
 \begin{frame}[fragile]{Step 13: check it against the days}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Wednesday's table ends on September 30, so its rows from September 1 on are September.
+            The same call, without \texttt{granularity}: the default is daily.
 
             \medskip
-            Do the month and its days agree?
+            How many rows should come back? Is the month the sum of its days?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# Wednesday's daily views, from September 1 on
-is_september = views["timestamp"] >= "2026-09-01"
-september_days = views[is_september]
+# September 2026 again, by day
+september_days = get_pageviews(
+    ARTICLE,
+    "20260901",
+    "20260930",
+)
 # How many days, and their sum
 print(len(september_days), september_days["views"].sum())
 \end{lstlisting}
@@ -1553,10 +1556,10 @@ cat_params = {
 \begin{frame}[fragile]{Step 14: send it, and look}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Which of the three are in the box at the foot of the article? Where are the others?
+            Three titles, and a \texttt{"continue"}: Step 4's idea, on another \texttt{prop}.
 
             \medskip
-            Is there a \texttt{"continue"}?
+            Are they the three you expected?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -1569,6 +1572,25 @@ cat_response = requests.get(
 # Look: the status, and the whole text
 print(cat_response.status_code, cat_response.text)
 \end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 14: the box at the foot of the article}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Which of your three are in the box (1)?
+
+            \medskip
+            The others are \textbf{hidden categories}, which editors use to keep track of articles.
+
+            \medskip
+            Should a study of how Wikipedia classifies a topic count them?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/article-categories_annotated.pdf}\\
+            {\scriptsize The article's categories, 2026-10-16.}
         \end{column}
     \end{columns}
 \end{frame}
@@ -1739,7 +1761,7 @@ print(back_data["query"])
             A given cell asks \texttt{query\_all()} for every article that links here, 500 a request. Its \texttt{sum()} adds one for each page that is a redirect.
 
             \medskip
-            Another saves the links, and what links here.
+            It also saves the links, and what links here.
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{Discuss}\\[2pt]
