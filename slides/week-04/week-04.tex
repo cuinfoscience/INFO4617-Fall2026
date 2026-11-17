@@ -942,6 +942,28 @@ df.head()
     \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]{A missing tag: \texttt{None}, and the chapter's guard}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The chapter's code, not the lab's. A missing tag makes \texttt{find()} return \texttt{None}, which has no \texttt{.text}: our loop would stop with an \texttt{AttributeError}.
+
+            \medskip
+            The chapter guards every field: one missing tag, one empty cell.
+
+            \medskip
+            Which would you rather: a crash, or a quiet gap?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One field, as our loop reads it
+m.find("party").text
+# The chapter's guard: None when the tag is missing
+m.find("party").text if m.find("party") else None
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}[fragile]{Step 6: count the rows for each state}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
