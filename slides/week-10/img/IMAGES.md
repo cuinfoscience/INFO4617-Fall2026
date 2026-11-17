@@ -77,5 +77,7 @@ Wikipedia, and why now".
 
 The tour's screenshots moved with the tour to the deck's last section,
 "Reading: a tour of Wikipedia". `api-response_annotated.pdf` is also on
-"Step 2: the same answer in a browser", and `revision-history_annotated.pdf`
-on "Step 4: where the next page starts", each at 0.6 of the text width.
+"Step 2: the same answer in a browser", and `article-categories_annotated.pdf`
+on "Step 14: the box at the foot of the article", each at 0.6 of the text
+width. The revision-history screenshot stays in the tour only: the lab's
+Step 4 keeps usernames off the screen, so its frames do too.

@@ -545,7 +545,7 @@ print(
 
 \begin{frame}{Step 4: where the next page starts}
     \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
+        \begin{column}{0.6\textwidth}
             The answer's \texttt{"continue"} holds \texttt{rvcontinue}: a time, then an ID.
 
             \medskip
@@ -554,10 +554,9 @@ print(
             \medskip
             Add those pairs to the parameters, and the next request starts there.
         \end{column}
-        \begin{column}{0.6\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/revision-history_annotated.pdf}\\
-            {\scriptsize The article's View history, 2026-10-16: when (1), who (2), bytes (3), summary (4).}
+        \begin{column}{0.35\textwidth}
+            \textbf{Pagination}\\[2pt]
+            {\footnotesize An API sends a long list a page at a time. The token for the next page comes with each answer.\par\medskip \textbf{Docs:} \href{https://www.mediawiki.org/wiki/API:Continue}{API:Continue}\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -1926,7 +1925,7 @@ print(len(edits_2023), "edits in 2023, from mwclient")
         \item \textbf{Ask small first}: three edits, three days, three categories. Then the whole thing.
         \item \textbf{Look before you read}: print the status and the text before you index into the JSON.
         \item Always \textbf{paginate}: follow \texttt{continue} to the end, or you keep only the first page.
-        \item A \textbf{pageview} is not a person, and its definition has changed.
+        \item A \textbf{pageview} is not a person, and a past month's count can still change.
     \end{enumerate}
     \bigskip
     \centering\small Next week: \textbf{Government APIs} --- the Census, the Federal Reserve (FRED), and other public data services.
