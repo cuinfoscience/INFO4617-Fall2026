@@ -9,6 +9,8 @@
 % file directly from its own folder (no TEXINPUTS needed).
 \makeatletter\def\input@path{{../common/}}\makeatother
 \input{preamble}
+% Larger code than the house default: a frame holds one short block (AUTHORING.md, "Code style")
+\lstset{basicstyle=\ttfamily\footnotesize}
 
 \title[Week 7 · Web Archives]{{\Huge Archived Web Pages \& the Wayback Machine}}
 \subtitle{Week 7 · Documents module · Textbook Chapter 7}
@@ -58,8 +60,49 @@
 \end{frame}
 
 % =========================================================================
-\section{Monday · Concepts}
+\section{Monday}
 % =========================================================================
+
+% -------------------------------------------------------------------------
+% The lab, labs/week-07/lab-07-key.ipynb, was rebuilt in three parts on 2026-11-17, for the next offering
+% (docs/plans/2026-11-16-incremental-style-revisions.md, "Week 07"). The "Step N" frames follow its cells,
+% one frame a cell where practical, reflowed to fit and sometimes cut with "...". They show no printed
+% output: the slides lead into the notebook, where students run each cell and see what it prints.
+% One code block a frame, narration on the left and code on the right: slides/common/AUTHORING.md.
+% A one-line comment above each step, at most two chained methods, one argument per line in long calls.
+% The dates are fall 2026's: the title's, and "Due Sunday, Oct 4" below.
+\begin{frame}{This week, every class is live coding}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            \dayband{Find it}{\texttt{labs/} in the course repository}
+            \begin{enumerate}\small
+                \item Open the \href{https://github.com/cuinfoscience/INFO4617-Fall2026/tree/main/labs}{\textbf{labs} folder} of \texttt{cuinfoscience/INFO4617-Fall2026} on GitHub
+                \item Open \texttt{week-07}, click \texttt{lab-07.ipynb}, then \textbf{Download raw file}
+                \item Open it in JupyterLab in the \texttt{webdata} environment
+            \end{enumerate}
+
+            \medskip
+            \dayband{Use it}{one part a day}
+            \begin{itemize}\small
+                \item I write the code on screen, and you write it in your copy
+                \item Put \textbf{your} email in the User-Agent in Step 0
+                \item Today: Part 1, Steps 0--3; no key, no account
+                \item Wednesday and Friday: start at that day's setup step
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Solutions}\\[2pt]
+            {\footnotesize \texttt{lab-07-key.ipynb}, beside it: every cell filled in. Fall behind? Copy the cell from the key and keep going.\par}
+            \medskip
+            \textbf{Due Sunday, Oct 4}\\[2pt]
+            {\footnotesize Chapter 7's \textbf{Recommended Exercises}, from its companion notebook. The lab itself isn't turned in. Graded on good-faith attempt to complete rather than getting everything working.\par}
+            \medskip
+            \begin{alertblock}{Error flavors}
+                \footnotesize A \texttt{JSONDecodeError} or a dropped connection may be the Archive turning us away: wait a minute, and run the cell once more. A cell that fails for everyone is \textit{broken}: tell me, or open an issue.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
 
 \begin{frame}{Link rot}
     \begin{columns}
@@ -399,6 +442,428 @@
     \end{columns}
 \end{frame}
 
+% ---- Lab, Part 1 (Steps 0-3) ----
+\begin{frame}{Today: Part 1, the archive by hand}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            A capture's address is a query. You can read it, and you can rewrite it.
+
+            \medskip
+            We take one address apart, and see what the Wayback Machine adds to a page when it replays it.
+
+            \medskip
+            Then we ask its Availability API a question that we can already answer.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Start at Step 0}\\[2pt]
+            {\footnotesize Open \texttt{lab-07.ipynb}. Put your email in the User-Agent. You need no key and no account.\par}
+            \medskip
+            \textbf{One address, thirty of us}\\[2pt]
+            {\footnotesize The Archive limits each network address, and this room shares one. Run each cell once, when we do.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 0: set up}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            This cell is given. Put your email in the User-Agent, then run it.
+
+            \medskip
+            Every request this week sends \texttt{HEADERS}. Why would a nonprofit library want to know who is asking?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# What we use today
+import requests
+import pandas as pd
+from bs4 import BeautifulSoup
+
+# Who is asking: put your email here
+HEADERS = {
+    "User-Agent":
+        "WebDataScience/1.0 (your-email@colorado.edu)"
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: take the address apart}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The 14 digits after \texttt{/web/} are the timestamp. The original address follows them.
+
+            \medskip
+            What will \texttt{after\_web} hold?
+
+            \medskip
+            The notebook writes the address on one line.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One capture of Thefacebook
+CAPTURE = (
+    "https://web.archive.org/web/20040212031928/"
+    "http://www.thefacebook.com/"
+)
+# Keep what follows "/web/"
+after_web = CAPTURE.split("/web/")[1]
+print(after_web)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: the timestamp, and the address}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Slice off the first 14 characters for the timestamp. Character 14 is the slash, so the address starts at 15.
+
+            \medskip
+            Which year, month and day is this?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The timestamp: the first 14 characters
+stamp = after_web[:14]
+# The original address: character 15 onward
+original = after_web[15:]
+print(stamp, original)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: read the timestamp}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{format} tells pandas how to read the digits: year, month, day, hour, minute, second.
+
+            \medskip
+            The time is in UTC. What time was it in Massachusetts?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://pandas.pydata.org/docs/reference/api/pandas.to_datetime.html}{\texttt{pd.to\_datetime()}}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Read the 14 digits as a date and time, in UTC
+when = pd.to_datetime(
+    stamp,
+    format="%Y%m%d%H%M%S",
+    utc=True,
+)
+print(when)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: a year for a timestamp}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Shorten the timestamp to a year. The Wayback Machine sends you to the closest capture.
+
+            \medskip
+            Where do you expect to land?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# A year where the 14 digits were
+year_url = (
+    "https://web.archive.org/web/2004/"
+    "thefacebook.com"
+)
+# Ask for it, and see where we landed
+by_year = requests.get(year_url, headers=HEADERS)
+print(by_year.status_code, by_year.url)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: the trail of redirects}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{history} keeps each response that sent us on. Its \texttt{Location} header says where to.
+
+            \medskip
+            How many redirects were there? In week 1, Wikipedia's list was empty.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The responses that redirected us
+print(by_year.history)
+# Where the first one pointed
+first = by_year.history[0]
+print(first.headers["Location"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1 microsprint: before they were famous}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} ask for \texttt{google.com} in 1998, \texttt{x.com} in 1999, or a site you knew in middle school.
+
+            \medskip
+            \textbf{Share:} the address, the date of the capture you landed on, and the page's title.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# A year, then the address
+famous = requests.get(
+    "https://web.archive.org/web/1999/x.com",
+    headers=HEADERS,
+)
+# Where we landed
+print(famous.url)
+# The page's <title>
+soup = BeautifulSoup(famous.text, "html.parser")
+print(soup.title)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: the wrapped capture}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The Wayback Machine rewrites a page's links to point back into the archive, at addresses that hold \texttt{/web/}.
+
+            \medskip
+            How many do you expect in this page?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The capture, as the Wayback Machine replays it
+wrapped = requests.get(CAPTURE, headers=HEADERS)
+# Its status, and how often "/web/" appears in it
+print(wrapped.status_code, wrapped.text.count("/web/"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: ask for the original, with \texttt{id\_}}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{id\_} after the timestamp asks for the capture as it was saved, with nothing added.
+
+            \medskip
+            Where in the address does it go?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Add "id_" after the timestamp
+RAW = CAPTURE.replace(stamp, stamp + "id_")
+print(RAW)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: the raw capture}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same request, for the raw address.
+
+            \medskip
+            How many \texttt{/web/} links should a page from 2004 hold?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The capture, as it was saved
+raw = requests.get(RAW, headers=HEADERS)
+# Its status, and how often "/web/" appears in it
+print(raw.status_code, raw.text.count("/web/"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: scripts and links, side by side}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            This given cell counts each page's \texttt{<script>} tags and links, and prints the counts.
+
+            \medskip
+            Which counts did the wrapper change? What would a study of JavaScript in 2004 have found on the wrapped page?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+for page in [wrapped, raw]:
+    # Parse the page, and find its <script> tags
+    page_soup = BeautifulSoup(page.text, "html.parser")
+    scripts = page_soup.find_all("script")
+    # Its links
+    hrefs = [
+        a["href"]
+        for a in page_soup.find_all("a", href=True)
+    ]
+    # The links that point into the archive
+    into_archive = [h for h in hrefs if "/web/" in h]
+    ...
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: a question we can answer}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The Availability API answers one question: which capture of this address is closest to this date?
+
+            \medskip
+            We know one capture of Thefacebook from February 12, 2004. Which timestamp do you expect?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} the \href{https://archive.org/help/wayback_api.php}{Availability API}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The Availability API's address
+avail_url = "https://archive.org/wayback/available"
+# The page, and the date: February 12, 2004
+facebook_params = {
+    "url": "thefacebook.com",
+    "timestamp": "20040212",
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: send it, and look}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Print the status and the start of the text before you read it as JSON.
+
+            \medskip
+            Is the status 200? Does the text look like JSON?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send the parameters, with our User-Agent
+facebook = requests.get(
+    avail_url,
+    params=facebook_params,
+    headers=HEADERS,
+)
+# Look before you read
+print(facebook.status_code, facebook.text[:300])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: down one level}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{.json()} reads the text as a dictionary. Go down it one level a cell.
+
+            \medskip
+            Which key should hold the capture?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The text, as a dictionary
+facebook_data = facebook.json()
+# Its keys
+facebook_data.keys()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: down another level}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            What is inside? Another dictionary, or a list?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The captures the API found
+facebook_data["archived_snapshots"]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: the closest capture}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Is this the timestamp we took apart in Step 1?
+
+            \medskip
+            Compare its \texttt{url} with \texttt{CAPTURE}. What is different?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Down to the capture itself
+closest = facebook_data["archived_snapshots"]["closest"]
+# When it was captured, and where it is
+print(closest["timestamp"], closest["url"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: an address nobody archived}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Change one value: an address that doesn't exist.
+
+            \medskip
+            What is the status? What would \texttt{["closest"]} do with this answer?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The same question, for a made-up address
+nowhere_params = {
+    "url": "this-site-does-not-exist-4617.org",
+    "timestamp": "20040212",
+}
+nowhere = requests.get(
+    avail_url,
+    params=nowhere_params,
+    headers=HEADERS,
+)
+print(nowhere.status_code, nowhere.text)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3 microsprint: a misspelled parameter}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} ask about Thefacebook again, with \texttt{timestamp} misspelled as \texttt{timestmp}.
+
+            \medskip
+            \textbf{Share:} the date of the capture it named. Did anything tell you about the misspelling?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# "timestmp": misspelled on purpose
+typo_params = {
+    "url": "thefacebook.com",
+    "timestmp": "20040212",
+}
+typo = requests.get(
+    avail_url,
+    params=typo_params,
+    headers=HEADERS,
+)
+print(typo.status_code, typo.text)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% ---- end of Part 1 ----
 \begin{frame}{Closing activity: time travel with the Wayback Machine}
     \begin{columns}
         \begin{column}{0.6\textwidth}\small
@@ -425,47 +890,245 @@
 \end{frame}
 
 % =========================================================================
-\section{Wednesday · Notebook Lab}
+\section{Wednesday}
 % =========================================================================
 
-\begin{frame}[fragile]{Finding a snapshot --- the Availability API}
-    The simplest question: does a snapshot exist near a date? Pass query args as a \texttt{params} dict so \texttt{requests} URL-encodes them (one value is itself a URL):
+% ---- Lab, Part 2 (Steps 4-9) ----
+\begin{frame}{Today: Part 2, every capture}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Monday's Availability API names one capture near a date. Today we use it on CNN's home page in three eras.
+
+            \medskip
+            Then the CDX Server lists every capture of a page in one answer, with the status code the crawler received each time.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Start at Step 4}\\[2pt]
+            {\footnotesize Open your \texttt{lab-07.ipynb}. Step 4 sets up again: nothing from Monday's cells is needed.\par}
+            \medskip
+            \textbf{Saved copies}\\[2pt]
+            {\footnotesize If the Archive refuses a request, the given cell under it loads a saved answer.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: set up again}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            This cell is given. Put your email in \texttt{HEADERS}, as on Monday, then run it.
+
+            \medskip
+            \texttt{checkpoints} is the address of the saved copies. When would you load one?
+        \end{column}
+        \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+import time
 import requests
-
-api_url = "https://archive.org/wayback/available"
-response = requests.get(api_url, params={"url": "https://www.cnn.com",
-                                         "timestamp": "20000815"})  # Aug 15, 2000
-data = response.json()
-
-if data["archived_snapshots"]:
-    snap = data["archived_snapshots"]["closest"]   # closest capture to that date
-    print(snap["timestamp"], snap["url"])
-else:
-    print("No snapshot available near this date")
+import pandas as pd
+...
+# Monday's API
+avail_url = "https://archive.org/wayback/available"
+# Where the saved copies are
+checkpoints = (
+    "https://raw.githubusercontent.com/cuinfoscience/"
+    "INFO4617-Fall2026/main/labs/week-07/data/"
+)
 \end{lstlisting}
+        \end{column}
+    \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Retrieve it raw with \texttt{id\_}, then measure}
-    Rewrite the snapshot URL to the \texttt{id\_} form, then parse it like any page:
-\begin{lstlisting}
-from bs4 import BeautifulSoup
+\begin{frame}[fragile]{Step 5: CNN on August 15, 2000}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Monday's request, for a new page and a new date.
 
-ts = snap["timestamp"]
-raw_url = snap["url"].replace(ts, ts + "id_")   # id_ -> original, unwrapped capture
-
-soup = BeautifulSoup(requests.get(raw_url).text, "html.parser")
-stats = {"year": ts[:4], "num_links": len(soup.find_all("a")),
-         "num_scripts": len(soup.find_all("script"))}
-\end{lstlisting}
-    The same measurement across three eras tells the web's story:
+            \medskip
+            How close to August 15 is the capture it names?
+        \end{column}
+        \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-#   year  num_links  text_length  num_images  num_scripts
-#   2000        150         8500          20            2   # largely static HTML
-#   2024        800        45000         120           95   # a JS app that renders
+# The page, and the date
+cnn_params = {
+    "url": "www.cnn.com",
+    "timestamp": "20000815",
+}
+# Ask the Availability API, and look
+cnn = requests.get(
+    avail_url,
+    params=cnn_params,
+    headers=HEADERS,
+)
+print(cnn.status_code, cnn.text[:300])
 \end{lstlisting}
+        \end{column}
+    \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]{Step 5: the capture's timestamp}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Go down to the closest capture, as on Monday.
+
+            \medskip
+            Which two keys lead to it?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The text, as a dictionary
+cnn_data = cnn.json()
+# Down to the closest capture
+cnn_closest = cnn_data["archived_snapshots"]["closest"]
+# Its own timestamp
+cnn_stamp = cnn_closest["timestamp"]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: its raw address}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            For counting, we want the page as it was saved. Add \texttt{id\_}, as in Step 2.
+
+            \medskip
+            Read the address. Is the timestamp exactly the date we asked for?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Add "id_" after the capture's timestamp
+cnn_raw = cnn_closest["url"].replace(
+    cnn_stamp,
+    cnn_stamp + "id_",
+)
+print(cnn_raw)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: count its links}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Fetch the capture, parse it, and count one kind of tag.
+
+            \medskip
+            How many links would you guess a news home page had in 2000?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Fetch the raw capture
+cnn_page = requests.get(cnn_raw, headers=HEADERS)
+# Parse it, as in week 6
+cnn_soup = BeautifulSoup(cnn_page.text, "html.parser")
+# Count its <a> tags
+print(len(cnn_soup.find_all("a")))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: the same lines, as a function}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A function is a name for some lines. The given \texttt{get\_snapshot\_stats()} runs your cells for any address and date.
+
+            \medskip
+            Find your cells in it. The lines cut here add \texttt{id\_}.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+def get_snapshot_stats(url, timestamp):
+    # Ask the Availability API
+    response = requests.get(
+        avail_url,
+        params={"url": url, "timestamp": timestamp},
+        headers=HEADERS,
+    )
+    # Down to the closest capture
+    data = response.json()
+    snapshot = data["archived_snapshots"]["closest"]
+    ...
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: what the function returns}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{return} hands back a dictionary: the year we asked for, the capture's own timestamp, and four counts.
+
+            \medskip
+            Which count is the one you typed?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+    # Fetch the raw capture, and parse it
+    page = requests.get(raw_url, headers=HEADERS)
+    soup = BeautifulSoup(page.text, "html.parser")
+    # The year, the capture, and four counts
+    return {
+        "year": timestamp[:4],
+        "capture": snapshot["timestamp"],
+        "num_links": len(soup.find_all("a")),
+        "text_length": len(soup.get_text()),
+        "num_images": len(soup.find_all("img")),
+        "num_scripts": len(soup.find_all("script")),
+    }
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: three eras}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given loop runs the function for three dates, and pauses a second between them.
+
+            \medskip
+            Which count do you expect to grow most from 2000 to 2024?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+stats = []
+for ts in ["20000815", "20120815", "20240815"]:
+    # One row of counts for this date
+    row = get_snapshot_stats("www.cnn.com", ts)
+    stats.append(row)
+    # Pause between dates
+    time.sleep(1)
+# A table with a row for each date
+comparison = pd.DataFrame(stats)
+comparison
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5 microsprint: another news site}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} run the function for a competitor of CNN's, such as \texttt{www.nytimes.com} or \texttt{www.foxnews.com}, in 2000 and in 2024.
+
+            \medskip
+            \textbf{Share:} the site, the two captures you got, and its links and scripts in each.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# August 2000
+print(get_snapshot_stats("www.nytimes.com", "20000815"))
+# Pause between requests
+time.sleep(1)
+# August 2024
+print(get_snapshot_stats("www.nytimes.com", "20240815"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% The instructor reworked this frame in Overleaf (2026-10-01), so it stays as it is. It is the chapter's
+% query; the lab's Steps 6-7, below, build it up in small cells, and leave out the timeout.
 \begin{frame}[fragile]{The whole history --- the CDX Server API}
     Availability finds \textit{one} snapshot; CDX enumerates \textit{all} of them. Two params filter server-side --- less data, less cleanup:
     
@@ -486,48 +1149,379 @@ df["timestamp"] = pd.to_datetime(
 \end{lstlisting}
 \end{frame}
 
-\begin{frame}[fragile]{Tracking a document over time}
-    Wrap the Availability + \texttt{id\_} + parse steps in \texttt{get\_wayback\_content()} (returns \texttt{None} on a miss), then loop over quarterly dates:
-\begin{lstlisting}
-dates = pd.date_range(start="2005-01-01", end="2024-01-01", freq="QS")
+\begin{frame}[fragile]{Step 6: three captures first}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The CDX Server lists every capture of a page, oldest first. Before a whole history, ask for three.
 
-results = []
-for date in dates:
-    snap = get_wayback_content("facebook.com/terms", date)
-    if snap is not None:          # skip misses instead of crashing the run
-        results.append(snap)
-    time.sleep(1)                 # rest between requests -- the Archive is a nonprofit
-# Retrieved 68 snapshots from 77 time points
-\end{lstlisting}
-    Serialize immediately --- you may not be able to re-scrape it later:
+            \medskip
+            How many rows do you expect, and from which year?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} the \href{https://github.com/internetarchive/wayback/tree/master/wayback-cdx-server}{CDX Server API}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-import json
-with open("fb_tos_history.json", "w") as f:
-    json.dump(results, f, indent=2)   # (also cache each raw capture as you go)
+# The CDX Server's address
+cdx_url = "https://web.archive.org/cdx/search/cdx"
+# Thefacebook's first three captures, two fields each
+small_params = {
+    "url": "thefacebook.com",
+    "output": "json",
+    "fl": "timestamp,statuscode",
+    "limit": 3,
+}
 \end{lstlisting}
+        \end{column}
+    \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Measuring change --- bag-of-words}
-    Represent each version as a vector of word frequencies (order ignored), then compare vectors. gensim comes with week 1's \texttt{webdata}; one made before October adds it with \texttt{conda install -c conda-forge gensim}.
+\begin{frame}[fragile]{Step 6: send it, and look}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            This is our first request to the CDX Server, so look before you read.
+
+            \medskip
+            Is the status 200? Where does each row start and end?
+        \end{column}
+        \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-import requests
-from gensim.utils import simple_preprocess
-from gensim import corpora, similarities
-
-headers = {"User-Agent": "WebDataScience/1.0 (your-email@colorado.edu)"}
-url = ("https://raw.githubusercontent.com/cuinfoscience/"
-       "Web-Data-Science-Book/main/data/stopwords-en.txt")   # one word per line
-stop = set(requests.get(url, headers=headers).text.split())
-docs = [[t for t in simple_preprocess(r["content"]) if t not in stop] for r in results]
-
-dct = corpora.Dictionary(docs)             # word -> id
-corpus = [dct.doc2bow(d) for d in docs]    # each version -> word-count vector
-index = similarities.SparseMatrixSimilarity(corpus, num_features=len(dct))
-change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1=all-new
+# Send the parameters
+small = requests.get(
+    cdx_url,
+    params=small_params,
+    headers=HEADERS,
+)
+# Look before you read
+print(small.status_code, small.text[:300])
 \end{lstlisting}
-    Plotting \texttt{change} over time gives a change timeline: spikes flag major revisions --- a new policy, a redesign, a response to controversy.
+        \end{column}
+    \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]{Step 6: a list of lists}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Each row is a list, not a dictionary.
+
+            \medskip
+            What does row 0 hold? Is it a capture? How many rows came back for a limit of 3?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The text, as a list of rows
+small_rows = small.json()
+# How many rows?
+print(len(small_rows))
+# The first two
+print(small_rows[0], small_rows[1])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: the chapter's query}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            This dictionary is given. \texttt{to} ends the list on a fixed day, so that a rerun gives the same rows.
+
+            \medskip
+            With no \texttt{limit}, how many rows might come back?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Facebook's terms: four fields, up to a fixed day
+terms_params = {
+    "url": "facebook.com/terms",
+    "output": "json",
+    "fl": "timestamp,original,statuscode,length",
+    "to": "20260930",
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: let the Archive filter}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A digest is a fingerprint of a capture's content. Two captures with one digest hold the same bytes.
+
+            \medskip
+            What is left when each repeat is dropped?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://github.com/internetarchive/wayback/tree/master/wayback-cdx-server\#filtering}{filtering}, \href{https://github.com/internetarchive/wayback/tree/master/wayback-cdx-server\#collapsing}{collapsing}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Keep the captures that succeeded
+terms_params["filter"] = "statuscode:200"
+# Drop a capture that matches the one before it
+terms_params["collapse"] = "digest"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: send it, and look}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            One request, for the page's whole history.
+
+            \medskip
+            Is the status 200? Do the rows look like Step 6's, with four fields?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send the parameters
+terms = requests.get(
+    cdx_url,
+    params=terms_params,
+    headers=HEADERS,
+)
+# Look before you read
+print(terms.status_code, terms.text[:300])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: rows into a table}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Row 0 names the columns. The rows after it are the captures.
+
+            \medskip
+            How many versions of the terms did the Archive save?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The text, as a list of rows
+terms_rows = terms.json()
+# Row 0 names the columns; the rest are captures
+df = pd.DataFrame(
+    terms_rows[1:],
+    columns=terms_rows[0],
+)
+print(len(df), "versions")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: dates and numbers}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Every value arrived as text. \texttt{errors} set to \texttt{coerce} turns a size that isn't a number into a missing value.
+
+            \medskip
+            When was the first capture? Is that when Facebook first had terms?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The timestamps, as dates
+df["timestamp"] = pd.to_datetime(
+    df["timestamp"],
+    format="%Y%m%d%H%M%S",
+)
+# The sizes, as numbers
+df["length"] = pd.to_numeric(
+    df["length"],
+    errors="coerce",
+)
+# The first and last capture
+print(df["timestamp"].min(), df["timestamp"].max())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: captures by quarter}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            You type the first line. The second cell is given: \texttt{resample()} groups the rows by quarter.
+
+            \medskip
+            \texttt{length} is the size of the archived record, compressed. What can it tell us, and what can't it?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.resample.html}{\texttt{resample()}}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The timestamp as the index
+df_ok = df.set_index("timestamp")
+# A row per quarter: a count, and a mean size
+quarterly = df_ok.resample("QS").agg(
+    captures=("length", "size"),
+    mean_size=("length", "mean"),
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: the busiest quarters}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Each row of the table is a change in the page's bytes.
+
+            \medskip
+            Did Facebook change its terms most in these quarters, or did the Archive look most often?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The three quarters with the most captures
+print(quarterly.nlargest(3, "captures"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: plot the record}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell plots both columns, one above the other, on one time axis.
+
+            \medskip
+            Pick a sudden jump in size. What would you open to tell a redesign from a move behind a login?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Two plots, one above the other, on one time axis
+fig, axes = plt.subplots(
+    2,
+    1,
+    figsize=(10, 6),
+    sharex=True,
+)
+# Captures per quarter, on top
+quarterly["captures"].plot(ax=axes[0])
+axes[0].set_ylabel("Captures per quarter")
+# The mean size goes below, the same way
+...
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: every capture in 2005}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The calendar's colors are status codes: blue for 2xx, green for 3xx, orange for 4xx, red for 5xx.
+
+            \medskip
+            This given query leaves out the filter. Which codes do you expect in 2005?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# facebook.com in 2005: no filter, no collapse
+fb2005_params = {
+    "url": "facebook.com",
+    "output": "json",
+    "fl": "timestamp,statuscode",
+    "from": "2005",
+    "to": "2005",
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: send it, and look}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same moves as Step 7, with nothing filtered out.
+
+            \medskip
+            Is the status 200? Which status codes can you see in the first rows?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send the parameters
+fb2005 = requests.get(
+    cdx_url,
+    params=fb2005_params,
+    headers=HEADERS,
+)
+# Look before you read
+print(fb2005.status_code, fb2005.text[:300])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: rows into a table}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Row 0 names the columns again.
+
+            \medskip
+            How many times did the crawler visit in 2005?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The text, as a list of rows
+fb2005_rows = fb2005.json()
+# Row 0 names the columns; the rest are captures
+fb2005_df = pd.DataFrame(
+    fb2005_rows[1:],
+    columns=fb2005_rows[0],
+)
+print(len(fb2005_df), "captures")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: month by status code}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{pd.crosstab()} counts the captures for each month and each code.
+
+            \medskip
+            Which months have 403s? What was happening to the address then?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://pandas.pydata.org/docs/reference/api/pandas.crosstab.html}{\texttt{pd.crosstab()}}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The month: the timestamp's first 6 characters
+fb2005_df["month"] = fb2005_df["timestamp"].str[:6]
+# Count the captures for each month and code
+counts = pd.crosstab(
+    fb2005_df["month"],
+    fb2005_df["statuscode"],
+)
+print(counts)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9 microsprint: a government page}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The given \texttt{status\_by\_year()} holds the cells you typed, and counts by year.
+
+            \medskip
+            \textbf{Do:} run it for the EPA's climate change page, 2016 to 2018.
+
+            \medskip
+            \textbf{Share:} the year its captures stop being 200s, and the codes that replaced them.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Every capture, counted by year and status code
+status_by_year("epa.gov/climatechange", "2016", "2018")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% ---- end of Part 2 ----
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}
         \begin{column}{0.6\textwidth}
@@ -555,7 +1549,7 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
 \end{frame}
 
 % =========================================================================
-\section{Friday · Backlog Standup}
+\section{Friday}
 % =========================================================================
 
 \begin{frame}{Daily note questions}
@@ -568,6 +1562,504 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
     \end{itemize}
 \end{frame}
 
+% ---- Lab, Part 3 (Steps 10-14) ----
+\begin{frame}{Today: Part 3, the words}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Wednesday's sizes say that Facebook's terms changed. They don't say how. For that we need the words.
+
+            \medskip
+            We fetch one version by hand, then ten, two years apart. A bag of words then turns each text into word counts that we can compare.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Start at Step 10}\\[2pt]
+            {\footnotesize Open your \texttt{lab-07.ipynb}. Step 10 sets up again: nothing from Monday or Wednesday is needed.\par}
+            \medskip
+            \textbf{Three sentences first}\\[2pt]
+            {\footnotesize Before the terms, we try the measure on three short sentences whose answer we can predict.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: set up again}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            This cell is given. Put your email in \texttt{HEADERS}, then run it. It also sets \texttt{avail\_url} and \texttt{checkpoints}.
+
+            \medskip
+            Does a \texttt{gensim} line stop? Chapter 7 gives the one \texttt{conda install} line.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+import os
+import json
+import time
+import requests
+import pandas as pd
+import matplotlib.pyplot as plt
+from bs4 import BeautifulSoup
+# gensim, for the bag of words
+from gensim.utils import simple_preprocess
+from gensim import corpora, similarities
+...
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: the terms at the start of 2010}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Monday's request once more, for Facebook's terms on January 1, 2010.
+
+            \medskip
+            We have seen this API's answers twice. What shape will this one have?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The page, and the date
+tos_params = {
+    "url": "facebook.com/terms",
+    "timestamp": "20100101",
+}
+# Ask the Availability API
+tos = requests.get(
+    avail_url,
+    params=tos_params,
+    headers=HEADERS,
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: which capture?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            We asked for January 1, 2010.
+
+            \medskip
+            How far from that day is the capture the API names? Would you call it the 2010 version?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The text, as a dictionary
+tos_data = tos.json()
+# Down to the closest capture
+tos_closest = tos_data["archived_snapshots"]["closest"]
+# When was it captured?
+print(tos_closest["timestamp"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: its raw address}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Add \texttt{id\_} once more. A toolbar's words would be counted with the terms' own.
+
+            \medskip
+            Which step first showed us what the wrapper adds?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The capture's own timestamp
+tos_stamp = tos_closest["timestamp"]
+# Add "id_" after it
+tos_raw = tos_closest["url"].replace(
+    tos_stamp,
+    tos_stamp + "id_",
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: the page's words}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{get\_text()} keeps the page's words, with a space between pieces, and drops the tags.
+
+            \medskip
+            It keeps menus and footers too. What will they do to a comparison?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://www.crummy.com/software/BeautifulSoup/bs4/doc/\#get-text}{\texttt{get\_text()}}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Fetch the raw capture, and parse it
+tos_page = requests.get(tos_raw, headers=HEADERS)
+tos_soup = BeautifulSoup(tos_page.text, "html.parser")
+# Keep its words, with a space between pieces
+tos_text = tos_soup.get_text(
+    separator=" ",
+    strip=True,
+)
+# How many words, and how it begins
+print(len(tos_text.split()), "words:", tos_text[:300])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: the same lines, as a function}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The given \texttt{get\_wayback\_content()} runs your four cells for any address and date. \texttt{strftime} writes the date as the API's timestamp.
+
+            \medskip
+            The lines cut here are yours. What does it hand back?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+def get_wayback_content(url, date):
+    # The date, as the API's timestamp
+    timestamp = date.strftime("%Y%m%d")
+    ...
+    # The capture, its address, and its words
+    return {
+        "timestamp": snapshot["timestamp"],
+        "url": raw_url,
+        "word_count": len(text.split()),
+        "content": text,
+    }
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: ten dates, and a folder}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given loop takes the start of every other year, 2006 to 2024, and names a file for each date.
+
+            \medskip
+            Why check for the file before asking the Archive?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+os.makedirs("wayback_cache", exist_ok=True)
+# The start of every other year, 2006 to 2024
+dates = pd.date_range(
+    "2006-01-01",
+    "2024-01-01",
+    freq="2YS",
+)
+for date in dates:
+    # A file named for the date
+    name = date.strftime("%Y%m%d")
+    cache_path = f"wayback_cache/{name}.json"
+    ...
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: get it, save it, pause}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The rest of the loop. Each version is saved as soon as it arrives.
+
+            \medskip
+            If the Archive refuses the sixth date, what do you have? What does a second run ask for?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+    # Ask only for a date we don't have yet
+    if not os.path.exists(cache_path):
+        # Get this date's version
+        result = get_wayback_content(
+            "facebook.com/terms",
+            date,
+        )
+        # Save it under the date's name
+        with open(cache_path, "w") as f:
+            json.dump(result, f)
+        # Pause before the next date
+        time.sleep(1)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: read them back}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell reads the ten files into \texttt{results}, a list of dictionaries. The next prints each date beside the capture we got.
+
+            \medskip
+            Do any of our ten dates share a capture?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Read the ten files back, in date order
+results = []
+for date in dates:
+    name = date.strftime("%Y%m%d")
+    with open(f"wayback_cache/{name}.json") as f:
+        results.append(json.load(f))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: one sentence into tokens}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A bag of words counts a text's words and ignores their order. First, split the text into tokens.
+
+            \medskip
+            What happens to the capital letters, the period, and the \texttt{'s}?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://radimrehurek.com/gensim/utils.html\#gensim.utils.simple_preprocess}{\texttt{simple\_preprocess()}}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Split a sentence into lowercase tokens
+tokens = simple_preprocess(
+    "We may share your data with Facebook's partners."
+)
+print(tokens)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: three short sentences}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Before the terms, three sentences that we can read in full.
+
+            \medskip
+            Which two should score as most alike? What should the third score?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Two alike, and one about something else
+sentences = [
+    "We collect your data.",
+    "We collect and share your data.",
+    "Cats sleep all day.",
+]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: without the stopwords}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Stopwords are too common to tell texts apart: \textit{the}, \textit{of}, \textit{your}. A given cell fetches the book's 198, defines the chapter's function, and runs it on each sentence.
+
+            \medskip
+            Which words will ``We collect your data.'' keep?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+def preprocess_document(text):
+    # Split the text into lowercase tokens
+    tokens = simple_preprocess(text)
+    # Keep each token that isn't a stopword
+    return [
+        token
+        for token in tokens
+        if token not in stop_words
+    ]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: number the words}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A \texttt{Dictionary} gives each different word a number.
+
+            \medskip
+            How many different words do the three sentences hold, without their stopwords?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://radimrehurek.com/gensim/corpora/dictionary.html}{\texttt{Dictionary}}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Give each different word a number
+tiny_dictionary = corpora.Dictionary(tiny_docs)
+print(tiny_dictionary.token2id)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: one sentence's bag}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Each pair is a word's number, and how many times the word appears.
+
+            \medskip
+            Which words are in sentence 1's bag? Where did their order go?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Sentence 1 as (word's number, count) pairs
+print(tiny_dictionary.doc2bow(tiny_docs[1]))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: an index of the bags}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            This cell is given. It makes a bag for each sentence, and an index that compares one bag with all of them.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://radimrehurek.com/gensim/similarities/docsim.html}{\texttt{SparseMatrixSimilarity}}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Every sentence's bag
+tiny_corpus = [
+    tiny_dictionary.doc2bow(doc)
+    for doc in tiny_docs
+]
+# An index that compares one bag with all three
+tiny_index = similarities.SparseMatrixSimilarity(
+    tiny_corpus,
+    num_features=len(tiny_dictionary),
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: how alike?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Cosine similarity is 1 for the same words in the same proportions, and 0 for no words in common.
+
+            \medskip
+            Predict the three numbers before you run it. The notebook writes this in one line.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Sentence 0's similarity to all three
+scores = tiny_index[tiny_corpus[0]]
+print(scores.round(3))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: all ten versions}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            This cell is given. It is Step 12 again, on the ten versions of the terms.
+
+            \medskip
+            Find each of Step 12's moves in it.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Every version's tokens
+processed_docs = [
+    preprocess_document(version["content"])
+    for version in results
+]
+# One dictionary, corpus and index for all ten
+dictionary = corpora.Dictionary(processed_docs)
+corpus = [dictionary.doc2bow(d) for d in processed_docs]
+index = similarities.SparseMatrixSimilarity(
+    corpus,
+    num_features=len(dictionary),
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: one change score}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            One minus the similarity is the change score: 0 for no change, 1 for no words in common.
+
+            \medskip
+            Versions 0 and 1 are the dates 2006 and 2008. What do you expect, after Step 11?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The change from version 0 to version 1
+print(1 - index[corpus[0]][1])
+# The change from version 0 to the last version
+print(1 - index[corpus[0]][9])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: every change, by date}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell scores each version against the one before it, then plots each score at the date of the later capture.
+
+            \medskip
+            Where is the biggest spike? What happened at Facebook around then?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Each version's change from the one before it
+change_scores = [
+    1 - index[corpus[i - 1]][i]
+    for i in range(1, len(corpus))
+]
+# The date of each later capture
+stamps = [version["timestamp"] for version in results[1:]]
+when = pd.to_datetime(stamps, format="%Y%m%d%H%M%S")
+...
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13 microsprint: one version against all}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} pick one version, from 0 to 9, and print its similarity to all ten.
+
+            \medskip
+            \textbf{Share:} its capture date, the version it is most like other than itself, and the one it is least like.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Version 4's similarity to all ten
+print(index[corpus[4]].round(2))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 14: what did we learn?}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Answer in a few sentences, as comments in the last cell:
+            \begin{itemize}
+                \item How many versions did the CDX Server list, and how many different captures did our ten dates reach?
+                \item What share of \texttt{facebook.com}'s captures in 2005 weren't 200s?
+                \item What did a small first request show you that the full run would have hidden?
+                \item What would your methods section say about the Wayback Machine?
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Then, the Recommended Exercises}\\[2pt]
+            {\footnotesize The same steps for a page you choose, in the chapter's companion notebook. Step 14 says which lab step prepared each one.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% ---- end of Part 3. The frames below are fall 2026's Friday, the backlog standup. ----
 \begin{frame}{Find your chapter}
     \begin{columns}
         \begin{column}{0.6\textwidth}
@@ -599,28 +2091,22 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
 \begin{frame}{Three activities}
     \begin{columns}[T]
         \begin{column}{0.31\textwidth}
-            \begin{block}{Triage an issue}
-                \small \textbf{Easy.} Check an issue against the book. Already fixed? A duplicate? Still a problem? Leave one comment.
-
-                \medskip
-                \footnotesize \texttt{triage-an-issue.pdf}
-            \end{block}
+            \textbf{Triage an issue}\\[2pt]
+            {\small \textbf{Easy.} Check an issue against the book. Already fixed? A duplicate? Still a problem? Leave one comment.\par}
+            \medskip
+            {\footnotesize \texttt{triage-an-issue.pdf}\par}
         \end{column}
         \begin{column}{0.31\textwidth}
-            \begin{block}{Review a pull request}
-                \small \textbf{Medium.} Read the change and its checks. Comment on lines, then submit a review with a verdict.
-
-                \medskip
-                \footnotesize \texttt{review-a-pull-request.pdf}
-            \end{block}
+            \textbf{Review a pull request}\\[2pt]
+            {\small \textbf{Medium.} Read the change and its checks. Comment on lines, then submit a review with a verdict.\par}
+            \medskip
+            {\footnotesize \texttt{review-a-pull-request.pdf}\par}
         \end{column}
         \begin{column}{0.31\textwidth}
-            \begin{block}{Issue $\to$ pull request}
-                \small \textbf{Hard.} Claim an issue, fix it in GitHub's web editor, and open a pull request that closes it.
-
-                \medskip
-                \footnotesize \texttt{issue-to-pull-request.pdf}
-            \end{block}
+            \textbf{Issue $\to$ pull request}\\[2pt]
+            {\small \textbf{Hard.} Claim an issue, fix it in GitHub's web editor, and open a pull request that closes it.\par}
+            \medskip
+            {\footnotesize \texttt{issue-to-pull-request.pdf}\par}
         \end{column}
     \end{columns}
 
@@ -880,9 +2366,8 @@ change = [1 - index[corpus[i-1]][i] for i in range(1, len(corpus))]  # 0=same, 1
             I regenerate the notebooks once, so Notebook sync goes green again.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Next week}
-                \footnotesize \textbf{Dynamic pages}: when the data appears only after JavaScript runs (Selenium).
-            \end{block}
+            \textbf{Next week}\\[2pt]
+            {\footnotesize \textbf{Dynamic pages}: when the data appears only after JavaScript runs (Selenium).\par}
         \end{column}
     \end{columns}
 \end{frame}
