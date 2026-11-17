@@ -1570,26 +1570,6 @@ print(safe_reply.status_code, safe_reply.text[:120])
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Microsprint: the raw title}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \textbf{Do:} predict what the API answers when the raw title, slash and all, goes into the address.
-
-            \medskip
-            \textbf{Share:} the status, and what the server took the slash to mean.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# The same address, with the raw title
-raw_url = f"{PAGEVIEWS}/AC/DC/daily/20260101/20260101"
-raw_reply = session.get(raw_url)
-# The verdict, and what the body says
-print(raw_reply.status_code, raw_reply.text[:200])
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 \begin{frame}[fragile]{Step 14: parameters in a dictionary, given}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
@@ -1629,6 +1609,26 @@ print(urlencode(info_params))
 info = session.get(ACTION_API, params=info_params)
 # The verdict, and the address requests built
 print(info.status_code, info.url)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: the raw title}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} predict what the pageviews API answers when the raw title, slash and all, goes into Step 14's address.
+
+            \medskip
+            \textbf{Share:} the status, and what the server took the slash to mean.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# One day of AC/DC's article, with the raw title
+raw_url = f"{PAGEVIEWS}/AC/DC/daily/20260101/20260101"
+raw_reply = session.get(raw_url)
+# The verdict, and what the body says
+print(raw_reply.status_code, raw_reply.text[:200])
 \end{lstlisting}
         \end{column}
     \end{columns}
