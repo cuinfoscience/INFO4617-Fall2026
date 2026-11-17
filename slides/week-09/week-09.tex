@@ -8,6 +8,8 @@
 % file directly from its own folder (no TEXINPUTS needed).
 \makeatletter\def\input@path{{../common/}}\makeatother
 \input{preamble}
+% Larger code than the house default: a frame holds one short block (AUTHORING.md, "Code style")
+\lstset{basicstyle=\ttfamily\footnotesize}
 
 \title[Week 9 · PDFs]{{\Huge Extracting Data from PDFs}}
 \subtitle{Week 9 · Documents module · Textbook Chapter 9}
@@ -50,9 +52,47 @@
     \includegraphics[width=.67\textwidth]{slides/common/course-overview.png}
 \end{frame}
 
+
 % =========================================================================
-\section{Monday · Concepts}
+\section{Monday}
 % =========================================================================
+
+% The code on the frames from here to the end of Friday's Step 13 is the lab's
+% (labs/week-09/lab-09-key.ipynb), rebuilt in three parts on 2026-11-17: one frame per typed
+% cell, with the lab's step numbers, laid out for reading; a given cell gets a frame of
+% narration. The lab writes the chapter's code (ch-09-pdfs.qmd, textbook 3f9cf2c) as straight
+% lines, typed for one case and given for the rest.
+\begin{frame}{This week, every class is live coding}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            \dayband{Find it}{\texttt{labs/} in the course repository}
+            \begin{enumerate}\small
+                \item Open the \href{https://github.com/cuinfoscience/INFO4617-Fall2026/tree/main/labs}{\textbf{labs} folder} of \texttt{cuinfoscience/INFO4617-Fall2026} on GitHub
+                \item Open \texttt{week-09}, click \texttt{lab-09.ipynb}, then \textbf{Download raw file}
+                \item Open it in JupyterLab in the \texttt{webdata} environment
+            \end{enumerate}
+
+            \medskip
+            \dayband{Use it}{one part a day}
+            \begin{itemize}\small
+                \item I write the code on screen, and you write it in your copy
+                \item Cells that start \texttt{\# Given:} are written: we read them and run them
+                \item Today: Part 1, Steps 0--4. Wednesday and Friday: start at that part's setup step
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Solutions}\\[2pt]
+            {\footnotesize \texttt{lab-09-key.ipynb}, beside it: every cell filled in and run. Fall behind? Copy the cell from the key and keep going.\par}
+            \medskip
+            \textbf{Due Sunday, Oct 18}\\[2pt]
+            {\footnotesize Chapter 9's \textbf{Recommended Exercises}, from its companion notebook. Graded on good-faith attempt to complete rather than getting everything working.\par}
+            \medskip
+            \begin{alertblock}{Error flavors}
+                \footnotesize Some cells fail on purpose: a misspelled name, a box off the page. Read the message. A cell that fails for everyone is \textit{broken}: tell me, or open an issue.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
 
 \begin{frame}{The web's filing cabinets}
     \begin{columns}[T]
@@ -96,12 +136,9 @@
     \end{columns}
 \end{frame}
 
+
 \begin{frame}{Four steps, from easiest to hardest}
     \begin{columns}[T]
-        \begin{column}{0.44\textwidth}
-            \centering
-            \includegraphics[height=0.82\textheight]{img/pathway.png}
-        \end{column}
         \begin{column}{0.52\textwidth}
             Take the first step that works.
             \begin{enumerate}\small
@@ -114,7 +151,11 @@
             \small Whatever route the data takes, \textbf{check it} before you use it. An AI parser is an optional branch at steps 3 and 4.
 
             \medskip
-            Today: every step by hand. Wednesday: steps 3 and 4 in Python.
+            Today: every step by hand, then the lab's Part 1. Wednesday and Friday: steps 3 and 4 in Python.
+        \end{column}
+        \begin{column}{0.44\textwidth}
+            \centering
+            \includegraphics[height=0.82\textheight]{img/pathway.png}
         \end{column}
     \end{columns}
 \end{frame}
@@ -141,7 +182,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{Steps 1 and 2: before you parse anything}
+\begin{frame}{Find it, or ask for it, before you parse}
     \begin{columns}[T]
         \begin{column}{0.64\textwidth}
             \textbf{1. Look for the data in a form made for machines.}
@@ -186,7 +227,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{Step 3: is the PDF born-digital?}
+\begin{frame}{Parse it: is the PDF born-digital?}
     \begin{columns}[T]
         \begin{column}{0.64\textwidth}
             A born-digital PDF has a \textbf{text layer}: the characters are in the file. Check before you choose a tool:
@@ -197,7 +238,7 @@
                 \item \textbf{Every page.} A report can mix both: text pages, and a page that is a picture of a table.
             \end{itemize}
             \medskip
-            \textbf{Yes:} get the text and tables out, by hand today and in Python on Wednesday. \textbf{No:} step 4.
+            \textbf{Yes:} get the text and tables out, by hand and in Python. \textbf{No:} step 4, OCR.
         \end{column}
         \begin{column}{0.32\textwidth}
             \includegraphics[width=\textwidth]{img/pathway_text.png}
@@ -205,7 +246,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{Step 3 by hand: readers and office tools}
+\begin{frame}{Parse it by hand: readers and office tools}
     Try this before you write code. One table, once, rarely needs Python.
 
     \medskip
@@ -219,28 +260,31 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Step 3 at the command line}
+\begin{frame}[fragile]{Parse it at the command line}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-pdfinfo report.pdf         # pages, producer, dates
-pdffonts report.pdf        # no fonts: no text layer
-pdftotext -layout report.pdf report.txt
-\end{lstlisting}
-            \small In a notebook, start each line with \texttt{!}, as in Chapter 5.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \small
+        \begin{column}{0.37\textwidth}
             \texttt{pdfinfo}, \texttt{pdffonts}, and \texttt{pdftotext} come with \textbf{Poppler}: \texttt{conda install -c conda-forge poppler}.
 
             \medskip
-
             \texttt{-layout} keeps columns lined up with spaces, which makes a table easier to split.
+
+            \medskip
+            In a notebook, start each line with \texttt{!}, as in Chapter 5.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Pages, producer, and dates
+pdfinfo report.pdf
+# No fonts: no text layer
+pdffonts report.pdf
+# The text, laid out as on the page
+pdftotext -layout report.pdf report.txt
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{Step 3 online: converters, and the upload}
+\begin{frame}{Parse it online: converters, and the upload}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
             Smallpdf, iLovePDF, Adobe's online converter, and Google Drive will all turn a PDF into Word, Excel, or text in your browser.
@@ -267,74 +311,454 @@ pdftotext -layout report.pdf report.txt
 % The subtotal's label wraps onto two lines. Page 15 (Exhibit 3) is a picture
 % of a table under a note: nothing on it can be selected; Google Docs' OCR
 % reads it. The 2023 column sums to $172,401,668, exactly the subtotal.
-\begin{frame}{In class: the city's revenue report, by hand (20 minutes)}
+\begin{frame}{In class: the city's revenue report, by hand (10 minutes)}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Work in pairs. Use no Python today.
+            Work in pairs. Use no Python yet.
             \begin{enumerate}\small
-                \item Download Boulder's December 2024 revenue report from the textbook: \texttt{data/ch-09/revenue-report-2024-12.pdf}. (5 min)
-                \item Get the \textbf{Sales and Use Tax Summary} on page 2 into a spreadsheet. Use copy and paste. Then use one other tool from step 3. (8 min)
-                \item Clean it. Make one row per source, with the columns \texttt{source}, \texttt{2023}, and \texttt{2024}. Remove the \texttt{\$} signs and the commas. (4 min)
+                \item Download Boulder's December 2024 revenue report from the textbook: \texttt{data/ch-09/revenue-report-2024-12.pdf}. (2 min)
+                \item Copy the \textbf{Sales and Use Tax Summary} on page 2 into a spreadsheet. Make one row per source, with the columns \texttt{source}, \texttt{2023}, and \texttt{2024}. (5 min)
                 \item Check it. Add the five sources for 2024. Compare the sum with the row ``Total Sales \& Use Tax based on current economic activity.'' (3 min)
             \end{enumerate}
             \smallskip
-            {\small Fast? Try the same steps on page 15, Exhibit 3. Nothing on it can be selected: that is step 4.}
+            {\small Fast? Try another tool from the last two frames, or page 15, Exhibit 3. Nothing on it can be selected: that is step 4.}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Report back}
-                \small
-                \begin{itemize}
-                    \item Which route kept the rows and columns?
-                    \item What did you fix by hand?
-                    \item Did your sum match? If not, why not?
-                \end{itemize}
-            \end{block}
-            \begin{block}{The file}
-                \scriptsize \url{https://github.com/cuinfoscience/Web-Data-Science-Book/tree/main/data/ch-09}
-            \end{block}
+            \textbf{Report back}\\[2pt]
+            \begin{itemize}\small
+                \item Which route kept the rows and columns?
+                \item What did you fix by hand?
+                \item Did your sum match? If not, why not?
+            \end{itemize}
+            \medskip
+            \textbf{The file}\\[2pt]
+            {\scriptsize \url{https://github.com/cuinfoscience/Web-Data-Science-Book/tree/main/data/ch-09}\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 4: no text layer --- OCR, then the same steps}
+\begin{frame}[fragile]{No text layer: OCR, then the same steps}
     \begin{columns}[T]
-        \begin{column}{0.64\textwidth}
-            \textbf{By hand.} Google Drive: right-click $\to$ \textit{Open with $\to$ Google Docs} runs OCR on a PDF or image of 2~MB or less. Tables and columns are usually lost.
+        \begin{column}{0.37\textwidth}
+            \textbf{By hand.} Google Drive's \textit{Open with $\to$ Google Docs} runs OCR on a PDF or image of 2~MB or less, and usually loses tables.
 
             \medskip
-
-            \textbf{At the command line}, one page at a time:
-\begin{lstlisting}
-pdftoppm -png -r 300 -f 15 -l 15 report.pdf page
-tesseract page-15.png page-15      # text
-tesseract page-15.png page-15 pdf  # searchable PDF
-\end{lstlisting}
-            \small Then do step 3's work on the text OCR gives you. OCR misreads characters (a period for a comma, ``l'' for 1), so the checks matter more here. An \textbf{AI parser} is an optional branch at steps 3 and 4; Wednesday shows one.
+            Then do step 3's work on the text. OCR misreads characters (a period for a comma), so the checks matter more.
         \end{column}
-        \begin{column}{0.32\textwidth}
-            \includegraphics[width=\textwidth]{img/pathway_ocr.png}
-
-            \medskip
-            \scriptsize \texttt{tesseract} and \texttt{pytesseract} are in \texttt{webdata}. OCRmyPDF, for a whole PDF, is optional: Chapter 9's appendix.
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Page 15 as a picture, at 300 dots an inch
+pdftoppm -png -r 300 -f 15 -l 15 report.pdf page
+# Its text
+tesseract page-15.png page-15
+# A searchable PDF: the picture, and its text
+tesseract page-15.png page-15 pdf
+\end{lstlisting}
+            \scriptsize \texttt{tesseract} and \texttt{pytesseract} are in \texttt{webdata}. OCRmyPDF, for a whole PDF, is optional: Chapter 9's appendix. An \textbf{AI parser} is an optional branch at steps 3 and 4; Wednesday shows one.
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{In the notebook}
-    This week's companion notebook follows the same steps:
-    \begin{itemize}
-        \item \textbf{Setup} --- install pypdf, pdfplumber, pytesseract, and Tesseract, once
-        \item \textbf{Step 3: is there a text layer?} --- characters and images on every page
-        \item \textbf{Step 3: text and tables} --- pypdf for a page's text, pdfplumber for words by position and tables rebuilt from rules
-        \item \textbf{Step 4: OCR} --- text from a scan, or from a picture of a table
-        \item \textbf{Check} --- counts, sums, two tools, two documents, and a sample coded by hand
-        \item \textbf{Case studies} --- attendance in council minutes with pypdf, and revenue reports with pdfplumber
-        \item \textbf{Optional branch} --- AI parsers such as Docling, judged with the same checks
-    \end{itemize}
+\begin{frame}[fragile]{Before the first cell: install once}
+    A \texttt{webdata} made from this term's setup page has all four. An older one, or Anaconda's \texttt{base}, needs this cell once; then restart the kernel.
+\begin{lstlisting}
+%conda install -y -c conda-forge pypdf pdfplumber pytesseract tesseract
+\end{lstlisting}
+    \texttt{pytesseract} is the Python library. \texttt{tesseract} is the OCR program it runs, and \texttt{pip} can't install it.
+\end{frame}
+
+\begin{frame}[fragile]{Step 0: set up}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Step 0's cell is given. Put your email in \texttt{HEADERS}, then run it.
+
+            \medskip
+            Which versions does yours print? A missing Tesseract stops here, with \texttt{TesseractNotFoundError}.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The libraries' versions
+print(
+    "pypdf", pypdf.__version__,
+    "| pdfplumber", pdfplumber.__version__,
+)
+# Tesseract's: pytesseract runs a separate program
+print("Tesseract", pytesseract.get_tesseract_version())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: one file, by hand}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The book keeps copies of the city's files on GitHub, in \texttt{BOOK\_DATA}, so a whole class doesn't hit the city's server.
+
+            \medskip
+            Ask for the December 2024 revenue report.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Ask the book's folder for one report
+report_response = requests.get(
+    BOOK_DATA + "revenue-report-2024-12.pdf",
+    headers=HEADERS,
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: look before you save}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Every PDF starts with the five bytes \texttt{\%PDF-}.
+
+            \medskip
+            A misspelled name gets status 404, and the words \texttt{404: Not Found}. Which would you rather see now?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The status, and the first five bytes
+print(
+    report_response.status_code,
+    report_response.content[:5],
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: save the bytes}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A PDF is bytes, not text: save \texttt{.content}, not \texttt{.text}.
+
+            \medskip
+            Then open the file in a PDF viewer, from the \texttt{pdfs} folder.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://docs.python.org/3/library/pathlib.html\#pathlib.Path.write_bytes}{write\_bytes()}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Where to keep it
+report_2024 = PDF_DIR / "revenue-report-2024-12.pdf"
+# Save the bytes as they came
+report_2024.write_bytes(report_response.content)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: the same lines, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The chapter gathers your lines into a function, \texttt{get\_saved\_copy()}. It's given.
+
+            \medskip
+            Find the lines you typed. It pauses a second after each download, so a loop of them is polite.
+
+            \medskip
+            What does it do the second time you ask for a file?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+def get_saved_copy(name):
+    path = PDF_DIR / name
+    # Download only the first time
+    if not path.exists():
+        response = requests.get(
+            BOOK_DATA + name,
+            headers=HEADERS,
+        )
+        path.write_bytes(response.content)
+        time.sleep(1)
+    return path
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: how many pages?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Look at the PDF first. How many pages? What does the cover say?
+
+            \medskip
+            Now ask pypdf.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://pypdf.readthedocs.io/en/stable/modules/PdfReader.html}{PdfReader}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Read the file
+reader = PdfReader(report_2024)
+# How many pages?
+print(len(reader.pages))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: the cover's text}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{extract\_text()} writes out a page's characters in the order the page draws them.
+
+            \medskip
+            \texttt{pages[0]} is the first page: lists count from 0.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://pypdf.readthedocs.io/en/stable/user/extract-text.html}{extract\_text()}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first page's text
+cover_text = reader.pages[0].extract_text()
+# Its first 80 characters
+print(cover_text[:80])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: as Python stores it}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            What comes before ``REVENUE REPORT''?
+
+            \medskip
+            What on the page could have drawn it?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first 20 characters; "\n" is a new line
+cover_text[:20]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: what the file says about itself}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Does the subject match the report's date? What is the creator good for?
+
+            \medskip
+            A given cell asks whether the file is \textit{tagged} for screen readers.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The file's own description
+meta = reader.metadata
+print(
+    meta.title, "|",
+    meta.subject, "|",
+    meta.creator,
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: open it with pdfplumber}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            pdfplumber gives every object on a page its position, in \textbf{points}: 1/72 of an inch.
+
+            \medskip
+            Page 2 is where the tables start.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Open the report with pdfplumber
+report_pdf = pdfplumber.open(report_2024)
+# The second page
+summary_page = report_pdf.pages[1]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: how big is a page?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The page is US Letter, 8.5 by 11 inches.
+
+            \medskip
+            How many points is that?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Width and height, in points
+print(summary_page.width, summary_page.height)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: one word, and where it sits}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            What is the page's first word? \texttt{x0} is its distance from the left edge.
+
+            \medskip
+            How far is that, in inches?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://github.com/jsvine/pdfplumber\#extracting-text}{extract\_words()}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Characters grouped into words
+words = summary_page.extract_words()
+# The first word, and its left edge
+print(words[0]["text"], words[0]["x0"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: one character}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A page stores characters, not words. What is the first one, and where?
+
+            \medskip
+            A given cell prints the next seven, and counts the page's rectangles.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first character the page draws
+summary_page.chars[0]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: find a phrase}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            How far down the page is the totals row?
+
+            \medskip
+            Remember this number. On Wednesday a table finder stops just above it.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Every place the phrase appears
+found = summary_page.search("Total Sales and Use Tax")
+# How many, and where the first one starts
+print(len(found), found[0]["top"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: one page, by hand}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The last page looks like a table. Can you select its numbers in the viewer?
+
+            \medskip
+            Count its characters and its images.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The report's last page
+last_page = reader.pages[14]
+# Its characters, and its images
+print(
+    len(last_page.extract_text()),
+    len(last_page.images),
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 4: every page of three files, given}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            The given loop counts each page's characters and images, in three files. Find your two counts in it.
+
+            \medskip
+            \textbf{Born-digital:} text, and no picture of the page.
+
+            \medskip
+            \textbf{Scanned:} one image, and no text. It needs OCR.
+
+            \medskip
+            \textbf{Scanned with a text layer:} one image, and text from someone else's OCR. Test it before you trust it.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \includegraphics[width=\textwidth]{img/pathway_text.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: the 2018 minutes}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Every page of these minutes is one image, with text.
+
+            \medskip
+            Who made the file?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The December 4, 2018 minutes
+minutes_2018 = PdfReader(
+    get_saved_copy("council-minutes-2018-12-04.pdf")
+)
+# Who made the file?
+print(minutes_2018.metadata.creator)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: the scanner's text}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The scanner ran its own OCR, and saved the text under the picture.
+
+            \medskip
+            Does it read the way the page does?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The text layer the scanner wrote
+first_2018 = minutes_2018.pages[0].extract_text()
+print(first_2018[:60])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: give each page a route}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} pick a file, then run the given cell. It gives each page a route: born-digital, OCR, or test the text layer.
+
+            \medskip
+            \textbf{Share:} how many pages take each route, and which you'd send to OCR.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One of two files the chapter doesn't profile:
+# "council-minutes-2000-12-19.pdf", or
+# "revenue-report-2021-12.pdf"
+sprint_file = "council-minutes-2000-12-19.pdf"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 % =========================================================================
-\section{Wednesday · Notebook Lab}
+\section{Wednesday}
 % =========================================================================
 
 \begin{frame}{Daily note questions}
@@ -346,131 +770,345 @@ tesseract page-15.png page-15 pdf  # searchable PDF
     \end{itemize}
 \end{frame}
 
-% The code on these frames is the chapter's (ch-09-pdfs.qmd, textbook PRs #258 and #261),
-% shortened where a frame needs it; every output shown was printed by running it on the
-% book's saved copies (data/ch-09/), on 2026-10-12 and 2026-10-14.
-\begin{frame}[fragile]{Before the first cell: install once}
-    \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-\begin{lstlisting}
-%conda install -y -c conda-forge pypdf pdfplumber pytesseract tesseract
-\end{lstlisting}
-\begin{lstlisting}
-import pypdf, pdfplumber, pytesseract
-print(pypdf.__version__, pdfplumber.__version__)
-print(pytesseract.get_tesseract_version())
-# 6.20.1 0.11.10
-# 5.5.3
-\end{lstlisting}
-        \end{column}
-        \begin{column}{0.4\textwidth}
-            \small A \texttt{webdata} made from today's setup page has all four. An older one, or Anaconda's \texttt{base}, needs the first cell; then restart the kernel.
-
-            \medskip
-
-            \texttt{pytesseract} is the Python library; \texttt{tesseract} is the OCR program it runs, and \texttt{pip} can't install it.
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 3 in code: is there a text layer?}
-    \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
-\begin{lstlisting}
-def page_profile(path):
-    reader = PdfReader(path)
-    characters = []
-    images = []
-    for page in reader.pages:
-        characters.append(len(page.extract_text()))
-        images.append(len(page.images))
-    return characters, images
-
-characters, images = page_profile(report_2024)
-print(characters)  # [1332, 2279, ..., 4624, 265]
-print(images)      # [1, 0, ..., 0, 1]
-\end{lstlisting}
-        \end{column}
-        \begin{column}{0.34\textwidth}
-            \includegraphics[width=\textwidth]{img/pathway_text.png}
-
-            \medskip
-            \small Text on every page of the December 2024 report: born-digital. But the last page has one image and 265 characters, the note beside a \textbf{picture} of a table: that page is step 4.
-
-            \medskip
-            One image per page and plenty of text, as in the 2018 minutes, is a \textbf{scan with a text layer}: test that text before you trust it.
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{pypdf: text in the order it was drawn}
-\begin{lstlisting}
-from pypdf import PdfReader
-
-minutes_2024 = PdfReader(get_saved_copy("council-minutes-2024-12-05.pdf"))
-text = minutes_2024.pages[0].extract_text()
-# P age 1
-# CI
-# TY COUNCIL MEETING
-# ...
-# M
-# ayor Brockett called the meeting to order at 6:00 p.m.
-\end{lstlisting}
-    Every word is there, and some are broken. Word drew the ``M'' of ``Mayor'', jumped to another line, and came back: pypdf starts a new line at each jump. \texttt{clean\_page\_text()} in the notebook removes ``P age 1'' and rejoins a first letter to the rest of its word.
-\end{frame}
-
-\begin{frame}[fragile]{The one line that flattens the page}
+\begin{frame}{Today: Part 2, text and tables}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-        Tempting one-liner:
-\begin{lstlisting}
-# DON'T: \s matches newlines too,
-# so this flattens the whole page
-re.sub(r'\s+', ' ', raw_text)
-\end{lstlisting}
-        Correct --- collapse spaces \& tabs, \textbf{keep} the line breaks:
-\begin{lstlisting}
-text = re.sub(r'[ \t]+', ' ', raw_text)
-kept = []
-for line in text.split('\n'):
-    if line.strip():         # skip empty lines
-        kept.append(line.strip())
-clean = '\n'.join(kept)
-\end{lstlisting}
+            Download the lab again, \texttt{lab-09.ipynb}, and start at \textbf{Step 5}. Its two given cells set up everything Monday's cells made.
+
+            \medskip
+            \textbf{Step 6:} where the files came from. I run it; you write it.
+
+            \medskip
+            \textbf{Steps 7--8:} the council minutes, three ways, repaired and searched.
+
+            \medskip
+            \textbf{Steps 9--10:} the summary table, the row it loses, and the checks that tell us.
         \end{column}
         \begin{column}{0.35\textwidth}
-            The most important choice is what \textit{not} to collapse.
-
-            \bigskip
-
-            Line structure is real information: a roll call's names, and each heading, sit on lines of their own.
-
-            \bigskip
-
-            Erase the newlines and no pattern can find where a list starts or ends.
+            \includegraphics[width=\textwidth]{img/pathway_text.png}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{pdfplumber: words where they sit}
+\begin{frame}{Step 6: where the files came from}
     \begin{columns}[T]
-        \begin{column}{0.46\textwidth}
-\begin{lstlisting}
-import pdfplumber
+        \begin{column}{0.6\textwidth}
+            \textbf{I run this step; you write it, and run it at home.} The city's server stopped answering after 13 to 17 requests in a row.
 
-with pdfplumber.open(report_2024) as report:
-    page = report.pages[1]
-    tables = page.find_tables()
-    rows = tables[0].extract()
-print(rows[-1][:2])
-# ['Use Tax Audit Revenue', None]
-\end{lstlisting}
-            \small pdfplumber groups characters by \textbf{position}, so ``Mayor'' comes out whole. Its table finder rebuilds a grid from the page's rules. On the December 2024 summary page it stops one row short: the \textbf{total} has no vertical rules beside it, and nothing raises an error.
+            \medskip
+            The book's copies came from the city's records portal. Its folder page is a shell that JavaScript fills in. The Network tab shows where the list comes from: a POST of the folder's number, as JSON.
+
+            \medskip
+            The server leaves out a certificate. Pass the book's bundle, \texttt{verify=bundle}, never \texttt{verify=False}.
         \end{column}
-        \begin{column}{0.5\textwidth}
+        \begin{column}{0.35\textwidth}
+            \textbf{Given}\\[2pt]
+            {\footnotesize The bundle, the book's \texttt{manifest.csv}, the portal's address \texttt{LISTING}, and the request's body, \texttt{folder\_body}.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: ask for a folder's list}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{json=} sends the dictionary as JSON, as the browser did.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://requests.readthedocs.io/en/stable/user/quickstart/\#more-complicated-post-requests}{POST requests}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# POST the folder's number, as JSON
+folder_response = requests.post(
+    LISTING,
+    json=folder_body,
+    headers=HEADERS,
+    verify=bundle,
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: look first}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The portal answers some errors in plain text, not JSON.
+
+            \medskip
+            Is the status 200? Is the answer JSON?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The status, and what kind of answer
+print(
+    folder_response.status_code,
+    folder_response.headers["Content-Type"],
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: then read it}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            One level down at a time.
+
+            \medskip
+            A given cell lists the folder's reports, then downloads one and checks it against the book's copy.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The answer, as a dictionary
+listing = folder_response.json()
+# One level down: the folder
+folder = listing["data"]
+print(folder["path"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: the minutes of December 5, 2024}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Written in Word and saved as PDF, so every page has characters.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The minutes, with pypdf
+minutes_2024 = PdfReader(
+    get_saved_copy("council-minutes-2024-12-05.pdf")
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: in the order it was drawn}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Where does ``Mayor'' break?
+
+            \medskip
+            Word drew the ``M'', jumped to another line, and came back. pypdf starts a new line at each jump.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Page 1's text, in the order it was drawn
+plain_text = minutes_2024.pages[0].extract_text()
+print(plain_text[:300])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: layout mode}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Layout mode places each piece by where it sits on the page, with spaces.
+
+            \medskip
+            Is ``Mayor'' whole now?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Each piece where it sits on the page
+layout_text = minutes_2024.pages[0].extract_text(
+    extraction_mode="layout",
+)
+print(layout_text[:600])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: pdfplumber}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            pdfplumber joins characters into words when the gap is under 3 points, and words into lines when their tops line up.
+
+            \medskip
+            Which of the three would you start from?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The same file, with pdfplumber
+minutes_pdf = pdfplumber.open(
+    get_saved_copy("council-minutes-2024-12-05.pdf")
+)
+# Page 1's text, grouped by position
+plumber_text = minutes_pdf.pages[0].extract_text()
+print(plumber_text[:300])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: one row, three ways}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} run the given cell. It prints the summary page's lines that hold \texttt{look\_for}, three ways. Then try \texttt{"economic activity"}.
+
+            \medskip
+            \textbf{Share:} do the three agree? Where did the subtotal's figures land?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The words to look for
+look_for = "Total Sales"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: one repair, by hand}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Repair what the extraction produced, not what the page shows. A search for ``Page 1'' misses ``P age 1''.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://docs.python.org/3/library/stdtypes.html\#str.replace}{str.replace()}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Remove the page number, as pypdf wrote it
+fixed_text = plain_text.replace("P age 1", "")
+# Is it in each text?
+print(
+    "P age 1" in plain_text,
+    "P age 1" in fixed_text,
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: four repairs, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The given cell joins all eight pages, and makes the chapter's four repairs with \textit{regular expressions}: patterns that match many strings.
+
+            \medskip
+            The third keeps the new lines. \texttt{\textbackslash s+} would match them too, and flatten the page.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Spaces and tabs become one space;
+# the new lines stay
+full_text = re.sub(r"[ \t]+", " ", full_text)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: count one word}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            How many votes say ``Carried''?
+
+            \medskip
+            Then the given cell runs the chapter's five patterns with \texttt{re.findall()}. Does its tally pattern agree with your count?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Count one word, by hand
+print(full_text.count("Carried"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: test a repair on another file}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} run the given cell. It counts where the second repair would join two lines, and prints the suspicious joins.
+
+            \medskip
+            \textbf{Share:} how many joins, how many look suspicious, and which is really wrong.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Another meeting's minutes
+check_file = "council-minutes-2023-12-07.pdf"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: find the tables}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The finder rebuilds a grid from the page's rules and the sides of its rectangles.
+
+            \medskip
+            How many tables do you see on page 2?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://github.com/jsvine/pdfplumber\#extracting-tables}{find\_tables()}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Every table the finder sees on the page
+tables = summary_page.find_tables()
+print(len(tables))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: the first table's last row}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The table on the page ends with ``Total Sales and Use Tax''.
+
+            \medskip
+            Does the finder's?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first table, as a list of rows
+default_rows = tables[0].extract()
+# Its last row
+print(default_rows[-1])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 9: what the finder found}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The total has no vertical rules beside it, so it falls outside the table.
+
+            \medskip
+            Nothing raises an error.
+        \end{column}
+        \begin{column}{0.6\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/missing_totals_row.png}\\
             {\scriptsize pdfplumber's table finder on the summary page: shaded where it found cells. The total, at the bottom, is left out.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: where does it end?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A table's \texttt{bbox}, its \textit{bounding box}, is (\texttt{x0}, \texttt{top}, \texttt{x1}, \texttt{bottom}), in points.
+
+            \medskip
+            Does the table end above the totals row?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Where the table ends: its last number
+print(tables[0].bbox)
+# Where the totals row starts, as on Monday
+found = summary_page.search("Total Sales and Use Tax")
+print(found[0]["top"])
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
@@ -488,40 +1126,36 @@ print(rows[-1][:2])
     \centering\small All of them, with defaults: \url{https://github.com/jsvine/pdfplumber\#table-extraction-settings}
 \end{frame}
 
-\begin{frame}{Step 4 in Python: OCR, then the same steps}
+\begin{frame}[fragile]{Step 9: the fix}
     \begin{columns}[T]
-        \begin{column}{0.62\textwidth}
-            \begin{enumerate}\small
-                \item \textbf{Get the image.} pypdf hands you a page's picture: \texttt{page.images[0].image}.
-                \item \textbf{OCR it.} \texttt{pytesseract.image\_to\_string()} runs Tesseract and returns text.
-                \item \textbf{Same steps as step 3.} Split the text into lines, and read each row with a regular expression.
-                \item \textbf{Check harder.} Set aside the lines that don't parse, and add up each row: OCR's misread digits still look like numbers.
-            \end{enumerate}
+        \begin{column}{0.37\textwidth}
+            Given: the column edges of the cells the finder did find, and settings that use them.
+
+            \medskip
+            You choose where the table stops. Then a given cell crops there, and reads the table again.
         \end{column}
-        \begin{column}{0.34\textwidth}
-            \includegraphics[width=\textwidth]{img/pathway_ocr.png}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Below the totals row, above the footnote
+table_bottom = 395
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{No text layer: OCR}
+\begin{frame}[fragile]{Microsprint: another year's table}
     \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
-\begin{lstlisting}
-import pytesseract
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} pick another year-end report, and run the given cell. (Skip 2020: its summary is on page 3.)
 
-exhibit_3 = (PdfReader(report_2024)
-    .pages[14].images[0].image.convert("L"))
-ocr_text = pytesseract.image_to_string(
-    exhibit_3, config="--psm 6")
-# 2021 8,059,343 7,608.759 10,351,245 ...
-\end{lstlisting}
-            \small Exhibit 3 of the December 2024 report is a \textbf{picture} of a table. Tesseract reads it, and puts periods for commas in a few figures. The rows' sums catch every misread digit; Tesseract's confidence scores don't.
+            \medskip
+            \textbf{Share:} where the table ends, where the totals row starts, and the table's last row.
         \end{column}
-        \begin{column}{0.46\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/ocr_confidence.png}\\
-            {\scriptsize Each word Tesseract read: blue if its confidence is 80 or more, red if less. Most red words are right.}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# 2018, 2019, 2021-12, 2022-12, or 2023-12
+other_report = "revenue-report-2018.pdf"
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
@@ -533,7 +1167,7 @@ ocr_text = pytesseract.image_to_string(
     \begin{enumerate}\small
         \item \textbf{Look at the page beside the output.}
         \item \textbf{Count.} The summary table has nine rows of figures; the council has nine seats.
-        \item \textbf{Sums.} The five sources add up to \$171,006,200; the printed subtotal is \$171,006,199.
+        \item \textbf{Sums.} The five sources should add up to the subtotal, within rounding.
         \item \textbf{Two tools agree.} pypdf's text and pdfplumber's table give the same 2024 figures.
         \item \textbf{Two documents agree.} A year printed in two reports should match.
         \item \textbf{A sample coded by hand.} Read some pages yourself, and measure the extraction against them.
@@ -545,95 +1179,70 @@ ocr_text = pytesseract.image_to_string(
     \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]{Step 10: count}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The page shows nine rows of figures. How many did we keep?
+
+            \medskip
+            Then a given cell checks the sums, for both years.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Rows of figures in our table
+print(len(summary_df))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: a sample coded by hand}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Read page 1 of the minutes, and write down who was present. A \textit{set}, in braces, holds each name once.
+
+            \medskip
+            The given cell measures a pattern's names against yours: precision and recall.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Who page 1 says was present, read by hand
+present_by_hand = {
+    "Adams", "Benjamin", "Brockett",
+    "Folkerts", "Marquis", "Schuchard",
+    "Speer", "Wallach", "Winer",
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}{The case studies, on the pathway}
     Both start at step 3: the chapter works from PDFs saved from the city's records portal.
     \begin{itemize}
         \item \textbf{Council minutes, 2018--2024} (case study 1). From 2020, born-digital: step 3, with pypdf. 2018 and 2019 are \textbf{scans with a text layer}: step 3, but test that text first --- the scanner's OCR read ``COUNCIL'' as ``COTJNCIL''.
-        \item \textbf{Revenue reports} (case study 2). Born-digital, so step 3, with pdfplumber: read the totals row by position.
-        \item \textbf{Exhibit 3}, the picture of a table on the last page of the December 2024 report: step 4, as on the OCR slide.
+        \item \textbf{Revenue reports} (case study 2). Born-digital, so step 3, with pdfplumber: read the totals row by position. Friday's Step 13.
+        \item \textbf{Exhibit 3}, the picture of a table on the last page of the December 2024 report: step 4, Friday's Step 12.
     \end{itemize}
     \medskip
     Each case study ends at the last box: the attendance counts match a hand count, and the totals match the reports' own change columns.
 \end{frame}
 
-\begin{frame}[fragile]{Case study 1: the obvious regex}
+\begin{frame}{Case study 1: attendance at roll call}
     \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Eleven December meetings, 2018--2024, read with pypdf. One pattern for \texttt{Present:} finds nobody before 2022.
+
+            \medskip
+            Through 2020 the roll call is a sentence: ``Council Members \ldots{} were present.'' From 2021 it is a label and a list that wraps.
+
+            \medskip
+            The chapter's \texttt{roll\_call()} reads both.
+        \end{column}
         \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-present = re.search(r'Present:\s*(.*?)\s*(?:Absent:|$)',
-                    page_1, re.IGNORECASE | re.MULTILINE)
-\end{lstlisting}
-            Eleven December meetings, 2018--2024, read with pypdf. This pattern finds \textbf{nobody} in the five meetings before 2022, and \textbf{5 of 9} members after.
-
-            \medskip
-
-            The minutes recorded the roll call two ways:
-            \begin{itemize}\small
-                \item through 2020, a sentence: ``Council Members Brockett, \ldots{} and Young were present.'' The mayor isn't in it.
-                \item from 2021, a label and a list that wraps onto a second line, with a separate label for members online.
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.35\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{img/attendance_chart.png}\\
-            {\scriptsize Members present at roll call, with the two December 2000 scans: counted by hand (dark), and found by this regex (light).}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Case study 1: one function, both formats}
-\begin{lstlisting}
-def roll_call(page_1):
-    present = set()
-    mayor = re.search(r"Mayor (\w+) called the meeting to order", page_1)
-    if mayor:
-        present.add(mayor.group(1))
-    # 2018-2020: "Council Members Brockett, ... and Young were present"
-    sentence = re.search(r"Council Members ([A-Z][^:]*?)\s+were\s+present", page_1)
-    if sentence:
-        present |= split_names(sentence.group(1))
-    # 2021-2024: "Council Members present:", "Virtually present:", "Present virtually:"
-    ...   # each list, plus the next line while the list ends with a comma
-    return present
-\end{lstlisting}
-    \small It matches a hand count of all eleven meetings: 8 or 9 members at each roll call. A member who arrived late counts as absent, and one member is ``Swetlik'' in 2019 and ``Swetlick'' in 2020.
-\end{frame}
-
-\begin{frame}[fragile]{Case study 2: read the totals row by position}
-\begin{lstlisting}
-def row_words(page, label):
-    found = page.search(label)[0]        # where the label sits, in points
-    # a strip of the page, as tall as the label's line
-    line = page.crop((0, found["top"] - 1, page.width, found["bottom"] + 1))
-    words = []
-    for word in line.extract_words():
-        if word["x0"] > found["x1"]:     # right of the label
-            words.append(word["text"])
-    return words
-
-row_words(page, "Total Sales and Use Tax")   # the 2018 report
-# ['$134,538,892', '$140,648,710', '$6,109,818', '4.54%']
-\end{lstlisting}
-    \small Seven year-end revenue reports. Find the summary page by its text: 2020's report opens with a letter restating earlier figures, so its summary is on page 3. Then skip the table finder, and read the one row you need by where it sits. Each report's own change column checks the two totals.
-\end{frame}
-
-\begin{frame}{Case study 2: one series from seven reports}
-    \begin{columns}[T]
-        \begin{column}{0.46\textwidth}
-            Six years are printed twice: in their own report, and as ``the year before'' in the next. Five agree to the dollar.
-
-            \medskip
-
-            \textbf{2018 doesn't.} The 2019 report gives it as \$38,959 less than the 2018 report did, and doesn't say why. Use each year's latest printing, and say so.
-
-            \medskip
-
-            Sales and use tax fell \textbf{4.76\%} in 2020, then rose \textbf{12.65\%} and \textbf{11.04\%}. In dollars of each year: not adjusted for inflation.
-        \end{column}
-        \begin{column}{0.5\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/sales_use_tax.png}\\
-            {\scriptsize Total sales and use tax by year, read with pdfplumber, with the change from the year before.}
+            \includegraphics[width=0.75\textwidth]{img/attendance_chart.png}\\
+            {\scriptsize Members present at roll call, with the two December 2000 scans: counted by hand (dark), and found by one \texttt{Present:} pattern (light).}
         \end{column}
     \end{columns}
 \end{frame}
@@ -665,10 +1274,10 @@ row_words(page, "Total Sales and Use Tax")   # the 2018 report
     \end{columns}
 \end{frame}
 
-\begin{frame}{Lab: work these, then show-and-tell}
+\begin{frame}{After the lab: work these, then show-and-tell}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Work in pairs. Run both case studies in the notebook, then extend one:
+            After the lab, in pairs: run both case studies in the chapter's companion notebook, then extend one:
             \begin{enumerate}\small
                 \item Run \texttt{roll\_call()} on the two December 2000 minutes. They are scans. What does the pattern miss? Fix it, and check against the page.
                 \item Count the votes in each meeting with the tally pattern (\texttt{Carried 9:0}). What share were unanimous?
@@ -679,20 +1288,19 @@ row_words(page, "Total Sales and Use Tax")   # the 2018 report
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Show-and-Tell}
-                \footnotesize Bring one of these to class:
-                \begin{itemize}\footnotesize
-                    \item a bug that you could not solve
-                    \item data that you collected and find interesting
-                    \item a question for a research design
-                \end{itemize}
-            \end{block}
+            \textbf{Show-and-Tell}\\[2pt]
+            {\footnotesize Bring one of these to class:\par}
+            \begin{itemize}\footnotesize
+                \item a bug that you could not solve
+                \item data that you collected and find interesting
+                \item a question for a research design
+            \end{itemize}
         \end{column}
     \end{columns}
 \end{frame}
 
 % =========================================================================
-\section{Friday · Notebook \& Final Project}
+\section{Friday}
 % =========================================================================
 
 \begin{frame}{Today}
@@ -725,6 +1333,307 @@ row_words(page, "Total Sales and Use Tax")   # the 2018 report
         \item \textbf{Using AI tools for PDF parsing} --- Pain to install and setup and run
         \item \textbf{Why PyPDF instead of PDFPlumber?} --- Tools make assumptions and will break unexpectedly
     \end{itemize}
+\end{frame}
+
+\begin{frame}{Step 11: set up again}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Download the lab again, and start at \textbf{Step 11}. Put your email in \texttt{HEADERS}, and run its two given cells.
+
+            \medskip
+            The second loads Wednesday's checkpoint, \texttt{summary.csv}: the summary table we fixed, saved by the key's run. You don't need Wednesday's cells to have run.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{A saved copy}\\[2pt]
+            {\footnotesize The PDF hasn't changed. What can't a saved copy of our table tell you that rerunning Wednesday's cells can?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{OCR in Python, then the same steps}
+    \begin{columns}[T]
+        \begin{column}{0.62\textwidth}
+            \begin{enumerate}\small
+                \item \textbf{Get the image.} pypdf hands you a page's picture: \texttt{page.images[0].image}.
+                \item \textbf{OCR it.} \texttt{pytesseract.image\_to\_string()} runs Tesseract and returns text.
+                \item \textbf{Same steps as step 3.} Split the text into lines, and read each row with a regular expression.
+                \item \textbf{Check harder.} Set aside the lines that don't parse, and add up each row: OCR's misread digits still look like numbers.
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.34\textwidth}
+            \includegraphics[width=\textwidth]{img/pathway_ocr.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: the page with no text}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Page 15 is Exhibit 3: a picture of a table, under a note offering ``a screen readable version'' on request.
+
+            \medskip
+            How many images does it hold?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Page 15: Exhibit 3
+exhibit_page = PdfReader(report_2024).pages[14]
+# How many images?
+print(len(exhibit_page.images))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: the picture}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            pypdf hands you the picture as a Pillow image.
+
+            \medskip
+            How many pixels wide is it, and how tall?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The page's one image
+exhibit_image = exhibit_page.images[0].image
+# Its width and height, in pixels
+print(exhibit_image.size)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 12: one row, given}
+    A given cell turns the image gray, which suits OCR, and crops one row, 2021's, by its box in pixels.
+
+    \medskip
+    Read its figures off the image. Then let Tesseract read them.
+
+    \bigskip
+    \centering
+    \includegraphics[width=\textwidth]{img/exhibit3_row_2021.png}\\[4pt]
+    {\scriptsize \texttt{row\_2021}: the first 1,000 pixels of 2021's row of retail sales tax, from Exhibit 3 of the December 2024 revenue report.}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: OCR one row}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Does every figure match the image, digit for digit, comma for comma?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://github.com/madmaze/pytesseract\#usage}{pytesseract}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Tesseract reads the one row
+print(pytesseract.image_to_string(row_2021))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: the whole picture}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{--psm 6} is the page segmentation mode for one uniform block of text.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://tesseract-ocr.github.io/tessdoc/ImproveQuality.html\#page-segmentation-method}{page segmentation modes}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# All of Exhibit 3, as one block of text
+ocr_text = pytesseract.image_to_string(
+    exhibit_3,
+    config="--psm 6",
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: line by line}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Line 5 is 2021's row again. Did Tesseract read it the same way twice?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One string a line
+ocr_lines = ocr_text.splitlines()
+print(len(ocr_lines))
+# 2021's row, from the whole picture
+print(ocr_lines[5])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 12: parse it, and check it, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Given cells read each line with the chapter's \texttt{ROW} pattern, set aside the lines that don't match, and add up each row's twelve months.
+
+            \medskip
+            The sums catch misread digits. Tesseract's confidence scores don't.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/ocr_confidence.png}\\
+            {\scriptsize Each word Tesseract read: blue if its confidence is 80 or more, red if less. Most red words are right.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: two documents}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The 2024 total is printed twice: in the picture, and in the summary page's text, Wednesday's table.
+
+            \medskip
+            Do they match?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# OCR's total, and the text's
+print(ocr_total, text_total)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: another segmentation mode}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} pick a mode, and run the given cell. It reads the picture again, counts the rows that parse, and times it.
+
+            \medskip
+            \textbf{Share:} your mode, its lines, its rows parsed, and its seconds.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# "4": one column of text of varying sizes
+# "3": Tesseract's default; it finds the layout
+psm_choice = "4"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: one report, by hand}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Seven year-end reports. Their tables' rules differ, so read the one row we need by position.
+
+            \medskip
+            First: is page 2 the summary page? It starts ``This report provides''.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Page 2 of the December 2024 report
+summary_page = pdfplumber.open(report_2024).pages[1]
+# Its text: does it start the summary?
+summary_text = summary_page.extract_text()
+print("This report provides" in summary_text)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: find the label}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{x1} is where the label ends, in points from the left edge.
+
+            \medskip
+            The row's figures are to its right.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The label's first match, and where it ends
+label = summary_page.search("Total Sales and Use Tax")[0]
+print(label["x1"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: a box beside the label}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A box is (\texttt{x0}, \texttt{top}, \texttt{x1}, \texttt{bottom}), in points.
+
+            \medskip
+            Why start one point right of the label?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# From just right of the label to the page's edge,
+# a point above and below it
+box = (
+    label["x1"] + 1,
+    label["top"] - 1,
+    summary_page.width,
+    label["bottom"] + 1,
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: crop, and split}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The crop keeps only what is inside the box.
+
+            \medskip
+            Which figure is 2023's total, and which 2024's? You saw them on Wednesday.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The strip of the page inside the box
+row = summary_page.crop(box)
+# Its text, then a list of its words
+row_text = row.extract_text()
+print(row_text.split())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 13: seven reports, given}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            The given cells find each report's summary page by its first sentence: 2020's report opens with a letter, so its summary is on page 3.
+
+            \medskip
+            Then they run our lines on every report, and save the totals as a checkpoint, \texttt{totals.csv}.
+
+            \medskip
+            Each report prints two years: the year before, and its own. Six years are printed twice. Do the two printings agree?
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Read it together}\\[2pt]
+            {\footnotesize Find our four typed lines in the loop. What changes from one report to the next?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 13: one series from seven reports}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Use each year's latest printing, and say so in the data's notes.
+
+            \medskip
+            Which years fell? These are dollars of each year, not adjusted for inflation.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/sales_use_tax.png}\\
+            {\scriptsize Total sales and use tax by year, read with pdfplumber, with the change from the year before.}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{Chapter 9 pull requests are still open}
