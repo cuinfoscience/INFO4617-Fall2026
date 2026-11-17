@@ -9,6 +9,8 @@
 % file directly from its own folder (no TEXINPUTS needed).
 \makeatletter\def\input@path{{../common/}}\makeatother
 \input{preamble}
+% Larger code than the house default: a frame holds one short block (AUTHORING.md, "Code style")
+\lstset{basicstyle=\ttfamily\footnotesize}
 
 \title[Week 10 · Wikipedia API]{{\Huge Introduction to APIs: Wikipedia}}
 \subtitle{Week 10 · APIs module · Textbook Chapter 10}
@@ -63,6 +65,7 @@
 \section{Monday}
 % =========================================================================
 
+
 \begin{frame}{Daily note}
     \begin{itemize}\small 
         \item \textbf{Example project ideas?} --- Check the ``Additional Exercises'' sections in each textbook chapters for inspiration
@@ -72,6 +75,39 @@
         \item \textbf{Final project overlap with class examples?} --- Definitely!
         \item \textbf{Running Python at home?} --- Everyone is different, but I still prefer to prototype and debug inside notebooks before translating into production scripts/pipelines
     \end{itemize}
+\end{frame}
+
+\begin{frame}{This week, every class is live coding}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            \dayband{Find it}{\texttt{labs/} in the course repository}
+            \begin{enumerate}\small
+                \item Open the \href{https://github.com/cuinfoscience/INFO4617-Fall2026/tree/main/labs}{\textbf{labs} folder} of \texttt{cuinfoscience/INFO4617-Fall2026} on GitHub
+                \item Open \texttt{week-10}, click \texttt{lab-10.ipynb}, then \textbf{Download raw file}
+                \item Open it in JupyterLab in the \texttt{webdata} environment
+            \end{enumerate}
+
+            \medskip
+            \dayband{Use it}{one part a day}
+            \begin{itemize}\small
+                \item I write the code on screen, and you write it in your copy
+                \item Put \textbf{your} email in the User-Agent in Step 0
+                \item Today: Part 1, Steps 0--5
+                \item Wednesday and Friday: download the new copy and start at that part's setup step
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Solutions}\\[2pt]
+            {\footnotesize \texttt{lab-10-key.ipynb}, beside it: every cell filled in and run. Fall behind? Copy the cell from the key and keep going.\par}
+            \medskip
+            \textbf{Nothing to submit}\\[2pt]
+            {\footnotesize The lab is practice. After each step, a \textbf{Discuss} box holds questions we'll talk over before the next.\par}
+            \medskip
+            \begin{alertblock}{Error flavors}
+                \footnotesize A \textbf{429} is Wikimedia's rate limit, which a room on one network can reach together: wait the \texttt{retry-after} seconds, and run the cell again. No GitHub issue. A cell that fails the same way after waiting may be \textit{genuinely} broken: tell me, or open an issue.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{From scraping to APIs}
@@ -133,20 +169,6 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{A tour: what sits behind every article}
-    Like most users, you have probably never clicked any deeper into Wikipedia than an article. But Wikipedia keeps many important records publicly available:
-    \begin{itemize}
-        \item who changed what, and when --- the \textbf{revision history}
-        \item what editors argued about --- the \textbf{talk page}
-        \item how many people read it --- \textbf{pageviews}
-        \item what it links to, what links to it, and the same topic in other \textbf{languages}
-        \item its \textbf{references}, \textbf{categories}, and \textbf{templates}
-        \item the editors themselves --- \textbf{user pages} and \textbf{contributions}
-    \end{itemize}
-    \bigskip
-    Each one has an \textbf{API endpoint}. Anything you can see in the interface, you can count.
-\end{frame}
-
 \begin{frame}{MediaWiki: the software behind Wikipedia}
     \begin{columns}[T]
         \begin{column}{0.44\textwidth}
@@ -177,27 +199,1735 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{The anatomy of a request}
+% The code on these frames is the lab's Part 1 (labs/week-10/lab-10-key.ipynb), rebuilt
+% 2026-11-10 and given its small first calls on 2026-11-17: one frame per lab cell, with the
+% lab's step numbers. The tour of Wikipedia's interface is at the end of the deck, as reading.
+
+\begin{frame}{Step 0: set up}
     \begin{columns}[T]
-        \begin{column}{0.46\textwidth}
-            Every Action API request is four parts:
-            \begin{enumerate}\small
-                \item a \textbf{base URL} --- \texttt{.../w/api.php}
-                \item an \texttt{\textbf{action}} --- what you want to do
-                \item \textbf{parameters} that narrow the request
-                \item a \texttt{\textbf{format}} --- \texttt{json}
-            \end{enumerate}
+        \begin{column}{0.6\textwidth}
+            Step 0's cell is given. Put your email in \texttt{CLIENT}, then run it.
 
             \medskip
-
-            The response is nested JSON you navigate \textbf{one level at a time}: \texttt{data["query"]["pages"][page\_id]}.
+            It builds \texttt{HEADERS}: our name and email, then the library's name and version. Every request sends it. It also sets \texttt{API}, the Action API's address, and \texttt{ARTICLE}.
         \end{column}
-        \begin{column}{0.5\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/api-response_annotated.pdf}\\
-            {\scriptsize The same request in a browser, with \texttt{format=jsonfm}: the page ID (1) is the key under \texttt{pages}, and \texttt{length} (2) is the article's size in bytes.}
+        \begin{column}{0.35\textwidth}
+            \textbf{Wikimedia asks}\\[2pt]
+            {\footnotesize Its \href{https://foundation.wikimedia.org/wiki/Policy:Wikimedia_Foundation_User-Agent_Policy}{User-Agent policy} asks for a name, a way to reach you, and the library. Step 3 shows what happens without one.\par}
         \end{column}
     \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: one request, four parts}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Every Action API request has four parts: the address, an \texttt{action}, parameters that narrow it, and a \texttt{format}.
+
+            \medskip
+            We write the parameters as a \textbf{dictionary}.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://www.mediawiki.org/wiki/API:Info}{prop=info}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The article's basic facts, as JSON
+info_params = {
+    "action": "query",
+    "titles": ARTICLE,
+    "prop": "info",
+    "format": "json",
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: send it, and look}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{requests} adds the parameters to \texttt{API}.
+
+            \medskip
+            Look before you read: the status, then the first 200 characters. Which page ID do you see?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it, saying who we are
+info_response = requests.get(
+    API,
+    params=info_params,
+    headers=HEADERS,
+)
+# Look first: the status, and the start of the text
+print(info_response.status_code, info_response.text[:200])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: the address it built}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Find the four parts in the address, as in week 5.
+
+            \medskip
+            Which would you change to ask about another article? What happened to the spaces in the title?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The address requests built from the four parts
+print(info_response.url)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 2: the same answer in a browser}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            With \texttt{format=jsonfm}, a browser shows the same answer, indented.
+
+            \medskip
+            The page's ID (1) is a \textit{key} under \texttt{pages}. Its length (2) is in bytes.
+
+            \medskip
+            In the notebook, we go down one level a cell.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/api-response_annotated.pdf}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: the top level}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{.json()} turns the text into Python dictionaries and lists.
+
+            \medskip
+            Print the \textbf{keys}, the names on the left of each pair, before choosing one. Which key holds the answer?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The answer, as Python
+info = info_response.json()
+# Its keys
+print(info.keys())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: one level down}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Go down one level. What is under \texttt{query}?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One level down
+print(info["query"].keys())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: the pages}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Under \texttt{pages}, each key is a page's ID. We can't know it before we ask.
+
+            \medskip
+            Is it the ID you saw in Step 1's text?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The pages, and their keys
+pages = info["query"]["pages"]
+print(pages.keys())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: whatever its ID}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given line takes the first value under \texttt{pages}, whatever its key.
+
+            \medskip
+            \texttt{list(...)} makes a list, and \texttt{[0]} is its first item.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: the first (and only) page, whatever its ID
+info_page = list(pages.values())[0]
+print(info_page)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: two fields, by name}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Does the length match the browser's?
+
+            \medskip
+            What would \texttt{["length"]} do with a page that doesn't exist?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The page's title, and its length in bytes
+print(info_page["title"], info_page["length"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: three titles}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{titles} takes several, joined with \texttt{|}. The notebook writes this on one line.
+
+            \medskip
+            A given cell sends it, and prints each page's key, title and length. What key did the misspelling get?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The article, its talk page, and a misspelling
+sprint_titles = (
+    ARTICLE
+    + "|Talk:" + ARTICLE
+    + "|University of Colorado Bolder"
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: without a User-Agent}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Send Step 1's request without \texttt{headers=}. \texttt{requests} sends its own User-Agent.
+
+            \medskip
+            What status comes back? What does the text ask you to do?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Step 1's request, without our User-Agent
+no_ua_response = requests.get(API, params=info_params)
+# Look: the status, and the start of the text
+print(
+    no_ua_response.status_code,
+    no_ua_response.text[:200],
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: when a cell stops}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A refused request still comes back. When a cell stops with \texttt{JSONDecodeError} or \texttt{KeyError}, print the response it read.
+
+            \medskip
+            A \textbf{429} means too many requests. \texttt{Retry-After} says how many seconds to wait.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: print the response a cell couldn't read
+print(
+    info_response.status_code,
+    info_response.headers.get("retry-after"),
+)
+print(info_response.text[:300])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: break it on purpose}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Break Step 1's request one way: misspell a key, leave out \texttt{"format"}, or ask for a \texttt{prop} that doesn't exist.
+
+            \medskip
+            Send it with \texttt{HEADERS}, and look. Which status? Which line of Step 2 would stop?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One thing broken: "title" for "titles"
+broken_params = {
+    "action": "query",
+    "title": ARTICLE,
+    "prop": "info",
+    "format": "json",
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: the article's edits, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{prop=revisions} lists the edits, newest first. \texttt{rvstart} fixes the newest we accept, so a rerun gets the same answer.
+
+            \medskip
+            We ask only each edit's time and size.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://www.mediawiki.org/wiki/API:Revisions}{prop=revisions}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: each edit's time and size, newest first
+rev_params = {
+    "action": "query",
+    "titles": ARTICLE,
+    "prop": "revisions",
+    "rvprop": "timestamp|size",
+    "rvstart": "2026-09-30T23:59:59Z",
+    "format": "json",
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: three edits first}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Before hundreds of edits, three.
+
+            \medskip
+            Open the article's \href{https://en.wikipedia.org/w/index.php?title=University_of_Colorado_Boulder&action=history}{View history}. Which three should come back?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Three edits, and no more
+rev_params["rvlimit"] = 3
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: send it, and look}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Three edits fit on the screen, so print the whole text.
+
+            \medskip
+            Do their times and sizes match View history? What else came back?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it
+three_edits_response = requests.get(
+    API,
+    params=rev_params,
+    headers=HEADERS,
+)
+# Look: the status, and the whole text
+print(
+    three_edits_response.status_code,
+    three_edits_response.text,
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 4: where the next page starts}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The answer's \texttt{"continue"} holds \texttt{rvcontinue}: a time, then an ID.
+
+            \medskip
+            Find that time on View history. Which edit is it?
+
+            \medskip
+            Add those pairs to the parameters, and the next request starts there.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/revision-history_annotated.pdf}\\
+            {\scriptsize The article's View history, 2026-10-16: when (1), who (2), bytes (3), summary (4).}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: now 500}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            One line changed. \texttt{"max"} is the most a request allows: 500.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The most a request allows
+rev_params["rvlimit"] = "max"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: page one}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Keep the whole answer in \texttt{first\_page}, so its \texttt{"continue"} is there to print.
+
+            \medskip
+            Where will page two start?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Page one: the newest 500 edits
+first_response = requests.get(
+    API,
+    params=rev_params,
+    headers=HEADERS,
+)
+first_page = first_response.json()
+# Where page two starts
+print(first_page["continue"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: page two's parameters}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{.copy()} makes a second dictionary. \texttt{.update()} adds another dictionary's pairs to it.
+
+            \medskip
+            Which keys are new?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# A second dictionary; page one's stays as it was
+second_params = rev_params.copy()
+# Add the "continue" pairs to it
+second_params.update(first_page["continue"])
+print(second_params)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: page two}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same request, with page two's parameters.
+
+            \medskip
+            A given cell prints how many edits each page holds, and the oldest on each. How many pages are left?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Page two: the next 500
+second_response = requests.get(
+    API,
+    params=second_params,
+    headers=HEADERS,
+)
+second_page = second_response.json()
+print(second_page["continue"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: the loop, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{get\_revisions()} is the chapter's function. A \textbf{function} is named lines that run when called.
+
+            \medskip
+            Its parameters are Step 4's, plus who made each edit, and why.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: the chapter's function
+def get_revisions(title, until="2026-09-30T23:59:59Z"):
+    # Step 4's parameters, plus who and why
+    params = {
+        ...
+        "rvprop": "ids|timestamp|user|size|comment",
+        ...
+    }
+    all_revisions = []
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: your first move}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{while True} repeats its lines until \texttt{break}.
+
+            \medskip
+            Find your first move: the request. The chapter's \texttt{raise\_for\_status()} is left out.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+    # Until a page has no "continue"
+    while True:
+        # Your first move: send the request
+        response = requests.get(
+            API,
+            params=params,
+            headers=HEADERS,
+        )
+        data = response.json()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: your second move}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Find your second move: the update from \texttt{"continue"}. It pauses a second before the next request.
+
+            \medskip
+            If the fourth request got a 429, which line would stop?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+        # Keep this page's edits
+        page = list(data["query"]["pages"].values())[0]
+        all_revisions.extend(page.get("revisions", []))
+        # Your second move: add the "continue" pairs
+        if "continue" in data:
+            params.update(data["continue"])
+            time.sleep(1)
+        else:
+            break
+    return pd.DataFrame(all_revisions)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: every edit}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            One call sends every request, a second apart.
+
+            \medskip
+            How many requests did it take? Is the oldest edit from 2003?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Every edit, up to September 30, 2026
+revisions = get_revisions(ARTICLE)
+# How many, and the oldest and newest
+print(
+    len(revisions),
+    revisions["timestamp"].min(),
+    revisions["timestamp"].max(),
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 5: numbers, not names}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            A given cell numbers the editors by their first edit, and drops names, IP addresses and edit summaries. Another saves the table for Wednesday.
+
+            \medskip
+            Every username is public on View history. Why number them in a copy we publish?
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{A checkpoint}\\[2pt]
+            {\footnotesize Stopped by a 429? The next given cell loads the course's saved copy instead. What can a saved copy not tell you?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Before Friday: install mwclient}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Friday's Step 16 uses \textbf{mwclient}, a client library. The \texttt{webdata} environment doesn't include it.
+
+            \medskip
+            Install it once, in a terminal, before Friday.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Once, in a terminal
+conda install -n webdata -c conda-forge mwclient
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+\begin{frame}{Your Final Project proposal, due Sunday}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Three parts, worth \textbf{5\%} of your grade:
+            \begin{enumerate}\small
+                \item \textbf{A research question.} What the data could answer, and who would care about the answer. A question, not a topic: not ``Wikipedia,'' but ``Which events send readers to articles about wildfires?''
+                \item \textbf{Data source(s) and method.} The site, API, or documents, and how you'll get them: an API, scraping, PDFs, or a mix. Name the endpoint, page, or file.
+                \item \textbf{Ethics and feasibility.} The terms of service, \texttt{robots.txt}, and any personal data in it --- and proof that you can get \textbf{one record}: paste the request and what came back.
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.36\textwidth}
+            \begin{block}{Need inspiration?}
+                \footnotesize Every chapter has \textit{Additional Exercises} that could make great project questions.
+            \end{block}
+            \begin{alertblock}{Collecting over time?}
+                \footnotesize Start the collector now, and say so in the proposal.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% =========================================================================
+\section{Wednesday}
+% =========================================================================
+
+% The code on these frames is the lab's Part 2 (labs/week-10/lab-10-key.ipynb): one frame per
+% lab cell, with the lab's step numbers. The plots are the key's own (see img/IMAGES.md).
+
+\begin{frame}{Today: Part 2, who writes and who reads}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            On Monday we fetched every edit. Today:
+            \begin{itemize}\small
+                \item Count the edits by month, and by editor
+                \item Ask a second API how many people read the article each day
+                \item Check whether editing and reading move together
+            \end{itemize}
+
+            \medskip
+            \dayband{Use it}{Steps 6--11}
+            \begin{itemize}\small
+                \item Download the new \texttt{lab-10.ipynb}; start at \textbf{Step 6}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{A second API}\\[2pt]
+            {\footnotesize The pageviews API puts its parameters in the address's path, not in a dictionary. Ask it for three days first.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 6: set up again}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Step 6's cells are given. Put your email in \texttt{CLIENT}, then run them.
+
+            \medskip
+            They load Monday's table from the course's repository: every edit up to September 30, 2026, each editor a number. Missed Monday? Start here.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Two new names}\\[2pt]
+            {\footnotesize \texttt{PAGEVIEWS}, the pageviews API's address, and \texttt{saved}, the address of the course's saved copies.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: look at the table}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The table has numbers where the history has names.
+
+            \medskip
+            What can you still count? What can't you do any more?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# How many edits, and the first three
+print(len(revisions))
+print(revisions.head(3))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: text to dates}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The timestamps are text. \texttt{pd.to\_datetime()} turns them into dates, here in UTC.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://pandas.pydata.org/docs/reference/api/pandas.to_datetime.html}{pandas.to\_datetime}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The timestamps are text: make them dates
+revisions["timestamp"] = pd.to_datetime(
+    revisions["timestamp"]
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: edits per month}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            With the dates as the \textbf{index}, \texttt{resample("ME")} groups the edits by month, labeled by its last day.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.resample.html}{DataFrame.resample}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The dates as the table's index
+by_time = revisions.set_index("timestamp")
+# Group by month, and count each group
+monthly_edits = by_time.resample("ME").size()
+print(monthly_edits.tail(3))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: the busiest month}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{idxmax()} gives the label of the largest value.
+
+            \medskip
+            Was the busiest month early or late in the article's life?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The busiest month, and its edits
+print(monthly_edits.idxmax(), monthly_edits.max())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 7: every month}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell plots the monthly edits. Yours should look like this.
+
+            \medskip
+            When was the article written, and when was it kept up?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/key-monthly-edits.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: by year}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Count by year instead: \texttt{"YE"} in place of \texttt{"ME"}.
+
+            \medskip
+            Share the busiest year and its number of edits.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# By year
+yearly_edits = by_time.resample("YE").size()
+print(yearly_edits.idxmax(), yearly_edits.max())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: how many editors}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{nunique()} counts the different values in a column.
+
+            \medskip
+            Each IP address counts as its own editor, and one person can use many. What does that do to the count?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# How many different editors
+print(revisions["editor"].nunique())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: edits per editor}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{value\_counts()} counts each value, most first.
+
+            \medskip
+            The chapter prints these ten as names. Ours are numbers.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Each editor's edits, most first
+edit_counts = revisions["editor"].value_counts()
+print(edit_counts.head(10))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: the top ten's share}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Is the work in a few hands, or many? Which number tells you?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The ten with the most edits
+top_ten = edit_counts.head(10)
+# Their share of all edits
+print(top_ten.sum() / len(revisions))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: edits without an account}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell keeps the edits made from an IP address (\texttt{anon}) or a temporary account (\texttt{temp}).
+
+            \medskip
+            Share their share of all edits, and their number of editors.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Their share of all edits
+print(len(no_account_edits) / len(revisions))
+# How many editor numbers they have
+print(no_account_edits["editor"].nunique())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: the title, for a path}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The pageviews API's parameters are parts of the address's \textit{path}, not a dictionary. In a path, a title has underscores for spaces.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/reference/page-views.html#get-number-of-page-views-for-a-page}{pageviews per article}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Underscores for spaces
+article = ARTICLE.replace(" ", "_")
+print(article)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: the path}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Project, access, \textbf{agent} and article. The agent says who is reading: \texttt{user} is people.
+
+            \medskip
+            The notebook writes this on one line.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Project, access, agent, article
+views_path = (
+    f"{PAGEVIEWS}/en.wikipedia"
+    f"/all-access/user/{article}"
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: three days first}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Then come granularity, start and end. Before six years, three days.
+
+            \medskip
+            How many items should come back?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Daily, September 1 to 3, 2026
+three_days_url = views_path + "/daily/20260901/20260903"
+print(three_days_url)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: send it, and look}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            No parameters this time: they are in the address.
+
+            \medskip
+            Each \texttt{timestamp} has ten digits, \texttt{YYYYMMDDHH}. What are the last two for, on a daily count?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it
+three_days_response = requests.get(
+    three_days_url,
+    headers=HEADERS,
+)
+# Look: the status, and the whole text
+print(
+    three_days_response.status_code,
+    three_days_response.text,
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: the whole window}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            One line changed: the start and the end.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# January 2021 to September 2026
+views_url = views_path + "/daily/20210101/20260930"
+print(views_url)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: send it}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Six years, in one answer.
+
+            \medskip
+            Why is there no \texttt{"continue"} here?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it
+views_response = requests.get(
+    views_url,
+    headers=HEADERS,
+)
+# Look: the status, and the start of the text
+print(
+    views_response.status_code,
+    views_response.text[:200],
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: its keys}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            One key, \texttt{items}: a list, one item a day.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The answer, as Python, and its keys
+views_data = views_response.json()
+print(views_data.keys())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: a table of days}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            One row a day. Does the number of days match the window?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One row a day
+views = pd.DataFrame(views_data["items"])
+# How many days, and how many views in all
+print(len(views), views["views"].sum())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: text to dates}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{format} says how to read the ten digits.
+
+            \medskip
+            A given cell saves the table, Friday's starting point.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# YYYYMMDDHH: year, month, day, hour
+views["timestamp"] = pd.to_datetime(
+    views["timestamp"],
+    format="%Y%m%d%H",
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 10: every day}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell plots the daily views. Yours should look like this.
+
+            \medskip
+            The API's days are UTC days. Which spikes can you explain?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/key-daily-views.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: the biggest day}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{.loc[]} reads the row with that label.
+
+            \medskip
+            An evening in Colorado counts toward the next UTC day. Which Colorado date was the peak?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The label of the row with the most views
+peak = views["views"].idxmax()
+# That row
+print(views.loc[peak])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: an ordinary day}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The \textbf{median}: half the days were above it.
+
+            \medskip
+            Share the median, and about how many ordinary days the peak was worth.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The median day's views
+print(views["views"].median())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: views per month}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Do edits and readers move together? First, count views by month, as Step 7 counted edits.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The days as the index
+views_by_day = views.set_index("timestamp")
+# Sum each month's views
+monthly_views = views_by_day["views"].resample("ME").sum()
+print(monthly_views.tail(2))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: compare the labels}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Both series are labeled by month ends. Compare these labels with the views'. What is different?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The edits' last two months
+print(monthly_edits.tail(2))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: drop the time zone}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Left as they are, pandas refuses to line them up. \texttt{tz\_localize(None)} drops the edits' time zone.
+
+            \medskip
+            Why is it better that pandas refused than guessed?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Drop the edits' time zone
+naive_edits = monthly_edits.tz_localize(None)
+# The months since 2021, as for the views
+edits_since_2021 = naive_edits.loc["2021":]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: how closely they move}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{corr()} lines the two series up by month: 1 is together, 0 not at all.
+
+            \medskip
+            What can a correlation not say?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Views and edits, month by month
+print(monthly_views.corr(edits_since_2021))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 11: both, on one time axis}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell plots views above and edits below.
+
+            \medskip
+            Find December 2022 and September 2023. Why would one month bring editors, and the other mostly readers?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/key-views-and-edits.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+% =========================================================================
+\section{Friday}
+% =========================================================================
+
+% The code on these frames is the lab's Part 3 (labs/week-10/lab-10-key.ipynb): one frame per
+% lab cell, with the lab's step numbers.
+
+\begin{frame}{Today: Part 3, what the counts count}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            \dayband{Lab}{Steps 12--17}
+            \begin{itemize}\small
+                \item Who reads the article: people, crawlers and bots
+                \item Its categories, languages and links
+                \item A client library that does the paging for us
+                \item Download the new \texttt{lab-10.ipynb}; start at \textbf{Step 12}
+            \end{itemize}
+
+            \medskip
+            \dayband{Then}{proposal Q\&A, 15 minutes}
+            \begin{itemize}\small
+                \item Bring your question and your source
+                \item \textbf{Proposal due Sunday, October 25}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{alertblock}{No mwclient?}
+                \footnotesize Step 16 needs it. In a terminal:\\
+                \texttt{conda install -n webdata}\\
+                \texttt{\ \ -c conda-forge mwclient}\\
+                Then restart the kernel.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+\begin{frame}{Daily note questions}\small
+    \begin{itemize}
+        \item \textbf{Can we have a walkthrough of what each line in params means?} --- Every API endpoint will be different, but let's review Wikipedia today
+        \item \textbf{Grades?} --- Updates to attendance and lab grades over the weekend
+        \item \textbf{Hard to use this on other websites?} --- This API is only going to work for MediaWiki installations like Wikipedia, other websites may not have APIs, and if they do will behave very differently
+        \item \textbf{Look for questions more and add more comments} --- Will do
+        \item \textbf{\texttt{rvcontinue} param takes ``rvcontinue'' key?} --- Exactly!
+    \end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Step 12: set up again}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Step 12's cells are given. Put your email in \texttt{CLIENT}, then run them.
+
+            \medskip
+            They load two saved tables: Monday's edits, for Step 16, and Wednesday's daily views, for Step 13. Missed a day? Start here.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Saved on 2026-11-10}\\[2pt]
+            {\footnotesize By the key's run, with the lab's own code. Which of today's numbers come live, and which from a saved table?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 13: a pageview is not a person}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            One reader who reloads three times is three views. The \textbf{agent} says who was reading: \texttt{user} (people), \texttt{spider} (crawlers that say so), \texttt{automated} (bots that don't).
+
+            \medskip
+            When bot detection improves, past counts can be reclassified, as March--August 2025 were.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Docs}\\[2pt]
+            {\footnotesize \href{https://meta.wikimedia.org/wiki/Research:Page_view}{Research:Page view}, Wikimedia's definition of a pageview.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: get\_pageviews(), given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The chapter's function: Step 9's lines, without \texttt{raise\_for\_status()}.
+
+            \medskip
+            \texttt{agent="user"} is a \textbf{default}: used when a call doesn't give one.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: Step 9's lines, as a function
+def get_pageviews(title, start, end,
+                  agent="user", granularity="daily"):
+    # Step 9: the title, then the address
+    ...
+    # Step 9: send it, then a table, then dates
+    ...
+    return views[["timestamp", "views"]]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: one month first}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Ask for September 2026, by month.
+
+            \medskip
+            How many rows should come back?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# September 2026, as one month
+september = get_pageviews(
+    ARTICLE,
+    "20260901",
+    "20260930",
+    granularity="monthly",
+)
+print(september)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: check it against the days}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Wednesday's table ends on September 30, so its rows from September 1 on are September.
+
+            \medskip
+            Do the month and its days agree?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Wednesday's daily views, from September 1 on
+is_september = views["timestamp"] >= "2026-09-01"
+september_days = views[is_september]
+# How many days, and their sum
+print(len(september_days), september_days["views"].sum())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: spiders}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Change the agent and the window.
+
+            \medskip
+            A given loop then asks for all three agents, a second apart, and saves them.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The same months, for crawlers that say so
+spider_views = get_pageviews(
+    ARTICLE,
+    "20240101",
+    "20260930",
+    agent="spider",
+    granularity="monthly",
+)
+print(spider_views.tail(3))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 13: three agents}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell plots the three. Yours should look like this.
+
+            \medskip
+            In which month were people the smallest share? How would a study that used \texttt{all-agents} read it?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/key-views-by-agent.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: do they add up?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Ask for every agent at once. A given cell checks that each month is the three agents' sum, and finds when people were the smallest share.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Every agent at once, the same months
+all_views = get_pageviews(
+    ARTICLE,
+    "20240101",
+    "20260930",
+    agent="all-agents",
+    granularity="monthly",
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 14: three categories first}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Categories, languages and links are all \texttt{action=query}, with another \texttt{prop}.
+
+            \medskip
+            Open the foot of \href{https://en.wikipedia.org/wiki/University_of_Colorado_Boulder}{the article}. Which three should come back?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://www.mediawiki.org/wiki/API:Categories}{prop=categories}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Three of the article's categories
+cat_params = {
+    "action": "query",
+    "titles": ARTICLE,
+    "format": "json",
+    "prop": "categories",
+    "cllimit": 3,
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 14: send it, and look}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Which of the three are in the box at the foot of the article? Where are the others?
+
+            \medskip
+            Is there a \texttt{"continue"}?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it
+cat_response = requests.get(
+    API,
+    params=cat_params,
+    headers=HEADERS,
+)
+# Look: the status, and the whole text
+print(cat_response.status_code, cat_response.text)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 14: two props, one request}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            One request can ask for two \texttt{prop}s, each with its own limit. The given dictionary sets both.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://www.mediawiki.org/wiki/API:Langlinks}{prop=langlinks}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: each prop's limit at "max"
+cat_lang_params = {
+    ...
+    "cllimit": "max",
+    "lllimit": "max",
+}
+# Yours: two props, joined with |
+cat_lang_params["prop"] = "categories|langlinks"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 14: send it, and check for more}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A short list fits in one answer, but check for \texttt{"continue"} before trusting a count.
+
+            \medskip
+            A given cell counts the categories and languages.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it
+cat_lang_response = requests.get(
+    API,
+    params=cat_lang_params,
+    headers=HEADERS,
+)
+cat_lang = cat_lang_response.json()
+# Is there more to come?
+print("continue" in cat_lang)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: redirects}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Which other titles send readers here? \texttt{prop=redirects} isn't in the chapter.
+
+            \medskip
+            Read \href{https://www.mediawiki.org/wiki/API:Redirects}{its page} for its limit parameter, and set it to \texttt{"max"}.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: prop=redirects, without a limit
+redirect_params = {
+    "action": "query",
+    "titles": ARTICLE,
+    "format": "json",
+    "prop": "redirects",
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 15: query\_all(), given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            For long lists the chapter has two functions. \texttt{query\_all()} sends any query, and follows \texttt{"continue"} to the end, a second apart.
+
+            \medskip
+            \texttt{**} copies one dictionary's pairs into another.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: any query, followed to the end
+def query_all(params):
+    # ** copies params' pairs into a new dictionary
+    params = {
+        "action": "query",
+        "format": "json",
+        **params,
+    }
+    # Then Step 5's loop, keeping each data["query"]
+    ...
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 15: the article's links}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The given \texttt{page\_list()} uses \texttt{query\_all()} to collect one \texttt{prop} of one page. Give it the prop, and its limit's name.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://www.mediawiki.org/wiki/API:Links}{prop=links}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Every wikilink in the article
+links = page_list(ARTICLE, "links", "pllimit")
+# How many, and the first three
+print(len(links), links[:3])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 15: three pages that link here}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            What links here is a \texttt{list}, not a \texttt{prop}: it searches all of Wikipedia. Its parameters start \texttt{bl}.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://www.mediawiki.org/wiki/API:Backlinks}{list=backlinks}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Three pages that link to the article
+back_params = {
+    "action": "query",
+    "list": "backlinks",
+    "bltitle": ARTICLE,
+    "bllimit": 3,
+    "format": "json",
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 15: send it, and look}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Where are the three pages: under \texttt{pages}, or somewhere else?
+
+            \medskip
+            Find them on the article's \href{https://en.wikipedia.org/wiki/Special:WhatLinksHere/University_of_Colorado_Boulder}{What links here}.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it
+back_response = requests.get(
+    API,
+    params=back_params,
+    headers=HEADERS,
+)
+back_data = back_response.json()
+# A list answers under its own name
+print(back_data["query"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 15: all of them, given}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            A given cell asks \texttt{query\_all()} for every article that links here, 500 a request. Its \texttt{sum()} adds one for each page that is a redirect.
+
+            \medskip
+            Another saves the links, and what links here.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Discuss}\\[2pt]
+            {\footnotesize Some pages that link here are redirects. Would you call the rest ``articles that link here''?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 16: connect}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{mwclient} follows \texttt{"continue"} for you. It adds its own name and version to \texttt{CLIENT}.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://mwclient.readthedocs.io/en/stable/user/connecting.html#specifying-a-user-agent}{mwclient: a User-Agent}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Wikipedia, with our User-Agent
+site = mwclient.Site(
+    "en.wikipedia.org",
+    clients_useragent=CLIENT,
+)
+# What it sends
+print(site.connection.headers["User-Agent"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 16: the article}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{site.pages[...]} finds a page by its title: no dictionary, no \texttt{"continue"}.
+
+            \medskip
+            Is it the page ID Step 1 printed?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The article, by its title
+mw_page = site.pages[ARTICLE]
+# Its page ID
+print(mw_page.pageid)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 16: 2023's edits, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            mwclient asks for 50 a request, and stops on a 429.
+
+            \medskip
+            The given cell's last line counts 2023 in Monday's table. Do the two agree?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: 2023's edits, newest first
+edits_2023 = list(mw_page.revisions(
+    start="2023-12-31T23:59:59Z",
+    end="2023-01-01T00:00:00Z",
+))
+print(len(edits_2023), "edits in 2023, from mwclient")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 17: what did we learn?}
+    Answer in the notebook, as comments.
+
+    \medskip
+    \textbf{Steps 5 and 16 counted 2023's edits two ways. Did they agree?}
+
+    \medskip
+    \textbf{How much of the article's traffic was people?}
+
+    \medskip
+    \textbf{Which of this week's numbers would differ next year?}
+
+    \medskip
+    \textbf{What could the saved copies not tell you?}
+\end{frame}
+
+% Copied from week 9's Friday ("The Final Project: grade and dates" and "What to
+% expect"), as edited in Overleaf; keep the two in step (docs/course-facts.md).
+\begin{frame}{The Final Project: grade and dates}
+    A \textbf{portfolio piece} that matches a web data source with a research design. Individually, or in pairs with the instructor's permission. \textbf{40\%} of your grade.
+
+    \medskip
+
+    \begin{center}
+    \begin{tabular}{llr}
+        \toprule
+        \textbf{Part} & \textbf{Due} & \textbf{Weight} \\
+        \midrule
+        Proposal & Sunday, October 25 & 5\% \\
+        5-min presentation & Week 16, Nov.~30--Dec.~4 & 10\% \\
+        Write-up & Monday, December 7 & 25\% \\
+        \bottomrule
+    \end{tabular}
+    \end{center}
+\end{frame}
+
+\begin{frame}{What to expect}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \textbf{The proposal} (Sunday, October 25)
+            \begin{itemize}\small
+                \item \textbf{A research question}: what the data could answer, and who would care about the answer.
+                \item \textbf{Data source(s) and method}: the site, API, or documents, and whether you'll use an API, scraping, PDFs, or a mix.
+                \item \textbf{Ethics and feasibility}: terms of service, \texttt{robots.txt}, and personal data; and proof that you can get one record.
+                \item Details on assignment submission on Canvas: \url{https://canvas.colorado.edu/courses/143304/assignments/2852060}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \textbf{The repository and write-up} (December 7)
+            \begin{itemize}\small
+                \item \textbf{Reproducible}: a GitHub repository whose notebook or scripts collect the data and rerun the analysis, with a README.
+                \item \textbf{A write-up} of about \textbf{2,000--3,000 words}, with figures.
+            \end{itemize}
+            \medskip
+            \textbf{The presentation} (final week)
+            \begin{itemize}\small
+                \item About \textbf{5 minutes} plus questions: the question, the data, one finding.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Before you submit the proposal}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \begin{itemize}\small
+                \item[$\square$] Is the question one the data can answer --- and would anyone outside this class care?
+                \item[$\square$] Does it name the exact source: an endpoint, a site's pages, or a set of PDFs?
+                \item[$\square$] Did you retrieve \textbf{one real record}, and paste the request and the response?
+                \item[$\square$] Did you read the terms of service and \texttt{robots.txt}? Does the data include people's names or other personal information, and how will you handle it?
+                \item[$\square$] If the data changes over time, is your collector already running?
+                \item[$\square$] Working in a pair? Ask the instructor before you submit.
+            \end{itemize}
+
+            \medskip
+            {\small The proposal is graded on a careful, good-faith plan, not on getting everything right: you may change your question or source later.}
+        \end{column}
+        \begin{column}{0.36\textwidth}
+            \textbf{What comes next}\\[2pt]
+            {\footnotesize Presentation, about 5 minutes (10\%), in the final week, Nov.~30--Dec.~4. Repository and a 2,000--3,000-word write-up (25\%), due Monday, December 7.\par}
+            \medskip
+            \textbf{Late work}\\[2pt]
+            {\footnotesize Loses 1\% of its maximum value for each day after the deadline, unless you have an approved excuse.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% =========================================================================
+\begin{frame}{Key takeaways}
+    \begin{enumerate}
+        \item An API is a \textbf{documented contract}: ask in its form, and it answers in data.
+        \item \textbf{Ask small first}: three edits, three days, three categories. Then the whole thing.
+        \item \textbf{Look before you read}: print the status and the text before you index into the JSON.
+        \item Always \textbf{paginate}: follow \texttt{continue} to the end, or you keep only the first page.
+        \item A \textbf{pageview} is not a person, and its definition has changed.
+    \end{enumerate}
+    \bigskip
+    \centering\small Next week: \textbf{Government APIs} --- the Census, the Federal Reserve (FRED), and other public data services.
+\end{frame}
+
+% =========================================================================
+\section{Reading: a tour of Wikipedia}
+% =========================================================================
+% Monday's tour of the interface, moved here unchanged on 2026-11-17 so that Monday is the
+% lab's Part 1. Its frames are the instructor's ("For research" lines, 2026-10-19).
+
+\begin{frame}{A tour: what sits behind every article}
+    Like most users, you have probably never clicked any deeper into Wikipedia than an article. But Wikipedia keeps many important records publicly available:
+    \begin{itemize}
+        \item who changed what, and when --- the \textbf{revision history}
+        \item what editors argued about --- the \textbf{talk page}
+        \item how many people read it --- \textbf{pageviews}
+        \item what it links to, what links to it, and the same topic in other \textbf{languages}
+        \item its \textbf{references}, \textbf{categories}, and \textbf{templates}
+        \item the editors themselves --- \textbf{user pages} and \textbf{contributions}
+    \end{itemize}
+    \bigskip
+    Each one has an \textbf{API endpoint}. Anything you can see in the interface, you can count.
 \end{frame}
 
 \begin{frame}{From the interface to the API}
@@ -393,409 +2123,6 @@
             \textbf{For research:} Editors' careers: what else an article's editors work on, and the communities they form.
         \end{column}
     \end{columns}
-\end{frame}
-
-\begin{frame}{Your Final Project proposal, due Sunday}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Three parts, worth \textbf{5\%} of your grade:
-            \begin{enumerate}\small
-                \item \textbf{A research question.} What the data could answer, and who would care about the answer. A question, not a topic: not ``Wikipedia,'' but ``Which events send readers to articles about wildfires?''
-                \item \textbf{Data source(s) and method.} The site, API, or documents, and how you'll get them: an API, scraping, PDFs, or a mix. Name the endpoint, page, or file.
-                \item \textbf{Ethics and feasibility.} The terms of service, \texttt{robots.txt}, and any personal data in it --- and proof that you can get \textbf{one record}: paste the request and what came back.
-            \end{enumerate}
-        \end{column}
-        \begin{column}{0.36\textwidth}
-            \begin{block}{Need inspiration?}
-                \footnotesize Every chapter has \textit{Additional Exercises} that could make great project questions.
-            \end{block}
-            \begin{alertblock}{Collecting over time?}
-                \footnotesize Start the collector now, and say so in the proposal.
-            \end{alertblock}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-% =========================================================================
-\section{Wednesday}
-% =========================================================================
-
-\begin{frame}{New this week: we live-code the lab together}
-    \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-            \dayband{Find it}{\texttt{labs/} in the course repository}
-            \begin{enumerate}\small
-                \item Open the \href{https://github.com/cuinfoscience/INFO4617-Fall2026/tree/main/labs}{\textbf{labs} folder} of the course repository, \texttt{cuinfoscience/INFO4617-Fall2026}, on GitHub
-                \item Open \texttt{week-10}, click \texttt{lab-10.ipynb}, then \textbf{Download raw file}, as with the companion notebooks
-                \item Save it in your course folder, and open it in JupyterLab in the \texttt{webdata} environment
-            \end{enumerate}
-
-            \medskip
-            \dayband{Use it}{fill in the cells as we go}
-            \begin{itemize}\small
-                \item Each step's text explains it; its code cell holds only a comment saying what to write
-                \item I write the code on screen, and you write it in your copy
-                \item Put \textbf{your} email in the User-Agent in Step 0
-                \item Eleven steps, about 75 minutes: today, and Friday if we run over
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.4\textwidth}
-            \begin{block}{Solutions}
-                \footnotesize \texttt{labs/week-10/lab-10-key.ipynb}: every cell filled in and run on October 20. Fall behind? Copy the cell from the key and keep going.
-            \end{block}
-            \begin{block}{Nothing to submit}
-                \footnotesize The lab is for practice in class. After each step, a \textbf{Discuss} box holds questions we'll talk over before the next. The next frames show the chapter's fuller version of the code, for reference.
-            \end{block}
-            \begin{alertblock}{A 429 is not a bug}
-                \footnotesize It's Wikimedia's rate limit. The lab's code doesn't handle it: wait the seconds it asks for, then run the cell again.
-            \end{alertblock}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-% The code on these frames is the chapter's (ch-10-wikipedia.qmd, textbook PRs #265 and #287),
-% shortened where a frame needs it. Its numbers and charts come from running it against
-% the live APIs on 2026-10-16, with every request ending 2026-09-30.
-\begin{frame}[fragile]{The four parts, then navigate the JSON}
-    Assemble the request as a dictionary of parameters; \texttt{requests} builds the URL for you:
-\begin{lstlisting}
-import requests
-url = "https://en.wikipedia.org/w/api.php"
-CLIENT = "WebDataScience/1.0 (your-email@colorado.edu)"   # name/version (contact)
-HEADERS = {"User-Agent": f"{CLIENT} python-requests/{requests.__version__}"}
-
-params = {"action": "query",                           # what to do
-          "titles": "University of Colorado Boulder",  # about this page
-          "prop":   "info",                            # what we want back
-          "format": "json"}                            # how we want it
-data = requests.get(url, params=params, headers=HEADERS).json()
-\end{lstlisting}
-    Then walk the nested response one key at a time --- page IDs are the keys:
-\begin{lstlisting}
-pages = data["query"]["pages"]
-page_id = list(pages.keys())[0]
-print(pages[page_id]["title"], pages[page_id]["pageid"], pages[page_id]["length"])
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{Revisions --- and the pagination loop}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-def get_revisions(title, until="2026-09-30T23:59:59Z"):
-    params = {"action": "query", "titles": title,
-        "prop": "revisions", "rvlimit": "max",
-        "rvprop": "ids|timestamp|user|size|comment",
-        "rvstart": until,       # newest edit to include
-        "format": "json"}
-    all_revisions = []
-    while True:                 # the pagination loop
-        response = requests.get(url, params=params,
-                                headers=HEADERS)
-        response.raise_for_status()
-        data = response.json()
-        page = list(data["query"]["pages"].values())[0]
-        all_revisions.extend(page.get("revisions", []))
-        if "continue" in data:
-            params.update(data["continue"])  # next batch
-        else:
-            break
-    return pd.DataFrame(all_revisions)
-\end{lstlisting}
-        \end{column}
-        \begin{column}{0.36\textwidth}
-            The most common API bug: \textbf{forgetting to paginate}. The server returns 500 at a time and a \texttt{continue} token when more remain. Skip the loop and you silently keep a \textit{fraction}.
-
-            \medskip
-            \texttt{rvstart} fixes the window, so next week's run gives today's answer.
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Every edit since 2003}
-    \centering
-    \includegraphics[width=0.78\textwidth]{img/cu-monthly-edits.png}\\
-    \raggedright\small
-    2,988 revisions through September 2026; the ten most active editors made 15.9\% of them. The busiest years came early, when the article was being written; since then, a few edits a month keep it current.
-\end{frame}
-
-\begin{frame}[fragile]{Pageviews: a second API}
-    \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-        The REST API puts its parameters in the URL's \textit{path}. Define the function once:
-\begin{lstlisting}
-def get_pageviews(title, start, end,
-                  agent="user", granularity="daily"):
-    article = title.replace(" ", "_")
-    url = ("https://wikimedia.org/api/rest_v1/metrics"
-           "/pageviews/per-article/en.wikipedia"
-           f"/all-access/{agent}/{article}"
-           f"/{granularity}/{start}/{end}")
-    response = requests.get(url, headers=HEADERS)
-    response.raise_for_status()
-    views = pd.DataFrame(response.json()["items"])
-    views["timestamp"] = pd.to_datetime(
-        views["timestamp"], format="%Y%m%d%H")
-    return views[["timestamp", "views"]]
-\end{lstlisting}
-        \end{column}
-        \begin{column}{0.4\textwidth}
-            Define the function in one cell, and use it in the next:
-\begin{lstlisting}
-cu_views = get_pageviews(
-    "University of Colorado Boulder",
-    "20210101", "20260930")
-\end{lstlisting}
-            \medskip
-            No \texttt{continue} here: one request returns the whole range.
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Spikes are events}
-    \centering
-    \includegraphics[width=0.78\textwidth]{img/cu-daily-views.png}\\
-    \raggedright\small
-    A typical day: about 600 human readers. December 5, 2022, two days after Deion Sanders was hired: 5,042. September 17, 2023, after a double-overtime win over Colorado State that ended late on the 16th: 16,767 --- the API's days are \textbf{UTC} days.
-\end{frame}
-
-\begin{frame}{What a pageview counts}
-    \begin{columns}[T]
-        \begin{column}{0.42\textwidth}\small
-            A pageview is \textbf{not a person}: one reader who reloads three times is three views.
-            \begin{itemize}\small
-                \item The REST API's counts start in \textbf{July 2015}, under a definition drafted in 2014--15 (\href{https://meta.wikimedia.org/wiki/Research:Page_view}{Research:Page view}).
-                \item Before that, \href{https://dumps.wikimedia.org/other/pagecounts-raw/}{pagecounts-raw} (2007--2016) counted every request, edits and crawlers included. A fallback, not comparable.
-                \item The \textbf{agent} says who is reading: \texttt{user} (people), \texttt{spider} (crawlers that say so), \texttt{automated} (bots that don't).
-                \item When bot detection improves, past counts can be \textbf{reclassified} --- as March--August 2025 were.
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.56\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/cu-views-by-agent.png}\\
-            {\scriptsize The same function, called once for each agent.}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{One function for every other feature}
-    Links, categories, templates, languages, backlinks, and contributions are all \texttt{action=query} with a different \texttt{prop} or \texttt{list}. Write the continuation loop once:
-\begin{lstlisting}
-def query_all(params):
-    params = {"action": "query", "format": "json", **params}
-    results = []
-    while True:
-        response = requests.get(url, params=params, headers=HEADERS)
-        response.raise_for_status()
-        data = response.json()
-        results.append(data["query"])
-        if "continue" in data:
-            params.update(data["continue"])
-        else:
-            break
-    return results
-
-# page_list() runs query_all() for one page and one prop, and returns the items
-categories = page_list(title, "categories", "cllimit")
-backlinks = query_all({"list": "backlinks", "bltitle": title, "bllimit": "max"})
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{From raw requests to a client: mwclient}
-    \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
-\begin{lstlisting}
-%conda install -y -c conda-forge mwclient
-\end{lstlisting}
-\begin{lstlisting}
-import mwclient
-print(mwclient.__version__)    # 0.10.1 from conda-forge
-
-site = mwclient.Site("en.wikipedia.org",
-    clients_useragent=CLIENT)   # it adds mwclient/0.10.1
-page = site.pages["University of Colorado Boulder"]
-
-print(len(list(page.categories())))
-print(len(list(page.langlinks())))
-revisions = list(page.revisions(   # 0.11: api_chunk_size=500
-    start="2026-09-30T23:59:59Z", limit=500))
-\end{lstlisting}
-        \end{column}
-        \begin{column}{0.38\textwidth}
-            Each line replaces one of our functions --- continuation included --- and mwclient backs off when the servers report lag. A \textbf{429} still stops it: wait, and run it again.
-
-            \medskip
-            Two things stay raw: \textbf{pageviews} (mwclient speaks the Action API only), and any parameter the library doesn't expose.
-
-            \medskip
-            {\footnotesize \href{https://mwclient.readthedocs.io/}{mwclient docs}}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Combining endpoints: the university and the city}
-    \begin{columns}[T]
-        \begin{column}{0.58\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/cu-boulder-combined.png}
-        \end{column}
-        \begin{column}{0.38\textwidth}
-            The same functions, on \textbf{Boulder, Colorado}: monthly views (top) and edits (bottom), side by side.
-
-            \medskip
-            Do articles get edited more when more people read them? Which events move the university's article, and which move the city's?
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Finished the lab? Try these, then show-and-tell}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Work in pairs. Do these exercises from the chapter, reusing the lab's functions:
-            \begin{enumerate}\small
-                \item Compare the revision histories of two related articles. Report the unique editors, the edits for each editor, and the monthly activity.
-                \item Get the daily pageviews of five articles. Report if the spikes occur together or separately.
-                \item Find the outgoing wikilinks of three related articles. Report the links that they share.
-                \item Read the API documentation. Write a request for a new endpoint such as \texttt{extlinks} or \texttt{recentchanges}.
-                \item Find the 20 most frequent editors of an article. Then find the other articles that they edit.
-                \item[6.] \textbf{5617}: reproduce one measure from \textcite{mesgari2015sum}. For example, calculate a Gini coefficient of the edits for each editor
-            \end{enumerate}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{Show-and-Tell}
-                \footnotesize Bring one of these to class:
-                \begin{itemize}\footnotesize
-                    \item a bug that you could not solve
-                    \item data that you collected and find interesting
-                    \item a question for a research design
-                \end{itemize}
-            \end{block}
-            \begin{alertblock}{Error flavors}
-                \footnotesize A \textbf{429} is Wikimedia's rate limit, which a whole classroom on one network can reach together: wait the \texttt{retry-after} seconds and run the cell again. No GitHub issue. A cell that fails the same way after waiting may be \textit{genuinely} broken: confirm it, then search and file an issue.
-            \end{alertblock}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-% =========================================================================
-\section{Friday}
-% =========================================================================
-
-\begin{frame}{Today}
-    \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
-            \dayband{First}{finish the lab}
-            \begin{itemize}\small
-                \item We pick up \texttt{labs/week-10/lab-10.ipynb} where we stopped on Wednesday
-                \item Check your outputs against \texttt{lab-10-key.ipynb}, in the same folder
-                \item No notebook or GitHub submission this week
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.48\textwidth}
-            \dayband{Then}{proposal Q\&A}
-            \begin{itemize}\small
-                \item Bring your question and your source
-                \item \textbf{Proposal due Sunday, October 25}
-            \end{itemize}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Daily note questions}\small
-    \begin{itemize}
-        \item \textbf{Can we have a walkthrough of what each line in params means?} --- Every API endpoint will be different, but let's review Wikipedia today
-        \item \textbf{Grades?} --- Updates to attendance and lab grades over the weekend
-        \item \textbf{Hard to use this on other websites?} --- This API is only going to work for MediaWiki installations like Wikipedia, other websites may not have APIs, and if they do will behave very differently
-        \item \textbf{Look for questions more and add more comments} --- Will do
-        \item \textbf{\texttt{rvcontinue} param takes ``rvcontinue'' key?} --- Exactly!
-    \end{itemize}
-    
-\end{frame}
-
-% Copied from week 9's Friday ("The Final Project: grade and dates" and "What to
-% expect"), as edited in Overleaf; keep the two in step (docs/course-facts.md).
-\begin{frame}{The Final Project: grade and dates}
-    A \textbf{portfolio piece} that matches a web data source with a research design. Individually, or in pairs with the instructor's permission. \textbf{40\%} of your grade.
-
-    \medskip
-
-    \begin{center}
-    \begin{tabular}{llr}
-        \toprule
-        \textbf{Part} & \textbf{Due} & \textbf{Weight} \\
-        \midrule
-        Proposal & Sunday, October 25 & 5\% \\
-        5-min presentation & Week 16, Nov.~30--Dec.~4 & 10\% \\
-        Write-up & Monday, December 7 & 25\% \\
-        \bottomrule
-    \end{tabular}
-    \end{center}
-\end{frame}
-
-\begin{frame}{What to expect}
-    \begin{columns}[T]
-        \begin{column}{0.48\textwidth}
-            \textbf{The proposal} (Sunday, October 25)
-            \begin{itemize}\small
-                \item \textbf{A research question}: what the data could answer, and who would care about the answer.
-                \item \textbf{Data source(s) and method}: the site, API, or documents, and whether you'll use an API, scraping, PDFs, or a mix.
-                \item \textbf{Ethics and feasibility}: terms of service, \texttt{robots.txt}, and personal data; and proof that you can get one record.
-                \item Details on assignment submission on Canvas: \url{https://canvas.colorado.edu/courses/143304/assignments/2852060}
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.48\textwidth}
-            \textbf{The repository and write-up} (December 7)
-            \begin{itemize}\small
-                \item \textbf{Reproducible}: a GitHub repository whose notebook or scripts collect the data and rerun the analysis, with a README.
-                \item \textbf{A write-up} of about \textbf{2,000--3,000 words}, with figures.
-            \end{itemize}
-            \medskip
-            \textbf{The presentation} (final week)
-            \begin{itemize}\small
-                \item About \textbf{5 minutes} plus questions: the question, the data, one finding.
-            \end{itemize}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Before you submit the proposal}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \begin{itemize}\small
-                \item[$\square$] Is the question one the data can answer --- and would anyone outside this class care?
-                \item[$\square$] Does it name the exact source: an endpoint, a site's pages, or a set of PDFs?
-                \item[$\square$] Did you retrieve \textbf{one real record}, and paste the request and the response?
-                \item[$\square$] Did you read the terms of service and \texttt{robots.txt}? Does the data include people's names or other personal information, and how will you handle it?
-                \item[$\square$] If the data changes over time, is your collector already running?
-                \item[$\square$] Working in a pair? Ask the instructor before you submit.
-            \end{itemize}
-
-            \medskip
-            {\small The proposal is graded on a careful, good-faith plan, not on getting everything right: you may change your question or source later.}
-        \end{column}
-        \begin{column}{0.36\textwidth}
-            \begin{block}{What comes next}
-                \footnotesize Presentation, about 5 minutes (10\%), in the final week, Nov.~30--Dec.~4. Repository and a 2,000--3,000-word write-up (25\%), due Monday, December 7.
-            \end{block}
-            \begin{block}{Late work}
-                \footnotesize Loses 1\% of its maximum value for each day after the deadline, unless you have an approved excuse.
-            \end{block}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-% =========================================================================
-\begin{frame}{Key takeaways}
-    \begin{enumerate}
-        \item An API is a \textbf{documented contract}: structured, intentional access --- clean JSON and stable endpoints, no reverse-engineering.
-        \item The skill transfers: \textbf{read the docs $\rightarrow$ build a parameterized request $\rightarrow$ parse nested JSON} one level at a time.
-        \item Always \textbf{paginate}: follow the \texttt{continue} token in a loop, or you silently keep only the first batch.
-        \item Be a good client: a descriptive \textbf{User-Agent}, serial requests, and \texttt{maxlag} for bulk jobs (the ethics of Ch.~2, applied). A client such as \textbf{mwclient} does the repetitive parts once you know what they are.
-        \item Know what your numbers count: a \textbf{pageview} is not a person, and its definition --- and the bots behind it --- have changed.
-        \item Openness is a \textit{choice}, not a guarantee of completeness --- Wikipedia's data still inherits its volunteer community's biases.
-    \end{enumerate}
-    \bigskip
-    \centering\small Next week: \textbf{Government APIs} --- the Census, the Federal Reserve (FRED), and other public data services.
 \end{frame}
 
 \end{document}
