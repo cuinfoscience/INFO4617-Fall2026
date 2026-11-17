@@ -8,6 +8,9 @@
 % file directly from its own folder (no TEXINPUTS needed).
 \makeatletter\def\input@path{{../common/}}\makeatother
 \input{preamble}
+% Larger code than the house default: a frame holds one short block (AUTHORING.md, "Code style").
+% The two accented letters in Wednesday's listings (Réalisation, película) need "literate".
+\lstset{basicstyle=\ttfamily\footnotesize, literate={é}{{\'e}}1 {í}{{\'i}}1}
 
 \title[Week 6 · Static Pages]{{\Huge Parsing Static Web Pages}}
 \subtitle{Week 6 · Documents module · Textbook Chapter 6}
@@ -57,8 +60,46 @@
 \end{frame}
 
 % =========================================================================
-\section{Monday · Concepts}
+\section{Monday}
 % =========================================================================
+
+% The code on the frames from here to the end of Friday's Step 13 is the lab's
+% (labs/week-06/lab-06-key.ipynb), rebuilt in three parts on 2026-11-17 for the next
+% offering: one frame per typed cell, with the lab's step numbers, laid out for reading.
+% Each new tool gets a small first call, on a few lines of HTML, before the real page.
+% The "Strategy N" concept frames are the instructor's, unchanged, moved to sit ahead of
+% the step that codes them.
+\begin{frame}{This week, every class is live coding}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            \dayband{Find it}{\texttt{labs/} in the course repository}
+            \begin{enumerate}\small
+                \item Open the \href{https://github.com/cuinfoscience/INFO4617-Fall2026/tree/main/labs}{\textbf{labs} folder} of \texttt{cuinfoscience/INFO4617-Fall2026} on GitHub
+                \item Open \texttt{week-06}, click \texttt{lab-06.ipynb}, then \textbf{Download raw file}
+                \item Open it in JupyterLab in the \texttt{webdata} environment
+            \end{enumerate}
+
+            \medskip
+            \dayband{Use it}{one part a day}
+            \begin{itemize}\small
+                \item I write the code on screen, and you write it in your copy
+                \item Cells that start \texttt{\# Given:} are written: we read them and run them
+                \item Today: Part 1, Steps 0--4. Wednesday and Friday: start at that part's setup step
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Solutions}\\[2pt]
+            {\footnotesize \texttt{lab-06-key.ipynb}, beside it: every cell filled in and run. Fall behind? Copy the cell from the key and keep going.\par}
+            \medskip
+            \textbf{Due Sunday}\\[2pt]
+            {\footnotesize Chapter 6's \textbf{Recommended Exercises}, from its companion notebook. Graded on good-faith attempt to complete rather than getting everything working.\par}
+            \medskip
+            \begin{alertblock}{Error flavors}
+                \footnotesize Some cells surprise you on purpose: a 403, a count of 0, a number ten times too big. Read what came back. A cell that fails for everyone is \textit{broken}: tell me, or open an issue.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
 
 \begin{frame}{From HTML to data}
     \begin{columns}
@@ -141,6 +182,239 @@
     \end{columns}
 \end{frame}
 
+\begin{frame}{Step 0: set up}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Step 0's cell is given. Put your email in \texttt{CLIENT}, then run it.
+
+            \medskip
+            \texttt{HEADERS} says who is asking, as week 2 explained. \texttt{WIKI\_HEADERS} adds the library's name and version, which Wikimedia asks for.
+
+            \medskip
+            Why not one User-Agent for every site? Step 3 shows.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Discuss}\\[2pt]
+            {\footnotesize Who reads the address in your User-Agent, and what can they do with it?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: two lines of \texttt{robots.txt}}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Before we ask a real site, write a \texttt{robots.txt} of two lines.
+
+            \medskip
+            They tell every crawler to stay out of paths that start \texttt{/w/}.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://docs.python.org/3/library/urllib.robotparser.html\#urllib.robotparser.RobotFileParser}{RobotFileParser}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# A parser for robots.txt files
+rp = RobotFileParser()
+# Give it a file's lines, as a list
+rp.parse(["User-agent: *", "Disallow: /w/"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: two addresses}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Two pages on Wikipedia: a script, and an article.
+
+            \medskip
+            Which one starts with \texttt{/w/}?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The script behind every page
+script_page = "https://en.wikipedia.org/w/index.php"
+# An article
+article_page = (
+    "https://en.wikipedia.org/wiki/The_Godfather"
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: may we fetch them?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{can\_fetch()} takes who is asking and an address. It answers \texttt{True} or \texttt{False}.
+
+            \medskip
+            Say what each line prints before you run it.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# May we fetch the script?
+print(rp.can_fetch(CLIENT, script_page))
+# May we fetch the article?
+print(rp.can_fetch(CLIENT, article_page))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: Wikipedia's real file}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Now the real file. It is plain text, at the top of the site.
+
+            \medskip
+            Look before you parse: the status, and how the file starts.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://www.rfc-editor.org/rfc/rfc9309.html}{RFC 9309}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Ask for the file, saying who we are
+wiki_robots = requests.get(
+    "https://en.wikipedia.org/robots.txt",
+    headers=HEADERS,
+)
+# Look first: the status, and 200 characters
+print(wiki_robots.status_code, wiki_robots.text[:200])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: parse it, and ask}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{splitlines()} cuts the text into a list of lines, which is what \texttt{parse()} reads.
+
+            \medskip
+            Does the real file agree with our two lines?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# A second parser, for the real file
+wiki_rp = RobotFileParser()
+# Its lines, as a list
+wiki_rp.parse(wiki_robots.text.splitlines())
+# The same question
+print(wiki_rp.can_fetch(CLIENT, script_page))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: the chapter's six sites, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The loop is given. Find your two cells in it.
+
+            \medskip
+            It also keeps each parser in \texttt{parsers}, for the microsprint.
+
+            \medskip
+            Which sites say no? What do they have in common?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+for page in CHAPTER_PAGES:
+    # The page's host, and its robots.txt
+    host = urlparse(page).netloc
+    robots_url = "https://" + host + "/robots.txt"
+    robots = requests.get(robots_url, headers=HEADERS)
+    # Your cells: parse the lines, and ask
+    host_rp = RobotFileParser()
+    host_rp.parse(robots.text.splitlines())
+    print(host, host_rp.can_fetch(CLIENT, page))
+    # Wait a second before the next site
+    time.sleep(1)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: another crawler}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} name another crawler, then run the given cell. It asks the six parsed files again, with no new requests.
+
+            \medskip
+            \textbf{Share:} which pages your crawler may fetch that we may not.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Google's search crawler; or "GPTBot", OpenAI's
+sprint_agent = "Googlebot"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: one row, three cells}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            One row of a table, small enough to read. Its second cell is empty.
+
+            \medskip
+            \texttt{.text} is all the text inside a tag. What will it print for this row?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One row: three cells, the second one empty
+tiny_row = BeautifulSoup(
+    "<tr><td>1</td><td></td><td>Aquaman</td></tr>",
+    "html.parser",
+)
+# All of its text
+print(tiny_row.text)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: cell by cell}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{find\_all("td")} gives a list of the row's cells.
+
+            \medskip
+            How many are there? Did \texttt{.text} show you that many?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://www.crummy.com/software/BeautifulSoup/bs4/doc/\#find-all}{find\_all()}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Every <td> in the row
+tiny_cells = tiny_row.find_all("td")
+# How many?
+print(len(tiny_cells))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: each cell's text, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A \textbf{list comprehension} runs \texttt{get\_text()} once for each cell, and collects the results in a list.
+
+            \medskip
+            Where is the empty cell now? Why does it matter which column a value sits in?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Each cell's text, trimmed, in a list
+[cell.get_text(strip=True) for cell in tiny_cells]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}{Strategy 2 --- a table hiding among decoys}
     \begin{columns}
         \begin{column}{0.6\textwidth}
@@ -156,6 +430,211 @@
             \centering
             \includegraphics[width=\textwidth]{img/the_numbers_table.png}\\
             {\scriptsize the-numbers.com --- two tables, one is the data.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: the chart's address}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Box Office Mojo said no in Step 1. The Numbers has the same week's chart, and said yes.
+
+            \medskip
+            The notebook writes the address on one line.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The chart for the week ending December 28, 2018
+NUMBERS_URL = (
+    "https://www.the-numbers.com"
+    "/box-office-chart/weekly/2018/12/28"
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: ask, as we ask Wikipedia}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            First with \texttt{WIKI\_HEADERS}, which names the library.
+
+            \medskip
+            Look first. Which status came back? What does the page say?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Ask with the User-Agent that names the library
+refused = requests.get(
+    NUMBERS_URL,
+    headers=WIKI_HEADERS,
+)
+# Look first: the status, and 200 characters
+print(refused.status_code, refused.text[:200])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: ask again, with \texttt{HEADERS}}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same address, with the User-Agent that names only us.
+
+            \medskip
+            What changed in the answer? What is this server filtering on?
+
+            \medskip
+            Not a 200? The next cell loads a saved copy.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Ask again, without the library's name
+numbers_response = requests.get(
+    NUMBERS_URL,
+    headers=HEADERS,
+)
+# Look first
+print(
+    numbers_response.status_code,
+    numbers_response.text[:200],
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: how many tables?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Parse the page, then find every \texttt{<table>} on it.
+
+            \medskip
+            How many did you expect from looking at the page?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Parse the page
+numbers_soup = BeautifulSoup(
+    numbers_response.text,
+    "html.parser",
+)
+# Every table on it
+numbers_tables = numbers_soup.find_all("table")
+print(len(numbers_tables))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: which table is which, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The loop is given. The second table it prints is the chapter's \texttt{tables[1]}.
+
+            \medskip
+            Can the number of rows choose between them? What can?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Each table's class, and how many rows it has
+for table in numbers_tables:
+    table_rows = table.find_all("tr")
+    print(table.get("class"), len(table_rows))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: the desktop table's rows}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Choose the table by its class, not by its position.
+
+            \medskip
+            \texttt{class} is a Python word, so BeautifulSoup spells the argument \texttt{class\_}.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The table for wide screens
+desktop = numbers_soup.find(
+    "table",
+    class_="chart-desktop",
+)
+# Its rows
+desktop_rows = desktop.find_all("tr")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: one row, by hand}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Row 0 is the header, so row 1 is the first film.
+
+            \medskip
+            A cell can be a \texttt{<td>} or a \texttt{<th>}: ask for both.
+
+            \medskip
+            Which film led the last week of 2018?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first film's cells: <td> or <th>
+aquaman_cells = desktop_rows[1].find_all(["td", "th"])
+# How many cells, and the third one's text
+print(
+    len(aquaman_cells),
+    aquaman_cells[2].get_text(strip=True),
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: every row, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{header} holds the first row's cell texts, made the same way.
+
+            \medskip
+            The loop prints each row it skips. What did it throw away, and was that right?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+all_rows = []
+for row in desktop_rows[1:]:
+    # The row's cell texts, as in Step 2
+    row_cells = row.find_all(["td", "th"])
+    values = [cell.get_text(strip=True)
+              for cell in row_cells]
+    # Keep a row with as many cells as the header
+    if len(values) == len(header):
+        all_rows.append(values)
+    else:
+        print("Skipped:", values)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: the phone table, two parsers}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The chapter takes \texttt{tables[1]}, the phone table.
+
+            \medskip
+            \textbf{Do:} name a second parser, then run the given cell.
+
+            \medskip
+            \textbf{Share:} the cells in the first film's row under each parser.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Another of BeautifulSoup's parsers
+sprint_parser = "lxml"
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
@@ -189,6 +668,353 @@
     \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]{Step 4: one small table, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A table of one film, small enough to read in full.
+
+            \medskip
+            Two strings side by side in parentheses are joined into one.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# A header row, and one film
+tiny_html = (
+    "<table><tr><th>Film</th><th>Year</th></tr>"
+    "<tr><td>Titanic</td><td>1997</td></tr></table>"
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: \texttt{read\_html()} on it}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{read\_html()} returns a \textbf{list} of DataFrames, one for each table it finds.
+
+            \medskip
+            How many will it find here? What will the columns be?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://pandas.pydata.org/docs/reference/api/pandas.read_html.html}{read\_html()}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# StringIO: pandas reads a bare string as a file name
+tiny_tables = pd.read_html(StringIO(tiny_html))
+# How many tables?
+print(len(tiny_tables))
+# The first one
+tiny_tables[0]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: one revision of Wikipedia's list}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The list changes every week, so we ask for one revision of it, with \texttt{oldid}.
+
+            \medskip
+            Step 1 allows \texttt{/wiki/} and not \texttt{/w/}. The notebook writes the address on one line.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The list, as it stood at one revision
+WIKI_URL = (
+    "https://en.wikipedia.org/wiki/"
+    "List_of_highest-grossing_films"
+    "?oldid=1381243185"
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: fetch it once}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The chapter points \texttt{read\_html()} at the address. We fetch the page ourselves, so it carries \texttt{WIKI\_HEADERS}.
+
+            \medskip
+            A busy classroom can get a 429 here. The notebook has a saved copy.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One request, as Wikipedia asks to be asked
+wiki_response = requests.get(
+    WIKI_URL,
+    headers=WIKI_HEADERS,
+)
+# Look first
+print(
+    wiki_response.status_code,
+    wiki_response.text[:200],
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: every table on the page}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same call as on the small table. \texttt{header=0} takes the column names from each table's first row.
+
+            \medskip
+            How many tables does the page have? How many did you see?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Every table on the page
+wiki_tables = pd.read_html(
+    StringIO(wiki_response.text),
+    header=0,
+)
+# How many?
+print(len(wiki_tables))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: the first one}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            We take the first table on faith. Is it the one we wanted?
+
+            \medskip
+            Look at \texttt{Worldwide gross}. Is it a number yet? Wednesday starts there.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first table
+films = wiki_tables[0]
+# Its first five rows
+films.head()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% =========================================================================
+\section{Wednesday}
+% =========================================================================
+
+\begin{frame}{Today: Part 2, clean a table and read an infobox}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            Monday's table parsed in one call. Today:
+            \begin{itemize}\small
+                \item Its gross column is text: clean it, plot it, and find the number the chapter's cleanup gets wrong
+                \item \textit{The Godfather}'s infobox, label by label
+                \item The same parser in French and Spanish, where the English anchor is gone
+            \end{itemize}
+
+            \medskip
+            \dayband{Use it}{Steps 5--9}
+            \begin{itemize}\small
+                \item Open \texttt{lab-06.ipynb} and start at \textbf{Step 5}
+                \item Its two given cells load Monday's table. Missed Monday? Start here
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Each new tool, small first}\\[2pt]
+            {\footnotesize Two values before the column. A few lines shaped like the French page before the page. Say what a cell will print before you run it.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 5: set up again}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Step 5's cells are given. Put your email in \texttt{CLIENT}, then run both.
+
+            \medskip
+            The second loads \texttt{films}, Monday's table, from a file the key's run saved in the course's repository.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Discuss}\\[2pt]
+            {\footnotesize What can a saved copy not tell you that the live request can?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: a pattern, and two values}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A \textbf{regular expression} is a pattern that describes text. This one means: one character that isn't 0 to 9. It's given.
+
+            \medskip
+            Two cells of the column, typed by hand. What should be left of each?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: one character that isn't a digit
+NOT_A_DIGIT = r"[^0-9]"
+# Two cells of the column
+two_grosses = pd.Series(
+    ["$2,923,710,708", "T$2,257,906,828"]
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: remove what isn't a digit}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{str.replace()} swaps every match for nothing. \texttt{regex=True} says the first argument is a pattern.
+
+            \medskip
+            Are both results right? Check them by eye.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://pandas.pydata.org/docs/reference/api/pandas.Series.str.replace.html}{str.replace()}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Replace each match with nothing
+two_digits = two_grosses.str.replace(
+    NOT_A_DIGIT,
+    "",
+    regex=True,
+)
+print(two_digits)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: the whole column}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same replace, on fifty films. The digits are still text, so \texttt{to\_numeric()} converts them.
+
+            \medskip
+            \texttt{errors="coerce"} turns what it can't read into \texttt{NaN}.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The same replace, on the column
+cleaned = films["Worldwide gross"].str.replace(
+    NOT_A_DIGIT,
+    "",
+    regex=True,
+)
+# Text to numbers
+films["gross"] = pd.to_numeric(cleaned, errors="coerce")
+films[["Title", "gross"]].head()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: plot it to check, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The given cell counts the footnote markers in \texttt{Ref}, then plots gross against year.
+
+            \medskip
+            A number wrong by a factor of ten hides in a table. Does every point sit where you'd expect?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+fig, ax = plt.subplots(figsize=(8, 4))
+# Gross, in billions, against the year
+ax.scatter(films["Year"], films["gross"] / 1e9)
+ax.set_xlabel("Release year")
+ax.set_ylabel("Worldwide gross (billions of US dollars)")
+plt.show()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: the point that doesn't belong}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} sort the films by gross, largest first. Look at the raw cell beside the cleaned number.
+
+            \medskip
+            \textbf{Share:} the film, what its cell says, and what the cleanup made of it.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Largest gross first
+by_gross = films.sort_values("gross", ascending=False)
+# The raw cell beside the cleaned number
+by_gross[["Title", "Worldwide gross", "gross"]].head(3)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: take what follows the \$, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The stray letters always come before the \texttt{\$}. So keep only what follows it.
+
+            \medskip
+            The pattern: a \texttt{\$}, then digits and commas. The parentheses mark the part to keep, and \texttt{[0]} takes it.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# A "$", then the digits and commas after it
+AFTER_DOLLAR = r"\$([\d,]+)"
+# The column, as text
+gross_text = films["Worldwide gross"]
+# The part in parentheses, for each cell
+after_dollar = gross_text.str.extract(AFTER_DOLLAR)[0]
+after_dollar.head(3)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: commas out, then a number}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A comma is plain text, so this replace needs no pattern.
+
+            \medskip
+            Then convert, as in Step 6, into a new column.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Take the commas out
+no_commas = after_dollar.str.replace(",", "")
+# Text to numbers, in a new column
+films["gross_fixed"] = pd.to_numeric(
+    no_commas,
+    errors="coerce",
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: what changed?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Compare the two columns, row by row. \texttt{changed} is \texttt{True} where they differ.
+
+            \medskip
+            How many rows changed? Read \texttt{gross} and \texttt{gross\_fixed} side by side.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# True where the two cleanups disagree
+changed = films["gross"] != films["gross_fixed"]
+# Only those rows
+films[changed]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}{Strategy 4 --- non-tabular structured data}
     \begin{columns}
         \begin{column}{0.6\textwidth}
@@ -208,6 +1034,116 @@
             \centering
             \includegraphics[width=\textwidth]{img/wiki_infobox_en.png}\\
             {\scriptsize en.wikipedia.org --- \textit{The Godfather}.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: fetch the article}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A new page, so look first: the status, and how the page starts.
+
+            \medskip
+            Wikipedia again, so \texttt{WIKI\_HEADERS}.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The article
+EN_URL = "https://en.wikipedia.org/wiki/The_Godfather"
+# Fetch it, as Wikipedia asks to be asked
+en_response = requests.get(EN_URL, headers=WIKI_HEADERS)
+# Look first
+print(en_response.status_code, en_response.text[:200])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: find the infobox}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            In English, the infobox is a \texttt{<table>} with the class \texttt{infobox}.
+
+            \medskip
+            Count its rows on the page first. Does the count match?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Parse the page
+en_soup = BeautifulSoup(en_response.text, "html.parser")
+# The table with the class "infobox"
+infobox = en_soup.find("table", class_="infobox")
+# Its rows
+infobox_rows = infobox.find_all("tr")
+print(len(infobox_rows))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: one row, by hand}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A row is a label, \texttt{<th>}, and a value, \texttt{<td>}.
+
+            \medskip
+            Rows 0 and 1 are the title and the poster. Which label and value should row 2 hold?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The third row
+director_row = infobox_rows[2]
+# Its label
+print(director_row.find("th").get_text(strip=True))
+# Its value, with spaces between its parts
+print(director_row.find("td").get_text(" ", strip=True))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: every row, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Your last cell, for every row, as a function. It's given.
+
+            \medskip
+            \texttt{find()} gives \texttt{None} when a row has no label or no value. What does the \texttt{if} do with that row?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+def read_infobox(table):
+    facts = {}
+    for row in table.find_all("tr"):
+        label = row.find("th")
+        value = row.find("td")
+        # Keep a row only when it has both
+        if label and value:
+            key = label.get_text(strip=True)
+            facts[key] = value.get_text(" ", strip=True)
+    return facts
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: call it, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            One call reads the whole infobox into a dictionary.
+
+            \medskip
+            How many facts? Read the labels: is one of them missing a space?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Every row of the English infobox
+facts = read_infobox(infobox)
+# How many facts, and the director
+print(len(facts), facts["Directed by"])
+# Every label
+print(list(facts))
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
@@ -238,6 +1174,162 @@
     \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]{Step 9: shaped like the French page, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A few lines shaped like French Wikipedia's infobox.
+
+            \medskip
+            Where is the class \texttt{infobox\_v3}: on the table, or on the \texttt{<div>} around it?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# A div with the class, around a table with a caption
+tiny_fr = BeautifulSoup(
+    '<div class="infobox_v3"><table>'
+    '<caption>Le Parrain</caption>'
+    '<tr><th>Réalisation</th><td>Coppola</td></tr>'
+    '</table></div>',
+    "html.parser",
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: two selectors}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{select()} takes a CSS selector and returns a list of matches.
+
+            \medskip
+            The first asks for a table with that class. The second asks for a table that has a caption. How many matches each?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://www.crummy.com/software/BeautifulSoup/bs4/doc/\#css-selectors-through-the-css-property}{CSS selectors}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Tables with the class infobox_v3
+print(len(tiny_fr.select("table.infobox_v3")))
+# Tables with a <caption> inside
+print(len(tiny_fr.select("table:has(caption)")))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: the real page}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same film, on French Wikipedia.
+
+            \medskip
+            Look first, as with every new page.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The French article
+FR_URL = "https://fr.wikipedia.org/wiki/Le_Parrain_(film)"
+# Fetch it
+fr_response = requests.get(FR_URL, headers=WIKI_HEADERS)
+# Look first
+print(fr_response.status_code, fr_response.text[:200])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: the same two selectors}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Did the small page predict the real one?
+
+            \medskip
+            The second selector may match more than one table. Which is the infobox?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Parse the page
+fr_soup = BeautifulSoup(fr_response.text, "html.parser")
+# The selector the Inspector suggests
+print(len(fr_soup.select("table.infobox_v3")))
+# The chapter's anchor: the caption
+print(len(fr_soup.select("table:has(caption)")))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: the same function}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The anchor changed. The function didn't.
+
+            \medskip
+            What does French Wikipedia call the director's row?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first table with a caption
+fr_infobox = fr_soup.select("table:has(caption)")[0]
+# Step 8's function, unchanged
+facts_fr = read_infobox(fr_infobox)
+# How many facts, and the director
+print(len(facts_fr), facts_fr["Réalisation"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: a third edition}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} give the Spanish article's address, then run the given cell. It tries both selectors and reads the infobox.
+
+            \medskip
+            \textbf{Share:} which selector reached it, how many facts, and Spanish for ``Directed by''.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The same film, on Spanish Wikipedia
+sprint_url = (
+    "https://es.wikipedia.org/wiki/"
+    "El_padrino_(película)"
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% =========================================================================
+\section{Friday}
+% =========================================================================
+
+\begin{frame}{Today: Part 3, cards to rows}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            Today the data isn't in a table at all:
+            \begin{itemize}\small
+                \item The Oscars' award cards: one card by hand, then every card, for three ceremonies
+                \item Rotten Tomatoes' cards, in tags of its own
+                \item A page that arrives without its data
+            \end{itemize}
+
+            \medskip
+            \dayband{Use it}{Steps 10--14}
+            \begin{itemize}\small
+                \item Open \texttt{lab-06.ipynb} and start at \textbf{Step 10}
+                \item Open the \href{https://www.oscars.org/oscars/ceremonies/2026}{2026 ceremony page} in Chrome, beside the handout \textit{Cards to rows}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Last 15 minutes}\\[2pt]
+            {\footnotesize From the lab to the textbook: what did the lab turn up that Chapter 6 should know?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}{Strategy 6 --- cards that need to become rows}
     \begin{columns}
         \begin{column}{0.6\textwidth}
@@ -259,6 +1351,344 @@
             \centering
             \includegraphics[width=\textwidth]{slides/week-06/img/oscar-nominees.png}\\
             {\scriptsize oscars.org --- 2026 ceremony, one card per honoree.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 10: set up again}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Step 10's cell is given. Put your email in \texttt{CLIENT}, then run it.
+
+            \medskip
+            Today needs no table from Monday or Wednesday, and only \texttt{HEADERS}.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Discuss}\\[2pt]
+            {\footnotesize Which of this week's sites asked for the library's name, and which refused it?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: fetch the ceremony's page}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The page for the 98th Academy Awards. The notebook writes the address on one line.
+
+            \medskip
+            oscars.org is not Wikipedia, so \texttt{HEADERS}.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The 98th Academy Awards
+OSCARS_URL = (
+    "https://www.oscars.org/oscars/ceremonies/2026"
+)
+# Fetch it, saying who we are
+oscars_response = requests.get(
+    OSCARS_URL,
+    headers=HEADERS,
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: look first}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The chapter says oscars.org turns away a request that pretends to be Chrome, and lets in one that names you.
+
+            \medskip
+            Which status came back for us?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The status, and the first 200 characters
+print(
+    oscars_response.status_code,
+    oscars_response.text[:200],
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: Drupal's class names, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Drupal built this page. Its class names describe Drupal's fields, not awards.
+
+            \medskip
+            The given cell names each one. Find them in the Inspector, from the outside in.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The div with every card; a card; the award's name
+AREA = "field--name-field-award-categories"
+CATEGORY = "paragraph--type--award-category"
+CATEGORY_NAME = "field--name-field-award-category-oscars"
+# An honoree; winner or nominee; who; which film
+HONOREE = "paragraph--type--award-honoree"
+HONOREE_TYPE = "field--name-field-honoree-type"
+ENTITY = "field--name-field-award-entities"
+FILM = "field--name-field-award-film"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: the area, and its cards}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Narrow down first: the one \texttt{<div>} that holds every card. Then the cards inside it.
+
+            \medskip
+            How many awards were given that night?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Parse the page
+oscars_soup = BeautifulSoup(
+    oscars_response.text,
+    "html.parser",
+)
+# The div that holds every card
+area = oscars_soup.find("div", class_=AREA)
+# The cards in it
+categories = area.find_all("div", class_=CATEGORY)
+print(len(categories))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: the first card}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Take one card apart by hand before any loop.
+
+            \medskip
+            Which award is first on the page?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first card
+first_card = categories[0]
+# The tag that holds the award's name
+card_name = first_card.find(class_=CATEGORY_NAME)
+print(card_name.get_text(strip=True))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: its honorees}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Inside the card, one block for each honoree, winner first.
+
+            \medskip
+            How many names does the page show for this award?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Every honoree in the card
+honorees = first_card.find_all("div", class_=HONOREE)
+print(len(honorees))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: winner, or nominee?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The first honoree's first field: winner, or nominee.
+
+            \medskip
+            The card lists its winner first. Is that what this prints?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first honoree
+first = honorees[0]
+# Winner, or nominee?
+type_tag = first.find(class_=HONOREE_TYPE)
+print(type_tag.get_text(strip=True))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: who, and for which film}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Two more fields, two cells in the notebook.
+
+            \medskip
+            Check both against the page.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Who
+print(first.find(class_=ENTITY).get_text(strip=True))
+# For which film
+film_tag = first.find(class_=FILM)
+print(film_tag.get_text(strip=True))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: every card, every honoree, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A loop inside a loop: every card, and every honoree in it.
+
+            \medskip
+            Each honoree becomes one dictionary with the fields you read by hand, and then one row.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+results = []
+# Every card
+for card in categories:
+    ...
+    # Every honoree in the card
+    for honoree in card.find_all("div", class_=HONOREE):
+        ...
+        # One dictionary for each honoree
+        results.append({...})
+# One row for each dictionary
+oscars26 = pd.DataFrame(results)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: an honoree with no film}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            An honorary award goes to a person, not a film. Then \texttt{find()} gives \texttt{None}, and \texttt{None} has no text.
+
+            \medskip
+            What would the loop do without the \texttt{if}?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The film's tag, or None
+honoree_film = honoree.find(class_=FILM)
+# Start from None
+film = None
+# Read the text only when there is a tag
+if honoree_film:
+    film = honoree_film.get_text(strip=True)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: the most nominations}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} count the rows for each film. Then run the given cell, which counts the leader a second way.
+
+            \medskip
+            \textbf{Share:} the film, and its count both ways. Why do they differ?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# How many rows name each film
+film_counts = oscars26["film"].value_counts()
+# The five with the most
+film_counts.head()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: Step 11 as a function, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            We want more years, so Step 11 becomes the chapter's function. Find your lines in it.
+
+            \medskip
+            It assumes every request works. What would a 429 do to it? The chapter's \texttt{safe\_scrape()} guards that.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+def parse_oscar_ceremony(year):
+    # Step 11's fetch, with the year in the address
+    page_url = (
+        "https://www.oscars.org/oscars/ceremonies/"
+        + str(year)
+    )
+    response = requests.get(page_url, headers=HEADERS)
+    soup = BeautifulSoup(response.text, "html.parser")
+    # Step 11's loops, with "year": year in each row
+    ...
+    return pd.DataFrame(results)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: one year, by hand}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Call it once before any loop.
+
+            \medskip
+            How many winners and nominees did the 2024 ceremony have?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One ceremony
+oscars_2024 = parse_oscar_ceremony(2024)
+# Its winners and nominees
+oscars_2024["honoree_type"].value_counts()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: three ceremonies, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The pause lives in the loop, not in the function: a second between requests.
+
+            \medskip
+            The cell then counts each year's categories and honorees. Did the Academy add an award?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+frames = []
+for year in [2024, 2025, 2026]:
+    # One ceremony's rows
+    frames.append(parse_oscar_ceremony(year))
+    # Wait a second before the next request
+    time.sleep(1)
+# One table of all three
+oscars = pd.concat(frames, ignore_index=True)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: before you were born}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} choose a ceremony from before you were born, then run the given cell.
+
+            \medskip
+            \textbf{Share:} the year, its categories and honorees, and any row with no film.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# A ceremony from before you were born
+sprint_year = 1990
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
@@ -285,6 +1715,117 @@
             \centering
             \includegraphics[width=\textwidth]{img/rt_movie_tiles.png}\\
             {\scriptsize rottentomatoes.com --- a differently-shaped card.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: one tile, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            One tile, as Rotten Tomatoes writes them. The tags are the site's own.
+
+            \medskip
+            Two \texttt{<rt-text>} tags would look alike. What tells this one apart?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One tile, with one score in it
+tiny_tile = BeautifulSoup(
+    '<media-info-tile>'
+    '<rt-text slot="criticsScore">93%</rt-text>'
+    '</media-info-tile>',
+    "html.parser",
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: find a tag by an attribute}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            BeautifulSoup reads a custom tag like any other. \texttt{attrs} names the attribute and the value to match.
+
+            \medskip
+            What will it print?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The rt-text whose slot is "criticsScore"
+tiny_score = tiny_tile.find(
+    "rt-text",
+    attrs={"slot": "criticsScore"},
+)
+print(tiny_score.get_text(strip=True))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: the real grid}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The films in theaters this week. The notebook writes the address on one line.
+
+            \medskip
+            The grid changes weekly. A given cell loads the page the key saw.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Movies in theaters
+RT_URL = (
+    "https://www.rottentomatoes.com"
+    "/browse/movies_in_theaters/"
+)
+# Fetch it
+rt_response = requests.get(RT_URL, headers=HEADERS)
+# Look first
+print(rt_response.status_code, rt_response.text[:200])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: how many tiles?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A custom tag is found by its name, like \texttt{"table"} or \texttt{"div"}.
+
+            \medskip
+            Count the posters in your browser. Do the two counts agree?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Parse the page
+rt_soup = BeautifulSoup(rt_response.text, "html.parser")
+# Every tile in the grid
+tiles = rt_soup.find_all("media-info-tile")
+print(len(tiles))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: every tile's score, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Your small call, for every tile. A film too new for a Tomatometer has an empty score.
+
+            \medskip
+            A second site needed a second parser. What would join this table to The Numbers'?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# What tells the two rt-text tags apart
+TITLE = {"data-qa": "discovery-media-list-item-title"}
+SCORE = {"slot": "criticsScore"}
+tile_rows = []
+for tile in tiles:
+    title = tile.find("rt-text", attrs=TITLE)
+    score = tile.find("rt-text", attrs=SCORE)
+    # One dictionary for each film
+    tile_rows.append({...})
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
@@ -317,6 +1858,95 @@
     \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]{Step 13: a page with its quotes}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Step 1 ruled IMDb out. \texttt{quotes.toscrape.com} is built for practice: the same quotes two ways.
+
+            \medskip
+            Open it in your browser. How many quotes are on the page?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The page, with its quotes in the HTML
+quotes_response = requests.get(
+    "https://quotes.toscrape.com/",
+    headers=HEADERS,
+)
+# Look first
+print(
+    quotes_response.status_code,
+    quotes_response.text[:200],
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: count the quotes}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Each quote is a \texttt{<div>} with the class \texttt{quote}.
+
+            \medskip
+            Does the count match the page?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Parse the page
+quotes_soup = BeautifulSoup(
+    quotes_response.text,
+    "html.parser",
+)
+# Every div with the class "quote"
+print(len(quotes_soup.select("div.quote")))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: the same quotes, drawn by a script}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            At \texttt{/js/} the browser shows the same quotes. A script draws them after the page arrives.
+
+            \medskip
+            \texttt{requests} never runs a script. How many will it count?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The same quotes, drawn by JavaScript
+js_response = requests.get(
+    "https://quotes.toscrape.com/js/",
+    headers=HEADERS,
+)
+js_soup = BeautifulSoup(js_response.text, "html.parser")
+# Every div with the class "quote"
+print(len(js_soup.select("div.quote")))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 13: the two pages, side by side}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            A given cell prints each page's length, its quotes, and its \texttt{<script>} tags.
+
+            \medskip
+            The \texttt{/js/} page came back with status 200 and a body. Where are the quotes in it? Try View Source.
+
+            \medskip
+            Typed as \texttt{div.quotes}, the selector counts 0 on the first page too. How would you tell a wrong selector from a page that arrived without its data?
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Not an error in your code}
+                \footnotesize No status and no exception tells you the data is missing. Compare what \texttt{requests} got with what the browser shows. Next week: pages built by JavaScript.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}{Which strategy?}
 
     Without writing any code come up with the strategy for scraping each of the websites below.
@@ -332,232 +1962,34 @@
     Use Inspection tab to evaluate where the data lives, which strategy is closest to what you'd need to turn it into tabular data, potential headaches, what the DataFrame would need to look like, what kinds of analyses you could run, why should anyone care about what you found
 \end{frame}
 
-% =========================================================================
-\section{Wednesday · Notebook Lab}
-% =========================================================================
-
-\begin{frame}[fragile]{Strategy 1 --- the one-line win}
-    One table, one call. When the page cooperates, take the win:
-\begin{lstlisting}
-import pandas as pd
-
-url = "https://www.boxofficemojo.com/weekend/2018W52/"
-tables = pd.read_html(url)
-print(f"{len(tables)} table(s) found")   # 1 -- no ambiguity here
-
-weekly = tables[0]
-print(weekly.head())
-\end{lstlisting}
-    No \texttt{requests}, no \texttt{BeautifulSoup} --- \texttt{read\_html()} fetches the page itself. Save this reflex for pages that look like Strategy 1; the next one won't be this easy.
-\end{frame}
-
-\begin{frame}[fragile]{Strategy 2 --- finding the real table among decoys}
-    Retrieve, then find the right table (pages hide data tables among navigation or mobile-layout tables):
-\begin{lstlisting}
-import requests
-from bs4 import BeautifulSoup
-
-url = "https://www.the-numbers.com/box-office-chart/weekly/2018/12/28"
-headers = {"User-Agent": "WebDataScience/1.0 (you@colorado.edu)"}
-soup = BeautifulSoup(requests.get(url, headers=headers).text, "html.parser")
-
-tables = soup.find_all("table")
-for i, table in enumerate(tables):          # inspect each candidate
-    print(i, len(table.find_all("tr")), "rows")
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{The one-line bug that shifts every column}
-    \begin{columns}
+\begin{frame}{After the lab: work these, then show-and-tell}
+    \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-        Tempting shortcut:
-\begin{lstlisting}
-# DON'T: silently drops empty cells
-row.text.split("\n")
-\end{lstlisting}
-        Correct --- walk cell by cell so \textbf{empty cells stay aligned}:
-\begin{lstlisting}
-cells = row.find_all(["td", "th"])
-values = [c.get_text(strip=True)
-          for c in cells]
-\end{lstlisting}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            A blank header cell (the ``previous rank'' column) is easy to lose.
+            \textbf{Due Sunday:} Chapter 6's \textbf{Recommended Exercises}, in its companion notebook. Take one Wikipedia table of your own from raw HTML to a cleaned chart, in seven steps.
 
-            \bigskip
-
-            Split-on-newline drops it. Every later value then shifts one column left, so \textbf{Movie} fills with distributor names.
-
-            \bigskip
-
-            The extra line of code buys correctness.
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Strategy 3 --- cleaning up after \texttt{read\_html()}}
-\begin{lstlisting}
-import pandas as pd
-
-url = "https://en.wikipedia.org/wiki/List_of_highest-grossing_films"
-df = pd.read_html(url, header=0)[0]     # verified by inspection: index 0
-print(df.dtypes)                        # "Worldwide gross" parsed as text
-\end{lstlisting}
-    Expect to spend as long \textbf{cleaning} as extracting:
-\begin{lstlisting}
-# a stray footnote-reference letter can sit in front of the "$" --
-# print a few raw values first so you know what you're stripping
-df["gross"] = pd.to_numeric(
-    df["Worldwide gross"].str.replace(r"[^0-9]", "", regex=True), errors="coerce")
-df["footnote_count"] = df["Ref"].str.count(r"\[")   # "[# 3][# 4]" -> 2
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{Strategy 4 --- the infobox pattern}
-    A table without a useful class name, but a very reliable shape --- one \texttt{<th>}/\texttt{<td>} pair per row:
-\begin{lstlisting}
-import requests
-from bs4 import BeautifulSoup
-
-url = "https://en.wikipedia.org/wiki/The_Godfather"
-headers = {"User-Agent": "WebDataScience/1.0 (you@colorado.edu)"}
-soup = BeautifulSoup(requests.get(url, headers=headers).text, "html.parser")
-
-infobox = soup.find("table", class_="infobox")
-facts = {}
-for row in infobox.find_all("tr"):
-    label, value = row.find("th"), row.find("td")
-    if label and value:
-        facts[label.get_text(strip=True)] = value.get_text(" ", strip=True)
-print(facts["Directed by"])   # 'Francis Ford Coppola'
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{Strategy 5 --- porting the parser to a new site}
-    The class name \texttt{infobox} doesn't exist on this page at all. Re-inspect, and anchor on the \texttt{<caption>} instead --- same loop as Strategy 4 after that:
-\begin{lstlisting}
-url = "https://fr.wikipedia.org/wiki/Le_Parrain_(film)"
-soup = BeautifulSoup(requests.get(url, headers=headers).text, "html.parser")
-
-infobox = soup.select("table:has(caption)")[0]   # the anchor that transfers
-facts = {}
-for row in infobox.find_all("tr"):
-    label, value = row.find("th"), row.find("td")
-    if label and value:
-        facts[label.get_text(strip=True)] = value.get_text(" ", strip=True)
-print(facts["Titre original"])   # 'The Godfather' -- same film, new labels
-\end{lstlisting}
-    The loop is identical. Only the anchor and the labels changed.
-\end{frame}
-
-\begin{frame}[fragile]{Strategy 6 --- cards to rows: the Oscars parser}
-    oscars.org 403s an anonymous or browser-spoofed request --- but not this honestly-identified one. Then navigate down through the real container hierarchy, category by honoree:
-\begin{lstlisting}
-url = "https://www.oscars.org/oscars/ceremonies/2026"
-soup = BeautifulSoup(requests.get(url, headers=headers).text, "html.parser")
-area = soup.find("div", class_="field--name-field-award-categories")
-categories = area.find_all("div", class_="paragraph--type--award-category")
-rows = list()
-for cat in categories:
-    name = cat.find(class_="field--name-field-award-category-oscars").get_text(strip=True)
-    for h in cat.find_all("div", class_="paragraph--type--award-honoree"):
-        rows.append({
-            "category": name,
-            "type": h.find(class_="field--name-field-honoree-type").get_text(strip=True),
-            "entity": h.find(class_="field--name-field-award-entities").get_text(strip=True),
-        })
-df = pd.DataFrame(rows)   # 24 categories on the 2026 ceremony page
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{Strategy 7 --- a different card, a different site}
-    Rotten Tomatoes' tiles are custom elements, not \texttt{<div>}s --- same idea, new anchors:
-\begin{lstlisting}
-url = "https://www.rottentomatoes.com/browse/movies_in_theaters/"
-soup = BeautifulSoup(requests.get(url, headers=headers).text, "html.parser")
-
-tiles = soup.find_all("tile-dynamic", attrs={"data-qa": "tile"})
-records = list()
-for tile in tiles:
-    title = tile.find("span", class_="p--small")
-    score = tile.find("rt-text", class_="critics-score")
-    records.append({
-        "title": title.get_text(strip=True) if title else None,
-        "tomatometer": score.get_text(strip=True) if score else None,
-    })
-# join records on title with the Oscars/box-office DataFrames -- one row per movie
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{Strategy 8 --- watching \texttt{requests} fail, live}
-\begin{lstlisting}
-import requests
-
-url = "https://www.imdb.com/title/tt0068646/"
-headers = {"User-Agent": "WebDataScience/1.0 (you@colorado.edu)"}
-response = requests.get(url, headers=headers)
-print(response.status_code, len(response.text))
-# 202 0  -- zero bytes. Not a bad selector: there is nothing here to select.
-\end{lstlisting}
-    \begin{alertblock}{This is not an error in your code}
-        \footnotesize A 202 with an empty body means the server accepted the request and handed back a JavaScript shell instead of a page. \texttt{BeautifulSoup} has nothing to parse. This is the boundary this chapter's strategies don't cross --- dynamic pages get their own week.
-    \end{alertblock}
-\end{frame}
-
-\begin{frame}[fragile]{Make it reusable --- and defensive}
-    Abstract the working parser into a function; keep the \texttt{sleep} in the \textit{caller}, not the function:
-\begin{lstlisting}
-for year in range(2020, 2027):
-    df = scrape_oscar_year(year, headers)   # returns empty DataFrame on failure
-    all_years.append(df)
-    time.sleep(1)                           # politeness lives in the loop
-\end{lstlisting}
-    Wrap fragile parsing so one bad page doesn't kill the run:
-\begin{lstlisting}
-try:
-    response.raise_for_status()
-except requests.RequestException as e:
-    print(f"Request failed: {e}"); return None
-# AttributeError fires when .find() returns None and you call .text on it
-# -- the single most common scraping error.
-\end{lstlisting}
-    \begin{alertblock}{Error flavors}
-        \footnotesize Some code here is \textit{designed} to break (a guard demonstrating the \texttt{AttributeError} above) --- that does not need a GitHub issue. Other code may be \textit{genuinely} broken: confirm it, then search and file an issue.
-    \end{alertblock}
-\end{frame}
-
-\begin{frame}{Lab: work these, then show-and-tell}
-    \begin{columns}
-        \begin{column}{0.6\textwidth}
-            Work in pairs. Do these exercises from the notebook:
+            \medskip
+            For more practice, the chapter's Additional Exercises:
             \begin{enumerate}\small
-                \item Get a Wikipedia table with \texttt{read\_html}. Then make a visualization.
                 \item Write a parser for a page that has no table. Record your selectors.
-                \item Extend the parser to more than one page. Add a delay, error handling, and a function.
-                \item Parse a Wikipedia page that is not in English. Report the encoding problems that you correct.
+                \item Extend the parser to more than one page. Add a delay and a function.
+                \item Get a table from a Wikipedia that is not in English. Report the cleanup it needs.
                 \item Download each page one time into \texttt{cache/}. Then parse the files offline.
-                \item[6.] \textbf{5617}: examine the Terms of Service and the \texttt{robots.txt} file of two sites. Compare them with \textcite{fiesler2020no}
+                \item Write one parser each for two sites. Join the results, and report where the join fails.
+                \item \textbf{5617}: examine the Terms of Service and the \texttt{robots.txt} file of two sites. Compare them with \textcite{fiesler2020no}
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Submitting}
-                \footnotesize Start in class, finish at home, submit what you got working.
+            \textbf{Submitting}\\[2pt]
+            {\footnotesize Start in class, finish at home, submit what you got working.
 
-                \smallskip
-
-                Graded on good-faith attempt to complete rather than getting everything working.
-            \end{block}
-            \begin{block}{Show-and-Tell}
-                \footnotesize Bring one of these to class: a bug you could not solve, data you find interesting, or a question for a research design.
-            \end{block}
+            \smallskip
+            Graded on good-faith attempt to complete rather than getting everything working.\par}
+            \medskip
+            \textbf{Show-and-Tell}\\[2pt]
+            {\footnotesize Bring one of these to class: a bug you could not solve, data you find interesting, or a question for a research design.\par}
         \end{column}
     \end{columns}
 \end{frame}
-
-% =========================================================================
-\section{Friday · No class}
-% =========================================================================
 
 \begin{frame}{Improving Chapter 6 and others}
     \begin{columns}
