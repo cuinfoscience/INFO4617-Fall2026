@@ -7,38 +7,38 @@ showing text structure (an XML tree, a nested JSON object, a raw XML
 response, a suggested code diff), which reads at least as clearly as a
 diagram and needed no asset to source. Those stub files were removed.
 
-`weather_forecast_plot.png` is **not a placeholder** — it is a real chart,
-regenerated from a live Open-Meteo API call:
+`power_boulder_2025.png` is **not a placeholder**: it is the figure students
+draw in the lab's Step 14, Boulder's daily high and low for 2025 from NASA's
+POWER API. It replaced `weather_forecast_plot.png` (a seven-day Open-Meteo
+forecast) on 2026-11-17, when the deck's JSON example became the lab's. It was
+drawn by the key's own cells, run on the lab's saved copy of POWER's answer,
+so no new request was sent. From the repository's top folder:
 
-```bash
-cd slides/week-04/img
-python3 - <<'EOF'
-import requests, matplotlib
+```python
+import json
+import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import pandas as pd
 
-HEADERS = {"User-Agent": "INFO4617-course-deck/1.0 (contact: accounts@brianckeegan.com)"}
-params = {"latitude": 40.01, "longitude": -105.27,
-          "daily": "temperature_2m_max,temperature_2m_min",
-          "temperature_unit": "fahrenheit", "timezone": "America/Denver"}
-data = requests.get("https://api.open-meteo.com/v1/forecast", params=params, headers=HEADERS, timeout=20).json()
-dates, highs, lows = data["daily"]["time"], data["daily"]["temperature_2m_max"], data["daily"]["temperature_2m_min"]
+data = json.load(open("labs/week-04/data/power-boulder-2025.json"))
+key = json.load(open("labs/week-04/lab-04-key.ipynb"))
+cells = ["".join(c["source"]) for c in key["cells"] if c["cell_type"] == "code"]
 
-fig, ax = plt.subplots(figsize=(8, 6))
-ax.plot(dates, highs, marker="o", color="#8B2635", label="High")
-ax.plot(dates, lows, marker="o", color="#4A6FA5", label="Low")
-ax.fill_between(range(len(dates)), lows, highs, alpha=0.15, color="#8B2635")
-ax.set_title("Boulder, CO — 7-Day Forecast (Open-Meteo)")
-ax.set_ylabel("Temperature (°F)")
-ax.set_xticks(range(len(dates))); ax.set_xticklabels([d[5:] for d in dates], rotation=45, ha="right")
-ax.legend(); ax.grid(alpha=0.3)
-fig.tight_layout(); fig.savefig("weather_forecast_plot.png", dpi=150)
-EOF
+def cell(holds):
+    return next(c for c in cells if holds in c)
+
+# Step 13's cells, then Step 14's plot, as the key has them
+exec(cell('weather = pd.DataFrame(data["properties"]["parameter"])'))
+exec(cell("weather.index = pd.to_datetime("))
+exec(cell("NAMES = {"))
+exec(cell('fill = data["header"]["fill_value"]'))
+exec(cell("fig, ax = plt.subplots(figsize=(10, 4))").replace("plt.show()", ""))
+fig.savefig("slides/week-04/img/power_boulder_2025.png", dpi=200, bbox_inches="tight")
 ```
 
-Re-run before class if you want the forecast current for that day; the
-chapter's own framing ("yours will differ, and that's fine — record the
-date") applies here too.
+2025 is a past year, so the figure doesn't go out of date. If the lab's plot
+cell changes, run this again.
 
 ## Handout screenshots (`handout_*.png`)
 
@@ -84,8 +84,8 @@ refresh one, retake and promote it in the textbook, then copy it here. The
 
 | File | Shows | Used on | Narrowest legible width |
 |---|---|---|---|
-| `house-xml-tree_annotated.pdf` | The House roster (published September 2, 2026) in Chrome's XML tree: `<MemberData>` (1), `<members>` (2), the first and second `<member>` (3), and the first `<member-info>` (4), with `<title-info>` and the first member's `<committee-assignments>` folded | not yet (for "XML → DataFrame: the real House roster") | `0.59\textwidth` |
-| `forecast-json_annotated.pdf` | The chapter's Open-Meteo request for Boulder in Chrome's JSON view, Pretty-print ticked (September 24, 2026): `daily_units` (1), `daily` (2), its `time` list (3), and `temperature_2m_max` (4) | not yet (for "JSON: peel the onion on a live API") | `0.44\textwidth` |
+| `house-xml-tree_annotated.pdf` | The House roster (published September 2, 2026) in Chrome's XML tree: `<MemberData>` (1), `<members>` (2), the first and second `<member>` (3), and the first `<member-info>` (4), with `<title-info>` and the first member's `<committee-assignments>` folded | "Step 2: look at it in Chrome first", in the `0.6\textwidth` column | `0.59\textwidth` |
+| `forecast-json_annotated.pdf` | The chapter's Open-Meteo request for Boulder in Chrome's JSON view, Pretty-print ticked (September 24, 2026): `daily_units` (1), `daily` (2), its `time` list (3), and `temperature_2m_max` (4) | not used: since 2026-11-17 the deck's JSON frames follow the lab's NASA POWER request (it would suit a frame on the Recommended Exercises' forecast) | `0.44\textwidth` |
 
 The narrowest legible width is where the figure's text reaches 16 pixels on a
 slide shown 1920 pixels wide (`slides/common/AUTHORING.md`, "How much a
@@ -103,5 +103,5 @@ between the two markers; the notes above are safe.
 <!-- stubs:begin: generated from stubs.tsv by slides/common/make_stubs.py; edits between these markers are replaced -->
 | File | Size | Should show |
 |---|---|---|
-| `weather_forecast_plot.png` | 1200x560 | Real Boulder, CO 7-day high/low forecast from a live Open-Meteo call, matplotlib OO interface (regenerate periodically to keep it current -- see img/IMAGES.md) |
+| `power_boulder_2025.png` | 1706x802 | The lab's Step 14 figure: Boulder's daily high and low for 2025 from NASA POWER, drawn by the key's own cells (see img/IMAGES.md) |
 <!-- stubs:end -->

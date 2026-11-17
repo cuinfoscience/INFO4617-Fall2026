@@ -3,14 +3,20 @@
 % Build:  latexmk -pdf week-04.tex   (from this folder; no env vars needed)
 % (or run `make` from the slides/ directory to build every deck)
 %
-% NOTE: No class Monday, Sept 7 (Labor Day). This deck runs Wednesday
-% (concepts + notebook, merged into one section) and Friday (revisions).
+% NOTE: Fall 2026 had no class Monday, Sept 7 (Labor Day), so this deck was
+% taught on Wednesday (concepts + notebook) and Friday (revisions). Since
+% 2026-11-17 its code frames follow the lab as rebuilt in three parts for the
+% next offering (labs/week-04/), one part a day. The title's dates and the
+% at-a-glance frame are still fall 2026's.
 % ==========================================================================
 \documentclass[9pt,aspectratio=169]{beamer}
 % Resolve the shared theme/preamble in ../common/ when compiling this
 % file directly from its own folder (no TEXINPUTS needed).
 \makeatletter\def\input@path{{../common/}}\makeatother
 \input{preamble}
+% Larger code than the house default: a frame holds one short block (AUTHORING.md, "Code style").
+% The degree sign in Friday's plot labels needs "literate".
+\lstset{basicstyle=\ttfamily\footnotesize, literate={°}{{\textdegree}}1}
 
 \title[Week 4 · Data Formats]{{\Huge Data Formats: XML \& JSON}}
 \subtitle{Week 4 · Foundations module · Textbook Chapter 4}
@@ -66,8 +72,47 @@
 \end{frame}
 
 % =========================================================================
-\section{Wednesday · Concepts \& Notebook}
+\section{Monday}
 % =========================================================================
+
+% The code on the frames from here to the end of Friday's Step 16 is the lab's
+% (labs/week-04/lab-04-key.ipynb), rebuilt in three parts on 2026-11-17 for the next
+% offering: one frame per typed cell, with the lab's step numbers, laid out for reading.
+% Each new tool gets a small first call, on a few lines students can read whole, before
+% the real file or the full request. The lab's JSON case is NASA's POWER API; the
+% chapter's, Open-Meteo, is the Recommended Exercises'. The concept frames between this
+% comment and Step 0 are the instructor's, unchanged, except the two with listings.
+\begin{frame}{This week, every class is live coding}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            \dayband{Find it}{\texttt{labs/} in the course repository}
+            \begin{enumerate}\small
+                \item Open the \href{https://github.com/cuinfoscience/INFO4617-Fall2026/tree/main/labs}{\textbf{labs} folder} of \texttt{cuinfoscience/INFO4617-Fall2026} on GitHub
+                \item Open \texttt{week-04}, click \texttt{lab-04.ipynb}, then \textbf{Download raw file}
+                \item Open it in JupyterLab in the \texttt{webdata} environment
+            \end{enumerate}
+
+            \medskip
+            \dayband{Use it}{one part a day}
+            \begin{itemize}\small
+                \item I write the code on screen, and you write it in your copy
+                \item Cells that start \texttt{\# Given:} are written: we read them and run them
+                \item Today: Part 1, Steps 0--4. Wednesday and Friday: start at that part's setup step
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Solutions}\\[2pt]
+            {\footnotesize \texttt{lab-04-key.ipynb}, beside it: every cell filled in and run. Fall behind? Copy the cell from the key and keep going.\par}
+            \medskip
+            \textbf{Due Sunday}\\[2pt]
+            {\footnotesize Chapter 4's \textbf{Recommended Exercises}, from its companion notebook. Graded on good-faith attempt to complete rather than getting everything working.\par}
+            \medskip
+            \begin{alertblock}{Error flavors}
+                \footnotesize Wednesday's Step 8 breaks JSON on purpose, to read the errors. A cell that fails for everyone is \textit{broken}: tell me, or open an issue.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
 
 \begin{frame}{The role of data formats}
     \begin{columns}[T]
@@ -136,36 +181,59 @@
 \end{frame}
 
 \begin{frame}[fragile]{XML: a tree of nested tags}
-    XML organizes data as a \textbf{hierarchy}: each tag can hold text, attributes, and child tags. The House \texttt{MemberData} feed, drawn as a tree:
-\begin{lstlisting}[basicstyle=\large\ttfamily]
-<MemberData>
-  <member>                     # repeats 441 times
-    <member-info>
-      <firstname>Joe</firstname>     # value in TEXT
-      <lastname>Neguse</lastname>
-      <party>D</party>
-    </member-info>
-    <state postal-code="CO">         # value in an ATTRIBUTE
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            XML is a \textbf{hierarchy}: a tag can hold text, attributes, and other tags.
+
+            \medskip
+            One member of the House, in the Clerk's tag names.
+
+            \medskip
+            Which values here are \textbf{text}, between two tags? Which is an \textbf{attribute}, inside one?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+<member>
+  <member-info>
+    <firstname>Joe</firstname>
+    <lastname>Neguse</lastname>
+    <party>D</party>
+    <state postal-code="CO">
       <state-fullname>Colorado</state-fullname>
     </state>
-  </member>
-</MemberData>
+  </member-info>
+</member>
 \end{lstlisting}
-    A value hides in one of two places: \textbf{text} (read with \texttt{.text}) or an \textbf{attribute} (read with brackets).
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{JSON: lists and dictionaries you already know}
-    JSON maps onto two Python structures you already use. The weather forecast, peeled one layer at a time:
-\begin{lstlisting}[basicstyle=\large\ttfamily]
-{                              # dict: type(data) is dict
-  "latitude": 40.01,
-  "daily": {                    # dict: data["daily"]
-    "time": [...],               # list: data["daily"]["time"]
-    "temperature_2m_max": [...]
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A JSON \textbf{object} is a Python \textbf{dictionary}. A JSON \textbf{array} is a \textbf{list}.
+
+            \medskip
+            The shape of a weather answer from NASA's POWER API, which Wednesday's lab takes apart.
+
+            \medskip
+            Which brackets hold a list? How many keys deep are the temperatures?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+{
+  "geometry": {
+    "coordinates": [...]
+  },
+  "properties": {
+    "parameter": {
+      "T2M_MAX": {"20250101": ..., "20250102": ...}
+    }
   }
 }
 \end{lstlisting}
-    A JSON \textbf{array} is a Python \textbf{list}; a JSON \textbf{object} is a Python \textbf{dict}. Real data nests them several levels deep --- the skill is navigating from the outside in, one \texttt{type()} and \texttt{.keys()} call at a time.
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{JSON vs.\ XML: pick your trade-offs}
@@ -243,145 +311,1658 @@
             Once you are in a DataFrame, a whole host of other data science methods for cleaning, filtering, grouping, aggregating, merging open up
 \end{frame}
 
-\begin{frame}[fragile]{Parsing XML with BeautifulSoup}
-    Parse the string into a navigable tree, then search it. \texttt{.find()} returns the first match, \texttt{.find\_all()} returns them all --- each searches the \textit{entire} subtree beneath a tag:
-\begin{lstlisting}[basicstyle=\small\ttfamily]
-from bs4 import BeautifulSoup
-
-soup = BeautifulSoup(house_raw, "xml")   # the "xml" parser comes from lxml
-
-members = soup.find_all("member")
-print(len(members))                       # 2
-
-for m in members:
-    first = m.find("firstname").text      # .text = content between the tags
-    last  = m.find("lastname").text       # .find() reaches nested tags too
-    party = m.find("party").text
-    print(f"{first} {last} ({party})")    # Joe Neguse (D) / Jeff Hurd (R)
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{Data exists in two different places in XML}
+\begin{frame}{Step 0: set up}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            A value is either \textbf{text} or an \textbf{attribute}:
-\begin{lstlisting}[basicstyle=\small\ttfamily]
-state = soup.find("state")
-state["postal-code"]                # "CO"
-state.find("state-fullname").text   # "Colorado"
-\end{lstlisting}
-            
-            \bigskip
-            A missing tag makes \texttt{.find()} return \texttt{None}:
-\begin{lstlisting}[basicstyle=\small\ttfamily]
-# AttributeError: None has no .text
-m.find("party").text
-# guard every extraction instead:
-m.find("party").text if m.find("party") else None
-\end{lstlisting}
+            Step 0's cell is given. Put your email in \texttt{CLIENT}, then run it.
+
+            \medskip
+            \texttt{HEADERS} says who is asking, as week 2 explained.
+
+            \medskip
+            \texttt{DATA} is the course's folder of saved copies, for when a site refuses you.
         \end{column}
         \begin{column}{0.35\textwidth}
-            Working out \textit{which} of the two holds your value is half the parsing battle --- real XML uses both.
-
-            \bigskip
-
-            Calling \texttt{.text} on a \texttt{None} is the \textbf{single most common} scraping error. The \texttt{if \dots else None} guard keeps one missing field from crashing a 441-record loop.
-
-            \bigskip
-
-            XML always hands you \textbf{text}: converting \texttt{"2nd"} or \texttt{"\$1,234"} to a number is your job.
+            \textbf{Discuss}\\[2pt]
+            {\footnotesize Neither site this week refuses a request without a User-Agent. Why send it anyway?\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{XML $\rightarrow$ DataFrame: the real House roster}
+\begin{frame}[fragile]{Step 1: two members, in a string, given}
     \begin{columns}[T]
-        \begin{column}{0.55\textwidth}
-\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
-import requests, pandas as pd
+        \begin{column}{0.37\textwidth}
+            \texttt{house\_raw} is given: the chapter's two members, in the roster's tag names. It is still just a string.
 
-url = "https://clerk.house.gov/xml/lists/MemberData.xml"
-soup = BeautifulSoup(requests.get(url).content, "xml")
-print(soup.find("MemberData")["publish-date"])
-
-records = []
-for m in soup.find_all("member"):    # 441 members
-    st = m.find("state")
-    records.append({"last_name": m.find("lastname").text,
-                    "party": m.find("party").text,
-                    "state": st["postal-code"] if st else None})
-df = pd.DataFrame(records)   # find_all -> dicts -> DataFrame
-\end{lstlisting}
+            \medskip
+            Read it before you parse it. How many \texttt{<member>} tags? Whose \texttt{<lastname>} comes first?
         \end{column}
-        \begin{column}{0.42\textwidth}
-            \textbf{\footnotesize The raw response, before parsing:}
-\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
-July 1, 2026
-<member>
- <member-info>
-  <firstname>Joe</firstname>
-  <lastname>Neguse</lastname>
-  <party>D</party>
- </member-info>
- <state postal-code="CO">
-  <state-fullname>
-   Colorado
-  </state-fullname>
- </state>
-</member>
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[language=]
+house_raw = """<?xml version="1.0" encoding="UTF-8"?>
+<MemberData publish-date="July 1, 2026">
+  <members>
+    <member>
+      <statedistrict>CO02</statedistrict>
+      <member-info>
+        <firstname>Joe</firstname>
+        <lastname>Neguse</lastname>
+        ...
+      </member-info>
+    </member>
+    ...
 \end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{JSON: parse a string, then the list-of-dictionaries pipeline}
-    \texttt{json.loads()} turns a \textbf{s}tring into Python objects (\texttt{json.load()} reads a \textbf{f}ile). With \texttt{requests}, \texttt{response.json()} does it for you:
-\begin{lstlisting}[basicstyle=\small\ttfamily]
-import json, pandas as pd
-
-data = json.loads('{"state": "Colorado", "population": 5773714}')
-print(data["state"])              # Colorado
-# response.json()  ==  json.loads(response.text)
-
-census = [                        # the list-of-dictionaries pattern:
-    {"state": "Colorado", "year": 2020, "population": 5773714},
-    {"state": "Colorado", "year": 2010, "population": 5029196},
-]
-df = pd.DataFrame(census)         # one dict per row, keys -> columns
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{JSON: peel the onion on a live API}
+\begin{frame}[fragile]{Step 1: parse it, and count}
     \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{BeautifulSoup()} turns the string into a tree we can search. The \texttt{"xml"} parser keeps each tag as written.
+
+            \medskip
+            \texttt{find\_all()} returns every tag of a name, as a list.
+
+            \medskip
+            How many should it find?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://www.crummy.com/software/BeautifulSoup/bs4/doc/\#parsing-xml}{Parsing XML}, \href{https://www.crummy.com/software/BeautifulSoup/bs4/doc/\#find-all}{find\_all()}\par}
+        \end{column}
         \begin{column}{0.6\textwidth}
-\begin{lstlisting}[basicstyle=\small\ttfamily]
-import requests
-
-url = "https://api.open-meteo.com/v1/forecast"
-params = {"latitude": 40.01, "longitude": -105.27,
-          "daily": "temperature_2m_max",
-          "timezone": "America/Denver"}
-data = requests.get(url, params=params).json()
-
-# type() + .keys(), one level deeper each time
-data.keys()            # latitude, longitude, daily...
-data["daily"].keys()   # time, temperature_2m_max
-highs = data["daily"]["temperature_2m_max"]  # a list
-data.get("elevation", "unknown")  # .get avoids KeyError
+\begin{lstlisting}
+# Parse the string as XML
+small_soup = BeautifulSoup(house_raw, "xml")
+# Every <member> tag, counted
+print(len(small_soup.find_all("member")))
 \end{lstlisting}
         \end{column}
-        \begin{column}{0.35\textwidth}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: text, between the tags}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{find()} returns the first tag of a name, however deep it sits.
+
+            \medskip
+            \texttt{.text} is what lies between the tag's opening and closing halves.
+
+            \medskip
+            Whose last name is this?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://www.crummy.com/software/BeautifulSoup/bs4/doc/\#find}{find()}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first <lastname> tag's text
+print(small_soup.find("lastname").text)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: an attribute, inside the tag}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            An attribute sits inside the opening half: \texttt{<state postal-code="CO">}.
+
+            \medskip
+            Read it with brackets, like a dictionary's key.
+
+            \medskip
+            What would \texttt{.text} give here? Try it.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first <state> tag's postal-code attribute
+print(small_soup.find("state")["postal-code"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: the second member}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} read the second member. \texttt{find\_all()} returns a list, so \texttt{[1]} is its second item.
+
+            \medskip
+            \textbf{Share:} the last name and the district. Is each one text, or an attribute?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The second <member> in the list
+second = small_soup.find_all("member")[1]
+# Its last name, then its district
+print(second.find("lastname").text)
+print(second.find("district").text)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 2: look at it in Chrome first}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The Clerk of the House publishes the roster as one XML file.
+
+            \medskip
+            Open its address in Chrome. A file with no stylesheet is drawn as a tree you can fold.
+
+            \medskip
+            Which of Step 1's tags do you recognize? Where is the \texttt{publish-date}?
+
+            \medskip
+            {\scriptsize \texttt{clerk.house.gov/xml/lists/MemberData.xml}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{img/weather_forecast_plot.png}\\
-            {\scriptsize Boulder's 7-day forecast, fetched live on Sept.~8.}
+            \includegraphics[width=\textwidth]{img/house-xml-tree_annotated.pdf}
+            {\scriptsize The roster in Chrome in September 2026. Yours will show a later \texttt{publish-date}.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{Lab: work these in pairs, then show-and-tell}
+\begin{frame}[fragile]{Step 2: fetch it, and look}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Send the request with \texttt{HEADERS}.
+
+            \medskip
+            Before parsing anything, look at the status code and the \texttt{Content-Type} header.
+
+            \medskip
+            Is the status 200? Does the header name a character set?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://requests.readthedocs.io/en/stable/api/\#requests.Response}{requests.Response}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The roster's address
+ROSTER = (
+    "https://clerk.house.gov/xml/lists/MemberData.xml"
+)
+# Ask for it, and say who is asking
+roster = requests.get(ROSTER, headers=HEADERS)
+# The status code, and what the server calls the file
+print(roster.status_code, roster.headers["Content-Type"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: its size, and a guess}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{roster.content} is the body in bytes, as the server sent it.
+
+            \medskip
+            The header named no character set, so \texttt{requests} guessed one: \texttt{roster.encoding}.
+
+            \medskip
+            What did it guess?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The size in bytes, and the encoding requests guessed
+print(len(roster.content), roster.encoding)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: the first bytes}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Now the file's own first line.
+
+            \medskip
+            Which encoding does the file declare? Does that match the guess?
+
+            \medskip
+            Step 3's microsprint shows what the difference costs.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first 150 bytes, as the server sent them
+print(roster.content[:150])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: parse the bytes}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Parse \texttt{roster.content}, the bytes, so that BeautifulSoup reads the encoding the file declares.
+
+            \medskip
+            The root tag's \texttt{publish-date} says which snapshot of the House this is.
+
+            \medskip
+            Why keep that date with anything you count today?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Parse the bytes as XML
+soup = BeautifulSoup(roster.content, "xml")
+# The root tag's attribute: when was this published?
+print(soup.MemberData["publish-date"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: the top-level blocks, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The given cell lists the root's children.
+
+            \medskip
+            It is a \textit{list comprehension}: take \texttt{.name} from each child, and collect the results in a list.
+
+            \medskip
+            Which block holds the members?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Each child's name, collected in a list
+[child.name for child in soup.MemberData.contents]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: the first member}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textit{Dot notation} takes the first tag of each name: \texttt{soup.members.member}.
+
+            \medskip
+            It works only for names without a hyphen. \texttt{find()} works for any name.
+
+            \medskip
+            Step 1's reads, on the real file.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first <member>, by dot notation
+first = soup.members.member
+# Its seat: text, by dot notation
+print(first.statedistrict.text)
+# Its last name and its party: text, with find()
+print(first.find("lastname").text)
+print(first.find("party").text)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: an attribute, and a hyphen}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The postal code is an attribute. The full name is text, in a tag with a hyphen in its name.
+
+            \medskip
+            Why does \texttt{first.state-fullname} fail? What does Python think you wrote?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# An attribute of the <state> tag
+print(first.find("state")["postal-code"])
+# The text of a tag whose name has a hyphen
+print(first.find("state-fullname").text)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: every member}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            One line finds every \texttt{<member>} in the file.
+
+            \medskip
+            The House has 435 voting seats. Is that the number you get?
+
+            \medskip
+            If not, the chapter's ``Working with Real XML'' says why.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Every <member> tag in the file
+members = soup.find_all("member")
+# How many are there?
+print(len(members))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: parse the text instead, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The chapter says \texttt{roster.text} would garble accented names. Check it.
+
+            \medskip
+            The given cell parses the text into a second tree, and lists the last names from each tree.
+
+            \medskip
+            It prints each position where the two lists differ.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# A second tree, from the text requests decoded
+garbled = BeautifulSoup(roster.text, "xml")
+their_members = garbled.find_all("member")
+# Every last name, from each tree
+ours = [m.find("lastname").text for m in members]
+theirs = [m.find("lastname").text for m in their_members]
+# Each position where the two lists differ
+for i in range(len(ours)):
+    if ours[i] != theirs[i]:
+        print(i)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: one name, two spellings}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} pick a position the given cell printed. Print that last name from each list.
+
+            \medskip
+            \textbf{Share:} how many names differ, and one of them as each tree spells it. Did anything warn us?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The same position in each list
+print(ours[59], theirs[59])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: \texttt{Counter}, on three letters}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{Counter} tallies a list.
+
+            \medskip
+            Say what it prints before you run it.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://docs.python.org/3/library/collections.html\#collections.Counter}{collections.Counter}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Tally a list of three letters
+print(Counter(["D", "R", "D"]))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: every member's party, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The given cell collects each member's \texttt{<party>} text, with a comprehension like Step 3's.
+
+            \medskip
+            What do its first five items look like?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Each member's party text, in a list
+parties = [m.find("party").text for m in members]
+# Its first five items
+print(parties[:5])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: count the parties}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same call as on three letters, now on the whole roster.
+
+            \medskip
+            Read every entry. Is there one you didn't expect?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Tally every member's party
+party_counts = Counter(parties)
+print(party_counts)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: read the odd entries, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The given loop prints the seat and the footnote of each member whose party is empty.
+
+            \medskip
+            What does the file say about these seats? Is an empty party a parsing bug?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+for m in members:
+    # A member whose party is empty
+    if m.find("party").text == "":
+        # Its seat, then the file's footnote
+        print(m.find("statedistrict").text)
+        print(m.find("footnote").text)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: how many are serving?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{party\_counts[""]} is the number of empty parties.
+
+            \medskip
+            How many people are serving? What would a paper that reported \texttt{len(members)} have gotten wrong?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The entries, less the empty ones
+print(len(members) - party_counts[""])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: party and caucus, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The file records two things about each member: \texttt{<party>}, the formal registration, and \texttt{<caucus>}, the party they sit with.
+
+            \medskip
+            The given cell counts each pair. Which pair doesn't match?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Each member's (party, caucus) pair, a tuple
+pairs = [
+    (m.find("party").text, m.find("caucus").text)
+    for m in members
+]
+# Tally the pairs
+print(Counter(pairs))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% =========================================================================
+\section{Wednesday}
+% =========================================================================
+
+\begin{frame}{Today: Part 2, from a tree to a table, and JSON}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            Monday's roster is a tree. Today:
+            \begin{itemize}\small
+                \item One member becomes one record, and every record a row of a DataFrame
+                \item JSON strings: one small object, a round trip, and three broken ones
+                \item A first small request to NASA's POWER API: three days of Boulder's weather, taken apart one key at a time
+            \end{itemize}
+
+            \medskip
+            \dayband{Use it}{Steps 5--10}
+            \begin{itemize}\small
+                \item Open \texttt{lab-04.ipynb} and start at \textbf{Step 5}
+                \item Its two given cells load Monday's roster. Missed Monday? Start here
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Each new tool, small first}\\[2pt]
+            {\footnotesize One member before the loop. One object before the table. Three days before a year. Say what a cell will print before you run it.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 5: set up again}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Work in pairs. Do these exercises from the Chapter 4 notebook:
+            Step 5's cells are given. Put your email in \texttt{CLIENT}, then run both.
+
+            \medskip
+            The second loads the roster from a copy the key's run saved in the course's repository, and parses it as Step 3 did. It prints the copy's \texttt{publish-date}.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Discuss}\\[2pt]
+            {\footnotesize What can a saved copy not tell you that the live request can?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: one member, one record}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The chapter's pipeline: find the records, pull each one's fields into a dictionary, and collect the dictionaries.
+
+            \medskip
+            First one member, by hand: an empty dictionary, filled one key at a time.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first member, and an empty dictionary
+first = members[0]
+record = {}
+# Two fields, each the text of a tag
+record["first_name"] = first.find("firstname").text
+record["last_name"] = first.find("lastname").text
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: three more fields}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The party and the district are text. The state is the \texttt{postal-code} attribute, in brackets.
+
+            \medskip
+            What will \texttt{record} look like? Is any value a number?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Text, an attribute, and text
+record["party"] = first.find("party").text
+record["state"] = first.find("state")["postal-code"]
+record["district"] = first.find("district").text
+# The whole record
+print(record)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: every member, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The loop is given. It writes your record for every member, inside one pair of braces, and adds it to a list.
+
+            \medskip
+            The chapter guards each field with \texttt{if ... else None}. We leave the guards out. What does that risk?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+records = []
+for m in members:
+    # Your record, in one pair of braces
+    member_record = {
+        "first_name": m.find("firstname").text,
+        "last_name": m.find("lastname").text,
+        "party": m.find("party").text,
+        "state": m.find("state")["postal-code"],
+        "district": m.find("district").text,
+    }
+    # Add it to the list
+    records.append(member_record)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: a list of dictionaries is a table}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The given cell ends with these two lines.
+
+            \medskip
+            \texttt{pd.DataFrame()} makes one row for each dictionary, and one column for each key.
+
+            \medskip
+            How many rows should there be?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html}{pandas.DataFrame}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One row for each record, one column for each key
+df = pd.DataFrame(records)
+# The first five rows
+df.head()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: count the rows for each state}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{groupby("state").size()} counts the rows that share a state.
+
+            \medskip
+            Sort the counts, largest first, and keep ten.
+
+            \medskip
+            Which states do you expect at the top?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.groupby.html}{groupby()}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The number of rows for each state
+by_state = df.groupby("state").size()
+# The ten largest
+print(by_state.sort_values(ascending=False).head(10))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: state by party}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} drop the vacant seats. Make a table of state by party, and print Colorado's row. Then run the given cell.
+
+            \medskip
+            \textbf{Share:} Colorado's split, and the number of delegations with both parties.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://pandas.pydata.org/docs/reference/api/pandas.crosstab.html}{pd.crosstab()}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The rows whose party isn't empty
+serving = df[df["party"] != ""]
+# States down the side, parties across the top
+table = pd.crosstab(serving["state"], serving["party"])
+# Colorado's row
+print(table.loc["CO"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: delegations with both, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The given cell marks each delegation that has at least one Democrat and at least one Republican. \texttt{\&} means both must be true.
+
+            \medskip
+            Summing a column of \texttt{True} and \texttt{False} counts the \texttt{True}s.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# True where a delegation has a D and an R
+has_both = (table["D"] > 0) & (table["R"] > 0)
+# How many are True, of how many
+print(has_both.sum(), "of", len(table), "have both")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: one JSON object}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{json.loads()} parses a JSON string. The \texttt{s} is for \textit{string}.
+
+            \medskip
+            What type comes back? What type is \texttt{seats}?
+
+            \medskip
+            In the roster, every value was text.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://docs.python.org/3/library/json.html\#json.loads}{json.loads()}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Parse a JSON string
+state = json.loads('{"state": "Colorado", "seats": 8}')
+# What did we get?
+print(type(state))
+# One value, and its type
+print(state["seats"], type(state["seats"]))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: from a table to JSON}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{to\_dict("records")} gives the table's rows as a list of dictionaries.
+
+            \medskip
+            \texttt{json.dumps()} writes Python as a JSON string.
+
+            \medskip
+            Find the list's brackets, and each dictionary's braces.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://docs.python.org/3/library/json.html\#json.dumps}{json.dumps()}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first two rows, as a list of dictionaries
+rows = df.head(2).to_dict("records")
+# The list, written as a JSON string
+as_json = json.dumps(rows, indent=2)
+print(as_json)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: and back again}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Parse the string, and we have the list again. One call makes it a table.
+
+            \medskip
+            The list-of-dictionaries pattern runs both ways.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Parse the string back into Python
+back = json.loads(as_json)
+# Its type, and one value from the first record
+print(type(back), back[0]["last_name"])
+# A list of dictionaries is a table again
+pd.DataFrame(back)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: two broken strings}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            JSON is strict. Keys and strings take double quotes, and nothing follows the last item.
+
+            \medskip
+            Type two strings that break those rules. They are plain Python strings until something parses them.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Single quotes where JSON wants double
+single_quotes = "{'state': 'Colorado'}"
+# A comma before the closing brace
+trailing_comma = '{"state": "Colorado",}'
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: read the errors, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Errors are this step's subject, so the given loop catches each one. \texttt{try} runs a line that may fail, and \texttt{except} prints the error's message.
+
+            \medskip
+            Nowhere else this week do we catch an error.
+
+            \medskip
+            Which message would a live API's refusal give?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://docs.python.org/3/library/json.html\#json.JSONDecodeError}{json.JSONDecodeError}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# What a refusal often looks like: a web page
+error_page = "<html><body>Too Many Requests</body></html>"
+for broken in [single_quotes, trailing_comma, error_page]:
+    try:
+        # Stops with an error if the string isn't JSON
+        json.loads(broken)
+    except json.JSONDecodeError as error:
+        # The string, and the error's message
+        print(broken, "->", error)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: break it yourself}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} write a broken string of your own: a missing brace, \texttt{True} for \texttt{true}, a key without quotes. Then run the given cell, the same \texttt{try} on your string.
+
+            \medskip
+            \textbf{Share:} your string and its message. Did the message say what was wrong?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# A string that looks like JSON and isn't
+my_broken = '{"seats": 8'
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: the parameters, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            NASA's POWER API serves daily weather for any point on Earth, with no key.
+
+            \medskip
+            Before a year of it, three days of one variable: the daily high, \texttt{T2M\_MAX}, in Boulder.
+
+            \medskip
+            Most of the parameters are given.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://power.larc.nasa.gov/docs/services/api/temporal/daily/}{POWER's daily API}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The API's address
+POWER = (
+    "https://power.larc.nasa.gov/api/temporal/daily/point"
+)
+# What to ask for, and where
+three_days = {
+    "parameters": "T2M_MAX",
+    "community": "AG",
+    "format": "JSON",
+    "latitude": 40.01,
+    "longitude": -105.27,
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: three days}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            You type the two dates, as \texttt{YYYYMMDD}, in quotes.
+
+            \medskip
+            The first three days of 2025.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first and the last day to ask for
+three_days["start"] = "20250101"
+three_days["end"] = "20250103"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: send it, and look}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Look before you read: the status code, and the first 200 characters of the answer.
+
+            \medskip
+            Three January highs in Boulder, in $^\circ$C. What should they look like?
+
+            \medskip
+            Is the answer JSON?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it, with the parameters and our name
+days_response = requests.get(
+    POWER,
+    params=three_days,
+    headers=HEADERS,
+)
+# The status code, and the start of the answer
+print(days_response.status_code, days_response.text[:200])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: the address \texttt{requests} built}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{requests} wrote our dictionary into the address, after the \texttt{?}.
+
+            \medskip
+            Paste it into Chrome, and tick \textbf{Pretty-print}. Can you find our seven parameters?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The full address, parameters and all
+print(days_response.url)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: parse it, and look at the top}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{.json()} parses the answer, as \texttt{json.loads()} parsed our string.
+
+            \medskip
+            Peel the onion: \texttt{type()} and \texttt{.keys()} at the top, then one key deeper at a time.
+
+            \medskip
+            Which key might hold the temperatures?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Parse the answer's JSON
+days = days_response.json()
+# What is it, and what are its keys?
+print(type(days))
+print(days.keys())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: one key deeper}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Follow one key down, and ask for its keys again.
+
+            \medskip
+            How many are there? Which would you follow next?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The keys under "properties"
+print(days["properties"].keys())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: and one more}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            One more level down.
+
+            \medskip
+            Do you recognize this key? Where did we type it?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The keys under "parameter"
+print(days["properties"]["parameter"].keys())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: the values}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Name the dictionary under \texttt{T2M\_MAX}, and print it.
+
+            \medskip
+            Are there three dated keys and three numbers? Were your guesses close?
+
+            \medskip
+            A date is a key, so one day is one lookup.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The dictionary of highs, keyed by date
+highs = days["properties"]["parameter"]["T2M_MAX"]
+print(highs)
+# One day's high
+print(highs["20250102"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: what the answer says about itself}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The answer carries the point it used, each variable's units, and any messages.
+
+            \medskip
+            \texttt{.get()} returns \texttt{None} for a missing key, where brackets would stop with a \texttt{KeyError}.
+
+            \medskip
+            Which number is the latitude? What is the third?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://docs.python.org/3/library/stdtypes.html\#dict.get}{dict.get()}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The point POWER used
+print(days["geometry"]["coordinates"])
+# Each variable's units
+print(days["parameters"])
+# Messages, if the key is there
+print(days.get("messages"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: lose the minus sign}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} set \texttt{my\_longitude} to 105.27, with no minus sign. Run the given cell, which sends Step 9's request with that one value changed.
+
+            \medskip
+            \textbf{Share:} the status code, the three highs, and where on Earth that point is.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The chapter's longitude, without its minus sign
+my_longitude = 105.27
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: one value changed, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{dict(three\_days)} makes a copy, so \texttt{three\_days} keeps Boulder's longitude.
+
+            \medskip
+            Did POWER object? What in the answer could tell you it was the wrong place?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# A copy, with one value changed
+east_days = dict(three_days)
+east_days["longitude"] = my_longitude
+# The same request, with the copy
+east_response = requests.get(
+    POWER,
+    params=east_days,
+    headers=HEADERS,
+)
+print(east_response.status_code, east_response.text[:200])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% =========================================================================
+\section{Friday}
+% =========================================================================
+
+\begin{frame}{Today: Part 3, a year of weather}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            Wednesday's request gave three days of one variable. Today:
+            \begin{itemize}\small
+                \item The same request, with two things changed: three variables, and the whole of 2025
+                \item The answer as a DataFrame, checked and plotted
+                \item A given function asks for any place, and a given loop compares three
+            \end{itemize}
+
+            \medskip
+            \dayband{Use it}{Steps 11--16}
+            \begin{itemize}\small
+                \item Open \texttt{lab-04.ipynb} and start at \textbf{Step 11}
+                \item Its given cell is all today needs. Missed Wednesday? Start here
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Small first, again}\\[2pt]
+            {\footnotesize Two days in a dictionary before 365. One place by hand before three in a loop.\par}
+            \medskip
+            \textbf{Then}\\[2pt]
+            {\footnotesize The last 15 minutes: from the lab to the textbook.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 11: set up again}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Step 11's cell is given. Put your email in \texttt{CLIENT}, then run it.
+
+            \medskip
+            It also defines \texttt{POWER}, the address of Wednesday's API. Today needs nothing else from Monday or Wednesday.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Discuss}\\[2pt]
+            {\footnotesize Today's year takes one request. What would 365 requests of one day each cost POWER, and you?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: the parameters, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Wednesday's dictionary, with one change so far: three variables in one string, separated by commas.
+
+            \medskip
+            The daily high, the daily low, and precipitation.
+
+            \medskip
+            What else must change to get a year?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Wednesday's parameters, with three variables
+year_params = {
+    "parameters": "T2M_MAX,T2M_MIN,PRECTOTCORR",
+    "community": "AG",
+    "format": "JSON",
+    "latitude": 40.01,
+    "longitude": -105.27,
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: the whole of 2025}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            You type the two dates.
+
+            \medskip
+            A past year gives the same answer every time you ask. A forecast never does.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# January 1 to December 31
+year_params["start"] = "20250101"
+year_params["end"] = "20251231"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: send it, and look}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same request, and the same look before reading.
+
+            \medskip
+            Is the status 200? Does the answer start as Wednesday's did?
+
+            \medskip
+            If POWER didn't answer, the next given cell loads a saved copy.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it, with the parameters and our name
+year_response = requests.get(
+    POWER,
+    params=year_params,
+    headers=HEADERS,
+)
+# The status code, and the start of the answer
+print(year_response.status_code, year_response.text[:200])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: parse it, and check}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Check three things before you trust the values: which variables came back, the \textit{fill value} POWER writes for a missing day, and the units.
+
+            \medskip
+            What would a fill value do to a mean?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Parse the answer's JSON
+data = year_response.json()
+# Which variables came back?
+print(data["properties"]["parameter"].keys())
+# The number that stands for a missing day
+print(data["header"]["fill_value"])
+# Each variable's units
+print(data["parameters"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: two days, in a dictionary of dictionaries}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            POWER's values are a dictionary of dictionaries: one for each variable, each keyed by date.
+
+            \medskip
+            \texttt{two\_days} is given, in that shape. You type the last line.
+
+            \medskip
+            Which keys become the columns, and which the rows?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html}{pandas.DataFrame}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Two variables, two days each
+two_days = {
+    "high": {"20250101": 5.1, "20250102": 7.3},
+    "low": {"20250101": -6.0, "20250102": -4.2},
+}
+# As a table
+pd.DataFrame(two_days)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: the year, as a table}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same call, on the year.
+
+            \medskip
+            \texttt{.shape} is the table's rows and columns. What shape do you expect, from a year of three variables?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One column for each variable, one row for each date
+weather = pd.DataFrame(data["properties"]["parameter"])
+# Its rows and columns
+print(weather.shape)
+# The first three rows
+weather.head(3)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: text to dates}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The index is still text, such as \texttt{"20250101"}.
+
+            \medskip
+            \texttt{pd.to\_datetime()} turns it into dates. \texttt{format} says how the text is laid out: a four-digit year, then the month, then the day.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://pandas.pydata.org/docs/reference/api/pandas.to_datetime.html}{pd.to\_datetime()}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Read each key as a year, a month and a day
+weather.index = pd.to_datetime(
+    weather.index,
+    format="%Y%m%d",
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: short names, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{NAMES} is given: POWER's name for each variable, and a shorter one for our columns.
+
+            \medskip
+            Which is which?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# POWER's names, and ours
+NAMES = {
+    "T2M_MAX": "high",
+    "T2M_MIN": "low",
+    "PRECTOTCORR": "precip",
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: missing values, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The given cell replaces the fill value with \texttt{NaN}, pandas' mark for a missing value, and renames the columns.
+
+            \medskip
+            How many days are missing in each column?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The fill value becomes NaN, "not a number"
+fill = data["header"]["fill_value"]
+weather = weather.replace(fill, float("nan"))
+# Our short column names
+weather = weather.rename(columns=NAMES)
+# The missing values in each column
+print(weather.isna().sum())
+# The first three rows
+weather.head(3)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 14: plot the year, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The plot is given. \texttt{plt.subplots()} makes the figure and its axes: the course's one way to start a plot.
+
+            \medskip
+            Find our two columns in it.
+
+            \medskip
+            \texttt{fill\_between()} shades from the lows up to the highs.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.fill_between.html}{fill\_between()}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+fig, ax = plt.subplots(figsize=(10, 4))
+# The highs and the lows, against the date
+ax.plot(weather["high"], color="red", label="High")
+ax.plot(weather["low"], color="blue", label="Low")
+# Shade the range between them
+ax.fill_between(
+    weather.index,
+    weather["low"],
+    weather["high"],
+    alpha=0.2,
+)
+...
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 14: say what it shows, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The rest of the cell: a title that names the place, the year and the source; labels with units; a legend.
+
+            \medskip
+            Which of these would a reader miss most, a year from now?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+...
+# What, when, and from whom
+ax.set_title(
+    "Boulder, CO: daily high and low, 2025 (NASA POWER)"
+)
+# Both axes, with units
+ax.set_xlabel("Date")
+ax.set_ylabel("Temperature (°C)")
+ax.legend()
+plt.show()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 14: Boulder's 2025}
+    \centering
+    \includegraphics[width=0.84\textwidth]{img/power_boulder_2025.png}
+
+    \smallskip
+    {\small Where is the last night below 0\,$^\circ$C in spring? The first in autumn? The microsprint finds both.\par}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: freezing nights}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} keep the days whose low fell below 0\,$^\circ$C, and count them. Then run the given cell, which finds the last one before July and the first one after.
+
+            \medskip
+            \textbf{Share:} the number of freezing nights, and the two dates.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The rows whose low is below freezing
+frost = weather[weather["low"] < 0]
+# How many nights?
+print(len(frost))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: the last and first frost, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{frost.index.month} is each date's month, from 1 to 12.
+
+            \medskip
+            POWER's point stands for a grid cell tens of kilometers wide, higher than the town. Would you write ``Boulder had this many freezing nights''?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The freezing nights before July, and after June
+spring = frost[frost.index.month < 7]
+autumn = frost[frost.index.month >= 7]
+# The latest of one, the earliest of the other
+print("Last spring frost:", spring.index.max().date())
+print("First autumn frost:", autumn.index.min().date())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 15: one function, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same table for more places: this is where a function earns its place.
+
+            \medskip
+            \texttt{get\_daily()} is given. Nothing in it is new. It begins with Step 12, on a copy of \texttt{year\_params}.
+
+            \medskip
+            Which two values does it change?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+def get_daily(latitude, longitude):
+    # A copy of year_params, with this point's coordinates
+    place_params = dict(year_params)
+    place_params["latitude"] = latitude
+    place_params["longitude"] = longitude
+    # Step 12: send it, and parse the answer
+    place_response = requests.get(
+        POWER,
+        params=place_params,
+        headers=HEADERS,
+    )
+    place_data = place_response.json()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 15: the function's table, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Then Step 13: the values as a table, and its index as dates.
+
+            \medskip
+            Find the lines you typed on your own table.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+    ...
+    # Step 13: a table, with dates for its index
+    values = place_data["properties"]["parameter"]
+    daily = pd.DataFrame(values)
+    daily.index = pd.to_datetime(
+        daily.index,
+        format="%Y%m%d",
+    )
+    ...
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 15: what the function returns, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The rest of Step 13, and one new thing: the grid cell's elevation, the point's third coordinate, kept in a column.
+
+            \medskip
+            \texttt{return} hands the table back to whoever called the function.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+    ...
+    # Missing values, and short names
+    place_fill = place_data["header"]["fill_value"]
+    daily = daily.replace(place_fill, float("nan"))
+    daily = daily.rename(columns=NAMES)
+    # The grid cell's elevation, in a column
+    point = place_data["geometry"]["coordinates"]
+    daily["grid_elevation_m"] = point[2]
+    return daily
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 15: Leadville, by hand}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Call the function once by hand. Leadville, at about 3,100 m, is the highest incorporated city in the United States.
+
+            \medskip
+            Colder than Boulder, surely. By how much? How many more freezing nights?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# A year of Leadville's weather, in one call
+leadville = get_daily(39.25, -106.29)
+# Its mean high, rounded to one decimal place
+print(round(leadville["high"].mean(), 1))
+# Its nights below 0 °C
+print((leadville["low"] < 0).sum())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: a place you know}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} put a place you know in \texttt{my\_place}: a name, a latitude and a longitude, in parentheses. West and south are negative. Then run the two given cells.
+
+            \medskip
+            \textbf{Share:} your place's row, beside Boulder's and Leadville's.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# A name, a latitude, and a longitude
+my_place = ("Grand Junction", 39.06, -108.55)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 15: three places, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The given list holds three places. The third is yours.
+
+            \medskip
+            Each is three values in parentheses, a \textit{tuple}.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Each place: a name, a latitude, a longitude
+places = [
+    ("Boulder", 40.01, -105.27),
+    ("Leadville", 39.25, -106.29),
+    my_place,
+]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 15: the same call for each, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The loop takes each place's three values apart, calls your function, and builds one row.
+
+            \medskip
+            Find Leadville's two numbers in the row. Which line did we not type by hand?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+place_rows = []
+for name, latitude, longitude in places:
+    # Your call, for this place
+    daily = get_daily(latitude, longitude)
+    elevation = daily["grid_elevation_m"].iloc[0]
+    # One row of the table
+    place_row = {
+        "place": name,
+        "grid_elevation_m": round(elevation),
+        "mean_high_c": round(daily["high"].mean(), 1),
+        "nights_below_0": int((daily["low"] < 0).sum()),
+    }
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 15: keep the row, and wait, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The loop ends by keeping the row and pausing a second before the next request, as week 2 asked.
+
+            \medskip
+            Then the rows become a table. Does Boulder's row match what you found in Step 14?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+for name, latitude, longitude in places:
+    ...
+    # Keep the row, and wait a second
+    place_rows.append(place_row)
+    time.sleep(1)
+# The rows, as a table
+pd.DataFrame(place_rows)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 16: what did we learn?}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Answer in the lab's last cell, as comments:
+            \begin{itemize}\small
+                \item How many of the roster's entries are people serving? What in the XML told you about the rest?
+                \item How many last names would \texttt{roster.text} have garbled? Did anything warn you?
+                \item How do Boulder, Leadville and your place compare? What do the grid elevations say about what the numbers describe?
+                \item What did each source tell you about itself? Which of those would you save beside your DataFrame?
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Recommended Exercises}\\[2pt]
+            {\footnotesize An RSS feed (XML) and the Open-Meteo forecast (JSON), each into a DataFrame. The lab's last cell says which step prepared each one.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{After the lab: work these, then show-and-tell}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            From the Chapter 4 notebook. Items 1 and 2 are the Recommended Exercises, due Sunday. The rest are Additional Exercises.
             \begin{enumerate}\small
                 \item \textbf{RSS feed} --- parse a news feed with the \texttt{"xml"} parser. Extract the title, the link, and the date. Put them in a DataFrame. \footnotesize Starter feeds and how to find your own: this week's handout.
                 \item \textbf{Nested JSON} --- get the dates and the maximum temperatures from Open-Meteo. Put them in a DataFrame.
@@ -392,14 +1973,14 @@ data.get("elevation", "unknown")  # .get avoids KeyError
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Show-and-Tell}
-                \footnotesize Bring one of these to class:
-                \begin{itemize}\footnotesize
-                    \item a bug that you could not solve
-                    \item data that you collected and find interesting
-                    \item a question for a research design
-                \end{itemize}
-            \end{block}
+            \textbf{Show-and-Tell}\\[2pt]
+            {\footnotesize Bring one of these to class:
+            \begin{itemize}\footnotesize
+                \item a bug that you could not solve
+                \item data that you collected and find interesting
+                \item a question for a research design
+            \end{itemize}\par}
+            \medskip
             \begin{alertblock}{Error flavors}
                 \footnotesize Some code here is \textit{designed} to break (a guard demonstrating a crash) --- that does not need a GitHub issue. Other code may be \textit{genuinely} broken: confirm it, then search and file an issue.
             \end{alertblock}
@@ -410,19 +1991,18 @@ data.get("elevation", "unknown")  # .get avoids KeyError
 \begin{frame}{Effort over perfection}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Start the lab in class, finish at home, submit what you got working. Graded on a good-faith attempt to complete the notebook, not on getting every cell to run.
+            Start the Recommended Exercises in class, finish at home, submit what you got working. Graded on a good-faith attempt to complete the notebook, not on getting every cell to run.
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Submitting}
-                \footnotesize Run all cells, then export: \textit{File $\rightarrow$ Save and Export Notebook As $\rightarrow$ HTML}. Upload to Canvas by \textbf{Sunday 11:59pm}.
-            \end{block}
+            \textbf{Submitting}\\[2pt]
+            {\footnotesize Run all cells, then export: \textit{File $\rightarrow$ Save and Export Notebook As $\rightarrow$ HTML}. Upload to Canvas by \textbf{Sunday 11:59pm}.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-% =========================================================================
-\section{Friday · Textbook Revisions}
-% =========================================================================
+% The frames from here to "The reviewer's tool" are fall 2026's Friday, a full class on the
+% GitHub web editor (#35), unchanged. In a three-part week they follow Part 3, in Friday's
+% last 15 minutes.
 
 \begin{frame}{A worked example --- linking the Missing Manual}
     \begin{columns}[T]
