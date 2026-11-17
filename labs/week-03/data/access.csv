@@ -1,0 +1,9 @@
+api,status,verdict,content_type,rate_limit,audit_date
+Wikipedia,200,open,application/json,,2026-10-21 21:56 UTC
+Hacker News,200,open,application/json,,2026-10-21 21:56 UTC
+arXiv,200,open,application/atom+xml,,2026-10-21 21:56 UTC
+Mastodon,200,open,application/json,300,2026-10-21 21:56 UTC
+Bluesky,200,open,application/json,,2026-10-21 21:56 UTC
+Reddit,403,gated,text/html,,2026-10-21 21:56 UTC
+X (Twitter),401,gated,application/problem+json,,2026-10-21 21:56 UTC
+Meta Graph,400,other,application/json,,2026-10-21 21:56 UTC
