@@ -1957,6 +1957,28 @@ print(scores.round(3))
     \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]{Step 12 microsprint: one small word}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textit{not} is on the stopword list.
+
+            \medskip
+            \textbf{Do:} print the tokens of these two sentences.
+
+            \medskip
+            \textbf{Share:} the two lists, and what their similarity would be.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# With "not"
+print(preprocess_document("We do not share your data."))
+# Without it
+print(preprocess_document("We share your data."))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}[fragile]{Step 13: all ten versions}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
