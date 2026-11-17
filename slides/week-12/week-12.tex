@@ -8,6 +8,8 @@
 % file directly from its own folder (no TEXINPUTS needed).
 \makeatletter\def\input@path{{../common/}}\makeatother
 \input{preamble}
+% Larger code than the house default: a frame holds one short block (AUTHORING.md, "Code style")
+\lstset{basicstyle=\ttfamily\footnotesize}
 % A marker's number in running text, drawn like the screenshots' markers (handoutmarkers.sty)
 \providecolor{tab-blue}{HTML}{4E79A7}
 \newcommand{\circled}[1]{\tikz[baseline=(m.base)]\node[circle,fill=tab-blue,text=white,inner sep=0pt,minimum size=1.25em,font=\sffamily\bfseries\scriptsize](m){#1};}
@@ -123,204 +125,415 @@
     \end{columns}
 \end{frame}
 
-% The code on these frames is the lab's Part 1 (labs/week-12/lab-12-key.ipynb), run live on
-% 2026-11-02 against Bluesky's public AppView. Chapter 12 at textbook baf0bc0 still uses atproto
-% with a login; the lab follows the chapter's planned revision.
-% The tour figures are copies of chapter 12's (textbook images/ch-12/, via tools/shots sync);
-% captured signed out on 2026-11-02.
+% The code on these frames is the lab's Part 1 (labs/week-12/lab-12-key.ipynb), rebuilt
+% 2026-11-10 and given its small first calls on 2026-11-16: one frame per lab cell, with the
+% lab's step numbers. The tour figures are copies of chapter 12's (textbook images/ch-12/, via
+% tools/shots sync); captured signed out on 2026-11-02.
 \begin{frame}{Start from the page a person reads}
     \begin{columns}[T]
+        \begin{column}{0.39\textwidth}
+            \textbf{Each marker is a field}\\[2pt]
+            \begin{enumerate}\footnotesize
+                \item The handle, a domain: \texttt{handle}
+                \item The blue check: \texttt{verification}
+                \item The counts: \texttt{followersCount}, \texttt{postsCount}
+                \item The posts, newest first: \href{https://endpoints.bsky.app/\#bluesky-app/tag/appbskyfeed/GET/xrpc/app.bsky.feed.getAuthorFeed}{\texttt{getAuthorFeed}}
+            \end{enumerate}
+            \medskip
+            {\footnotesize The page rounds the counts. The API gives them exactly.\par}
+        \end{column}
         \begin{column}{0.58\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/bsky-profile_annotated.pdf}\\
             {\scriptsize The National Weather Service on \href{https://bsky.app/profile/nws.noaa.gov}{bsky.app}, captured 2026-11-02 (chapter 12, figure 12.1).}
         \end{column}
-        \begin{column}{0.39\textwidth}
-            \textbf{Each marker is a field}\\[2pt]
-            \begin{enumerate}\footnotesize
-                \item The handle, a domain: \texttt{handle}
-                \item The blue check: \href{https://docs.bsky.app/docs/api/app-bsky-actor-get-profile}{\texttt{verification}}
-                \item The counts: \href{https://docs.bsky.app/docs/api/app-bsky-actor-get-profile}{\texttt{followersCount}, \texttt{postsCount}}
-                \item The posts, newest first: \href{https://docs.bsky.app/docs/api/app-bsky-feed-get-author-feed}{\texttt{getAuthorFeed}}
-            \end{enumerate}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 0: set up}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Step 0's cell is given. Put your email in \texttt{HEADERS}, then run it.
+
             \medskip
-            {\footnotesize The page rounds to 63K followers and 1.3K posts. The API gives the exact counts.\par}
+            Bluesky asks for no key. Every request still says who sent it, as Wikipedia's did in week 10.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{The AppView}\\[2pt]
+            {\footnotesize \texttt{public.api.bsky.app} answers reads for anyone. Each \textbf{method}, one kind of request, puts its name at the end of the address.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{From the website to the API: one agency's profile}
+\begin{frame}[fragile]{Step 1: ask for one profile}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-            The National Weather Service at \href{https://bsky.app/profile/nws.noaa.gov}{bsky.app/profile/nws.noaa.gov}, and the same profile from the API:
-\begin{lstlisting}
-bsky_base = "https://public.api.bsky.app/xrpc"
-profile = requests.get(
-    f"{bsky_base}/app.bsky.actor.getProfile",
-    params={"actor": "nws.noaa.gov"},
-    headers=HEADERS).json()
-print(profile["handle"], "|", profile["displayName"])
-print("followers:", profile["followersCount"],
-      "| posts:", profile["postsCount"])
-# nws.noaa.gov | National Weather Service
-# followers: 63020 | posts: 1394
-\end{lstlisting}
-            \small The method's name is part of the address. No key, no login: Bluesky's \textbf{AppView} answers reads for anyone.\\[2pt]{\scriptsize\textbf{Docs:} \href{https://docs.bsky.app/docs/api/app-bsky-actor-get-profile}{\texttt{getProfile}}, which lists every field; every method: the \href{https://docs.bsky.app/docs/category/http-reference}{HTTP API reference}}
-        \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{Is it really the agency?}\\[2pt]
-            {\footnotesize Two proofs, both in the API's answer:\par}
-            \begin{itemize}\footnotesize
-                \item The \textbf{handle is a domain}, \texttt{nws.noaa.gov}: only whoever controls the domain can take it
-                \item A \textbf{blue check}: \texttt{"verification"} says Bluesky itself verified it
-            \end{itemize}
+        \begin{column}{0.37\textwidth}
+            Open \href{https://bsky.app/profile/nws.noaa.gov}{the Weather Service's page}. Now ask the API for the same account.
+
             \medskip
-            {\footnotesize A search for ``National Park Service'' also finds ``Alt National Park Service'', with neither. Collect its posts as the agency's, and your study is wrong.\par}
+            \texttt{getProfile} has one parameter, \texttt{actor}: the handle.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://endpoints.bsky.app/\#bluesky-app/tag/appbskyactor/GET/xrpc/app.bsky.actor.getProfile}{getProfile}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The method's address
+profile_url = f"{bsky_base}/app.bsky.actor.getProfile"
+# Its one parameter: the account's handle
+profile_params = {"actor": "nws.noaa.gov"}
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Five agencies in one table}
+\begin{frame}[fragile]{Step 1: send it}
     \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
-\begin{lstlisting}
-agencies = ["noaa.gov", "nws.noaa.gov",
-            "climate.noaa.gov", "noaacomms.noaa.gov",
-            "federalreserve.gov"]
-rows = []
-for handle in agencies:
-    p = requests.get(
-        f"{bsky_base}/app.bsky.actor.getProfile",
-        params={"actor": handle}, headers=HEADERS).json()
-    rows.append({"handle": p["handle"],
-                 "followers": p["followersCount"],
-                 "posts": p["postsCount"],
-                 "joined": p["createdAt"][:10]})
-accounts = pd.DataFrame(rows).sort_values(
-    "followers", ascending=False)
-\end{lstlisting}
-            {\scriptsize\textbf{Docs:} \href{https://docs.bsky.app/docs/api/app-bsky-actor-get-profile}{\texttt{getProfile}}; \href{https://docs.bsky.app/docs/api/app-bsky-actor-get-profiles}{\texttt{getProfiles}} takes up to 25 accounts in one request.}
+        \begin{column}{0.37\textwidth}
+            Send the parameters and the User-Agent. Keep the answer, read as JSON, in \texttt{profile}.
         \end{column}
-        \begin{column}{0.47\textwidth}
-            {\footnotesize
-            \begin{tabular}{@{}lrrr@{}}
-                \toprule
-                \textbf{Handle} & \textbf{Followers} & \textbf{Posts} & \textbf{Joined} \\
-                \midrule
-                nws.noaa.gov & 63,020 & 1,394 & 2025-01 \\
-                climate.noaa.gov & 46,966 & 93 & 2025-01 \\
-                noaa.gov & 41,937 & 150 & 2025-01 \\
-                federalreserve.gov & 8,405 & 1,029 & 2024-12 \\
-                noaacomms.noaa.gov & 5,620 & 117 & 2025-01 \\
-                \bottomrule
-            \end{tabular}\par}
-            \medskip
-            {\footnotesize These are the federal accounts with a \texttt{.gov} handle on November 2; four are NOAA's. NASA and the Census Bureau have none.\par}
-            \medskip
-            \textbf{Microsprint}\\[2pt]
-            {\footnotesize Not every official account has a domain: \texttt{librarycongress.bsky.social} and \texttt{stlouisfed.bsky.social} (FRED's home) are both verified instead.\par}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it, saying who we are
+profile_response = requests.get(
+    profile_url,
+    params=profile_params,
+    headers=HEADERS,
+)
+# The answer, as a dictionary
+profile = profile_response.json()
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{What an agency posted this week}
+\begin{frame}[fragile]{Step 1: look before you read}
     \begin{columns}[T]
-        \begin{column}{0.53\textwidth}
-\begin{lstlisting}
-params = {"actor": "nws.noaa.gov", "limit": 25,
-          "filter": "posts_no_replies"}
-feed = requests.get(
-    f"{bsky_base}/app.bsky.feed.getAuthorFeed",
-    params=params, headers=HEADERS).json()["feed"]
-posts = []
-for item in feed:
-    if "reason" in item:   # a repost
-        continue
-    post = item["post"]
-    posts.append({"time": post["indexedAt"][:16],
-                  "likes": post["likeCount"],
-                  "reposts": post["repostCount"],
-                  "text": post["record"]["text"][:70]})
-\end{lstlisting}
-            {\scriptsize\textbf{Docs:} \href{https://docs.bsky.app/docs/api/app-bsky-feed-get-author-feed}{\texttt{getAuthorFeed}}, with the values \texttt{filter} takes.}
+        \begin{column}{0.37\textwidth}
+            Bluesky answers an error as JSON, with a \texttt{"message"}. \texttt{.get()} gives \texttt{None} when there is none.
+
+            \medskip
+            Then look at the keys. Which ones did the page show?
         \end{column}
-        \begin{column}{0.44\textwidth}
-            \textbf{Most reposted, NWS}\\[2pt]
-            {\footnotesize
-            \begin{tabular}{@{}rl@{}}
-                \toprule
-                \textbf{Reposts} & \textbf{Post} \\
-                \midrule
-                80 & Daylight Saving Time ends \ldots \\
-                33 & Updated Extreme Rainfall \ldots \\
-                33 & Here's a more detailed look \ldots \\
-                \bottomrule
-            \end{tabular}\par}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Look first: the status, and any error message
+print(
+    profile_response.status_code,
+    profile.get("message"),
+)
+# Then the answer's keys
+profile.keys()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: two counts and an ID}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Do the counts match the page's, which rounds them?
+
             \medskip
-            \textbf{Why skip reposts?}\\[2pt]
-            {\footnotesize A repost carries someone else's post, and they may be a private person. Skipping them keeps every handle in our table an agency's.\par}
+            A handle can change. The \texttt{did} can't. Which would you store?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Its followers and posts
+print(profile["followersCount"], profile["postsCount"])
+# The account's permanent ID
+print(profile["did"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 2: is it really the agency?}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            A search for ``National Park Service'' also finds ``Alt National Park Service''. Collect its posts as the agency's, and your study is wrong.
+
             \medskip
-            {\footnotesize The answer ends with a \texttt{cursor}. Wednesday: what is it for?\par}
+            Two proofs are in the API's answer.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{A domain handle}\\[2pt]
+            {\footnotesize Only whoever controls \texttt{noaa.gov} can take \texttt{nws.noaa.gov}.\par}
+            \medskip
+            \textbf{A blue check}\\[2pt]
+            {\footnotesize Bluesky verified the account, in \texttt{"verification"}.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: the check}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Print the whole field first. Then go one level down.
+
+            \medskip
+            Who verified the account?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://bsky.social/about/blog/04-21-2025-verification}{how verification works}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The whole field
+print(profile["verification"])
+# One level down: is it valid?
+print(profile["verification"]["verifiedStatus"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: the domain}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{.endswith()} asks whether a string ends a certain way.
+
+            \medskip
+            A given cell asks for NOAA Fisheries. Its handle ends in \texttt{.gov}. Does it have a check?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Is the handle a .gov domain?
+print(profile["handle"].endswith(".gov"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: NOAA's own handle}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Ask for \texttt{noaa.gov}, with names of your own. Then a given cell asks for the same account by its \texttt{did}.
+
+            \medskip
+            Does NOAA have an account on Bluesky?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# NOAA's own handle
+noaa_params = {"actor": "noaa.gov"}
+# Send it
+noaa_response = requests.get(
+    profile_url,
+    params=noaa_params,
+    headers=HEADERS,
+)
+noaa = noaa_response.json()
+# The status, and the message
+print(noaa_response.status_code, noaa.get("message"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: five agencies}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Four NOAA accounts and the Federal Reserve. Every handle is a \texttt{.gov} domain.
+
+            \medskip
+            Which agencies would a study built this way never see?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Five handles, in a list
+agencies = [
+    "nws.noaa.gov",
+    "climate.noaa.gov",
+    "noaacomms.noaa.gov",
+    "fisheries.noaa.gov",
+    "federalreserve.gov",
+]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: one request for five}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{getProfiles} takes up to 25 handles as \texttt{actors}, plural. Give it the list.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://endpoints.bsky.app/\#bluesky-app/tag/appbskyactor/GET/xrpc/app.bsky.actor.getProfiles}{getProfiles}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The method's address
+profiles_url = f"{bsky_base}/app.bsky.actor.getProfiles"
+# "actors", plural, takes the whole list
+profiles_params = {"actors": agencies}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: send it}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same request as Step 1's, to the new address.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it
+profiles_response = requests.get(
+    profiles_url,
+    params=profiles_params,
+    headers=HEADERS,
+)
+# The answer, as a dictionary
+profiles_data = profiles_response.json()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: look first}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Status 200, and no message?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Look first: the status, and any error message
+print(
+    profiles_response.status_code,
+    profiles_data.get("message"),
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: how many came back?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{getProfiles} leaves out a handle it can't find, with no error.
+
+            \medskip
+            So compare what you asked for with what came back.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The list of profiles
+profiles = profiles_data["profiles"]
+# How many we asked for, and how many came back
+print(
+    len(agencies),
+    "asked for,",
+    len(profiles),
+    "came back",
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 3: a table, and a checkpoint}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            A given cell makes one row for each profile: handle, \texttt{did}, name, followers, posts, and the day it joined. The most followed come first.
+
+            \medskip
+            Another saves it as Monday's checkpoint, with the day you collected it.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Discuss}\\[2pt]
+            {\footnotesize Is followers the right measure of an agency's reach?\par}
+            \medskip
+            {\footnotesize What can a saved copy not tell you that the live request can?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: two more handles}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell adds NOAA's own handle and the St.\ Louis Fed's. \texttt{+} joins two lists.
+
+            \medskip
+            Send it, with names of your own, and print both counts. Which one is missing? Did anything warn you?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: the five, plus two more
+more_agencies = agencies + [
+    "noaa.gov",
+    "stlouisfed.bsky.social",
+]
+# Yours: the same request, for seven
+more_params = {"actors": more_agencies}
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
 \begin{frame}{Friday's page: an agency's YouTube channel}
     \begin{columns}[T]
-        \begin{column}{0.64\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/youtube-channel_annotated.pdf}\\
-            {\scriptsize NOAA's channel on \href{https://www.youtube.com/@NOAA}{youtube.com}, captured 2026-11-02 (chapter 12, figure 12.2).}
-        \end{column}
         \begin{column}{0.33\textwidth}
             \textbf{The same four questions}\\[2pt]
             \begin{enumerate}\footnotesize
-                \item The name: \href{https://developers.google.com/youtube/v3/docs/channels}{\texttt{snippet.title}}
-                \item The handle and counts: \href{https://developers.google.com/youtube/v3/docs/channels}{\texttt{subscriberCount}, \texttt{videoCount}}
+                \item The name: \texttt{snippet.title}
+                \item The handle and counts: \texttt{subscriberCount}, \texttt{videoCount}
                 \item A link to \texttt{noaa.gov}
-                \item The videos: the \textbf{uploads} playlist, via \href{https://developers.google.com/youtube/v3/docs/playlistItems/list}{\texttt{playlistItems.list}}
+                \item The videos: the \textbf{uploads} playlist
             \end{enumerate}
             \medskip
             {\footnotesize Marker 3 proves nothing alone: anyone can link to any site. The proof runs the other way, from the agency's website to the channel.\par}
             \medskip
             {\footnotesize Unlike Bluesky, every one of these requests needs a key.\par}
         \end{column}
+        \begin{column}{0.64\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/youtube-channel_annotated.pdf}\\
+            {\scriptsize NOAA's channel on \href{https://www.youtube.com/@NOAA}{youtube.com}, captured 2026-11-02 (chapter 12, figure 12.2).}
+        \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Before Friday: your YouTube key}
+\begin{frame}{Before Friday: make a YouTube key}
     \begin{center}
         \small\textbf{\href{https://console.cloud.google.com/apis/library/youtube.googleapis.com}{\texttt{console.cloud.google.com/apis/library/youtube.googleapis.com}}}
     \end{center}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{enumerate}\small
-                \item Open the link above, signed in with a \textbf{personal} Google account (make a project if it asks), and click \textbf{Enable}
-                \item On the \textbf{Credentials} tab: \textbf{Create credentials}, then \textbf{API key}, restricted to \textbf{YouTube Data API v3}
-                \item Store it with the \texttt{webdata} environment, in a terminal (on Windows, the Anaconda Prompt):
+                \item Open the link above, signed in with a \textbf{personal} Google account. Make a project if it asks. Click \textbf{Enable}.
+                \item On the \textbf{Credentials} tab, click \textbf{Create credentials}, then \textbf{API key}. Restrict it to \textbf{YouTube Data API v3}.
             \end{enumerate}
-\begin{lstlisting}
-conda env config vars set YOUTUBE_KEY="your-key" -n webdata
-\end{lstlisting}
-            \small Then close that terminal, open a new one, run \texttt{conda activate webdata}, and start Jupyter from it.\\[2pt]
             {\footnotesize Screenshots of every step: Friday's first frames, and the lab's ``Before Step 8''.\par}
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.35\textwidth}
             \begin{alertblock}{It's a password}
                 \footnotesize Never paste the key into a notebook cell or a code file. If it leaks, delete it in the console and make a new one.
             \end{alertblock}
-            \textbf{The quota}\\[2pt]
-            {\footnotesize 10,000 units a day; most reads cost 1 unit, and searches are capped at 100 a day (\href{https://developers.google.com/youtube/v3/getting-started}{Google's guide}). Friday's code reads channels and videos, not searches.\par}
         \end{column}
     \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Before Friday: store your key}
+    Store it with the \texttt{webdata} environment, in a terminal (on Windows, the Anaconda Prompt). Put your key in place of \texttt{your-key}:
+
+    \medskip
+\begin{lstlisting}
+conda env config vars set YOUTUBE_KEY="your-key" -n webdata
+\end{lstlisting}
+
+    \medskip
+    Then close that terminal, and open a new one. Run \texttt{conda activate webdata}, and start Jupyter from it.
 \end{frame}
 
 % =========================================================================
 \section{Wednesday}
 % =========================================================================
 
-% The code on these frames is the lab's Part 2 (labs/week-12/lab-12-key.ipynb), run live on
-% 2026-11-02, following chapter 12's rewrite (textbook #303).
+% The code on these frames is the lab's Part 2 (labs/week-12/lab-12-key.ipynb): one frame per
+% lab cell, with the lab's step numbers.
 \begin{frame}{Today: Part 2, more of Bluesky}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
@@ -346,97 +559,478 @@ conda env config vars set YOUTUBE_KEY="your-key" -n webdata
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{More than one page: the \texttt{cursor}}
+\begin{frame}{Step 4: set up again}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-\begin{lstlisting}
-params = {"actor": "nws.noaa.gov", "limit": 100,
-          "filter": "posts_no_replies"}
-first = requests.get(
-    f"{bsky_base}/app.bsky.feed.getAuthorFeed",
-    params=params, headers=HEADERS).json()
-# 100 items, from 2026-10-31 back to 2026-10-02
+        \begin{column}{0.6\textwidth}
+            Step 4's cell is given. Put your email in \texttt{HEADERS}, then run it.
 
-params["cursor"] = first["cursor"]
-second = requests.get(
-    f"{bsky_base}/app.bsky.feed.getAuthorFeed",
-    params=params, headers=HEADERS).json()
-# 100 items, from 2026-10-01 back to 2026-08-26
-\end{lstlisting}
-            \small Then a given loop: up to five pages, skipping reposts. It stopped at 495 posts, back to April 20, with a cursor still left.\\[2pt]{\scriptsize\textbf{Docs:} \href{https://docs.bsky.app/docs/api/app-bsky-feed-get-author-feed}{\texttt{getAuthorFeed}}'s \texttt{cursor} and \texttt{limit}}
+            \medskip
+            It sets \texttt{feed\_url}, the address of today's one method, and loads Monday's table from the course's repository. Missed Monday? Start here.
         \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{Three ways to page}\\[2pt]
+        \begin{column}{0.35\textwidth}
+            \textbf{One method today}\\[2pt]
+            {\footnotesize \href{https://endpoints.bsky.app/\#bluesky-app/tag/appbskyfeed/GET/xrpc/app.bsky.feed.getAuthorFeed}{\texttt{getAuthorFeed}}: an account's posts, replies and reposts, newest first.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: three items first}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Before a page of 25, one small request: the three newest items.
+
+            \medskip
+            Open the \textbf{Replies} tab of \href{https://bsky.app/profile/nws.noaa.gov}{the Weather Service's page}. Which three should come back?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The three newest items, and nothing else
+three_params = {"actor": "nws.noaa.gov", "limit": 3}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: send it}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{feed\_url} is set in Step 4. The rest is Step 1's request.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it
+three_response = requests.get(
+    feed_url,
+    params=three_params,
+    headers=HEADERS,
+)
+# The answer, as a dictionary
+three_page = three_response.json()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: look, and count}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Look first. Then take the list of items under \texttt{"feed"}.
+
+            \medskip
+            Did three come back?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Look first
+print(
+    three_response.status_code,
+    three_page.get("message"),
+)
+# The items, a list: how many?
+three_feed = three_page["feed"]
+print(len(three_feed))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 5: what is each item?}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            A given cell labels each item, with its time and the start of its text. An item with a \texttt{"reply"} key is the agency answering someone. One with a \texttt{"reason"} is a \textbf{repost}, someone else's post, so it prints no text.
+
+            \medskip
+            Do yours match the Replies tab?
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Not in the feed}\\[2pt]
+            {\footnotesize A pinned post, at the top of the page.\par}
+            \medskip
+            \textbf{\texttt{elif}}\\[2pt]
+            {\footnotesize ``Else if'': checked only when the \texttt{if} above it wasn't true.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: leave out replies, and ask for 25}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{filter} chooses what comes back. \texttt{"posts\_no\_replies"} leaves out replies, and keeps reposts.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://endpoints.bsky.app/\#bluesky-app/tag/appbskyfeed/GET/xrpc/app.bsky.feed.getAuthorFeed}{getAuthorFeed}, with the values \texttt{filter} takes\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# As three_params, with 25 and a filter
+feed_params = {
+    "actor": "nws.noaa.gov",
+    "limit": 25,
+    "filter": "posts_no_replies",
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: send it}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Keep the whole answer in \texttt{first\_page}. Step 6 needs more of it than the posts.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it
+feed_response = requests.get(
+    feed_url,
+    params=feed_params,
+    headers=HEADERS,
+)
+# Keep the whole answer
+first_page = feed_response.json()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: look, then the keys}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The answer has two keys. One is the list of items. What could the other be for?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Look first
+print(
+    feed_response.status_code,
+    first_page.get("message"),
+)
+# Then the answer's keys
+first_page.keys()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: the items, and the cursor}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            How many items came back?
+
+            \medskip
+            The \texttt{cursor} looks like a time. Step 6 sends it back.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The list of items
+feed = first_page["feed"]
+# How many, and the cursor
+print(len(feed), first_page["cursor"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: the first item}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Go down one level at a time.
+
+            \medskip
+            Does the first item have a \texttt{"reason"}? Then it's a repost.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first item, and its keys
+item = feed[0]
+item.keys()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: its post}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The \texttt{record} is what the author wrote. Its \texttt{createdAt} is set by the author's app.
+
+            \medskip
+            Is this the newest post on the page?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The post inside the item
+post = item["post"]
+# When it was written, its likes and reposts
+print(
+    post["record"]["createdAt"],
+    post["likeCount"],
+    post["repostCount"],
+)
+# Its text
+print(post["record"]["text"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 5: the agency's own posts}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            A given cell makes one row for each item on the page, and skips reposts: \texttt{continue} goes on to the next item.
+
+            \medskip
+            How many of the 25 are the agency's own?
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Why skip reposts?}\\[2pt]
+            {\footnotesize A repost carries someone else's post, and they may be a private person. Skipping them keeps every post in our table an agency's.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: Climate.gov's reposts}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Ask for Climate.gov's newest 25 items, with names of your own. A given cell counts the reposts, without printing whose posts they are.
+
+            \medskip
+            How many were reposts?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Like feed_params, for another account
+climate_params = {
+    "actor": "climate.noaa.gov",
+    "limit": 25,
+    "filter": "posts_no_replies",
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: page two, by hand}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Send the \texttt{cursor} back, and the next request returns the page that follows. You don't need to know what it means.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://endpoints.bsky.app/\#bluesky-app/tag/appbskyfeed/GET/xrpc/app.bsky.feed.getAuthorFeed}{getAuthorFeed}'s \texttt{cursor}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Page one's three keys, plus its cursor
+second_params = {
+    "actor": "nws.noaa.gov",
+    "limit": 25,
+    "filter": "posts_no_replies",
+    "cursor": first_page["cursor"],
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: send it}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same request, with the new parameters. The answer is page two.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it
+second_response = requests.get(
+    feed_url,
+    params=second_params,
+    headers=HEADERS,
+)
+# Page two
+second_page = second_response.json()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: where page two starts}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Is page two's first post older than page one's last?
+
+            \medskip
+            Page two has a cursor of its own.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Look first
+print(
+    second_response.status_code,
+    second_page.get("message"),
+)
+# When page two's first post was written
+second_feed = second_page["feed"]
+first_post = second_feed[0]["post"]
+print(first_post["record"]["createdAt"])
+# And the cursor for page three
+print(second_page["cursor"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: six months, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given loop asks for pages of 100, a second apart. It stops when a page has no cursor, or is older than \texttt{since}.
+
+            \medskip
+            A given cell keeps the posts up to \texttt{until}, and saves them.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The six months we keep
+since = "2026-05-01"
+until = "2026-11-01"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Three ways to page}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
             {\footnotesize
             \begin{tabular}{@{}ll@{}}
                 \toprule
                 \textbf{API} & \textbf{You send back} \\
                 \midrule
-                Wikipedia (wk 10) & \texttt{continue} \\
-                EIA (wk 11) & an \texttt{offset} you count \\
+                Wikipedia (week 10) & \texttt{continue} \\
+                EIA (chapter 11) & an \texttt{offset} you count \\
                 Bluesky & the \texttt{cursor} \\
                 \bottomrule
             \end{tabular}\par}
-            \medskip
+        \end{column}
+        \begin{column}{0.35\textwidth}
             \textbf{When to stop}\\[2pt]
             {\footnotesize At the end (no cursor), at a count, or at a date. Choose one, and say which when you write it up.\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{When an agency posts}
+\begin{frame}[fragile]{Microsprint: a misspelled filter}
     \begin{columns}[T]
-        \begin{column}{0.4\textwidth}
-\begin{lstlisting}
-local = nws["created"].dt.tz_convert(
-    "America/New_York")
-by_day = (local.dt.day_name()
-          .value_counts().reindex(days))
-by_day.plot.bar(rot=0)
-\end{lstlisting}
-            \small Times arrive in UTC: convert to the agency's zone before counting by day or hour.
+        \begin{column}{0.37\textwidth}
+            Send it with names of your own, and print the status and message. A given cell counts the replies.
 
             \medskip
-            \small The weather doesn't take weekends off; the agencies' staff mostly do. The Weather Service peaks on Friday, before the weekend's weather; the Fed posts Wednesday to Friday, and almost never on weekends.
+            Did anything warn you?
         \end{column}
-        \begin{column}{0.56\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/weekday-nws-fed.png}\\
-            {\scriptsize Drawn from the lab's Step 6 and its microsprint, run 2026-11-02 against Bluesky's public API.}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# "posts_no_reply": one letter short
+typo_params = {
+    "actor": "nws.noaa.gov",
+    "limit": 100,
+    "filter": "posts_no_reply",
+}
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{What travels}
+\begin{frame}[fragile]{Step 7: in the agency's time zone}
     \begin{columns}[T]
-        \begin{column}{0.52\textwidth}
-\begin{lstlisting}
-nws.groupby("embed")["reposts"].agg(
-    ["count", "median"]).sort_values(
-    "count", ascending=False)
-\end{lstlisting}
-            {\footnotesize
-            \begin{tabular}{@{}lrr@{}}
-                \toprule
-                \textbf{Embed} & \textbf{Posts} & \textbf{Median reposts} \\
-                \midrule
-                images & 412 & 19 \\
-                video & 59 & 23 \\
-                external (link card) & 13 & 14 \\
-                record with media & 5 & 23 \\
-                record (a quoted post) & 3 & 24 \\
-                none & 3 & 28 \\
-                \bottomrule
-            \end{tabular}\par}
+        \begin{column}{0.37\textwidth}
+            Each \texttt{createdAt} is in UTC. Convert it to Eastern time, the Weather Service's headquarters, before you count by day.
+
             \medskip
-            {\scriptsize\textbf{Docs:} Bluesky's \href{https://docs.bsky.app/docs/about-bluesky-content/posts}{Posts in-depth}, on each kind of embed.}
+            {\scriptsize\textbf{Docs:} \href{https://pandas.pydata.org/docs/reference/api/pandas.Series.dt.tz_convert.html}{dt.tz\_convert}\par}
         \end{column}
-        \begin{column}{0.44\textwidth}
-            \textbf{Describe, don't explain}\\[2pt]
-            {\footnotesize 412 of 495 posts carry an image, so the other rows compare a handful of posts. And a post's reach depends on the weather it warns about far more than on its format.\par}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# From UTC to Eastern time
+local = nws["created"].dt.tz_convert("America/New_York")
+# Each post's weekday; look at the first five
+day_names = local.dt.day_name()
+day_names.head()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: count by day}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{days} is given: the weekdays, Monday first. \texttt{reindex(days)} puts the counts in that order.
+
             \medskip
-            \textbf{Discuss}\\[2pt]
-            {\footnotesize What would you need, beyond this table, to say a format \textit{causes} reposts? We left out the agency's replies: what could they tell you, and what would collecting them ask of you?\par}
+            {\scriptsize\textbf{Docs:} \href{https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html}{value\_counts}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Count each weekday, Monday first
+by_day = day_names.value_counts().reindex(days)
+print(by_day)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% img/weekday-nws.png: the key's own Step 7 plot (labs/week-12/lab-12-key.ipynb, cell
+% w12-s7-plot), from the six months saved in labs/week-12/data/nws_posts.csv. See img/IMAGES.md.
+\begin{frame}{Step 7: when the agency posts}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell draws the counts as bars. Yours should look like this.
+
+            \medskip
+            The weather doesn't take weekends off. Why might an agency's posts?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/weekday-nws.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: by hour}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Count by hour instead, in Eastern time and in UTC.
+
+            \medskip
+            What is the busiest hour each way? Which claims would a forgotten conversion break?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Posts by hour, in Eastern time
+by_hour = local.dt.hour.value_counts()
+print(by_hour.head(3))
+# The same, still in UTC
+utc_hour = nws["created"].dt.hour.value_counts()
+print(utc_hour.head(3))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: what travels}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell groups the posts by what they carry: images, a video, a link card, a quoted post, or none.
+
+            \medskip
+            Which row holds most posts? What would you need to say a format \textit{causes} reposts?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: the posts, grouped by what they carry
+by_embed = nws.groupby("embed")
+# How many, and their median reposts
+embeds = by_embed["reposts"].agg(["count", "median"])
+# The most common first
+embeds.sort_values("count", ascending=False)
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
@@ -445,9 +1039,9 @@ nws.groupby("embed")["reposts"].agg(
 \section{Friday}
 % =========================================================================
 
-% The code on these frames is the lab's Part 3 (labs/week-12/lab-12-key.ipynb), following chapter
-% 12's YouTube section. It was not run from the cloud machine, which has no YOUTUBE_KEY: these
-% frames show code, not outputs, until it is run with a key.
+% The code on these frames is the lab's Part 3 (labs/week-12/lab-12-key.ipynb): one frame per
+% lab cell, with the lab's step numbers. It was not run from the cloud machine, which has no
+% YOUTUBE_KEY: these frames show code, not outputs.
 \begin{frame}{Today: Part 3, YouTube's Data API}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
@@ -470,7 +1064,7 @@ nws.groupby("embed")["reposts"].agg(
                 \footnotesize Quit Jupyter, open a new terminal, start it again. Can't restart? Step 8's given cell asks with \texttt{getpass()}: paste into the box, press Enter.
             \end{alertblock}
             \textbf{No key yet?}\\[2pt]
-            {\footnotesize The next five frames make one, step by step; the lab's ``Before Step 8'' has the same steps. Or follow along from the key, and make one after class.\par}
+            {\footnotesize The next four frames make one, step by step; the lab's ``Before Step 8'' has the same steps. Or follow along from the key, and make one after class.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -483,11 +1077,6 @@ nws.groupby("embed")["reposts"].agg(
         \small\textbf{\href{https://console.cloud.google.com/apis/library/youtube.googleapis.com}{\texttt{console.cloud.google.com/apis/library/youtube.googleapis.com}}}
     \end{center}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/yt-library_annotated.pdf}\\
-            {\scriptsize The Google Cloud console, Firefox, 2026-11-06 (chapter 12, figure 12.3).}
-        \end{column}
         \begin{column}{0.41\textwidth}
             \begin{enumerate}\footnotesize
                 \item Sign in with a \textbf{personal} Google account. Asked to select a project? \textbf{New Project}, name it \texttt{info4617}, \textbf{Create}.
@@ -495,47 +1084,47 @@ nws.groupby("embed")["reposts"].agg(
             \end{enumerate}
             {\footnotesize The console is built for companies that run many services; this link skips its menus.\par}
         \end{column}
+        \begin{column}{0.56\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/yt-library_annotated.pdf}\\
+            {\scriptsize The Google Cloud console, Firefox, 2026-11-06 (chapter 12, figure 12.3).}
+        \end{column}
     \end{columns}
 \end{frame}
 
 \begin{frame}{Your YouTube key: open Credentials}
     \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/yt-enabled_annotated.pdf}\\
-            {\scriptsize The Google Cloud console, Firefox, 2026-11-06 (chapter 12, figure 12.4).}
-        \end{column}
         \begin{column}{0.37\textwidth}
             \begin{enumerate}\footnotesize\setcounter{enumi}{2}
                 \item The page becomes \textbf{API/Service Details}: Status, \textbf{Enabled} \circled{1}. Click the \textbf{Credentials} tab \circled{2}.
             \end{enumerate}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/yt-enabled_annotated.pdf}\\
+            {\scriptsize The Google Cloud console, Firefox, 2026-11-06 (chapter 12, figure 12.4).}
         \end{column}
     \end{columns}
 \end{frame}
 
 \begin{frame}{Your YouTube key: create an API key}
     \begin{columns}[T]
-        \begin{column}{0.5\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/yt-create-credentials_annotated.pdf}\\
-            {\scriptsize The Google Cloud console, Firefox, 2026-11-06 (chapter 12, figure 12.5).}
-        \end{column}
         \begin{column}{0.47\textwidth}
             \begin{enumerate}\footnotesize\setcounter{enumi}{3}
                 \item Click \textbf{Create credentials} \circled{1}, and choose \textbf{API key} \circled{2}.
             \end{enumerate}
             {\footnotesize Not \textbf{OAuth client ID}: that is for a program acting on a person's own YouTube account. Reading public channels needs only a key.\par}
         \end{column}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/yt-create-credentials_annotated.pdf}\\
+            {\scriptsize The Google Cloud console, Firefox, 2026-11-06 (chapter 12, figure 12.5).}
+        \end{column}
     \end{columns}
 \end{frame}
 
 \begin{frame}{Your YouTube key: restrict it to YouTube}
     \begin{columns}[T]
-        \begin{column}{0.45\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/yt-create-key-top_annotated.pdf}\\
-            {\scriptsize The top of the dialog, Firefox, 2026-11-06; chapter 12, figure 12.6, shows all of it.}
-        \end{column}
         \begin{column}{0.52\textwidth}
             \begin{enumerate}\footnotesize\setcounter{enumi}{4}
                 \item In \textbf{Create API key}:
@@ -549,59 +1138,375 @@ nws.groupby("embed")["reposts"].agg(
                 \item \textbf{Copy the key}, and paste it only into the next step
             \end{enumerate}
         \end{column}
+        \begin{column}{0.45\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/yt-create-key-top_annotated.pdf}\\
+            {\scriptsize The top of the dialog, Firefox, 2026-11-06; chapter 12, figure 12.6, shows all of it.}
+        \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{A channel by its handle}
+\begin{frame}[fragile]{Step 8: set up, and read your key}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-\begin{lstlisting}
-yt_base = "https://www.googleapis.com/youtube/v3"
-params = {"part": "snippet,statistics,contentDetails",
-          "forHandle": "@NOAA", "key": youtube_key}
-channel = requests.get(f"{yt_base}/channels",
-    params=params, headers=HEADERS).json()["items"][0]
-print(channel["snippet"]["title"],
-      channel["statistics"]["subscriberCount"],
-      channel["statistics"]["videoCount"])
-uploads = channel["contentDetails"][
-    "relatedPlaylists"]["uploads"]
-\end{lstlisting}
-            \small \texttt{part} names the groups of fields you want back; \texttt{uploads} is the playlist of every video the channel has posted.\\[2pt]{\scriptsize\textbf{Docs:} \href{https://developers.google.com/youtube/v3/docs/channels/list}{\texttt{channels.list}}; the \href{https://developers.google.com/youtube/v3/docs/channels}{channel resource}, field by field}
-        \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{Is it the agency's?}\\[2pt]
-            {\footnotesize Check that the agency's own website links to the channel. \texttt{@NOAA}, \texttt{@NOAAClimate}, \texttt{@federalreserve}, \texttt{@stlouisfed}, \texttt{@uscensusbureau}, and \texttt{@NASA} all have channels.\par}
+        \begin{column}{0.37\textwidth}
+            Put your email in \texttt{HEADERS}, and run the given setup cell. It says \texttt{set} or \texttt{MISSING}, and never prints the key.
+
             \medskip
-            \textbf{Rounded}\\[2pt]
-            {\footnotesize YouTube rounds \texttt{subscriberCount} down to three significant figures, so a small change won't show.\par}
+            Then read the key into a name.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# From the environment, never from the notebook
+youtube_key = os.environ["YOUTUBE_KEY"]
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{A channel's newest videos and rate limits}
+\begin{frame}[fragile]{Step 8: one small request}
     \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-\begin{lstlisting}
-params = {"part": "contentDetails",
-          "playlistId": uploads, "maxResults": 50,
-          "key": youtube_key}
-items = requests.get(f"{yt_base}/playlistItems",
-    params=params, headers=HEADERS).json()["items"]
-video_ids = []
-for item in items:
-    video_ids.append(item["contentDetails"]["videoId"])
-params = {"part": "snippet,statistics",
-          "id": ",".join(video_ids), "key": youtube_key}
-\end{lstlisting}
-            \small Then \texttt{videos.list}: views and likes for all 50, as strings; \texttt{int()} them, and \texttt{.get()} a \texttt{likeCount} an owner hid.\\[2pt]{\scriptsize\textbf{Docs:} \href{https://developers.google.com/youtube/v3/docs/playlistItems/list}{\texttt{playlistItems.list}}, \href{https://developers.google.com/youtube/v3/docs/videos/list}{\texttt{videos.list}}, \href{https://developers.google.com/youtube/v3/determine_quota_cost}{quota costs}}
+        \begin{column}{0.37\textwidth}
+            Test the key on NOAA's channel, found by its handle. \texttt{part} names the groups of fields you want: here, only the \texttt{snippet}, which holds the name.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://developers.google.com/youtube/data/reference/rest/v3/channels/list}{channels.list}\par}
         \end{column}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# NOAA's channel, by its handle: only its name
+test_params = {
+    "part": "snippet",
+    "forHandle": "@NOAA",
+    "key": youtube_key,
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: send it, and look}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            YouTube answers an error as JSON, under \texttt{"error"}. You should see \texttt{None}.
+
+            \medskip
+            This request costs 1 unit of your daily quota.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it
+test_response = requests.get(
+    channels_url,
+    params=test_params,
+    headers=HEADERS,
+)
+test = test_response.json()
+# Look first: None means no error
+print(test.get("error"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: the channel's name}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{"items"} is a list of the channels found.
+
+            \medskip
+            Is the title the name on \href{https://www.youtube.com/@NOAA}{NOAA's channel page}?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first channel found
+test_channel = test["items"][0]
+# Its name
+print(test_channel["snippet"]["title"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: a made-up key}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Send it to \texttt{channels\_url}, with names of your own. Print the status and \texttt{bad["error"]}.
+
+            \medskip
+            What is Google's \texttt{"message"}, and the \texttt{"reason"} in its \texttt{"errors"}?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Like test_params, with a key that isn't one
+bad_params = {
+    "part": "snippet",
+    "forHandle": "@NOAA",
+    "key": "not-a-real-key",
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: three groups of fields}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Ask again, for the name, the counts, and \texttt{contentDetails}, which holds the playlist of every upload.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} the \href{https://developers.google.com/youtube/data/reference/rest/v3/channels}{channel resource}, field by field\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The name, the counts, and the uploads
+channel_params = {
+    "part": "snippet,statistics,contentDetails",
+    "forHandle": "@NOAA",
+    "key": youtube_key,
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: send it, and look}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Step 8's request, with the new parameters.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it
+channel_response = requests.get(
+    channels_url,
+    params=channel_params,
+    headers=HEADERS,
+)
+channel_data = channel_response.json()
+# Look first
+print(channel_data.get("error"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: the name and the counts}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            YouTube rounds \texttt{subscriberCount} down to three significant figures.
+
+            \medskip
+            How would you know \texttt{@NOAA} is NOAA's? Check that \texttt{noaa.gov} links to it.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first channel found, and its name
+channel = channel_data["items"][0]
+print(channel["snippet"]["title"])
+# Its subscribers and videos
+channel_stats = channel["statistics"]
+print(
+    channel_stats["subscriberCount"],
+    channel_stats["videoCount"],
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: the uploads playlist}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Every video the channel uploaded is in one playlist. Step 10 asks for its newest.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The channel's own playlists
+playlists = channel["contentDetails"]["relatedPlaylists"]
+# The ID of the playlist of every upload
+uploads = playlists["uploads"]
+print(uploads)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: another agency's channel}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Try \texttt{@NOAAClimate}, \texttt{@NOAAFisheries} or \texttt{@federalreserve}. Send it, and print its statistics.
+
+            \medskip
+            How do its subscribers compare with its Bluesky followers in \texttt{accounts}?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Only the counts, for another agency
+other_params = {
+    "part": "statistics",
+    "forHandle": "@NOAAClimate",
+    "key": youtube_key,
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: three uploads first}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Before 50 videos, three. \texttt{maxResults} says how many, up to 50.
+
+            \medskip
+            Open the Videos and Shorts tabs of \href{https://www.youtube.com/@NOAA/videos}{NOAA's channel}. Which three should come back?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://developers.google.com/youtube/data/reference/rest/v3/playlistItems/list}{playlistItems.list}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The uploads playlist's three newest videos
+newest_params = {
+    "part": "contentDetails",
+    "playlistId": uploads,
+    "maxResults": 3,
+    "key": youtube_key,
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: send it, and look}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A new address: \texttt{playlist\_url}, set in Step 8's given cell.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it
+newest_response = requests.get(
+    playlist_url,
+    params=newest_params,
+    headers=HEADERS,
+)
+newest = newest_response.json()
+# Look first
+print(newest.get("error"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: one upload}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A \texttt{videoId} ends the video's address. A given cell keeps all three in \texttt{newest\_ids}, and prints each address.
+
+            \medskip
+            Are they the channel's three newest?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first of the three
+first_upload = newest["items"][0]
+# Its video's ID, and when it was published
+print(first_upload["contentDetails"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: one video's statistics}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{videos.list} takes video IDs. Ask for one: the newest.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://developers.google.com/youtube/data/reference/rest/v3/videos/list}{videos.list}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The newest video's counts
+one_params = {
+    "part": "statistics",
+    "id": newest_ids[0],
+    "key": youtube_key,
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: send it, and look}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Another address, \texttt{videos\_url}, also set in Step 8's given cell.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it
+one_response = requests.get(
+    videos_url,
+    params=one_params,
+    headers=HEADERS,
+)
+one_data = one_response.json()
+# Look first
+print(one_data.get("error"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: its counts}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The counts arrive as strings. \texttt{int()} makes one a number.
+
+            \medskip
+            Is it close to the view count on the video's page, which rounds?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The one video's statistics
+stats = one_data["items"][0]["statistics"]
+print(stats)
+# Its views, as a number
+print(int(stats["viewCount"]))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 10: the newest 50, given}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Given cells send the same two requests for 50: \texttt{maxResults} 50, then the 50 IDs in one request, joined by commas.
+
+            \medskip
+            Then a table, one row a video, saved on your computer as Friday's checkpoint.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{A hidden \texttt{likeCount}}\\[2pt]
+            {\footnotesize An owner can hide a video's likes. The given table cell sets a missing \texttt{likeCount} to 0, and counts how often.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Title from the instructor's 2026-11-07 edit of the old Step 10 frame
+% ("A channel's newest videos and rate limits"); its code moved to the Step 10 frames above.
+\begin{frame}{Quotas and rate limits}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
             \begin{alertblock}{The quota}
                 \footnotesize 10,000 units a day; each request here costs 1. Two requests read 50 videos. Searches are capped separately, at 100 a day.
             \end{alertblock}
+            {\scriptsize\textbf{Docs:} \href{https://developers.google.com/youtube/data/determine_quota_cost}{quota costs}\par}
+        \end{column}
+        \begin{column}{0.35\textwidth}
             \textbf{Discuss}\\[2pt]
-            {\footnotesize How many units would a year of NOAA's uploads cost? We set a hidden \texttt{likeCount} to 0: when is that wrong, and how would you count how often it happened?\par}
+            {\footnotesize How many units would all of NOAA's uploads cost? We set a hidden \texttt{likeCount} to 0: when is that wrong?\par}
         \end{column}
     \end{columns}
 \end{frame}
