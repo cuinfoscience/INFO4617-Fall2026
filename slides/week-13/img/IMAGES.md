@@ -35,7 +35,9 @@ does. Its table matches the key's printed table to three places. The plot is
 the key's line chart restyled for a slide: larger type, ticks every four
 years, no title (the frame has one), and a different marker for each article,
 because the default colors for Trump and Clinton are hard to tell apart for
-readers with red-green color blindness. Chapter 13's `@fig-lead-similarity`
+readers with red-green color blindness. Since the fix pass of 2026-11-18 it also
+draws the key's gray baseline band, from the lowest to the highest similarity of
+two different people's current leads (0.389 to 0.584). Chapter 13's `@fig-lead-similarity`
 ("Similarity Over Time") draws the same data. Rebuild it from the repository
 root with:
 

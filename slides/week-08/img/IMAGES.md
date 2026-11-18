@@ -120,7 +120,7 @@ capture dates.
     with the windows side by side, showed it at about 8.
 - `xkcd_inspect.png` -- DevTools Elements panel after right-click > Inspect on
   xkcd's comic: the selected `<img>` with its `title` (hover joke) and `alt`
-  attributes. (Read attributes, then act like a user)
+  attributes. (Step 7: find it first; until 2026-11-17, "Read attributes, then act like a user")
 To retake one of the 2026-09-22/23 images by hand, open the page in Chrome
 and screenshot it; the DevTools shots need the panel docked right at about
 1680x1000.
