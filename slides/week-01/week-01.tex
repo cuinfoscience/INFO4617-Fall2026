@@ -34,7 +34,7 @@
             Welcome to Web Data Science. The semester starts Thursday, so this week we meet \textbf{Friday only}
 
             \bigskip
-            Today is orientation and introduction to GitHub.
+            Today is orientation, Lab 01 and introduction to GitHub.
 
             \bigskip
 
@@ -43,6 +43,7 @@
                 \item What web data science is and why it matters
                 \item How the class works and how you're graded
                 \item Our unusual textbook
+                \item Lab 01: your first request
                 \item Git \& GitHub
             \end{itemize}
 
@@ -228,20 +229,23 @@
 \begin{frame}{Lab 01: your first request}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Lab 01 runs the chapter's loop once, end to end: one page, one day of pageviews, then January 2026 as a table, a plot and a file.
+            Lab 01 runs the chapter's loop: one page, one day of pageviews, then January 2026 as a table.
 
             \medskip
             Each new request starts small enough to predict what comes back.
 
             \medskip
-            Steps 0--6 are for class. Steps 7--9 are for after class, on your own.
+            Steps 0--3 are for class, 35 minutes. Steps 4--10 are for after class, on your own: the plot, the file, a year, and a request that fails.
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{The notebook}\\[2pt]
-            {\footnotesize \texttt{labs/week-01/lab-01.ipynb} in the course repository. The key is \texttt{lab-01-key.ipynb}.\par}
+            {\footnotesize Open \href{https://github.com/cuinfoscience/INFO4617-Fall2026/blob/main/labs/week-01/lab-01.ipynb}{\texttt{labs/week-01/lab-01.ipynb}} in the course repository. Click \textbf{Download raw file}. The key is \texttt{lab-01-key.ipynb}.\par}
             \medskip
             \textbf{Step 0}\\[2pt]
             {\footnotesize Open it in the \texttt{webdata} environment. Put your email in the User-Agent.\par}
+            \medskip
+            \textbf{Not set up yet?}\\[2pt]
+            {\footnotesize Follow on a neighbor's screen today. Finish the setup handout before Monday.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -253,6 +257,9 @@
 
             \medskip
             What status code do you expect? Will the first 200 characters look like the article?
+
+            \medskip
+            Spell out \texttt{headers=}. Without it, your email goes into the address, and Wikipedia answers 403.
 
             \medskip
             The notebook writes the address in one line.
@@ -277,7 +284,7 @@ print(response.text[:200])
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 3: the address is the question}
+\begin{frame}[fragile]{Step 2: the address is the question}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             The pageviews API takes its parameters as parts of the address.
@@ -307,7 +314,7 @@ https://wikimedia.org/api/rest_v1
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 3: ask for one day}
+\begin{frame}[fragile]{Step 2: ask for one day}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             \texttt{views\_url} holds every part up to the article. The window comes last.
@@ -331,13 +338,13 @@ print(day_response.status_code, day_response.text)
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 3: read the day, then ask for the month}
+\begin{frame}[fragile]{Step 2: read the day, then ask for the month}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            \texttt{.json()} turns the text into a dictionary. Check it against what you read.
+            \texttt{.json()} turns the text into a dictionary. Its one key, \texttt{items}, holds the list of days.
 
             \medskip
-            Then the month. Only the end date changes. How many items now?
+            Is the title the one you asked for? Then the month. Only the end date changes. How many items now?
 
             \medskip
             {\scriptsize\textbf{Docs:} \href{https://requests.readthedocs.io/en/stable/user/quickstart/\#json-response-content}{\texttt{.json()}}\par}
@@ -346,9 +353,10 @@ print(day_response.status_code, day_response.text)
 \begin{lstlisting}
 # The text as a dictionary
 day_data = day_response.json()
-# How many days, and the first day's views
+# How many days, and the first day's title and views
 print(len(day_data["items"]))
-print(day_data["items"][0]["views"])
+first_day = day_data["items"][0]
+print(first_day["article"], first_day["views"])
 
 # Then all of January: only the end changes
 month_url = views_url + "/daily/20260101/20260131"
@@ -366,20 +374,22 @@ month_url = views_url + "/daily/20260101/20260131"
 
     \bigskip
 
-    \dayband{Monday}{Concept + notebook intro}
+    \dayband{Monday}{Concept + lab, part 1}
     \begin{itemize}\small
-        \item Lecture --- Introduce the week's ideas and the companion notebook, you read the week's textbook chapter
+        \item Lecture and live coding --- Introduce the week's ideas and start the week's lab, you read the week's textbook chapter
     \end{itemize}
     \medskip
-    \dayband{Wednesday}{Notebook lab}
+    \dayband{Wednesday}{Notebook lab, part 2}
     \begin{itemize}\small
         \item Hands-on --- we work and debug the chapter's code together, live
     \end{itemize}
     \medskip
-    \dayband{Friday}{Textbook revisions}
+    \dayband{Friday}{Lab, part 3 + textbook revisions}
     \begin{itemize}\small
-        \item Fix --- submit issues and propose pull requests that improve the textbook and notebooks
+        \item Fix --- in the last 15 minutes, submit issues and propose pull requests that improve the textbook and notebooks (from week 11, your project checkpoint)
     \end{itemize}
+    \medskip
+    Submit the companion notebook's Recommended Exercises by the Sunday after the lab.
 \end{frame}
 
 \begin{frame}{Evaluation}
@@ -487,7 +497,7 @@ month_url = views_url + "/daily/20260101/20260131"
                
                 \item Every chapter ships with a companion notebook
                 
-                \item Notebook have exercises we will work on Wednesdays and you will submit on Fridays
+                \item Notebooks have exercises we will work toward in the week's lab and you will submit by Sunday
 
                 \item Notebooks might have errors for you to fix or that the repo needs to fix
 
@@ -857,7 +867,7 @@ month_url = views_url + "/daily/20260101/20260131"
 \begin{frame}{Key takeaways}
     \begin{enumerate}
         \item Web data science is \textbf{retrieve $\rightarrow$ parse $\rightarrow$ analyze}
-        \item Every week has a rhythm: \textbf{Monday} concept, \textbf{Wednesday} notebook lab, \textbf{Friday} textbook revisions.
+        \item Every week has a rhythm: a lab coded live on \textbf{Monday}, \textbf{Wednesday} and \textbf{Friday}, textbook revisions at the end of \textbf{Friday}, and exercises due \textbf{Sunday}.
         \item The textbook is \textbf{open, Quarto-built, and AI-drafted} --- which is exactly why your first-time-reader perspective is valuable.
         \item Revisions to textbook graded on \textbf{location, evidence, actionability, and reviews} --- not on whether I merge them.
         \item Your grade is what you build: Labs 30\%, Revisions 15\%, Attendance 15\%, Final Project 40\% --- \textbf{no exams}.

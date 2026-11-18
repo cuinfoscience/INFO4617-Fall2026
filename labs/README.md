@@ -6,7 +6,7 @@ This term began the labs in week 10. The labs for weeks 1–9 are written for th
 
 | Week | Your copy | Solutions |
 | --- | --- | --- |
-| 1 · Introduction to web data science (Friday only: Steps 0–6 in class, Steps 7–9 on your own) | [`week-01/lab-01.ipynb`](week-01/lab-01.ipynb) | [`week-01/lab-01-key.ipynb`](week-01/lab-01-key.ipynb) · [PDF](week-01/lab-01-key.pdf) |
+| 1 · Introduction to web data science (Friday only: Steps 0–3 in class, Steps 4–10 on your own) | [`week-01/lab-01.ipynb`](week-01/lab-01.ipynb) | [`week-01/lab-01-key.ipynb`](week-01/lab-01-key.ipynb) · [PDF](week-01/lab-01-key.pdf) |
 | 2 · Ethics, law, and responsible collection | [`week-02/lab-02.ipynb`](week-02/lab-02.ipynb) | [`week-02/lab-02-key.ipynb`](week-02/lab-02-key.ipynb) · [PDF](week-02/lab-02-key.pdf) |
 | 3 · The post-API age | [`week-03/lab-03.ipynb`](week-03/lab-03.ipynb) | [`week-03/lab-03-key.ipynb`](week-03/lab-03-key.ipynb) · [PDF](week-03/lab-03-key.pdf) |
 | 4 · Data formats: XML and JSON | [`week-04/lab-04.ipynb`](week-04/lab-04.ipynb) | [`week-04/lab-04-key.ipynb`](week-04/lab-04-key.ipynb) · [PDF](week-04/lab-04-key.pdf) |
