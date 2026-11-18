@@ -49,10 +49,10 @@
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{The lab}\\[2pt]
-            {\footnotesize \texttt{labs/week-02/lab-02.ipynb} in the course repository, in two parts. The key is beside it.\par}
+            {\footnotesize \texttt{labs/week-02/lab-02.ipynb} in the course repository, in two parts. The key is beside it. Each part ends with microsprints for after class.\par}
             \medskip
             \begin{alertblock}{Bring a laptop}
-                \footnotesize Wednesday is hands-on --- we send live requests and watch what the server sees.
+                \footnotesize Wednesday and Friday are hands-on --- we send live requests and watch what the server sees.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -482,10 +482,10 @@
 \begin{frame}{First: get this week's notebook from GitHub}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Every week's companion notebook lives in the textbook's GitHub repository, in a \texttt{notebooks/} folder. Today's is \texttt{ch-02-ethics.ipynb} --- this is a habit you'll repeat every Wednesday, so let's do it slowly once:
+            Every week's lab notebook lives in the course's GitHub repository, in a \texttt{labs/} folder. Today's is \texttt{lab-02.ipynb} --- this is a habit you'll repeat every Wednesday, so let's do it slowly once:
             \begin{enumerate}\small
-                \item Go to \url{github.com/cuinfoscience/Web-Data-Science-Book}
-                \item Open the \texttt{notebooks} folder, then click \texttt{ch-02-ethics.ipynb}
+                \item Go to \url{github.com/cuinfoscience/INFO4617-Fall2026}
+                \item Open the \texttt{labs} folder, then \texttt{week-02}, then click \texttt{lab-02.ipynb}
                 \item Click \textbf{Download raw file} in the file toolbar (the down-arrow icon). 
                 \begin{itemize}
                     \item If your browser opens the raw JSON instead of downloading it, right-click the button and choose \textbf{Save Link As\ldots}
@@ -494,9 +494,9 @@
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Where to look}
-                \footnotesize The Companion Notebooks appendix of the published book also links every chapter's notebook in one place, if you'd rather click than browse the repo.
-            \end{block}
+            \textbf{Where to look}\\[2pt]
+            {\footnotesize The Recommended Exercises, due Sunday, are in the chapter's companion notebook, \texttt{ch-02-ethics.ipynb}, in the textbook's \texttt{notebooks/} folder. The Companion Notebooks appendix of the published book links every chapter's notebook in one place, if you'd rather click than browse the repo.\par}
+            \medskip
 
             \includegraphics[width=\textwidth]{slides/week-02/img/github-download-raw-file.png}
             
@@ -517,7 +517,7 @@ jupyter notebook              # 3. starts the server; your browser opens automat
 
 \medskip
 
-                In the file-browser tab that opens, click \texttt{ch-02-ethics.ipynb} to open it. Before running anything, confirm you're where you think you are:
+                In the file-browser tab that opens, click \texttt{lab-02.ipynb} to open it. Before running anything, confirm you're where you think you are:
 \begin{lstlisting}
 import os
 print(os.getcwd())
@@ -554,6 +554,9 @@ print(os.getcwd())
 
             \medskip
             Each idea starts small enough to predict: one echo, five lines of rules, three lines that disagree. Then the New York Times.
+
+            \medskip
+            Steps 0--5 fill the 50 minutes. The microsprints wait at the end of the part, for after class.
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{Where}\\[2pt]
@@ -563,7 +566,7 @@ print(os.getcwd())
             {\footnotesize The chapter's Recommended Exercises, in its companion notebook. Graded on good-faith attempt to complete rather than getting everything working.\par}
             \medskip
             \textbf{Error flavors}\\[2pt]
-            {\footnotesize Steps 1 and 5 are designed to break. A cell that fails any other way may need a GitHub issue.\par}
+            {\footnotesize Steps 1 and 5 are designed to break. A \texttt{NameError} after an error means an earlier cell failed: fix that one first. A cell that fails any other way may need a GitHub issue.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -571,7 +574,7 @@ print(os.getcwd())
 \begin{frame}[fragile]{Step 0: say who we are}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            A given cell imports what we need and prints your Python version.
+            A given cell imports what we need and prints your Python version. 3.14.5 or later (or 3.13.14) gives the key's answers.
 
             \medskip
             Then type the header every request will send: a name, a version, and a way to reach you. Use your own email.
@@ -580,7 +583,8 @@ print(os.getcwd())
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
 # The User-Agent every request will send
 HEADERS = {
-    "User-Agent": "WebDataScience/1.0 (you@colorado.edu)",
+    "User-Agent":
+        "WebDataScience/1.0 (your-email@colorado.edu)",
 }
 print(HEADERS)
 \end{lstlisting}
@@ -640,7 +644,7 @@ print(bare.status_code)
 \begin{frame}[fragile]{Step 2: a robots.txt you can read whole}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            A \texttt{User-agent} line names the crawlers a group is for. \texttt{Disallow} gives a path they may not fetch. A blank line ends the group.
+            A \texttt{User-agent} line names the crawlers a group is for. \texttt{Disallow} gives a path they may not fetch. The group runs to the next \texttt{User-agent} line after its rules.
 
             \medskip
             Which group applies to us?
@@ -713,10 +717,10 @@ print(len(lines))
 \begin{frame}[fragile]{Step 4: when two rules match}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Both rules match \texttt{/svc/wordle}. Since Python 3.14.5, the longest one wins. Before, the first one did.
+            Both rules match \texttt{/svc/wordle}. Since Python 3.14.5 (and 3.13.14), the longest one wins. Before, the first one did, so the answers differ.
 
             \medskip
-            Predict both answers. Which Python did Step 0 print?
+            Predict both answers. Which Python did Step 0 print? The notebook labels each answer.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
@@ -742,7 +746,7 @@ print(two_rules.can_fetch("*", site + "/svc/news"))
             Parse the lines we already have. \texttt{"*"} is the group for every crawler the file doesn't name.
 
             \medskip
-            A given cell asks about four pages. The microsprint finds the lines behind one answer.
+            A given cell asks about four pages. The notebook labels each answer. After class, a microsprint finds the lines behind one of them.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
@@ -865,9 +869,13 @@ sites = {"Wikipedia": "https://en.wikipedia.org/robots.txt",
          "NY Times":  "https://www.nytimes.com/robots.txt"}
 
 for name, url in sites.items():
-    lines = requests.get(url, headers=HEADERS).text.strip().split("\n")
-    disallow = sum(l.startswith("Disallow") for l in lines)
-    allow    = sum(l.startswith("Allow")    for l in lines)
+    response = requests.get(url, headers=HEADERS)
+    if response.status_code != 200:   # an error page isn't a rules file
+        print(f"{name}: got {response.status_code}, nothing to count")
+        continue
+    lines = response.text.strip().split("\n")
+    disallow = sum(l.lower().startswith("disallow") for l in lines)
+    allow    = sum(l.lower().startswith("allow")    for l in lines)
     print(f"{name}: {len(lines)} lines, {disallow} Disallow, {allow} Allow")
 \end{lstlisting}
 
@@ -910,137 +918,33 @@ for name, url in sites.items():
     \end{columns}
 \end{frame}
 
-\begin{frame}{Which AI crawlers does this site block?}
+\begin{frame}{After the lab: work these, then show-and-tell}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Since 2023, \texttt{robots.txt} has grown a second job: naming \textbf{AI training crawlers}. Search each file you fetched for:
-
-            \smallskip
-            {\footnotesize \texttt{GPTBot} (OpenAI) \textbar{} \texttt{ClaudeBot} (Anthropic) \textbar{} \texttt{CCBot} (Common Crawl) \textbar{} \texttt{Google-Extended} \textbar{} \texttt{Applebot-Extended} \textbar{} \texttt{Meta-ExternalAgent} \textbar{} \texttt{PerplexityBot}}
-
-            \medskip
-
-            Then look for the error that \textcite{koebler_wrong_2024} found: a site blocks a \textbf{retired} crawler name, but not the operator's \textbf{active} one. Copied blocklists go out of date.
-
-            \medskip
-
-            \texttt{robots.txt} also has no enforcement mechanism. \textcite{mehrotra_perplexity_2024} documents a company that reached blocked pages from an unpublished IP address.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Why respect it}
-                \footnotesize Because your goal is defensible research, not avoiding detection.
-
-                \smallskip
-
-                The norm does not stop bad actors, but ignoring it will damage your reputation.
-            \end{alertblock}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Identify yourself, then slow down}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-Two habits make you a good citizen of the web --- a truthful \texttt{User-Agent} and rate limiting:
-\begin{lstlisting}
-import time, requests
-
-headers = {
-    "User-Agent": "WebDataScience/1.0 (INFO 4617; brian.keegan@colorado.edu)"
-}
-
-for url in urls:
-    response = requests.get(url, headers=headers)
-    # ... process the response ...
-    time.sleep(1)          # a good default: about one request per second
-\end{lstlisting}
-
-            \footnotesize The default \texttt{requests} User-Agent marks you as an anonymous bot. A good one \textbf{identifies you and gives contact info}, so operators can reach you instead of simply blocking you --- and some APIs \textit{require} it.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/user_agent_devtools.png}\\
-            {\scriptsize Your header is visible to every server you touch.}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{\texttt{responsible\_get()}: build it once}
-    Custom User-Agent, rate limiting, and error handling appear in \textit{every} scraping project. Wrap them into one reusable function instead of re-implementing them ad hoc:
-\begin{lstlisting}
-import requests, time
-
-def responsible_get(url, headers=None, delay=1.0):
-    """GET with responsible defaults: identify, rate-limit, fail loudly."""
-    default_headers = {
-        "User-Agent": "WebDataScience/1.0 (INFO 4617; you@colorado.edu)"}
-    if headers:
-        default_headers.update(headers)
-    try:
-        response = requests.get(url, headers=default_headers, timeout=30)
-        response.raise_for_status()      # treat 4xx/5xx as failures, not data
-        time.sleep(delay)                # rate-limit by default
-        return response
-    except requests.exceptions.RequestException as e:
-        print(f"Request failed ({type(e).__name__}): {url}")
-        return None
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}{Design choices, and later reuse}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \begin{block}{Every default encodes a principle}
-                \begin{itemize}\small
-                    \item \textbf{Custom User-Agent} --- identify \& give contact
-                    \item \textbf{\texttt{delay} defaults ON} --- aggressive scraping must be a \textit{conscious} override, not an oversight
-                    \item \texttt{raise\_for\_status()} --- a 403/404 fails loudly instead of feeding your parser garbage
-                    \item broad \texttt{except} --- \texttt{ConnectionError}, \texttt{Timeout}, \texttt{SSLError} log rather than crash the run
-                    \item \texttt{timeout=30} --- never hang forever on a dead server
-                    \item pass a site's \texttt{Crawl-delay} as \texttt{delay} to honor its stated preference
-                \end{itemize}
-            \end{block}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Reused in later chapters}
-                \footnotesize \texttt{responsible\_get()} returns in \textbf{Ch.~6} (scraping HTML tables), \textbf{Ch.~7} (Wayback snapshots), and throughout the \textbf{API chapters}.
-
-                \medskip
-
-                Building responsible defaults into your \textit{tools} is more reliable than remembering to add them each time.
-            \end{alertblock}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Lab: work these, then show-and-tell}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Work in pairs. Do these exercises from the notebook:
+            These are optional practice, most of them the chapter's Additional Exercises. What is due Sunday is the Recommended Exercises, in the companion notebook. Work in pairs:
             \begin{enumerate}\small
                 \item Compare the \texttt{robots.txt} files of five sites in one category. Report the patterns that you find.
                 \item Read one Terms of Service. Find three clauses that limit automated collection. Report if research is an exception.
                 \item Apply the five-question framework to this plan: collect dating-app profiles to study self-presentation.
-                \item Measure five requests with \texttt{time.time()}. Use a 1-second delay, then a 2-second delay. Compare the times with your intent.
+                \item Measure five requests with \texttt{time.time()}. Use a 1-second delay, then a 2-second delay. Compare the times with your intent. Read the site's \texttt{robots.txt} first.
                 \item Select a site that you use each day. Compare its \texttt{robots.txt}, its Terms of Service, and the framework. Write 300 words. Show where they disagree.
                 \item[6.] \textbf{5617}: read \textcite{fiesler2020no}, the EFF page about the CFAA, and \textit{Van Buren}. Then write a two-page memo about collection from platforms
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Show-and-Tell}
-                \footnotesize Bring one of these to class:
-                \begin{itemize}\footnotesize
-                    \item a bug that you could not solve
-                    \item data that you collected and find interesting
-                    \item a question for a research design
-                \end{itemize}
-            \end{block}
+            \textbf{Show-and-Tell}\\[2pt]
+            {\footnotesize Bring one of these to class:\par}
+            \begin{itemize}\footnotesize
+                \item a bug that you could not solve
+                \item data that you collected and find interesting
+                \item a question for a research design
+            \end{itemize}
         \end{column}
     \end{columns}
 \end{frame}
 
 % =========================================================================
-\section{Friday · Textbook Revisions}
+\section{Friday}
 % =========================================================================
 
 \begin{frame}{Daily note questions, part I}\small 
@@ -1092,7 +996,38 @@ def responsible_get(url, headers=None, delay=1.0):
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{Start at Step 6}\\[2pt]
-            {\footnotesize Put your email in its setup cell. The next given cell loads a saved copy of the Times's file, so Wednesday's kernel isn't needed.\par}
+            {\footnotesize Put your email in its setup cell; it prints \texttt{HEADERS}, so check it. The next given cell loads a saved copy of the Times's file, so Wednesday's kernel isn't needed. If that cell stops, ask.\par}
+            \medskip
+            \textbf{After class}\\[2pt]
+            {\footnotesize Steps 6--9 fill the 35 minutes. The microsprints and Step 10 wait at the end of the part.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Which AI crawlers does this site block?}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Since 2023, \texttt{robots.txt} has grown a second job: naming \textbf{AI training crawlers}. Search each file you fetched for:
+
+            \smallskip
+            {\footnotesize \texttt{GPTBot} (OpenAI) \textbar{} \texttt{ClaudeBot} (Anthropic) \textbar{} \texttt{CCBot} (Common Crawl) \textbar{} \texttt{Google-Extended} \textbar{} \texttt{Applebot-Extended} \textbar{} \texttt{Meta-ExternalAgent} \textbar{} \texttt{PerplexityBot}}
+
+            \medskip
+
+            Then look for the error that \textcite{koebler_wrong_2024} found: a site blocks a \textbf{retired} crawler name, but not the operator's \textbf{active} one. Copied blocklists go out of date.
+
+            \medskip
+
+            \texttt{robots.txt} also has no enforcement mechanism. \textcite{mehrotra_perplexity_2024} documents a company that reached blocked pages from an unpublished IP address.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Why respect it}
+                \footnotesize Because your goal is defensible research, not avoiding detection.
+
+                \smallskip
+
+                The norm does not stop bad actors, but ignoring it will damage your reputation.
+            \end{alertblock}
         \end{column}
     \end{columns}
 \end{frame}
@@ -1121,7 +1056,7 @@ print(sun.status_code)
             Hand \texttt{parse()} the lines, not the text: given one string, it finds no rules and allows everything.
 
             \medskip
-            A given \texttt{crawler\_check()} repeats these moves for seven agents, and a given loop runs it on six newsrooms.
+            A given \texttt{crawler\_check()} repeats these moves for seven agents, and stops on any status but 200. A given loop runs it on six newsrooms.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
@@ -1176,22 +1111,43 @@ print(rp.crawl_delay("*"))
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 8: ask first, then send}
+\begin{frame}[fragile]{Step 8: robots.txt says yes. Do we send?}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Permission, a name, a pause. A given loop does this for three pages, skips any that \texttt{robots.txt} disallows, and waits a second.
+            Ask the Times's file about its technology section.
 
             \medskip
-            \texttt{robots.txt} says yes. Will the server?
+            Then recall Step 3's notice: no automated collection without written permission. Which signal wins? We send the Times nothing.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
-# Ask robots.txt first
+# Ask robots.txt only; send nothing
 tech_url = "https://www.nytimes.com/section/technology"
-print(rp.can_fetch("*", tech_url))
-# It says yes, so send it, with our header
-tech_page = requests.get(tech_url, headers=HEADERS)
-print(tech_page.status_code)
+print(
+    "Times technology section:",
+    rp.can_fetch("*", tech_url),
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: ask first, then send}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell parses Wikipedia's file into \texttt{wiki\_rules}. It allows articles, and names no AI crawler.
+
+            \medskip
+            A given loop does this for three pages, skips any the file disallows, waits a second, and stops on any status but 200.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+# Ask Wikipedia's rules, not the Times's
+article_url = "https://en.wikipedia.org/wiki/Robots.txt"
+print(wiki_rules.can_fetch("*", article_url))
+# It may: send it, with our header
+article = requests.get(article_url, headers=HEADERS)
+print(article.status_code)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1203,11 +1159,87 @@ print(tech_page.status_code)
             Monday's framework, on what we collected this week: legality, consent, proportionality, privacy, server impact. One comment line each.
 
             \medskip
-            Then, in pairs, a harder case: a researcher wants to scrape dating-app profiles to study self-presentation. What do you recommend, and which question decides it?
+            After class, in pairs, a harder case: a researcher wants to scrape dating-app profiles to study self-presentation. What do you recommend, and which question decides it?
         \end{column}
         \begin{column}{0.35\textwidth}
-            \textbf{Then Step 10}\\[2pt]
-            {\footnotesize What did we learn? Four questions, answered as comments, after class if time runs out.\par}
+            \textbf{After class}\\[2pt]
+            {\footnotesize The four microsprints, then Step 10: what did we learn? Four questions, answered as comments.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Reading after class: lab Step 8 points to the chapter's responsible_get().
+\begin{frame}[fragile]{After class: identify yourself, then slow down}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+Two habits make you a good citizen of the web --- a truthful \texttt{User-Agent} and rate limiting:
+\begin{lstlisting}
+import time, requests
+
+headers = {
+    "User-Agent": "WebDataScience/1.0 (INFO 4617; brian.keegan@colorado.edu)"
+}
+
+for url in urls:
+    response = requests.get(url, headers=headers)
+    # ... process the response ...
+    time.sleep(1)          # a good default: about one request per second
+\end{lstlisting}
+
+            \footnotesize The default \texttt{requests} User-Agent marks you as an anonymous bot. A good one \textbf{identifies you and gives contact info}, so operators can reach you instead of simply blocking you --- and some APIs \textit{require} it.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/user_agent_devtools.png}\\
+            {\scriptsize Your header is visible to every server you touch.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class: \texttt{responsible\_get()}, built once}
+    Custom User-Agent, rate limiting, and error handling appear in \textit{every} scraping project. Wrap them into one reusable function instead of re-implementing them ad hoc:
+\begin{lstlisting}
+import requests, time
+
+def responsible_get(url, headers=None, delay=1.0):
+    """GET with responsible defaults: identify, rate-limit, fail loudly."""
+    default_headers = {
+        "User-Agent": "WebDataScience/1.0 (INFO 4617; you@colorado.edu)"}
+    if headers:
+        default_headers.update(headers)
+    try:
+        response = requests.get(url, headers=default_headers, timeout=30)
+        response.raise_for_status()      # treat 4xx/5xx as failures, not data
+        time.sleep(delay)                # rate-limit by default
+        return response
+    except requests.exceptions.RequestException as e:
+        print(f"Request failed ({type(e).__name__}): {url}")
+        return None
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{After class: design choices, and later reuse}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \begin{block}{Every default encodes a principle}
+                \begin{itemize}\small
+                    \item \textbf{Custom User-Agent} --- identify \& give contact
+                    \item \textbf{\texttt{delay} defaults ON} --- aggressive scraping must be a \textit{conscious} override, not an oversight
+                    \item \texttt{raise\_for\_status()} --- a 403/404 fails loudly instead of feeding your parser garbage
+                    \item broad \texttt{except} --- \texttt{ConnectionError}, \texttt{Timeout}, \texttt{SSLError} log rather than crash the run
+                    \item \texttt{timeout=30} --- never hang forever on a dead server
+                    \item pass a site's \texttt{Crawl-delay} as \texttt{delay} to honor its stated preference
+                \end{itemize}
+            \end{block}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Reused in later chapters}
+                \footnotesize \texttt{responsible\_get()} returns in \textbf{Ch.~6} (scraping HTML tables), \textbf{Ch.~7} (Wayback snapshots), and throughout the \textbf{API chapters}.
+
+                \medskip
+
+                Building responsible defaults into your \textit{tools} is more reliable than remembering to add them each time.
+            \end{alertblock}
         \end{column}
     \end{columns}
 \end{frame}
@@ -1341,7 +1373,7 @@ print(tech_page.status_code)
 
     \medskip
 
-    \textbf{Notebook labs} --- Wednesday notebook exercises to bottom, save as HTML, submit to Canvas
+    \textbf{Notebook labs} --- the chapter's Recommended Exercises, in its companion notebook; save as HTML, submit to Canvas
 
     \medskip
 
