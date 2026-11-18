@@ -2,7 +2,7 @@
 
 Read by `lab-07.ipynb` from this folder's raw address on `main`. Each lets a student go on when the Internet Archive refuses a request: thirty people behind one campus address share its allowance.
 
-**Not made yet.** All four hold answers from `web.archive.org`, which refused the course's cloud machine on 2026-10-21 and again on 2026-11-17, when the lab was rebuilt (issue #197 collects the laptop runs). Until the files are here, the four loading cells in the lab would stop with a 404; they are commented out, and no setup step needs them.
+**Not made yet.** All four hold answers from `web.archive.org`, which refused the course's cloud machine on 2026-10-21 and again on 2026-11-17, when the lab was rebuilt (issue #197 collects the laptop runs). Until the files are here, the four loading cells in the lab would stop with a 404; they are commented out, and no setup step needs them. Their lines start with `#` and no space, so that removing the `#` leaves code Python can run; the three that load JSON check the status first and stop with "Got 404", and the CSV's `pd.read_csv()` stops with `HTTPError` by itself. Step 9's file is read by a step that moved to After class on 2026-11-18.
 
 To make them, run the key from a laptop with `labs/tools/run_key.py`, then run the key once more in JupyterLab with one line added at the end of each cell below, and commit the four files here. Write the date of that run in this file, in place of this paragraph.
 
