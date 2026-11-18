@@ -29,32 +29,35 @@
 
             \bigskip
 
-            \dayband{Monday}{Concepts \& notebook intro}
+            \dayband{Monday}{Lab 8, Part 1: do you need a browser?}
             \begin{itemize}\small
-                \item Three checks by hand; Selenium and Selenium Manager; headless browsers; Playwright scripts; AI agents that drive a browser; logging in as yourself, and what it costs
-                \item Close with a pair activity: do you need a browser?
+                \item Three checks by hand, then in code; the hidden API, one page by hand, then every page
             \end{itemize}
 
             \medskip
 
-            \dayband{Wednesday}{Notebook lab}
+            \dayband{Wednesday}{Part 2: drive a browser}
             \begin{itemize}\small
-                \item Work the Chapter 8 notebook in Selenium: xkcd, a Wikipedia search, and the Quotes to Scrape sandbox
+                \item Selenium, Selenium Manager and headless mode; start Chrome, then find, read, click, and wait
             \end{itemize}
 
             \medskip
 
-            \dayband{Friday}{Clearing the backlog}
+            \dayband{Friday}{Part 3: scroll and log in, then revisions}
             \begin{itemize}\small
-                \item Turn an issue into a pull request, get a pull request merged, or start one for Chapter 8
+                \item Scroll to the end, and log in by hand; then 15 minutes from the lab to the textbook
+                \item After class: a Playwright script, and AI agents that drive a browser
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Companion notebook}
-                \footnotesize \texttt{ch-08-dynamic-pages.ipynb}
-            \end{block}
+            \textbf{Lab 8}\\[2pt]
+            {\footnotesize \texttt{labs/week-08/lab-08.ipynb}, one part a day\par}
+            \medskip
+            \textbf{Recommended Exercises}\\[2pt]
+            {\footnotesize In \texttt{ch-08-dynamic-pages.ipynb}, due Sunday\par}
+            \medskip
             \begin{alertblock}{Bring a laptop}
-                \footnotesize Monday and Wednesday are both hands-on --- bring a laptop both days.
+                \footnotesize All three days are hands-on --- bring a laptop every day.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -151,14 +154,14 @@
             \begin{enumerate}\small
                 \item Open the \href{https://github.com/cuinfoscience/INFO4617-Fall2026/tree/main/labs}{\textbf{labs} folder} of \texttt{cuinfoscience/INFO4617-Fall2026} on GitHub
                 \item Open \texttt{week-08}, click \texttt{lab-08.ipynb}, then \textbf{Download raw file}
-                \item Open it in JupyterLab in the \texttt{webdata} environment
+                \item Open it in JupyterLab, in the environment from the setup handout (\texttt{webdata}, or Anaconda's own)
             \end{enumerate}
 
             \medskip
             \dayband{Use it}{one part a day}
             \begin{itemize}\small
                 \item I write the code on screen, and you write it in your copy
-                \item Today: Part 1, Steps 0--3; no browser yet
+                \item Today: Part 1, Steps 0--3; no browser yet. Two microsprints are after class
                 \item Wednesday and Friday: start at that part's setup step
             \end{itemize}
         \end{column}
@@ -166,8 +169,8 @@
             \textbf{Solutions}\\[2pt]
             {\footnotesize \texttt{lab-08-key.ipynb}, beside it: every cell filled in and run. Fall behind? Copy the cell from the key and keep going.\par}
             \medskip
-            \textbf{Nothing to submit}\\[2pt]
-            {\footnotesize The lab is practice. After each step, a \textbf{Discuss} box holds questions we'll talk over before the next.\par}
+            \textbf{What you turn in}\\[2pt]
+            {\footnotesize Not the lab: it's practice. Chapter 8's Recommended Exercises, in its companion notebook, are due Sunday. After each step, a \textbf{Discuss} box holds questions we'll talk over before the next.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -207,6 +210,8 @@ print(
     js_response.status_code,
     js_response.headers["Content-Type"],
 )
+# How many characters came back?
+print(len(js_response.text))
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -220,6 +225,7 @@ print(
             \medskip
             Predict this page's count before you run it.
         \end{column}
+        \pause
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[style=lab]
 # Parse the HTML the server sent
@@ -250,17 +256,17 @@ print(script_quotes[0]["author"]["name"])
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Microsprint: another page}
+\begin{frame}[fragile]{After class: another page}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            \textbf{Do:} run Check~1 on \texttt{/scroll}. \texttt{in} asks whether one string is inside another.
+            A microsprint for after class. \textbf{Do:} run Check~1 on \texttt{/scroll}. \texttt{in} asks whether one string is inside another.
 
             \medskip
             \textbf{Share:} both answers, and where you'd look next for the quotes.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[style=lab]
-# Fetch another page of the sandbox
+# Fetch another page of the practice site
 scroll_check = requests.get(
     "https://quotes.toscrape.com/scroll",
     headers=HEADERS,
@@ -347,8 +353,8 @@ print(
 \begin{lstlisting}[style=lab]
 # The answer, as a dictionary
 first_page = first_response.json()
-# Look at its keys
-first_page.keys()
+# Print its keys
+print(first_page.keys())
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -381,8 +387,8 @@ print(
 \begin{lstlisting}[style=lab]
 # The first quote on the page
 first_quote = first_page["quotes"][0]
-# Look at its keys
-first_quote.keys()
+# Print its keys
+print(first_quote.keys())
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -499,7 +505,7 @@ print(
             Read it together. Find Step~2's request in it. What does the loop add?
 
             \medskip
-            It also takes a \texttt{tag}. \texttt{requests} leaves a parameter out when its value is \texttt{None}.
+            It stops if a reply's status isn't 200. It also takes a \texttt{tag}. \texttt{requests} leaves a parameter out when its value is \texttt{None}.
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{\texttt{while True:}}\\[2pt]
@@ -546,10 +552,10 @@ api_quotes.head(3)
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Microsprint: one tag}
+\begin{frame}[fragile]{After class: one tag}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            \textbf{Do:} pick a tag from \texttt{top\_ten}, spelled as it is there. Collect its quotes.
+            A microsprint for after class. \textbf{Do:} pick a tag from \texttt{top\_ten}, spelled as it is there. Collect its quotes.
 
             \medskip
             \textbf{Share:} your tag, how many came back, and whether that matches \texttt{top\_ten}.
@@ -563,6 +569,84 @@ print(top_ten)
 tagged = get_all_quotes(tag="humor")
 print(len(tagged), top_ten["humor"])
 \end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Closing activity: do you need a browser?}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}\small
+            Work in pairs. Pick a page that shows data you would want: a news live blog, a sports scoreboard, a store's search results, a campus events calendar.
+            \begin{enumerate}
+                \item Open View Source. Search it for a word you can see on the page
+                \item Turn JavaScript off. Reload. Write down what is left
+                \item Open the Network tab. Filter to Fetch/XHR. Reload, scroll, or click. Find the request that carries the data
+                \item Decide: \texttt{requests}, the JSON directly, or a browser?
+            \end{enumerate}
+
+            \bigskip
+            Stuck? Start with quotes.toscrape.com/js/ and quotes.toscrape.com/scroll
+
+            \bigskip
+            Report back with one page that did not need a browser, and one that did
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{slides/week-08/img/is-this-a-pigeon.jpg}\\
+            {\footnotesize Is this a dynamic website?}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Before Wednesday}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Complete daily note: \url{https://bit.ly/info4617f26}
+
+            \medskip
+            Read Textbook Ch.~8 before Wednesday.
+
+            \medskip
+            Everyone: Ch.~8's code won't run until you install Selenium. Follow the setup page \href{https://github.com/cuinfoscience/INFO4617-Fall2026/tree/main/handouts/week-08}{\textbf{Set up Selenium for chapter 8}}: \texttt{handouts/week-08} in the course repository on GitHub. It takes you from Anaconda as you installed it to Ch.~8's notebook opening Chrome, in about 20 minutes, mostly downloading. Use a fast connection.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Recommended Exercises}
+                \small In Ch.~8's companion notebook, after all three parts of the lab: fill in the empty cells, run everything, export to HTML, upload to Canvas by \textbf{Sunday 11:59pm}
+            \end{alertblock}
+            \begin{alertblock}{Friday}
+                \small Upload links to your own pull requests, reviews, comments, or issues by \textbf{Sunday 11:59pm}. Each one counts.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% =========================================================================
+\section{Wednesday}
+% =========================================================================
+
+% The code on these frames is the lab's Part 2 (labs/week-08/lab-08-key.ipynb), rebuilt
+% 2026-11-17: one frame per typed cell, with the lab's step numbers.
+\begin{frame}{Today: Part 2, drive a browser}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            When the three checks come up empty, you need a browser. Today:
+            \begin{itemize}\small
+                \item Start Chrome from Python, and open a page you know
+                \item Find elements on xkcd, then read and click like a reader
+                \item Wait for a page that takes ten seconds
+            \end{itemize}
+
+            \medskip
+            \dayband{Use it}{Steps 4--8}
+            \begin{itemize}\small
+                \item Download the new \texttt{lab-08.ipynb}; start at \textbf{Step 4}
+                \item After class: Step 8's microsprint, and typing into a search form
+                \item Chrome must open from chapter 8's notebook (the setup handout)
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Headless}\\[2pt]
+            {\footnotesize Today's browsers have no window. On your laptop, delete the \texttt{-{}-headless=new} line, and watch.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -650,8 +734,8 @@ Current browser version is 154.0.8037.57
             \textbf{Two options}\\[2pt]
             {\footnotesize \texttt{-{}-headless=new}: no window. \texttt{-{}-window-size=1280,800}: a laptop's layout, not 780 pixels wide.\par}
             \medskip
-            \textbf{Wednesday}\\[2pt]
-            {\footnotesize The lab's Step~4 builds them once, for every browser that day.\par}
+            \textbf{Today}\\[2pt]
+            {\footnotesize The lab's Step~4 builds them once, for every browser today.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -665,7 +749,7 @@ Current browser version is 154.0.8037.57
             \textbf{Works with a window, not headless?} Some sites give headless browsers less, or nothing. Open your \texttt{save\_screenshot()}, set \texttt{-{}-window-size} (the default was 780 pixels wide), or go back to the window. Faking the User-Agent to pass as a person is week~5's spoofing.
 
             \medskip
-            \textbf{It can't wait for you.} Nobody can type into a window that isn't there. To log in, use a window once, keep the session, then go headless (later today).
+            \textbf{It can't wait for you.} Nobody can type into a window that isn't there. To log in, use a window once, keep the session, then go headless (Friday).
         \end{column}
         \begin{column}{0.36\textwidth}
             \begin{alertblock}{\texttt{-{}-no-sandbox}?}
@@ -676,8 +760,1048 @@ Current browser version is 154.0.8037.57
             \end{alertblock}
 
             \medskip
-            \textbf{Wednesday}\\[2pt]
-            {\footnotesize Step~8's microsprint times \texttt{requests} and an open browser on the same page.\par}
+            \textbf{After class}\\[2pt]
+            {\footnotesize Step~8's microsprint times \texttt{requests} and a new browser on the same page.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 4: set up again}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Step 4's three cells are given. Put your email in \texttt{HEADERS}, then run them.
+
+            \medskip
+            The second sets Selenium Manager's settings, as in the setup handout. The third builds \texttt{options}, how every browser today starts.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Two settings}\\[2pt]
+            {\footnotesize \texttt{SE\_SKIP\_DRIVER\_IN\_PATH} ignores stray drivers. \texttt{SE\_AVOID\_STATS} stops the usage statistics.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: start the browser}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A browser is a whole program. Time how long it takes to start.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://cuinfoscience.github.io/Web-Data-Science-Book/ch-08-dynamic-pages.html\#starting-the-browser}{Starting the Browser}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# Start the clock
+start = time.time()
+# Start Chrome, with today's options
+driver = webdriver.Chrome(options=options)
+# How many seconds did that take?
+print(round(time.time() - start, 1))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: a page you know}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            First, a page whose answer you know: the practice site's plain page.
+
+            \medskip
+            Your browser's tab shows its title. Predict it.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# Load the practice site's plain page
+driver.get("https://quotes.toscrape.com/")
+# The words in its <title>
+print(driver.title)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: its heading}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{find\_element()} takes a strategy from \texttt{By} and a value. Here, a tag name.
+
+            \medskip
+            Does the heading say the same?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# The page's first <h1>
+heading = driver.find_element(By.TAG_NAME, "h1")
+# Its text, as the browser shows it
+print(heading.text)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: the page \texttt{requests} couldn't read}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Step~1's \texttt{requests} found no quote boxes on \texttt{/js/}.
+
+            \medskip
+            How many will the browser find? A 0? Run it again: Step~8 says why.
+        \end{column}
+        \pause
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# The page requests found empty in Step 1
+driver.get("https://quotes.toscrape.com/js/")
+# Every quote box the browser built
+js_quotes = driver.find_elements(
+    By.CSS_SELECTOR,
+    "div.quote",
+)
+print(len(js_quotes))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: look at what it saw}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            With no window, a screenshot is how you see what the browser saw.
+
+            \medskip
+            What can it tell you that the count can't?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# Save what the browser drew
+driver.save_screenshot("quotes-headless.png")
+# Show it in the notebook
+Image(filename="quotes-headless.png", width=640)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: by class name}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            How many navigation rows, above and below the comic?
+
+            \medskip
+            \texttt{find\_elements()} returns a list. Typed as \texttt{"comicnav"}, it's empty, with no error.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+driver.get("https://xkcd.com")
+# By class name: the navigation rows
+nav_rows = driver.find_elements(
+    By.CLASS_NAME,
+    "comicNav",
+)
+print(len(nav_rows))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: by CSS selector}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The links in those rows. A given cell then tries three more strategies: exact link text, partial link text, and an XPath.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# By CSS selector: the links in those rows
+nav_links = driver.find_elements(
+    By.CSS_SELECTOR,
+    "ul.comicNav a",
+)
+print(len(nav_links))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: inside one row}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            To search inside an element, call the method on it, and start the XPath with a dot.
+
+            \medskip
+            Without the dot, what does \texttt{//a} search?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# The first row
+first_row = nav_rows[0]
+# With a dot: the links inside this row
+print(len(first_row.find_elements(By.XPATH, ".//a")))
+# Without it: the links anywhere on the page
+print(len(first_row.find_elements(By.XPATH, "//a")))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Microsprint: three locators}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \textbf{Do:} find the front page's comic image three ways.
+            \begin{itemize}\small
+                \item \texttt{By.ID} for the comic's \texttt{<div>}, then \texttt{By.TAG\_NAME} inside it
+                \item one \texttt{By.CSS\_SELECTOR}
+                \item one short \texttt{By.XPATH} that starts from the id
+            \end{itemize}
+            Check with \texttt{==} that all three found the same element, and print its \texttt{alt}.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Share}\\[2pt]
+            {\footnotesize Your three locators, whether \texttt{==} said \texttt{True}, and which one you'd trust after a redesign.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: what the browser shows}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            xkcd keeps a transcript in a \texttt{<div>} its style hides.
+
+            \medskip
+            \texttt{.text} reads what the browser shows. \texttt{repr()} shows an empty string as \texttt{''}.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# The comic "Python"
+driver.get("https://xkcd.com/353/")
+transcript = driver.find_element(By.ID, "transcript")
+# The text the browser shows
+print(repr(transcript.text))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: what the markup holds}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{textContent} is what BeautifulSoup's \texttt{get\_text()} would read.
+
+            \medskip
+            Which answer does a study of what readers see want?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# The text in the markup, shown or hidden
+print(transcript.get_attribute("textContent")[:59])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 7: find it first}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Right-click the comic and choose \textbf{Inspect}.
+
+            \medskip
+            Its \texttt{<img>} holds two texts you never see on the page: \texttt{alt} and \texttt{title}.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/xkcd_inspect.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: the comic's two texts}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{get\_attribute()} reads any attribute, even one you never see.
+
+            \medskip
+            The \texttt{alt} holds the comic's name; the \texttt{title}, its hover joke.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+driver.get("https://xkcd.com")
+# The comic's image
+comic_img = driver.find_element(
+    By.XPATH,
+    "//div[@id='comic']//img",
+)
+# Its name, then its hover joke
+print(comic_img.get_attribute("alt"))
+print(comic_img.get_attribute("title"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: click}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Find the \textbf{Random} link by part of its text, and click it.
+
+            \medskip
+            The notebook writes the XPath on one line. Is one second enough for the next page?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# The Random link, by part of its text
+random_xpath = (
+    "//ul[@class='comicNav']"
+    "//a[contains(text(),'Random')]"
+)
+# Click it, then give the page a second
+driver.find_element(By.XPATH, random_xpath).click()
+time.sleep(1)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: the new comic}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Find the image again: the old one belonged to the old page.
+
+            \medskip
+            Where did the click take you?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# The new page's image
+random_img = driver.find_element(
+    By.XPATH,
+    "//div[@id='comic']//img",
+)
+# Where are we, and what's the joke?
+print(driver.current_url)
+print(random_img.get_attribute("title"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: ten seconds of nothing}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{/js-delayed/} adds its quotes after ten seconds.
+
+            \medskip
+            How many will a two-second sleep find?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# Start the clock, and load the slow page
+start = time.time()
+driver.get("https://quotes.toscrape.com/js-delayed/")
+# A guess: two seconds
+time.sleep(2)
+print(len(driver.find_elements(By.CLASS_NAME, "quote")))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: wait for it}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{WebDriverWait} checks every half second, and returns when the condition is true. The locator is a \textbf{tuple}: a strategy and a value, in parentheses.
+
+            \medskip
+            How long did it wait?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# What to wait for
+quote_locator = (By.CLASS_NAME, "quote")
+# Up to 15 seconds, until it's there
+WebDriverWait(driver, 15).until(
+    EC.presence_of_element_located(quote_locator)
+)
+print(round(time.time() - start, 1))
+# Count again
+print(len(driver.find_elements(By.CLASS_NAME, "quote")))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: quit}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Each driver is a whole browser. \texttt{quit()} closes every window and stops chromedriver.
+
+            \medskip
+            After it, a cell that uses \texttt{driver} stops with \texttt{MaxRetryError}: start a browser again. What happens to a headless browser you never quit?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# Close the browser
+driver.quit()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{After class: the rest of Part 2}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            These didn't fit today's 50 minutes. Do them before Friday:
+            \begin{itemize}\small
+                \item Step~8's microsprint: a new browser against \texttt{requests} (4 minutes)
+                \item The rest of Step~7: type into a search form, and its microsprint (10 minutes)
+            \end{itemize}
+
+            \medskip
+            Step~8 quit the browser, so the microsprint starts a new one, and the search uses it.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Restarted?}\\[2pt]
+            {\footnotesize Run Step~4's three cells, and set \texttt{quote\_locator} as Step~8 did.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class: which is faster?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} a given cell times \texttt{requests.get()} on \texttt{/js/}. Time a new browser, from its start to the first quote.
+
+            \medskip
+            \textbf{Share:} both times, from two runs.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+start = time.time()
+# A new browser, from its start
+driver = webdriver.Chrome(options=options)
+driver.get("https://quotes.toscrape.com/js/")
+# Until the first quote is there
+WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located(quote_locator)
+)
+print(round(time.time() - start, 2))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class: read the rules first}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Wikipedia's search sends you to \texttt{/wiki/Special:} pages, which its \texttt{robots.txt} asks automated clients to avoid.
+
+            \medskip
+            So we search a practice site. What does its file allow?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# Week 2: read robots.txt before anything else
+robots = requests.get(
+    "https://www.scrapethissite.com/robots.txt",
+    headers=HEADERS,
+)
+print(robots.status_code, robots.text)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class: find the box}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Scrape This Site lists hockey teams, one row per team and season. Its search box has the \texttt{name} \texttt{q}.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+driver.get("https://www.scrapethissite.com/pages/forms/")
+# The box whose name is "q"
+search_box = driver.find_element(By.NAME, "q")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class: type, and press Enter}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The results page's address holds \texttt{q=}. Wait for it, as in Step~8, rather than sleep.
+
+            \medskip
+            What will the address say?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# Type, then press Enter
+search_box.send_keys("Colorado", Keys.RETURN)
+# Until the address holds "q="
+WebDriverWait(driver, 10).until(
+    EC.url_contains("q=")
+)
+print(driver.current_url)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class: the teams it found}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Each team is a \texttt{<tr>} of class \texttt{team}. Typed as \texttt{"teams"}, the count is 0, with no error.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# Every row of class "team"
+teams = driver.find_elements(By.CLASS_NAME, "team")
+print(len(teams))
+# The first row's text
+print(teams[0].text)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class: your own search}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} a given function, \texttt{search\_teams()}, repeats the search and counts the teams. Run it on a team or a city of your own, then on \texttt{"New York"}.
+
+            \medskip
+            \textbf{Share:} the counts, and what the New York page shows below its rows.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# The search above, for any query
+search_teams("Boston")
+search_teams("New York")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Three errors you will meet}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \textbf{\texttt{NoSuchElementException}} --- the page has not finished loading. Wait on a condition.
+
+            \medskip
+            \textbf{\texttt{StaleElementReferenceException}} --- the page changed after you found the element. Find it again.
+
+            \medskip
+            \textbf{\texttt{SessionNotCreatedException}} --- the driver and the browser do not match. Remove the stray driver, or set \texttt{SE\_SKIP\_DRIVER\_IN\_PATH=true}.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Error flavors}
+                \footnotesize Some failures \textit{are} the lesson (a page that is empty without JavaScript) --- that does not need a GitHub issue. Other code may be \textit{genuinely} broken: a selector a site renamed, a sandbox page that moved. Confirm it, then search and file an issue.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Optional: the chapter's Additional Exercises}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Not graded: for when you finish early, or for your project. Chapter~8's Additional Exercises:
+            \begin{enumerate}\small
+                \item Automate a search that has more than one step. Navigate to the page, enter the query, submit it, and extract the result.
+                \item Examine three sites. Categorize each site as static, partially dynamic, or fully dynamic.
+                \item Find a ``Load More'' button. Click it in a loop until it disappears. Count the items that were hidden.
+                \item Measure the time for \texttt{requests}, for Selenium with a window, and for Selenium with no window. Report when the slower method is acceptable.
+                \item Rewrite your scraper as a Playwright script. Run it from a terminal.
+                \item On paper: list the routes to data behind a login, and who carries each one's risk.
+                \item[7.] \textbf{5617}: use both methods on a research site that depends on JavaScript. Write a memo of about 500 words. Refer to \textcite{mitchell2018web}
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{What you turn in}\\[2pt]
+            {\footnotesize The Recommended Exercises, in Ch.~8's companion notebook, by Sunday. Graded on good-faith attempt to complete rather than getting everything working. These are extra.\par}
+            \medskip
+            \textbf{Show-and-Tell}\\[2pt]
+            {\footnotesize Bring one of these to class: a bug you could not solve, data you find interesting, or a question for a research design.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Before Step 12: Playwright's browsers}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Step~12, after Friday's class, runs Playwright scripts. Playwright needs its own browsers, about 320\,MB.
+
+            \medskip
+            In a terminal where your environment is active, run:
+
+            \medskip
+            \texttt{python -m playwright install chromium}
+
+            \medskip
+            Skipped \texttt{webdata}? First: \texttt{conda install -c conda-forge playwright-python}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Type \texttt{python -m}}\\[2pt]
+            {\footnotesize On conda-forge, two packages install a \texttt{playwright} command.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% A textbook status label as GitHub shows it, kept on one line, with a
+% plain space after the colon (\texttt would otherwise widen it).
+\newcommand{\statuslabel}[1]{\mbox{\texttt{status:\ #1}}}
+
+% =========================================================================
+\section{Friday}
+% =========================================================================
+
+\begin{frame}{Daily note questions}\small
+    \begin{itemize}
+        \item \textbf{XHR part confusing} --- Need to click both the JS and XHR tabs to see the microservice API requests
+        \item \textbf{Ambiguous about whether to scrape} --- Make sure to have an ironclad research or public interest case
+        \item \textbf{Scraping a site after login} --- Low and slow like a human, random wait intervals, Selenium/Playwright, \textit{etc}.
+        \item \textbf{Scraping in background} --- we will cover best practices for automated scraping in last week
+        \item \textbf{Use other browsers besides Chrome?} --- Check section 8.3.6 in textbook
+        \item \textbf{Chrome browser history?} --- history should only stay in the driver browser, unless you log into the browser
+        \item \textbf{How to navigate sites?} --- sitemaps, use inspect and copy XPATH for buttons, otherwise simulate scrolling
+        \item \textbf{Screenshotting code in notebook?} --- theoretically could \texttt{driver.get('http://localhost:8888/')} 
+        \item \textbf{Why use headless?} --- prototype with UI and then offload to script/AI agent to run in background
+    \end{itemize}
+\end{frame}
+
+% The code on these frames is the lab's Part 3 (labs/week-08/lab-08-key.ipynb), rebuilt
+% 2026-11-17: one frame per typed cell, with the lab's step numbers.
+\begin{frame}{Today: Part 3, scroll and log in}
+    \begin{columns}[T]
+        \begin{column}{0.56\textwidth}
+            On an infinite-scroll page, the quotes arrive as you scroll. Today:
+            \begin{itemize}\small
+                \item Scroll once by hand, then to the end, and hand the page to BeautifulSoup
+                \item Compare it with Monday's API table
+                \item Log in to the practice site, by hand
+            \end{itemize}
+
+            \medskip
+            \dayband{Use it}{Steps 9--13}
+            \begin{itemize}\small
+                \item Download the new \texttt{lab-08.ipynb}; start at \textbf{Step 9}
+                \item Step 11 needs a window: delete \texttt{-{}-headless=new} in Step~9
+                \item After class: Step 11's microsprint, and Step 12, a Playwright script
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Chrome won't start?}\\[2pt]
+            {\footnotesize Step 10 has a saved copy of the scrolled page. Load it, and keep going.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 9: set up again}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Step 9's four cells are given. Put your email in \texttt{HEADERS}, then run them.
+
+            \medskip
+            They load Monday's table, \texttt{api\_quotes}, from the course's repository, and set Step~8's \texttt{quote\_locator} and Wednesday's \texttt{options}.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Missed a day?}\\[2pt]
+            {\footnotesize Start here. Nothing from Monday or Wednesday needs to have run.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: the scrolling page}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A new browser, on the page whose Network tab we watched on Monday.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# A new browser, with Wednesday's options
+driver = webdriver.Chrome(options=options)
+driver.get("https://quotes.toscrape.com/scroll")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: before any scroll}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The page asks the API for its first quotes after it loads, so wait for them.
+
+            \medskip
+            The notebook prints the count in one line. How many?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# Wait for the first quotes, as in Step 8
+WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located(quote_locator)
+)
+# How many quote boxes so far?
+boxes = driver.find_elements(
+    By.CSS_SELECTOR,
+    "div.quote",
+)
+print(len(boxes))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: how tall is the page?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{execute\_script()} runs JavaScript in the page. \texttt{return} sends its answer back.
+
+            \medskip
+            Without \texttt{return}, it gives \texttt{None}, with no error.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# The page's height in pixels, from JavaScript
+height = driver.execute_script(
+    "return document.body.scrollHeight"
+)
+print(height)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: one scroll by hand}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Scroll to the bottom, and give the next page of quotes time to arrive.
+
+            \medskip
+            What should happen to the count and the height?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# Scroll to the bottom
+driver.execute_script(
+    "window.scrollTo(0, document.body.scrollHeight);"
+)
+# Give the next quotes time to arrive
+time.sleep(2)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: did it grow?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same cell counts and measures again. The notebook prints each in one line.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# Count the quote boxes again
+boxes = driver.find_elements(
+    By.CSS_SELECTOR,
+    "div.quote",
+)
+print(len(boxes))
+# Measure the page again
+height = driver.execute_script(
+    "return document.body.scrollHeight"
+)
+print(height)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 10: to the end, given}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            A given loop repeats your scroll, and times it. Rather than sleep two seconds, it waits up to five for the page to grow. It stops when it doesn't, or after 20 scrolls.
+
+            \medskip
+            Find the lines you just typed. Why cap it at 20? Expect 100 quotes: the API said 10 pages.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{\texttt{break}}\\[2pt]
+            {\footnotesize Leaves the loop at once. Here, when the wait raises \texttt{TimeoutException}.\par}
+            \medskip
+            \textbf{Proportionality}\\[2pt]
+            {\footnotesize Week~2: collect only what your question needs.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: hand it to BeautifulSoup}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{page\_source} is the page as the browser built it. Selenium is the hands; BeautifulSoup, the eyes.
+
+            \medskip
+            How many quotes now?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# The page as the browser built it, parsed
+scroll_soup = BeautifulSoup(
+    driver.page_source,
+    "html.parser",
+)
+# Its characters, then its quote boxes
+print(len(driver.page_source))
+print(len(scroll_soup.select("div.quote")))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: a table, then quit}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Given cells save the page as a checkpoint, and make \texttt{scroll\_quotes}, one row per quote.
+
+            \medskip
+            Then close the browser.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# Rows and columns
+print(scroll_quotes.shape)
+# Close every window, and stop chromedriver
+driver.quit()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: the same quotes?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} a \textbf{set} has no repeats. \texttt{\&} keeps what's in both; \texttt{-}, what's in the first only.
+
+            \medskip
+            \textbf{Share:} both tables' sizes, how many texts are in both, and in only one.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# Each table's quote texts
+in_scroll = set(scroll_quotes["text"])
+in_api = set(api_quotes["text"])
+# A set drops repeats: compare the sizes too
+print(len(scroll_quotes), len(api_quotes))
+# In both; only scrolled; only from the API
+print(
+    len(in_scroll & in_api),
+    len(in_scroll - in_api),
+    len(in_api - in_scroll),
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Behind a login: the cheaper API}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Week~3's doors closed or got expensive: X's enterprise API at \$42{,}000 a month, Reddit at \$0.24 per 1{,}000 calls, CrowdTangle shut down in August 2024 (Ch.~3).
+
+            \bigskip
+            Your own account can often still see the posts. Selenium can log in as you and read what you can read: no API key, no bill.
+
+            \bigskip
+            \textbf{Cheaper in dollars. Not cheaper in risk}, to you and to the people in the data.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Chapter 8}\\[2pt]
+            {\footnotesize ``Legal risk concentrates precisely where Selenium is most tempting: automating logged-in accounts and ToS-restricted content.''\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Log in by hand, then automate}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Start a browser \textbf{with} a window. \texttt{input()} holds the cell while you log in, in Chrome.
+
+            \medskip
+            The practice site takes any username and password. How many links will the last line count?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# A browser with a window, at the login page
+driver = webdriver.Chrome()
+driver.get("https://quotes.toscrape.com/login")
+# Hold the cell while you log in, in the window
+input("Log in in Chrome, then press Enter here")
+# Count the links only logged-in users see
+driver.get("https://quotes.toscrape.com/")
+links = driver.find_elements(
+    By.LINK_TEXT,
+    "(Goodreads page)",
+)
+print(len(links))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Keep the login}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            You type the password into Chrome, not the notebook. It never lands in a file, a commit, or an AI chat, and two-factor login works.
+
+            \medskip
+            Chrome keeps the session cookie, so every later \texttt{driver.get()} loads as you.
+
+            \medskip
+            To keep the login after \texttt{driver.quit()}, even headless, give Chrome a profile folder outside your project (\texttt{-{}-user-data-dir}, Ch.~8).
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Guard the folder}
+                \footnotesize That folder now logs in as you. Treat it like a password.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{What changes when you log in}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}\small
+            \textbf{You agreed to the Terms.} Meta's 2024 contract claims against Bright Data failed because Bright Data scraped public pages without logging in. Logged in, the Terms bind you, and most forbid automated collection. hiQ lost to LinkedIn on contract after agreeing to its Terms and getting a cease-and-desist (Ch.~2).
+
+            \medskip
+            \textbf{What you see isn't public.} Friends-only posts, private groups, messages. The people in them never agreed to be in your study: that is human-subjects research, and it needs IRB review.
+
+            \medskip
+            \textbf{Your account is you.} The platform can tie every request to you, and ban you. Selenium tells every site it is automated (\texttt{navigator.webdriver} is \texttt{true}). Don't hide it, and don't make fake accounts to get around a ban.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{alertblock}{Passwords}
+                \footnotesize Never in a notebook, a repository, or a prompt. Never someone else's account.
+            \end{alertblock}
+
+            \medskip
+            {\scriptsize Not legal advice.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Would you log in to collect it?}
+    \begin{columns}[T]
+        \begin{column}{0.55\textwidth}\small
+            Hands up: \textbf{yes}, \textbf{yes, if\ldots}, or \textbf{no}?
+            \begin{enumerate}
+                \item Your own listening history, from your streaming account
+                \item Posts in a private Facebook group you belong to, for a class paper
+                \item Twenty new TikTok accounts posing as teenagers, to audit what it recommends
+                \item Articles from a news site you pay for, to build a dataset
+            \end{enumerate}
+
+            \medskip
+            For each: what would you need first?
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Routes that ask first}
+            \begin{itemize}\footnotesize
+                \item \textbf{Your own data}: most platforms export it; a data-donation study asks others for theirs
+                \item \textbf{Researcher access}: Meta Content Library; the EU's DSA Article 40 (Ch.~3)
+                \item \textbf{Consenting volunteers}: NYU's Ad Observatory studied ads with data volunteered by consenting users. Meta disabled its researchers' accounts in 2021 (Ch.~3)
+                \item \textbf{Ask the site}
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: logged out}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Logged in, each quote shows a \textbf{(Goodreads page)} link.
+
+            \medskip
+            Typed without the parentheses, the count is 0 either way. How will you know this 0 means ``logged out''?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+driver = webdriver.Chrome(options=options)
+driver.get("https://quotes.toscrape.com/")
+# Links only logged-in users see
+logged_out = driver.find_elements(
+    By.LINK_TEXT,
+    "(Goodreads page)",
+)
+print(len(logged_out))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: log in by hand}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{input()} holds the cell while you log in, in Chrome's window. The practice site takes any username and password.
+
+            \medskip
+            Your password goes to the site, never into the notebook.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+driver.get("https://quotes.toscrape.com/login")
+# Hold the cell while you log in, in the window
+input("Log in in the Chrome window, then press Enter here")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 11: logged in}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Load the front page again, and count again.
+
+            \medskip
+            A given cell prints the cookies' names, never their values. Then quit.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+driver.get("https://quotes.toscrape.com/")
+# The same links, logged in
+logged_in = driver.find_elements(
+    By.LINK_TEXT,
+    "(Goodreads page)",
+)
+print(len(logged_in))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{After class: the rest of Part 3}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            These didn't fit today's 35 minutes. Do them before Sunday:
+            \begin{itemize}\small
+                \item Step~11's microsprint, on paper (5 minutes)
+                \item Step~12: the same work in a Playwright script (8 minutes), after the install on ``Before Step 12''
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Restarted?}\\[2pt]
+            {\footnotesize Step~12 uses \texttt{sys}: run Step~9's Selenium Manager cell first.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{After class: the routes to your data}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \textbf{Do:} on paper, choose a site where you have an account and data you'd like to study. Read its \texttt{robots.txt}; collect nothing else. List the routes: an API and its price, a researcher program, data donation, asking the site, a logged-in browser.
+
+            \medskip
+            For each: who carries the risk? You, the platform, or the people in the data?
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Share}\\[2pt]
+            {\footnotesize Your site, the route you'd take, and one risk it puts on someone other than you.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -732,7 +1856,7 @@ with sync_playwright() as p:
 \begin{frame}[fragile]{Locators wait for you}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            This sandbox page waits ten seconds before its JavaScript adds the quotes.
+            This practice page waits ten seconds before its JavaScript adds the quotes.
 
             \medskip
             Acting on an element, or reading it, waits up to 30 seconds. Which line waits?
@@ -864,1090 +1988,10 @@ page.get_by_role("link", name="(about)").click()
     \end{columns}
 \end{frame}
 
-\begin{frame}{Behind a login: the cheaper API}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Week~3's doors closed or got expensive: X's enterprise API at \$42{,}000 a month, Reddit at \$0.24 per 1{,}000 calls, CrowdTangle shut down in August 2024 (Ch.~3).
-
-            \bigskip
-            Your own account can often still see the posts. Selenium can log in as you and read what you can read: no API key, no bill.
-
-            \bigskip
-            \textbf{Cheaper in dollars. Not cheaper in risk}, to you and to the people in the data.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \textbf{Chapter 8}\\[2pt]
-            {\footnotesize ``Legal risk concentrates precisely where Selenium is most tempting: automating logged-in accounts and ToS-restricted content.''\par}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Log in by hand, then automate}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Start a browser \textbf{with} a window. \texttt{input()} holds the cell while you log in, in Chrome.
-
-            \medskip
-            The sandbox takes any username and password. How many links will the last line count?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# A browser with a window, at the login page
-driver = webdriver.Chrome()
-driver.get("https://quotes.toscrape.com/login")
-# Hold the cell while you log in, in the window
-input("Log in in Chrome, then press Enter here")
-# Count the links only logged-in users see
-driver.get("https://quotes.toscrape.com/")
-links = driver.find_elements(
-    By.LINK_TEXT,
-    "(Goodreads page)",
-)
-print(len(links))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Keep the login}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            You type the password into Chrome, not the notebook. It never lands in a file, a commit, or an AI chat, and two-factor login works.
-
-            \medskip
-            Chrome keeps the session cookie, so every later \texttt{driver.get()} loads as you.
-
-            \medskip
-            To keep the login after \texttt{driver.quit()}, even headless, give Chrome a profile folder outside your project (\texttt{-{}-user-data-dir}, Ch.~8).
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Guard the folder}
-                \footnotesize That folder now logs in as you. Treat it like a password.
-            \end{alertblock}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{What changes when you log in}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}\small
-            \textbf{You agreed to the Terms.} Meta's 2024 contract claims against Bright Data failed because Bright Data scraped public pages without logging in. Logged in, the Terms bind you, and most forbid automated collection. hiQ lost to LinkedIn on contract after agreeing to its Terms and getting a cease-and-desist (Ch.~2).
-
-            \medskip
-            \textbf{What you see isn't public.} Friends-only posts, private groups, messages. The people in them never agreed to be in your study: that is human-subjects research, and it needs IRB review.
-
-            \medskip
-            \textbf{Your account is you.} The platform can tie every request to you, and ban you. Selenium tells every site it is automated (\texttt{navigator.webdriver} is \texttt{true}). Don't hide it, and don't make fake accounts to get around a ban.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Passwords}
-                \footnotesize Never in a notebook, a repository, or a prompt. Never someone else's account.
-            \end{alertblock}
-
-            \medskip
-            {\scriptsize Not legal advice.}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Would you log in to collect it?}
-    \begin{columns}[T]
-        \begin{column}{0.55\textwidth}\small
-            Hands up: \textbf{yes}, \textbf{yes, if\ldots}, or \textbf{no}?
-            \begin{enumerate}
-                \item Your own listening history, from your streaming account
-                \item Posts in a private Facebook group you belong to, for a class paper
-                \item Twenty new TikTok accounts posing as teenagers, to audit what it recommends
-                \item Articles from a news site you pay for, to build a dataset
-            \end{enumerate}
-
-            \medskip
-            For each: what would you need first?
-        \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{Routes that ask first}
-            \begin{itemize}\footnotesize
-                \item \textbf{Your own data}: most platforms export it; a data-donation study asks others for theirs
-                \item \textbf{Researcher access}: Meta Content Library; the EU's DSA Article 40 (Ch.~3)
-                \item \textbf{Consenting volunteers}: NYU's Ad Observatory studied ads with data volunteered by consenting users. Meta disabled its researchers' accounts in 2021 (Ch.~3)
-                \item \textbf{Ask the site}
-            \end{itemize}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Selenium or Playwright?}
-    \centering\small
-    \begin{tabular}{p{0.15\textwidth}p{0.37\textwidth}p{0.37\textwidth}}
-        & \textbf{Selenium} & \textbf{Playwright} \tabularnewline \hline
-        \raggedright Install & \raggedright In \texttt{webdata} (week 1) & \raggedright In \texttt{webdata}, then \texttt{python -m playwright install chromium} \tabularnewline[0.5em]
-        \raggedright Browsers & \raggedright Yours; Selenium Manager downloads Chrome for Testing if you have none & \raggedright Its own copies, pinned to each release \tabularnewline[0.5em]
-        \raggedright Notebook & \raggedright Yes & \raggedright Only with the async API and \texttt{await} \tabularnewline[0.5em]
-        \raggedright Waiting & \raggedright Explicit: \texttt{WebDriverWait} & \raggedright Automatic when you act on or read an element \tabularnewline[0.5em]
-        \raggedright Recording & \raggedright Selenium IDE, a browser extension & \raggedright \texttt{playwright codegen}, built in \tabularnewline
-    \end{tabular}
-
-    \bigskip
-    This week's lab uses Selenium, and on Friday one Playwright script. The take-home uses Selenium.
-\end{frame}
-
-\begin{frame}{Closing activity: do you need a browser?}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}\small
-            Work in pairs. Pick a page that shows data you would want: a news live blog, a sports scoreboard, a store's search results, a campus events calendar.
-            \begin{enumerate}
-                \item Open View Source. Search it for a word you can see on the page
-                \item Turn JavaScript off. Reload. Write down what is left
-                \item Open the Network tab. Filter to Fetch/XHR. Reload, scroll, or click. Find the request that carries the data
-                \item Decide: \texttt{requests}, the JSON directly, or a browser?
-            \end{enumerate}
-
-            \bigskip
-            Stuck? Start with quotes.toscrape.com/js/ and quotes.toscrape.com/scroll
-
-            \bigskip
-            Report back with one page that did not need a browser, and one that did
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{slides/week-08/img/is-this-a-pigeon.jpg}\\
-            {\footnotesize Is this a dynamic website?}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Before Wednesday}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Complete daily note: \url{https://bit.ly/info4617f26}
-
-            \medskip
-            Read Textbook Ch.~8 before Wednesday.
-
-            \medskip
-            Everyone: Ch.~8's code won't run until you install Selenium. Follow the setup page \href{https://github.com/cuinfoscience/INFO4617-Fall2026/tree/main/handouts/week-08}{\textbf{Set up Selenium for chapter 8}}: \texttt{handouts/week-08} in the course repository on GitHub. It takes you from Anaconda as you installed it to Ch.~8's notebook opening Chrome, in about 20 minutes, mostly downloading. Use a fast connection.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Wednesday lab}
-                \small Complete \textbf{Recommended Exercises}: fill in the empty cells, run everything, export to HTML, upload to Canvas by \textbf{Sunday 11:59pm}
-            \end{alertblock}
-            \begin{alertblock}{Friday}
-                \small Upload links to your own pull requests, reviews, comments, or issues by \textbf{Sunday 11:59pm}. Each one counts.
-            \end{alertblock}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-% =========================================================================
-\section{Wednesday}
-% =========================================================================
-
-% The code on these frames is the lab's Part 2 (labs/week-08/lab-08-key.ipynb), rebuilt
-% 2026-11-17: one frame per typed cell, with the lab's step numbers.
-\begin{frame}{Today: Part 2, drive a browser}
-    \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-            When the three checks come up empty, you need a browser. Today:
-            \begin{itemize}\small
-                \item Start Chrome from Python, and open a page you know
-                \item Find elements on xkcd, then click and type like a reader
-                \item Wait for a page that takes ten seconds
-            \end{itemize}
-
-            \medskip
-            \dayband{Use it}{Steps 4--8}
-            \begin{itemize}\small
-                \item Download the new \texttt{lab-08.ipynb}; start at \textbf{Step 4}
-                \item Chrome must open from chapter 8's notebook (the setup handout)
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{Headless}\\[2pt]
-            {\footnotesize Today's browsers have no window. On your laptop, delete the \texttt{-{}-headless=new} line, and watch.\par}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Step 4: set up again}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Step 4's three cells are given. Put your email in \texttt{HEADERS}, then run them.
-
-            \medskip
-            The second sets Selenium Manager's settings, as in the setup handout. The third builds \texttt{options}, how every browser today starts.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \textbf{Two settings}\\[2pt]
-            {\footnotesize \texttt{SE\_SKIP\_DRIVER\_IN\_PATH} ignores stray drivers. \texttt{SE\_AVOID\_STATS} stops the usage statistics.\par}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 5: start the browser}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            A browser is a whole program. Time how long it takes to start.
-
-            \medskip
-            {\scriptsize\textbf{Docs:} \href{https://cuinfoscience.github.io/Web-Data-Science-Book/ch-08-dynamic-pages.html\#starting-the-browser}{Starting the Browser}\par}
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# Start the clock
-start = time.time()
-# Start Chrome, with today's options
-driver = webdriver.Chrome(options=options)
-# How many seconds did that take?
-print(round(time.time() - start, 1))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 5: a page you know}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            First, a page whose answer you know: the sandbox's plain page.
-
-            \medskip
-            Your browser's tab shows its title. Predict it.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# Load the sandbox's plain page
-driver.get("https://quotes.toscrape.com/")
-# The words in its <title>
-print(driver.title)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 5: its heading}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \texttt{find\_element()} takes a strategy from \texttt{By} and a value. Here, a tag name.
-
-            \medskip
-            Does the heading say the same?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# The page's first <h1>
-heading = driver.find_element(By.TAG_NAME, "h1")
-# Its text, as the browser shows it
-print(heading.text)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 5: the page \texttt{requests} couldn't read}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Step~1's \texttt{requests} found no quote boxes on \texttt{/js/}.
-
-            \medskip
-            How many will the browser find?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# The page requests found empty in Step 1
-driver.get("https://quotes.toscrape.com/js/")
-# Every quote box the browser built
-js_quotes = driver.find_elements(
-    By.CSS_SELECTOR,
-    "div.quote",
-)
-print(len(js_quotes))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 5: look at what it saw}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            With no window, a screenshot is how you see what the browser saw.
-
-            \medskip
-            What can it tell you that the count can't?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# Save what the browser drew
-driver.save_screenshot("quotes-headless.png")
-# Show it in the notebook
-Image("quotes-headless.png", width=640)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 6: by class name}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            How many navigation rows, above and below the comic?
-
-            \medskip
-            \texttt{find\_elements()} returns a list. Typed as \texttt{"comicnav"}, it's empty, with no error.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-driver.get("https://xkcd.com")
-# By class name: the navigation rows
-nav_rows = driver.find_elements(
-    By.CLASS_NAME,
-    "comicNav",
-)
-print(len(nav_rows))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 6: by CSS selector}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            The links in those rows. A given cell then tries three more strategies: exact link text, partial link text, and an XPath.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# By CSS selector: the links in those rows
-nav_links = driver.find_elements(
-    By.CSS_SELECTOR,
-    "ul.comicNav a",
-)
-print(len(nav_links))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 6: inside one row}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            To search inside an element, call the method on it, and start the XPath with a dot.
-
-            \medskip
-            Without the dot, what does \texttt{//a} search?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# The first row
-first_row = nav_rows[0]
-# With a dot: the links inside this row
-print(len(first_row.find_elements(By.XPATH, ".//a")))
-# Without it: the links anywhere on the page
-print(len(first_row.find_elements(By.XPATH, "//a")))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 6: what the browser shows}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            xkcd keeps a transcript in a \texttt{<div>} its style hides.
-
-            \medskip
-            \texttt{.text} reads what the browser shows. \texttt{repr()} shows an empty string as \texttt{''}.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# The comic "Python"
-driver.get("https://xkcd.com/353/")
-transcript = driver.find_element(By.ID, "transcript")
-# The text the browser shows
-print(repr(transcript.text))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 6: what the markup holds}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \texttt{textContent} is what BeautifulSoup's \texttt{get\_text()} would read.
-
-            \medskip
-            Which answer does a study of what readers see want?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# The text in the markup, shown or hidden
-print(transcript.get_attribute("textContent")[:59])
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Microsprint: three locators}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \textbf{Do:} find comic 353's image three ways.
-            \begin{itemize}\small
-                \item \texttt{By.ID} for the comic's \texttt{<div>}, then \texttt{By.TAG\_NAME} inside it
-                \item one \texttt{By.CSS\_SELECTOR}
-                \item one short \texttt{By.XPATH} that starts from the id
-            \end{itemize}
-            Check with \texttt{==} that all three found the same element, and print its \texttt{alt}.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \textbf{Share}\\[2pt]
-            {\footnotesize Your three locators, whether \texttt{==} said \texttt{True}, and which one you'd trust after a redesign.\par}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Step 7: find it first}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Right-click the comic and choose \textbf{Inspect}.
-
-            \medskip
-            Its \texttt{<img>} holds two texts you never see on the page: \texttt{alt} and \texttt{title}.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/xkcd_inspect.png}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 7: the comic's two texts}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \texttt{get\_attribute()} reads any attribute, even one you never see.
-
-            \medskip
-            The \texttt{alt} holds the comic's name; the \texttt{title}, its hover joke.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-driver.get("https://xkcd.com")
-# The comic's image
-comic_img = driver.find_element(
-    By.XPATH,
-    "//div[@id='comic']//img",
-)
-# Its name, then its hover joke
-print(comic_img.get_attribute("alt"))
-print(comic_img.get_attribute("title"))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 7: click}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Find the \textbf{Random} link by part of its text, and click it.
-
-            \medskip
-            The notebook writes the XPath on one line. Is one second enough for the next page?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# The Random link, by part of its text
-random_xpath = (
-    "//ul[@class='comicNav']"
-    "//a[contains(text(),'Random')]"
-)
-# Click it, then give the page a second
-driver.find_element(By.XPATH, random_xpath).click()
-time.sleep(1)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 7: the new comic}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Find the image again: the old one belonged to the old page.
-
-            \medskip
-            Where did the click take you?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# The new page's image
-random_img = driver.find_element(
-    By.XPATH,
-    "//div[@id='comic']//img",
-)
-# Where are we, and what's the joke?
-print(driver.current_url)
-print(random_img.get_attribute("title"))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 7: find the box}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Wikipedia's search box has the \texttt{name} \texttt{search}.
-
-            \medskip
-            Wikipedia welcomes automated access. Google forbids it in its Terms of Service.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-driver.get("https://www.wikipedia.org")
-# The box whose name is "search"
-search_box = driver.find_element(By.NAME, "search")
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 7: type, and press Enter}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            An exact title goes straight to the article. Anything else lands on a results page.
-
-            \medskip
-            Where will this one land?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# Type, then press Enter
-search_box.send_keys("Colorado Buffaloes", Keys.RETURN)
-# A guess at how long the next page takes
-time.sleep(2)
-print(driver.title)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Microsprint: your own search}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \textbf{Do:} a given function, \texttt{search\_wikipedia()}, repeats the search and counts the results. Run it on a query of your own, then on an exact title.
-
-            \medskip
-            \textbf{Share:} the titles, and the counts.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# The search above, for any query
-search_wikipedia("headless browser scraping")
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 8: ten seconds of nothing}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \texttt{/js-delayed/} adds its quotes after ten seconds.
-
-            \medskip
-            How many will a two-second sleep find?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# Start the clock, and load the slow page
-start = time.time()
-driver.get("https://quotes.toscrape.com/js-delayed/")
-# A guess: two seconds
-time.sleep(2)
-print(len(driver.find_elements(By.CLASS_NAME, "quote")))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 8: wait for it}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \texttt{WebDriverWait} checks every half second, and returns when the condition is true. The locator is a \textbf{tuple}: a strategy and a value, in parentheses.
-
-            \medskip
-            How long did it wait?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# What to wait for
-quote_locator = (By.CLASS_NAME, "quote")
-# Up to 15 seconds, until it's there
-WebDriverWait(driver, 15).until(
-    EC.presence_of_element_located(quote_locator)
-)
-print(round(time.time() - start, 1))
-# Count again
-print(len(driver.find_elements(By.CLASS_NAME, "quote")))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Microsprint: which is faster?}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \textbf{Do:} a given cell times \texttt{requests.get()} on \texttt{/js/}. Time the open browser on the same page.
-
-            \medskip
-            \textbf{Share:} your two times. We'll put the class's side by side.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-start = time.time()
-driver.get("https://quotes.toscrape.com/js/")
-# Wait for the first quote, as above
-WebDriverWait(driver, 10).until(
-    EC.presence_of_element_located(quote_locator)
-)
-print(round(time.time() - start, 2))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 8: quit}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Each driver is a whole browser. \texttt{quit()} closes every window and stops chromedriver.
-
-            \medskip
-            What happens to a headless browser you never quit?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# Close the browser
-driver.quit()
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Three errors you will meet}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \textbf{\texttt{NoSuchElementException}} --- the page has not finished loading. Wait on a condition.
-
-            \medskip
-            \textbf{\texttt{StaleElementReferenceException}} --- the page changed after you found the element. Find it again.
-
-            \medskip
-            \textbf{\texttt{SessionNotCreatedException}} --- the driver and the browser do not match. Remove the stray driver, or set \texttt{SE\_SKIP\_DRIVER\_IN\_PATH=true}.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{alertblock}{Error flavors}
-                \footnotesize Some failures \textit{are} the lesson (a page that is empty without JavaScript) --- that does not need a GitHub issue. Other code may be \textit{genuinely} broken: a selector a site renamed, a sandbox page that moved. Confirm it, then search and file an issue.
-            \end{alertblock}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Lab: work these, then show-and-tell}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Work in pairs. Do these exercises from the notebook:
-            \begin{enumerate}\small
-                \item Automate a search that has more than one step. Navigate to the page, enter the query, submit it, and extract the result.
-                \item Examine three sites. Categorize each site as static, partially dynamic, or fully dynamic.
-                \item Find a ``Load More'' button. Click it in a loop until it disappears. Count the items that were hidden.
-                \item Measure the time for \texttt{requests}, for Selenium with a window, and for Selenium with no window. Report when the slower method is acceptable.
-                \item Optional: rewrite your scraper as a Playwright script. Run it from a terminal.
-                \item[6.] \textbf{5617}: use both methods on a research site that depends on JavaScript. Write a memo of about 500 words. Refer to \textcite{mitchell2018web}
-            \end{enumerate}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \textbf{Submitting}\\[2pt]
-            {\footnotesize Start in class, finish at home, submit what you got working.
-
-            \smallskip
-            Graded on good-faith attempt to complete rather than getting everything working.\par}
-            \medskip
-            \textbf{Show-and-Tell}\\[2pt]
-            {\footnotesize Bring one of these to class: a bug you could not solve, data you find interesting, or a question for a research design.\par}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Before Friday: Playwright's browsers}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Friday's Step~12 runs Playwright scripts. Playwright needs its own browsers, about 320\,MB.
-
-            \medskip
-            In the terminal where you start Jupyter, with \texttt{webdata} active, run:
-
-            \medskip
-            \texttt{python -m playwright install chromium}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \textbf{Type \texttt{python -m}}\\[2pt]
-            {\footnotesize On conda-forge, two packages install a \texttt{playwright} command.\par}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-% A textbook status label as GitHub shows it, kept on one line, with a
-% plain space after the colon (\texttt would otherwise widen it).
-\newcommand{\statuslabel}[1]{\mbox{\texttt{status:\ #1}}}
-
-% =========================================================================
-\section{Friday}
-% =========================================================================
-
-\begin{frame}{Daily note questions}\small
-    \begin{itemize}
-        \item \textbf{XHR part confusing} --- Need to click both the JS and XHR tabs to see the microservice API requests
-        \item \textbf{Ambiguous about whether to scrape} --- Make sure to have an ironclad research or public interest case
-        \item \textbf{Scraping a site after login} --- Low and slow like a human, random wait intervals, Selenium/Playwright, \textit{etc}.
-        \item \textbf{Scraping in background} --- we will cover best practices for automated scraping in last week
-        \item \textbf{Use other browsers besides Chrome?} --- Check section 8.3.6 in textbook
-        \item \textbf{Chrome browser history?} --- history should only stay in the driver browser, unless you log into the browser
-        \item \textbf{How to navigate sites?} --- sitemaps, use inspect and copy XPATH for buttons, otherwise simulate scrolling
-        \item \textbf{Screenshotting code in notebook?} --- theoretically could \texttt{driver.get('http://localhost:8888/')} 
-        \item \textbf{Why use headless?} --- prototype with UI and then offload to script/AI agent to run in background
-    \end{itemize}
-\end{frame}
-
-% The code on these frames is the lab's Part 3 (labs/week-08/lab-08-key.ipynb), rebuilt
-% 2026-11-17: one frame per typed cell, with the lab's step numbers.
-\begin{frame}{Today: Part 3, scroll, log in, and a script}
-    \begin{columns}[T]
-        \begin{column}{0.56\textwidth}
-            On an infinite-scroll page, the quotes arrive as you scroll. Today:
-            \begin{itemize}\small
-                \item Scroll once by hand, then to the end, and hand the page to BeautifulSoup
-                \item Compare it with Monday's API table
-                \item Log in to the practice site
-                \item The same work in a Playwright script
-            \end{itemize}
-
-            \medskip
-            \dayband{Use it}{Steps 9--13}
-            \begin{itemize}\small
-                \item Download the new \texttt{lab-08.ipynb}; start at \textbf{Step 9}
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.4\textwidth}
-            \textbf{Chrome won't start?}\\[2pt]
-            {\footnotesize Step 10 has a saved copy of the scrolled page. Load it, and keep going.\par}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Step 9: set up again}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Step 9's three cells are given. Put your email in \texttt{HEADERS}, then run them.
-
-            \medskip
-            They load Monday's table, \texttt{api\_quotes}, from the course's repository, and set Step~8's \texttt{quote\_locator} and Wednesday's \texttt{options}.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \textbf{Missed a day?}\\[2pt]
-            {\footnotesize Start here. Nothing from Monday or Wednesday needs to have run.\par}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 10: the scrolling page}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            A new browser, on the page whose Network tab we watched on Monday.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# A new browser, with Wednesday's options
-driver = webdriver.Chrome(options=options)
-driver.get("https://quotes.toscrape.com/scroll")
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 10: before any scroll}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            The page asks the API for its first quotes after it loads, so wait for them.
-
-            \medskip
-            The notebook prints the count in one line. How many?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# Wait for the first quotes, as in Step 8
-WebDriverWait(driver, 10).until(
-    EC.presence_of_element_located(quote_locator)
-)
-# How many quote boxes so far?
-boxes = driver.find_elements(
-    By.CSS_SELECTOR,
-    "div.quote",
-)
-print(len(boxes))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 10: how tall is the page?}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \texttt{execute\_script()} runs JavaScript in the page. \texttt{return} sends its answer back.
-
-            \medskip
-            Without \texttt{return}, it gives \texttt{None}, with no error.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# The page's height in pixels, from JavaScript
-height = driver.execute_script(
-    "return document.body.scrollHeight"
-)
-print(height)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 10: one scroll by hand}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Scroll to the bottom, and give the next page of quotes time to arrive.
-
-            \medskip
-            What should happen to the count and the height?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# Scroll to the bottom
-driver.execute_script(
-    "window.scrollTo(0, document.body.scrollHeight);"
-)
-# Give the next quotes time to arrive
-time.sleep(2)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 10: did it grow?}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            The same cell counts and measures again. The notebook prints each in one line.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# Count the quote boxes again
-boxes = driver.find_elements(
-    By.CSS_SELECTOR,
-    "div.quote",
-)
-print(len(boxes))
-# Measure the page again
-height = driver.execute_script(
-    "return document.body.scrollHeight"
-)
-print(height)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Step 10: to the end, given}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            A given loop repeats your scroll: scroll, wait two seconds, measure. It stops when the height stops growing, or after 20 scrolls.
-
-            \medskip
-            Find the lines you just typed. Why cap it at 20?
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \textbf{\texttt{break}}\\[2pt]
-            {\footnotesize Leaves the loop at once.\par}
-            \medskip
-            \textbf{Proportionality}\\[2pt]
-            {\footnotesize Week~2: collect only what your question needs.\par}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 10: hand it to BeautifulSoup}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \texttt{page\_source} is the page as the browser built it. Selenium is the hands; BeautifulSoup, the eyes.
-
-            \medskip
-            How many quotes now?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# The page as the browser built it, parsed
-scroll_soup = BeautifulSoup(
-    driver.page_source,
-    "html.parser",
-)
-print(len(scroll_soup.select("div.quote")))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 10: a table, then quit}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Given cells save the page as a checkpoint, and make \texttt{scroll\_quotes}, one row per quote.
-
-            \medskip
-            Then close the browser.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# Rows and columns
-print(scroll_quotes.shape)
-# Close every window, and stop chromedriver
-driver.quit()
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Microsprint: the same quotes?}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \textbf{Do:} a \textbf{set} has no repeats. \texttt{\&} keeps what's in both; \texttt{-}, what's in the first only.
-
-            \medskip
-            \textbf{Share:} how many texts are in both, and in only one.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# Each table's quote texts
-in_scroll = set(scroll_quotes["text"])
-in_api = set(api_quotes["text"])
-# In both; only scrolled; only from the API
-print(
-    len(in_scroll & in_api),
-    len(in_scroll - in_api),
-    len(in_api - in_scroll),
-)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 11: a password, kept out of the code}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            A headless browser has no window to log in by hand. Read the password from the environment, or ask for it.
-
-            \medskip
-            \texttt{getpass()} hides what you type. The practice site takes anything.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# From the environment, or typed and hidden
-password = (
-    os.environ.get("QUOTES_PASSWORD")
-    or getpass("Password: ")
-)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 11: logged out}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Logged in, each quote shows a \textbf{(Goodreads page)} link.
-
-            \medskip
-            Typed without the parentheses, the count is 0 either way. How will you know this 0 means ``logged out''?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-driver = webdriver.Chrome(options=options)
-driver.get("https://quotes.toscrape.com/")
-# Links only logged-in users see
-logged_out = driver.find_elements(
-    By.LINK_TEXT,
-    "(Goodreads page)",
-)
-print(len(logged_out))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 11: log in}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Each box has an \texttt{id}. Type into it, and press Enter after the password.
-
-            \medskip
-            Never print a password.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-driver.get("https://quotes.toscrape.com/login")
-# Any username works here
-driver.find_element(By.ID, "username").send_keys(
-    "your-username"
-)
-# The password, then Enter
-driver.find_element(By.ID, "password").send_keys(
-    password,
-    Keys.RETURN,
-)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 11: logged in}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Wait for the page that loads after the login. Then count again.
-
-            \medskip
-            A given cell prints the cookies' names, never their values, and quits.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# Wait for the quotes, as in Step 8
-WebDriverWait(driver, 10).until(
-    EC.presence_of_element_located(quote_locator)
-)
-# The same links, logged in
-logged_in = driver.find_elements(
-    By.LINK_TEXT,
-    "(Goodreads page)",
-)
-print(len(logged_in))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Microsprint: the routes to your data}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \textbf{Do:} on paper, choose a site where you have an account and data you'd like to study. Collect nothing. List the routes: an API and its price, a researcher program, data donation, asking the site, a logged-in browser.
-
-            \medskip
-            For each: who carries the risk? You, the platform, or the people in the data?
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \textbf{Share}\\[2pt]
-            {\footnotesize Your site, the route you'd take, and one risk it puts on someone other than you.\par}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 \begin{frame}[fragile]{Step 12: a first Playwright script}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            A given cell writes Monday's \texttt{hello\_pw.py}. \texttt{!} runs a program from the notebook, with the notebook's own Python.
+            A given cell writes \texttt{hello\_pw.py}. \texttt{!} runs a program from the notebook, with the notebook's own Python. The quotation marks keep a folder name with a space in one piece.
 
             \medskip
             Predict its title from Step~5.
@@ -1955,7 +1999,7 @@ print(len(logged_in))
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[style=lab]
 # Run the script as a separate program
-!{sys.executable} hello_pw.py
+!"{sys.executable}" hello_pw.py
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1964,10 +2008,10 @@ print(len(logged_in))
 \begin{frame}[fragile]{Step 12: your script}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Copy \texttt{hello\_pw.py}'s cell, and change two lines: the address, and what it prints.
+            Copy everything after the first line of \texttt{hello\_pw.py}'s cell, and change two lines: the address, and what it prints.
 
             \medskip
-            Does \texttt{count()} wait? Then run it, as above.
+            \texttt{count()} doesn't wait: it reports the page as it stands. Try \texttt{/js-delayed/}.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[style=lab]
@@ -1998,10 +2042,25 @@ with sync_playwright() as p:
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[style=lab]
 # Run the given script
-!{sys.executable} scroll_api.py
+!"{sys.executable}" scroll_api.py
 \end{lstlisting}
         \end{column}
     \end{columns}
+\end{frame}
+
+\begin{frame}{Selenium or Playwright?}
+    \centering\small
+    \begin{tabular}{p{0.15\textwidth}p{0.37\textwidth}p{0.37\textwidth}}
+        & \textbf{Selenium} & \textbf{Playwright} \tabularnewline \hline
+        \raggedright Install & \raggedright In \texttt{webdata} (week 1) & \raggedright In \texttt{webdata}, then \texttt{python -m playwright install chromium} \tabularnewline[0.5em]
+        \raggedright Browsers & \raggedright Yours; Selenium Manager downloads Chrome for Testing if you have none & \raggedright Its own copies, pinned to each release \tabularnewline[0.5em]
+        \raggedright Notebook & \raggedright Yes & \raggedright Only with the async API and \texttt{await} \tabularnewline[0.5em]
+        \raggedright Waiting & \raggedright Explicit: \texttt{WebDriverWait} & \raggedright Automatic when you act on or read an element \tabularnewline[0.5em]
+        \raggedright Recording & \raggedright Selenium IDE, a browser extension & \raggedright \texttt{playwright codegen}, built in \tabularnewline
+    \end{tabular}
+
+    \bigskip
+    This week's lab uses Selenium, and, after Friday's class, one Playwright script. The take-home uses Selenium.
 \end{frame}
 
 % The counts on the next two frames, and the boards after them, come from the
@@ -2483,7 +2542,7 @@ with sync_playwright() as p:
 \begin{frame}{A revision menu for Chapter 8}
     High-value targets --- pick one and scope it to a single PR:
     \begin{itemize}
-        \item \textbf{Test the code against live sites.} xkcd, Wikipedia, and the Quotes to Scrape sandbox all drift. Run the notebook headless, report what broke, and fix the selector --- the chapter's own ``Fragility Problem.''
+        \item \textbf{Test the code against live sites.} xkcd, Scrape This Site, and Quotes to Scrape all drift. Run the notebook headless, report what broke, and fix the selector --- the chapter's own ``Fragility Problem.''
         \item \textbf{Test the Playwright scripts.} Run the chapter's scripts from a terminal on your own machine. Report the download size and anything that differed on Windows or macOS.
         \item \textbf{Try another browser.} Follow ``Other Browsers'' with Firefox, Edge, or Safari. Report what printed, and anything the chapter gets wrong on your machine.
         \item \textbf{Try an agent on the sandbox.} Have an AI agent write a scraper for quotes.toscrape.com. Compare its script with yours, and add what you learned to ``Letting an AI Agent Drive.''
