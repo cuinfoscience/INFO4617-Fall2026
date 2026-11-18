@@ -1301,8 +1301,10 @@ print(capture.text)
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
-# One level down: the captures
-snapshots = capture.json()["archived_snapshots"]
+# Read the body as JSON
+answer = capture.json()
+# One key down: the captures
+snapshots = answer["archived_snapshots"]
 print(snapshots)
 # One more: the closest capture
 closest = snapshots["closest"]
