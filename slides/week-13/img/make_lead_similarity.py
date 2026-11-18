@@ -1,4 +1,4 @@
-"""Render slides/week-13/img/lead-similarity.png from the week 13 lab's saved vectors, as the key's Step 12 computes it.
+"""Render slides/week-13/img/lead-similarity.png from the week 13 lab's saved vectors, as the key's Step 12 computes it, with its gray baseline band.
 
 Usage, from the repository root:
     python3 -I slides/week-13/img/make_lead_similarity.py labs/week-13/data/wikipedia/ slides/week-13/img/lead-similarity.png
@@ -29,6 +29,10 @@ print(table.round(3).to_string())
 
 plt.rcParams.update({"font.size": 12, "axes.spines.top": False, "axes.spines.right": False})
 fig, ax = plt.subplots(figsize=(5.6, 3.7))
+# The key's baseline band: from the lowest to the highest similarity of two different people's current leads
+pairs = [today[a] @ today[b] for a in today for b in today if a < b]
+print("two people's current leads:", round(min(pairs), 3), "to", round(max(pairs), 3))
+ax.axhspan(min(pairs), max(pairs), color="0.85", label="Two people, today")
 markers = ["o", "s", "^", "D", "v"]
 for column, marker in zip(table.columns, markers):
     ax.plot(table.index, table[column], marker=marker, markersize=4.5, linewidth=1.8, label=column)
