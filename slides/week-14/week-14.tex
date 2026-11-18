@@ -1076,6 +1076,9 @@ series = (
             Read it, and look at its last rows.
 
             \medskip
+            The key's numbers come from 18 runs, on November 17. Today's file has more, so your counts will be larger.
+
+            \medskip
             What can this file tell you that a live request can't? What can't it tell you?
         \end{column}
         \begin{column}{0.6\textwidth}
@@ -1172,7 +1175,10 @@ print(
             The first forecast isn't a change, so subtract one.
 
             \medskip
-            How many times a day did the forecast change? A collector that kept the schedule would ask 24 times a day.
+            At least how many times a day did the forecast change? A forecast that changed twice between two runs counts once.
+
+            \medskip
+            A collector that kept the schedule would ask 24 times a day.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -1218,7 +1224,7 @@ print(
 \begin{frame}[fragile]{Microsprint: the share that was new}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The same cell prints the share of the 672 requests that would find a new forecast.
+            The same cell prints the share of the 672 requests that would find a new forecast: at least that share, probably more.
 
             \medskip
             Thirty such collectors ask 20,160 times. About how many of those requests bring nothing new?
@@ -1235,7 +1241,7 @@ print(round(found_new / asked, 2), "of them")
 \begin{frame}{What a bot costs a server}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Step 8 counted two or three changes a day. Our schedule asks for 24 runs a day anyway: an hourly collector would find a new forecast about one request in ten.
+            Step 8 counted at least two or three changes a day. Our schedule asks for 24 runs a day anyway: an hourly collector would find a new forecast in at least one request in ten, probably a little more.
 
             \medskip
             \texttt{Last-Modified} and \texttt{Cache-Control} say how new an answer is. Who pays for the requests that bring nothing new?
@@ -1297,20 +1303,20 @@ lead_hours = lead.dt.total_seconds() / 3600
 \begin{frame}[fragile]{Step 9: plot it}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The same given cell plots the forecast temperature against the lead time.
+            The same given cell plots the forecast temperature against the lead time, as steps, like the chapter's chart.
 
             \medskip
-            Where does the line settle?
+            Several runs found the same forecast. A step holds each run's forecast until the next run. Where does the line settle?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # One figure, wide and short
 fig, ax = plt.subplots(figsize=(8, 4))
-# Temperature against lead time, a dot per run
-ax.plot(
+# A step holds each run's forecast until the next run's
+ax.step(
     lead_hours,
     noon_rows["temperature"],
-    marker=".",
+    where="post",
 )
 # Furthest ahead on the left, nearest on the right
 ax.invert_xaxis()
