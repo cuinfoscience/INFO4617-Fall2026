@@ -34,7 +34,7 @@
 
             \bigskip
 
-            \dayband{Monday}{Concepts \& notebook intro}
+            \dayband{Monday}{Concepts \& lab, Part 1}
             \begin{itemize}\small
                 \item Client--server, TCP/IP, DNS, and HTTP as one stack --- and how a server decides who, or what, is asking
                 \item Close with a live pair activity: hunt for Inspector patterns across real sites
@@ -42,15 +42,16 @@
 
             \medskip
 
-            \dayband{Wednesday}{Notebook lab}
+            \dayband{Wednesday}{Lab, Part 2}
             \begin{itemize}\small
-                \item Trace the stack in Python \emph{and} the terminal: ping and traceroute from a notebook cell, a live API call, curl/wget
+                \item Trace the stack in Python \emph{and} the terminal: your addresses, curl from a notebook cell, DNS, and status codes
             \end{itemize}
 
             \medskip
 
-            \dayband{Friday}{Textbook revisions}
+            \dayband{Friday}{Lab, Part 3 \& textbook revisions}
             \begin{itemize}\small
+                \item Call a live API, and see what a server sees of you
                 \item Propose \& peer-review pull requests improving Chapter 5
             \end{itemize}
         \end{column}
@@ -59,7 +60,7 @@
                 \footnotesize \texttt{ch-05-protocols.ipynb}
             \end{block}
             \begin{alertblock}{Bring a laptop}
-                \footnotesize Monday and Wednesday are both hands-on this week --- bring a laptop both days.
+                \footnotesize Monday, Wednesday and Friday are all hands-on this week --- bring a laptop all three days.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -105,7 +106,7 @@
 
             \bigskip
 
-            Web data science can fail at any of these levels, so debugging requires diagnoses each part.
+            Web data science can fail at any of these levels, so debugging requires diagnosing each part.
         \end{column}
         \begin{column}{0.35\textwidth}
             \centering
@@ -156,8 +157,8 @@
             \textbf{Solutions}\\[2pt]
             {\footnotesize \texttt{lab-05-key.ipynb}, beside it: every cell filled in and run. Fall behind? Copy the cell from the key and keep going.\par}
             \medskip
-            \textbf{Nothing to submit}\\[2pt]
-            {\footnotesize The lab is practice. After each step, a \textbf{Discuss} box holds questions we'll talk over before the next.\par}
+            \textbf{Nothing to submit from the lab}\\[2pt]
+            {\footnotesize The lab is practice; the chapter's exercises are due Sunday. After each step, a \textbf{Discuss} box holds questions we'll talk over before the next.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -330,7 +331,7 @@ print(page_response.headers["Content-Type"])
             The page travels compressed. The Network tab's \textbf{Size} column counts those bytes.
 
             \medskip
-            Which of these numbers is closer to that column?
+            Which of these numbers is closer to that column? Brackets raise a \texttt{KeyError} if a header is missing.
 
             \medskip
             {\scriptsize\textbf{Docs:} MDN's \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Encoding}{Content-Encoding}\par}
@@ -392,7 +393,7 @@ print(page_response.request.headers)
 \begin{frame}[fragile]{Microsprint: count the requests}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            \textbf{Do:} reload a news site with the Network tab open. Note its requests by filter. Do the same for the article.
+            \textbf{Do:} tick \textbf{Disable cache}, and reload a news site. Note its total and its requests by filter; Other is the total minus the five. Do the same for the article.
 
             \medskip
             \textbf{Share:} the site, its total, and the share that are scripts. A given cell draws both.
@@ -449,6 +450,7 @@ article_counts = {
                 \item One connection, as \texttt{curl} narrates it
                 \item DNS: from a name to an address
                 \item The status codes a server answers with
+                \item After class: where an address is (Step 7)
             \end{itemize}
 
             \medskip
@@ -464,21 +466,18 @@ article_counts = {
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 4: your machine's name and address}
+\begin{frame}[fragile]{Step 4: your machine's address}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Every machine on a network has an \textbf{IP address}. \texttt{socket} asks your operating system for yours.
+            Every machine on a network has an \textbf{IP address}. \texttt{socket} asks your operating system for yours, by your computer's name.
 
             \medskip
-            Is it \texttt{127.0.0.1}? That address means ``this machine''.
+            We don't print the name: it often holds your own. Is the address \texttt{127.0.0.1}? That means ``this machine''.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[style=lab]
-# This machine's name
-hostname = socket.gethostname()
-print(hostname)
-# The address the operating system gives for it
-print(socket.gethostbyname(hostname))
+# The address the operating system gives this machine
+print(socket.gethostbyname(socket.gethostname()))
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -618,14 +617,14 @@ for line in curl_lines:
 \begin{frame}[fragile]{Microsprint: another site's headers}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            \textbf{Do:} ask a site you read for its headers.
+            \textbf{Do:} open a site's \texttt{/robots.txt} first. If it disallows the page, or won't load, pick another. Then ask the site for its headers.
 
             \medskip
             \textbf{Share:} its status line, its \texttt{server:} header, and one header you didn't expect.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[style=lab]
-# The same question, to a site you read
+# The same question, to a site whose robots.txt allows it
 !curl -s -I -A "{USER_AGENT}" https://www.colorado.edu/
 \end{lstlisting}
         \end{column}
@@ -740,96 +739,9 @@ print(socket.gethostbyname("en.wikipedia.org"))
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 7: an address you know}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            An \textbf{IP geolocation} service looks up who registered an address, and where.
-
-            \medskip
-            \texttt{8.8.8.8} is Google's public DNS server. What should \texttt{isp} say?
-
-            \medskip
-            {\scriptsize\textbf{Docs:} ip-api's \href{https://ip-api.com/docs/api:json}{JSON endpoint}\par}
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# Ask ip-api about Google's public DNS server
-tiny_place = requests.get(
-    "http://ip-api.com/json/8.8.8.8",
-    headers=HEADERS,
-)
-# Look first: the status, and the whole answer
-print(tiny_place.status_code, tiny_place.text)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 7: Wikipedia's address}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            The same question, about the address DNS gave us in Step 6.
-
-            \medskip
-            ip-api allows 45 requests a minute from one address, and this room shares one. Run it once.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# The same question, about Step 6's address
-wiki_place = requests.get(
-    "http://ip-api.com/json/" + WIKI_IP,
-    headers=HEADERS,
-)
-# Look first: the status
-print(wiki_place.status_code)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 7: where is it?}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Parse the answer, and read three of its values.
-
-            \medskip
-            Is that where Wikipedia's servers are? What did the service look up?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# Parse the JSON
-location = wiki_place.json()
-# The city, the region, and who the address belongs to
-print(
-    location["city"],
-    location["regionName"],
-    location["isp"],
-)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Microsprint: where is 1.1.1.1?}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \textbf{Do:} predict the country of \texttt{1.1.1.1}. Then run the given cell, which sends this step's request for it.
-
-            \medskip
-            \textbf{Share:} the country and city. Do your requests to it travel that far?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# One of Step 6's addresses for one.one.one.one
-sprint_ip = "1.1.1.1"
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 \begin{frame}{The upper stack: HTTP status codes \& URLs}
     \begin{center}
-        \includegraphics[width=.75\textwidth]{img/url_anatomy.png}
+        \includegraphics[width=.68\textwidth]{img/url_anatomy.png}
     \end{center}
     
     \textbf{HTTP} structures the conversation: a request carries a method (GET, POST, \dots) and headers; a response carries a \textbf{status code}:
@@ -868,7 +780,7 @@ print(page_response.headers["Content-Type"])
 \begin{frame}[fragile]{Step 8: what answered, and how much}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            \texttt{Server} names what answered: Wikimedia's cache, \texttt{ATS}, or a web server named for its data center.
+            \texttt{Server} names what answered: Wikimedia's cache, \texttt{ATS}; a web server named for its data center; or \texttt{HAProxy}, the front door.
 
             \medskip
             \texttt{eqiad} is in Virginia, and \texttt{codfw} in Texas. Which answered you?
@@ -957,15 +869,105 @@ print(hop.status_code, hop.headers["Location"])
 \begin{frame}[fragile]{Microsprint: an alias}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            \textbf{Do:} predict what this address answers: 200, 301, or 404? A given cell requests it, and prints its status, its history, and the page's title.
+            \textbf{Do:} predict what this address answers: 200, 301, or 404? A given cell requests it, and again over \texttt{http://}. It prints each status, history and \texttt{.url}, then the title.
 
             \medskip
-            \textbf{Share:} the status, and the title that came back.
+            \textbf{Share:} the status, the title, and each history.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[style=lab]
 # A short name for the article
 alias_url = "https://en.wikipedia.org/wiki/CU_Boulder"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class, Step 7: an address you know}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            An \textbf{IP geolocation} service looks up who registered an address, and where.
+
+            \medskip
+            \texttt{8.8.8.8} is Google's public DNS server. What should \texttt{isp} say?
+
+            \medskip
+            ip-api's \texttt{robots.txt} disallows \texttt{/json/} for crawlers. Its documentation offers this endpoint to programs, for non-commercial use.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} ip-api's \href{https://ip-api.com/docs/api:json}{JSON endpoint}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# Ask ip-api about Google's public DNS server
+tiny_place = requests.get(
+    "http://ip-api.com/json/8.8.8.8",
+    headers=HEADERS,
+)
+# Look first: the status, and the whole answer
+print(tiny_place.status_code, tiny_place.text)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class, Step 7: Wikipedia's address}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same question, about the address DNS gave us in Step 6.
+
+            \medskip
+            ip-api allows 45 requests a minute from one address, and a campus shares one. Run it once.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# The same question, about Step 6's address
+wiki_place = requests.get(
+    "http://ip-api.com/json/" + WIKI_IP,
+    headers=HEADERS,
+)
+# Look first: the status
+print(wiki_place.status_code)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class, Step 7: where is it?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Parse the answer, and read three of its values.
+
+            \medskip
+            Is that where Wikipedia's servers are? What did the service look up?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# Parse the JSON
+location = wiki_place.json()
+# The city, the region, and who the address belongs to
+print(
+    location["city"],
+    location["regionName"],
+    location["isp"],
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class, microsprint: where is 1.1.1.1?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} predict the country of \texttt{1.1.1.1}. Then run the given cell, which sends this step's request for it.
+
+            \medskip
+            \textbf{Share:} the country and city. Do your requests to it travel that far?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# One of Step 6's addresses for one.one.one.one
+sprint_ip = "1.1.1.1"
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1016,15 +1018,17 @@ alias_url = "https://en.wikipedia.org/wiki/CU_Boulder"
 \begin{frame}{After class: work these, then show-and-tell}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Work in pairs. Do these exercises from the chapter:
-            \begin{enumerate}\small
-                \item Open the Network tab on a Wikipedia article and on a news site. Count the requests. Give the fraction that is content and the fraction that is tracking.
-                \item Resolve five related domains with \texttt{dns.resolver}. Report the domains that share an IP address.
-                \item Plot the pageviews of three related articles. Give a possible cause for each spike.
-                \item Write \texttt{diagnose\_url()}. Test it on a 200 response, a 404 response, a redirect, an API, and a blocked site.
-                \item Run the \texttt{curl -v} cell. Mark where the TCP handshake had finished, where TLS was set up, the lines you sent (\texttt{>}), and the lines you got back (\texttt{<}).
-                \item \textbf{5617:} examine the delivery infrastructure of one site. Record the redirect chain, the CDN headers, and the traceroute hops. Write a 500-word memo
+            \textbf{Graded:} the chapter's Recommended Exercises, six steps:
+            \begin{enumerate}\footnotesize
+                \item Take three URLs apart with \texttt{urlparse()}.
+                \item Resolve three names with \texttt{dns.resolver}.
+                \item Send your \texttt{HEADERS}. Read three response headers.
+                \item Write \texttt{diagnose\_url()}, with a timeout.
+                \item Profile five URLs. Read each site's \texttt{robots.txt} first.
+                \item Interpret what you found.
             \end{enumerate}
+
+            \textbf{Optional, in pairs:} Additional Exercises 1--3; mark the \texttt{curl -v} narration (TCP done, TLS, \texttt{>}, \texttt{<}); and, for 5617, the delivery-infrastructure memo.
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{Submitting}\\[2pt]
@@ -1048,10 +1052,11 @@ alias_url = "https://en.wikipedia.org/wiki/CU_Boulder"
         \begin{column}{0.56\textwidth}
             An API answers with the same status codes, and with data in place of a page. Today:
             \begin{itemize}\small
-                \item The pageviews API: one day, then a month, then a plot
+                \item The pageviews API: one day, then a month
                 \item What a server sees of your User-Agent
                 \item A \texttt{Session} that reuses its connection
                 \item URLs, taken apart and built
+                \item After class: the month as a plot (Step 11)
             \end{itemize}
 
             \medskip
@@ -1133,7 +1138,7 @@ print(one_day_data["items"][0])
 \begin{frame}[fragile]{Step 10: without a name}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The chapter says this API refuses a client that doesn't name itself. Check it.
+            Without \texttt{HEADERS}, \texttt{requests} sends its own name, \texttt{python-requests/2.x}. Wikimedia refuses that name. Check it.
 
             \medskip
             Is the answer the one Wednesday's request with no User-Agent got?
@@ -1170,150 +1175,6 @@ print(month_response.status_code)
 # Parse the JSON, and count the days
 data = month_response.json()
 print(len(data["items"]))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 11: one timestamp}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Each \texttt{timestamp} is a string: year, month, day, and hour. \texttt{format} says how to read it.
-
-            \medskip
-            Which date is \texttt{"2026010100"}?
-
-            \medskip
-            {\scriptsize\textbf{Docs:} pandas' \href{https://pandas.pydata.org/docs/reference/api/pandas.to_datetime.html}{to\_datetime()}\par}
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# One timestamp, read as year, month, day, and "00"
-print(pd.to_datetime("2026010100", format="%Y%m%d00"))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 11: a table, with dates}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            A list of dictionaries becomes a table in one call, as in week~4.
-
-            \medskip
-            Then the same conversion, for the whole column. What type is \texttt{timestamp} now?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# One row for each day
-df = pd.DataFrame(data["items"])
-# Turn the whole column into dates
-df["timestamp"] = pd.to_datetime(
-    df["timestamp"],
-    format="%Y%m%d00",
-)
-# Look at the first three rows
-df.head(3)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 11: the plot, given}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            A given cell plots views by date. It makes the axes first, then draws on them.
-
-            \medskip
-            Which line would you change to plot another column?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# One set of axes
-fig, ax = plt.subplots(figsize=(10, 4))
-# Views by date
-ax.plot(df["timestamp"], df["views"])
-# Say what the plot shows
-ax.set_title("Daily pageviews: " + ARTICLE)
-ax.set_xlabel("Date")
-ax.set_ylabel("Views")
-plt.show()
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Step 11: a month of readers}
-    \centering
-    \includegraphics[width=0.72\textwidth]{img/pageviews_timeseries.png}
-
-    \medskip
-    These counts include crawlers. What happened on the biggest day? How would you check, rather than guess?
-\end{frame}
-
-\begin{frame}[fragile]{Step 11: the biggest day}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \texttt{idxmax()} gives the row number of the largest value. \texttt{.loc} reads one cell, by row and column.
-
-            \medskip
-            Does the date match the peak on your plot?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# The row number of the day with the most views
-peak_row = df["views"].idxmax()
-# That row's date, and its views
-print(
-    df.loc[peak_row, "timestamp"],
-    df.loc[peak_row, "views"],
-)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Microsprint: three articles}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \textbf{Do:} put our article and two related ones in the list, with underscores. Run the given cells.
-
-            \medskip
-            \textbf{Share:} which had the biggest spike, on what day, and a guess at why.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-# Our article, and two related ones
-sprint_titles = [
-    ARTICLE,
-    "Colorado_State_University",
-    "University_of_Denver",
-]
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Microsprint: the loop, given}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Find Step 10's request for the month in this loop. It runs once for each title, a second apart.
-
-            \medskip
-            Then the cell makes one table, with a column for each article.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}[style=lab]
-series = {}
-for title in sprint_titles:
-    # Step 10's request for the month, for this title
-    url = f"{PAGEVIEWS}/{title}/daily/20260101/20260131"
-    reply = requests.get(url, headers=HEADERS)
-    # Its days as a table; keep the views, by timestamp
-    table = pd.DataFrame(reply.json()["items"])
-    series[title] = table.set_index("timestamp")["views"]
-    # Wait a second before the next request
-    time.sleep(1)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1374,7 +1235,7 @@ print(echo.status_code, echo.text)
             Spoofing is the same dictionary, with a false value. This one claims to be Chrome on Windows.
 
             \medskip
-            The notebook breaks the string in another place. It is the chapter's.
+            In this course we send our own name. If a site refuses it, we stop and ask; we don't change the name.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[style=lab]
@@ -1397,7 +1258,7 @@ spoofed_headers = {
             The same request, three times: with no headers, with ours, and with the spoofed one.
 
             \medskip
-            What does \texttt{requests} call itself when you give it no headers? Can the server tell the third from Chrome?
+            What does \texttt{requests} call itself when you give it no headers?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[style=lab]
@@ -1407,11 +1268,52 @@ claims = [
     HEADERS,
     spoofed_headers,
 ]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 12: the three requests, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Each request stops if the status isn't 200, then prints what httpbin received.
+
+            \medskip
+            Can the server tell the third from Chrome?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
 for headers in claims:
     seen = requests.get(ECHO, headers=headers)
+    # Stop if it isn't 200, with what the server said
+    if seen.status_code != 200:
+        raise RuntimeError(
+            f"Got {seen.status_code}, not 200: "
+            f"{seen.text[:200]}"
+        )
     # What did the server receive?
     print(seen.json())
     time.sleep(1)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: a misspelled name}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} predict what httpbin echoes when the header's name has no hyphen. Then ask it.
+
+            \medskip
+            \textbf{Share:} what came back, and why \texttt{requests} raised no error.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# The header's name, without its hyphen
+typo_headers = {"UserAgent": HEADERS["User-Agent"]}
+# Ask httpbin what it received
+typo_echo = requests.get(ECHO, headers=typo_headers)
+print(typo_echo.text)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1439,17 +1341,17 @@ session.headers.update(HEADERS)
 \begin{frame}[fragile]{Step 13: one request with it}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            No \texttt{headers=} this time. Did the request still say who we are?
+            No \texttt{headers=} this time. A 200, not Step~8's 403, says the session sent our name.
 
             \medskip
-            \texttt{elapsed} is the time from sending the request until the response's headers arrived.
+            \texttt{elapsed} is the time until the response's headers arrived. \texttt{.total\_seconds()} makes it a number.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[style=lab]
 # The article, through the session
 first = session.get(PAGE)
-# Who it said we are, and the verdict
-print(session.headers["User-Agent"], first.status_code)
+# The verdict
+print(first.status_code)
 # How long the answer took, in seconds
 print(first.elapsed.total_seconds())
 \end{lstlisting}
@@ -1460,23 +1362,49 @@ print(first.elapsed.total_seconds())
 \begin{frame}[fragile]{Step 13: bare against the session, given}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            A given loop asks for the chapter's three articles twice each, a second apart.
+            A given loop asks for the chapter's three articles twice each, a second apart. The middle one asks the session first.
 
             \medskip
-            Is it a fair race? The chapter's session also retries a 429. What would that hide?
+            One measurement each, in a fixed order. Is it a fair race?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[style=lab]
 for article in articles:
     url = "https://en.wikipedia.org/wiki/" + article
+    # The middle article: the session first
+    if article == "Web_scraping":
+        reused = session.get(url)
     # On a new connection
     bare = requests.get(url, headers=HEADERS)
-    # On the connection the session kept open
-    reused = session.get(url)
-    # The verdict, and each one's time in seconds
-    print(article, reused.status_code)
-    print("  bare:", bare.elapsed.total_seconds())
-    print("  session:", reused.elapsed.total_seconds())
+    # The others: the session second
+    if article != "Web_scraping":
+        reused = session.get(url)
+    ...
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 13: the times, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Each stops if a status isn't 200. Then both times, in seconds.
+
+            \medskip
+            Did asking the session first change the gap? The chapter's session also retries a 429. What would that hide?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+    # Stop if either isn't 200
+    for timed in [bare, reused]:
+        if timed.status_code != 200:
+            raise RuntimeError(...)
+    # Each one's time, in seconds
+    print(article)
+    print("  bare (new connection):",
+          bare.elapsed.total_seconds())
+    print("  session (connection already open):",
+          reused.elapsed.total_seconds())
     time.sleep(1)
 \end{lstlisting}
         \end{column}
@@ -1601,7 +1529,10 @@ print(urlencode(info_params))
             Pass the dictionary as \texttt{params=}, and \texttt{requests} does the escaping.
 
             \medskip
-            Is the address it built the one \texttt{urlencode()} made? Week~10 reads what this API sends back.
+            Is the address it built the one \texttt{urlencode()} made?
+
+            \medskip
+            Wikipedia's \texttt{robots.txt} disallows \texttt{/w/} for crawlers. This API is documented for programs that name themselves.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[style=lab]
@@ -1620,7 +1551,7 @@ print(info.status_code, info.url)
             \textbf{Do:} predict what the pageviews API answers when the raw title, slash and all, goes into Step 14's address.
 
             \medskip
-            \textbf{Share:} the status, and what the server took the slash to mean.
+            \textbf{Share:} the status, and what the server took the slash to mean. A 429? Wait a minute, and run it once more.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[style=lab]
@@ -1629,6 +1560,176 @@ raw_url = f"{PAGEVIEWS}/AC/DC/daily/20260101/20260101"
 raw_reply = session.get(raw_url)
 # The verdict, and what the body says
 print(raw_reply.status_code, raw_reply.text[:200])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class, Step 11: one timestamp}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Each \texttt{timestamp} is a string: year, month, day, and hour. \texttt{format} says how to read it.
+
+            \medskip
+            Which date is \texttt{"2026010100"}?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} pandas' \href{https://pandas.pydata.org/docs/reference/api/pandas.to_datetime.html}{to\_datetime()}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# One timestamp, read as year, month, day, and "00"
+print(pd.to_datetime("2026010100", format="%Y%m%d00"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class, Step 11: a table, with dates}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A list of dictionaries becomes a table in one call, as in week~4.
+
+            \medskip
+            Then the same conversion, for the whole column. What type is \texttt{timestamp} now?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# One row for each day
+df = pd.DataFrame(data["items"])
+# Turn the whole column into dates
+df["timestamp"] = pd.to_datetime(
+    df["timestamp"],
+    format="%Y%m%d00",
+)
+# Look at the first three rows
+df.head(3)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class, Step 11: the plot, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell plots views by date. It makes the axes first, then draws on them.
+
+            \medskip
+            Which line would you change to plot another column?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# One set of axes
+fig, ax = plt.subplots(figsize=(10, 4))
+# Views by date
+ax.plot(df["timestamp"], df["views"])
+# Say what the plot shows
+ax.set_title("Daily pageviews: " + ARTICLE)
+ax.set_xlabel("Date")
+ax.set_ylabel("Views")
+plt.show()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{After class, Step 11: a month of readers}
+    \centering
+    \includegraphics[width=0.72\textwidth]{img/pageviews_timeseries.png}
+
+    \medskip
+    These counts include crawlers. What happened on the biggest day? How would you check, rather than guess?
+\end{frame}
+
+\begin{frame}[fragile]{After class, Step 11: the biggest day}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{idxmax()} gives the row number of the largest value. \texttt{.loc} reads one cell, by row and column.
+
+            \medskip
+            Does the date match the peak on your plot?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# The row number of the day with the most views
+peak_row = df["views"].idxmax()
+# That row's date, and its views
+print(
+    df.loc[peak_row, "timestamp"],
+    df.loc[peak_row, "views"],
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class, microsprint: three articles}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} put our article and two related ones in the list, with underscores. Run the given cells.
+
+            \medskip
+            \textbf{Share:} which had the biggest day, and whether it is more than about two standard deviations above its mean.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+# Our article, and two related ones
+sprint_titles = [
+    ARTICLE,
+    "Colorado_State_University",
+    "University_of_Denver",
+]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class, microsprint: the loop, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Find Step 10's request for the month in this loop. It runs once for each title, a second apart.
+
+            \medskip
+            It stops if the status isn't 200. A 429 says how many seconds to wait.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+series = {}
+for title in sprint_titles:
+    # Step 10's request for the month, for this title
+    url = f"{PAGEVIEWS}/{title}/daily/20260101/20260131"
+    reply = requests.get(url, headers=HEADERS)
+    print(title, reply.status_code)
+    # Stop if it isn't 200, with what the server said
+    if reply.status_code != 200:
+        wait = reply.headers.get("Retry-After", "a few")
+        raise RuntimeError(...)
+    ...
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class, microsprint: the loop, given (continued)}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The message says the status, how long a 429 asks you to wait, and the start of the body.
+
+            \medskip
+            Then the cell makes one table, with a column for each article.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[style=lab]
+        raise RuntimeError(
+            f"Got {reply.status_code}, not 200. "
+            f"A 429 asks you to wait {wait} seconds "
+            f"(Retry-After). {reply.text[:200]}"
+        )
+    # Its days as a table; keep the views, by timestamp
+    table = pd.DataFrame(reply.json()["items"])
+    series[title] = table.set_index("timestamp")["views"]
+    # Wait a second before the next request
+    time.sleep(1)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1675,7 +1776,7 @@ print(raw_reply.status_code, raw_reply.text[:200])
             High-value targets --- pick one and scope it to a single PR:
             \begin{itemize}\footnotesize
                 \item \textbf{Test the code against live services.} \texttt{ipify}, \texttt{ip-api.com} (45 req/min), the Wikimedia pageviews API, and DNS results all drift. Run the notebook, report what broke, and fix it.
-                \item \textbf{Add a figure.} The chapter still has zero diagrams --- a layered-stack or annotated Network-tab figure would anchor the concepts.
+                \item \textbf{Add a figure.} The chapter's four figures are screenshots of the developer tools, and it has no diagram --- a layered-stack figure would anchor the concepts.
                 \item \textbf{Deepen ``Common Issues to Debug.''} An IPv6 \texttt{AAAA} lookup, and a \texttt{curl}/\texttt{wget}-specific gotcha, are still missing.
                 \item \textbf{Strengthen an exercise.} Give \texttt{diagnose\_url()} expected output, a rubric, or a starter cell so it is self-checking.
                 \item \textbf{Add a missing citation.} ICANN, Verisign, and \texttt{ip-api.com} are all named in the chapter without a link.
@@ -1695,7 +1796,7 @@ print(raw_reply.status_code, raw_reply.text[:200])
 \begin{frame}{Key takeaways}
     \begin{enumerate}\small
         \item The web is a \textbf{layered stack}: TCP/IP transports, DNS resolves names, HTTP structures the conversation, URLs identify the target.
-        \item \textbf{Traceroute and \texttt{curl -v}}, run from a notebook cell with \texttt{!}, make that transport layer directly observable; the \texttt{User-Agent} header --- honest or spoofed --- is how a server decides who, or what, is asking.
+        \item \textbf{\texttt{curl -v}}, run from a notebook cell with \texttt{!}, makes that transport layer directly observable; the \texttt{User-Agent} header --- honest or spoofed --- is how a server decides who, or what, is asking.
         \item Debugging is \textbf{systematic diagnosis}, not guesswork: reach the server? right address? which status code? headers correct? URL well-formed?
         \item A meaningful \texttt{User-Agent} fixes most \textbf{403}s; backoff or a \texttt{Retry} policy handles \textbf{429}s. A \texttt{for} loop over one host is your cue for a \texttt{Session}.
         \item \textbf{Never regex a URL.} \texttt{urllib.parse} both parses and builds; know path-segment (\texttt{quote}) from query-parameter (\texttt{params=}) APIs.
