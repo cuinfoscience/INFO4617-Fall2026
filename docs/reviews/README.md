@@ -51,4 +51,17 @@ Two cautions:
 
 | Week | Topic | Reviewed | File |
 |---|---|---|---|
+| 1 | Introduction to Web Data Science | 2026-11-18, #217 at `a91f57f` (textbook `3f9cf2c`) | [`week-01.md`](week-01.md) |
+| 2 | Ethics, Law, and Responsible Data Collection | 2026-11-18, #214 at `1c59716` (textbook `3f9cf2c`) | [`week-02.md`](week-02.md) |
+| 3 | The Post-API Age | 2026-11-18, #212 at `e136c69` (textbook `3f9cf2c`) | [`week-03.md`](week-03.md) |
+| 4 | Data Formats: XML and JSON | 2026-11-18, #208 at `7d62e42` (textbook `3f9cf2c`) | [`week-04.md`](week-04.md) |
+| 5 | Web Architecture and Protocols | 2026-11-17 and 18, #211 at `8ee384e` (textbook `3f9cf2c`) | [`week-05.md`](week-05.md) |
+| 6 | Parsing Static Web Pages | 2026-11-18, #206 at `21b478e` (textbook `3f9cf2c`) | [`week-06.md`](week-06.md) |
+| 7 | Archived Web Pages and the Wayback Machine | two of five reviews done (#207); the other three wait for the laptop run that makes the checkpoints (#197) | not yet |
+| 8 | Dynamic Web Pages with Selenium | 2026-11-17 and 18, #203 at `2cbbad7` (textbook `3f9cf2c`) | [`week-08.md`](week-08.md) |
+| 9 | Extracting Data from PDFs | 2026-11-17 and 18, #204 at `50192aa` (textbook `3f9cf2c`) | [`week-09.md`](week-09.md) |
+| 10 | Introduction to APIs: Wikipedia | 2026-11-18, #205 at `ea4a699` (textbook `3f9cf2c`) | [`week-10.md`](week-10.md) |
+| 11 | Government Data APIs | 2026-11-18, #201 at `1d3f270` (textbook `3f9cf2c`) | [`week-11.md`](week-11.md) |
+| 12 | Social and Media Platform APIs | 2026-11-17, at `efc1e36` (textbook `3f9cf2c`) | [`week-12.md`](week-12.md) |
 | 13 | AI APIs as Data Tools: Datalab, structured output, embeddings | 2026-11-17, at `efc1e36` (textbook `3f9cf2c`) | [`week-13.md`](week-13.md) |
+| 14 | Automating Data Collection | 2026-11-17 and 18, #213 at `576551b` (persona A at `efc1e36`; textbook `90fd7ef`) | [`week-14.md`](week-14.md) |
