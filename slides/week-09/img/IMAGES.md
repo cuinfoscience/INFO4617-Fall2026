@@ -1,8 +1,8 @@
 # Images for `week-09`
 
-All thirteen of the deck's images are real as of 2026-10-16. Five are copies made
+All fourteen of the deck's images are real as of 2026-11-17. Five are copies made
 by the textbook's `tools/shots` (listed under "Copied by tools/shots" below);
-the other eight are recorded here. Text in each reaches 16 pixels on a slide shown
+the other nine are recorded here. Text in each reaches 16 pixels on a slide shown
 1,920 pixels wide (`slides/common/AUTHORING.md`), at the width its frame shows
 it.
 
@@ -27,7 +27,7 @@ it.
 - `attendance_chart.png` -- members present at the roll call of each of the
   13 saved minutes (December 2000, 2018--2024), counted by hand (dark bars),
   beside what the slide's `extract_attendance()` returns (light bars).
-  (Case study 1: the obvious regex)
+  (Case study 1: attendance at roll call)
   - Drawn 2026-10-12 by `attendance_chart.py` (in this folder) with
     matplotlib 3.11.2 and pypdf 6.20.1:
     `python -I attendance_chart.py PATH/TO/data/ch-09 attendance_chart.png`,
@@ -57,6 +57,16 @@ it.
   - Drawn by the same script, from `pathway_<step>.dot`.
   - Their text, 31 pixels in a 684-pixel image, comes to 24 pixels or more in
     the 32--34% columns and the 75%-of-44% column that show them.
+- `exhibit3_row_2021.png` -- one row of Exhibit 3, the picture of a table on
+  page 15 of the December 2024 revenue report: 2021's retail sales tax,
+  January to April. (Step 12: one row, given)
+  - Cut 2026-11-17 from the textbook's saved copy,
+    `data/ch-09/revenue-report-2024-12.pdf`, with pypdf 7.1.0: the page's
+    one image, `.convert("L")`, then `.crop((0, 151, 1000, 180))`, the lab
+    key's own `row_2021` (lab 09, Step 12).
+  - Its figures are about 15 pixels tall. The frame shows it the full text
+    width, about 1,680 pixels, so they come to 25.
+
 ## Removed
 
 `pr_review.png`, a gray placeholder for a GitHub "Files changed" view, was
@@ -78,10 +88,10 @@ gave way to finishing the notebook and the Final Project.
 
 ## Copied by tools/shots
 
-Widths of the copies, on a 1,920-pixel slide: `missing_totals_row.png`
-and `sales_use_tax.png` sit in 50% columns, 840 pixels, so their 16-pixel text
-(in an 800-pixel frame) comes to 16.8;
-`ocr_confidence.png` in a 46% column, where its 20-pixel figures come to 19.3.
+Widths of the copies, on a 1,920-pixel slide: `missing_totals_row.png`,
+`sales_use_tax.png` and `ocr_confidence.png` sit in 60% columns, 1,008 pixels,
+since the rebuild of 2026-11-17, so the first two's 16-pixel text (in an
+800-pixel frame) comes to 20, and the third's 20-pixel figures to 25.
 
 <!-- shots:begin: copies from the textbook's tools/shots, generated from shots.json; edits between these markers are replaced -->
 Copied here by the textbook's `tools/shots/run sync`; `tools/shots/run synced` checks them.
@@ -89,8 +99,8 @@ Copied here by the textbook's `tools/shots/run sync`; `tools/shots/run synced` c
 | File | Copy of | Captured | Source | How |
 |---|---|---|---|---|
 | `documentcloud.png` | `course/week09-documentcloud` (tools/shots/out/course/week09-documentcloud/20261012T180809Z.png, textbook `f5042a5`) | 2026-10-12 | https://www.documentcloud.org/home/ | tools/shots: Google Chrome for Testing 154.0.8037.92, 480×600 at 2× |
-| `missing_totals_row.png` | `ch-09/missing-totals-row` (images/ch-09/missing-totals-row.png, textbook `5b3caf2`) | 2026-10-06 | https://documents.bouldercolorado.gov/WebLink/ElectronicFile.aspx?docid=194397&dbid=0&repo=LF8PROD2 | Claude Code: rendered with pdfplumber 0.11.10; imported by tools/shots |
-| `ocr_confidence.png` | `ch-09/ocr-confidence` (images/ch-09/ocr-confidence.png, textbook `5b3caf2`) | 2026-10-06 | https://documents.bouldercolorado.gov/WebLink/ElectronicFile.aspx?docid=194397&dbid=0&repo=LF8PROD2 | Claude Code: rendered with pytesseract 0.3.13 with Tesseract 5.5.3; imported by tools/shots |
-| `pdf_drawing_instructions.png` | `ch-09/pdf-objects` (images/ch-09/pdf-objects.png, textbook `74a950a`) | 2026-10-06 | https://documents.bouldercolorado.gov/WebLink/ElectronicFile.aspx?docid=194397&dbid=0&repo=LF8PROD2 | Claude Code: rendered with pdfplumber 0.11.10; imported by tools/shots |
-| `sales_use_tax.png` | `ch-09/sales-use-tax` (images/ch-09/sales-use-tax.png, textbook `1743581`) | 2026-10-12 | https://documents.bouldercolorado.gov/WebLink/Browse.aspx?id=194345&dbid=0&repo=LF8PROD2 | Claude Code: rendered with matplotlib 3.11.2 with pdfplumber 0.11.10; imported by tools/shots |
+| `missing_totals_row.png` | `ch-09/missing-totals-row` (images/ch-09/missing-totals-row.png, textbook `5b3caf2`) | 2026-10-06 | https://documents.bouldercolorado.gov/WebLink/ElectronicFile.aspx?docid=194397&dbid=0&repo=LF8PROD2 | Brian C. Keegan: rendered with pdfplumber 0.11.10; imported by tools/shots |
+| `ocr_confidence.png` | `ch-09/ocr-confidence` (images/ch-09/ocr-confidence.png, textbook `5b3caf2`) | 2026-10-06 | https://documents.bouldercolorado.gov/WebLink/ElectronicFile.aspx?docid=194397&dbid=0&repo=LF8PROD2 | Brian C. Keegan: rendered with pytesseract 0.3.13 with Tesseract 5.5.3; imported by tools/shots |
+| `pdf_drawing_instructions.png` | `ch-09/pdf-objects` (images/ch-09/pdf-objects.png, textbook `74a950a`) | 2026-10-06 | https://documents.bouldercolorado.gov/WebLink/ElectronicFile.aspx?docid=194397&dbid=0&repo=LF8PROD2 | Brian C. Keegan: rendered with pdfplumber 0.11.10; imported by tools/shots |
+| `sales_use_tax.png` | `ch-09/sales-use-tax` (images/ch-09/sales-use-tax.png, textbook `1743581`) | 2026-10-12 | https://documents.bouldercolorado.gov/WebLink/Browse.aspx?id=194345&dbid=0&repo=LF8PROD2 | Brian C. Keegan: rendered with matplotlib 3.11.2 with pdfplumber 0.11.10; imported by tools/shots |
 <!-- shots:end -->

@@ -29,9 +29,13 @@ from nbclient.exceptions import CellExecutionError
 
 PLACEHOLDER = "your-email@colorado.edu"
 ANSI = re.compile(r"\x1b\[[0-9;]*m")
-# Labs don't call raise_for_status(), so a rate limit usually surfaces when the
-# cell reads the refusal page as JSON: a JSONDecodeError, "Expecting value".
-TRANSIENT = re.compile(r"\b(429|502|503|504)\b|Too Many Requests|timed? ?out|ConnectionError|"
+# Labs don't call raise_for_status(), so in a typed cell a rate limit usually
+# surfaces when the cell reads the refusal page as JSON: a JSONDecodeError,
+# "Expecting value". A given cell's status check stops with "Got 429, not 200"
+# (labs/AUTHORING.md, "Status checks in given cells"), which \b429\b matches;
+# the same check's hint, "A 429 asks you to wait", is skipped, so that a 404
+# whose message carries the hint isn't retried.
+TRANSIENT = re.compile(r"\b(429|502|503|504)\b(?! asks)|Too Many Requests|timed? ?out|ConnectionError|"
                        r"RemoteDisconnected|Connection reset|Max retries exceeded|"
                        r"JSONDecodeError|Expecting value")
 

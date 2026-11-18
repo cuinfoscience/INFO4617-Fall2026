@@ -1,0 +1,8 @@
+report,month,year,total_prior,total_current,model,prior_ok,current_ok,year_ok,month_ok
+revenue-report-2018,December,2018,134538892,140648710,nvidia/nemotron-3.5-super-vl:free,True,True,True,True
+revenue-report-2019,December,2019,140609751,141954650,nvidia/nemotron-3.5-super-vl:free,True,True,True,True
+revenue-report-2020,December,2020,141954650,135195413,nvidia/nemotron-3.5-super-vl:free,True,True,True,True
+revenue-report-2021-12,December,2021,135195413,152302653,nvidia/nemotron-3.5-super-vl:free,True,True,True,True
+revenue-report-2022-12,December,2022,152302653,169112615,nvidia/nemotron-3.5-super-vl:free,True,True,True,True
+revenue-report-2023-12,December,2023,169112615,175517129,nvidia/nemotron-3.5-super-vl:free,True,True,True,True
+revenue-report-2024-12,December,2024,175517129,173908431,nvidia/nemotron-3.5-super-vl:free,True,True,True,True
