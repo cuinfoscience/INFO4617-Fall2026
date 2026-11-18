@@ -23,7 +23,8 @@
 % -------------------------------------------------------------------------
 % Rebuilt on 2026-11-16 from the lab key (labs/week-11/lab-11-key.ipynb, rebuilt 2026-11-10 and revised
 % 2026-11-16), one frame per cell, by docs/plans/2026-11-16-incremental-style-revisions.md. The lab, and
-% so the code on these frames, follows chapter 11 at textbook commit 3036573.
+% so the code on these frames, follows chapter 11 at textbook commit 3036573. Revised 2026-11-18 from
+% docs/reviews/week-11.md: the given code shows its status checks, and the lab follows textbook #316.
 \begin{frame}{This week at a glance}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
@@ -91,8 +92,8 @@
             \textbf{Solutions}\\[2pt]
             {\footnotesize \texttt{lab-11-key.ipynb}, beside it: every cell filled in and run. Fall behind? Copy the cell from the key and keep going.\par}
             \medskip
-            \textbf{Nothing to submit}\\[2pt]
-            {\footnotesize The lab is practice. After each step, a \textbf{Discuss} box holds questions we'll talk over before the next.\par}
+            \textbf{Nothing in the notebook to submit}\\[2pt]
+            {\footnotesize The lab is practice. Chapter 11's \textbf{Recommended Exercises}, which it sets up, are due Sunday and graded. After each step, a \textbf{Discuss} box holds questions we'll talk over; what doesn't fit in class is under \textbf{After class}.\par}
             \medskip
             \begin{alertblock}{Error flavors}
                 \footnotesize A missing key stops Step 0 \textit{on purpose}: set it and run again. Step 4 breaks requests \textit{on purpose}. A cell that fails with your key set is \textit{broken}: tell me, or open an issue.
@@ -109,7 +110,6 @@
                 \item The \textbf{Census Bureau} is constitutionally mandated to count the population.
                 \item The \textbf{Federal Reserve} publishes the economic data it collects; FRED is the St.\ Louis Fed's service for it.
                 \item The \textbf{Energy Information Administration} was created in 1977, after the energy crises, to publish independent energy statistics.
-                \item The \textbf{Library of Congress} publishes Congress's legislative record at Congress.gov.
             \end{itemize}
 
             \medskip
@@ -220,7 +220,7 @@ census_key = keys["census"]
             The check prints \texttt{set} or \texttt{MISSING}. It never prints the key.
 
             \medskip
-            \texttt{MISSING}? Quit Jupyter and start it from a new terminal, or use the second cell.
+            \texttt{MISSING}? Quit Jupyter and start it from a new terminal, or use the second cell. The second cell is fine for this week.
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{The User-Agent}\\[2pt]
@@ -236,6 +236,9 @@ census_key = keys["census"]
 
             \medskip
             Paste your key and press \textbf{Enter}. Nothing shows, on purpose. Paste only into the box, never between the quotation marks.
+
+            \medskip
+            Fine for this week. Set the variable before your project needs it.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -339,6 +342,9 @@ census_base = "https://api.census.gov/data/2024/acs/acs5"
 
             \medskip
             Our first request: look before you read. What status? What do the first 200 characters say?
+
+            \medskip
+            {\footnotesize \texttt{api.census.gov/robots.txt} answers ``Request Rejected'', not rules. A documented API follows its \href{https://www.census.gov/data/developers/about/terms-of-service.html}{terms of service}.\par}
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -389,6 +395,8 @@ catalog.keys()
 groups = pd.DataFrame(catalog["groups"])
 # Keep its name and its description
 groups = groups[["name", "description"]]
+# In order of name
+groups = groups.sort_values("name")
 print(len(groups), "groups")
 groups.head(3)
 \end{lstlisting}
@@ -508,13 +516,16 @@ group_vars["B19013_001E"]
             A given function asks for a group's catalog, as you just did, then prints each estimate and its label.
 
             \medskip
-            \textbf{Microsprint:} \texttt{show\_estimates("B25034")}, Year Structure Built. Which line counts homes built in the 1970s?
+            \textbf{After class:} \texttt{show\_estimates("B25034")}, Year Structure Built. Which line counts homes built in the 1970s?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # Given: each estimate in a group, with its label
 def show_estimates(group):
-    ...
+    response = requests.get(...)
+    # Stop unless the answer is a 200
+    if response.status_code != 200:
+        raise RuntimeError(...)
     variables = response.json()["variables"]
     for name in sorted(variables):
         # An estimate ends in E; NAME is a place's name
@@ -801,7 +812,7 @@ geographies = [
 \begin{frame}[fragile]{Step 4: one request a place, given}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            \texttt{.update()} adds one dictionary's keys to another. The loop pauses a second between requests.
+            \texttt{.update()} adds one dictionary's keys to another. The loop stops on any status but 200, and pauses a second between requests.
 
             \medskip
             Then a table of the three.
@@ -810,12 +821,14 @@ geographies = [
 \begin{lstlisting}
 three = []
 for geography in geographies:
-    # The variables and the key, as before
+    # The variables and the key, plus this place
     geo_params = {...}
-    # Add this place's "for" and "in"
     geo_params.update(geography)
-    # Send it, as before; keep row 1's first 3 values
+    # Send it; stop unless the answer is a 200
     geo_response = requests.get(...)
+    if geo_response.status_code != 200:
+        raise RuntimeError(...)
+    # Keep row 1's first 3 values; pause a second
     geo_rows = geo_response.json()
     three.append(geo_rows[1][:3])
     time.sleep(1)
@@ -882,7 +895,7 @@ look(try_params)
 \begin{frame}[fragile]{Step 6: Monday's cells, given}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            A given function gathers Monday's cells. \texttt{def} names the lines; \texttt{return} hands back the result.
+            A given function gathers Monday's cells. \texttt{def} names the lines; \texttt{return} hands back the result. It stops on any status but 200.
 
             \medskip
             Which of Monday's cells can you find in it?
@@ -890,15 +903,35 @@ look(try_params)
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 def census_get(params):
-    # Send it, and print the status
+    # Send it; stop unless the answer is a 200
     response = requests.get(...)
-    print("status", response.status_code)
+    if response.status_code != 200:
+        raise RuntimeError(...)
     # Rows to a table, as on Monday
     rows = response.json()
     table = pd.DataFrame(rows[1:], columns=rows[0])
-    # Each variable's column (it starts with B)
+    ...
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: numbers, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Then every column but the name and the place codes becomes numbers, whatever its group's letter.
+
+            \medskip
+            The notebook writes the list inside the \texttt{if}.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+def census_get(params):
+    ...
+    # Numbers, except the name and the place codes
+    text = ["NAME", "GEO_ID", "state", "county", "place"]
     for column in table.columns:
-        if column.startswith("B"):
+        if column not in text:
             table[column] = pd.to_numeric(table[column])
     return table
 \end{lstlisting}
@@ -949,6 +982,9 @@ incomes
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             Ten variables of \texttt{B25034}, Year Structure Built. A \textbf{list comprehension} writes the ten codes; \texttt{line:03d} pads \texttt{2} to \texttt{002}.
+
+            \medskip
+            The notebook gives the codes and the catalog in two cells.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -957,10 +993,10 @@ housing_vars = [
     f"B25034_{line:03d}E" for line in range(2, 12)
 ]
 # Monday's catalog, for this group
-b25034_response = requests.get(
-    census_base + "/groups/B25034.json",
-    headers=HEADERS,
-)
+b25034_response = requests.get(...)
+# Stop unless the answer is a 200
+if b25034_response.status_code != 200:
+    raise RuntimeError(...)
 b25034 = b25034_response.json()["variables"]
 \end{lstlisting}
         \end{column}
@@ -970,7 +1006,7 @@ b25034 = b25034_response.json()["variables"]
 \begin{frame}[fragile]{Step 6: a label for each code}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The same given cell keeps each label's last part, after its last \texttt{!!}.
+            The catalog's cell keeps each label's last part, after its last \texttt{!!}.
 
             \medskip
             Which code is ``Built 1970 to 1979''?
@@ -1108,6 +1144,24 @@ print(round(margin_of_difference))
     \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]{Step 7: a rule to decide}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Divide the difference by its margin. Above 1: larger than its margin, at 90\% confidence. Below 1: you can't tell which is higher.
+
+            \medskip
+            The rule assumes independent estimates: two cities, not a city and its county.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The difference, in margins
+ratio = difference / margin_of_difference
+print(round(ratio, 2))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}[fragile]{Step 8: rent, given}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
@@ -1227,7 +1281,7 @@ places["rent"].describe().round()
 \begin{frame}[fragile]{Step 8: the highest rents}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            A given cell draws the ten as bars, each with its margin of error.
+            A given cell draws the ten as bars, each with its margin of error. The top three are orange: tied at the cap, \$3,500 or more.
 
             \medskip
             Which of the ten could you rank with confidence?
@@ -1244,10 +1298,10 @@ top[["NAME", "rent", "B25064_001M"]]
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Microsprint: a code in the margin}
+\begin{frame}[fragile]{After class: a code in the margin}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The margin column has a code of its own. Look it up in the Bureau's notes.
+            A microsprint for after class. The margin column has a code of its own. Look it up in the Bureau's notes.
 
             \medskip
             Share how many places, their rent, and what the code says about it.
@@ -1539,7 +1593,10 @@ income.tail(3)
 \begin{frame}[fragile]{Step 11: Step 10's lines, given}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The chapter's function. \texttt{**params} collects any other parameter you name, such as \texttt{units="chg"}, and sends it along.
+            A shorter version of the chapter's function. \texttt{**params} collects any other parameter you name, such as \texttt{units="chg"}, and sends it along.
+
+            \medskip
+            It stops with FRED's own message on any status but 200: a wrong series ID says so.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -1550,7 +1607,11 @@ def fred_observations(series_id, **params):
         api_key=fred_key,
         file_type="json",
     )
-    # Then Step 10's request, table and conversion
+    # Step 10's request; stop unless it's a 200
+    response = requests.get(...)
+    if response.status_code != 200:
+        raise RuntimeError(...)
+    # Then Step 10's table and conversion
     ...
     return df
 \end{lstlisting}
@@ -1611,7 +1672,7 @@ change = fred_observations(
             The server applies these before it sends. The values you get are no longer the series as published.
 
             \medskip
-            When is it worth asking the server for what you could compute yourself?
+            The chapter's FRED section gives two reasons to ask the server for what you could compute yourself. Which matters more to a reader checking you?
         \end{column}
         \begin{column}{0.6\textwidth}
             \begin{center}\small
@@ -1632,10 +1693,10 @@ change = fred_observations(
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Microsprint: the years it fell}
+\begin{frame}[fragile]{After class: the years it fell}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            In which years did Boulder County's median household income \textit{fall}?
+            A microsprint for after class. In which years did Boulder County's median household income \textit{fall}?
 
             \medskip
             Share how many years, which ones, and the largest fall in dollars.
@@ -1724,10 +1785,10 @@ print(len(monthly), "months")
 \begin{frame}[fragile]{Step 12: a missing month}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Look for a gap before you trust a yearly average.
+            Look for a gap before you trust a yearly average. Which month is missing?
 
             \medskip
-            Which month is missing? Why might it be?
+            {\footnotesize The BLS collected no prices during the lapse in appropriations, October 1 to November 12, 2025 (\href{https://www.bls.gov/cpi/additional-resources/2025-federal-government-shutdown-impact-cpi-faq.htm}{BLS}).\par}
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -1793,13 +1854,14 @@ inflation = fred_observations(
             Compute each year's mean from \texttt{monthly}, and compare it with FRED's.
 
             \medskip
-            Share your 2024 and 2025 means, and how many months each averages. The notebook writes this in three lines.
+            Share your 2024 and 2025 means, and how many months each averages. The notebook prints the means in one line.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # Microsprint: the months, grouped by year
-years = monthly["date"].dt.year
-by_year = monthly.groupby(years)["value"]
+by_year = monthly.groupby(
+    monthly["date"].dt.year
+)["value"]
 # Each year's mean, and how many months it has
 means = by_year.mean().round(1)
 print(means.tail(3))
@@ -1815,7 +1877,7 @@ print(by_year.count().tail(3))
             A given cell asks for the Denver area's CPI, \texttt{CUUSA433SA0}, with \texttt{units="pc1"}. It is annual already.
 
             \medskip
-            In which years did Denver's prices rise faster than the nation's?
+            In which years did Denver's prices rise faster than the nation's? The lab marks 2025: the nation's mean has no October.
         \end{column}
         \begin{column}{0.6\textwidth}
             \centering
@@ -1835,7 +1897,7 @@ print(by_year.count().tail(3))
         \end{column}
         \begin{column}{0.6\textwidth}
             \textbf{Recommended Exercises, due Sunday}\\[2pt]
-            {\footnotesize In chapter 11's companion notebook. Graded on good-faith attempt to complete rather than getting everything working.\par}
+            {\footnotesize In chapter 11's companion notebook: run its setup cell, above Step 1, first. Graded on good-faith attempt to complete rather than getting everything working.\par}
             \medskip
             \textbf{On your own: the EIA}\\[2pt]
             {\footnotesize The chapter's third API, in ``EIA API v2'': routes that describe themselves, facets that filter, paging with \texttt{offset}. Its key is \texttt{EIA\_KEY}.\par}
@@ -1881,7 +1943,7 @@ print(by_year.count().tail(3))
 % =========================================================================
 \begin{frame}{Key takeaways}
     \begin{enumerate}
-        \item Government APIs serve \textbf{public mandates}: the census, the Federal Reserve's data.
+        \item Government APIs serve \textbf{public mandates}: the census, the Federal Reserve's data, and, on your own, the EIA's.
         \item Each carried one idea you'll meet again: \textbf{ask what you can ask for} (Census), \textbf{let the server compute} (FRED).
         \item \textbf{Start from the website, and start small}: one place, one year, or three months you can check, before the whole table.
         \item \textbf{Read what isn't a number}: a margin of error, a code like \texttt{-666666666}, a cap at \$3,500, a \texttt{"."} for missing.
