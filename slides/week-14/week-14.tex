@@ -39,12 +39,16 @@
 % Code shaped for reading (2026-11-13): a one-line comment above each step, at most two chained
 % methods, one argument per line in long calls. Where a slide names a step the key or the template
 % doesn't, it does the same thing and prints the same things; its narration says so.
+% The schedule (2026-11-17): the workflow is scheduled for minute 17 of every hour, and GitHub ran
+% the course's copy three or four times a day. Frames say "scheduled" for the first and give the
+% second as what happened (instructor, 2026-11-13: keep the sparse schedule, and teach it). The
+% numbers are the key's run of 2026-11-17 and chapter 14's: labs/week-14/data/README.md.
 \begin{frame}{This week at a glance}
     \begin{center}
     \begin{tikzpicture}[node distance=0.35cm, >=stealth]
         \node[stage] (one) {\textbf{One request}\\[-1pt]{\scriptsize by hand · Wed}};
         \node[stage, right=of one] (script) {\textbf{collector.py}\\[-1pt]{\scriptsize a script · Wed}};
-        \node[stage, right=of script] (actions) {\textbf{Every hour}\\[-1pt]{\scriptsize Actions · Wed}};
+        \node[stage, right=of script] (actions) {\textbf{On a schedule}\\[-1pt]{\scriptsize Actions · Wed}};
         \node[stage, right=of actions] (csv) {\textbf{forecasts.csv}\\[-1pt]{\scriptsize read it · Fri}};
         \node[stage, right=of csv] (fail) {\textbf{A red X}\\[-1pt]{\scriptsize break it · Fri}};
         \draw[->, thick] (one) -- (script);
@@ -277,7 +281,7 @@ print(grid["relativeLocation"]["properties"]["city"])
 \begin{frame}[fragile]{Step 1: the forecast's address}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            \texttt{forecastHourly} is the address our collector will ask every hour.
+            \texttt{forecastHourly} is the address our collector will ask on every run.
 
             \medskip
             The documentation says a square can change. \texttt{collector.py} keeps only this address. What would it collect if the square changed?
@@ -370,7 +374,7 @@ print(len(hourly["periods"]), "periods")
             Print the first period.
 
             \medskip
-            Which of its fields would you save every hour? Which would you leave out?
+            Which of its fields would you save on every run? Which would you leave out?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -900,7 +904,7 @@ jobs:
 \begin{frame}{Step 5: start the first run}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            A scheduled run can start late. Start the first one by hand.
+            A scheduled run can start hours late, or not at all. Start the first one by hand.
             \begin{enumerate}\small\setcounter{enumi}{5}
                 \item Click the \textbf{Actions} tab. If GitHub asks, enable workflows. Click \textbf{Collect Boulder's hourly forecast}. Click \textbf{Run workflow}, then the green \textbf{Run workflow}.
             \end{enumerate}
@@ -937,7 +941,7 @@ jobs:
                 \item Click the \textbf{Code} tab. Find \texttt{forecasts.csv}, and the commit by \texttt{github-actions[bot]}. Click the file.
             \end{enumerate}
             \medskip
-            From now on it runs by itself, every hour, until December 11. GitHub can take hours to start a new schedule, so the first hourly run may come long after class.
+            From now on it is scheduled every hour, until December 11. GitHub ran the course's copy three or four times a day, so your next run may come long after class.
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{Git scraping}\\[2pt]
@@ -993,7 +997,7 @@ my_forecasts.head()
             Open your \textbf{Actions} tab once. Each run is a line, with a green check or a red X.
 
             \medskip
-            How many runs do you expect by Friday's class?
+            The schedule asks for 48 runs by Friday's class. GitHub gave the course's copy three or four a day. How many do you expect?
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{Friday}\\[2pt]
@@ -1009,7 +1013,7 @@ my_forecasts.head()
 \begin{frame}{Today: Part 2, what the collector gathered}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            The course has run the same \texttt{collector.py} every hour since November 13.
+            The course has had the same \texttt{collector.py} on an hourly schedule since November 13. GitHub ran it three or four times a day.
 
             \medskip
             Today we count how often the forecast changed and follow one hour as it came closer. Then we break a run on purpose.
@@ -1049,13 +1053,13 @@ HEADERS = {"User-Agent":
             The same cell names two addresses.
 
             \medskip
-            \texttt{series} is the course's file. A new run adds to it at minute 17 of every hour.
+            \texttt{series} is the course's file. Its schedule says minute 17 of every hour. GitHub adds a run every few hours.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # The NWS's API
 nws_base = "https://api.weather.gov"
-# The course's series, collected every hour
+# The course's series, scheduled every hour
 series = (
     "https://raw.githubusercontent.com/"
     "cuinfoscience/INFO4617-Fall2026/main/"
@@ -1070,6 +1074,9 @@ series = (
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             Read it, and look at its last rows.
+
+            \medskip
+            The key's numbers come from 18 runs, on November 17. Today's file has more, so your counts will be larger.
 
             \medskip
             What can this file tell you that a live request can't? What can't it tell you?
@@ -1093,7 +1100,7 @@ forecasts.tail()
             Each run is one \texttt{collected\_at}. Each forecast the NWS issued is one \texttt{update\_time}.
 
             \medskip
-            If the forecast changed every hour, the two counts would match. Do they?
+            The schedule asks for 24 runs a day. How many runs did GitHub make? How many forecasts did they find?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -1112,7 +1119,7 @@ print(forecasts["update_time"].nunique(), "forecasts")
             This cell is given. For each forecast, it counts the runs that collected it, and finds the first and last.
 
             \medskip
-            Which forecasts lasted longest? What does that say about when forecasters update it?
+            At which times of day do the forecasters update it? Where is the longest stretch with no run?
 
             \medskip
             The notebook groups and counts in one line.
@@ -1134,27 +1141,98 @@ print(per_forecast.to_string())
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Microsprint: the share that was new}
+\begin{frame}[fragile]{Step 8: from the first forecast to the last}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Divide forecasts by runs: the share of runs that brought a forecast no earlier run had.
+            GitHub made few runs, so forecasts divided by runs describes GitHub. Count the changes a day instead.
 
             \medskip
-            Thirty collectors each ask 24 times a day. How many of their 720 requests bring something new?
+            First, the days. \texttt{.total\_seconds()} turns a length of time into seconds. How many days?
 
             \medskip
-            The notebook divides in one line.
+            The notebook subtracts and divides in one line.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# How many forecasts, and how many runs
-n_forecasts = forecasts["update_time"].nunique()
-n_runs = forecasts["collected_at"].nunique()
-# The share of runs that brought a new forecast
-new_share = n_forecasts / n_runs
-print(round(new_share, 2))
-# The same share of 720 requests a day
-print(round(720 * new_share), "of 720 daily requests")
+# Each row's update_time, as a time
+update_times = pd.to_datetime(forecasts["update_time"])
+# From the first forecast to the last
+span = update_times.max() - update_times.min()
+# The same, in days: a day has 86,400 seconds
+days = span.total_seconds() / 86400
+print(
+    round(days, 1),
+    "days from the first forecast to the last",
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: changes a day}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The first forecast isn't a change, so subtract one.
+
+            \medskip
+            At least how many times a day did the forecast change? A forecast that changed twice between two runs counts once.
+
+            \medskip
+            A collector that kept the schedule would ask 24 times a day.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The changes: every forecast after the first
+changes = forecasts["update_time"].nunique() - 1
+# How many changes, and how many a day
+print(
+    changes,
+    "changes,",
+    round(changes / days, 1),
+    "a day",
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: an hourly collector's four weeks}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A collector that kept the hourly schedule would ask 672 times in four weeks.
+
+            \medskip
+            At the series' changes a day, how many of those requests would find a forecast that had changed?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# An hourly collector's requests in four weeks
+asked = 24 * 28
+# The forecast's changes in the same four weeks
+found_new = changes / days * 28
+print(
+    asked,
+    "requests in four weeks;",
+    round(found_new),
+    "would find a new forecast",
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: the share that was new}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same cell prints the share of the 672 requests that would find a new forecast: at least that share, probably more.
+
+            \medskip
+            Thirty such collectors ask 20,160 times. About how many of those requests bring nothing new?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The share of requests that found a new forecast
+print(round(found_new / asked, 2), "of them")
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1163,7 +1241,7 @@ print(round(720 * new_share), "of 720 daily requests")
 \begin{frame}{What a bot costs a server}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Step 8 counted how often the forecast changed. Our collector asks 24 times a day anyway. On November 12, an hourly collector got the same forecast 12 times in a row.
+            Step 8 counted at least two or three changes a day. Our schedule asks for 24 runs a day anyway: an hourly collector would find a new forecast in at least one request in ten, probably a little more.
 
             \medskip
             \texttt{Last-Modified} and \texttt{Cache-Control} say how new an answer is. Who pays for the requests that bring nothing new?
@@ -1225,20 +1303,20 @@ lead_hours = lead.dt.total_seconds() / 3600
 \begin{frame}[fragile]{Step 9: plot it}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The same given cell plots the forecast temperature against the lead time.
+            The same given cell plots the forecast temperature against the lead time, as steps, like the chapter's chart.
 
             \medskip
-            Where does the line settle?
+            Several runs found the same forecast. A step holds each run's forecast until the next run. Where does the line settle?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # One figure, wide and short
 fig, ax = plt.subplots(figsize=(8, 4))
-# Temperature against lead time, a dot per run
-ax.plot(
+# A step holds each run's forecast until the next run's
+ax.step(
     lead_hours,
     noon_rows["temperature"],
-    marker=".",
+    where="post",
 )
 # Furthest ahead on the left, nearest on the right
 ax.invert_xaxis()
@@ -1305,13 +1383,57 @@ print(
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 10: is it still running?}
+\begin{frame}[fragile]{Step 10: the gaps between runs}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             A collector that stops doesn't say so. Its file just stops growing.
 
             \medskip
-            A \textbf{freshness check} asks how old the newest row is. Under about an hour and a half is fresh. Is the course's?
+            How long is too long without a run? This given cell prints the hours from each run to the next. \texttt{.diff()} subtracts the row before.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Each run's time, once
+run_times = pd.to_datetime(
+    forecasts["collected_at"].drop_duplicates()
+)
+# From each run to the next, in hours
+gaps = run_times.diff().dropna()
+gap_hours = gaps.dt.total_seconds() / 3600
+print(gap_hours.round(1).tolist())
+# The longest gap
+print("longest gap:", round(gap_hours.max(), 1), "hours")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: runs a day}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same cell counts the runs on each day, in UTC. The schedule asks for 24.
+
+            \medskip
+            How many did GitHub make? The notebook counts them in one line.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Each run's day, such as "Nov 13"
+run_days = run_times.dt.strftime("%b %d")
+# How many runs each day had
+print(run_days.value_counts(sort=False).to_dict())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: is it still running?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A \textbf{freshness check} asks how old the newest row is.
+
+            \medskip
+            The longest gap between this collector's runs is a yardstick. Is the course's newest row older than that? What limit would you set?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
