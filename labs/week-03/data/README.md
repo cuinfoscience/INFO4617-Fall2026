@@ -4,8 +4,8 @@ Read by `lab-03.ipynb` from this folder's raw address on `main`. Each lets a stu
 
 | File | Made from | What it holds |
 |---|---|---|
-| `access.csv` | Step 4's given loop, as `lab-03-key.ipynb` ran it on 2026-10-21 at 21:56 UTC, from a cloud machine | The access matrix: one row for each of the chapter's eight endpoints, with its status code, verdict, content type, and `x-ratelimit-limit` header, and the time of the audit. Step 4's fallback cell and Friday's setup step (Step 6) load it. |
-| `servers.csv` | Step 9's given loop, in the same run | Six Mastodon servers: the number of accounts each reported, the status code of its public timeline for an anonymous request, and the time of the audit. Step 9's fallback cell loads it. |
+| `access.csv` | Step 4's given loop, as `lab-03-key.ipynb` ran it on 2026-10-21 at 21:56 UTC, from a cloud machine | The access matrix: one row for each of the chapter's eight endpoints, with its status code, verdict, content type, and `x-ratelimit-limit` header, and the time of the audit. Step 4's fallback cell and Friday's setup step (Step 6) load it; Step 6 says how to load a student's own copy from Wednesday instead. |
+| `servers.csv` | The given loop of the after-class Mastodon step (Step 9 until 2026-11-18), in the same run | Six Mastodon servers: the number of accounts each reported, the status code of its public timeline for an anonymous request, and the time of the audit. That step's fallback cell loads it. |
 
 **How they were made.** Each file is the table its loop printed in full in the key's run of 2026-10-21, copied to CSV on 2026-11-17 from the key's saved output, with the `audit_date` column that the lab's saving cells add. No value was typed by hand. The loops weren't run again on 2026-11-17: several of their hosts' `robots.txt` files disallow the lab's paths to automated clients, and that run was automated. When the instructor runs the key from a laptop, the saving cells under each loop write new copies; replace these files with them, and change the dates in the lab's loading cells and in this table.
 
