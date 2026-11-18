@@ -1,0 +1,7 @@
+,*,Googlebot,GPTBot,ClaudeBot,CCBot,Google-Extended,PerplexityBot
+www.nytimes.com,True,True,False,False,False,False,False
+www.washingtonpost.com,True,True,True,False,False,True,False
+www.wsj.com,False,True,True,False,False,False,False
+www.theguardian.com,True,True,True,False,False,True,False
+www.denverpost.com,True,True,False,False,False,False,False
+coloradosun.com,True,True,False,False,False,True,False
