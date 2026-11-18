@@ -53,3 +53,31 @@ Copied here by the textbook's `tools/shots/run sync`; `tools/shots/run synced` c
 | `user-contributions.png` and `user-contributions_annotated.png` and `user-contributions_annotated.pdf` | `ch-10/user-contributions` (images/ch-10/user-contributions.png, textbook `9a22395`) | 2026-10-16 | https://en.wikipedia.org/wiki/Special:Contributions/Jimbo_Wales | tools/shots: Google Chrome for Testing 154.0.8037.92, 800×760 at 2× |
 | `what-links-here.png` and `what-links-here_annotated.png` and `what-links-here_annotated.pdf` | `ch-10/what-links-here` (images/ch-10/what-links-here.png, textbook `9a22395`) | 2026-10-16 | https://en.wikipedia.org/wiki/Special:WhatLinksHere/University_of_Colorado_Boulder | tools/shots: Google Chrome for Testing 154.0.8037.92, 800×1000 at 2× |
 <!-- shots:end -->
+
+## The key's plots
+
+On 2026-11-17 the deck was rebuilt around the lab's three parts, one frame
+per lab cell. Where a given cell draws a plot, its frame shows the key's own
+output, so students see what theirs should look like. Each PNG is the cell's
+saved output in `labs/week-10/lab-10-key.ipynb` (the key's run of 2026-11-10,
+with every request ending 2026-09-30), unchanged:
+
+| File | Lab cell | Frame |
+|---|---|---|
+| `key-monthly-edits.png` | `w10-s7-g` | Step 7: every month |
+| `key-daily-views.png` | `w10-s10-g` | Step 10: every day |
+| `key-views-and-edits.png` | `w10-s11-g` | Step 11: both, on one time axis |
+| `key-views-by-agent.png` | `w10-s13-g3` | Step 13: three agents |
+
+The chapter's copies of three of the same charts, `cu-monthly-edits.png`,
+`cu-daily-views.png` and `cu-boulder-combined.png` (the city's article beside
+the university's), are no longer on a frame (used on: not yet). They stay
+here as `tools/shots` copies. `cu-views-by-agent.png` is still on "Why
+Wikipedia, and why now".
+
+The tour's screenshots moved with the tour to the deck's last section,
+"Reading: a tour of Wikipedia". `api-response_annotated.pdf` is also on
+"Step 2: the same answer in a browser", and `article-categories_annotated.pdf`
+on "Step 14: the box at the foot of the article", each at 0.6 of the text
+width. The revision-history screenshot stays in the tour only: the lab's
+Step 4 keeps usernames off the screen, so its frames do too.
