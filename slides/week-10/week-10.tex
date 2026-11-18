@@ -29,31 +29,31 @@
 
             \bigskip
 
-            \dayband{Monday}{Concepts \& notebook intro}
+            \dayband{Monday}{Live-coding lab, Part 1}
             \begin{itemize}\small
                 \item What an API is, why it beats scraping, and why we learn on Wikipedia
-            \end{itemize}
-
-            \medskip
-
-            \dayband{Wednesday}{Live-coding lab}
-            \begin{itemize}\small
-                \item MediaWiki API: revisions, pageviews, links, raw requests
                 \item We write the code together in \texttt{labs/week-10/lab-10.ipynb}
             \end{itemize}
 
             \medskip
 
-            \dayband{Friday}{Continue the lab}
+            \dayband{Wednesday}{Live-coding lab, Part 2}
             \begin{itemize}\small
-                \item Finish the lab; check it against \texttt{lab-10-key.ipynb}
+                \item MediaWiki API: revisions; the pageviews API
+            \end{itemize}
+
+            \medskip
+
+            \dayband{Friday}{Live-coding lab, Part 3}
+            \begin{itemize}\small
+                \item Pageviews by agent, links, and a client library; check it against \texttt{lab-10-key.ipynb}
                 \item Final project proposal Q\&A
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Skipping weekly submissions}
-                No lab notebook or GitHub submissions this week
-            \end{block}
+            \textbf{Recommended Exercises}\\[2pt]
+            {\footnotesize Chapter 10's, in its companion notebook, due the Sunday after the lab. The lab itself is practice.\par}
+            \medskip
             \begin{alertblock}{Due Sunday, Oct 25}
                 \footnotesize \textbf{Final Project proposal} (5\%) --- a research question, your data source(s) and method, and an ethics \& feasibility check.
             \end{alertblock}
@@ -92,7 +92,7 @@
             \begin{itemize}\small
                 \item I write the code on screen, and you write it in your copy
                 \item Put \textbf{your} email in the User-Agent in Step 0
-                \item Today: Part 1, Steps 0--5
+                \item Today: Part 1, Steps 0--5; Step 3 is after class
                 \item Wednesday and Friday: download the new copy and start at that part's setup step
             \end{itemize}
         \end{column}
@@ -100,11 +100,11 @@
             \textbf{Solutions}\\[2pt]
             {\footnotesize \texttt{lab-10-key.ipynb}, beside it: every cell filled in and run. Fall behind? Copy the cell from the key and keep going.\par}
             \medskip
-            \textbf{Nothing to submit}\\[2pt]
-            {\footnotesize The lab is practice. After each step, a \textbf{Discuss} box holds questions we'll talk over before the next.\par}
+            \textbf{Practice; the exercises are turned in}\\[2pt]
+            {\footnotesize Nothing in the lab is submitted. Chapter 10's Recommended Exercises are, from its companion notebook, due the Sunday after. What didn't fit a day is under its \textbf{After class} heading.\par}
             \medskip
             \begin{alertblock}{Error flavors}
-                \footnotesize A \textbf{429} is Wikimedia's rate limit, which a room on one network can reach together: wait the \texttt{retry-after} seconds, and run the cell again. No GitHub issue. A cell that fails the same way after waiting may be \textit{genuinely} broken: tell me, or open an issue.
+                \footnotesize A \textbf{429} is Wikimedia's rate limit, which a room on one network can reach together. A given loop stops with \texttt{Got 429} and the seconds to wait: wait, then load the saved copy below it. A typed cell: wait, and run it again. No GitHub issue. A cell that fails the same way after waiting may be \textit{genuinely} broken: tell me, or open an issue.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -370,18 +370,22 @@ print(info_page)
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 2: two fields, by name}
+\begin{frame}[fragile]{Step 2: three fields, by name}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Does the length match the browser's?
+            Does the length match the browser's? Note the page ID: Step 16 checks it.
 
             \medskip
             What would \texttt{["length"]} do with a page that doesn't exist?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# The page's title, and its length in bytes
-print(info_page["title"], info_page["length"])
+# The page's title, its ID, and its length in bytes
+print(
+    info_page["title"],
+    info_page["pageid"],
+    info_page["length"],
+)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -403,71 +407,6 @@ sprint_titles = (
     + "|Talk:" + ARTICLE
     + "|University of Colorado Bolder"
 )
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 3: without a User-Agent}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Send Step 1's request without \texttt{headers=}. \texttt{requests} sends its own User-Agent.
-
-            \medskip
-            What status comes back? What does the text ask you to do?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# Step 1's request, without our User-Agent
-no_ua_response = requests.get(API, params=info_params)
-# Look: the status, and the start of the text
-print(
-    no_ua_response.status_code,
-    no_ua_response.text[:200],
-)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 3: when a cell stops}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            A refused request still comes back. When a cell stops with \texttt{JSONDecodeError} or \texttt{KeyError}, print the response it read.
-
-            \medskip
-            A \textbf{429} means too many requests. \texttt{Retry-After} says how many seconds to wait.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# Given: print the response a cell couldn't read
-print(
-    info_response.status_code,
-    info_response.headers.get("retry-after"),
-)
-print(info_response.text[:300])
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Microsprint: break it on purpose}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Break Step 1's request one way: misspell a key, leave out \texttt{"format"}, or ask for a \texttt{prop} that doesn't exist.
-
-            \medskip
-            Send it with \texttt{HEADERS}, and look. Which status? Which line of Step 2 would stop?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# One thing broken: "title" for "titles"
-broken_params = {
-    "action": "query",
-    "title": ARTICLE,
-    "prop": "info",
-    "format": "json",
-}
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -672,7 +611,7 @@ def get_revisions(title, until="2026-09-30T23:59:59Z"):
             \texttt{while True} repeats its lines until \texttt{break}.
 
             \medskip
-            Find your first move: the request. The chapter's \texttt{raise\_for\_status()} is left out.
+            Find your first move: the request.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -684,6 +623,29 @@ def get_revisions(title, until="2026-09-30T23:59:59Z"):
             params=params,
             headers=HEADERS,
         )
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: stop on a refusal}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            In place of the chapter's \texttt{raise\_for\_status()}, it checks the status. \texttt{raise} stops the cell with what came back.
+
+            \medskip
+            Stopped by \texttt{Got 429}? Wait, then load the saved copy rather than run the loop again.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+        # Stop on anything but a 200, and say why
+        if response.status_code != 200:
+            wait = response.headers.get("Retry-After", "a few")
+            raise RuntimeError(
+                f"Got {response.status_code}, not 200. "
+                f"A 429 asks you to wait {wait} seconds "
+                f"(Retry-After). {response.text[:200]}"
+            )
         data = response.json()
 \end{lstlisting}
         \end{column}
@@ -753,13 +715,82 @@ print(
     \end{columns}
 \end{frame}
 
+% After class (the lab's "After class" heading for Part 1): Step 3 and its microsprint didn't fit
+% Monday's 50 minutes (labs/AUTHORING.md, "The time budget"), so they follow Step 5 here too.
+
+\begin{frame}[fragile]{After class, Step 3: without a User-Agent}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Send Step 1's request without \texttt{headers=}. \texttt{requests} sends its own User-Agent.
+
+            \medskip
+            What status comes back? What does the text ask you to do?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Step 1's request, without our User-Agent
+no_ua_response = requests.get(API, params=info_params)
+# Look: the status, and the start of the text
+print(
+    no_ua_response.status_code,
+    no_ua_response.text[:200],
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class, Step 3: when a cell stops}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A refused request still comes back. When a typed cell stops with \texttt{JSONDecodeError} or \texttt{KeyError}, print the response it read: put its name in place of \texttt{info\_response}.
+
+            \medskip
+            A \textbf{429} means too many requests. \texttt{Retry-After} says how many seconds to wait.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: the response a cell couldn't read
+# (Step 1's here: put the failed one's name)
+print(
+    info_response.status_code,
+    info_response.headers.get("retry-after"),
+)
+print(info_response.text[:300])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class: break it on purpose}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Break Step 1's request one way: misspell a key, leave out \texttt{"format"}, or ask for a \texttt{prop} that doesn't exist.
+
+            \medskip
+            Send it with \texttt{HEADERS}, and look. Which status? Which line of Step 2 would stop?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One thing broken: "title" for "titles"
+broken_params = {
+    "action": "query",
+    "title": ARTICLE,
+    "prop": "info",
+    "format": "json",
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}[fragile]{Before Friday: install mwclient}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             Friday's Step 16 uses \textbf{mwclient}, a client library. The \texttt{webdata} environment doesn't include it.
 
             \medskip
-            Install it once, in a terminal, before Friday.
+            Install it once, in a terminal, before Friday. Then restart any open notebook's kernel.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -813,6 +844,7 @@ conda install -n webdata -c conda-forge mwclient
             \dayband{Use it}{Steps 6--11}
             \begin{itemize}\small
                 \item Download the new \texttt{lab-10.ipynb}; start at \textbf{Step 6}
+                \item After class: Step 10, and the yearly count
             \end{itemize}
         \end{column}
         \begin{column}{0.4\textwidth}
@@ -926,20 +958,13 @@ print(monthly_edits.idxmax(), monthly_edits.max())
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Microsprint: by year}
+\begin{frame}{Step 8: how many editors?}
     \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Count by year instead: \texttt{"YE"} in place of \texttt{"ME"}.
+        \begin{column}{0.6\textwidth}
+            Your turn. The cell's comment names the goal, not the method: how many different editors are there?
 
             \medskip
-            Share the busiest year and its number of edits.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# By year
-yearly_edits = by_time.resample("YE").size()
-print(yearly_edits.idxmax(), yearly_edits.max())
-\end{lstlisting}
+            Which method in the step's text counts the different values in a column?
         \end{column}
     \end{columns}
 \end{frame}
@@ -1186,57 +1211,6 @@ views["timestamp"] = pd.to_datetime(
     \end{columns}
 \end{frame}
 
-\begin{frame}{Step 10: every day}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            A given cell plots the daily views. Yours should look like this.
-
-            \medskip
-            The API's days are UTC days. Which spikes can you explain?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/key-daily-views.png}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 10: the biggest day}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \texttt{.loc[]} reads the row with that label.
-
-            \medskip
-            An evening in Colorado counts toward the next UTC day. Which Colorado date was the peak?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# The label of the row with the most views
-peak = views["views"].idxmax()
-# That row
-print(views.loc[peak])
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Microsprint: an ordinary day}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            The \textbf{median}: half the days were above it.
-
-            \medskip
-            Share the median, and about how many ordinary days the peak was worth.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# The median day's views
-print(views["views"].median())
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 \begin{frame}[fragile]{Step 11: views per month}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
@@ -1304,6 +1278,31 @@ print(monthly_views.corr(edits_since_2021))
     \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]{Step 11: does one month decide it?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell asks again: by rank (Spearman's), where the biggest month counts only as the biggest, and without September 2023.
+
+            \medskip
+            Which would you report?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: by rank
+print(monthly_views.corr(
+    edits_since_2021,
+    method="spearman",
+))
+# Given: without September 2023
+without_sept_2023 = monthly_views.drop(
+    pd.Timestamp("2023-09-30")
+)
+print(without_sept_2023.corr(edits_since_2021))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}{Step 11: both, on one time axis}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
@@ -1315,6 +1314,78 @@ print(monthly_views.corr(edits_since_2021))
         \begin{column}{0.6\textwidth}
             \centering
             \includegraphics[width=\textwidth]{img/key-views-and-edits.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% After class (the lab's "After class" heading for Part 2): Step 7's microsprint, and Step 10
+% with its microsprint, didn't fit Wednesday's 50 minutes.
+
+\begin{frame}[fragile]{After class: by year}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Count by year instead: \texttt{"YE"} in place of \texttt{"ME"}.
+
+            \medskip
+            Share the busiest year and its number of edits.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# By year
+yearly_edits = by_time.resample("YE").size()
+print(yearly_edits.idxmax(), yearly_edits.max())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{After class, Step 10: every day}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell plots the daily views. Yours should look like this.
+
+            \medskip
+            The API's days are UTC days. Which spikes can you explain?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/key-daily-views.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class, Step 10: the biggest day}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{.loc[]} reads the row with that label.
+
+            \medskip
+            An evening in Colorado counts toward the next UTC day. Which Colorado date was the peak?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The label of the row with the most views
+peak = views["views"].idxmax()
+# That row
+print(views.loc[peak])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class: an ordinary day}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The \textbf{median}: half the days were above it.
+
+            \medskip
+            Share the median, and about how many ordinary days the peak was worth.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The median day's views
+print(views["views"].median())
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
@@ -1333,8 +1404,9 @@ print(monthly_views.corr(edits_since_2021))
             \dayband{Lab}{Steps 12--17}
             \begin{itemize}\small
                 \item Who reads the article: people, crawlers and bots
-                \item Its categories, languages and links
-                \item A client library that does the paging for us
+                \item Its links, and what links to it
+                \item A client library that follows \texttt{"continue"} for us
+                \item After class: Step 14, on categories and languages
                 \item Download the new \texttt{lab-10.ipynb}; start at \textbf{Step 12}
             \end{itemize}
 
@@ -1401,7 +1473,7 @@ print(monthly_views.corr(edits_since_2021))
 \begin{frame}[fragile]{Step 13: get\_pageviews(), given}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The chapter's function: Step 9's lines, without \texttt{raise\_for\_status()}.
+            The chapter's function: Step 9's lines, with Step 5's status check in place of \texttt{raise\_for\_status()}.
 
             \medskip
             \texttt{agent="user"} is a \textbf{default}: used when a call doesn't give one.
@@ -1413,7 +1485,9 @@ def get_pageviews(title, start, end,
                   agent="user", granularity="daily"):
     # Step 9: the title, then the address
     ...
-    # Step 9: send it, then a table, then dates
+    # Step 9: send it; stop on anything but a 200
+    ...
+    # Then a table, then dates
     ...
     return views[["timestamp", "views"]]
 \end{lstlisting}
@@ -1440,6 +1514,17 @@ september = get_pageviews(
 )
 print(september)
 \end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 13: now by day?}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Your turn: September 2026 again, by day. Print how many days, and their total views.
+
+            \medskip
+            Which argument do you change, or leave out?
         \end{column}
     \end{columns}
 \end{frame}
@@ -1506,163 +1591,6 @@ print(spider_views.tail(3))
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Microsprint: do they add up?}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Ask for every agent at once. A given cell checks that each month is the three agents' sum, and finds when people were the smallest share.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# Every agent at once, the same months
-all_views = get_pageviews(
-    ARTICLE,
-    "20240101",
-    "20260930",
-    agent="all-agents",
-    granularity="monthly",
-)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 14: three categories first}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Categories, languages and links are all \texttt{action=query}, with another \texttt{prop}.
-
-            \medskip
-            Open the foot of \href{https://en.wikipedia.org/wiki/University_of_Colorado_Boulder}{the article}. Which three should come back?
-
-            \medskip
-            {\scriptsize\textbf{Docs:} \href{https://www.mediawiki.org/wiki/API:Categories}{prop=categories}\par}
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# Three of the article's categories
-cat_params = {
-    "action": "query",
-    "titles": ARTICLE,
-    "format": "json",
-    "prop": "categories",
-    "cllimit": 3,
-}
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 14: send it, and look}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Three titles, and a \texttt{"continue"}: Step 4's idea, on another \texttt{prop}.
-
-            \medskip
-            Are they the three you expected?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# Send it
-cat_response = requests.get(
-    API,
-    params=cat_params,
-    headers=HEADERS,
-)
-# Look: the status, and the whole text
-print(cat_response.status_code, cat_response.text)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Step 14: the box at the foot of the article}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Which of your three are in the box (1)?
-
-            \medskip
-            The others are \textbf{hidden categories}, which editors use to keep track of articles.
-
-            \medskip
-            Should a study of how Wikipedia classifies a topic count them?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{img/article-categories_annotated.pdf}\\
-            {\scriptsize The article's categories, 2026-10-16.}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 14: two props, one request}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            One request can ask for two \texttt{prop}s, each with its own limit. The given dictionary sets both.
-
-            \medskip
-            {\scriptsize\textbf{Docs:} \href{https://www.mediawiki.org/wiki/API:Langlinks}{prop=langlinks}\par}
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# Given: each prop's limit at "max"
-cat_lang_params = {
-    ...
-    "cllimit": "max",
-    "lllimit": "max",
-}
-# Yours: two props, joined with |
-cat_lang_params["prop"] = "categories|langlinks"
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 14: send it, and check for more}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            A short list fits in one answer, but check for \texttt{"continue"} before trusting a count.
-
-            \medskip
-            A given cell counts the categories and languages.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# Send it
-cat_lang_response = requests.get(
-    API,
-    params=cat_lang_params,
-    headers=HEADERS,
-)
-cat_lang = cat_lang_response.json()
-# Is there more to come?
-print("continue" in cat_lang)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Microsprint: redirects}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Which other titles send readers here? \texttt{prop=redirects} isn't in the chapter.
-
-            \medskip
-            Read \href{https://www.mediawiki.org/wiki/API:Redirects}{its page} for its limit parameter, and set it to \texttt{"max"}.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# Given: prop=redirects, without a limit
-redirect_params = {
-    "action": "query",
-    "titles": ARTICLE,
-    "format": "json",
-    "prop": "redirects",
-}
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 \begin{frame}[fragile]{Step 15: query\_all(), given}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
@@ -1681,7 +1609,8 @@ def query_all(params):
         "format": "json",
         **params,
     }
-    # Then Step 5's loop, keeping each data["query"]
+    # Then Step 5's loop and status check,
+    # keeping each data["query"]
     ...
 \end{lstlisting}
         \end{column}
@@ -1757,7 +1686,7 @@ print(back_data["query"])
 \begin{frame}{Step 15: all of them, given}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            A given cell asks \texttt{query\_all()} for every article that links here, 500 a request. Its \texttt{sum()} adds one for each page that is a redirect.
+            A given cell asks \texttt{query\_all()} for every article that links here, 500 a request. It marks each page's \texttt{redirect} True or False, and counts the Trues. Stopped by \texttt{Got 429}? Load the saved copy.
 
             \medskip
             It also saves the links, and what links here.
@@ -1797,7 +1726,7 @@ print(site.connection.headers["User-Agent"])
             \texttt{site.pages[...]} finds a page by its title: no dictionary, no \texttt{"continue"}.
 
             \medskip
-            Is it the page ID Step 1 printed?
+            Is it the page ID Step 2 printed?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -1845,6 +1774,169 @@ print(len(edits_2023), "edits in 2023, from mwclient")
 
     \medskip
     \textbf{What could the saved copies not tell you?}
+\end{frame}
+
+% After class (the lab's "After class" heading for Part 3): Step 13's microsprint, and Step 14
+% with its microsprint, didn't fit Friday's 35 minutes.
+
+\begin{frame}[fragile]{After class: do they add up?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Ask for every agent at once. A given cell prints the largest gap between each month and the three agents' sum.
+
+            \medskip
+            A gap of a few views is Wikimedia revising its counts between your requests, not your code.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Every agent at once, the same months
+all_views = get_pageviews(
+    ARTICLE,
+    "20240101",
+    "20260930",
+    agent="all-agents",
+    granularity="monthly",
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class, Step 14: three categories first}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Categories, languages and links are all \texttt{action=query}, with another \texttt{prop}.
+
+            \medskip
+            Open the foot of \href{https://en.wikipedia.org/wiki/University_of_Colorado_Boulder}{the article}. Which three should come back?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://www.mediawiki.org/wiki/API:Categories}{prop=categories}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Three of the article's categories
+cat_params = {
+    "action": "query",
+    "titles": ARTICLE,
+    "format": "json",
+    "prop": "categories",
+    "cllimit": 3,
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class, Step 14: send it, and look}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Three titles, and a \texttt{"continue"}: Step 4's idea, on another \texttt{prop}.
+
+            \medskip
+            Are they the three you expected?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it
+cat_response = requests.get(
+    API,
+    params=cat_params,
+    headers=HEADERS,
+)
+# Look: the status, and the whole text
+print(cat_response.status_code, cat_response.text)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{After class, Step 14: the box at the foot of the article}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Which of your three are in the box (1)?
+
+            \medskip
+            The others are \textbf{hidden categories}, which editors use to keep track of articles.
+
+            \medskip
+            Should a study of how Wikipedia classifies a topic count them?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{img/article-categories_annotated.pdf}\\
+            {\scriptsize The article's categories, 2026-10-16.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class, Step 14: two props, one request}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            One request can ask for two \texttt{prop}s, each with its own limit. The given dictionary sets both.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://www.mediawiki.org/wiki/API:Langlinks}{prop=langlinks}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: each prop's limit at "max"
+cat_lang_params = {
+    ...
+    "cllimit": "max",
+    "lllimit": "max",
+}
+# Yours: two props, joined with |
+cat_lang_params["prop"] = "categories|langlinks"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class, Step 14: send it, and check for more}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A short list fits in one answer, but check for \texttt{"continue"} before trusting a count.
+
+            \medskip
+            A given cell counts the categories and languages.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it
+cat_lang_response = requests.get(
+    API,
+    params=cat_lang_params,
+    headers=HEADERS,
+)
+cat_lang = cat_lang_response.json()
+# Is there more to come?
+print("continue" in cat_lang)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class: redirects}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Which other titles send readers here? \texttt{prop=redirects} isn't in the chapter.
+
+            \medskip
+            Read \href{https://www.mediawiki.org/wiki/API:Redirects}{its page} for its limit parameter, and set it to \texttt{"max"}.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Given: prop=redirects, without a limit
+redirect_params = {
+    "action": "query",
+    "titles": ARTICLE,
+    "format": "json",
+    "prop": "redirects",
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 % Copied from week 9's Friday ("The Final Project: grade and dates" and "What to
