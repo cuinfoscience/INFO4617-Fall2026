@@ -28,7 +28,7 @@
 % is due Wednesday, Nov 18 (instructor: Nov 22 on 2026-11-12, then Nov 18 on 2026-11-13, in the
 % check-in frame and Canvas); portfolio checkpoint 3 stays on Sunday, Nov 15.
 %
-% Code frames follow the lab key, labs/week-13/lab-13-key.ipynb, as on main on 2026-11-12, reflowed
+% Code frames follow the lab key, labs/week-13/lab-13-key.ipynb (Parts 1-2 re-cut on 2026-11-16), reflowed
 % to fit and sometimes cut with "...". They show no printed output: the slides lead into the
 % notebook, where students run each cell and see what it prints (instructor, 2026-11-12).
 % One code block a frame, narration on the left and code on the right: slides/common/AUTHORING.md.
@@ -132,46 +132,60 @@ conda env config vars set OPENROUTER_KEY="..." -n webdata
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 0: check them}
+\begin{frame}[fragile]{Step 0: set up}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Print whether each key is set. Never print the key itself.
+            Both setup cells are given. Put your email in \texttt{HEADERS}, and run them. Each key should say \texttt{set}.
 
             \medskip
-            Does yours say \texttt{MISSING}? Run the given \texttt{getpass()} cell under it.
-
-            \medskip
-            The notebook writes each check in one line.
+            \texttt{datalab\_headers} is \texttt{HEADERS} plus your key. Every request to Datalab sends it.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# Is the Datalab key set? Print "set" or "MISSING"
-found = os.environ.get("DATALAB_KEY")
-print("DATALAB_KEY:", "set" if found else "MISSING")
-# The same for the OpenRouter key
-found = os.environ.get("OPENROUTER_KEY")
-print("OPENROUTER_KEY:", "set" if found else "MISSING")
+# Read the key; never print it
+datalab_key = os.environ["DATALAB_KEY"]
+# A copy of HEADERS, plus the key
+datalab_headers = dict(HEADERS)
+datalab_headers["X-API-Key"] = datalab_key
 \end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 1: what to send}
+\begin{frame}[fragile]{Step 0: where the PDFs are}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            We send Datalab a link to week 9's 2024 report, not the file. Datalab fetches the PDF itself.
+            The same given cell sets two addresses: Datalab's API, and the book's copies of week 9's PDFs.
 
             \medskip
-            Which line asks for Markdown? Which asks for the cost of a fresh conversion?
+            A long string can go on over two lines.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Datalab's API
+datalab_base = "https://www.datalab.to/api/v1"
+# Week 9's PDFs, saved in the book's repository
+book = (
+    "https://raw.githubusercontent.com/cuinfoscience/"
+    "Web-Data-Science-Book/main/data/ch-09/"
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: how to convert}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            This cell is given. It says how Datalab should convert: to Markdown, with each page marked, and afresh, so we see the real cost.
 
             \medskip
             {\scriptsize\textbf{Docs:} Datalab's \href{https://documentation.datalab.to/docs/recipes/conversion/conversion-api-overview}{Convert API}\par}
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# A link to the PDF, and how to convert it
-data = {
-    "file_url": book + "revenue-report-2024-12.pdf",
+# Markdown, each page marked, not from the cache
+settings = {
     "output_format": "markdown",
     "mode": "balanced",
     "paginate": "true",
@@ -182,45 +196,113 @@ data = {
     \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]{Step 1: one page first}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Before the whole report, one page: page 15, Exhibit 3, the picture of a table.
+
+            \medskip
+            \texttt{page\_range} counts from 0. Open page 15 of the PDF. What should come back?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# A copy of settings, for one page
+one_page = dict(settings)
+# The PDF's address: Datalab fetches it from there
+one_page["file_url"] = book + "revenue-report-2024-12.pdf"
+# Page 15: page_range counts from 0
+one_page["page_range"] = "14"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}[fragile]{Step 1: submit it}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Post it with your key in a header.
+            Post it, with your key in the headers.
 
             \medskip
             What comes back first is a ticket. Which field is it?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# Send it, with the key in a header
-job = requests.post(
+# Send it, with the key in the headers
+one_job = requests.post(
     f"{datalab_base}/convert",
-    data=data,
-    headers={"X-API-Key": datalab_key, **HEADERS},
+    data=one_page,
+    headers=datalab_headers,
 ).json()
 # The ticket
-print(job)
+print(one_job)
 \end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 2: ask about the ticket}
+\begin{frame}[fragile]{Step 1: ask about the ticket}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The ticket, \texttt{request\_check\_url}, is where the result will appear. Ask it once.
+            The ticket, \texttt{request\_check\_url}, is where the result will appear.
 
             \medskip
-            \texttt{processing} means Datalab is still reading.
+            \texttt{processing} means Datalab is still reading. Run the cell again until it says \texttt{complete}.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # Ask the ticket's address how the job is going
-check = requests.get(
-    job["request_check_url"],
-    headers={"X-API-Key": datalab_key, **HEADERS},
+one_check = requests.get(
+    one_job["request_check_url"],
+    headers=datalab_headers,
 ).json()
-print(check["status"])
+print(one_check["status"])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: what came back}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            How many pages did it read? What did they cost?
+
+            \medskip
+            Print the table, from its first \texttt{|}. Does its first row match the PDF?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# How many pages, and their cost in cents
+print(one_check["page_count"], "page")
+print(one_check["total_cost"], "cents")
+# The Markdown, from the table's first "|"
+one_markdown = one_check["markdown"]
+table_start = one_markdown.index("|")
+print(one_markdown[table_start:table_start + 1500])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: the whole report}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same settings, for all 15 pages: no \texttt{page\_range} this time.
+
+            \medskip
+            Send it as you sent one page.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The same settings, without page_range
+data = dict(settings)
+data["file_url"] = book + "revenue-report-2024-12.pdf"
+# Send it, as in Step 1
+job = requests.post(
+    f"{datalab_base}/convert",
+    data=data,
+    headers=datalab_headers,
+).json()
+print(job)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -229,31 +311,95 @@ print(check["status"])
 \begin{frame}[fragile]{Step 2: wait for the result}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            This cell is given. It asks again every two seconds until the job is done, then prints the pages and the cost.
+            This cell is given. It does what you did by hand in Step 1.
+
+            \medskip
+            First it asks the ticket's address once.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The ticket's address
+ticket = job["request_check_url"]
+# Ask once, as in Step 1
+check = requests.get(
+    ticket,
+    headers=datalab_headers,
+).json()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: ask until it's done}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Then it asks again every two seconds, while the job is \texttt{processing}. Asking until a job is done is called \textbf{polling}.
 
             \medskip
             \textbf{Discuss:} what would this loop do if Datalab never finished?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# Ask again every two seconds while it's processing
+# Again every two seconds, while it's processing
 while check["status"] == "processing":
     time.sleep(2)
     check = requests.get(
-        job["request_check_url"],
-        headers={"X-API-Key": datalab_key, **HEADERS},
+        ticket,
+        headers=datalab_headers,
     ).json()
-# Done: print the status
-print("status:", check["status"])
 \end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 3: split the Markdown into pages}
+\begin{frame}[fragile]{Step 2: what it read, and what it cost}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Each page starts with a marker such as \texttt{\{14\}} and a line of dashes. Split on the markers, and drop the empty piece before the first one.
+            The same given cell prints the status and any error. Read \texttt{error} even when the status is \texttt{complete}.
+
+            \medskip
+            Fifteen pages: what did they cost, next to one?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Done: the status, and any error
+print("status:", check["status"])
+print("error:", check.get("error"))
+# How many pages, their cost, and the time it took
+print(check["page_count"], "pages")
+print(check["total_cost"], "cents")
+print(round(check["runtime"], 1), "seconds")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: a function that splits pages}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Each page starts with a marker such as \texttt{\{14\}} and a line of dashes. This given function splits on the markers.
+
+            \medskip
+            The pattern is a \textbf{regular expression}: a short way to describe text.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Split at each page marker; drop the empty first piece
+def split_pages(markdown):
+    pieces = re.split(
+        r"\n*\{\d+\}-{10,}\n*",
+        markdown,
+    )
+    return pieces[1:]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: the report's pages}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            How many pages? Read the start of page 2, the summary table week 9 read.
 
             \medskip
             Never print \texttt{pages[0]}: the cover gives a staff member's phone and email.
@@ -262,8 +408,8 @@ print("status:", check["status"])
 \begin{lstlisting}
 # The whole report, as one string of Markdown
 markdown = check["markdown"]
-# Split it at each page marker; drop the empty first piece
-pages = re.split(r"\n*\{\d+\}-{10,}\n*", markdown)[1:]
+# A list of pages
+pages = split_pages(markdown)
 # How many pages, and the start of the summary page
 print(len(pages), "pages")
 print(pages[1][:1200])
@@ -278,16 +424,33 @@ print(pages[1][:1200])
             Page 15, Exhibit 3, is an image. Week 9's pdfplumber found no text in it.
 
             \medskip
-            Print the first lines of the Markdown table Datalab wrote. Does it look like the PDF?
+            Print the first lines of the Markdown table Datalab wrote. Is it the table you got in Step 1?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # Page 15 (index 14), from the table's first "|"
-start = pages[14].index("|")
-exhibit = pages[14][start:]
+exhibit_start = pages[14].index("|")
+exhibit = pages[14][exhibit_start:]
 # The first 10 lines, each cut at 150 characters
 for line in exhibit.splitlines()[:10]:
     print(line[:150])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: what Datalab wrote}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Page 9 has Chart 8, a pie chart with its figures printed on the slices.
+
+            \medskip
+            Print it. Compare the sentence under the chart with the figures.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Page 9: Chart 8 and Datalab's description of it
+print(pages[8][:2200])
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -321,69 +484,109 @@ for line in exhibit.splitlines()[:10]:
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 4: split each row into cells}
+\begin{frame}[fragile]{Step 4: one row by hand}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             Week 9's first check: a row's twelve months should add up to its total.
 
             \medskip
-            First, split each line on \texttt{|} and clean each cell. The notebook does the cleaning in one list comprehension.
+            Start with one row. Line 3 is Retail Sales Tax for 2019. What are lines 0 to 2?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-for line in pages[14].splitlines():
-    # Split the row at each "|", and clean each cell
-    cells = []
-    for c in line.split("|"):
-        c = c.strip().replace(",", "")
-        c = c.replace("<b>", "").replace("</b>", "")
-        cells.append(c)
+# The table's lines
+exhibit_lines = exhibit.splitlines()
+# Line 3: Retail Sales Tax, 2019
+row = exhibit_lines[3]
+print(row[:150])
 \end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 4: keep the rows with a year}
+\begin{frame}[fragile]{Step 4: split it into cells}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            A row we want has more than 16 cells, and its third cell is a year.
+            Each cell sits between two \texttt{|} characters.
 
             \medskip
-            Why check the length first?
+            Which cell holds the year? The total? Could you add up the months as they are printed?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-for line in pages[14].splitlines():
-    ...  # split and clean, as on the last frame
-    # Keep a row with enough cells
-    if len(cells) > 16:
-        # ...whose third cell is a year
-        if re.fullmatch(r"20\d\d", cells[2]):
-            ...  # add up its months: next frame
+# The row's cells, between the "|"s
+cells = row.split("|")
+# The year, and the total
+print(cells[2], cells[15])
+# The twelve months
+print(cells[3:15])
 \end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 4: add up the months}
+\begin{frame}[fragile]{Step 4: every row, given}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Add the twelve months, and compare the sum with the row's total. Print a row only if it misses by more than \$5.
+            A given function, \texttt{check\_sums()}, does this for every row. Find the lines you just typed.
 
             \medskip
-            Nothing printed? What can a sum still miss?
+            Then call it on page 15. Nothing printed? What can a sum still miss?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-checked = 0
-for line in pages[14].splitlines():
-    ...  # split, clean, and keep the year rows
-            # Add the months; compare with the total
-            months = sum(int(c) for c in cells[3:15])
-            checked += 1
-            if abs(months - int(cells[15])) > 5:
-                print(cells[2], months, cells[15])
-print(checked, "rows checked")
+def check_sums(page):
+    ...  # count the rows checked
+    for line in page.splitlines():
+        ...  # take out <b> tags and commas
+        cells = line.split("|")
+        ...  # if cells[2] is a year: add the months,
+        ...  # and print the row if they miss cells[15]
+# Every row of Exhibit 3
+check_sums(pages[14])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: a table of text}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The 2018 report's Exhibit 3 is text, not a picture. The book saved Datalab's Markdown of it, so this costs nothing.
+
+            \medskip
+            How many rows did the check find? How many missed?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The book's saved Markdown of the 2018 report
+md_2018 = requests.get(
+    saved + "revenue-report-2018.md",
+    headers=HEADERS,
+).text
+# Its pages, and a check of page 15
+pages_2018 = split_pages(md_2018)
+check_sums(pages_2018[14])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: save the text}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Write the report's Markdown to a file, so Part 2 doesn't pay Datalab again.
+
+            \medskip
+            Part 2 reads the book's copy, made the same way. How could yours differ?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# A file for the 2024 report's Markdown
+md_path = "revenue-report-2024-12.md"
+# Write the Markdown to it
+with open(md_path, "w", encoding="utf-8") as f:
+    f.write(markdown)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -495,22 +698,42 @@ print(checked, "rows checked")
 \begin{frame}[fragile]{Step 6: set up again}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Put your email in \texttt{HEADERS}, and check the key.
+            Both setup cells are given. Put your email in \texttt{HEADERS}, and run them.
 
             \medskip
-            Today we read the book's saved Markdown of all seven reports, so no one pays Datalab again.
+            Today we read the book's saved Markdown, so no one pays Datalab again. The second cell also defines \texttt{split\_pages()} again.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# Is the key set?
-found = os.environ.get("OPENROUTER_KEY")
-print("OPENROUTER_KEY:", "set" if found else "MISSING")
-# Where OpenRouter's API is, and the book's saved Markdown
-openrouter_base = "https://openrouter.ai/api/v1"
-saved = (
-    "https://raw.githubusercontent.com/cuinfoscience/"
-    "Web-Data-Science-Book/main/data/ch-13/"
-)
+# Read the key; never print it
+openrouter_key = os.environ["OPENROUTER_KEY"]
+# A copy of HEADERS, plus the key
+openrouter_headers = dict(HEADERS)
+bearer = f"Bearer {openrouter_key}"
+openrouter_headers["Authorization"] = bearer
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: the saved Markdown}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Read the 2024 report's saved Markdown, and split it into pages, as on Monday.
+
+            \medskip
+            The notebook sends the request in one line.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Read the 2024 report's saved Markdown
+markdown = requests.get(
+    saved + "revenue-report-2024-12.md",
+    headers=HEADERS,
+).text
+# Split it into pages, as on Monday
+pages = split_pages(markdown)
+print(len(pages), "pages")
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -519,23 +742,238 @@ saved = (
 \begin{frame}[fragile]{Step 7: find the summary page}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The model sees only what we send. We send one page: the one with the row \textit{Total Sales and Use Tax}.
+            The model sees only what we send. We send one page: the first with the row \textit{Total Sales and Use Tax}.
 
             \medskip
             Read the start of that page. Where is the row we want?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# Read the 2024 report's saved Markdown
-report = saved + "revenue-report-2024-12.md"
-markdown = requests.get(report, headers=HEADERS).text
-# Split it into pages, as on Monday
-pages = re.split(r"\n*\{\d+\}-{10,}\n*", markdown)[1:]
-# The first page with the row we want
-matches = [page for page in pages
-           if "Total Sales and Use Tax" in page]
-summary = matches[0]
+# The pages, as a pandas Series
+pages_series = pd.Series(pages)
+# Which pages hold the table's last row?
+has_total = pages_series.str.contains(
+    "Total Sales and Use Tax",
+    regex=False,
+)
+# The first page that does
+summary = pages_series[has_total].iloc[0]
 print(summary[:1000])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: three models}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            This cell is given. The whole class shares these free models. If the first is busy, OpenRouter tries the next.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Three free models, tried in this order
+MODELS = [
+    "nvidia/nemotron-3.5-super-vl:free",
+    "google/gemma-4-31b-it:free",
+    "dots-studio/dots-3-note-preview:free",
+]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: one sentence first}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Before a page, one sentence whose answer we know.
+
+            \medskip
+            What should the model write back? Will it be a number, or text?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One sentence, with one number in it
+sentence = (
+    "The 2024 total was $173,908,431. "
+    "Write that number as digits only."
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: a plain request}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{models}, with an \textit{s}, takes the list. \texttt{temperature} 0 asks for the most likely answer.
+
+            \medskip
+            One message, from the \texttt{user}: our sentence.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The request: our models, and one message
+plain_body = {
+    "models": MODELS,
+    "temperature": 0,
+    "messages": [{"role": "user", "content": sentence}],
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: send it}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Post it to the chat completions endpoint, with your key in the headers.
+
+            \medskip
+            \texttt{error} is \texttt{None} if it worked.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} OpenRouter's \href{https://openrouter.ai/docs/api/reference/overview}{API reference}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it, with the key in the headers
+plain = requests.post(
+    f"{openrouter_base}/chat/completions",
+    json=plain_body,
+    headers=openrouter_headers,
+).json()
+# Any error?
+print(plain.get("error"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: the answer is text}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Which model answered? Was it one of ours?
+
+            \medskip
+            \texttt{repr()} shows the answer with its quotes. Is it the number you expected, or text?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Which model answered, and was it one of ours?
+print(plain["model"], plain["model"] in MODELS)
+# The first choice's message holds the answer
+plain_text = plain["choices"][0]["message"]["content"]
+# Its quotes show that it is text
+print(repr(plain_text))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: one field, as JSON}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A \textbf{JSON Schema} names the fields an answer must have, and the type of each.
+
+            \medskip
+            This given one has one field, a whole number. No other fields allowed.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One field: total_current, a whole number
+ONE_FIELD = {
+    "type": "object",
+    "properties": {"total_current": {"type": "integer"}},
+    "required": ["total_current"],
+    "additionalProperties": False,
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: ask for that shape}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same given cell makes \texttt{one\_format}. It asks for an answer in \texttt{ONE\_FIELD}'s shape. \texttt{strict}: no other fields.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} OpenRouter's \href{https://openrouter.ai/docs/guides/features/structured-outputs}{structured outputs}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Answer in ONE_FIELD's shape, and nothing else
+one_format = {
+    "type": "json_schema",
+    "json_schema": {
+        "name": "total",
+        "strict": True,
+        "schema": ONE_FIELD,
+    },
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: add it to the request}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Copy the plain request, and add two keys.
+
+            \medskip
+            \texttt{require\_parameters} sends it only to models that can follow a schema.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# A copy of the plain request
+one_body = dict(plain_body)
+# Ask for ONE_FIELD's shape
+one_body["response_format"] = one_format
+# Only models that accept response_format
+one_body["provider"] = {"require_parameters": True}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: send it again}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same request as before, with the new body.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Send it, as before
+one = requests.post(
+    f"{openrouter_base}/chat/completions",
+    json=one_body,
+    headers=openrouter_headers,
+).json()
+# Any error?
+print(one.get("error"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: read it as JSON}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The answer is still text, but now it holds JSON. \texttt{json.loads()} turns it into a dictionary.
+
+            \medskip
+            Is \texttt{total\_current} a number now? Does it match?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The answer, as text
+one_text = one["choices"][0]["message"]["content"]
+print(one["model"], one_text)
+# The text, as a dictionary
+one_answer = json.loads(one_text)
+# The number we sent?
+print(one_answer["total_current"] == 173908431)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -544,10 +982,10 @@ print(summary[:1000])
 \begin{frame}[fragile]{Step 8: the shape of the answer}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            A \textbf{JSON Schema} names the fields we want and the type of each.
+            Now the page, and four fields. This cell is given.
 
             \medskip
-            This cell is given. In the notebook, every field also has a description, and \texttt{MONTHS} lists the twelve months.
+            In the notebook, every field also has a description, and \texttt{MONTHS} lists the twelve months.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -570,7 +1008,7 @@ SCHEMA = {
 \begin{frame}[fragile]{Step 8: the instruction}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The instruction tells the model its job. It is also given.
+            The instruction tells the model its job. It is also given, with \texttt{response\_format}, which asks for \texttt{SCHEMA}'s shape as \texttt{one\_format} asked for \texttt{ONE\_FIELD}'s.
 
             \medskip
             Which words in it try to stop the model from guessing?
@@ -588,47 +1026,6 @@ INSTRUCTION = (
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 8: three models}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            The whole class shares these free models. If the first is busy, OpenRouter tries the next.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# Three free models, tried in this order
-MODELS = [
-    "nvidia/nemotron-3.5-super-vl:free",
-    "google/gemma-4-31b-it:free",
-    "dots-studio/dots-3-note-preview:free",
-]
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 8: the request's body}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \texttt{temperature} 0 asks for the model's most likely answer.
-
-            \medskip
-            The next two frames fill in the \texttt{...}.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# What we send to the model
-body = {
-    "models": MODELS,
-    "temperature": 0,
-    "messages": [...],
-    "response_format": {...},
-    "provider": {"require_parameters": True},
-}
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 \begin{frame}[fragile]{Step 8: what the model reads}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
@@ -640,60 +1037,51 @@ body = {
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # First our instruction, then the page
-"messages": [
+messages = [
     {"role": "system", "content": INSTRUCTION},
     {"role": "user", "content": summary},
-],
+]
 \end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 8: what the model must return}
+\begin{frame}[fragile]{Step 8: the request's body}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            \texttt{response\_format} asks for JSON in \texttt{SCHEMA}'s shape. \texttt{strict}: no other fields.
+            Copy the one-field request, and change two keys: the messages, and the shape.
 
             \medskip
-            \texttt{require\_parameters} sends the request only to models that accept this.
-
-            \medskip
-            {\scriptsize\textbf{Docs:} OpenRouter's \href{https://openrouter.ai/docs/guides/features/structured-outputs}{structured outputs}\par}
+            The models, \texttt{temperature} and \texttt{provider} stay as they were.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# Answer in SCHEMA's shape, with no other fields
-"response_format": {
-    "type": "json_schema",
-    "json_schema": {
-        "name": "totals",
-        "strict": True,
-        "schema": SCHEMA,
-    },
-},
-# Only models that accept response_format
-"provider": {"require_parameters": True},
+# A copy of the one-field request
+body = dict(one_body)
+# The instruction and the page
+body["messages"] = messages
+# Four fields, in SCHEMA's shape
+body["response_format"] = response_format
 \end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 8: send it}
+\begin{frame}[fragile]{Step 8: send it, given}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Post the body to the chat completions endpoint, with your key in the header.
+            The same request a third time, with the page. This cell is given: find in it the lines you typed twice.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# Post the body, with the key in a header
+# Send it, as before
 response = requests.post(
     f"{openrouter_base}/chat/completions",
     json=body,
-    headers={
-        "Authorization": f"Bearer {openrouter_key}",
-        **HEADERS,
-    },
+    headers=openrouter_headers,
 ).json()
+# Any error?
+print(response.get("error"))
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -702,15 +1090,13 @@ response = requests.post(
 \begin{frame}[fragile]{Step 8: what came back}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Print three things: any error, which model answered, and \texttt{usage}, the tokens in and out.
+            Print which model answered, and \texttt{usage}, the tokens in and out.
 
             \medskip
-            Did the first model answer?
+            How many tokens did the page take? How many did the sentence?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# Any error?
-print(response.get("error"))
 # Which model answered, and was it one of ours?
 print(response["model"], response["model"] in MODELS)
 # How many tokens in, and how many out
@@ -723,7 +1109,7 @@ print(response["usage"])
 \begin{frame}[fragile]{Step 8: read the answer}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The answer arrives as text that holds JSON. \texttt{json.loads()} turns it into a dictionary.
+            As before, \texttt{json.loads()} turns the text into a dictionary.
 
             \medskip
             Look at your four fields. Which would you trust without checking?
@@ -791,22 +1177,17 @@ print(answer["year"], answer["month"])
 \begin{frame}[fragile]{Microsprint: the same request, a different model}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Send the same body to the third model alone.
+            Copy \texttt{body}, and keep only the third model in its list. A given cell sends it.
 
             \medskip
             Does it return the same four fields? Does your neighbor's run agree with yours?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# The same body, but only the third model in the list
-response = requests.post(
-    f"{openrouter_base}/chat/completions",
-    json={**body, "models": [MODELS[2]]},
-    headers=...,  # your key, as above
-).json()
-# Which model answered, and what it said
-content = response["choices"][0]["message"]["content"]
-print(response["model"], json.loads(content))
+# A copy of body
+dots_body = dict(body)
+# Only the third model in the list
+dots_body["models"] = [MODELS[2]]
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -830,112 +1211,63 @@ print(response["model"], json.loads(content))
 \begin{frame}[fragile]{Step 10: Step 8 as a function}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            We will send Step 8's request seven times, once for each report. Only the page changes.
+            We will send Step 8's request seven times. Only the page changes, and later the instruction.
 
             \medskip
-            So the body goes in a function that takes the page.
+            This given function holds Step 8's lines. Find the ones you typed.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-def extract_totals(page):
-    # Step 8's body, with this page as the user message
-    body = {
-        "models": MODELS,
-        "temperature": 0,
-        "messages": [
-            {"role": "system", "content": INSTRUCTION},
-            {"role": "user", "content": page},
-        ],
-        ...  # response_format and provider, as before
-    }
+def extract_totals(page, instruction):
+    # Step 8's body, with this instruction and page
+    page_body = dict(body)
+    page_body["messages"] = [...]
+    ...  # send it, as in Step 8
+    ...  # the answer, from text to a dictionary
+    # Add the model that gave it, and return it
+    page_answer["model"] = page_response["model"]
+    return page_answer
 \end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 10: send, and return the answer}
+\begin{frame}[fragile]{Step 10: one report by hand}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The rest of the function sends the body and returns two things: the answer, and the model that gave it.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-def extract_totals(page):
-    ...  # the body, as on the last frame
-    # Send it, as in Step 8
-    response = requests.post(
-        f"{openrouter_base}/chat/completions",
-        json=body,
-        headers=...,
-    ).json()
-    # The answer, and the model that gave it
-    message = response["choices"][0]["message"]
-    answer = json.loads(message["content"])
-    return answer, response["model"]
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 10: seven reports}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            For each report, read its Markdown, find its summary page, and send it.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-rows = []
-for report, (prior, current) in TRUTH.items():
-    # Read this report, and split it into pages
-    md = requests.get(
-        saved + report + ".md",
-        headers=HEADERS,
-    ).text
-    pages = re.split(r"\n*\{\d+\}-{10,}\n*", md)[1:]
-    # Send its summary page to the model
-    matches = [page for page in pages
-               if "Total Sales and Use Tax" in page]
-    answer, model = extract_totals(matches[0])
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 10: record each answer, and check it}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Each row keeps the model's answer and whether each total matches week 9.
+            Call it once, on the 2024 page.
 
             \medskip
-            \texttt{time.sleep(2)} spaces out the requests to a shared free model.
+            Is it the same answer as Step 8's? Which model gave it?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-    # Keep the answer, and whether each total matches
-    rows.append({
-        "report": report,
-        "model": model,
-        **answer,
-        "prior_ok": answer["total_prior"] == prior,
-        "current_ok": answer["total_current"] == current,
-    })
+# The 2024 summary page, with our instruction
+print(extract_totals(summary, INSTRUCTION))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: seven reports, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given loop does each report: read it, find its summary page, send it, and check both totals.
+
+            \medskip
+            \texttt{time.sleep(2)} spaces out the requests. Which reports came back wrong in your table?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+for report in TRUTH:
+    ...  # read its Markdown; find its summary page
+    report_answer = extract_totals(
+        report_summary,
+        INSTRUCTION,
+    )
+    ...  # check each total against week 9's
     time.sleep(2)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 10: the table}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Which reports came back wrong in your table? Are they the ones your neighbor got wrong?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# One row per report
-results = pd.DataFrame(rows)
-# Print it without the model column
-print(results.drop(columns="model").to_string())
+...  # print the table: one row per report
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -967,15 +1299,15 @@ print(results.drop(columns="model").to_string())
 \begin{frame}[fragile]{Step 10: the schema, in the instruction}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Add the schema to the instruction, as text. A given cell runs the loop again.
+            Add the schema to the instruction, as text. A given cell runs the loop again with \texttt{with\_schema}.
 
             \medskip
             Compare the two tables. Was the problem the model, or what we sent it?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# Add the schema to the instruction, as text
-INSTRUCTION = (
+# The instruction, then the schema, as text
+with_schema = (
     INSTRUCTION
     + " Answer with JSON that fits this schema: "
     + json.dumps(SCHEMA)
@@ -1055,7 +1387,7 @@ INSTRUCTION = (
         \end{column}
         \begin{column}{0.35\textwidth}\centering
             \includegraphics[width=\textwidth]{slides/week-13/img/embedding-gender-biases.png}\\ \footnotesize
-            $x$-axis is male-female bias and $y$-axis is gender neutrality. From: Boulukbasi, et al. (2016)
+            $x$-axis is male-female bias and $y$-axis is gender neutrality. From: Bolukbasi et al. (2016)
         \end{column}
     \end{columns}
     

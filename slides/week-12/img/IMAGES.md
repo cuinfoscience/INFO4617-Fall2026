@@ -27,6 +27,14 @@ Copied here by the textbook's `tools/shots/run sync`; `tools/shots/run synced` c
 | `yt-library.png` and `yt-library_annotated.png` and `yt-library_annotated.pdf` | `ch-12/yt-library` (images/ch-12/yt-library.png, textbook `53cfd16`) | 2026-11-06 | https://console.cloud.google.com/apis/library/youtube.googleapis.com | Brian C. Keegan: screenshot by hand in Firefox; imported by tools/shots |
 <!-- shots:end -->
 
-**Used on** (Monday): `bsky-profile_annotated.pdf` on "Start from the page a person reads", at 0.58 of the text width; `youtube-channel_annotated.pdf` on "Friday's page: an agency's YouTube channel", at 0.64, because YouTube's smaller text needs the room to reach 16 pixels. Both widths are the recipes' `targets:` in the textbook, which `tools/shots/run check` measures.
+**Used on** (Monday): `bsky-profile_annotated.pdf` on "Start from the page a person reads", at 0.58 of the text width, on the right; `youtube-channel_annotated.pdf` on "Friday's page: an agency's YouTube channel", at 0.64, on the right, because YouTube's smaller text needs the room to reach 16 pixels. Both widths are the recipes' `targets:` in the textbook, which `tools/shots/run check` measures.
 
-**Used on** (Friday, "Your YouTube key" frames): `yt-library_annotated.pdf` at 0.56 of the text width, `yt-enabled_annotated.pdf` at 0.6, `yt-create-credentials_annotated.pdf` at 0.5, and `yt-create-key-top_annotated.pdf` at 0.45: the course recipe `week12-yt-create-key`, chapter 12's `yt-create-key` cut at the OK button, because the whole dialog would be too small to read on a slide. `yt-create-key_annotated.png` (the whole dialog) and the four annotated PNGs are also embedded in `labs/week-12/lab-12-key.ipynb`'s "Before Step 8" cell as attachments.
+**Used on** (Friday, "Your YouTube key" frames, each on the right since 2026-11-16): `yt-library_annotated.pdf` at 0.56 of the text width, `yt-enabled_annotated.pdf` at 0.6, `yt-create-credentials_annotated.pdf` at 0.5, and `yt-create-key-top_annotated.pdf` at 0.45: the course recipe `week12-yt-create-key`, chapter 12's `yt-create-key` cut at the OK button, because the whole dialog would be too small to read on a slide. `yt-create-key_annotated.png` (the whole dialog) and the four annotated PNGs are also embedded in `labs/week-12/lab-12-key.ipynb`'s "Before Step 8" cell as attachments.
+
+## Drawn from the lab
+
+| File | What it is | Made |
+|---|---|---|
+| `weekday-nws.png` | The National Weather Service's Bluesky posts by weekday, May–October 2026 | The key's own Step 7 plot: the PNG output of cell `w12-s7-plot` in `labs/week-12/lab-12-key.ipynb`, drawn by the key's run of 2026-11-10 from the posts saved in `labs/week-12/data/nws_posts.csv`. Extracted from the notebook on 2026-11-16, unchanged. |
+
+**Used on** (Wednesday): `weekday-nws.png` on "Step 7: when the agency posts", at 0.6 of the text width. It replaced `weekday-nws-fed.png`, a two-agency chart of the lab's earlier version, which the rebuilt lab no longer draws.
