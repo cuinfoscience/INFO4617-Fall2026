@@ -6,7 +6,7 @@ and `tcp_handshake.png` are diagrams drawn by `generate_images.py`;
 `pageviews_timeseries.png` is a live chart pulled from the Wikimedia
 pageviews API, using the exact same call and date range
 (`University_of_Colorado_Boulder`, `20260101`-`20260131`) shown in the
-Wednesday "Make an API call, get a time series" slide, so the chart matches
+lab's Step 10 (Friday's "Step 10: the month" slide; the chart is on "Step 11: a month of readers"), so the chart matches
 what students actually see if they run that cell themselves.
 
 ## Real, hand-sourced images
