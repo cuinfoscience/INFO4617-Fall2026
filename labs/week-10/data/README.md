@@ -1,6 +1,6 @@
 # Week 10's saved copies (checkpoints)
 
-Made by `lab-10-key.ipynb`'s own code on the runs its key note describes (`links.csv` and `backlinks.csv` on 2026-11-18, the others on 2026-11-10), and read by the lab from this folder's raw address on `main`. Each lets a student go on when a request was refused, or start a day without the earlier days' kernel.
+Made by `lab-10-key.ipynb`'s own code on the runs its key note describes (`revisions.csv` and `daily-views.csv` on 2026-11-10, `by-agent.csv` on 2026-11-18), and read by the lab from this folder's raw address on `main`. Each lets a student go on when a request was refused, or start a day without the earlier days' kernel. `links.csv` and `backlinks.csv` were remade on 2026-11-18 with Step 15's requests and code, sent by a script that waited 20 seconds between requests and honoured `Retry-After`, because Wikimedia refused the key's own one-second loop from the course's cloud machine; `links.csv` came out the same as 2026-11-10's.
 
 | File | Made by | What it holds |
 |---|---|---|
