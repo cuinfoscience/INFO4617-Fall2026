@@ -15,7 +15,7 @@
 \title[Week 6 · Static Pages]{{\Huge Parsing Static Web Pages}}
 \subtitle{Week 6 · Documents module · Textbook Chapter 6}
 \author[Keegan]{\textbf{Brian C. Keegan, Ph.D.} \\ Associate Professor, Department of Information Science \\ University of Colorado Boulder}
-\date{September 21 \& 23, 2026}
+\date{September 21, 23 \& 25, 2026}
 
 \begin{document}
 
@@ -29,23 +29,24 @@
 
             \bigskip
 
-            \dayband{Monday}{Concepts \& notebook intro}
+            \dayband{Monday}{Lab, part 1: Steps 0--4}
             \begin{itemize}\small
                 \item Eight common shapes static pages hide their data in, and where each one sits on a single-site/multi-site, consistent/inconsistent design spectrum
+                \item Pilot the first in code: \texttt{robots.txt}, box office, and Wikipedia
             \end{itemize}
 
             \medskip
 
-            \dayband{Wednesday}{Notebook lab}
+            \dayband{Wednesday}{Lab, part 2: Steps 5--9}
             \begin{itemize}\small
-                \item Pilot each strategy in code: box office, Wikipedia, the Oscars, and Rotten Tomatoes
+                \item Pilot the next in code: Wikipedia's tables and infoboxes
             \end{itemize}
 
             \medskip
 
-            \dayband{Friday}{No class}
+            \dayband{Friday}{Lab, part 3: Steps 10--14}
             \begin{itemize}\small
-                \item No class again on Friday, still submit PRs and issues for Sunday
+                \item The Oscars and Rotten Tomatoes; then 15 minutes on the textbook. Submit PRs and issues for Sunday
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
@@ -53,7 +54,7 @@
                 \footnotesize \texttt{ch-06-static-pages.ipynb}
             \end{block}
             \begin{alertblock}{Bring a laptop}
-                \footnotesize Wednesday is hands-on --- we debug live.
+                \footnotesize Every class is hands-on --- we debug live.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -95,7 +96,7 @@
             {\footnotesize Chapter 6's \textbf{Recommended Exercises}, from its companion notebook. Graded on good-faith attempt to complete rather than getting everything working.\par}
             \medskip
             \begin{alertblock}{Error flavors}
-                \footnotesize Some cells surprise you on purpose: a 403, a count of 0, a number ten times too big. Read what came back. A cell that fails for everyone is \textit{broken}: tell me, or open an issue.
+                \footnotesize Some cells surprise you on purpose: a 403, a count of 0, a number with a digit too many. Read what came back. A cell that fails for everyone is \textit{broken}: tell me, or open an issue.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -191,7 +192,7 @@
             \texttt{HEADERS} says who is asking, as week 2 explained. \texttt{WIKI\_HEADERS} adds the library's name and version, which Wikimedia asks for.
 
             \medskip
-            Why not one User-Agent for every site? Step 3 shows.
+            The Numbers refuses the library's name: Step 3. Use your colorado.edu address; it stays in every notebook you hand in.
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{Discuss}\\[2pt]
@@ -249,7 +250,7 @@ article_page = (
             \texttt{can\_fetch()} takes who is asking and an address. It answers \texttt{True} or \texttt{False}.
 
             \medskip
-            Say what each line prints before you run it.
+            Expect \texttt{False}, then \texttt{True}. Two \texttt{True}s? \texttt{parse()} got a string, not a list.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -268,7 +269,7 @@ print(rp.can_fetch(CLIENT, article_page))
             Now the real file. It is plain text, at the top of the site.
 
             \medskip
-            Look before you parse: the status, and how the file starts.
+            Look before you parse: the status, and how the file starts. Its first lines are comments (\texttt{\#}); the rules come later.
 
             \medskip
             {\scriptsize\textbf{Docs:} \href{https://www.rfc-editor.org/rfc/rfc9309.html}{RFC 9309}\par}
@@ -311,13 +312,13 @@ print(wiki_rp.can_fetch(CLIENT, script_page))
 \begin{frame}[fragile]{Step 1: the chapter's six sites, given}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The loop is given. Find your two cells in it.
+            The loop is given. Find your two cells in it. It stops on any status but 200: a file we couldn't read is no permission.
 
             \medskip
             It also keeps each parser in \texttt{parsers}, for the microsprint.
 
             \medskip
-            Which sites say no? What do they have in common?
+            Which sites say no? Strategy 1's Box Office Mojo and Strategy 8's IMDb get no request but this one.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -326,10 +327,13 @@ for page in CHAPTER_PAGES:
     host = urlparse(page).netloc
     robots_url = "https://" + host + "/robots.txt"
     robots = requests.get(robots_url, headers=HEADERS)
+    if robots.status_code != 200:
+        raise RuntimeError(f"Got {robots.status_code}, not 200")
     # Your cells: parse the lines, and ask
     host_rp = RobotFileParser()
     host_rp.parse(robots.text.splitlines())
-    print(host, host_rp.can_fetch(CLIENT, page))
+    print(robots.status_code, host,
+          host_rp.can_fetch(CLIENT, page))
     # Wait a second before the next site
     time.sleep(1)
 \end{lstlisting}
@@ -340,14 +344,14 @@ for page in CHAPTER_PAGES:
 \begin{frame}[fragile]{Microsprint: another crawler}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            \textbf{Do:} name another crawler, then run the given cell. It asks the six parsed files again, with no new requests.
+            \textbf{Do:} set \texttt{"Googlebot"}, run the given cell; then \texttt{"GPTBot"}, and run it again. It asks the six parsed files, with no new requests.
 
             \medskip
-            \textbf{Share:} which pages your crawler may fetch that we may not.
+            \textbf{Share:} which pages each may fetch that we may not. Why would a site name one crawler and not the other?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# Google's search crawler; or "GPTBot", OpenAI's
+# Google's search crawler; then "GPTBot", OpenAI's
 sprint_agent = "Googlebot"
 \end{lstlisting}
         \end{column}
@@ -357,10 +361,10 @@ sprint_agent = "Googlebot"
 \begin{frame}[fragile]{Step 2: one row, three cells}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            One row of a table, small enough to read. Its second cell is empty.
+            A made-up row of a table, small enough to read. Its second cell is empty.
 
             \medskip
-            \texttt{.text} is all the text inside a tag. What will it print for this row?
+            \texttt{.text} is all the text inside a tag, run together. Expect \texttt{1Aquaman}: no gap where the empty cell was.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -440,6 +444,9 @@ print(len(tiny_cells))
             Box Office Mojo said no in Step 1. The Numbers has the same week's chart, and said yes.
 
             \medskip
+            Strategy 2's frame showed a 2026 weekend. We use the week ending December 28, 2018, which the chapter prints.
+
+            \medskip
             The notebook writes the address on one line.
         \end{column}
         \begin{column}{0.6\textwidth}
@@ -465,12 +472,15 @@ NUMBERS_URL = (
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # Ask with the User-Agent that names the library
-refused = requests.get(
+wiki_ua_response = requests.get(
     NUMBERS_URL,
     headers=WIKI_HEADERS,
 )
 # Look first: the status, and 200 characters
-print(refused.status_code, refused.text[:200])
+print(
+    wiki_ua_response.status_code,
+    wiki_ua_response.text[:200],
+)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -530,7 +540,7 @@ print(len(numbers_tables))
 \begin{frame}[fragile]{Step 3: which table is which, given}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The loop is given. The second table it prints is the chapter's \texttt{tables[1]}.
+            The loop is given. The chapter's code takes \texttt{tables[1]}: the second one it prints.
 
             \medskip
             Can the number of rows choose between them? What can?
@@ -599,7 +609,10 @@ print(
             \texttt{header} holds the first row's cell texts, made the same way.
 
             \medskip
-            The loop prints each row it skips. What did it throw away, and was that right?
+            The loop prints each row it skips. What did it throw away? \texttt{weekly} has 81 rows: what else in the skipped row could you check?
+
+            \medskip
+            One column is \texttt{Total\textbackslash xa0Gross}, with a non-breaking space: \texttt{"Total Gross"} raises a \texttt{KeyError}.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -628,7 +641,7 @@ for row in desktop_rows[1:]:
             \textbf{Do:} name a second parser, then run the given cell.
 
             \medskip
-            \textbf{Share:} the cells in the first film's row under each parser.
+            \textbf{Share:} the cells in the first film's row under each parser, and how many rows the chapter's loop would keep from it.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -712,21 +725,23 @@ tiny_tables[0]
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 4: one revision of Wikipedia's list}
+\begin{frame}[fragile]{Step 4: Wikipedia's list}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The list changes every week, so we ask for one revision of it, with \texttt{oldid}.
+            The article's own address. Wikimedia's Robot policy asks automated clients not to use \texttt{oldid}, though \texttt{robots.txt} allows it.
 
             \medskip
-            Step 1 allows \texttt{/wiki/} and not \texttt{/w/}. The notebook writes the address on one line.
+            The list changes with every edit; Wednesday's checkpoint is one revision of it. The notebook writes the address on one line.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://wikitech.wikimedia.org/wiki/Robot_policy}{Robot policy}\par}
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# The list, as it stood at one revision
+# The list, as it stands today
 WIKI_URL = (
     "https://en.wikipedia.org/wiki/"
     "List_of_highest-grossing_films"
-    "?oldid=1381243185"
 )
 \end{lstlisting}
         \end{column}
@@ -758,19 +773,40 @@ print(
     \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]{Step 4: save it, and read it back, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A copy on disk doesn't change, and the Recommended Exercises' Step 2 asks for one.
+
+            \medskip
+            \texttt{with} closes the file when its lines end. \texttt{encoding="utf-8"} writes every character the same way on any computer.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# "w" opens the file for writing
+with open("wiki-list.html", "w", encoding="utf-8") as f:
+    f.write(wiki_response.text)
+# Read it back
+with open("wiki-list.html", encoding="utf-8") as f:
+    wiki_html = f.read()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}[fragile]{Step 4: every table on the page}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The same call as on the small table. \texttt{header=0} takes the column names from each table's first row.
+            The same call as on the small table, on the saved copy. \texttt{header=0} takes the column names from each table's first row.
 
             \medskip
-            How many tables does the page have? How many did you see?
+            How many tables? \texttt{Import html5lib failed} means your page has no table: install nothing, and print its status.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # Every table on the page
 wiki_tables = pd.read_html(
-    StringIO(wiki_response.text),
+    StringIO(wiki_html),
     header=0,
 )
 # How many?
@@ -808,13 +844,13 @@ films.head()
         \begin{column}{0.56\textwidth}
             Monday's table parsed in one call. Today:
             \begin{itemize}\small
-                \item Its gross column is text: clean it, plot it, and find the number the chapter's cleanup gets wrong
+                \item Its gross column is text: clean it, plot it, find the number the chapter's cleanup gets wrong, and check the fix
                 \item \textit{The Godfather}'s infobox, label by label
-                \item The same parser in French and Spanish, where the English anchor is gone
+                \item After class: the same parser in French and Spanish, where the English anchor is gone
             \end{itemize}
 
             \medskip
-            \dayband{Use it}{Steps 5--9}
+            \dayband{Use it}{Steps 5--8; Step 9 after class}
             \begin{itemize}\small
                 \item Open \texttt{lab-06.ipynb} and start at \textbf{Step 5}
                 \item Its two given cells load Monday's table. Missed Monday? Start here
@@ -830,7 +866,7 @@ films.head()
 \begin{frame}{Step 5: set up again}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Step 5's cells are given. Put your email in \texttt{CLIENT}, then run both.
+            Step 5's cells are given. Put your email in \texttt{CLIENT} again (the cell resets it), then run both.
 
             \medskip
             The second loads \texttt{films}, Monday's table, from a file the key's run saved in the course's repository.
@@ -866,7 +902,7 @@ two_grosses = pd.Series(
 \begin{frame}[fragile]{Step 6: remove what isn't a digit}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            \texttt{str.replace()} swaps every match for nothing. \texttt{regex=True} says the first argument is a pattern.
+            \texttt{str.replace()} swaps every match for nothing. \texttt{regex=True} says the first argument is a pattern. Leave it out and pandas looks for the characters \texttt{[\^{}0-9]} themselves: nothing changes.
 
             \medskip
             Are both results right? Check them by eye.
@@ -918,13 +954,16 @@ films[["Title", "gross"]].head()
             The given cell counts the footnote markers in \texttt{Ref}, then plots gross against year.
 
             \medskip
-            A number wrong by a factor of ten hides in a table. Does every point sit where you'd expect?
+            A number with a digit too many, about 66 times too big, hides in a table. Does every point sit where you'd expect?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
+# Count the footnote markers: "\[" is a real "["
+films["footnote_count"] = films["Ref"].str.count(r"\[")
 fig, ax = plt.subplots(figsize=(8, 4))
 # Gross, in billions, against the year
 ax.scatter(films["Year"], films["gross"] / 1e9)
+ax.set_title("The 50 highest-grossing films ...")
 ax.set_xlabel("Release year")
 ax.set_ylabel("Worldwide gross (billions of US dollars)")
 plt.show()
@@ -958,7 +997,10 @@ by_gross[["Title", "Worldwide gross", "gross"]].head(3)
             The stray letters always come before the \texttt{\$}. So keep only what follows it.
 
             \medskip
-            The pattern: a \texttt{\$}, then digits and commas. The parentheses mark the part to keep, and \texttt{[0]} takes it.
+            In a pattern: \texttt{\textbackslash\$} a real \texttt{\$}; \texttt{\textbackslash d} a digit; \texttt{[\textbackslash d,]+} one or more digits or commas; \texttt{\textbackslash .} a real dot; \texttt{(...)} keeps what it matches.
+
+            \medskip
+            \texttt{extract()} gives a table, one column per \texttt{(...)}, named 0; \texttt{[0]} takes it. No match: \texttt{NaN}.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -966,9 +1008,10 @@ by_gross[["Title", "Worldwide gross", "gross"]].head(3)
 AFTER_DOLLAR = r"\$([\d,]+)"
 # The column, as text
 gross_text = films["Worldwide gross"]
-# The part in parentheses, for each cell
+# A table with one column, named 0
+print(gross_text.str.extract(AFTER_DOLLAR).head(3))
+# That column
 after_dollar = gross_text.str.extract(AFTER_DOLLAR)[0]
-after_dollar.head(3)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1003,6 +1046,9 @@ films["gross_fixed"] = pd.to_numeric(
 
             \medskip
             How many rows changed? Read \texttt{gross} and \texttt{gross\_fixed} side by side.
+
+            \medskip
+            What would Step 6's pattern make of \texttt{4TS3}, Toy Story 3's peak?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -1010,6 +1056,24 @@ films["gross_fixed"] = pd.to_numeric(
 changed = films["gross"] != films["gross_fixed"]
 # Only those rows
 films[changed]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: is it right?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            ``Changed'' isn't ``right''. The table is ranked by gross, so the right column falls all the way down.
+
+            \medskip
+            Then a given cell lists the rows whose \texttt{Rank} or \texttt{Peak} isn't only digits. What second source of truth does your own table have?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# True if each value is at most the one above it
+print(films["gross"].is_monotonic_decreasing)
+print(films["gross_fixed"].is_monotonic_decreasing)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1133,7 +1197,7 @@ def read_infobox(table):
             One call reads the whole infobox into a dictionary.
 
             \medskip
-            How many facts? Read the labels: is one of them missing a space?
+            How many facts? \texttt{get\_text(strip=True)} glues a label's words across a line break (\texttt{Productioncompanies}); \texttt{get\_text(" ", strip=True)} keeps a space.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -1148,6 +1212,8 @@ print(list(facts))
     \end{columns}
 \end{frame}
 
+% After class: Step 9 and its microsprint, which didn't fit in Wednesday's 50 minutes
+% (labs/week-06, "After class: Step 9"). Strategy 5's frame introduces them.
 \begin{frame}{Strategy 5 --- porting patterns to new sites}
     \begin{columns}
         \begin{column}{0.6\textwidth}
@@ -1174,7 +1240,7 @@ print(list(facts))
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 9: shaped like the French page, given}
+\begin{frame}[fragile]{After class, Step 9: shaped like the French page, given}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             A few lines shaped like French Wikipedia's infobox.
@@ -1197,7 +1263,7 @@ tiny_fr = BeautifulSoup(
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 9: two selectors}
+\begin{frame}[fragile]{After class, Step 9: two selectors}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             \texttt{select()} takes a CSS selector and returns a list of matches.
@@ -1219,7 +1285,7 @@ print(len(tiny_fr.select("table:has(caption)")))
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 9: the real page}
+\begin{frame}[fragile]{After class, Step 9: the real page}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             The same film, on French Wikipedia.
@@ -1240,7 +1306,7 @@ print(fr_response.status_code, fr_response.text[:200])
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 9: the same two selectors}
+\begin{frame}[fragile]{After class, Step 9: the same two selectors}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             Did the small page predict the real one?
@@ -1261,7 +1327,7 @@ print(len(fr_soup.select("table:has(caption)")))
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 9: the same function}
+\begin{frame}[fragile]{After class, Step 9: the same function}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             The anchor changed. The function didn't.
@@ -1282,7 +1348,7 @@ print(len(facts_fr), facts_fr["Réalisation"])
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Microsprint: a third edition}
+\begin{frame}[fragile]{Microsprint, after class: a third edition}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             \textbf{Do:} give the Spanish article's address, then run the given cell. It tries both selectors and reads the infobox.
@@ -1317,7 +1383,7 @@ sprint_url = (
             \end{itemize}
 
             \medskip
-            \dayband{Use it}{Steps 10--14}
+            \dayband{Use it}{Steps 10--14; two microsprints after class}
             \begin{itemize}\small
                 \item Open \texttt{lab-06.ipynb} and start at \textbf{Step 10}
                 \item Open the \href{https://www.oscars.org/oscars/ceremonies/2026}{2026 ceremony page} in Chrome, beside the handout \textit{Cards to rows}
@@ -1358,14 +1424,14 @@ sprint_url = (
 \begin{frame}{Step 10: set up again}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Step 10's cell is given. Put your email in \texttt{CLIENT}, then run it.
+            Step 10's cell is given. Put your email in \texttt{CLIENT} again (the cell resets it), then run it.
 
             \medskip
             Today needs no table from Monday or Wednesday, and only \texttt{HEADERS}.
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{Discuss}\\[2pt]
-            {\footnotesize Which of this week's sites asked for the library's name, and which refused it?\par}
+            {\footnotesize Wikimedia asked for the library's name; The Numbers refused it. Why can't one User-Agent suit every site?\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -1397,7 +1463,7 @@ oscars_response = requests.get(
 \begin{frame}[fragile]{Step 11: look first}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The chapter says oscars.org turns away a request that pretends to be Chrome, and lets in one that names you.
+            The chapter says oscars.org turns away a request that pretends to be Chrome. On 2026-11-18 it also refused \texttt{WebDataScience/1.0} with no address.
 
             \medskip
             Which status came back for us?
@@ -1547,7 +1613,7 @@ print(film_tag.get_text(strip=True))
             A loop inside a loop: every card, and every honoree in it.
 
             \medskip
-            Each honoree becomes one dictionary with the fields you read by hand, and then one row.
+            Each honoree becomes one dictionary with the fields you read by hand, and then one row: one per honoree block, not always one per nomination.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -1589,32 +1655,13 @@ if honoree_film:
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Microsprint: the most nominations}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \textbf{Do:} count the rows for each film. Then run the given cell, which counts the leader a second way.
-
-            \medskip
-            \textbf{Share:} the film, and its count both ways. Why do they differ?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# How many rows name each film
-film_counts = oscars26["film"].value_counts()
-# The five with the most
-film_counts.head()
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 \begin{frame}[fragile]{Step 12: Step 11 as a function, given}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             We want more years, so Step 11 becomes the chapter's function. Find your lines in it.
 
             \medskip
-            It assumes every request works. What would a 429 do to it? The chapter's \texttt{safe\_scrape()} guards that.
+            It stops on any status but 200. What would a 429 for 2025 do to the loop? The chapter's \texttt{safe\_scrape()} guards that.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -1625,6 +1672,8 @@ def parse_oscar_ceremony(year):
         + str(year)
     )
     response = requests.get(page_url, headers=HEADERS)
+    if response.status_code != 200:
+        raise RuntimeError(f"Got {response.status_code}, not 200")
     soup = BeautifulSoup(response.text, "html.parser")
     # Step 11's loops, with "year": year in each row
     ...
@@ -1671,23 +1720,6 @@ for year in [2024, 2025, 2026]:
     time.sleep(1)
 # One table of all three
 oscars = pd.concat(frames, ignore_index=True)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Microsprint: before you were born}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \textbf{Do:} choose a ceremony from before you were born, then run the given cell.
-
-            \medskip
-            \textbf{Share:} the year, its categories and honorees, and any row with no film.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# A ceremony from before you were born
-sprint_year = 1990
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1861,7 +1893,7 @@ for tile in tiles:
 \begin{frame}[fragile]{Step 13: a page with its quotes}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Step 1 ruled IMDb out. \texttt{quotes.toscrape.com} is built for practice: the same quotes two ways.
+            Step 1 ruled IMDb out. \texttt{quotes.toscrape.com} is built for practice: the same quotes two ways. Its \texttt{robots.txt} is a 404: no file, no rules.
 
             \medskip
             Open it in your browser. How many quotes are on the page?
@@ -1947,6 +1979,44 @@ print(len(js_soup.select("div.quote")))
     \end{columns}
 \end{frame}
 
+% After class: Step 11's and Step 12's microsprints, which didn't fit in Friday's 35 minutes
+% (labs/week-06, "After class: two microsprints").
+\begin{frame}[fragile]{Microsprint, after class: the most nominations}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} count the rows for each film. Then run the given cell, which counts the leader a second way.
+
+            \medskip
+            \textbf{Share:} the film, and its count both ways. Why do they differ, and which one counts nominations?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# How many rows name each film
+film_counts = oscars26["film"].value_counts()
+# The five with the most
+film_counts.head()
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint, after class: before you were born}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} choose a ceremony from before you were born, then run the given cell.
+
+            \medskip
+            \textbf{Share:} the year, its categories and honorees, and any row with no film.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# A ceremony from before you were born
+sprint_year = 1990
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}{Which strategy?}
 
     Without writing any code come up with the strategy for scraping each of the websites below.
@@ -1980,7 +2050,7 @@ print(len(js_soup.select("div.quote")))
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{Submitting}\\[2pt]
-            {\footnotesize Start in class, finish at home, submit what you got working.
+            {\footnotesize Start after the lab, finish at home, submit what you got working.
 
             \smallskip
             Graded on good-faith attempt to complete rather than getting everything working.\par}
@@ -1994,7 +2064,7 @@ print(len(js_soup.select("div.quote")))
 \begin{frame}{Improving Chapter 6 and others}
     \begin{columns}
         \begin{column}{0.6\textwidth}
-            Today we make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-06-static-pages.qmd} and reviews a classmate's.
+            Friday's last 15 minutes make the book better. Each of you opens a \textbf{pull request} against \texttt{ch-06-static-pages.qmd} and reviews a classmate's.
 
             \bigskip
 
