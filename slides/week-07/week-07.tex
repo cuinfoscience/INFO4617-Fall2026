@@ -29,31 +29,36 @@
 
             \bigskip
 
-            \dayband{Monday}{Concepts \& notebook intro}
+            \dayband{Monday}{Concepts \& lab, Part 1}
             \begin{itemize}\small
                 \item Web archiving, the Wayback Machine by hand, how captures break, and what researchers do with them
+                \item Lab 07, Part 1: a capture's address, and the Availability API
             \end{itemize}
 
             \medskip
 
-            \dayband{Wednesday}{Notebook lab}
+            \dayband{Wednesday}{Lab, Part 2}
             \begin{itemize}\small
-                \item Work the Chapter 7 notebook: Availability API, CDX, tracking a Terms-of-Service document
+                \item Lab 07, Part 2: Availability API, CDX, every version of a Terms-of-Service document
             \end{itemize}
 
             \medskip
 
-            \dayband{Friday}{Backlog standup}
+            \dayband{Friday}{Lab, Part 3, then the backlog}
             \begin{itemize}\small
-                \item A standup, then pairs by chapter on three activities: triage an issue, review a pull request, turn an issue into a pull request
+                \item Lab 07, Part 3: tracking a Terms-of-Service document's words
+                \item The last 15 minutes: a standup, then pairs by chapter on three activities: triage an issue, review a pull request, turn an issue into a pull request
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Companion notebook}
-                \footnotesize \texttt{ch-07-archives.ipynb}
-            \end{block}
+            \textbf{Lab}\\[2pt]
+            {\footnotesize \texttt{labs/week-07/lab-07.ipynb}\par}
+            \medskip
+            \textbf{Companion notebook}\\[2pt]
+            {\footnotesize \texttt{ch-07-archives.ipynb}: the Recommended Exercises, due Sunday\par}
+            \medskip
             \begin{alertblock}{Bring a laptop}
-                \footnotesize Monday and Wednesday are both hands-on this week --- bring a laptop both days.
+                \footnotesize Every class is hands-on this week --- bring a laptop all three days.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -71,6 +76,9 @@
 % One code block a frame, narration on the left and code on the right: slides/common/AUTHORING.md.
 % A one-line comment above each step, at most two chained methods, one argument per line in long calls.
 % The dates are fall 2026's: the title's, and "Due Sunday, Oct 4" below.
+% Revised on 2026-11-18 with the lab, from the student reviews: the given functions' checks, https, a
+% capture's address from a CDX row, captures by year, and "After class" frames where the lab moved a step
+% or microsprint to fit its day. The at-a-glance frame and "Lab: work these" were stale for the new week.
 \begin{frame}{This week, every class is live coding}
     \begin{columns}[T]
         \begin{column}{0.56\textwidth}
@@ -98,7 +106,7 @@
             {\footnotesize Chapter 7's \textbf{Recommended Exercises}, from its companion notebook. The lab itself isn't turned in. Graded on good-faith attempt to complete rather than getting everything working.\par}
             \medskip
             \begin{alertblock}{Error flavors}
-                \footnotesize A \texttt{JSONDecodeError} or a dropped connection may be the Archive turning us away: wait a minute, and run the cell once more. A cell that fails for everyone is \textit{broken}: tell me, or open an issue.
+                \footnotesize A \texttt{JSONDecodeError}, a dropped connection, or a given cell's ``Got 429'' or ``No capture'' may be the Archive turning us away: wait a minute, and run the cell once more. A cell that fails for everyone is \textit{broken}: tell me, or open an issue.
             \end{alertblock}
         \end{column}
     \end{columns}
@@ -541,7 +549,7 @@ print(stamp, original)
             \texttt{format} tells pandas how to read the digits: year, month, day, hour, minute, second.
 
             \medskip
-            The time is in UTC. What time was it in Massachusetts?
+            Read the time as UTC. What time was it in Massachusetts?
 
             \medskip
             {\scriptsize\textbf{Docs:} \href{https://pandas.pydata.org/docs/reference/api/pandas.to_datetime.html}{\texttt{pd.to\_datetime()}}\par}
@@ -598,31 +606,6 @@ print(by_year.history)
 # Where the first one pointed
 first = by_year.history[0]
 print(first.headers["Location"])
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 1 microsprint: before they were famous}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \textbf{Do:} ask for \texttt{google.com} in 1998, \texttt{x.com} in 1999, or a site you knew in middle school.
-
-            \medskip
-            \textbf{Share:} the address, the date of the capture you landed on, and the page's title.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# A year, then the address
-famous = requests.get(
-    "https://web.archive.org/web/1999/x.com",
-    headers=HEADERS,
-)
-# Where we landed
-print(famous.url)
-# The page's <title>
-famous_soup = BeautifulSoup(famous.text, "html.parser")
-print(famous_soup.title)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -687,14 +670,14 @@ print(raw.status_code, raw.text.count("/web/"))
 \begin{frame}[fragile]{Step 2: scripts and links, side by side}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            This given cell counts each page's \texttt{<script>} tags and links, and prints the counts.
+            This given cell takes each (name, page) pair in turn. It counts the page's \texttt{<script>} tags and links, and prints them with the name.
 
             \medskip
             Which counts did the wrapper change? What would a study of JavaScript in 2004 have found on the wrapped page?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-for page in [wrapped, raw]:
+for name, page in [("wrapped", wrapped), ("raw", raw)]:
     # Parse the page, and find its <script> tags
     page_soup = BeautifulSoup(page.text, "html.parser")
     scripts = page_soup.find_all("script")
@@ -863,6 +846,33 @@ print(typo.status_code, typo.text)
     \end{columns}
 \end{frame}
 
+% After class: Step 1's microsprint didn't fit Monday's lab time, after the concept frames; moved with
+% the lab on 2026-11-18 (labs/AUTHORING.md, "The time budget").
+\begin{frame}[fragile]{After class: Step 1's microsprint, before they were famous}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} ask for \texttt{google.com} in 1998, \texttt{x.com} in 1999, or a site you knew in middle school.
+
+            \medskip
+            \textbf{Share:} the address, the date of the capture you landed on, and the page's title.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# A year, then the address
+famous = requests.get(
+    "https://web.archive.org/web/1999/x.com",
+    headers=HEADERS,
+)
+# Where we landed
+print(famous.url)
+# The page's <title>
+famous_soup = BeautifulSoup(famous.text, "html.parser")
+print(famous_soup.title)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 % ---- end of Part 1 ----
 \begin{frame}{Closing activity: time travel with the Wayback Machine}
     \begin{columns}
@@ -995,7 +1005,7 @@ cnn_stamp = cnn_closest["timestamp"]
             For counting, we want the page as it was saved. Add \texttt{id\_}, as in Step 2.
 
             \medskip
-            Read the address. Is the timestamp exactly the date we asked for?
+            The API's address starts \texttt{http:}. The \texttt{1} changes only the first one. Why fetch over \texttt{https}, when our email is in the User-Agent?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -1004,6 +1014,8 @@ cnn_raw = cnn_closest["url"].replace(
     cnn_stamp,
     cnn_stamp + "id_",
 )
+# Fetch it over https
+cnn_raw = cnn_raw.replace("http:", "https:", 1)
 print(cnn_raw)
 \end{lstlisting}
         \end{column}
@@ -1013,15 +1025,17 @@ print(cnn_raw)
 \begin{frame}[fragile]{Step 5: count its links}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Fetch the capture, parse it, and count one kind of tag.
+            Fetch the capture, look at its status and size, then parse it and count one kind of tag.
 
             \medskip
-            How many links would you guess a news home page had in 2000?
+            A refusal page has no links. What would its 0 look like in a table?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # Fetch the raw capture
 cnn_page = requests.get(cnn_raw, headers=HEADERS)
+# Look before you count: its status, and its size
+print(cnn_page.status_code, len(cnn_page.text))
 # Parse it, as in week 6
 cnn_soup = BeautifulSoup(cnn_page.text, "html.parser")
 # Count its <a> tags
@@ -1037,21 +1051,45 @@ print(len(cnn_soup.find_all("a")))
             A function is a name for some lines. The given \texttt{get\_snapshot\_stats()} runs your cells for any address and date.
 
             \medskip
-            Find your cells in it. The lines cut here add \texttt{id\_}.
+            Find your first cell in it. What does the \texttt{if} do with a 429?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 def get_snapshot_stats(url, timestamp):
     # Ask the Availability API
-    response = requests.get(
+    answer = requests.get(
         avail_url,
         params={"url": url, "timestamp": timestamp},
         headers=HEADERS,
     )
-    # Down to the closest capture
-    data = response.json()
-    snapshot = data["archived_snapshots"]["closest"]
+    # Not a 200? Stop, and say why
+    if answer.status_code != 200:
+        ...
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: stop if no capture comes back}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Two more checks. An empty \texttt{archived\_snapshots} names no capture. A page under 1,000 characters is a refusal, not CNN.
+
+            \medskip
+            The cut lines add \texttt{id\_} and \texttt{https}. Which check stops a refusal page sent with a 200?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+    # No capture named? Stop
+    snapshots = answer.json()["archived_snapshots"]
+    if "closest" not in snapshots:
+        raise RuntimeError(...)
     ...
+    # Fetch the raw capture
+    page = requests.get(raw_url, headers=HEADERS)
+    # Not a 200, or too short to be a page? Stop
+    if page.status_code != 200 or len(page.text) < 1000:
+        raise RuntimeError(...)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1063,17 +1101,16 @@ def get_snapshot_stats(url, timestamp):
             \texttt{return} hands back a dictionary: the year we asked for, the capture's own timestamp, and four counts.
 
             \medskip
-            Which count is the one you typed?
+            Which count is the one you typed? The notebook writes the dictionary on three lines.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-    # Fetch the raw capture, and parse it
-    page = requests.get(raw_url, headers=HEADERS)
+    # Parse the page
     soup = BeautifulSoup(page.text, "html.parser")
     # The year, the capture, and four counts
     return {
         "year": timestamp[:4],
-        "capture": snapshot["timestamp"],
+        "capture": stamp,
         "num_links": len(soup.find_all("a")),
         "text_length": len(soup.get_text()),
         "num_images": len(soup.find_all("img")),
@@ -1316,17 +1353,18 @@ print(len(df), "versions")
 \begin{frame}[fragile]{Step 7: dates and numbers}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Every value arrived as text. \texttt{errors} set to \texttt{coerce} turns a size that isn't a number into a missing value.
+            Every value arrived as text. \texttt{utc=True} reads the times as UTC, as in Step 1. \texttt{errors} set to \texttt{coerce} turns a size that isn't a number into a missing value.
 
             \medskip
             When was the first capture? Is that when Facebook first had terms?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# The timestamps, as dates
+# The timestamps, as dates in UTC
 df["timestamp"] = pd.to_datetime(
     df["timestamp"],
     format="%Y%m%d%H%M%S",
+    utc=True,
 )
 # The sizes, as numbers
 df["length"] = pd.to_numeric(
@@ -1335,6 +1373,55 @@ df["length"] = pd.to_numeric(
 )
 # The first and last capture
 print(df["timestamp"].min(), df["timestamp"].max())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: one capture, from a row}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A CDX row has a \texttt{timestamp} and an \texttt{original}, not an address. \texttt{df.iloc[0]} is the first row.
+
+            \medskip
+            \texttt{strftime()} writes the date back as 14 digits. What would \texttt{str()} of the date look like instead?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The first row
+first_row = df.iloc[0]
+print(first_row)
+# Its date, back as 14 digits
+first_stamp = first_row["timestamp"].strftime(
+    "%Y%m%d%H%M%S"
+)
+print(first_stamp)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: its raw address}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Join the pieces, with \texttt{id\_} after the timestamp, as in Step 2's \texttt{RAW}.
+
+            \medskip
+            Which Recommended Exercise step needs this address, for two rows?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://pandas.pydata.org/docs/reference/api/pandas.Timestamp.strftime.html}{\texttt{Timestamp.strftime()}}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The archive, the 14 digits, id_, the original
+first_raw = (
+    "https://web.archive.org/web/"
+    + first_stamp
+    + "id_/"
+    + first_row["original"]
+)
+print(first_raw)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1368,7 +1455,7 @@ quarterly = df_ok.resample("QS").agg(
 \begin{frame}[fragile]{Step 8: the busiest quarters}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Each row of the table is a change in the page's bytes.
+            Each row of the table differs from the capture before it.
 
             \medskip
             Did Facebook change its terms most in these quarters, or did the Archive look most often?
@@ -1409,7 +1496,28 @@ axes[0].set_ylabel("Captures per quarter")
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 9: every capture in 2005}
+\begin{frame}[fragile]{Step 8: captures by year}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{.dt.year} reads each date's year. \texttt{value\_counts()} counts each year's rows, and \texttt{sort\_index()} puts the years in order. The notebook writes it in one line.
+
+            \medskip
+            Which year has the most captures? Facebook's doing, or the Archive's?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Each capture's year, counted, in year order
+per_year = df["timestamp"].dt.year.value_counts()
+per_year = per_year.sort_index()
+print(per_year)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% After class: Step 9 and its microsprint didn't fit Wednesday's 50 minutes; moved with the lab on
+% 2026-11-18 (labs/AUTHORING.md, "The time budget"). The Recommended Exercises don't use them.
+\begin{frame}[fragile]{After class, Step 9: every capture in 2005}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             The calendar's colors are status codes: blue for 2xx, green for 3xx, orange for 4xx, red for 5xx.
@@ -1432,7 +1540,7 @@ fb2005_params = {
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 9: send it, and look}
+\begin{frame}[fragile]{After class, Step 9: send it, and look}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             The same moves as Step 7, with nothing filtered out.
@@ -1455,7 +1563,7 @@ print(fb2005.status_code, fb2005.text[:300])
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 9: rows into a table}
+\begin{frame}[fragile]{After class, Step 9: rows into a table}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             Row 0 names the columns again.
@@ -1478,7 +1586,7 @@ print(len(fb2005_df), "captures")
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 9: month by status code}
+\begin{frame}[fragile]{After class, Step 9: month by status code}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             \texttt{pd.crosstab()} counts the captures for each month and each code.
@@ -1504,7 +1612,7 @@ print(counts)
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 9 microsprint: a government page}
+\begin{frame}[fragile]{After class, Step 9's microsprint: a government page}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             The given \texttt{status\_by\_year()} holds the cells you typed, and counts by year.
@@ -1528,7 +1636,7 @@ status_by_year("epa.gov/climatechange", "2016", "2018")
 \begin{frame}{Lab: work these, then show-and-tell}
     \begin{columns}
         \begin{column}{0.6\textwidth}
-            Work in pairs. Do these exercises from the notebook:
+            Due Sunday: the companion notebook's Recommended Exercises. If you finish, work in pairs on these Additional Exercises:
             \begin{enumerate}\small
                 \item Select a policy document. Get 5 or more versions from different dates. Plot the length of each version.
                 \item Use the CDX API. Compare the capture frequency and the page size of two competing organizations.
@@ -1539,14 +1647,13 @@ status_by_year("epa.gov/climatechange", "2016", "2018")
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Show-and-Tell}
-                \footnotesize Bring one of these to class:
-                \begin{itemize}\footnotesize
-                    \item a bug that you could not solve
-                    \item a change you found in the archived past
-                    \item a question for a research design
-                \end{itemize}
-            \end{block}
+            \textbf{Show-and-Tell}\\[2pt]
+            {\footnotesize Bring one of these to class:\par}
+            \begin{itemize}\footnotesize
+                \item a bug that you could not solve
+                \item a change you found in the archived past
+                \item a question for a research design
+            \end{itemize}
         \end{column}
     \end{columns}
 \end{frame}
@@ -1674,6 +1781,9 @@ tos_raw = tos_closest["url"].replace(
     tos_stamp,
     tos_stamp + "id_",
 )
+# Over https, as in Step 5
+tos_raw = tos_raw.replace("http:", "https:", 1)
+print(tos_raw)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1682,7 +1792,7 @@ tos_raw = tos_closest["url"].replace(
 \begin{frame}[fragile]{Step 11: the page's words}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            \texttt{get\_text()} keeps the page's words, with a space between pieces, and drops the tags.
+            Look at the status and size first. Then \texttt{get\_text()} keeps the page's words, with a space between pieces, and drops the tags.
 
             \medskip
             It keeps menus and footers too. What will they do to a comparison?
@@ -1692,14 +1802,12 @@ tos_raw = tos_closest["url"].replace(
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# Fetch the raw capture, and parse it
+# Fetch the raw capture, and look first
 tos_page = requests.get(tos_raw, headers=HEADERS)
+print(tos_page.status_code, len(tos_page.text))
+# Parse it, and keep its words
 tos_soup = BeautifulSoup(tos_page.text, "html.parser")
-# Keep its words, with a space between pieces
-tos_text = tos_soup.get_text(
-    separator=" ",
-    strip=True,
-)
+tos_text = tos_soup.get_text(separator=" ", strip=True)
 # How many words, and how it begins
 print(len(tos_text.split()), "words:", tos_text[:300])
 \end{lstlisting}
@@ -1713,7 +1821,7 @@ print(len(tos_text.split()), "words:", tos_text[:300])
             The given \texttt{get\_wayback\_content()} runs your four cells for any address and date. \texttt{strftime} writes the date as the API's timestamp.
 
             \medskip
-            The lines cut here are yours. What does it hand back?
+            The lines cut here are yours, with Step 5's checks: it stops on a refusal, or under 50 words. What does it hand back?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -1723,7 +1831,7 @@ def get_wayback_content(url, date):
     ...
     # The capture, its address, and its words
     return {
-        "timestamp": snapshot["timestamp"],
+        "timestamp": stamp,
         "url": raw_url,
         "word_count": len(text.split()),
         "content": text,
@@ -1763,7 +1871,7 @@ for date in dates:
 \begin{frame}[fragile]{Step 11: get it, save it, pause}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The rest of the loop. Each version is saved as soon as it arrives.
+            The rest of the loop. Each version is saved as soon as it arrives. A refusal stops the function, so it is never saved.
 
             \medskip
             If the Archive refuses the sixth date, what do you have? What does a second run ask for?
@@ -1957,28 +2065,6 @@ print(scores.round(3))
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 12 microsprint: one small word}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \textit{not} is on the stopword list.
-
-            \medskip
-            \textbf{Do:} print the tokens of these two sentences.
-
-            \medskip
-            \textbf{Share:} the two lists, and what their similarity would be.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# With "not"
-print(preprocess_document("We do not share your data."))
-# Without it
-print(preprocess_document("We share your data."))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 \begin{frame}[fragile]{Step 13: all ten versions}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
@@ -2031,7 +2117,7 @@ print(round(1 - index[corpus[0]][9], 3))
             A given cell scores each version against the one before it, then plots each score at the date of the later capture.
 
             \medskip
-            Where is the biggest spike? What happened at Facebook around then?
+            Where is the biggest spike? What happened at Facebook around then? Where two dates got one capture, what does a 0 measure?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -2042,14 +2128,63 @@ change_scores = [
 ]
 # The date of each later capture
 stamps = [version["timestamp"] for version in results[1:]]
-when = pd.to_datetime(stamps, format="%Y%m%d%H%M%S")
+capture_dates = pd.to_datetime(
+    stamps,
+    format="%Y%m%d%H%M%S",
+    utc=True,
+)
 ...
 \end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 13 microsprint: one version against all}
+\begin{frame}{Step 14: what did we learn?}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Answer in a few sentences, as comments in the last cell:
+            \begin{itemize}
+                \item How many versions did the CDX Server list, and how many different captures did our ten dates reach?
+                \item In Step 8, which year had the most captures? Facebook's doing, or the Archive's?
+                \item What did a small first request show you that the full run would have hidden?
+                \item What would your methods section say about the Wayback Machine?
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Then, the Recommended Exercises}\\[2pt]
+            {\footnotesize The same steps for a page you choose, in the chapter's companion notebook, due Sunday. Step 14 says which lab step prepared each one.\par}
+            \medskip
+            \textbf{Refused?}\\[2pt]
+            {\footnotesize Write what you would have checked, and which cell would have printed it.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% After class: the microsprints of Steps 12 and 13 didn't fit Friday's 35 minutes; moved with the lab
+% on 2026-11-18 (labs/AUTHORING.md, "The time budget").
+\begin{frame}[fragile]{After class: Step 12's microsprint, one small word}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textit{not} is on the stopword list.
+
+            \medskip
+            \textbf{Do:} print the tokens of these two sentences.
+
+            \medskip
+            \textbf{Share:} the two lists, and what their similarity would be.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# With "not"
+print(preprocess_document("We do not share your data."))
+# Without it
+print(preprocess_document("We share your data."))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class: Step 13's microsprint, one version against all}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             \textbf{Do:} pick one version, from 0 to 9, and print its similarity to all ten.
@@ -2062,24 +2197,6 @@ when = pd.to_datetime(stamps, format="%Y%m%d%H%M%S")
 # Version 4's similarity to all ten
 print(index[corpus[4]].round(2))
 \end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Step 14: what did we learn?}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Answer in a few sentences, as comments in the last cell:
-            \begin{itemize}
-                \item How many versions did the CDX Server list, and how many different captures did our ten dates reach?
-                \item What share of \texttt{facebook.com}'s captures in 2005 weren't 200s?
-                \item What did a small first request show you that the full run would have hidden?
-                \item What would your methods section say about the Wayback Machine?
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \textbf{Then, the Recommended Exercises}\\[2pt]
-            {\footnotesize The same steps for a page you choose, in the chapter's companion notebook. Step 14 says which lab step prepared each one.\par}
         \end{column}
     \end{columns}
 \end{frame}
