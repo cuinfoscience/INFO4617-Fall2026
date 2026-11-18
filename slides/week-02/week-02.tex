@@ -34,23 +34,23 @@
 
             \medskip
 
-            \dayband{Wednesday}{Notebook lab}
+            \dayband{Wednesday}{Lab Part 1: who we are, and what a site permits}
             \begin{itemize}\small
-                \item Get \texttt{ch-02-ethics.ipynb} from GitHub and launch it in Jupyter
-                \item Then: \texttt{robots.txt}, User-Agent headers, rate limiting --- and building \texttt{responsible\_get()}
+                \item A User-Agent, a five-line \texttt{robots.txt}, the Times's file, and the trap in \texttt{rp.read()}
             \end{itemize}
 
             \medskip
 
-            \dayband{Friday}{Textbook revisions}
+            \dayband{Friday}{Lab Part 2, then textbook revisions}
             \begin{itemize}\small
-                \item GitHub, hands-on --- and everyone files their first issue against Chapter 2
+                \item AI crawlers at six newsrooms, a clock on a pause, and one polite loop
+                \item Then GitHub, hands-on. Everyone files a first issue against Chapter 2
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
-            \begin{block}{Companion notebook}
-                \footnotesize \texttt{ch-02-ethics.ipynb}
-            \end{block}
+            \textbf{The lab}\\[2pt]
+            {\footnotesize \texttt{labs/week-02/lab-02.ipynb} in the course repository, in two parts. The key is beside it.\par}
+            \medskip
             \begin{alertblock}{Bring a laptop}
                 \footnotesize Wednesday is hands-on --- we send live requests and watch what the server sees.
             \end{alertblock}
@@ -540,6 +540,224 @@ print(os.getcwd())
     \end{columns}
 \end{frame}
 
+% -------------------------------------------------------------------------
+% Lab Part 1. These frames follow labs/week-02/lab-02-key.ipynb (2026-11-18):
+% a frame for each small first call and each case typed by hand, with the
+% given cells described in the narration. The code frames after them come
+% from chapter 2's companion notebook and are kept as the instructor left them.
+% -------------------------------------------------------------------------
+
+\begin{frame}{Today: lab Part 1}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            A server sees your request, not your code. Today we read what ours says, and what a site's \texttt{robots.txt} lets it fetch.
+
+            \medskip
+            Each idea starts small enough to predict: one echo, five lines of rules, three lines that disagree. Then the New York Times.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Where}\\[2pt]
+            {\footnotesize \texttt{labs/week-02/lab-02.ipynb}; the key is \texttt{lab-02-key.ipynb}, beside it.\par}
+            \medskip
+            \textbf{Due Sunday}\\[2pt]
+            {\footnotesize The chapter's Recommended Exercises, in its companion notebook. Graded on good-faith attempt to complete rather than getting everything working.\par}
+            \medskip
+            \textbf{Error flavors}\\[2pt]
+            {\footnotesize Steps 1 and 5 are designed to break. A cell that fails any other way may need a GitHub issue.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 0: say who we are}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell imports what we need and prints your Python version.
+
+            \medskip
+            Then type the header every request will send: a name, a version, and a way to reach you. Use your own email.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+# The User-Agent every request will send
+HEADERS = {
+    "User-Agent": "WebDataScience/1.0 (you@colorado.edu)",
+}
+print(HEADERS)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: what a server sees}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            This address sends back the User-Agent it received.
+
+            \medskip
+            With no headers, what will \texttt{requests} call itself? What changes with \texttt{HEADERS}?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://httpbin.org/\#/Request_inspection/get_user_agent}{httpbin's \texttt{/user-agent}}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+# Ask an echo service, with no headers
+plain = requests.get("https://httpbin.org/user-agent")
+print(plain.text)
+# The same request, with our header
+named = requests.get(
+    "https://httpbin.org/user-agent",
+    headers=HEADERS,
+)
+print(named.text)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: no headers at all}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Week 1's article, asked for with no headers. What status code do you expect?
+
+            \medskip
+            The notebook writes the address in one line.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+# Week 1's article
+article = "University_of_Colorado_Boulder"
+# Ask for it with no headers
+bare = requests.get(
+    "https://en.wikipedia.org/wiki/" + article,
+)
+print(bare.status_code)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: a robots.txt you can read whole}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A \texttt{User-agent} line names the crawlers a group is for. \texttt{Disallow} gives a path they may not fetch. A blank line ends the group.
+
+            \medskip
+            Which group applies to us?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+# A whole robots.txt, five lines long
+rules = [
+    "User-agent: *",
+    "Disallow: /private/",
+    "",
+    "User-agent: GPTBot",
+    "Disallow: /",
+]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: predict, then ask}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{parse()} takes a list of lines. \texttt{can\_fetch()} takes an agent and a URL.
+
+            \medskip
+            Write down three answers before you run anything. The notebook asks one question a cell, with each URL in full.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://docs.python.org/3/library/urllib.robotparser.html}{\texttt{urllib.robotparser}}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+# Hand the lines to a parser
+tiny = RobotFileParser()
+tiny.parse(rules)
+# Ask three questions
+site = "https://example.com"
+print(tiny.can_fetch("*", site + "/private/notes"))
+print(tiny.can_fetch("*", site + "/about"))
+print(tiny.can_fetch("GPTBot", site + "/about"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: the Times's robots.txt}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same kind of file, from a newsroom. How many lines would you guess?
+
+            \medskip
+            Given cells print the notice at its top, and count the crawlers it names.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+# The Times's robots.txt, with our header
+nyt_robots = requests.get(
+    "https://www.nytimes.com/robots.txt",
+    headers=HEADERS,
+)
+print(nyt_robots.status_code)
+# One string per line
+lines = nyt_robots.text.splitlines()
+print(len(lines))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: when two rules match}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Both rules match \texttt{/svc/wordle}. Since Python 3.14.5, the longest one wins. Before, the first one did.
+
+            \medskip
+            Predict both answers. Which Python did Step 0 print?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+# Two rules that both match /svc/wordle
+two_rules = RobotFileParser()
+two_rules.parse([
+    "User-agent: *",
+    "Disallow: /svc",
+    "Allow: /svc/wordle",
+])
+# Predict both answers
+site = "https://example.com"
+print(two_rules.can_fetch("*", site + "/svc/wordle"))
+print(two_rules.can_fetch("*", site + "/svc/news"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 4: ask about the Times}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Parse the lines we already have. \texttt{"*"} is the group for every crawler the file doesn't name.
+
+            \medskip
+            A given cell asks about four pages. The microsprint finds the lines behind one answer.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+# Parse the Times's lines; no second request
+rp = RobotFileParser()
+rp.parse(lines)
+# Its home page, for OpenAI's crawler and for us
+home = "https://www.nytimes.com/"
+print(rp.can_fetch("GPTBot", home))
+print(rp.can_fetch("*", home))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \begin{frame}[fragile]{\texttt{robots.txt}: read it before you scrape}
     A \texttt{robots.txt} at a site's root declares what automated agents may fetch. Fetch it \textbf{with your own User-Agent}, then parse it and ask permission per URL:
 \begin{lstlisting}
@@ -590,6 +808,49 @@ except urllib.error.HTTPError as err:
 
                 Fetch with your header, then \texttt{rp.parse()}.
             \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: let \texttt{read()} fetch it}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Let the parser fetch Wikipedia's file itself, as most tutorials do.
+
+            \medskip
+            Then the notebook asks about the chapter's Python article. What do you expect?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+# Let read() fetch Wikipedia's file itself
+wiki_rp = RobotFileParser(
+    "https://en.wikipedia.org/robots.txt"
+)
+wiki_rp.read()
+# Did it decide the whole site is closed?
+print(wiki_rp.disallow_all)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 5: send \texttt{read()}'s User-Agent ourselves}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given cell prints the headers \texttt{urllib} sends by default, which \texttt{read()} uses.
+
+            \medskip
+            Send them with \texttt{requests}. Where did this status code go when \texttt{read()} got it?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+# The same file, with urllib's default headers
+urllib_style = requests.get(
+    "https://en.wikipedia.org/robots.txt",
+    headers=urllib_headers,
+)
+print(urllib_style.status_code)
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
@@ -813,7 +1074,142 @@ def responsible_get(url, headers=None, delay=1.0):
         \item \textbf{How to open Terminal?} \textbf{Terminal is scary} --- I agree! Keep practicing and check out Missing Manual Ch. 11 \url{https://cuinfoscience.github.io/INFO-Missing-Manual/}
         \item \textbf{Rate limit on robots.txt?} --- Not really
     \end{itemize}
-    
+
+\end{frame}
+
+% -------------------------------------------------------------------------
+% Lab Part 2 (labs/week-02/lab-02-key.ipynb, Steps 6--10), before the
+% revision block
+% -------------------------------------------------------------------------
+
+\begin{frame}{Today: lab Part 2}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Since 2023, \texttt{robots.txt} has named AI crawlers. Which ones do newsrooms let in?
+
+            \medskip
+            Then two habits that go with every request from now on: a pause, and asking \texttt{robots.txt} before you send.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Start at Step 6}\\[2pt]
+            {\footnotesize Put your email in its setup cell. The next given cell loads a saved copy of the Times's file, so Wednesday's kernel isn't needed.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: one newsroom by hand}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The Colorado Sun's file, fetched the way we fetched the Times's.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+# The Colorado Sun's robots.txt, with our header
+sun = requests.get(
+    "https://coloradosun.com/robots.txt",
+    headers=HEADERS,
+)
+print(sun.status_code)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: may GPTBot come in?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Hand \texttt{parse()} the lines, not the text: given one string, it finds no rules and allows everything.
+
+            \medskip
+            A given \texttt{crawler\_check()} repeats these moves for seven agents, and a given loop runs it on six newsrooms.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+# Parse its lines
+sun_rp = RobotFileParser()
+sun_rp.parse(sun.text.splitlines())
+# May OpenAI's crawler fetch the home page?
+home = "https://coloradosun.com/"
+print(sun_rp.can_fetch("GPTBot", home))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: put a clock on a pause}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{time.time()} is the time now, in seconds. Two readings, subtracted, give the time between them.
+
+            \medskip
+            What will this print?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+# Read the clock, sleep, read it again
+start = time.time()
+time.sleep(2)
+print(time.time() - start)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 7: a clock on one request}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A given \texttt{timed\_requests()} sends five requests with a pause after each. Given cells run it with a one-second pause and with none, and plot both.
+
+            \medskip
+            \texttt{None} from \texttt{crawl\_delay()}: does the Times not mind?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+# The same clock around one request
+start = time.time()
+requests.get("https://example.com/", headers=HEADERS)
+print(time.time() - start)
+# Does the Times ask for a pause?
+print(rp.crawl_delay("*"))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: ask first, then send}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Permission, a name, a pause. A given loop does this for three pages, skips any that \texttt{robots.txt} disallows, and waits a second.
+
+            \medskip
+            \texttt{robots.txt} says yes. Will the server?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+# Ask robots.txt first
+tech_url = "https://www.nytimes.com/section/technology"
+print(rp.can_fetch("*", tech_url))
+# It says yes, so send it, with our header
+tech_page = requests.get(tech_url, headers=HEADERS)
+print(tech_page.status_code)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Step 9: five questions before you collect}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Monday's framework, on what we collected this week: legality, consent, proportionality, privacy, server impact. One comment line each.
+
+            \medskip
+            Then, in pairs, a harder case: a researcher wants to scrape dating-app profiles to study self-presentation. What do you recommend, and which question decides it?
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Then Step 10}\\[2pt]
+            {\footnotesize What did we learn? Four questions, answered as comments, after class if time runs out.\par}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{Four objects you'll use all semester}
