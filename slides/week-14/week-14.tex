@@ -39,12 +39,16 @@
 % Code shaped for reading (2026-11-13): a one-line comment above each step, at most two chained
 % methods, one argument per line in long calls. Where a slide names a step the key or the template
 % doesn't, it does the same thing and prints the same things; its narration says so.
+% The schedule (2026-11-17): the workflow is scheduled for minute 17 of every hour, and GitHub ran
+% the course's copy three or four times a day. Frames say "scheduled" for the first and give the
+% second as what happened (instructor, 2026-11-13: keep the sparse schedule, and teach it). The
+% numbers are the key's run of 2026-11-17 and chapter 14's: labs/week-14/data/README.md.
 \begin{frame}{This week at a glance}
     \begin{center}
     \begin{tikzpicture}[node distance=0.35cm, >=stealth]
         \node[stage] (one) {\textbf{One request}\\[-1pt]{\scriptsize by hand · Wed}};
         \node[stage, right=of one] (script) {\textbf{collector.py}\\[-1pt]{\scriptsize a script · Wed}};
-        \node[stage, right=of script] (actions) {\textbf{Every hour}\\[-1pt]{\scriptsize Actions · Wed}};
+        \node[stage, right=of script] (actions) {\textbf{On a schedule}\\[-1pt]{\scriptsize Actions · Wed}};
         \node[stage, right=of actions] (csv) {\textbf{forecasts.csv}\\[-1pt]{\scriptsize read it · Fri}};
         \node[stage, right=of csv] (fail) {\textbf{A red X}\\[-1pt]{\scriptsize break it · Fri}};
         \draw[->, thick] (one) -- (script);
@@ -125,7 +129,7 @@
 \begin{frame}[fragile]{Step 0: set up}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            This cell is given. Put your email in \texttt{HEADERS}, and run it.
+            This cell is given. Put your email in \texttt{HEADERS}, and run it. In Step 4 it goes in a public repository, for good. Use an address you check and don't mind showing.
 
             \medskip
             The NWS asks for no key. It asks every program to name itself and give a contact. Why send your email if nobody checks?
@@ -152,7 +156,7 @@ HEADERS = {"User-Agent":
             The same cell names two addresses. \texttt{nws\_base} is the NWS's API. \texttt{template} is where the course keeps \texttt{collector.py} and its workflow.
 
             \medskip
-            Steps 3 and 4 print those two files from it.
+            Steps 3 and 4 print the template's files from it.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -164,6 +168,31 @@ template = (
     "cuinfoscience/INFO4617-Fall2026/main/"
     "labs/week-14/template/"
 )
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% robots.txt for an official API: labs/AUTHORING.md, "robots.txt" (instructor, 2026-11-18). Read 2026-11-18.
+\begin{frame}[fragile]{robots.txt, and an API}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The API's \texttt{robots.txt} says no to every user agent, for every path.
+
+            \medskip
+            It is written for crawlers. A documented API has its own terms: open data, ``reasonable rate limits''. We read them, so we call it.
+
+            \medskip
+            Is a collector that asks once an hour a crawler?
+
+            \medskip
+            {\scriptsize\textbf{Terms:} the NWS's \href{https://www.weather.gov/documentation/services-web-api}{API documentation}, Overview tab\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[language={}]
+# https://api.weather.gov/robots.txt
+User-agent: *
+Disallow: /
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -192,6 +221,9 @@ points_url = f"{nws_base}/points/40.015,-105.2705"
             Send it with \texttt{HEADERS}. Print the status code and the \texttt{Content-Type} header.
 
             \medskip
+            Write \texttt{headers=} in full. Without it, the NWS answers 400.
+
+            \medskip
             Is the answer JSON? Which kind?
         \end{column}
         \begin{column}{0.6\textwidth}
@@ -214,7 +246,10 @@ print(
 \begin{frame}[fragile]{Step 1: any error?}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            When something goes wrong, the NWS says what in \texttt{detail}. \texttt{None} means no error.
+            When something goes wrong, the NWS says what in \texttt{detail} and \texttt{parameterErrors}. \texttt{None} means no error.
+
+            \medskip
+            A later cell says \texttt{'method' object}? Put \texttt{()} after \texttt{.json}, and run the cells below again.
 
             \medskip
             Bluesky's errors had a \texttt{message}. Why read the error before the data?
@@ -224,7 +259,10 @@ print(
 # The answer, as a dictionary
 points = points_response.json()
 # Any error? None means no error
-print(points.get("detail"))
+print(
+    points.get("detail"),
+    points.get("parameterErrors"),
+)
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -277,7 +315,7 @@ print(grid["relativeLocation"]["properties"]["city"])
 \begin{frame}[fragile]{Step 1: the forecast's address}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            \texttt{forecastHourly} is the address our collector will ask every hour.
+            \texttt{forecastHourly} is the address our collector will ask on every run.
 
             \medskip
             The documentation says a square can change. \texttt{collector.py} keeps only this address. What would it collect if the square changed?
@@ -370,7 +408,7 @@ print(len(hourly["periods"]), "periods")
             Print the first period.
 
             \medskip
-            Which of its fields would you save every hour? Which would you leave out?
+            Which of its fields would you save on every run? Which would you leave out?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -431,26 +469,6 @@ print(
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Microsprint: how old is the forecast?}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \texttt{pd.to\_datetime()} turns each time into one Python can subtract.
-
-            \medskip
-            How old was your forecast when the NWS built your answer? And your neighbor's?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# Each time, as one Python can subtract
-generated = pd.to_datetime(hourly["generatedAt"])
-updated = pd.to_datetime(hourly["updateTime"])
-# How old the forecast was when the answer was built
-print(generated - updated)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 \begin{frame}{Step 3: from a notebook to a script}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
@@ -473,6 +491,9 @@ print(generated - updated)
 
             \medskip
             Which line would you change to collect another city's forecast?
+
+            \medskip
+            In the file, \texttt{URL} is one string, on one line. The slide splits it to fit.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -710,10 +731,13 @@ if __name__ == "__main__":
         \begin{column}{0.6\textwidth}
             \begin{enumerate}\small\setcounter{enumi}{2}
                 \item Click \textbf{Add file}, then \textbf{Upload files}. Drag in \texttt{collector.py} and \texttt{README.md}. Click \textbf{Commit changes}.
-                \item Click \texttt{collector.py}, then the pencil. In \texttt{HEADERS}, type your email address. Commit the change.
+                \item Read this first. The repository is public, and its history keeps your address even if you change it later. Use an address you check and don't mind showing. Click \texttt{collector.py}, then the pencil. In \texttt{HEADERS}, type that address. Commit the change.
             \end{enumerate}
         \end{column}
         \begin{column}{0.35\textwidth}
+            \textbf{No zip?}\\[2pt]
+            {\footnotesize Create \texttt{collector.py} with \textbf{Create new file}, from what Step 3's cell printed. Paste the README that a given cell prints over GitHub's.\par}
+            \medskip
             \textbf{No \texttt{forecasts.csv}?}\\[2pt]
             {\footnotesize The first run makes it.\par}
         \end{column}
@@ -900,10 +924,11 @@ jobs:
 \begin{frame}{Step 5: start the first run}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            A scheduled run can start late. Start the first one by hand.
+            A scheduled run can start hours late, or not at all. Start the first one by hand.
             \begin{enumerate}\small\setcounter{enumi}{5}
                 \item Click the \textbf{Actions} tab. If GitHub asks, enable workflows. Click \textbf{Collect Boulder's hourly forecast}. Click \textbf{Run workflow}, then the green \textbf{Run workflow}.
             \end{enumerate}
+            {\footnotesize No workflow there? The file's path must start with \texttt{.github/}, with the dot.\par}
         \end{column}
         \begin{column}{0.6\textwidth}
             \centering
@@ -937,11 +962,65 @@ jobs:
                 \item Click the \textbf{Code} tab. Find \texttt{forecasts.csv}, and the commit by \texttt{github-actions[bot]}. Click the file.
             \end{enumerate}
             \medskip
-            From now on it runs by itself, every hour, until December 11. GitHub can take hours to start a new schedule, so the first hourly run may come long after class.
+            From now on it is scheduled every hour, until December 11. GitHub ran the course's copy three or four times a day, so your next run may come long after class.
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{Git scraping}\\[2pt]
             {\footnotesize Each run kept as a commit, as newsrooms do. What can the history show that the file can't?\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Before Friday}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Open your \textbf{Actions} tab once. Each run is a line, with a green check or a red X. No new line for a day? Press \textbf{Run workflow} again.
+
+            \medskip
+            The schedule asks for 48 runs by Friday's class. GitHub gave the course's copy three or four a day. How many do you expect?
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Friday}\\[2pt]
+            {\footnotesize Part 2 starts at Step 7, with its own setup. Today's cells don't need to have run.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Moved here so Part 1 fits Wednesday's 50 minutes (labs/AUTHORING.md, "The time budget"; 2026-11-18).
+\begin{frame}{After class}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Two pieces of Part 1 are for after class, so that today fits its 50 minutes:
+            \begin{itemize}\small
+                \item Step 2's microsprint: how old was the forecast? (3 minutes)
+                \item Step 6: read what your collector saved. (4 minutes)
+            \end{itemize}
+            \medskip
+            Step 6 is easier once your first run has finished.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Restarted?}\\[2pt]
+            {\footnotesize Run Step 0's cell first, and Step 2's first two cells for the microsprint.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class: Step 2's microsprint}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{pd.to\_datetime()} turns each time into one Python can subtract.
+
+            \medskip
+            How old was your forecast when the NWS built your answer? And your neighbor's?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Each time, as one Python can subtract
+generated = pd.to_datetime(hourly["generatedAt"])
+updated = pd.to_datetime(hourly["updateTime"])
+# How old the forecast was when the answer was built
+print(generated - updated)
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
@@ -969,7 +1048,7 @@ my_series = (
 \begin{frame}[fragile]{Step 6: read what your collector saved}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            \texttt{pd.read\_csv()} reads from an address too. The raw copy can be five minutes behind.
+            \texttt{pd.read\_csv()} reads from an address too. The raw copy can be five minutes behind. A 404 means no run has finished, or a typo in the address.
 
             \medskip
             Which columns would differ from your neighbor's file?
@@ -987,21 +1066,6 @@ my_forecasts.head()
     \end{columns}
 \end{frame}
 
-\begin{frame}{Before Friday}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            Open your \textbf{Actions} tab once. Each run is a line, with a green check or a red X.
-
-            \medskip
-            How many runs do you expect by Friday's class?
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \textbf{Friday}\\[2pt]
-            {\footnotesize Part 2 starts at Step 7, with its own setup. Today's cells don't need to have run.\par}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 % =========================================================================
 \section{Friday}
 % =========================================================================
@@ -1009,10 +1073,10 @@ my_forecasts.head()
 \begin{frame}{Today: Part 2, what the collector gathered}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            The course has run the same \texttt{collector.py} every hour since November 13.
+            The course has had the same \texttt{collector.py} on an hourly schedule since November 13. GitHub ran it three or four times a day.
 
             \medskip
-            Today we count how often the forecast changed and follow one hour as it came closer. Then we break a run on purpose.
+            Today we count how often the forecast changed and check that the collector is still running. Then we break a run on purpose. Step 9, one hour's forecast, is after class.
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{Start at Step 7}\\[2pt]
@@ -1024,10 +1088,10 @@ my_forecasts.head()
 \begin{frame}[fragile]{Step 7: set up again}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            This cell is given. Put your email in \texttt{HEADERS}, and run it.
+            This cell is given. Put your email in \texttt{HEADERS}, the same address as on Wednesday, and run it.
 
             \medskip
-            \texttt{matplotlib} is new today. Step 9 draws a plot with it.
+            \texttt{matplotlib} is new today. Step 9, after class, draws a plot with it.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -1049,13 +1113,13 @@ HEADERS = {"User-Agent":
             The same cell names two addresses.
 
             \medskip
-            \texttt{series} is the course's file. A new run adds to it at minute 17 of every hour.
+            \texttt{series} is the course's file. Its schedule says minute 17 of every hour. GitHub adds a run every few hours.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # The NWS's API
 nws_base = "https://api.weather.gov"
-# The course's series, collected every hour
+# The course's series, scheduled every hour
 series = (
     "https://raw.githubusercontent.com/"
     "cuinfoscience/INFO4617-Fall2026/main/"
@@ -1070,6 +1134,9 @@ series = (
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             Read it, and look at its last rows.
+
+            \medskip
+            The key's numbers come from 18 runs, on November 17. Today's file has more, so your counts will be larger.
 
             \medskip
             What can this file tell you that a live request can't? What can't it tell you?
@@ -1093,7 +1160,7 @@ forecasts.tail()
             Each run is one \texttt{collected\_at}. Each forecast the NWS issued is one \texttt{update\_time}.
 
             \medskip
-            If the forecast changed every hour, the two counts would match. Do they?
+            The schedule asks for 24 runs a day. How many runs did GitHub make? How many forecasts did they find?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -1112,7 +1179,7 @@ print(forecasts["update_time"].nunique(), "forecasts")
             This cell is given. For each forecast, it counts the runs that collected it, and finds the first and last.
 
             \medskip
-            Which forecasts lasted longest? What does that say about when forecasters update it?
+            At which times of day do the forecasters update it? Where is the longest stretch with no run? (ISO times sort as text, so \texttt{min} and \texttt{max} work.)
 
             \medskip
             The notebook groups and counts in one line.
@@ -1120,9 +1187,9 @@ print(forecasts["update_time"].nunique(), "forecasts")
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # The run times, grouped by forecast
-runs = forecasts.groupby("update_time")["collected_at"]
+grouped = forecasts.groupby("update_time")["collected_at"]
 # For each: how many runs, the first, and the last
-per_forecast = runs.agg([
+per_forecast = grouped.agg([
     "nunique",
     "min",
     "max",
@@ -1134,27 +1201,98 @@ print(per_forecast.to_string())
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Microsprint: the share that was new}
+\begin{frame}[fragile]{Step 8: from the first forecast to the last}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Divide forecasts by runs: the share of runs that brought a forecast no earlier run had.
+            GitHub made few runs, so forecasts divided by runs describes GitHub. Count the changes a day instead.
 
             \medskip
-            Thirty collectors each ask 24 times a day. How many of their 720 requests bring something new?
+            First, the days. \texttt{.total\_seconds()} turns a length of time into seconds. How many days?
 
             \medskip
-            The notebook divides in one line.
+            The notebook subtracts and divides in one line.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# How many forecasts, and how many runs
-n_forecasts = forecasts["update_time"].nunique()
-n_runs = forecasts["collected_at"].nunique()
-# The share of runs that brought a new forecast
-new_share = n_forecasts / n_runs
-print(round(new_share, 2))
-# The same share of 720 requests a day
-print(round(720 * new_share), "of 720 daily requests")
+# Each row's update_time, as a time
+update_times = pd.to_datetime(forecasts["update_time"])
+# From the first forecast to the last
+span = update_times.max() - update_times.min()
+# The same, in days: a day has 86,400 seconds
+days = span.total_seconds() / 86400
+print(
+    round(days, 1),
+    "days from the first forecast to the last",
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 8: changes a day}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The first forecast isn't a change, so subtract one.
+
+            \medskip
+            At least how many times a day did the forecast change? A forecast that changed twice between two runs counts once.
+
+            \medskip
+            A collector that kept the schedule would ask 24 times a day.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The changes: every forecast after the first
+changes = forecasts["update_time"].nunique() - 1
+# How many changes, and how many a day
+print(
+    changes,
+    "changes,",
+    round(changes / days, 1),
+    "a day",
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: an hourly collector's four weeks}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A collector that kept the hourly schedule would ask 672 times in four weeks.
+
+            \medskip
+            At the series' changes a day, how many of those requests would find a forecast that had changed?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# An hourly collector's requests in four weeks
+asked = 24 * 28
+# The forecast's changes in the same four weeks
+found_new = changes / days * 28
+print(
+    asked,
+    "requests in four weeks;",
+    round(found_new),
+    "would find a new forecast",
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: the share that was new}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same cell prints the share of the 672 requests that would find a new forecast: at least that share, probably more.
+
+            \medskip
+            Thirty such collectors ask 20,160 times. About how many of those requests bring nothing new?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The share of requests that found a new forecast
+print(round(found_new / asked, 2), "of them")
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1163,7 +1301,7 @@ print(round(720 * new_share), "of 720 daily requests")
 \begin{frame}{What a bot costs a server}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Step 8 counted how often the forecast changed. Our collector asks 24 times a day anyway. On November 12, an hourly collector got the same forecast 12 times in a row.
+            Step 8 counted at least two or three changes a day. Our schedule asks for 24 runs a day anyway: an hourly collector would find a new forecast in at least one request in ten, probably a little more.
 
             \medskip
             \texttt{Last-Modified} and \texttt{Cache-Control} say how new an answer is. Who pays for the requests that bring nothing new?
@@ -1175,131 +1313,45 @@ print(round(720 * new_share), "of 720 daily requests")
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 9: one hour, forecast again and again}
+\begin{frame}[fragile]{Step 10: the gaps between runs}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Every run forecasts the next six and a half days. So each hour is forecast by many runs.
+            A collector that stops doesn't say so. Its file just stops growing.
 
             \medskip
-            Take noon on Wednesday, our first class. How many runs forecast it?
-
-            \medskip
-            The notebook picks these rows in one line.
+            How long is too long without a run? This given cell prints the hours from each run to the next. \texttt{.diff()} subtracts the row before.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# Noon on Wednesday, November 18, in Boulder's time
-noon = "2026-11-18T12:00:00-07:00"
-# True for each row that forecasts that hour
-is_noon = forecasts["start_time"] == noon
-# Keep those rows, and count them
-noon_rows = forecasts[is_noon]
-print(len(noon_rows))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 9: lead time}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            A row's \textbf{lead time} is how far ahead its run was: the hour's \texttt{start\_time} minus the run's \texttt{collected\_at}.
-
-            \medskip
-            This cell is given. The notebook subtracts in one line, without naming \texttt{hour} and \texttt{run}.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# Noon, and when each run asked, as times in UTC
-hour = pd.to_datetime(noon_rows["start_time"], utc=True)
-run = pd.to_datetime(noon_rows["collected_at"], utc=True)
-# Lead time: how far ahead each run was
-lead = hour - run
-# The same, in hours
-lead_hours = lead.dt.total_seconds() / 3600
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 9: plot it}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            The same given cell plots the forecast temperature against the lead time.
-
-            \medskip
-            Where does the line settle?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# One figure, wide and short
-fig, ax = plt.subplots(figsize=(8, 4))
-# Temperature against lead time, a dot per run
-ax.plot(
-    lead_hours,
-    noon_rows["temperature"],
-    marker=".",
+# Each run's time, once
+run_times = pd.to_datetime(
+    forecasts["collected_at"].drop_duplicates()
 )
-# Furthest ahead on the left, nearest on the right
-ax.invert_xaxis()
-# Then a title, axis labels, and plt.show()
-...
+# From each run to the next, in hours
+gaps = run_times.diff().dropna()
+gap_hours = gaps.dt.total_seconds() / 3600
+print(gap_hours.round(1).tolist())
+# The longest gap
+print("longest gap:", round(gap_hours.max(), 1), "hours")
 \end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 9: furthest ahead, and nearest}
+\begin{frame}[fragile]{Step 10: runs a day}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Print the first row and the last: the furthest ahead and the nearest.
+            The same cell counts the runs on each day, in UTC. The schedule asks for 24.
 
             \medskip
-            Which one was right? What else would you have to collect to know?
-
-            \medskip
-            The notebook writes the list of columns into each line.
+            How many did GitHub make? The notebook counts them in one line.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# The three columns to show
-columns = [
-    "collected_at",
-    "temperature",
-    "short_forecast",
-]
-# The first run, furthest ahead
-print(noon_rows[columns].head(1))
-# The last run, nearest
-print(noon_rows[columns].tail(1))
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Microsprint: midnight}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            Do the same for midnight that night.
-
-            \medskip
-            How far apart were its lowest and highest forecasts? Is that more or less than noon's?
-
-            \medskip
-            The notebook picks the rows in one line.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# Midnight's rows, picked as for noon, and how many
-midnight = "2026-11-19T00:00:00-07:00"
-is_midnight = forecasts["start_time"] == midnight
-midnight_rows = forecasts[is_midnight]
-print(len(midnight_rows))
-# Its lowest and highest forecast temperature
-print(
-    midnight_rows["temperature"].min(),
-    midnight_rows["temperature"].max(),
-)
+# Each run's day, such as "Nov 13"
+run_days = run_times.dt.strftime("%b %d")
+# How many runs each day had
+print(run_days.value_counts(sort=False).to_dict())
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1308,10 +1360,10 @@ print(
 \begin{frame}[fragile]{Step 10: is it still running?}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            A collector that stops doesn't say so. Its file just stops growing.
+            A \textbf{freshness check} asks how old the newest row is.
 
             \medskip
-            A \textbf{freshness check} asks how old the newest row is. Under about an hour and a half is fresh. Is the course's?
+            The longest gap between this collector's runs is a yardstick. Is the course's newest row older than that? What limit would you set?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -1327,7 +1379,7 @@ print(newest, pd.Timestamp.now(tz="UTC") - newest)
 \begin{frame}[fragile]{Step 10: is yours?}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Check your own file the same way, from Wednesday's raw address.
+            Check your own file the same way, from Wednesday's raw address. A 404 means no run yet, or a typo. No repository? Skip it.
 
             \medskip
             Is it fresh? If not, where would you look first?
@@ -1355,7 +1407,7 @@ print(my_newest, pd.Timestamp.now(tz="UTC") - my_newest)
 \begin{frame}[fragile]{Step 10: is the forecast fresh?}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Rows can keep coming while \texttt{update\_time} stands still. Half a day without a change can be normal.
+            Rows can keep coming while \texttt{update\_time} stands still. Half a day without a change can be normal. In the chapter's copy, the oldest forecast a run saved was 10 hours 45 minutes old.
 
             \medskip
             How long ago did the forecasters last change it? How old would you call stale? Where could this check run to warn you?
@@ -1517,8 +1569,9 @@ print(swapped_grid_response.status_code, temperature)
     \end{columns}
 \end{frame}
 
-% Free tiers checked on 2026-11-13 on each provider's own pages; sources in img/IMAGES.md ("Sources for
-% the hosted-scheduler table").
+% Free tiers checked on 2026-11-13 on each provider's own pages, and Amazon EventBridge's and Render's on
+% 2026-11-18, so the rows match chapter 14's table; sources in img/IMAGES.md ("Sources for the
+% hosted-scheduler table").
 \begin{frame}{Other places to run a schedule}
     Actions is one of several hosted schedulers. Each free tier has its own limit. Which of these could run our collector every hour, for free?
 
@@ -1526,14 +1579,15 @@ print(swapped_grid_response.status_code, temperature)
     {\footnotesize\renewcommand{\arraystretch}{1.25}
     \begin{tabular}{@{}lll@{}}
         \toprule
-        \textbf{Service} & \textbf{What runs} & \textbf{Free tier, read on Nov 13, 2026} \\
+        \textbf{Service} & \textbf{What runs} & \textbf{Free tier, read in Nov 2026} \\
         \midrule
         GitHub Actions (ours) & A workflow's steps & Free in public repositories; every 5 minutes at most \\
         GitLab scheduled pipelines & A CI/CD pipeline & 400 compute minutes a month; 24 runs a day \\
         PythonAnywhere scheduled tasks & A Python script & None on free accounts made since January 2026 \\
         Cloudflare Workers Cron Triggers & A Worker, in JavaScript or Python & 5 cron triggers; 10 ms of CPU a run \\
         Google Cloud Scheduler & A call to a URL you give it & 3 jobs a month per billing account \\
-        Val Town & A val, in TypeScript & Every 15 minutes at most \\
+        Amazon EventBridge Scheduler & A call to a target, such as Lambda & 14 million scheduled calls a month \\
+        Render cron jobs & A command, in a container & None: at least \$1 a month for each \\
         \bottomrule
     \end{tabular}\par}
 \end{frame}
@@ -1548,11 +1602,13 @@ print(swapped_grid_response.status_code, temperature)
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[language={},literate={~}{{\raisebox{-0.6ex}{\textasciitilde}}}1]
+# webdata's Python: the path `which python3` prints
+PY=/path/to/webdata/bin/python3
 # At minute 17 of every hour, run the collector
-17 * * * * cd ~/boulder-forecast && python3 collector.py
+17 * * * * cd ~/boulder-forecast && $PY collector.py
 \end{lstlisting}
             \medskip
-            {\footnotesize Wrong Python? Give the full path that \texttt{which python3} prints in \texttt{webdata}.\par}
+            {\footnotesize cron runs its own Python unless you give the full path. In \texttt{webdata}, \texttt{which python3} prints it.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -1563,14 +1619,160 @@ print(swapped_grid_response.status_code, temperature)
             Answer in the notebook, as comments.
             \begin{itemize}\small
                 \item How often should a collector ask?
-                \item How far did noon's forecast move?
+                \item How far did noon's forecast move? (Step 9, after class)
                 \item Name a failure with a red X, and one without.
                 \item What should your README say about when you collected?
             \end{itemize}
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{No graded lab}\\[2pt]
-            {\footnotesize Chapter 14's Recommended Exercises, in its companion notebook, are practice this week, not turned in.\par}
+            {\footnotesize Chapter 14's Recommended Exercises, in its companion notebook, are practice this week. The chapter says to submit them; this term, don't.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Moved here so Part 2 fits Friday's 35 minutes (labs/AUTHORING.md, "The time budget"; 2026-11-18).
+\begin{frame}{After class: Step 9}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Step 9 and its microsprint are for after class, so that today's lab fits its 35 minutes. They follow one hour's forecast as the hour came closer. (13 minutes)
+            \medskip
+
+            The Recommended Exercises don't use them.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Restarted?}\\[2pt]
+            {\footnotesize Run Step 7's two cells first.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class, Step 9: one hour, forecast again and again}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Every run forecasts the next six and a half days. So each hour is forecast by many runs.
+
+            \medskip
+            Take noon on Wednesday, during Wednesday's class. How many runs forecast it?
+
+            \medskip
+            The notebook picks these rows in one line.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Noon on Wednesday, November 18, in Boulder's time
+noon = "2026-11-18T12:00:00-07:00"
+# True for each row that forecasts that hour
+is_noon = forecasts["start_time"] == noon
+# Keep those rows, and count them
+noon_rows = forecasts[is_noon]
+print(len(noon_rows))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: lead time}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A row's \textbf{lead time} is how far ahead its run was: the hour's \texttt{start\_time} minus the run's \texttt{collected\_at}.
+
+            \medskip
+            This cell is given. The two columns have different offsets, hence \texttt{utc=True}. The notebook subtracts in one line, without naming \texttt{hour} and \texttt{run}.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Noon, and when each run asked, as times in UTC
+hour = pd.to_datetime(noon_rows["start_time"], utc=True)
+run = pd.to_datetime(noon_rows["collected_at"], utc=True)
+# Lead time: how far ahead each run was
+lead = hour - run
+# The same, in hours
+lead_hours = lead.dt.total_seconds() / 3600
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: plot it}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same given cell plots the forecast temperature against the lead time, as steps, like the chapter's chart.
+
+            \medskip
+            Several runs found the same forecast. A step holds each run's forecast until the next run. The cell also counts the distinct forecasts. Where does the line settle?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One figure, wide and short
+fig, ax = plt.subplots(figsize=(8, 4))
+# A step holds each run's forecast until the next run's
+ax.step(
+    lead_hours,
+    noon_rows["temperature"],
+    where="post",
+)
+# Furthest ahead on the left, nearest on the right
+ax.invert_xaxis()
+# Then a title, axis labels, and plt.show()
+...
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 9: furthest ahead, and nearest}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Print the first row and the last: the furthest ahead and the nearest.
+
+            \medskip
+            Which one was right? What else would you have to collect to know?
+
+            \medskip
+            The notebook writes the list of columns into each line.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The three columns to show
+columns = [
+    "collected_at",
+    "temperature",
+    "short_forecast",
+]
+# The first run, furthest ahead
+print(noon_rows[columns].head(1))
+# The last run, nearest
+print(noon_rows[columns].tail(1))
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Microsprint: midnight}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Do the same for midnight that night.
+
+            \medskip
+            How far apart were its lowest and highest forecasts? Is that more or less than noon's?
+
+            \medskip
+            The notebook picks the rows in one line.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Midnight's rows, picked as for noon, and how many
+midnight = "2026-11-19T00:00:00-07:00"
+is_midnight = forecasts["start_time"] == midnight
+midnight_rows = forecasts[is_midnight]
+print(len(midnight_rows))
+# Its lowest and highest forecast temperature
+print(
+    midnight_rows["temperature"].min(),
+    midnight_rows["temperature"].max(),
+)
+\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
