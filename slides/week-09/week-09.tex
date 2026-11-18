@@ -26,26 +26,29 @@
 
     \bigskip
 
-    \dayband{Monday}{Concepts \& notebook intro}
+    \dayband{Monday}{Concepts \& lab Part 1}
     \begin{itemize}\small
         \item Why PDFs resist extraction; reconstruction vs.\ reading
         \item Four steps: find the data, ask for it, parse a born-digital PDF, OCR a scan --- by hand first
-        \item In class: the city's revenue report, by hand (20 minutes)
+        \item In class: the city's revenue report, by hand (10 minutes); then the lab's Steps 0--4: what a PDF holds
     \end{itemize}
 
     \medskip
 
-    \dayband{Wednesday}{Notebook lab}
+    \dayband{Wednesday}{Lab Part 2}
     \begin{itemize}\small
-        \item Steps 3 and 4 in Python: pypdf on the council minutes, pdfplumber on the revenue reports, OCR on a picture of a table
+        \item Steps 5--10 in Python: pypdf and pdfplumber on the council minutes, then the revenue report's summary table, and the checks
     \end{itemize}
 
     \medskip
 
-    \dayband{Friday}{Notebook \& Final Project}
+    \dayband{Friday}{Lab Part 3 \& Final Project}
     \begin{itemize}\small
-        \item Finish the notebook, from OCR on; then the Final Project: grade, dates, expectations, and ideas
+        \item Steps 11--14: OCR on a picture of a table, then seven reports; from the lab to the textbook (15 minutes); then the Final Project: grade, dates, expectations, and ideas
     \end{itemize}
+
+    \medskip
+    \textbf{The lab:} \texttt{labs/week-09/lab-09.ipynb}, one part a day. Due Sunday: Chapter 9's Recommended Exercises.
 \end{frame}
 
 \begin{frame}{Course overview}\centering
@@ -151,7 +154,7 @@
             \small Whatever route the data takes, \textbf{check it} before you use it. An AI parser is an optional branch at steps 3 and 4.
 
             \medskip
-            Today: every step by hand, then the lab's Part 1. Wednesday and Friday: steps 3 and 4 in Python.
+            Today: every step by hand, then the lab's Part 1. Wednesday and Friday: pathway steps 3 and 4 in Python, the lab's Parts 2 and 3.
         \end{column}
         \begin{column}{0.44\textwidth}
             \centering
@@ -472,9 +475,31 @@ def get_saved_copy(name):
             BOOK_DATA + name,
             headers=HEADERS,
         )
+        # (the status check: next frame)
         path.write_bytes(response.content)
         time.sleep(1)
     return path
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: stop unless it's 200, given}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Inside the function, right after the request: if the status isn't 200, stop, and show what the server said.
+
+            \medskip
+            Without it, a misspelled name saves \texttt{404: Not Found} as a \texttt{.pdf}. What would every later call read?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Stop unless the status is 200
+if response.status_code != 200:
+    raise RuntimeError(
+        f"Got {response.status_code}, not 200: "
+        f"{response.text[:200]}"
+    )
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -527,14 +552,15 @@ print(cover_text[:80])
 \begin{frame}[fragile]{Step 2: as Python stores it}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            What comes before ``REVENUE REPORT''?
+            No \texttt{print()}: on a cell's last line, Jupyter shows the value as Python stores it, in quotes, with \texttt{\textbackslash n} for each new line.
 
             \medskip
-            What on the page could have drawn it?
+            What comes before ``REVENUE REPORT''? What on the page could have drawn it?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# The first 20 characters; "\n" is a new line
+# The first 20 characters, alone on the
+# cell's last line, with no print()
 cover_text[:20]
 \end{lstlisting}
         \end{column}
@@ -627,11 +653,15 @@ print(words[0]["text"], words[0]["x0"])
             A page stores characters, not words. What is the first one, and where?
 
             \medskip
+            Its text is a space, which \texttt{print()} would show as nothing. Look at the whole dictionary.
+
+            \medskip
             A given cell prints the next seven, and counts the page's rectangles.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# The first character the page draws
+# The first character the page draws:
+# the whole dictionary, with no print()
 summary_page.chars[0]
 \end{lstlisting}
         \end{column}
@@ -776,96 +806,16 @@ sprint_file = "council-minutes-2000-12-19.pdf"
             Download the lab again, \texttt{lab-09.ipynb}, and start at \textbf{Step 5}. Its two given cells set up everything Monday's cells made.
 
             \medskip
-            \textbf{Step 6:} where the files came from. I run it; you write it.
-
-            \medskip
             \textbf{Steps 7--8:} the council minutes, three ways, repaired and searched.
 
             \medskip
             \textbf{Steps 9--10:} the summary table, the row it loses, and the checks that tell us.
+
+            \medskip
+            \textbf{After class:} two microsprints; and Step 6, the city's portal, which only I run.
         \end{column}
         \begin{column}{0.35\textwidth}
             \includegraphics[width=\textwidth]{img/pathway_text.png}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Step 6: where the files came from}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            \textbf{I run this step; you write it, and run it at home.} The city's server stopped answering after 13 to 17 requests in a row.
-
-            \medskip
-            The book's copies came from the city's records portal. Its folder page is a shell that JavaScript fills in. The Network tab shows where the list comes from: a POST of the folder's number, as JSON.
-
-            \medskip
-            The server leaves out a certificate. Pass the book's bundle, \texttt{verify=bundle}, never \texttt{verify=False}.
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \textbf{Given}\\[2pt]
-            {\footnotesize The bundle, the book's \texttt{manifest.csv}, the portal's address \texttt{LISTING}, and the request's body, \texttt{folder\_body}.\par}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 6: ask for a folder's list}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \texttt{json=} sends the dictionary as JSON, as the browser did.
-
-            \medskip
-            {\scriptsize\textbf{Docs:} \href{https://requests.readthedocs.io/en/stable/user/quickstart/\#more-complicated-post-requests}{POST requests}\par}
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# POST the folder's number, as JSON
-folder_response = requests.post(
-    LISTING,
-    json=folder_body,
-    headers=HEADERS,
-    verify=bundle,
-)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 6: look first}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            The portal answers some errors in plain text, not JSON.
-
-            \medskip
-            Is the status 200? Is the answer JSON?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# The status, and what kind of answer
-print(
-    folder_response.status_code,
-    folder_response.headers["Content-Type"],
-)
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Step 6: then read it}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            One level down at a time.
-
-            \medskip
-            A given cell lists the folder's reports, then downloads one and checks it against the book's copy.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# The answer, as a dictionary
-listing = folder_response.json()
-# One level down: the folder
-folder = listing["data"]
-print(folder["path"])
-\end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
@@ -946,23 +896,6 @@ print(plumber_text[:300])
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Microsprint: one row, three ways}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \textbf{Do:} run the given cell. It prints the summary page's lines that hold \texttt{look\_for}, three ways. Then try \texttt{"economic activity"}.
-
-            \medskip
-            \textbf{Share:} do the three agree? Where did the subtotal's figures land?
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# The words to look for
-look_for = "Total Sales"
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 \begin{frame}[fragile]{Step 8: one repair, by hand}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
@@ -1023,15 +956,17 @@ print(full_text.count("Carried"))
 \begin{frame}[fragile]{Microsprint: test a repair on another file}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            \textbf{Do:} run the given cell. It counts where the second repair would join two lines, and prints the suspicious joins.
+            \textbf{Do:} pick a file, and run the given cell. It makes Step 8's four repairs, and counts ``Council'' in the result and in pdfplumber's text.
 
             \medskip
-            \textbf{Share:} how many joins, how many look suspicious, and which is really wrong.
+            \textbf{Share:} the two counts. If they differ, what did the repair miss?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# Another meeting's minutes
-check_file = "council-minutes-2023-12-07.pdf"
+# Another year's minutes:
+# "council-minutes-2022-12-15.pdf", or
+# "council-minutes-2023-12-07.pdf"
+check_file = "council-minutes-2022-12-15.pdf"
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1099,15 +1034,15 @@ print(default_rows[-1])
             A table's \texttt{bbox}, its \textit{bounding box}, is (\texttt{x0}, \texttt{top}, \texttt{x1}, \texttt{bottom}), in points.
 
             \medskip
-            Does the table end above the totals row?
+            Does the table end above the totals row? Where does the totals row end?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # Where the table ends: its last number
 print(tables[0].bbox)
-# Where the totals row starts, as on Monday
+# Where the totals row starts and ends
 found = summary_page.search("Total Sales and Use Tax")
-print(found[0]["top"])
+print(found[0]["top"], found[0]["bottom"])
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1132,29 +1067,30 @@ print(found[0]["top"])
             Given: the column edges of the cells the finder did find, and settings that use them.
 
             \medskip
-            You choose where the table stops. Then a given cell crops there, and reads the table again.
+            You choose where the table stops: below the totals row's bottom, and above the footnote, whose top is at about 397.7. Then a given cell crops there, and reads the table again.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# Below the totals row, above the footnote
+# Below the totals row's bottom,
+# above the footnote
 table_bottom = 395
 \end{lstlisting}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Microsprint: another year's table}
+\begin{frame}[fragile]{Step 9: what did the crop read?}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            \textbf{Do:} pick another year-end report, and run the given cell. (Skip 2020: its summary is on page 3.)
+            The page shows nine rows of figures. How many rows did the crop read, and what is the first?
 
             \medskip
-            \textbf{Share:} where the table ends, where the totals row starts, and the table's last row.
+            A given cell then keeps the label and two years, drops the rows with a blank cell, and says how many it dropped.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
-# 2018, 2019, 2021-12, 2022-12, or 2023-12
-other_report = "revenue-report-2018.pdf"
+# How many rows, and the first one
+print(len(fixed_rows), fixed_rows[0])
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1185,7 +1121,7 @@ other_report = "revenue-report-2018.pdf"
             The page shows nine rows of figures. How many did we keep?
 
             \medskip
-            Then a given cell checks the sums, for both years.
+            Then given cells check the sums, for both years, and run the same count on the default table. Does the check fail there?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -1202,7 +1138,7 @@ print(len(summary_df))
             Read page 1 of the minutes, and write down who was present. A \textit{set}, in braces, holds each name once.
 
             \medskip
-            The given cell measures a pattern's names against yours: precision and recall.
+            The given cell measures a pattern's names against yours: precision and recall. It prints the lines it read, too. Where did the missed names go?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -1212,6 +1148,120 @@ present_by_hand = {
     "Folkerts", "Marquis", "Schuchard",
     "Speer", "Wallach", "Winer",
 }
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class: one row, three ways}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} run the given cell. It prints the summary page's lines that hold \texttt{look\_for}, three ways. Then try \texttt{"economic activity"}.
+
+            \medskip
+            \textbf{Share:} do the three agree? Where did the subtotal's figures land?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The words to look for
+look_for = "Total Sales"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class: another year's table}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} pick another year-end report, and run the given cell. (Skip 2020: its summary is on page 3.)
+
+            \medskip
+            \textbf{Share:} where the table ends, where the totals row starts, and the table's last row.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# 2018, 2019, 2021-12, 2022-12, or 2023-12
+other_report = "revenue-report-2018.pdf"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{After class, Step 6: where the files came from}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            \textbf{I run this step, if there's time. Don't run it: read its output in the key.} The city's server stopped answering after 13 to 17 requests in a row.
+
+            \medskip
+            The book's copies came from the city's records portal. Its folder page is a shell that JavaScript fills in. The Network tab shows where the list comes from: a POST of the folder's number, as JSON.
+
+            \medskip
+            The server leaves out a certificate. Pass the book's bundle, \texttt{verify=bundle}, never \texttt{verify=False}.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Given}\\[2pt]
+            {\footnotesize The bundle, the book's \texttt{manifest.csv}, the portal's address \texttt{LISTING}, and the request's body, \texttt{folder\_body}.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: ask for a folder's list}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{json=} sends the dictionary as JSON, as the browser did.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://requests.readthedocs.io/en/stable/user/quickstart/\#more-complicated-post-requests}{POST requests}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# POST the folder's number, as JSON
+folder_response = requests.post(
+    LISTING,
+    json=folder_body,
+    headers=HEADERS,
+    verify=bundle,
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: look first}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The portal answers some errors in plain text, not JSON.
+
+            \medskip
+            Is the status 200? Is the answer JSON?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The status, and what kind of answer
+print(
+    folder_response.status_code,
+    folder_response.headers["Content-Type"],
+)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 6: then read it}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            One level down at a time.
+
+            \medskip
+            A given cell lists the folder's reports. Another downloads one, stops unless the status is 200, and checks it against the book's copy.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The answer, as a dictionary
+listing = folder_response.json()
+# One level down: the folder
+folder = listing["data"]
+print(folder["path"])
 \end{lstlisting}
         \end{column}
     \end{columns}
@@ -1237,7 +1287,7 @@ present_by_hand = {
             Through 2020 the roll call is a sentence: ``Council Members \ldots{} were present.'' From 2021 it is a label and a list that wraps.
 
             \medskip
-            The chapter's \texttt{roll\_call()} reads both.
+            The chapter's \texttt{roll\_call()}, in its companion notebook, reads both.
         \end{column}
         \begin{column}{0.6\textwidth}
             \centering
@@ -1277,7 +1327,7 @@ present_by_hand = {
 \begin{frame}{After the lab: work these, then show-and-tell}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            After the lab, in pairs: run both case studies in the chapter's companion notebook, then extend one:
+            After the lab, in pairs: run both case studies in the chapter's companion notebook, where \texttt{roll\_call()} and \texttt{row\_words()} are defined, then extend one:
             \begin{enumerate}\small
                 \item Run \texttt{roll\_call()} on the two December 2000 minutes. They are scans. What does the pattern miss? Fix it, and check against the page.
                 \item Count the votes in each meeting with the tally pattern (\texttt{Carried 9:0}). What share were unanimous?
@@ -1306,11 +1356,10 @@ present_by_hand = {
 \begin{frame}{Today}
     \begin{columns}[T]
         \begin{column}{0.48\textwidth}
-            \dayband{First}{finish the notebook}
+            \dayband{First}{the lab's Part 3}
             \begin{itemize}\small
-                \item Pick up where Wednesday stopped: \textbf{``When There Is No Text Layer: OCR''}
-                \item Work in pairs, through both case studies
-                \item Check your output against the checkpoints on the next slide
+                \item Start at \textbf{Step 11}: OCR on a picture of a table, then seven reports
+                \item Last 15 minutes: from the lab to the textbook
             \end{itemize}
         \end{column}
         \begin{column}{0.48\textwidth}
@@ -1405,7 +1454,7 @@ print(exhibit_image.size)
 \end{frame}
 
 \begin{frame}{Step 12: one row, given}
-    A given cell turns the image gray, which suits OCR, and crops one row, 2021's, by its box in pixels.
+    A given cell turns the image gray, which suits OCR, and crops one row, 2021's, by its box in pixels: its year and first four figures.
 
     \medskip
     Read its figures off the image. Then let Tesseract read them.
@@ -1456,14 +1505,14 @@ ocr_text = pytesseract.image_to_string(
 \begin{frame}[fragile]{Step 12: line by line}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Line 5 is 2021's row again. Did Tesseract read it the same way twice?
+            \texttt{ocr\_lines[5]}, the sixth line (lists count from 0), is 2021's row again. Did Tesseract read it the same way twice?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # One string a line
 ocr_lines = ocr_text.splitlines()
 print(len(ocr_lines))
-# 2021's row, from the whole picture
+# 2021's row: index 5, the sixth line
 print(ocr_lines[5])
 \end{lstlisting}
         \end{column}
@@ -1503,31 +1552,13 @@ print(ocr_total, text_total)
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Microsprint: another segmentation mode}
-    \begin{columns}[T]
-        \begin{column}{0.37\textwidth}
-            \textbf{Do:} pick a mode, and run the given cell. It reads the picture again, counts the rows that parse, and times it.
-
-            \medskip
-            \textbf{Share:} your mode, its lines, its rows parsed, and its seconds.
-        \end{column}
-        \begin{column}{0.6\textwidth}
-\begin{lstlisting}
-# "4": one column of text of varying sizes
-# "3": Tesseract's default; it finds the layout
-psm_choice = "4"
-\end{lstlisting}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 \begin{frame}[fragile]{Step 13: one report, by hand}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             Seven year-end reports. Their tables' rules differ, so read the one row we need by position.
 
             \medskip
-            First: is page 2 the summary page? It starts ``This report provides''.
+            First: is page 2, \texttt{pages[1]}, the summary page? It starts ``This report provides''.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
@@ -1605,7 +1636,7 @@ print(row_text.split())
 \begin{frame}{Step 13: seven reports, given}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            The given cells find each report's summary page by its first sentence: 2020's report opens with a letter, so its summary is on page 3.
+            A given cell finds the heading's two years with \texttt{search()} and a pattern of two groups. Others find each report's summary page by its first sentence: 2020's report opens with a letter, so its summary is on page 3.
 
             \medskip
             Then they run our lines on every report, and save the totals as a checkpoint, \texttt{totals.csv}.
@@ -1626,7 +1657,7 @@ print(row_text.split())
             Use each year's latest printing, and say so in the data's notes.
 
             \medskip
-            Which years fell? These are dollars of each year, not adjusted for inflation.
+            Which years fell? These are dollars of each year, not adjusted for inflation: what would you divide by before saying tax rose in real terms?
         \end{column}
         \begin{column}{0.6\textwidth}
             \centering
@@ -1636,8 +1667,46 @@ print(row_text.split())
     \end{columns}
 \end{frame}
 
-\begin{frame}{Chapter 9 pull requests are still open}
-    No revision workshop this week, but pull requests on \texttt{ch-09-pdfs.qmd} are welcome.
+\begin{frame}[fragile]{After class: another segmentation mode}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \textbf{Do:} pick a mode, and run the given cell. It reads the picture again, counts the rows that parse, and times it.
+
+            \medskip
+            \textbf{Share:} your mode, its lines, its rows parsed, and its seconds.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# "4": one column of text of varying sizes
+# "3": Tesseract's default; it finds the layout
+psm_choice = "4"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{After class: a third printing}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Exhibit 3 prints each year's total for 2019 to 2024 too.
+
+            \medskip
+            \textbf{Do:} keep its \texttt{TOTAL} rows, in capitals, and run the given cell. It puts each year's total from the picture beside the summary pages'.
+
+            \medskip
+            \textbf{Share:} the year that disagrees, by how much, and which figure you'd use.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Exhibit 3's TOTAL rows, from OCR
+exhibit_totals = ocr_df[ocr_df["category"] == "TOTAL"]
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Friday: from the lab to the textbook (15 minutes)}
+    The lab's last cell: what did it turn up that the chapter should know? Pull requests on \texttt{ch-09-pdfs.qmd} are welcome.
     \begin{itemize}\small
         \item \textbf{Try the pathway on another city.} Run the chapter's checks on another city and report what breaks.
         \item \textbf{Make an exercise self-checking.} Add expected output or a starter cell to a Recommended Exercise.
