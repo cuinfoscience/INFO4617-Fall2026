@@ -2,9 +2,11 @@
 
 *Starter feeds and a directory to browse more — Chapter 4's take-home exercise*
 
-The Chapter 4 lab and take-home both start the same way: find an RSS feed
-from a news outlet or podcast, check its `robots.txt`, and parse it with
-BeautifulSoup's `"xml"` parser. This page is the practical reference for
+Chapter 4's take-home starts by finding an RSS feed from a news outlet or
+podcast, reading its site's `robots.txt` before you send the feed any
+request, and parsing it with BeautifulSoup's `"xml"` parser. Treat a
+`robots.txt` you can't read (refused, or a server error) as a no; a site
+with no file at all (a 404) has set no rules. This page is the practical reference for
 that step — a verified starting list, the technique for finding one
 yourself, and a directory to browse if none of these fit what you're
 interested in.
@@ -13,31 +15,42 @@ interested in.
 
 ## Starter feeds
 
-The same ten feeds from [the chapter's Recommended
+The ten feeds from [the chapter's Recommended
 Exercises](https://cuinfoscience.github.io/Web-Data-Science-Book/ch-04-data-formats.html#recommended-exercises),
 researched as of September 2026 — treat these as a starting point, not a
 guarantee. If one has moved, the status-code check in the exercise's Step 2
-is exactly how you'd notice.
+is exactly how you'd notice. The last column is what each feed's
+`robots.txt` said when the course read it from its cloud machine on
+November 18, 2026; read it again yourself before you send a request.
+BBC News was on this list until then: the BBC's main site's `robots.txt`
+asks for "no creating datasets from BBC content", so Boulder Reporting Lab
+replaced it.
 
 **News**
 
-| Outlet | Feed |
-|---|---|
-| The New York Times | `https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml` |
-| BBC News | `https://feeds.bbci.co.uk/news/rss.xml` |
-| The Guardian | `https://www.theguardian.com/world/rss` |
-| PBS NewsHour | `https://www.pbs.org/newshour/feeds/rss/headlines` |
-| Al Jazeera | `https://www.aljazeera.com/xml/rss/all.xml` |
+| Outlet | Feed | `robots.txt` |
+|---|---|---|
+| The New York Times | `https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml` | none (404): no rules |
+| Boulder Reporting Lab | `https://boulderreportinglab.org/feed/` | allows every user agent |
+| The Guardian | `https://www.theguardian.com/world/rss` | allows `User-agent: *` |
+| PBS NewsHour | `https://www.pbs.org/newshour/feeds/rss/headlines` | refused the cloud machine (403): read it from your laptop, and if it is refused there too, treat it as a no |
+| Al Jazeera | `https://www.aljazeera.com/xml/rss/all.xml` | allows `User-agent: *` |
 
 **Podcasts (data, tech, and data journalism)**
 
-| Podcast | Feed |
-|---|---|
-| Data Skeptic | `https://dataskeptic.libsyn.com/rss` |
-| Planet Money (NPR) | `https://feeds.npr.org/510289/podcast.xml` |
-| The Changelog | `https://changelog.com/podcast/feed` |
-| Data Engineering Podcast | no single published URL — find it on [dataengineeringpodcast.com](https://www.dataengineeringpodcast.com/) using the technique below |
-| The PolicyViz Podcast | no single published URL — find it on [policyviz.com/podcast](https://policyviz.com/podcast/) using the technique below |
+| Podcast | Feed | `robots.txt` |
+|---|---|---|
+| Data Skeptic | `https://dataskeptic.libsyn.com/rss` | none (404): no rules |
+| Planet Money (NPR) | `https://feeds.npr.org/510289/podcast.xml` | none (404): no rules. Three of its items have no `<link>` |
+| The Changelog | `https://changelog.com/podcast/feed` | disallows every path for every user agent: don't use it |
+| Data Engineering Podcast | no single published URL — find it on [dataengineeringpodcast.com](https://www.dataengineeringpodcast.com/) using the technique below | read the site's own |
+| The PolicyViz Podcast | no single published URL — find it on [policyviz.com/podcast](https://policyviz.com/podcast/) using the technique below | read the site's own |
+
+Real feeds leave tags out. On November 18, 2026, three of Planet Money's 355
+items had no `<link>`, and a loop that reads `item.find("link").text` stops
+there with `AttributeError: 'NoneType' object has no attribute 'text'`. The
+chapter's `if ... else None` guard, from "From XML to DataFrame", turns each
+missing tag into an empty cell instead.
 
 ---
 
@@ -57,7 +70,7 @@ the feeds the BBC publishes for each section. `<rss>` ① holds one
 `<channel>` ②: the feed's title, description, and link, then one `<item>` ③
 per story. Each `CDATA` wrapper marks text the parser takes as it is, and
 BeautifulSoup's `.text` returns what is inside. Chrome's triangles fold the
-channel's `<image>` and `<copyright>`. (The textbook's Figure 4.3.)*
+channel's `<image>` and `<copyright>`. (The textbook's Figure 4.4.)*
 
 ---
 
@@ -83,7 +96,7 @@ Most sites don't advertise their feed on the homepage:
 *PBS NewsHour's home page in View Source, searched with Chrome's find bar
 (Ctrl + F, or ⌘ + F on a Mac) for `application/rss+xml`, September 2026.
 The one match is on line 33, in a `<link rel="alternate">` whose `href` ① is
-the feed's address. (The textbook's Figure 4.2.)*
+the feed's address. (The textbook's Figure 4.3.)*
 
 ---
 
