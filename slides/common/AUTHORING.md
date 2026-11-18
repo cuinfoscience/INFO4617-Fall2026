@@ -438,6 +438,15 @@ main content).
   it. If a shipped frame came back rewritten, that rewrite *is* the review
   comment: imitate it in the next deck instead of restoring the old shape.
   Fix outright typos quietly in passing; do not restructure while doing so.
+- **Stale facts in the instructor's frames are the exception** (instructor,
+  2026-11-18). A fix pass may edit an instructor's frame, for the next
+  offering, where it is stale: its dates, the week's rhythm (which day does
+  what), due dates, and which exercises are graded. The reviews in
+  `docs/reviews/` found at-a-glance frames describing the old week (weeks 4,
+  5, 6, 8 and 9) and "Nothing to submit" beside "due Sunday" (weeks 5 and
+  11). Change only the stale fact, keep the frame's wording and shape
+  otherwise, and list every such change in the pull request, frame by frame,
+  before and after.
 - **A commented-out frame is parked, not rejected.** The instructor cut week-02's
   "Anatomy of a good issue" frame by wrapping every line in `%` rather than
   deleting it — content he may want back, not content he's decided against.
@@ -504,6 +513,11 @@ clean. Never leave a broken deck.
   `# output` comments. See "Layout and density" and its "Code shaped for
   reading".
 - Use `\texttt{}` for inline code, package, and file names.
+- **Requests on a slide follow the lab's rules** ([`labs/AUTHORING.md`](../../labs/AUTHORING.md),
+  "robots.txt" and "Status checks in given cells"): no frame sends students
+  to a web page its `robots.txt` disallows, an API call the file disallows
+  says why, and a given cell shown on a frame keeps its status check, never
+  `raise_for_status()`.
 - **Write procedures in Simplified Technical English (ASD-STE100).** Anything a
   student *executes* — lab exercises, in-class activities, setup steps, the
   Friday workflow — follows STE: start each step with an imperative verb, one
