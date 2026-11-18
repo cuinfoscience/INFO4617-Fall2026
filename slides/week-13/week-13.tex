@@ -340,11 +340,13 @@ check = {"status": "processing"}
 # Every two seconds, while it's processing
 while check["status"] == "processing":
     time.sleep(2)
-    check_response = requests.get(ticket, headers=datalab_headers)
-    # Stop on anything but 200
+    check_response = requests.get(
+        ticket,
+        headers=datalab_headers,
+    )
+    # Stop on anything but 200, with Datalab's message
     if check_response.status_code != 200:
-        raise RuntimeError(f"Got {check_response.status_code}, not 200: "
-                           f"{check_response.text[:200]}")
+        raise RuntimeError(...)  # "Got 401, not 200: ..."
     check = check_response.json()
 \end{lstlisting}
         \end{column}
@@ -1092,8 +1094,7 @@ page_reply = requests.post(
 )
 # Stop on anything but 200
 if page_reply.status_code != 200:
-    raise RuntimeError(f"Got {page_reply.status_code}, not 200: "
-                       f"{page_reply.text[:200]}")
+    raise RuntimeError(...)  # "Got 429, not 200: ..."
 response = page_reply.json()
 print(response.get("error"))
 \end{lstlisting}
@@ -1504,8 +1505,11 @@ lead_params["oldid"] = revision["revid"]
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # Send it, and print its status
-lead_response = requests.get(wiki_api, params=lead_params,
-                             headers=HEADERS)
+lead_response = requests.get(
+    wiki_api,
+    params=lead_params,
+    headers=HEADERS,
+)
 print(lead_response.status_code)
 # The HTML is under "parse", then "text"
 lead_data = lead_response.json()
@@ -1735,7 +1739,7 @@ print(round(today["Barack Obama"] @ today["Joe Biden"], 3))
 \begin{frame}[fragile]{Step 12: a row per year}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            Pivot to a row per year and a column per article. A given cell plots it.
+            Pivot to a row per year and a column per article. (The notebook writes \texttt{pivot()} on one line.) A given cell plots it.
 
             \medskip
             Where do the lines jump? What happened that year?
@@ -1745,7 +1749,11 @@ print(round(today["Barack Obama"] @ today["Joe Biden"], 3))
 # The January 1 leads, without today's
 past = leads[leads["year"] != "current"]
 # A row per year, a column per article
-table = past.pivot(index="year", columns="title", values="similarity")
+table = past.pivot(
+    index="year",
+    columns="title",
+    values="similarity",
+)
 # Years as numbers, so they sort in order
 table.index = table.index.astype(int)
 print(table.round(3))
@@ -1825,7 +1833,7 @@ for y in [year - 1, year]:
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{Due Wednesday, Nov 18}\\[2pt]
-            {\footnotesize Chapter 13's Recommended Exercises, from its companion notebook: how alike two Wikipedia articles, or two PDFs, you choose are. Graded on the 10-point Notebook Labs rubric: every step attempted and run, each doing its task, and your own interpretation.\par}
+            {\footnotesize Chapter 13's Recommended Exercises, from its companion notebook: how alike two Wikipedia articles, or two PDFs, you choose are. Graded on the 10-point Notebook Labs rubric: a good-faith attempt at every step, run with its output, each step doing its task, and your own interpretation.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -1857,10 +1865,13 @@ for y in [year - 1, year]:
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # The server's tool list, saved on November 9
-tools_response = requests.get(cmcp + "tools.json", headers=HEADERS)
+tools_response = requests.get(
+    cmcp + "tools.json",
+    headers=HEADERS,
+)
 # Stop on anything but 200
 if tools_response.status_code != 200:
-    raise RuntimeError(f"Got {tools_response.status_code}, not 200")
+    raise RuntimeError(...)  # "Got 404, not 200: ..."
 tools = tools_response.json()
 # Each tool's name, and the inputs it requires
 for tool in tools:
@@ -1969,7 +1980,11 @@ else:
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # Week 11's parameters, from the model's arguments
-census_params = {"get": get, "for": args["for"], "in": args["in"]}
+census_params = {
+    "get": get,
+    "for": args["for"],
+    "in": args["in"],
+}
 print("sends:", census_url, census_params)
 # The model's arguments it leaves out
 print("leaves out:", [name for name in args
@@ -1992,11 +2007,13 @@ census_params["key"] = census_key
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
 # Send it; stop on anything but 200
-census_response = requests.get(census_url, params=census_params,
-                               headers=HEADERS)
+census_response = requests.get(
+    census_url,
+    params=census_params,
+    headers=HEADERS,
+)
 if census_response.status_code != 200:
-    raise RuntimeError(f"Got {census_response.status_code}, not 200: "
-                       f"{census_response.text[:200]}")
+    raise RuntimeError(...)  # "Got 400, not 200: ..."
 # Print the data, never the URL: your key is in it
 census_rows = census_response.json()
 print(census_rows)
@@ -2040,7 +2057,7 @@ skill_response = requests.get(
     headers=HEADERS,
 )
 if skill_response.status_code != 200:
-    raise RuntimeError(f"Got {skill_response.status_code}, not 200")
+    raise RuntimeError(...)  # "Got 404, not 200: ..."
 skill = skill_response.text
 # Its front matter: the first five lines
 lines = skill.splitlines()
