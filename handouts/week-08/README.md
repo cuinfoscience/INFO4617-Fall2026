@@ -146,6 +146,28 @@ use a terminal.
    `selenium-manager --version` prints Selenium Manager's version.
 5. Go back to the notebook, restart the kernel, and go on with step 5 above.
 
+## Later in the week: Playwright, for Step 12
+
+The lab's Step 12, which you do after Friday's class, uses a second
+library, **Playwright**, and its own copy of Chrome. You don't need it
+before then. In `webdata` the library is already there. In Anaconda's own
+environment, add it with a new cell in the notebook:
+
+```
+%conda install -y -c conda-forge playwright-python
+```
+
+Then, in a terminal where the same environment is active (`(base)` for
+Anaconda's own), download Playwright's browser, about 320 MB, on a fast
+connection:
+
+```
+python -m playwright install chromium
+```
+
+Type `python -m playwright`, not just `playwright`: chapter 8's "Installing
+Playwright" says why.
+
 ## When something goes wrong
 
 | What you see | What to do |
