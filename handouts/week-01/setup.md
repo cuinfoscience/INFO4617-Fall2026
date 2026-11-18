@@ -2,10 +2,12 @@
 
 *Do this before Monday, August 24 — INFO 4617 Web Data Science*
 
-Three things must work on your laptop before the first notebook lab. Allow about
-45 minutes. If you cannot complete a step, send me an e-mail before Monday at
-[brian.keegan@colorado.edu](mailto:brian.keegan@colorado.edu). Do not come to
-class with an environment that does not work.
+Three things must work on your laptop before the first notebook lab. The first
+lab, Lab 01, is in week 1's Friday class, so do this before that class if you
+can. Allow about 45 minutes. If you cannot complete a step, send me an e-mail
+before Monday at [brian.keegan@colorado.edu](mailto:brian.keegan@colorado.edu).
+If your environment does not work on Friday, follow Lab 01 on a neighbor's
+screen. Then finish this handout before Monday.
 
 | | What | Why |
 |---|---|---|
@@ -120,6 +122,13 @@ The setup is correct if you get a DataFrame with dates and view counts.
 The `User-Agent` header tells the server who sends the request. Put your own
 e-mail address in it. Wikipedia refuses a request that does not identify its
 sender. Week 2 explains why this is important.
+
+### Get the week's lab
+
+Each week's lab is a notebook in the course repository. Open
+[`labs/week-01/lab-01.ipynb`](https://github.com/cuinfoscience/INFO4617-Fall2026/blob/main/labs/week-01/lab-01.ipynb)
+on GitHub. Click **Download raw file**. Move the file to the folder that you
+start Jupyter from, and open it in Jupyter.
 
 ---
 

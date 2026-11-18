@@ -14,7 +14,7 @@ the National Weather Service's hourly forecast for Boulder, Colorado
 | `start_time` | The hour the row forecasts (Mountain time, with its offset) |
 | `temperature` | Degrees Fahrenheit |
 | `precip_chance` | Probability of precipitation, percent |
-| `wind_speed`, `wind_direction` | As the NWS prints them, such as `5 mph` and `W` |
+| `wind_speed`, `wind_direction` | As the NWS prints them, such as `5 mph` and `W`; `wind_direction` is empty when the wind is calm (`0 mph`) |
 | `short_forecast` | Such as `Clear` or `Chance Snow Showers` |
 
 The first run (156 rows, collected 2026-11-13T02:23Z) was made by hand, before the workflow was merged,

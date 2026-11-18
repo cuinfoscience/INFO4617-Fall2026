@@ -5,7 +5,7 @@ Run from this directory:  python3 generate_images.py
 Produces: protocol_stack.png, url_anatomy.png, request_lifecycle.png,
 tcp_handshake.png (all script-drawn diagrams) and pageviews_timeseries.png
 (a live chart from the Wikimedia pageviews API, matching the exact call
-and date range shown in the Wednesday "Make an API call" slide).
+and date range of the lab's Step 10, on Friday's "Step 10: the month" slide).
 
 pr_review.png stays a placeholder -- it needs a real GitHub PR review
 comment, which a script can't honestly reproduce.
