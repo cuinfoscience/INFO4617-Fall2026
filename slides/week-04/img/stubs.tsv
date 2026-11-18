@@ -1,2 +1,2 @@
 # filename	WIDTHxHEIGHT	description of the real asset to drop in
-weather_forecast_plot.png	1200x560	Real Boulder, CO 7-day high/low forecast from a live Open-Meteo call, matplotlib OO interface (regenerate periodically to keep it current -- see img/IMAGES.md)
+power_boulder_2025.png	1706x802	The lab's Step 14 figure: Boulder's daily high and low for 2025 from NASA POWER, drawn by the key's own cells (see img/IMAGES.md)
