@@ -8,12 +8,15 @@
 %
 % Environment setup (Anaconda, first request) is NOT in this deck -- it moved
 % to handouts/week-01/setup.md so class time protects the textbook-revision activity.
+% The "Lab 01" section (added 2026-11-18, for the next offering) shows only the
+% lab's first request and its one-day pageviews call, in the lab's step numbers.
 % ==========================================================================
 \documentclass[9pt,aspectratio=169]{beamer}
 % Resolve the shared theme/preamble in ../common/ when compiling this
 % file directly from its own folder (no TEXINPUTS needed).
 \makeatletter\def\input@path{{../common/}}\makeatother
 \input{preamble}
+\lstset{basicstyle=\ttfamily\footnotesize}
 
 \title[Week 1 · Introduction]{{\Huge Introduction \& Setup}}
 \subtitle{Week 1 · Foundations module · Textbook Chapter 1}
@@ -216,6 +219,142 @@
         \item \textbf{The hacker ethic} --- sharing, openness, curiosity, and a bias toward action. The libraries we will use exist because people shared their work.
         \item \textbf{Scientific norms} --- communalism, skepticism, and reproducibility. Document your methods; question yours and others' data; report limitations.
     \end{itemize}
+\end{frame}
+
+% =========================================================================
+\section{Lab 01}
+% =========================================================================
+
+\begin{frame}{Lab 01: your first request}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            Lab 01 runs the chapter's loop once, end to end: one page, one day of pageviews, then January 2026 as a table, a plot and a file.
+
+            \medskip
+            Each new request starts small enough to predict what comes back.
+
+            \medskip
+            Steps 0--6 are for class. Steps 7--9 are for after class, on your own.
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{The notebook}\\[2pt]
+            {\footnotesize \texttt{labs/week-01/lab-01.ipynb} in the course repository. The key is \texttt{lab-01-key.ipynb}.\par}
+            \medskip
+            \textbf{Step 0}\\[2pt]
+            {\footnotesize Open it in the \texttt{webdata} environment. Put your email in the User-Agent.\par}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 1: your first request}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            Ask Wikipedia for the chapter's article, the way a browser does.
+
+            \medskip
+            What status code do you expect? Will the first 200 characters look like the article?
+
+            \medskip
+            The notebook writes the address in one line.
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://requests.readthedocs.io/en/stable/user/quickstart/\#make-a-request}{\texttt{requests.get()}}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The chapter's article
+wiki = "https://en.wikipedia.org/wiki/"
+url = wiki + "University_of_Colorado_Boulder"
+
+# Send the request, with our User-Agent
+response = requests.get(url, headers=headers)
+
+# Look before you read: the status, then the start
+print(response.status_code)
+print(response.text[:200])
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: the address is the question}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The pageviews API takes its parameters as parts of the address.
+
+            \medskip
+            Each part answers one question: which wiki, which readers, which article, which days?
+
+            \medskip
+            The same date as start and end asks for one day. How many items should come back?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/reference/page-views.html\#get-number-of-page-views-for-a-page}{page views for a page}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}[language={},keepspaces=true]
+https://wikimedia.org/api/rest_v1
+  /metrics/pageviews/per-article
+  /en.wikipedia                    project
+  /all-access                      access
+  /all-agents                      agent
+  /University_of_Colorado_Boulder  article
+  /daily                           granularity
+  /20260101                        start
+  /20260101                        end
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: ask for one day}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{views\_url} holds every part up to the article. The window comes last.
+
+            \medskip
+            One day, January 1, 2026. The answer is short enough to read in full.
+
+            \medskip
+            What do you expect? Which \texttt{timestamp}?
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# One day: the same start and end
+day_url = views_url + "/daily/20260101/20260101"
+
+# Send it, and print everything that came back
+day_response = requests.get(day_url, headers=headers)
+print(day_response.status_code, day_response.text)
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: read the day, then ask for the month}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            \texttt{.json()} turns the text into a dictionary. Check it against what you read.
+
+            \medskip
+            Then the month. Only the end date changes. How many items now?
+
+            \medskip
+            {\scriptsize\textbf{Docs:} \href{https://requests.readthedocs.io/en/stable/user/quickstart/\#json-response-content}{\texttt{.json()}}\par}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# The text as a dictionary
+day_data = day_response.json()
+# How many days, and the first day's views
+print(len(day_data["items"]))
+print(day_data["items"][0]["views"])
+
+# Then all of January: only the end changes
+month_url = views_url + "/daily/20260101/20260131"
+\end{lstlisting}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 % =========================================================================
@@ -462,7 +601,7 @@
     In today's daily note, include your GitHub username in the ``take away'' field
 
     \medskip
-    Setup instructions are in \texttt{handouts/setup.md} --- have this working before next Monday.
+    Setup instructions are in \texttt{handouts/week-01/setup.md} --- have this working before next Monday.
 \end{frame}
 
 \begin{frame}{Four objects you'll use all semester}
@@ -697,7 +836,7 @@
             Complete your daily note \textbf{today}: \url{https://bit.ly/info4617f26}
 
             \bigskip
-            Work through \texttt{handouts/setup.md} --- about 45 minutes:
+            Work through \texttt{handouts/week-01/setup.md} --- about 45 minutes:
             \begin{enumerate}
                 \item \textbf{Python, via Anaconda} --- plus a \texttt{webdata} environment and libraries
                 \item \textbf{Notebook} --- download and run the notebook for Ch.~01
