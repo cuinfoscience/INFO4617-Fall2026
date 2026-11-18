@@ -28,6 +28,11 @@ book figures.
   `YYYY-MM-DD-<topic>.md`. Each plan names the AAR revision it implements. A
   plan records a proposal and the decisions behind it; once work starts,
   progress goes in the AAR's tracking table, not in the plan.
+- `reviews/` — reviews of one week's lab, deck and Recommended Exercises as
+  five student personas would meet them, one file per week, named
+  `week-NN.md`. Each makes the strongest case for the week as designed, then
+  ranks where it falls short, with a proposed fix and the file to change.
+  [`reviews/README.md`](reviews/README.md) has the method and the list.
 
 The repository root's `AGENTS.md` says how coding agents work here, and
 `course-facts.md`, in this folder, lists the facts that are written in more
@@ -50,6 +55,8 @@ Current contents:
 | `plans/2026-10-02-standup-run-of-show.md` | Week 7's Friday: the backlog standup, its three activities and handouts, and the steps before and after class. |
 | `plans/2026-10-09-backlog-sprint-run-of-show.md` | Week 8's Friday: the backlog sprint in three groups; the textbook's chapter and status labels; how to make the "Textbook backlog" project; and the queries behind the slides' counts. |
 | `plans/2026-10-21-recommended-exercise-notebooks.md` | A recommendation, not yet built: standalone notebooks of each chapter's Recommended Exercises, generated from the chapter by the textbook's notebook script so they can't drift, and the questions to settle first. |
+| `reviews/README.md` | What the student-persona reviews are, their method, the five personas, how to read a review, and the list of reviews by week. |
+| `reviews/week-13.md` | Week 13 (2026-11-17): five personas' reviews of the lab, deck and chapter 13's exercises, put together. Fifteen ranked findings, each verified or marked as reported; first among them a typed cell whose natural mistakes print contact details, and a results table that reads "True True" for a wrong year. |
 
 Moved to the textbook repo's `docs/` (2026-09-24):
 
