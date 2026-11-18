@@ -1235,7 +1235,7 @@ print(round(found_new / asked, 2), "of them")
 \begin{frame}{What a bot costs a server}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Step 8 counted the changes: two or three a day. Our schedule asks for 24 runs a day anyway. On November 12, an hourly collector got the same forecast 12 times in a row.
+            Step 8 counted two or three changes a day. Our schedule asks for 24 runs a day anyway: an hourly collector would find a new forecast about one request in ten.
 
             \medskip
             \texttt{Last-Modified} and \texttt{Cache-Control} say how new an answer is. Who pays for the requests that bring nothing new?
@@ -1377,13 +1377,57 @@ print(
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 10: is it still running?}
+\begin{frame}[fragile]{Step 10: the gaps between runs}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             A collector that stops doesn't say so. Its file just stops growing.
 
             \medskip
-            A \textbf{freshness check} asks how old the newest row is. Under about an hour and a half is fresh. Is the course's?
+            How long is too long without a run? This given cell prints the hours from each run to the next. \texttt{.diff()} subtracts the row before.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Each run's time, once
+run_times = pd.to_datetime(
+    forecasts["collected_at"].drop_duplicates()
+)
+# From each run to the next, in hours
+gaps = run_times.diff().dropna()
+gap_hours = gaps.dt.total_seconds() / 3600
+print(gap_hours.round(1).tolist())
+# The longest gap
+print("longest gap:", round(gap_hours.max(), 1), "hours")
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: runs a day}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            The same cell counts the runs on each day, in UTC. The schedule asks for 24.
+
+            \medskip
+            How many did GitHub make? The notebook counts them in one line.
+        \end{column}
+        \begin{column}{0.6\textwidth}
+\begin{lstlisting}
+# Each run's day, such as "Nov 13"
+run_days = run_times.dt.strftime("%b %d")
+# How many runs each day had
+print(run_days.value_counts(sort=False).to_dict())
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Step 10: is it still running?}
+    \begin{columns}[T]
+        \begin{column}{0.37\textwidth}
+            A \textbf{freshness check} asks how old the newest row is.
+
+            \medskip
+            The longest gap between this collector's runs is a yardstick. Is the course's newest row older than that? What limit would you set?
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}
