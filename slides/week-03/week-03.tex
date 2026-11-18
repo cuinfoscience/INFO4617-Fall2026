@@ -41,12 +41,12 @@
 
             \dayband{Wednesday}{Notebook lab}
             \begin{itemize}\small
-                \item Measure data access and forensic analysis of dead endpoints
+                \item Lab 03, Part 1: measure who answers a request with no credentials
             \end{itemize}
 
             \medskip
 
-            \dayband{Friday}{Textbook revisions}
+            \dayband{Friday}{Lab 03, Part 2, then textbook revisions}
             \begin{itemize}\small
                 \item Reading and commenting on issues; first pull requests from the browser
             \end{itemize}
@@ -55,10 +55,10 @@
             \begin{alertblock}{Monday lecture}
                 \small Read Chapter 03 of the Web Data Science book
             \end{alertblock}
-            \begin{alertblock}{Wednesday lab}
+            \begin{alertblock}{Due Sunday: the exercises}
                 \small Complete \textbf{Recommended Exercises}: fill in the empty cells, run everything, export to HTML, upload to Canvas by \textbf{Sunday 11:59pm}
             \end{alertblock}
-            \begin{alertblock}{Friday notebook}
+            \begin{alertblock}{Due Sunday: an issue or comment}
                 \small You do not need to wait until Friday to begin to submit issues from textbook or notebook, upload the link to your issue or comment by \textbf{Sunday 11:59pm}
             \end{alertblock}
         \end{column}
@@ -72,7 +72,7 @@
 \begin{frame}{The golden age of web data access}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            Between roughly 2008 to 2018 the web was a mostly open that was easy(ish) to retrieve and analyze
+            Between roughly 2008 to 2018 the web was a mostly open web that was easy(ish) to retrieve and analyze
             
             \medskip
             
@@ -304,7 +304,7 @@
             \begin{enumerate}
                 \item ``The post-API age means APIs are gone.''
                 \item ``If the API closes, I'll just scrape.''
-                \item ``If data is publicly, collecting it is permitted.''
+                \item ``If data is publicly visible, collecting it is permitted.''
                 \item ``This only matters for social media research.''
                 \item ``Nothing can be done about it.''
             \end{enumerate}
@@ -755,7 +755,7 @@
             
             \medskip
             
-            Run dead-endpoint forensics: autopsies of Pushshift, CrowdTangle, and Twitter v1.1 --- three retirements, three different failure signatures
+            On Friday, run dead-endpoint forensics: autopsies of Pushshift, CrowdTangle, and Twitter v1.1 --- three retirements, three different failure signatures
         \end{column}
         \begin{column}{0.35\textwidth}
             \begin{alertblock}{Take-home: the 7-step audit, new targets}
@@ -818,6 +818,7 @@
                 \item I write the code on screen, and you write it in your copy
                 \item Put \textbf{your} email in \texttt{CLIENT} in Step 0
                 \item Today: Part 1, Steps 0--5. No key, no account
+                \item Its three microsprints are after class
                 \item Friday: Part 2 starts at Step 6, its own setup step
             \end{itemize}
         \end{column}
@@ -825,8 +826,8 @@
             \textbf{Solutions}\\[2pt]
             {\footnotesize \texttt{lab-03-key.ipynb}, beside it: every cell filled in. Fall behind? Copy the cell from the key and keep going.\par}
             \medskip
-            \textbf{Nothing to submit}\\[2pt]
-            {\footnotesize The lab is practice for the Recommended Exercises. A cell that starts with \texttt{\# Given:} is already written: we read it together and run it.\par}
+            \textbf{Nothing to submit from the lab}\\[2pt]
+            {\footnotesize The lab is practice for the Recommended Exercises, which are due Sunday. A cell that starts with \texttt{\# Given:} is already written: we read it together and run it.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -890,7 +891,7 @@ print(item["type"])
             Which header says what kind of body came back? How many ids do you expect?
 
             \medskip
-            The microsprint requests the first of them.
+            After class, a microsprint requests the first of them.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
@@ -914,6 +915,9 @@ print(len(ids))
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             Reddit's public JSON was free from 2008 until 2023. Ask it for one post from r/python, and print the same three things.
+
+            \medskip
+            Its \texttt{robots.txt} disallows every path. This is its documented API, asked once, by name: the Discuss box says why.
 
             \medskip
             What did Hacker News send for each? What does Reddit send?
@@ -1023,6 +1027,9 @@ print(VERDICTS.get(404, "other"))
             A given loop asks all eight targets what you asked two, and keeps one row for each answer.
 
             \medskip
+            Five of the eight disallow automated clients in \texttt{robots.txt}. All eight are documented APIs, asked once, by name. Why is that fine?
+
+            \medskip
             Find your two requests in the loop before you run it.
 
             \medskip
@@ -1030,29 +1037,32 @@ print(VERDICTS.get(404, "other"))
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{Saved copies}\\[2pt]
-            {\footnotesize One given cell saves your table with its date. Another loads the key's table if the loop stopped.\par}
+            {\footnotesize One given cell loads the key's table if the loop stopped. The next saves your table, with its date.\par}
             \medskip
-            \textbf{Microsprint}\\[2pt]
+            \textbf{After class: a microsprint}\\[2pt]
             {\footnotesize Which of your statuses differ from the chapter's? Did the platform change, or did something on our side?\par}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Claims you can check --- the access matrix}
-    What happens if you show up to a website with no credentials and ask for data?
-\begin{lstlisting}
-def probe(name, url):
-    """Ask one endpoint for data without credentials; describe the answer."""
-    try:
-        response = requests.get(url, headers=HEADERS, timeout=20)
-    except requests.RequestException as error:   # no answer is a result too
-        return {"api": name, "status": None, "verdict": "unreachable"}
-    verdict = ("open" if response.status_code == 200
-               else "gated" if response.status_code in (401, 403) else "other")
-    return {"api": name, "status": response.status_code, "verdict": verdict,
-            "content_type": response.headers.get("content-type", "")}
-\end{lstlisting}
-\end{frame}
+% Parked 2026-11-18 (week 3 student review, item 12): this probe() computes its verdict
+% differently from the chapter's VERDICTS (429 is "other" here) and keeps the charset, so a
+% student who copies it gets different verdicts. Remove the % to restore it.
+%\begin{frame}[fragile]{Claims you can check --- the access matrix}
+%    What happens if you show up to a website with no credentials and ask for data?
+%\begin{lstlisting}
+%def probe(name, url):
+%    """Ask one endpoint for data without credentials; describe the answer."""
+%    try:
+%        response = requests.get(url, headers=HEADERS, timeout=20)
+%    except requests.RequestException as error:   # no answer is a result too
+%        return {"api": name, "status": None, "verdict": "unreachable"}
+%    verdict = ("open" if response.status_code == 200
+%               else "gated" if response.status_code in (401, 403) else "other")
+%    return {"api": name, "status": response.status_code, "verdict": verdict,
+%            "content_type": response.headers.get("content-type", "")}
+%\end{lstlisting}
+%\end{frame}
 
 \begin{frame}{Popular web data sources}
     \begin{columns}[T]
@@ -1062,7 +1072,7 @@ def probe(name, url):
             
             \medskip
             
-            \textbf{Reddit}: status 403, content-type \texttt{text/html} a block page served where JSON lived from 2008 to 2023
+            \textbf{Reddit}: status 403, content-type \texttt{text/html}: a block page served where JSON lived from 2008 to 2023
             
             \medskip
             
@@ -1085,7 +1095,7 @@ def probe(name, url):
             Did Reddit refuse us, or did something between us and Reddit? \texttt{server} names the software that answered. \texttt{via} names the proxies it passed through.
 
             \medskip
-            Who sent each answer? In the microsprint, ask Wikipedia with no \texttt{headers}; a given loop then asks four hosts both ways.
+            Who sent each answer? After class, a microsprint asks Wikipedia with no \texttt{headers}, and a given loop asks four hosts both ways.
 
             \medskip
             {\scriptsize\textbf{Docs:} \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Server}{Server}, \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Via}{Via}\par}
@@ -1105,38 +1115,16 @@ print(reddit.text[:120])
     \end{columns}
 \end{frame}
 
-\begin{frame}{Three ways web data dies}
-    \begin{columns}[T]
-        \begin{column}{0.6\textwidth}
-            How a retired endpoint refuses tells you whether anything can be recovered:
-
-            \medskip
-            \textbf{Pushshift} answers \texttt{403} in JSON. It still runs (for Reddit moderators) but not for you.
-            
-            \medskip
-            \textbf{CrowdTangle} does not resolve at all. No HTTP conversation happens. Enclosed, or destroyed?
-            
-            \medskip
-            \textbf{Twitter v1.1} parses your request and rejects it (error 215). Alive, but only for paying customers. 
-            
-        \end{column}
-        \begin{column}{0.35\textwidth}
-            \begin{block}{HTTP errors}\footnotesize
-                HTTP errors reveal different causes of death: \url{https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status}
-            \end{block}
-        \end{column}
-    \end{columns}
-\end{frame}
 
 \begin{frame}{A guided audit in seven steps}
     \begin{columns}[T]
         \begin{column}{0.6\textwidth}
-            The notebook's \textbf{Recommended Exercises} walk you through your own audit of \textbf{public-institution APIs} --- none of which we probed today. Fill in each empty cell:
+            The notebook's \textbf{Recommended Exercises} walk you through your own audit of \textbf{public-institution APIs} --- none of which we probed today. Steps 1--5 follow Wednesday, 6--7 Friday:
             \begin{enumerate}\footnotesize
                 \item Define \texttt{HEADERS} with your named User-Agent
                 \item Probe the anchor by hand: \textbf{OpenAlex} and its \texttt{X-RateLimit} headers
                 \item Anchor + at least \textbf{two} menu endpoints (government, science, museum APIs) $\rightarrow$ dated DataFrame
-                \item Add \textbf{two} institutional endpoints of your own
+                \item Add \textbf{two} institutional endpoints of your own, \texttt{robots.txt} first
                 \item Diagnose one refusal: \texttt{server}, \texttt{via}, body --- even a \texttt{200} that is really a web page
                 \item Autopsy one retired institutional API: gone, gated, or repriced?
                 \item Interpret: does ``held open by legal mandate'' hold?
@@ -1189,11 +1177,11 @@ print(reddit.text[:120])
 \end{frame}
 
 % =========================================================================
-\section{Friday · Textbook Revisions}
+\section{Friday · Lab and Textbook Revisions}
 % =========================================================================
 
 
-% The lab's Part 2 (labs/week-03/lab-03-key.ipynb, Steps 6-9), added 2026-11-17 for the next
+% The lab's Part 2 (labs/week-03/lab-03-key.ipynb, Steps 6-9 and the after-class Mastodon step), added 2026-11-17 for the next
 % offering: one listing a frame, the given cells described on their step's frame.
 \begin{frame}{Today: Lab 03, Part 2}
     \begin{columns}[T]
@@ -1204,14 +1192,14 @@ print(reddit.text[:120])
             How does a dead endpoint fail? What did the Wayback Machine keep of it?
 
             \medskip
-            And who answers for Mastodon, when there is no single Mastodon?
+            After class: who answers for Mastodon, when there is no single Mastodon?
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{Start at Step 6}\\[2pt]
             {\footnotesize Open \texttt{lab-03.ipynb}. Put your email in \texttt{CLIENT}. Run the two given cells: the setup, and a saved copy of Wednesday's table.\par}
             \medskip
             \textbf{Today}\\[2pt]
-            {\footnotesize Part 2, Steps 6--10. Then textbook revisions.\par}
+            {\footnotesize Part 2, Steps 6--9. Then textbook revisions. The Mastodon step is after class.\par}
         \end{column}
     \end{columns}
 \end{frame}
@@ -1239,6 +1227,29 @@ print(pushshift.status_code, pushshift.text[:60])
 # What the chapter calls that status
 print(CAUSES.get(pushshift.status_code, "other"))
 \end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Three ways web data dies}
+    \begin{columns}[T]
+        \begin{column}{0.6\textwidth}
+            How a retired endpoint refuses tells you whether anything can be recovered:
+
+            \medskip
+            \textbf{Pushshift} answers \texttt{403} in JSON. It still runs (for Reddit moderators) but not for you.
+            
+            \medskip
+            \textbf{CrowdTangle} does not resolve at all. No HTTP conversation happens. Enclosed, or destroyed?
+            
+            \medskip
+            \textbf{Twitter v1.1} parses your request and rejects it (error 215). Alive, but only for paying customers. 
+            
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{block}{HTTP errors}\footnotesize
+                HTTP errors reveal different causes of death: \url{https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status}
+            \end{block}
         \end{column}
     \end{columns}
 \end{frame}
@@ -1294,7 +1305,7 @@ print(capture.text)
 \begin{frame}[fragile]{Step 8: read into it, one level at a time}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
-            The closest capture is two keys down. Its \texttt{status} is the code the archive received that day.
+            The closest capture is two keys down. Its \texttt{status} is the code the archive received that day. This API only answers with a capture that received a 200, so it never shows a redirect.
 
             \medskip
             What would \texttt{snapshots["closest"]} do if \texttt{snapshots} were empty?
@@ -1320,7 +1331,7 @@ print(closest["timestamp"], closest["status"])
             \texttt{.example} is reserved, so no such site exists. What status do you expect? What is in \texttt{archived\_snapshots}?
 
             \medskip
-            Two given loops follow: the most recent captures of Pushshift's and CrowdTangle's addresses, and CrowdTangle near the four dates of the microsprint.
+            Two given loops follow: the most recent captures of Pushshift's and CrowdTangle's addresses, and CrowdTangle near the four dates of the microsprint. Each prints the answer's \texttt{"error"} too.
         \end{column}
         \begin{column}{0.6\textwidth}
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
@@ -1337,7 +1348,7 @@ print(nothing.status_code, nothing.text)
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 9: one Mastodon server}
+\begin{frame}[fragile]{After class: one Mastodon server}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             There is no single Mastodon to ask, so start with one server. Its description counts its accounts under \texttt{"stats"}.
@@ -1366,7 +1377,7 @@ print(details["stats"]["user_count"])
     \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Step 9: its public timeline}
+\begin{frame}[fragile]{After class: its public timeline}
     \begin{columns}[T]
         \begin{column}{0.37\textwidth}
             Ask for one post from the server's public timeline, with no credentials. Print only the start: a post belongs to someone.
@@ -1611,7 +1622,7 @@ Reddit's API had been free since 2008.
         \item \textbf{Add the missing citations.} \emph{X Corp.\ v.\ Bonta}, \emph{Lindke v.\ Freed}, PATA, and Social Science One are described in prose with no source link.
         \item \textbf{Update the moving numbers.} Twitter/X pricing, the Reddit--Google deal, and DSA Article~40's status ``as of mid-2026.'' Flag what has gone stale.
         \item \textbf{Re-run the audit.} The access matrix and forensics outputs are dated 28 Aug 2026 and \textit{will} drift. Where a row changed, file it with your output.
-        \item \textbf{Add a figure.} The chapter still has none: a three-pressures diagram, an API-access timeline (2008--2026), a link-rot chart. Memes welcome.
+        \item \textbf{Add a figure.} The chapter has four screenshots and no diagram: a three-pressures diagram, an API-access timeline (2008--2026), a link-rot chart. Memes welcome.
         \item \textbf{Verify the cross-references.} Ch.~3 leans on many \texttt{@sec-} links. Confirm each resolves and is described accurately.
     \end{itemize}
 \end{frame}
