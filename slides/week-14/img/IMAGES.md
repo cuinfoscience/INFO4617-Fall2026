@@ -54,8 +54,9 @@ provider's own page on 2026-11-13:
 | PythonAnywhere scheduled tasks | None on free accounts made since January 2026 | <https://help.pythonanywhere.com/pages/ScheduledTasks/> (scheduled tasks work "in paid accounts or free accounts created before 2026-01-15", 2026-01-08 on the EU system; such a free account gets one daily task); <https://www.pythonanywhere.com/pricing/> (Beginner: no scheduled tasks) |
 | Cloudflare Workers Cron Triggers | 5 cron triggers; 10 ms of CPU a run | <https://developers.cloudflare.com/workers/platform/limits/> (Free plan: 5 Cron Triggers per account, 10 ms CPU per Cron Trigger invocation, 100,000 requests a day); <https://developers.cloudflare.com/workers/configuration/cron-triggers/> (a Worker's `scheduled()` handler, examples in JavaScript, TypeScript and Python; UTC) |
 | Google Cloud Scheduler | 3 jobs a month per billing account | <https://cloud.google.com/scheduler/pricing> ("Each Google billing account gets 3 jobs per month free"; then $0.10 per job a month) |
-| Val Town | Every 15 minutes at most | <https://docs.val.town/vals/cron/> ("Crons can run up to once every 15 minutes on a Free account") |
+| Amazon EventBridge Scheduler | 14 million scheduled calls a month | <https://aws.amazon.com/eventbridge/pricing/> ("after 14 million free invocations per month"; read 2026-11-18, as chapter 14's table gives it) |
+| Render cron jobs | None: at least $1 a month for each | <https://render.com/docs/cronjobs> ("There is a minimum monthly charge of $1 per cron job service"; read 2026-11-18, as chapter 14's table gives it) |
 
-Vercel Cron Jobs were checked too and left out to keep the table short: on the
+Val Town's crons (every 15 minutes at most on a free account, <https://docs.val.town/vals/cron/>) were on the slide until 2026-11-18, when the slide took chapter 14's two rows instead, Amazon EventBridge and Render, so that the two tables agree. Vercel Cron Jobs were checked too and left out to keep the table short: on the
 Hobby plan they run once a day at most
 (<https://vercel.com/docs/cron-jobs/usage-and-pricing>).
