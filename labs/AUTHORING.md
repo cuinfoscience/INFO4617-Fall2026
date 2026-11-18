@@ -1,6 +1,6 @@
 # Writing a lab notebook
 
-How to turn a chapter of [*Web Data Science*](https://github.com/cuinfoscience/Web-Data-Science-Book) into the week's live-coding lab. [`README.md`](README.md) is for students; this file is for whoever writes a lab, person or agent. It came from the instructor's answers on 2026-10-21, after week 10 piloted the format at students' request: they wanted to code with the instructor rather than work through the chapter's notebook alone. Its code style was rewritten after the instructor taught week 10 live; [`docs/aar/2026-10-21-live-coding-labs.md`](../docs/aar/2026-10-21-live-coding-labs.md) says why. It was revised again on 2026-11-10, after an audit of weeks 10–13 (issues #165 and #167–#169) and the instructor's decision to rebuild those labs for students with little Python: smaller cells, one case typed by hand before a given loop, saved checkpoints, and a check of every request against its provider's documentation. A lab written or rebuilt from that date follows this file as it stands; the labs for weeks 1–9, and weeks 10–13 until each is rebuilt, were written to the earlier rules.
+How to turn a chapter of [*Web Data Science*](https://github.com/cuinfoscience/Web-Data-Science-Book) into the week's live-coding lab. [`README.md`](README.md) is for students; this file is for whoever writes a lab, person or agent. It came from the instructor's answers on 2026-10-21, after week 10 piloted the format at students' request: they wanted to code with the instructor rather than work through the chapter's notebook alone. Its code style was rewritten after the instructor taught week 10 live; [`docs/aar/2026-10-21-live-coding-labs.md`](../docs/aar/2026-10-21-live-coding-labs.md) says why. It was revised again on 2026-11-10, after an audit of weeks 10–13 (issues #165 and #167–#169) and the instructor's decision to rebuild those labs for students with little Python: smaller cells, one case typed by hand before a given loop, saved checkpoints, and a check of every request against its provider's documentation. A lab written or rebuilt from that date follows this file as it stands; the labs for weeks 1–9, and weeks 10–13 until each is rebuilt, were written to the earlier rules. On 2026-11-18, after student-persona reviews of weeks 1–14 ([`docs/reviews/`](../docs/reviews/README.md)), the instructor added four rules: when a lab may send a request that `robots.txt` disallows ("robots.txt"), a status check in given cells ("Status checks in given cells"), how a part's minutes fit its day ("The time budget"), and a checklist of the silent traps the reviews kept finding ("Check it against the provider"). Each week's fix pass brings its lab to them.
 
 ## What a lab is for
 
@@ -39,7 +39,7 @@ The labs are written as notebooks, not built from a `.qmd`, so `handouts/`'s `ma
 
 A lab is one notebook in three parts, one for each day, of numbered steps, in this order:
 
-1. **The opening cell.** The title, `# Lab NN: <the chapter's title>`; a line linking the chapter; two or three sentences on what we'll build and on which case; a sentence saying what the 💬 Discuss boxes are; a **Before class** line (environment, keys, accounts); and one line for later days: "On Wednesday and Friday, start at that day's setup step." Don't send students to **Run All Above**: it repeats every request of the earlier days, which costs time, rate limit, and in some labs money No outline table: each step's heading gives its time. In the key only, this cell ends with the key note (see "The key").
+1. **The opening cell.** The title, `# Lab NN: <the chapter's title>`; a line linking the chapter; two or three sentences on what we'll build and on which case; a sentence saying what the 💬 Discuss boxes are; a **Before class** line (environment, keys, accounts); one line for later days: "On Wednesday and Friday, start at that day's setup step."; and one saying how the minutes add up: "A part's time is its steps' minutes plus its microsprints'." Don't send students to **Run All Above**: it repeats every request of the earlier days, which costs time, rate limit, and in some labs money. No outline table: each step's heading gives its time. In the key only, this cell ends with the key note (see "The key").
 2. **Three parts**, each headed `# Part N — <day>: <what we build>`, with steps numbered across the lab, `## Step 0` to about `## Step 15`. Each part opens with a short setup step, so a student who missed a day can start there: a given cell that imports, defines the User-Agent and checks the keys, in which students type only their email, and a given cell that loads the earlier days' checkpoints (see "Checkpoints"). No variable crosses a day except through a checkpoint. Step 0 is the first.
 3. **What did we learn?** The last numbered step: three or four reflection questions, answered as comments, plus the **Recommended Exercises ahead** list.
 4. **Friday's revision block**, a last Markdown cell.
@@ -53,7 +53,7 @@ Each step is, in order:
 3. **A microsprint**, after most steps (see below): a Markdown cell and a code cell.
 4. **A 💬 Discuss box** (see below). It goes last in the step, after the microsprint if there is one, so the class can discuss what the microsprint found.
 
-Minutes include the microsprint and the discussion. A lab's minutes add up to about 135: about 50 in Monday's part, 50 in Wednesday's, and 35 in Friday's.
+A step's minutes include its Discuss box but not its microsprint, which has minutes of its own. "The time budget" says how they add up.
 
 Every code cell carries metadata saying what students see, which `tools/make_student_copy.py` reads:
 
@@ -70,7 +70,7 @@ The code is typed live, in front of the class, by students some of whom are unsu
 - **One to four lines a typed cell, six at most,** doing one thing a student can see: build the parameters; send the request; look at what came back; read one value. A line is at most about 90 characters, so it fits a projector and can be typed without a slip.
 - **One step at a line.** Don't chain a request to `.json()` to a lookup. Write `response = requests.get(...)`, then `data = response.json()`, then `data["query"]`, each where a student can print it. Go down nested JSON one level a cell the first time a shape appears (`data.keys()`, then `data["query"].keys()`).
 - **Look before you read.** The first request to each API prints what came back before anything indexes into it: `print(response.status_code, response.text[:200])` for a service that answers errors in plain text or HTML (Wikimedia, the Census Bureau), or `print(data.get("error"))` for one that answers them as JSON (OpenRouter, FRED, YouTube). This isn't error handling; it's the habit that makes the next rule livable. Without it, every refusal, bad key and misspelled parameter in weeks 10–13 reached the student as the same `JSONDecodeError` or `KeyError`, with the service's own message unread.
-- **No error handling.** No `raise_for_status()`, `try`/`except`, retry loops, back-off, `timeout=` arguments, or status checks that branch, unless the step is about them (chapter 3's refusals, chapter 5's status codes). Acknowledge the limitation in a Discuss box: at least one per lab asks what would break here (a 429, a 403, a missing key, a changed page) and how the chapter guards against it.
+- **No error handling in typed cells.** No `raise_for_status()`, `try`/`except`, retry loops, back-off, `timeout=` arguments, or status checks that branch in a cell students type, unless the step is about them (chapter 3's refusals, chapter 5's status codes). Acknowledge the limitation in a Discuss box: at least one per lab asks what would break here (a 429, a 403, a missing key, a changed page) and how the chapter guards against it. Given cells are different: each one that sends a request checks the status and stops (see "Status checks in given cells").
 - **Little Python assumed.** In typed cells, don't use comprehensions, tuple unpacking in a `for`, `**` to merge or pass dictionaries, conditional expressions, `while True` with `break`, regular expressions, or format specifications inside f-strings. Where the chapter's code needs one, it goes in a given cell. The first time any construct appears in the lab, typed or given, the step's text explains it in a sentence.
 - **By hand, then given.** See the next section. Students never type a function definition or a loop that sends requests.
 - **One name for one thing.** Don't reuse `params`, `data`, `response` or `page` for a different request later in the lab, and don't have a microsprint replace a name a later cell reads: name them for what they hold (`profile_params`, `first_page`, `census_rows`). A cell run twice, or out of order, should give the same result. Week 13's Step 14 checked one tool call and ran another because a microsprint replaced `call` but not `args`.
@@ -78,7 +78,31 @@ The code is typed live, in front of the class, by students some of whom are unsu
 - **One way to do each thing:** f-strings to print, pandas to tabulate, `plt.subplots()` to plot, and nothing the chapter doesn't use.
 - **A `try` only where the failure is the point:** a step about errors (week 4's broken JSON), or a step whose subject is a request that never completes (week 3's dead endpoint). Say why in the step's text.
 
-`tools/run_key.py` decides whether to retry a cell from the error the cell raises, and that depends on this style: with no `raise_for_status()`, a 429 usually surfaces at `.json()`, as a `JSONDecodeError`. A change to these rules that changes how a refused request fails needs the same change to its `TRANSIENT` pattern, in the same pull request.
+`tools/run_key.py` decides whether to retry a cell from the error the cell raises, and that depends on this style: in a typed cell, a 429 usually surfaces at `.json()`, as a `JSONDecodeError`; in a given cell, the status check stops with "Got 429, not 200", which its `TRANSIENT` pattern matches by the number. A change to these rules that changes how a refused request fails needs the same change to `TRANSIENT`, in the same pull request.
+
+### Status checks in given cells
+
+A given cell or given function that sends a request checks the status before it reads the answer, and stops if it isn't 200. Without the check, a refusal or a bad request inside a given cell reached students as a `JSONDecodeError` or `KeyError: 'observations'` a line later, with the service's own message unread (the reviews of weeks 10, 11 and 13), and a missing checkpoint became a `robots.txt` parser that allowed every page (week 2). Use one pattern, in every lab:
+
+```python
+if response.status_code != 200:
+    raise RuntimeError(f"Got {response.status_code}, not 200: {response.text[:200]}")
+```
+
+- **One `if`, and stop.** No `try`/`except`, no retry, no waiting. The student reads the message as they would any other error. The check is given, so it costs no typing.
+- **Name the 429 where one is likely.** In a given loop to a service that rate-limits a shared network (Wikimedia, OpenAlex), the message says what a 429 asks for, from the `Retry-After` header:
+
+  ```python
+  if response.status_code != 200:
+      wait = response.headers.get("Retry-After", "a few")
+      raise RuntimeError(f"Got {response.status_code}, not 200. A 429 asks you to wait "
+                         f"{wait} seconds (Retry-After). {response.text[:200]}")
+  ```
+
+  Keep the words "A 429 asks": `run_key.py` retries a cell whose error holds a 429, and skips that phrase so a 404 isn't retried for it.
+
+- **Never a key in the message.** Don't use `raise_for_status()` in a lab: its message holds the whole URL, so where the key travels in the URL (the Census Bureau's `key=`, FRED's `api_key=`) the key lands in the traceback, and in a notebook a student submits (week 11's review). For the same reason, don't print `response.url` for such a service, and if its error body repeats the request (look when you try the mistypes), leave `response.text` out of the message. `run_key.py` refuses to save a key it finds in the key's outputs; a student's notebook has no such guard.
+- **Check a checkpoint before parsing it.** A cell that loads a saved copy with `requests.get` runs the same `if` before it hands the text to a parser, `json.loads()` or a table, so a 404 (a checkpoint not yet on `main`) stops as "Got 404" rather than becoming an empty parser or an empty table. `pd.read_csv(url)` already stops on a 404 by itself.
 
 ### By hand, then given
 
@@ -106,6 +130,12 @@ A prompt is what a student who has fallen behind, or who is reading alone, works
 Count typed lines: the lines of code cells that aren't `given`, without prompt lines, blank lines, or the answers in "What did we learn?". A part has at most about **55 typed lines** for Monday's and Wednesday's 50 minutes and **40** for Friday's 35, a little over one line a minute, with microsprints inside the count. Parts 1 and 2 of week 13 ran at that rate and fit their days; its Part 3, at more than two lines a minute, didn't. Count the waiting too: a loop of model requests or paced API calls that takes three minutes is three of the step's minutes.
 
 What the labs written before 2026-11-10 measured, for comparison: 17–28 code cells in 85 minutes, a median cell of 5–7 lines, zero to three typed functions, and zero to two given cells. A rebuilt lab has more cells, each smaller, and more of them given.
+
+### The time budget
+
+The minutes in the headings are the budget students see, so they have to fit the day. A part's time is the minutes in its step headings plus the minutes in its microsprint headings; a Discuss box is inside its step's minutes. That sum is at most 50 for Monday's part and for Wednesday's, and at most 35 for Friday's, whose last 15 minutes are the week's checkpoint or revision block (`docs/course-facts.md`; the class meets for 50 minutes). The reviews found a part over its day by the lab's own minutes in ten of the thirteen weeks reviewed (1, 3, 5, 6, 8–10 and 12–14), some of them only once the microsprints were counted, and the slower personas needed more than the headings said even where a part fit.
+
+When a part runs over, move its least essential step or microsprint to an **After class** heading at the end of that part, minutes and all, so a student can still do it. The least essential is the one the Recommended Exercises need least: a step they never use, or a microsprint that practises what another already did. Don't lower a step's minutes just to make the sum fit, and never delete a step or microsprint without saying so: the pull request lists what moved, and from where.
 
 ### Links
 
@@ -199,13 +229,23 @@ In weeks 11–13 the last cell is instead `## Friday: your portfolio checkpoint 
 - **API keys** come from environment variables, never from the notebook. Step 0 reads them with `os.environ["NAME"]`; a missing key raises a `KeyError` that names it, which is message enough. If a service will answer a request that has no key, or the wrong parameter, from a default that costs money (OpenRouter's default model), a typed line checks what answered.
 - **Privacy:** follow [`AGENTS.md`](../AGENTS.md), "Images and privacy". Don't print a private person's name in an output, and don't build a ranking of people the chapter doesn't build.
 
+### robots.txt
+
+Week 2 teaches students to read a site's `robots.txt` before sending it anything. The reviews found labs that then sent every student to paths the file disallows without saying why that was acceptable (weeks 3, 4, 5 and 8), and steps and exercises that invited a site of the student's choosing without mentioning it (weeks 1, 3 and 5). The careful students stopped and lost their time; the others learned that the check is decoration. The instructor's rules of 2026-11-18:
+
+- **An official API may be called where `robots.txt` disallows its path.** `robots.txt` is written for crawlers; a documented API is governed by its own terms and rate limits. A lab that sends such a request, or sets up an exercise that does, says so in a 💬 Discuss box: what the file says for that path, why the call is still acceptable, and that the API's terms were read (link them). Wikipedia's `/w/api.php` and NASA POWER's `/api/` are two such paths.
+- **A web page is strict.** No step, microsprint or exercise sends a request, a HEAD included, to a page meant for a browser whose `robots.txt` disallows it for generic clients (`User-agent: *`) or for named AI clients (GPTBot, ClaudeBot and the like). Swap in a page the file allows, or have students read the `robots.txt` alone, which carries the lesson without the request.
+- **A site of the student's own.** A step, microsprint or exercise that invites students to choose a site tells them to read its `robots.txt` first, before any request, and to treat a file that can't be read (refused, a server error, an expired certificate) as a no. A site with no file, a 404, has set no rules.
+
+Before the pull request, read the `robots.txt` of every host the lab sends to, and list each in the pull request: the path, what the file says for it, and which rule above allows the request.
+
 ### Checkpoints
 
 A checkpoint is a saved copy of a step's result that lets a student go on when they fell behind, missed a day, have no working key, or were refused by the site.
 
 - **Where.** After each given loop that sends several requests, and at the end of each part. A lab has about three to five.
 - **What.** A CSV for a table; JSON for a raw response. Files live in `labs/week-NN/data/` (or the textbook's `data/ch-NN/` when the chapter already saves them), and the lab reads them from the repository's raw address on `main`. Make them with the key's own code, on the run the key note describes, and say so there.
-- **How it's used.** The live cell comes first. Under it, a given cell loads the checkpoint, with its two lines commented out and a first line that says when to use it: `# Given, only if the cell above stopped: remove the "#" from the next two lines`. Each part's setup step loads the earlier parts' checkpoints the same way, uncommented, so a part never depends on another day's kernel.
+- **How it's used.** The live cell comes first. Under it, a given cell loads the checkpoint, with its lines commented out and a first line that says when to use it: `# Given, only if the cell above stopped: remove the "#" from the lines below`. If it loads with `requests.get`, its lines include the status check ("Status checks in given cells"). Each part's setup step loads the earlier parts' checkpoints the same way, uncommented, so a part never depends on another day's kernel.
 - **Privacy.** A published checkpoint holds no private person's name, username, handle or IP address, and no contact details ([`AGENTS.md`](../AGENTS.md), "Images and privacy"). Drop those columns, or keep that step live and have each student save their own copy locally. Institutions' and public officials' accounts are fine.
 - **Honesty.** A checkpoint is dated in its loading cell's comment, and a Discuss question somewhere in the lab asks what a saved copy can't tell you that the live request can.
 
@@ -237,6 +277,15 @@ A cell that runs isn't yet a cell that's right, or one a student can get right. 
 - **Check every statement** in the step texts, Discuss boxes and "What did we learn?" against the key's outputs and the page it cites.
 - **Know what `run_key.py` skipped.** Cells tagged `skip-execution`, which every `not-run-live` cell is, aren't run and raise nothing. A key with such cells has not been run top to bottom, whatever the report says; a later cell that depends on one ran on whatever state was there, or failed for that reason alone.
 
+Then check for the silent traps the reviews found in many weeks. Each gives a wrong result, or a failure somewhere else, with no error where it happens:
+
+- **`requests.get(url, headers)`** sends the dictionary as `params`: no User-Agent, the student's email in the URL, and a 403 that looks like the lesson (week 1). Prompts spell out `headers=headers`.
+- **A name shared by a demo cell and an exercise or microsprint cell** makes an earlier given function read the later value (week 13's `body`). Name each for what it holds ("One name for one thing").
+- **Checkpoints read from `main`'s raw address** 404 until the pull request merges (weeks 1, 2 and 3). Right after merging, request each one and see a 200.
+- **Answers that depend on the Python version** (week 2's `robots.txt` parsing) **or on live data that drifts** (week 10's monthly counts, week 14's series): say so in the step, compare rates or the size of a gap rather than exact counts, and never test live counts with `==`.
+- **Redirects the API doesn't follow:** the pageviews API counts a redirect's own few views under a 200 (week 1). Say where the exact title comes from, and print the first item's title before going on.
+- **Given cells that depend on globals** fail with a `NameError` after a restart, or send a request without them (weeks 1 and 4). A comment line names each one and the step that makes it, or the function takes it as an argument.
+
 Put what you found in the pull request: the mistypes tried and their results, as a short table.
 
 ## How the pieces fit
@@ -266,11 +315,13 @@ python labs/tools/make_key_pdf.py labs/week-NN/lab-NN-key.ipynb
 `make_key_pdf.py` needs pandoc, LuaLaTeX (TeX Live's `texlive-luatex`), and the DejaVu and Noto fonts. Rerun it whenever the key changes, so the PDF never shows an older key.
 
 Then check by reading:
-- The minutes in the step headings add up to about 135, by part as "A step" says, and the typed lines are within "The typing budget".
+- Each part's step and microsprint minutes add up to no more than its day allows ("The time budget"), and the typed lines are within "The typing budget".
 - No typed cell has more than six lines, a line over about 90 characters, a function definition, a loop that sends requests, or anything "Little Python assumed" rules out.
 - The first request to each service prints what came back before it's indexed.
 - Every step has a Discuss box, and most have a microsprint; no microsprint retypes a step or replaces a name a later cell reads.
-- No cell has error handling, and no given function sits inside another.
+- No typed cell has error handling. Every given cell or function that sends a request or loads a checkpoint has the status check, with no key in its message and no `raise_for_status()`. No given function sits inside another.
+- Every host the lab sends to has had its `robots.txt` read, and each API call it disallows has its Discuss box ("robots.txt").
+- None of the silent traps in "Check it against the provider" is left.
 - No microsprint answers a Recommended Exercise step, and "Recommended Exercises ahead" matches the chapter's steps as merged.
 - Every part starts from its own setup step and its checkpoints, and no checkpoint holds a private person's name, handle or address.
 - Every step's text is within about 80 words and defines its terms.
@@ -279,9 +330,10 @@ Then check by reading:
 
 The pull request:
 - lists the cells not run live;
-- gives the typed lines and minutes for each part, and the mistypes tried against each service;
+- gives the typed lines and minutes for each part, what was moved to After class, and the mistypes tried against each service;
+- lists each host, what its `robots.txt` says for the lab's path, and which rule allows the request;
 - says where the lab departs from the chapter;
 - names the textbook commit;
 - adds the lab's row to [`README.md`](README.md)'s table.
 
-When a week's slides exist, their at-a-glance frame and each day's first frame name the lab. The instructor edits slides in Overleaf, so say in the pull request what the slides should say rather than editing them, unless asked.
+When a week's slides exist, their at-a-glance frame and each day's first frame name the lab. The instructor edits slides in Overleaf, so say in the pull request what those frames should say rather than editing them, unless asked. The exception is a frame that is stale for the next offering: a fix pass may correct it, and lists each change, before and after, in the pull request ([`slides/common/AUTHORING.md`](../slides/common/AUTHORING.md), "Working alongside the instructor").
